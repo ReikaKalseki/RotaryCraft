@@ -21,7 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import cpw.mods.fml.relauncher.Side;
@@ -84,7 +84,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 	public void breakBlock(World world, int x, int y, int z, int a, int b) {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		int meta = adv.getBlockMetadata();
-		ItemStack todrop = new ItemStack(mod_RotaryCraft.advgearitems.itemID, 1, meta/4);
+		ItemStack todrop = new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
 		EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 		item.delayBeforeCanPickup = 10;
 		if (!world.isRemote)

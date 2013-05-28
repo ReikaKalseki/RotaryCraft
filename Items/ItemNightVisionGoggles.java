@@ -16,13 +16,13 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
 
 	public ItemNightVisionGoggles(int itemID, int texID) {
-		super(itemID, mod_RotaryCraft.NVGM, texID, 0, 97);
+		super(itemID, RotaryCraft.NVGM, texID, 0, 97);
 		this.setNoRepair();
 	}
 

@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemMulti;
 
 public class ItemSpawner extends ItemMulti {
@@ -30,7 +30,7 @@ public class ItemSpawner extends ItemMulti {
 		super(id, 9);
 		this.setHasSubtypes(true);
 		//setItemName("spawner");
-		this.setCreativeTab(mod_RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.tabRotary);
 	}
 
 	@Override

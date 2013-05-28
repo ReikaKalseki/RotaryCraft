@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -59,22 +59,22 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 		break;
 		}
 		//Make punch thru snow, tall grass, etc!
-		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == mod_RotaryCraft.lightbridge.blockID)
+		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID)
 		//	blocked = true;
 		int range = this.getRange();
 		if (power >= MINPOWER && world.getBlockLightValue(x, y+1, z) >= 13) //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
 			//if (!Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)]) {
-			for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == mod_RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != mod_RotaryCraft.lightbridge.blockID; i++) {
+			for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
 				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
-				if (idview == 0 || ReikaWorldHelper.softBlocks(idview) || idview == mod_RotaryCraft.lightblock.blockID || idview == mod_RotaryCraft.beamblock.blockID || idview == mod_RotaryCraft.lightbridge.blockID) { //Only overwrite air blocks
+				if (idview == 0 || ReikaWorldHelper.softBlocks(idview) || idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID || idview == RotaryCraft.lightbridge.blockID) { //Only overwrite air blocks
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
-					world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, mod_RotaryCraft.lightbridge.blockID, dir, 3);
+					world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightbridge.blockID, dir, 3);
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d @ %d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
 					//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
 					//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
 				}
-				if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != mod_RotaryCraft.lightblock.blockID && idview != mod_RotaryCraft.beamblock.blockID && idview != mod_RotaryCraft.lightbridge.blockID || animtick > range) {
+				if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && idview != RotaryCraft.lightbridge.blockID || animtick > range) {
 					animtick--;
 					blocked = true;
 				}
@@ -89,7 +89,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 		animtick = 0;
 		int i = 1;
 		int idview = world.getBlockId(x+xstep, y+ystep, z+zstep);
-		while (idview == mod_RotaryCraft.lightbridge.blockID) {
+		while (idview == RotaryCraft.lightbridge.blockID) {
 			ReikaWorldHelper.legacySetBlockWithNotify(world, x+xstep*i, y+ystep*i, z+zstep*i, 0);
 			i++;
 			idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);

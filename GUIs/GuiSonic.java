@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 
@@ -103,7 +103,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 
     @Override
     public void actionPerformed(GuiButton button) {
-    	ReikaPacketHelper.sendLongPacket(mod_RotaryCraft.packetChannel, 16, sonic, player, vol);
+    	ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
     }
 
     @Override
@@ -123,14 +123,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	    if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 	    	freq = 0;
 	    	input.deleteFromCursor(-1);
-	    	ReikaPacketHelper.sendLongPacket(mod_RotaryCraft.packetChannel, 15, sonic, player, freq);
+	    	ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, player, freq);
 	    	valid1 = false;
 	    }
 	    if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 	    	dB = 0;
 	    	this.getVolFromdB();
 	    	input2.deleteFromCursor(-1);
-	    	ReikaPacketHelper.sendLongPacket(mod_RotaryCraft.packetChannel, 16, sonic, player, vol);
+	    	ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
 	    	valid2 = false;
 	    }
 	    if (!valid1 && !valid2)
@@ -140,13 +140,13 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	    if (valid1) {
 		    freq = Long.parseLong(input.getText());
 		    if (freq >= 0)
-		    	ReikaPacketHelper.sendLongPacket(mod_RotaryCraft.packetChannel, 15, sonic, player, freq);
+		    	ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, player, freq);
 		}
 	    if (valid2) {
 		    dB = Integer.parseInt(input2.getText());
 		    if (dB >= 0) {
 		    	this.getVolFromdB();
-		    	ReikaPacketHelper.sendLongPacket(mod_RotaryCraft.packetChannel, 16, sonic, player, vol);
+		    	ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
 		    }
 	    }
     }

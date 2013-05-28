@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
@@ -93,7 +93,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 
 	public void instantHarvest(World world, int x, int y, int z, int meta, int editx2, int edity2, int editz2) {
 		if (world.getBlockId(editx2, edity2, editz2) != Block.leaves.blockID && world.getBlockId(editx2, edity2, editz2) != Block.wood.blockID &&
-				world.getBlockId(editx2, edity2, editz2) != mod_RotaryCraft.gravleaves.blockID && world.getBlockId(editx2, edity2, editz2) != mod_RotaryCraft.gravlog.blockID)
+				world.getBlockId(editx2, edity2, editz2) != RotaryCraft.gravleaves.blockID && world.getBlockId(editx2, edity2, editz2) != RotaryCraft.gravlog.blockID)
 			return;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Valid "+String.format("%d %d", stepx, stepz));
 		int[] logs = new int[4]; //Logs by metadata
@@ -104,8 +104,8 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		for (int i = y; i < 256 && !blocked; i++) {
 			int id = world.getBlockId(x, i, z);
 			int readmeta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, i, z), 4);
-			if (Block.opaqueCubeLookup[id] && id != Block.wood.blockID && id != mod_RotaryCraft.gravlog.blockID &&
-					id != Block.leaves.blockID && id != mod_RotaryCraft.gravleaves.blockID) {
+			if (Block.opaqueCubeLookup[id] && id != Block.wood.blockID && id != RotaryCraft.gravlog.blockID &&
+					id != Block.leaves.blockID && id != RotaryCraft.gravleaves.blockID) {
 				blocked = true;
 				heightlimit = i;
 			}
@@ -117,14 +117,14 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 					for (int h = y; h <= heightlimit; h++) {
 						int blockid = world.getBlockId(k, h, m);
 						int blockmeta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(k, h, m), 4);
-						if (blockid == Block.wood.blockID || blockid == mod_RotaryCraft.gravlog.blockID) {
+						if (blockid == Block.wood.blockID || blockid == RotaryCraft.gravlog.blockID) {
 							logs[blockmeta]++;
 							ReikaWorldHelper.legacySetBlockWithNotify(world, k, h, m, 0);
 							if (h == y && (world.getBlockId(k, h-1, m) == 2 || world.getBlockId(k, h-1, m) == 3)) { // Ground level
 								ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, k, h, m, Block.sapling.blockID, blockmeta);
 							}
 						}
-						if (blockid == Block.leaves.blockID || blockid == mod_RotaryCraft.gravleaves.blockID) {
+						if (blockid == Block.leaves.blockID || blockid == RotaryCraft.gravleaves.blockID) {
 							leaves[blockmeta]++;
 							if (blockmeta == 0 && par5Random.nextInt(200) == 0)
 								numapples++;
@@ -142,14 +142,14 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 						int blockid = world.getBlockId(k, h, m);
 						int blockmeta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(k, h, m), 4);
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d:%d @ %d %d %d", blockid, blockmeta, k, h, m));
-						if (blockid == Block.wood.blockID || blockid == mod_RotaryCraft.gravlog.blockID) {
+						if (blockid == Block.wood.blockID || blockid == RotaryCraft.gravlog.blockID) {
 							logs[blockmeta]++;
 							ReikaWorldHelper.legacySetBlockWithNotify(world, k, h, m, 0);
 							if (h == y && (world.getBlockId(k, h-1, m) == 2 || world.getBlockId(k, h-1, m) == 3)) { // Ground level
 								ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, k, h, m, Block.sapling.blockID, blockmeta);
 							}
 						}
-						if (blockid == Block.leaves.blockID || blockid == mod_RotaryCraft.gravleaves.blockID) {
+						if (blockid == Block.leaves.blockID || blockid == RotaryCraft.gravleaves.blockID) {
 							leaves[blockmeta]++;
 							if (blockmeta == 0 && par5Random.nextInt(200) == 0)
 								numapples++;
@@ -165,14 +165,14 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 					for (int h = y; h <= heightlimit; h++) {
 						int blockid = world.getBlockId(k, h, m);
 						int blockmeta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(k, h, m), 4);
-						if (blockid == Block.wood.blockID || blockid == mod_RotaryCraft.gravlog.blockID) {
+						if (blockid == Block.wood.blockID || blockid == RotaryCraft.gravlog.blockID) {
 							logs[blockmeta]++;
 							ReikaWorldHelper.legacySetBlockWithNotify(world, k, h, m, 0);
 							if (h == y && (world.getBlockId(k, h-1, m) == 2 || world.getBlockId(k, h-1, m) == 3)) { // Ground level
 								ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, k, h, m, Block.sapling.blockID, blockmeta);
 							}
 						}
-						if (blockid == Block.leaves.blockID || blockid == mod_RotaryCraft.gravleaves.blockID) {
+						if (blockid == Block.leaves.blockID || blockid == RotaryCraft.gravleaves.blockID) {
 							leaves[blockmeta]++;
 							if (blockmeta == 0 && par5Random.nextInt(200) == 0)
 								numapples++;
@@ -190,14 +190,14 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 						int blockid = world.getBlockId(k, h, m);
 						int blockmeta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(k, h, m), 4);
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", k, h, m));
-						if (blockid == Block.wood.blockID || blockid == mod_RotaryCraft.gravlog.blockID) {
+						if (blockid == Block.wood.blockID || blockid == RotaryCraft.gravlog.blockID) {
 							logs[blockmeta]++;
 							ReikaWorldHelper.legacySetBlockWithNotify(world, k, h, m, 0);
 							if (h == y && (world.getBlockId(k, h-1, m) == 2 || world.getBlockId(k, h-1, m) == 3)) { // Ground level
 								ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, k, h, m, Block.sapling.blockID, blockmeta);
 							}
 						}
-						if (blockid == Block.leaves.blockID || blockid == mod_RotaryCraft.gravleaves.blockID) {
+						if (blockid == Block.leaves.blockID || blockid == RotaryCraft.gravleaves.blockID) {
 							leaves[blockmeta]++;
 							if (blockmeta == 0 && par5Random.nextInt(200) == 0)
 								numapples++;
@@ -273,8 +273,8 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 	public void harvest(World world, int x, int y, int z, int meta, int editx2, int edity2, int editz2, boolean sapling) {
 		int id = world.getBlockId(editx2, edity2, editz2);
 		int editmeta = world.getBlockMetadata(editx2, edity2, editz2);
-		if (id != Block.wood.blockID && id != mod_RotaryCraft.gravlog.blockID && id != Block.leaves.blockID &&
-				id != mod_RotaryCraft.gravleaves.blockID)
+		if (id != Block.wood.blockID && id != RotaryCraft.gravlog.blockID && id != Block.leaves.blockID &&
+				id != RotaryCraft.gravleaves.blockID)
 			return;
 		boolean top = true;
 		if (!sapling && editmeta == 3)
@@ -285,24 +285,24 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		while (k < 256 && !blocked) {
 			int readid = world.getBlockId(editx2, k, editz2);
 			if (readid != 0) {
-				if (readid != Block.wood.blockID && readid != mod_RotaryCraft.gravlog.blockID && Block.opaqueCubeLookup[readid])
+				if (readid != Block.wood.blockID && readid != RotaryCraft.gravlog.blockID && Block.opaqueCubeLookup[readid])
 					blocked = true;
-				else if (readid == Block.leaves.blockID || readid == mod_RotaryCraft.gravleaves.blockID)
+				else if (readid == Block.leaves.blockID || readid == RotaryCraft.gravleaves.blockID)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx2, k, editz2, 0);
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> %d", readid, world.getBlockId(editx2, k, editz2)));
 			}
 			k++;
 		}
 
-		if (id == Block.wood.blockID || id == mod_RotaryCraft.gravlog.blockID)
+		if (id == Block.wood.blockID || id == RotaryCraft.gravlog.blockID)
 			world.playSoundEffect(editx2+0.5, edity+0.5, editz2+0.5, "dig.wood", 0.5F+par5Random.nextFloat(), 1F);
-		if (id == Block.leaves.blockID || id == mod_RotaryCraft.gravleaves.blockID)
+		if (id == Block.leaves.blockID || id == RotaryCraft.gravleaves.blockID)
 			world.playSoundEffect(editx2+0.5, edity+0.5, editz2+0.5, "dig.grass", 0.5F+par5Random.nextFloat(), 1F);
 		if (sapling) {
 			for (int j = edity2+1; j < 256 && top; j++) {
 				int id2 = world.getBlockId(editx2, j, editz2);
-				if ((id2 == Block.wood.blockID || id2 == mod_RotaryCraft.gravlog.blockID || id2 == Block.leaves.blockID ||
-						id2 == mod_RotaryCraft.gravleaves.blockID)) {
+				if ((id2 == Block.wood.blockID || id2 == RotaryCraft.gravlog.blockID || id2 == Block.leaves.blockID ||
+						id2 == RotaryCraft.gravleaves.blockID)) {
 					top = false;
 					//if (!world.isRemote)
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d:%d @ y=%d", id2, editmeta, j));
@@ -314,7 +314,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			if (inzone.size() > 1)
 				top = false;
 		}
-		if (sapling && (id == Block.wood.blockID || id == mod_RotaryCraft.gravlog.blockID) && top &&
+		if (sapling && (id == Block.wood.blockID || id == RotaryCraft.gravlog.blockID) && top &&
 				(world.getBlockId(editx2, edity2-1, editz2) == Block.dirt.blockID ||
 				world.getBlockId(editx2, edity2-1, editz2) == Block.grass.blockID))
 
@@ -323,13 +323,13 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			ReikaWorldHelper.legacySetBlockWithNotify(world, editx2, edity2, editz2, 0);
 		if (world.getBlockId(editx2, edity2+1, editz2) == Block.wood.blockID) {
 			int logmeta = world.getBlockMetadata(editx2, edity2+1, editz2);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, editx2, edity2+1, editz2, mod_RotaryCraft.gravlog.blockID, logmeta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, editx2, edity2+1, editz2, RotaryCraft.gravlog.blockID, logmeta);
 		}
 		if (world.getBlockId(editx2, edity2+1, editz2) == Block.leaves.blockID) {
 			int leafmeta = world.getBlockMetadata(editx2, edity2+1, editz2);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, editx2, edity2+1, editz2, mod_RotaryCraft.gravleaves.blockID, leafmeta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, editx2, edity2+1, editz2, RotaryCraft.gravleaves.blockID, leafmeta);
 		}
-		if (!world.isRemote && (id == Block.wood.blockID || id == mod_RotaryCraft.gravlog.blockID)) {
+		if (!world.isRemote && (id == Block.wood.blockID || id == RotaryCraft.gravlog.blockID)) {
 			while (editmeta > 3)
 				editmeta -= 4;
 			ItemStack is = new ItemStack(Block.wood.blockID, 1, editmeta);

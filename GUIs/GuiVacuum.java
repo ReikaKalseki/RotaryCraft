@@ -17,7 +17,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
@@ -63,7 +63,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
 	}
 
     /**

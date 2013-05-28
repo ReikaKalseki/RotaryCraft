@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -104,7 +104,7 @@ public class RenderWinder extends RotaryTERenderer
 			// if (tile.getBlockMetadata() < 4)
 
 
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItem(mod_RotaryCraft.wind.itemID, tile.inslot)), -tile.phi);
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItem(RotaryCraft.wind.itemID, tile.inslot)), -tile.phi);
 			// else
 			//var15.renderAll();
 

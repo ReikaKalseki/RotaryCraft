@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Models.ModelBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -65,10 +65,10 @@ public class RenderFallingBlock extends Render
 			var10 = Block.blocksList[Block.leaves.blockID];
 		if (par1EntityFallingBlock.blockID == Block.wood.blockID)
 			var10 = Block.blocksList[Block.wood.blockID];
-		if (par1EntityFallingBlock.blockID == mod_RotaryCraft.gravleaves.blockID)
-			var10 = mod_RotaryCraft.gravleaves;
-		if (par1EntityFallingBlock.blockID == mod_RotaryCraft.gravlog.blockID)
-			var10 = mod_RotaryCraft.gravlog;
+		if (par1EntityFallingBlock.blockID == RotaryCraft.gravleaves.blockID)
+			var10 = RotaryCraft.gravleaves;
+		if (par1EntityFallingBlock.blockID == RotaryCraft.gravlog.blockID)
+			var10 = RotaryCraft.gravlog;
 		World var11 = par1EntityFallingBlock.getWorld();
 		//GL11.glDisable(GL11.GL_LIGHTING);
 		//Tessellator var12;
@@ -78,7 +78,7 @@ public class RenderFallingBlock extends Render
 		float green = ReikaRenderHelper.biomeToColorMultiplier(par1EntityFallingBlock.worldObj, (int)par1EntityFallingBlock.posX, (int)par1EntityFallingBlock.posZ, "Leaves", 1);
 		float blue = ReikaRenderHelper.biomeToColorMultiplier(par1EntityFallingBlock.worldObj, (int)par1EntityFallingBlock.posX, (int)par1EntityFallingBlock.posZ, "Leaves", 2);
 
-		if (par1EntityFallingBlock.blockID == Block.leaves.blockID || par1EntityFallingBlock.blockID == mod_RotaryCraft.gravleaves.blockID)
+		if (par1EntityFallingBlock.blockID == Block.leaves.blockID || par1EntityFallingBlock.blockID == RotaryCraft.gravleaves.blockID)
 			if (par1EntityFallingBlock.metadata == 0 || par1EntityFallingBlock.metadata == 3) //Spruce and Birch are immune to biome color
 				;
 			else if (par1EntityFallingBlock.metadata == 1) { //Spruce
@@ -115,7 +115,7 @@ public class RenderFallingBlock extends Render
         	int hexcolor = var10.getBlockColor();
         	//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("DF3");
             this.sandRenderBlocks.setRenderBoundsFromBlock(var10);
-            if (var10.blockID == Block.leaves.blockID || var10.blockID == mod_RotaryCraft.gravleaves.blockID) {/*
+            if (var10.blockID == Block.leaves.blockID || var10.blockID == RotaryCraft.gravleaves.blockID) {/*
             	this.sandRenderBlocks.colorRedBottomLeft = ReikaRenderHelper.biomeToColorMultiplier(par1EntityFallingBlock.worldObj, (int)par2, (int)par4, "Leaves", 0);
             	this.sandRenderBlocks.colorRedBottomRight = ReikaRenderHelper.biomeToColorMultiplier(par1EntityFallingBlock.worldObj, (int)par2, (int)par4, "Leaves", 0);
             	this.sandRenderBlocks.colorGreenBottomLeft = ReikaRenderHelper.biomeToColorMultiplier(par1EntityFallingBlock.worldObj, (int)par2, (int)par4, "Leaves", 1);

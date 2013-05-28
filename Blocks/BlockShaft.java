@@ -26,7 +26,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -90,7 +90,7 @@ public class BlockShaft extends BlockModelledMachine {
 			return 0.01F;
 		int mult = 1;
 		if (ep.inventory.getCurrentItem() != null) {
-			if (ep.inventory.getCurrentItem().itemID == mod_RotaryCraft.bedpick.itemID)
+			if (ep.inventory.getCurrentItem().itemID == RotaryCraft.bedpick.itemID)
 				mult = 4;
 		}
 		if (this.canHarvest(world, ep, x, y, z))
@@ -194,7 +194,7 @@ public class BlockShaft extends BlockModelledMachine {
 			}
 			else if (sha.getBlockMetadata() < 6) {
 				int metat = sha.type.ordinal();
-				ItemStack todrop = new ItemStack(mod_RotaryCraft.shaftitems.itemID, 1, metat); //drop shaft item
+				ItemStack todrop = new ItemStack(RotaryCraft.shaftitems.itemID, 1, metat); //drop shaft item
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
@@ -206,7 +206,7 @@ public class BlockShaft extends BlockModelledMachine {
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);*/
-				ItemStack todrop = new ItemStack(mod_RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1); //drop shaft cross
+				ItemStack todrop = new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1); //drop shaft cross
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)

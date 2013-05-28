@@ -21,7 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
@@ -66,7 +66,7 @@ public class BlockFlywheel extends BlockModelledMachine {
 			}
 			else {
 				int meta = fly.getBlockMetadata();
-				ItemStack todrop = new ItemStack(mod_RotaryCraft.flywheelitems.itemID, 1, meta/4); //drop flywheel
+				ItemStack todrop = new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta/4); //drop flywheel
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)

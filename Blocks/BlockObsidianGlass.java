@@ -22,7 +22,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex {
@@ -33,7 +33,7 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 		this.setResistance(6000F);
 		this.setLightValue(0F);
 		this.setStepSound(soundGlassFootstep);
-		this.setCreativeTab(mod_RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.tabRotary);
 
 		//this.blockIndexInTexture = 74;
 	}
@@ -71,7 +71,7 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 		ItemStack item = ep.inventory.getCurrentItem();
 		if (item == null)
 			return false;
-		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != mod_RotaryCraft.bedpick.itemID)
+		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != RotaryCraft.bedpick.itemID)
 			return false;
 		return true;
 	}

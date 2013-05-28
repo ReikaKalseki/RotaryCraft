@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerProjector;
@@ -52,7 +52,7 @@ public class GuiProjector extends GuiPowerOnlyMachine {
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.PROJECTOR.getMinValue(), proj, ep);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.PROJECTOR.getMinValue(), proj, ep);
 		this.initGui();
 	}
 

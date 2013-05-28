@@ -22,7 +22,7 @@ import Reika.DragonAPI.PixelRenderer;
 import Reika.DragonAPI.IO.ReikaPNGLoader;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -40,7 +40,7 @@ public class RenderProjector extends RotaryTERenderer {
     public RenderProjector() {
     	for (int i = 0; i < hasImages.length; i++) {
         	String name = "/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(i)+".png";
-    		if (ReikaPNGLoader.imageFileExists(mod_RotaryCraft.class, name))
+    		if (ReikaPNGLoader.imageFileExists(RotaryCraft.class, name))
     			hasImages[i] = true;
     	}
     }

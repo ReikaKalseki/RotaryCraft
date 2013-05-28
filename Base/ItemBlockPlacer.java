@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,7 +27,7 @@ public abstract class ItemBlockPlacer extends Item {
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;
-		this.setCreativeTab(mod_RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.tabRotary);
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockMiningPipe extends BlockBasic {
@@ -78,12 +78,12 @@ public class BlockMiningPipe extends BlockBasic {
 
     @Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x+1, y, z, mod_RotaryCraft.miningpipe.blockID, -1, x+1, y, z, 24);
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x-1, y, z, mod_RotaryCraft.miningpipe.blockID, -1, x-1, y, z, 24);
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+1, z, mod_RotaryCraft.miningpipe.blockID, -1, x, y+1, z, 24);
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-1, z, mod_RotaryCraft.miningpipe.blockID, -1, x, y-1, z, 24);
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+1, mod_RotaryCraft.miningpipe.blockID, -1, x, y, z+1, 24);
-    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-1, mod_RotaryCraft.miningpipe.blockID, -1, x, y, z-1, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x+1, y, z, RotaryCraft.miningpipe.blockID, -1, x+1, y, z, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x-1, y, z, RotaryCraft.miningpipe.blockID, -1, x-1, y, z, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+1, z, RotaryCraft.miningpipe.blockID, -1, x, y+1, z, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-1, z, RotaryCraft.miningpipe.blockID, -1, x, y-1, z, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+1, RotaryCraft.miningpipe.blockID, -1, x, y, z+1, 24);
+    	ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-1, RotaryCraft.miningpipe.blockID, -1, x, y, z-1, 24);
     }
 
     @Override

@@ -21,7 +21,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockGravity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,7 +38,7 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 
 
 		//this.blockIndexInTexture = 20;
-		//setCreativeTab(mod_RotaryCraft.tabRotary);
+		//setCreativeTab(RotaryCraft.tabRotary);
 	}
 
 	@Override
@@ -98,89 +98,89 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 
 		if (world.getBlockId(x+1, y, z) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x+1, y, z) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z, RotaryCraft.gravleaves.blockID, meta);
 		}
 
 		if (world.getBlockId(x-1, y, z) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x-1, y, z) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z, RotaryCraft.gravleaves.blockID, meta);
 		}
 
 		if (world.getBlockId(x, y+1, z) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y+1, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y+1, z, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y+1, z, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x, y+1, z) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y+1, z), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y+1, z, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y+1, z, RotaryCraft.gravleaves.blockID, meta);
 		}
 		/*	Do not propagate downwards - to avoid affecting an entire biome, especially jungle
     	if (world.getBlockId(x, y-1, z) == Block.wood.blockID) {
     		int meta = world.getBlockMetadata(x, y-1, z);
-    		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, mod_RotaryCraft.gravlog.blockID, meta);
+    		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, RotaryCraft.gravlog.blockID, meta);
     	}
     	if (world.getBlockId(x, y-1, z) == Block.leaves.blockID) {
     		int meta = world.getBlockMetadata(x, y-1, z);
-    		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, mod_RotaryCraft.gravleaves.blockID, meta);
+    		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, RotaryCraft.gravleaves.blockID, meta);
     	}*/
 
 		if (world.getBlockId(x, y, z+1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z+1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z+1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x, y, z+1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z+1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z+1, RotaryCraft.gravleaves.blockID, meta);
 		}
 
 		if (world.getBlockId(x, y, z-1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z-1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z-1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x, y, z-1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z-1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z-1, RotaryCraft.gravleaves.blockID, meta);
 		}
 
 		if (world.getBlockId(x-1, y, z-1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z-1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z-1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x-1, y, z-1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z-1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z-1, RotaryCraft.gravleaves.blockID, meta);
 		}
 		if (world.getBlockId(x+1, y, z-1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z-1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z-1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x+1, y, z-1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z-1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z-1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z-1, RotaryCraft.gravleaves.blockID, meta);
 		}
 		if (world.getBlockId(x+1, y, z+1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z+1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z+1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x+1, y, z+1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x+1, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z+1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+1, y, z+1, RotaryCraft.gravleaves.blockID, meta);
 		}
 		if (world.getBlockId(x-1, y, z+1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, mod_RotaryCraft.gravlog.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, RotaryCraft.gravlog.blockID, meta);
 		}
 		if (world.getBlockId(x-1, y, z+1) == Block.leaves.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z+1), 4);
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, mod_RotaryCraft.gravleaves.blockID, meta);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, RotaryCraft.gravleaves.blockID, meta);
 		}
 	}
 

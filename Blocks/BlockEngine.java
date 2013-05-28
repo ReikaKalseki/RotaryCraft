@@ -20,7 +20,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -163,7 +163,7 @@ public class BlockEngine extends BlockModelledMachine {
 			}
 			else {
 				int metat = eng.type.getID();
-				ItemStack todrop = new ItemStack(mod_RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
+				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)

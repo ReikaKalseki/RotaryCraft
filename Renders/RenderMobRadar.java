@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -123,7 +123,7 @@ public class RenderMobRadar extends RotaryTERenderer
     	EntityPlayer ep = te.worldObj.getPlayerEntityByName(te.owner);
     	if (ep == null)
     		return;
-    	if (!ReikaInventoryHelper.checkForItem(mod_RotaryCraft.motiontracker.itemID, ep.inventory.mainInventory))
+    	if (!ReikaInventoryHelper.checkForItem(RotaryCraft.motiontracker.itemID, ep.inventory.mainInventory))
     		return;
     	if (mc.thePlayer.getEntityName() != ep.getEntityName())
     		return;

@@ -124,7 +124,7 @@ public enum MachineRegistry {
 	GRINDER(			"Grinder", 					BlockDMIMachine.class,		TileEntityGrinder.class,			0,	"RenderGrinder"),
 	HEATRAY(			"Heat Ray", 				BlockDMMachine.class,		TileEntityHeatRay.class,			2,	"RenderHRay"),
 	HOSE(				"Lubricant Hose", 			BlockPiping.class,			TileEntityHose.class,				0,	"PipeRenderer"),
-	BORER(				"Borer", 					BlockDMachine.class,		TileEntityBorer.class,				0),
+	BORER(				"Boring Machine", 			BlockDMachine.class,		TileEntityBorer.class,				0),
 	LIGHTBRIDGE(		"Light Bridge", 			BlockDMMachine.class,		TileEntityBridgeEmitter.class,		3,	"RenderBridge"),
 	PUMP(				"Pump", 					BlockDMMachine.class,		TileEntityPump.class,				4,	"RenderPump"),
 	PIPE(				"Liquid Pipe", 				BlockPiping.class,			TileEntityPipe.class,				1,	"PipeRenderer"),
@@ -739,31 +739,31 @@ public enum MachineRegistry {
 
 	public ItemStack getCraftedProduct() {
 		if (this == HOSE)
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 0);
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 0);
 		if (this == PIPE)
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1);
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1);
 		if (this == FUELLINE)
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 2);
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2);
 		if (this == SPILLER)
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 3);
-		return new ItemStack(mod_RotaryCraft.machineplacer.itemID, 1, this.ordinal());
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 3);
+		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 
 	public ItemStack getCraftedMetadataProduct(int meta) {
 		if (this == ADVANCEDGEARS) {
-			return new ItemStack(mod_RotaryCraft.advgearitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta);
 		}
 		if (this == FLYWHEEL) {
-			return new ItemStack(mod_RotaryCraft.flywheelitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta);
 		}
 		if (this == ENGINE) {
-			return new ItemStack(mod_RotaryCraft.engineitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.engineitems.itemID, 1, meta);
 		}
 		if (this == SHAFT) {
-			return new ItemStack(mod_RotaryCraft.shaftitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, meta);
 		}
 		if (this == GEARBOX) {
-			return new ItemStack(mod_RotaryCraft.gbxitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, meta);
 		}
 		return null;
 	}

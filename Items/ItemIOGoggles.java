@@ -14,14 +14,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 
 public class ItemIOGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
 
 	public ItemIOGoggles(int itemID, int texID) {
-		super(itemID, mod_RotaryCraft.IOGM, texID, 0, 1);
+		super(itemID, RotaryCraft.IOGM, texID, 0, 1);
 		this.setNoRepair();
 	}
 

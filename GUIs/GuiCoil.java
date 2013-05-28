@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 
@@ -88,13 +88,13 @@ public class GuiCoil extends GuiNonPoweredMachine
 	    if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 	    	omega = 0;
 	    	input.deleteFromCursor(-1);
-	    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 19, coil, player, omega);
+	    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, player, omega);
 	    	valid1 = false;
 	    }
 	    if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 	    	torque = 0;
 	    	input2.deleteFromCursor(-1);
-	    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 20, coil, player, torque);
+	    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, player, torque);
 	    	valid2 = false;
 	    }
 	    if (!valid1 && !valid2)
@@ -106,7 +106,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		    if (omega >= 0) {
 		    	if (omega > RotaryConfig.omegalimit)
 		    		omega = RotaryConfig.omegalimit;
-		    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 19, coil, player, omega);
+		    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, player, omega);
 		    }
 		}
 	    if (valid2) {
@@ -114,7 +114,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		    if (torque >= 0) {
 		    	if (torque > RotaryConfig.torquelimit)
 		    		torque = RotaryConfig.torquelimit;
-		    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 20, coil, player, torque);
+		    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, player, torque);
 		    }
 	    }
     }

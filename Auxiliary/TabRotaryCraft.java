@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 public class TabRotaryCraft extends CreativeTabs {
@@ -23,7 +23,7 @@ public class TabRotaryCraft extends CreativeTabs {
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() //The item it displays for your tab
 	{
-		return new ItemStack(mod_RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.getID());
+		return new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.getID());
 	}
 
 	@Override

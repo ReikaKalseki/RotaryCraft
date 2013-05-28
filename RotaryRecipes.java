@@ -81,7 +81,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.CLUTCH.getCraftedProduct(), new Object[]{
 			"S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone});
 		GameRegistry.addRecipe(MachineRegistry.CLUTCH.getCraftedProduct(), new Object[]{
-			"S", "R", 'S', new ItemStack(mod_RotaryCraft.shaftitems, 1, 2), 'R', Item.redstone});
+			"S", "R", 'S', new ItemStack(RotaryCraft.shaftitems, 1, 2), 'R', Item.redstone});
 
 		GameRegistry.addRecipe(MachineRegistry.DYNAMOMETER.getCraftedProduct(), new Object[]{
 			" S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl});
@@ -105,7 +105,7 @@ public class RotaryRecipes {
 			"B B", "BBB", 'B', ItemStacks.basepanel});
 
 		GameRegistry.addRecipe(MachineRegistry.FRACTIONATOR.getCraftedProduct(), new Object[]{
-			"GFG", "GIG", "GPG", 'P', ItemStacks.basepanel, 'I', ItemStacks.mixer, 'G', Item.ingotGold, 'F', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 2)});
+			"GFG", "GIG", "GPG", 'P', ItemStacks.basepanel, 'I', ItemStacks.mixer, 'G', Item.ingotGold, 'F', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2)});
 
 		GameRegistry.addRecipe(MachineRegistry.BAITBOX.getCraftedProduct(), new Object[]{
 			"BBB", "BAB", "BBB", 'B', Block.fenceIron, 'A', MachineRegistry.AUTOBREEDER.getCraftedProduct()});
@@ -129,7 +129,7 @@ public class RotaryRecipes {
 			"SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb});
 
 		GameRegistry.addRecipe(MachineRegistry.SPRINKLER.getCraftedProduct(), new Object[]{
-			" s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1), 'i', ItemStacks.impeller});
+			" s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'i', ItemStacks.impeller});
 
 		GameRegistry.addRecipe(MachineRegistry.SPAWNERCONTROLLER.getCraftedProduct(), new Object[]{
 			"PCP", "OGO", "g g", 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'g', Block.glowStone, 'C', ItemStacks.pcb});
@@ -138,7 +138,7 @@ public class RotaryRecipes {
 			"LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', ItemStacks.radar, 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold});
 
 		GameRegistry.addRecipe(MachineRegistry.OBSIDIAN.getCraftedProduct(), new Object[]{
-			"SpS", "PMP", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1)});
+			"SpS", "PMP", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
 		GameRegistry.addRecipe(MachineRegistry.HEATER.getCraftedProduct(), new Object[]{
 			"sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Block.fenceIron, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor});
@@ -147,7 +147,7 @@ public class RotaryRecipes {
 			"SsS", "PCP", "SRS", 'S', ItemStacks.steelingot, 's', ItemStacks.screen, 'P', ItemStacks.basepanel, 'R', ItemStacks.radar, 'C', ItemStacks.pcb});
 
 		GameRegistry.addRecipe(MachineRegistry.PULSEJET.getCraftedProduct(), new Object[]{
-			"OCD", "PcO", "BBB", 'B', ItemStacks.basepanel, 'O', Block.obsidian, 'C', ItemStacks.compressor, 'D', ItemStacks.diffuser, 'c', ItemStacks.combustor, 'P', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1)});
+			"OCD", "PcO", "BBB", 'B', ItemStacks.basepanel, 'O', Block.obsidian, 'C', ItemStacks.compressor, 'D', ItemStacks.diffuser, 'c', ItemStacks.combustor, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
 		GameRegistry.addRecipe(MachineRegistry.EXTRACTOR.getCraftedProduct(), new Object[]{
 			"SWS", "siS", "PIN", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.shaftitem, 's', Block.stone, 'i', ItemStacks.impeller, 'N', Block.netherrack, 'W', Block.planks});
@@ -159,7 +159,7 @@ public class RotaryRecipes {
 			"PGP", "gFg", "PDP", 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit8, 'g', ItemStacks.shaftitem, 'F', ItemStacks.flywheelcore3, 'D', ItemStacks.drill});
 
 		GameRegistry.addRecipe(MachineRegistry.PUMP.getCraftedProduct(), new Object[]{
-			"SGS", "pIp", "PpP", 'P', ItemStacks.basepanel, 'p', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1), 'I', ItemStacks.impeller, 'G', Block.thinGlass, 'S', ItemStacks.steelingot});
+			"SGS", "pIp", "PpP", 'P', ItemStacks.basepanel, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'I', ItemStacks.impeller, 'G', Block.thinGlass, 'S', ItemStacks.steelingot});
 
 		GameRegistry.addRecipe(MachineRegistry.RAILGUN.getCraftedProduct(), new Object[]{
 			"LLS", "LLG", "SGB", 'L', ItemStacks.lim, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit, 'B', ItemStacks.basepanel});
@@ -237,9 +237,9 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
 				"SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Item.redstone});
 		GameRegistry.addRecipe(ItemStacks.radiator, new Object[]{
-				"SSS", "PPP", "SSS", 'S', ItemStacks.steelingot, 'P', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1)});
+				"SSS", "PPP", "SSS", 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.condenser, new Object[]{
-				"SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, 1)});
+				"SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.goldcoil, new Object[]{
 				"GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', Item.ingotGold});
 		GameRegistry.addRecipe(ItemStacks.cylinder, new Object[]{
@@ -280,7 +280,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.sonar, new Object[]{
 				" S ", "SNS", "RCR", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'N', Block.music, 'C', ItemStacks.pcb});
 		GameRegistry.addRecipe(ItemStacks.radar, new Object[]{
-				"SSS", " G ", "RMR", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'G', Item.ingotGold, 'M', new ItemStack(mod_RotaryCraft.engineitems.itemID, 1, 0)});
+				"SSS", " G ", "RMR", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'G', Item.ingotGold, 'M', new ItemStack(RotaryCraft.engineitems.itemID, 1, 0)});
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.belt, 2), new Object[]{
 			"LLL", "LSL", "LLL", 'L', Item.leather, 'S', ItemStacks.steelingot});
@@ -291,7 +291,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.brake, new Object[]{
 				" g ", "SBS", " G ", 'g', ItemStacks.gearunit, 'G', ItemStacks.steelgear, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing});
 		GameRegistry.addRecipe(ItemStacks.tenscoil, new Object[]{
-				"WWW", "WSW", "WWW", 'W', mod_RotaryCraft.wind, 'S', ItemStacks.shaftitem});
+				"WWW", "WSW", "WWW", 'W', RotaryCraft.wind, 'S', ItemStacks.shaftitem});
 
 		GameRegistry.addRecipe(ItemStacks.lens, new Object[]{
 				" D ", "DGD", " D ", 'D', Item.diamond, 'G', Block.glass});
@@ -385,47 +385,47 @@ public class RotaryRecipes {
 	}
 
 	public static void addToolItems() {
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.wind.itemID, 4, 0), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.wind.itemID, 4, 0), new Object[]{
 			" S ", "S S", " S ", 'S', ItemStacks.steelingot});
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.target), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.target), new Object[]{
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.screwdriver), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.screwdriver), new Object[]{
 			"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.screwdriver), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.screwdriver), new Object[]{
 			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.meter), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.meter), new Object[]{
 			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.infobook), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.infobook), new Object[]{
 			"RSR", "PPP", "PPP", 'R', Item.redstone, 'S', Item.ingotIron, 'P', Item.paper});
 
-		ItemStack pick = new ItemStack(mod_RotaryCraft.bedpick);
+		ItemStack pick = new ItemStack(RotaryCraft.bedpick);
 		pick.addEnchantment(Enchantment.silkTouch, 1);
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.bedaxe), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.bedaxe), new Object[]{
 			"BB ", "BS ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
 		GameRegistry.addRecipe(pick, new Object[]{
 				"BBB", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.bedshov), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.bedshov), new Object[]{
 			" B ", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
 
-		GameRegistry.addShapelessRecipe(new ItemStack(mod_RotaryCraft.nvh), Item.helmetDiamond, mod_RotaryCraft.nvg);
+		GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.nvh), Item.helmetDiamond, RotaryCraft.nvg);
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.ultra), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.ultra), new Object[]{
 			" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'n', ItemStacks.sonar});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.motiontracker), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.motiontracker), new Object[]{
 			" nr", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'n', ItemStacks.sonar, 'r', ItemStacks.radar});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.vac), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.vac), new Object[]{
 			" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.impeller, 'n', ItemStacks.diffuser});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.stun), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.stun), new Object[]{
 			" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.sonar, 'n', ItemStacks.diffuser});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.gravelgun), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.gravelgun), new Object[]{
 			" d ", "gcg", "sss", 's', ItemStacks.steelingot, 'c', Block.chest, 'd', Block.dispenser, 'g', ItemStacks.steelgear});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.fireball), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.fireball), new Object[]{
 			"b b", "scs", "srs", 's', ItemStacks.steelingot, 'c', ItemStacks.combustor, 'r', Item.redstone, 'b', Item.blazeRod});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.handcraft), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.handcraft), new Object[]{
 			" g ", "scs", " g ", 's', ItemStacks.steelingot, 'g', Item.ingotGold, 'c', Block.workbench});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.nvg), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.nvg), new Object[]{
 			"   ", "scs", "ese", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'e', Item.enderPearl});
 
 
@@ -436,19 +436,19 @@ public class RotaryRecipes {
 			GameRegistry.addRecipe(new ItemStack(Block.bedrock.blockID, 1, 0), new Object[]{
 				"DDD", "DDD", "DDD", 'D', ItemStacks.bedrockdust});
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.canolaseed.itemID, 1, 1), new Object[]{
-			"DDD", "DDD", "DDD", 'D', new ItemStack(mod_RotaryCraft.canolaseed.itemID, 1, 0)});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.canolaseed.itemID, 1, 1), new Object[]{
+			"DDD", "DDD", "DDD", 'D', new ItemStack(RotaryCraft.canolaseed.itemID, 1, 0)});
 
-		GameRegistry.addShapelessRecipe(new ItemStack(mod_RotaryCraft.canolaseed.itemID, 9, 0),
-				new ItemStack(mod_RotaryCraft.canolaseed.itemID, 1, 1));
+		GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.canolaseed.itemID, 9, 0),
+				new ItemStack(RotaryCraft.canolaseed.itemID, 1, 1));
 
 		GameRegistry.addRecipe(new ItemStack(Block.planks.blockID, 1, 0), new Object[]{
 			"WW", "WW", 'W', ItemStacks.sawdust});
 		GameRegistry.addRecipe(new ItemStack(Item.paper.itemID, 8, 0), new Object[]{
 			" W ", "SSS", "RRR", 'R', Block.stone, 'S', ItemStacks.sawdust, 'W', Item.bucketWater});
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.blastglass, 16, 0), new Object[]{
-			"OOO", "OOO", 'O', mod_RotaryCraft.obsidianglass});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.blastglass, 16, 0), new Object[]{
+			"OOO", "OOO", 'O', RotaryCraft.obsidianglass});
 
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 15), ItemStacks.steelgear);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 48), ItemStacks.gearunit);
@@ -478,45 +478,45 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addShapelessRecipe(ItemStacks.silveriodide, ItemStacks.salt, ItemStacks.silveringot);
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 3, 0), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 3, 0), new Object[]{
 			"ss ", "s  ", "   ", 's', ItemStacks.steelingot});
 
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 1), new Object[]{
-			"p  ", " s ", "  p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 0), 'p', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 2), new Object[]{
-			"p p", " s ", "p p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 1), 'p', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 3), new Object[]{
-			"ppp", "psp", "ppp", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 2), 'p', Block.planks});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 4), new Object[]{
-			"p  ", " s ", "  p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 3), 'p', Block.stone});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 5), new Object[]{
-			"p p", " s ", "p p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 4), 'p', Block.stone});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 6), new Object[]{
-			"ppp", "psp", "ppp", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 5), 'p', Block.stone});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 7), new Object[]{
-			"p  ", " s ", "  p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 6), 'p', Item.ingotIron});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 8), new Object[]{
-			"p p", " s ", "p p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 7), 'p', Item.ingotIron});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 9), new Object[]{
-			"ppp", "psp", "ppp", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 8), 'p', Item.ingotIron});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 10), new Object[]{
-			"p  ", " s ", "  p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 9), 'p', Item.ingotGold});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 11), new Object[]{
-			"p p", " s ", "p p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 10), 'p', Item.ingotGold});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 12), new Object[]{
-			"ppp", "psp", "ppp", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 11), 'p', Item.ingotGold});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 13), new Object[]{
-			"p  ", " s ", "  p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 12), 'p', ItemStacks.bedingot});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 14), new Object[]{
-			"p p", " s ", "p p", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 13), 'p', ItemStacks.bedingot});
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.railammo, 1, 15), new Object[]{
-			"ppp", "psp", "ppp", 's', new ItemStack(mod_RotaryCraft.railammo.itemID, 1, 14), 'p', ItemStacks.bedingot});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 1), new Object[]{
+			"p  ", " s ", "  p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 0), 'p', Block.planks});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 2), new Object[]{
+			"p p", " s ", "p p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 1), 'p', Block.planks});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 3), new Object[]{
+			"ppp", "psp", "ppp", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 2), 'p', Block.planks});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 4), new Object[]{
+			"p  ", " s ", "  p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 3), 'p', Block.stone});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 5), new Object[]{
+			"p p", " s ", "p p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 4), 'p', Block.stone});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 6), new Object[]{
+			"ppp", "psp", "ppp", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 5), 'p', Block.stone});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 7), new Object[]{
+			"p  ", " s ", "  p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 6), 'p', Item.ingotIron});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 8), new Object[]{
+			"p p", " s ", "p p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 7), 'p', Item.ingotIron});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 9), new Object[]{
+			"ppp", "psp", "ppp", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 8), 'p', Item.ingotIron});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 10), new Object[]{
+			"p  ", " s ", "  p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 9), 'p', Item.ingotGold});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 11), new Object[]{
+			"p p", " s ", "p p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 10), 'p', Item.ingotGold});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 12), new Object[]{
+			"ppp", "psp", "ppp", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 11), 'p', Item.ingotGold});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 13), new Object[]{
+			"p  ", " s ", "  p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 12), 'p', ItemStacks.bedingot});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 14), new Object[]{
+			"p p", " s ", "p p", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 13), 'p', ItemStacks.bedingot});
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.railammo, 1, 15), new Object[]{
+			"ppp", "psp", "ppp", 's', new ItemStack(RotaryCraft.railammo.itemID, 1, 14), 'p', ItemStacks.bedingot});
 
 		addSlideRecipes();
 	}
 
 	private static void addSlideRecipes() {
-		GameRegistry.addRecipe(new ItemStack(mod_RotaryCraft.slides.itemID, 1, 0), new Object[]{ //Wood shaft unit
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.slides.itemID, 1, 0), new Object[]{ //Wood shaft unit
 			"PPP", "PGP", "PPP", 'G', Block.thinGlass, 'P', Item.paper});
 
 		Random r = new Random();
@@ -539,7 +539,7 @@ public class RotaryRecipes {
 				}
 				if (color+j < 0)
 					throw new RuntimeException("Color mapping < 0 at color "+color+" and dye color "+i+" for slide "+j);
-				GameRegistry.addShapelessRecipe(new ItemStack(mod_RotaryCraft.slides.itemID, 1, color+j), new ItemStack(Item.dyePowder.itemID, 1, i), new ItemStack(mod_RotaryCraft.slides.itemID, 1, j));
+				GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.slides.itemID, 1, color+j), new ItemStack(Item.dyePowder.itemID, 1, i), new ItemStack(RotaryCraft.slides.itemID, 1, j));
 				//ReikaJavaLibrary.pConsole("Registering recipe with slide "+j+" and color "+i+" to result slide "+(color+j));
 			}
 		}
@@ -655,17 +655,17 @@ public class RotaryRecipes {
 	}
 
 	public static void addFurnace() {
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.powders.itemID, 2, new ItemStack(mod_RotaryCraft.ethanol, 1, 0), 0.5F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.powders.itemID, 2, new ItemStack(RotaryCraft.ethanol, 1, 0), 0.5F);
 
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 24, new ItemStack(Item.coal.itemID, 1, 0), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 25, new ItemStack(Item.ingotIron.itemID, 1, 0), 0.7F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 26, new ItemStack(Item.ingotGold.itemID, 1, 0), 1F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 27, new ItemStack(Item.redstone.itemID, 4, 0), 0.5F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 28, new ItemStack(Item.dyePowder.itemID, 4, 6), 0.6F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 29, new ItemStack(Item.diamond.itemID, 1, 0), 1F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 30, new ItemStack(Item.emerald.itemID, 1, 0), 1F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 31, new ItemStack(Item.netherQuartz.itemID, 1, 0), 1F);
-		FurnaceRecipes.smelting().addSmelting(mod_RotaryCraft.extracts.itemID, 32, new ItemStack(ItemStacks.silveringot.itemID, 1, ItemStacks.silveringot.getItemDamage()), 1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 24, new ItemStack(Item.coal.itemID, 1, 0), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 25, new ItemStack(Item.ingotIron.itemID, 1, 0), 0.7F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 26, new ItemStack(Item.ingotGold.itemID, 1, 0), 1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 27, new ItemStack(Item.redstone.itemID, 4, 0), 0.5F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 28, new ItemStack(Item.dyePowder.itemID, 4, 6), 0.6F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 29, new ItemStack(Item.diamond.itemID, 1, 0), 1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 30, new ItemStack(Item.emerald.itemID, 1, 0), 1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 31, new ItemStack(Item.netherQuartz.itemID, 1, 0), 1F);
+		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 32, new ItemStack(ItemStacks.silveringot.itemID, 1, ItemStacks.silveringot.getItemDamage()), 1F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

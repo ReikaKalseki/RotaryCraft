@@ -14,7 +14,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
@@ -22,7 +22,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	public ItemBedrockShovel(int par1) {
 		super(par1, EnumToolMaterial.GOLD);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		this.maxStackSize = 1;
 		this.setMaxDamage(0);

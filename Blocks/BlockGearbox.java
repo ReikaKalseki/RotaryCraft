@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -89,7 +89,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return 0.01F;
 		int mult = 1;
 		if (ep.inventory.getCurrentItem() != null) {
-			if (ep.inventory.getCurrentItem().itemID == mod_RotaryCraft.bedpick.itemID)
+			if (ep.inventory.getCurrentItem().itemID == RotaryCraft.bedpick.itemID)
 				mult = 2;
 		}
 		if (this.canHarvest(world, ep, x, y, z))
@@ -142,7 +142,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		if (gbx != null) {
 			int type = gbx.type.ordinal();
 			int ratio = gbx.getBlockMetadata()/4;
-			ItemStack todrop = new ItemStack(mod_RotaryCraft.gbxitems.itemID, 1, type+5*ratio); //drop gearbox item
+			ItemStack todrop = new ItemStack(RotaryCraft.gbxitems.itemID, 1, type+5*ratio); //drop gearbox item
 			if (todrop.stackTagCompound == null)
 				todrop.setTagCompound(new NBTTagCompound());
 			todrop.stackTagCompound.setInteger("damage", gbx.damage);
@@ -233,7 +233,7 @@ public class BlockGearbox extends BlockModelledMachine {
 
 		if (tileentity != null)
 		{
-			ep.openGui(mod_RotaryCraft.instance, 9, world, x, y, z);
+			ep.openGui(RotaryCraft.instance, 9, world, x, y, z);
 		}
 
 		return true;

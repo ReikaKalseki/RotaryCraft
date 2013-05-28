@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWinder;
@@ -42,7 +42,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			}
 			return;
 		}
-		if (inslot[0].itemID != mod_RotaryCraft.wind.itemID) {
+		if (inslot[0].itemID != RotaryCraft.wind.itemID) {
 			if (!winding) {
 				torque = 0;
 				omega = 0;
@@ -56,7 +56,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			tickcount = 0;
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
 				return;
-			inslot[0] = new ItemStack(mod_RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()+1);
+			inslot[0] = new ItemStack(RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()+1);
 			if (par5Random.nextInt((65536-inslot[0].getItemDamage())) == 0) {
 				inslot[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
@@ -72,7 +72,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			if (tickcount < 20)
 				return;
 			tickcount = 0;
-			inslot[0] = new ItemStack(mod_RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()-1);
+			inslot[0] = new ItemStack(RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()-1);
 			omega = UNWINDSPEED;
 			torque = UNWINDTORQUE;
 			power = omega;
@@ -252,7 +252,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == mod_RotaryCraft.wind.itemID;
+		return is.itemID == RotaryCraft.wind.itemID;
 	}
 
 }

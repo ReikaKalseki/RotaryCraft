@@ -24,7 +24,7 @@ import org.lwjgl.input.Keyboard;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;
@@ -62,7 +62,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
     		on = false;
     		return;
     	}
-    	if (inv[0].itemID != mod_RotaryCraft.wind.itemID) {
+    	if (inv[0].itemID != RotaryCraft.wind.itemID) {
     		on = false;
     		return;
     	}
@@ -73,7 +73,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
     	tickcount2++;
     	int dmg = inv[0].getItemDamage();
     	if (tickcount2 > 120) {
-    		ItemStack is = new ItemStack(mod_RotaryCraft.wind.itemID, 1, dmg-1);
+    		ItemStack is = new ItemStack(RotaryCraft.wind.itemID, 1, dmg-1);
     		inv[0] = is;
     		tickcount2 = 0;
     	}
@@ -94,7 +94,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
     		;//return;
     	if (!cameraIsMoved)
     		return;
-    	if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == mod_RotaryCraft.wind.itemID && inv[0].getItemDamage() > 0)
+    	if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == RotaryCraft.wind.itemID && inv[0].getItemDamage() > 0)
     		return;
     	tickcount = 0;
     	this.moveCameraToPlayer();
@@ -274,7 +274,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
-		return is.itemID == mod_RotaryCraft.wind.itemID;
+		return is.itemID == RotaryCraft.wind.itemID;
 	}
 
 	 @Override

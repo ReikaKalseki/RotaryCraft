@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -57,13 +57,13 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		int range = this.getRange();
 		if (power > MINPOWER) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
 			wentdark = false;
-			for (int i = 1; (i < range || range == -1) && !blocked && !Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)] && (!beammode || y+ystep*i <= 125);i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != mod_RotaryCraft.lightblock.blockID; i++) {
+			for (int i = 1; (i < range || range == -1) && !blocked && !Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)] && (!beammode || y+ystep*i <= 125);i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightblock.blockID; i++) {
 				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
-				if (idview == 0 || ((idview == mod_RotaryCraft.lightblock.blockID || idview == mod_RotaryCraft.beamblock.blockID) && world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i) != lightlevel)) { //Only overwrite air blocks or wrong-value light blocks
+				if (idview == 0 || ((idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID) && world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i) != lightlevel)) { //Only overwrite air blocks or wrong-value light blocks
 					if (beammode && lightlevel >= 15)
-						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, mod_RotaryCraft.beamblock.blockID);
+						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.beamblock.blockID);
 					else if (!beammode)
-						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, mod_RotaryCraft.lightblock.blockID, lightlevel, 3);
+						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightblock.blockID, lightlevel, 3);
 					world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
 				}
 				if (Block.opaqueCubeLookup[idview])

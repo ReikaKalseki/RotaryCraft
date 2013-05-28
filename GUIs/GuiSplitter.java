@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 
@@ -70,10 +70,10 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id <= 8) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 6, splitter, player, mode);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 6, splitter, player, mode);
 		}
 		if (button.id == 9)
-			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 7, splitter, player, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 7, splitter, player, 0);
 		this.updateScreen();
 
 	}

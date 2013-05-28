@@ -11,18 +11,18 @@ package Reika.RotaryCraft.Auxiliary;
 
 import Reika.DragonAPI.MIDIInterface;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public final class DemoMusic {
-	private static final MIDIInterface DEMO1 = new MIDIInterface(mod_RotaryCraft.class, "MIDIs/test.mid", RotaryAux.mididir+"test.mid");
-	private static final MIDIInterface DEMO2 = new MIDIInterface(mod_RotaryCraft.class, "MIDIs/test2.mid", RotaryAux.mididir+"test2.mid");
-	private static final MIDIInterface DEMO3 = new MIDIInterface(mod_RotaryCraft.class, "MIDIs/test3.mid", RotaryAux.mididir+"test3.mid");
-	private static final MIDIInterface DEMO4 = new MIDIInterface(mod_RotaryCraft.class, "MIDIs/test4.mid", RotaryAux.mididir+"test4.mid");
-	private static final MIDIInterface DEMO5 = new MIDIInterface(mod_RotaryCraft.class, "MIDIs/test5.mid", RotaryAux.mididir+"test5.mid");
-	private static final MIDIInterface DEMO6 = new MIDIInterface(mod_RotaryCraft.class, "", "");
-	private static final MIDIInterface DEMO7 = new MIDIInterface(mod_RotaryCraft.class, "", "");
-	private static final MIDIInterface DEMO8 = new MIDIInterface(mod_RotaryCraft.class, "", "");
-	private static final MIDIInterface DEMO9 = new MIDIInterface(mod_RotaryCraft.class, "", "");
+	private static final MIDIInterface DEMO1 = new MIDIInterface(RotaryCraft.class, "MIDIs/test.mid", RotaryAux.mididir+"test.mid");
+	private static final MIDIInterface DEMO2 = new MIDIInterface(RotaryCraft.class, "MIDIs/test2.mid", RotaryAux.mididir+"test2.mid");
+	private static final MIDIInterface DEMO3 = new MIDIInterface(RotaryCraft.class, "MIDIs/test3.mid", RotaryAux.mididir+"test3.mid");
+	private static final MIDIInterface DEMO4 = new MIDIInterface(RotaryCraft.class, "MIDIs/test4.mid", RotaryAux.mididir+"test4.mid");
+	private static final MIDIInterface DEMO5 = new MIDIInterface(RotaryCraft.class, "MIDIs/test5.mid", RotaryAux.mididir+"test5.mid");
+	private static final MIDIInterface DEMO6 = new MIDIInterface(RotaryCraft.class, "", "");
+	private static final MIDIInterface DEMO7 = new MIDIInterface(RotaryCraft.class, "", "");
+	private static final MIDIInterface DEMO8 = new MIDIInterface(RotaryCraft.class, "", "");
+	private static final MIDIInterface DEMO9 = new MIDIInterface(RotaryCraft.class, "", "");
 
 	private static int[][][] demo1 = new int[DEMO1.getLength()][16][3];
 	private static int[][][] demo2 = new int[DEMO2.getLength()][64][3];

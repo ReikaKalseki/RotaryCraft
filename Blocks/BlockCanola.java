@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockCanola extends BlockBasic {
@@ -52,7 +52,7 @@ public class BlockCanola extends BlockBasic {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(mod_RotaryCraft.canolaseed.itemID, 1, 0);
+		return new ItemStack(RotaryCraft.canolaseed.itemID, 1, 0);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class BlockCanola extends BlockBasic {
 		int ndrops = 2+rand.nextInt(8)+rand.nextInt(5);
 		if (world.getBlockMetadata(x, y, z) != 9)
 			ndrops = 1;
-		ItemStack items = new ItemStack(mod_RotaryCraft.canolaseed.itemID, ndrops, 0);
+		ItemStack items = new ItemStack(RotaryCraft.canolaseed.itemID, ndrops, 0);
 		for (int i = 0; i < 1; i++) {
 			EntityItem itemdrop = new EntityItem(world, x+0.5D, y+0.5D, z+0.5D, items);
 			itemdrop.motionX = -0.1+0.2*rand.nextFloat();

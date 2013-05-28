@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPileDriver;
@@ -246,7 +246,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
     	}*/
 		if (id == Block.sand.blockID || id == Block.gravel.blockID)
 			this.makeFall(world, x, y, z, id);
-		/*if (id == mod_RotaryCraft.miningpipe.blockID && dropmeta != 4)
+		/*if (id == RotaryCraft.miningpipe.blockID && dropmeta != 4)
 			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);*/
 		if (dropid == -1)
 			return;
@@ -302,7 +302,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			to[0] = id;
 			to[1] = meta;
 		}
-		if (id == mod_RotaryCraft.miningpipe.blockID && meta == 3) {
+		if (id == RotaryCraft.miningpipe.blockID && meta == 3) {
 			to[0] = id;
 			to[1] = meta;
 		}
@@ -311,7 +311,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public boolean drawPile3(World world, int x, int y, int z, int speed) {
 		if (climbing && tickcount > speed) {
-			if (world.getBlockId(x, y-step2-2, z) == mod_RotaryCraft.miningpipe.blockID)
+			if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
 				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-2, z, 0);
 			step2--;
 			if (world.getBlockId(x, y-step2, z) == this.getBlockType().blockID) {
@@ -324,7 +324,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			tickcount = 0;
 		}
 		if (climbing && tickcount <= speed) {
-			//if (world.getBlockId(x, y-step2-2, z) == mod_RotaryCraft.miningpipe.blockID)
+			//if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
 			//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-2, z, 0);
 			if (step2 >= step)
 				step2--;
@@ -399,12 +399,12 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.fizz", 1F, 1F);
 			}
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-1, z, mod_RotaryCraft.miningpipe.blockID, BITMETA);
+			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-1, z, RotaryCraft.miningpipe.blockID, BITMETA);
 			step2++;
 		}/*
 		if (step2 == step) {
 			if (world.getBlockId(x, y-step2-2, z) == 0)
-				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-2, z, mod_RotaryCraft.miningpipe.blockID, BITMETA);
+				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-2, z, RotaryCraft.miningpipe.blockID, BITMETA);
 		}*/
 		if (world.getBlockId(x, y-step2-1, z) == 0) {
 			while(world.getBlockId(x, y-step2-2, z) == 0 && y-step2-2 > 0 && step == step2) {
@@ -458,7 +458,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			for (int j = -2; j < 3; j++) {
 				if (i*j != 4 && i*j != -4 && world.getBlockId(x+i, y, z+j) != 0 && world.getBlockMaterial(x+i, y, z+j) != Material.water && world.getBlockMaterial(x+i, y, z+j) != Material.lava) {
 					cleared = false;
-					//ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z, mod_RotaryCraft.miningpipe.blockID, BITMETA);
+					//ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z, RotaryCraft.miningpipe.blockID, BITMETA);
 				}
 			}
 		}
@@ -486,7 +486,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 		if (dmg == -1)
 			return;
-		ItemStack is = new ItemStack(mod_RotaryCraft.spawner.itemID, 1, dmg);
+		ItemStack is = new ItemStack(RotaryCraft.spawner.itemID, 1, dmg);
 		EntityItem ent = new EntityItem(world, x, y, z, is);
 		world.spawnEntityInWorld(ent);
 	}

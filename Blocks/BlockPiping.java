@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumLook;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -42,7 +42,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	@Override
 	public int idDropped(int id, Random r, int fortune) {
-		return mod_RotaryCraft.pipeplacer.itemID;
+		return RotaryCraft.pipeplacer.itemID;
 	}
 
 	@Override

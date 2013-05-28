@@ -13,7 +13,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
@@ -51,7 +51,7 @@ public class GuiWinder extends GuiOneSlotInv
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, player);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, player);
 		input = !input;
 		this.initGui();
 	}

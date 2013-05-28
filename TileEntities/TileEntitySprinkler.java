@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -113,10 +113,10 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 						int foundid = world.getBlockId(x+i, k, z+j);
 						int meta2 = world.getBlockMetadata(x+i, k, z+j);
 						if (par5Random.nextInt(20) == 0) {
-							if (foundid == Block.crops.blockID || foundid == Block.potato.blockID || foundid == Block.carrot.blockID || foundid == mod_RotaryCraft.canola.blockID) {
-								if (foundid != mod_RotaryCraft.canola.blockID && meta2 < 7)
+							if (foundid == Block.crops.blockID || foundid == Block.potato.blockID || foundid == Block.carrot.blockID || foundid == RotaryCraft.canola.blockID) {
+								if (foundid != RotaryCraft.canola.blockID && meta2 < 7)
 									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
-								if (foundid == mod_RotaryCraft.canola.blockID && meta2 < 9)
+								if (foundid == RotaryCraft.canola.blockID && meta2 < 9)
 									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
 							}
 						}

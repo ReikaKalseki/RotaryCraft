@@ -16,7 +16,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites {
 
@@ -24,7 +24,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	public ItemRotaryArmor(int par1, EnumArmorMaterial par2, int par3, int par4, int ind) {
 		super(par1, par2, par3, par4);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;
 		this.setIndex(ind);
 	}

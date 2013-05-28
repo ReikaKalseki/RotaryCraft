@@ -17,7 +17,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -405,7 +405,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	private void bonusItems(ItemStack is) {
 		if (is == null)
 			return;
-		if (is.itemID == mod_RotaryCraft.extracts.itemID) {
+		if (is.itemID == RotaryCraft.extracts.itemID) {
 			if (is.getItemDamage() == ItemStacks.goldoresolution.getItemDamage()) {
 				if (par5Random.nextInt(8) == 0)
 					ReikaInventoryHelper.addOrSetStack(ItemStacks.silverflakes.itemID, 1, ItemStacks.silverflakes.getItemDamage(), extractorItemStacks, 8);

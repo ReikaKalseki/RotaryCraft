@@ -33,7 +33,7 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
     @Override
 	public void bindTextureByName(String file) {/*
         RenderEngine renderengine = this.tileEntityRenderer.renderEngine;
-        //String filename = mod_RotaryCraft.class.getResource(file).getPath();
+        //String filename = RotaryCraft.class.getResource(file).getPath();
         //ReikaJavaLibrary.pConsole(getClass().getClassLoader().getResource(".").getPath());
         String filename;
         if (this.getClass() == null)

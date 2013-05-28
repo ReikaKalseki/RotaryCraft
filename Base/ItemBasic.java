@@ -15,7 +15,7 @@ import java.util.Random;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class ItemBasic extends Item implements IndexedItemSprites {
 
@@ -26,7 +26,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	public ItemBasic(int itemID, int index) {
 		super(itemID);
 		maxStackSize = 64;
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.setIndex(index);
 	}
 
@@ -35,7 +35,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 		maxStackSize = max;
 		if (max == 1);
 		hasSubtypes = true;
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.setIndex(index);
 	}
 

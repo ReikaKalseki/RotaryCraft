@@ -21,7 +21,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +32,7 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 
 	public ItemBedrockPickaxe(int par1) {
 		super(par1, EnumToolMaterial.GOLD);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
@@ -61,9 +61,9 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 			return 0;
 		if (par2Block.blockID == Block.obsidian.blockID)
 			return 48F;
-		if (par2Block.blockID == mod_RotaryCraft.blastglass.blockID)
+		if (par2Block.blockID == RotaryCraft.blastglass.blockID)
 			return 32F;
-		if (par2Block.blockID == mod_RotaryCraft.obsidianglass.blockID)
+		if (par2Block.blockID == RotaryCraft.obsidianglass.blockID)
 			return 48F;
 		if (par2Block.blockID == MachineRegistry.SHAFT.getBlockID())
 			return 32F;
@@ -81,7 +81,7 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		}
 		if (par2Block.blockMaterial == Material.rock || par2Block.blockMaterial == Material.iron)
 			return 12F;
-		if (par2Block == mod_RotaryCraft.decoblock)
+		if (par2Block == RotaryCraft.decoblock)
 			return 12F;
 		if (par2Block instanceof BlockBasicMachine)
 			return 12F;

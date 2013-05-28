@@ -22,6 +22,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -33,14 +34,14 @@ public class RotaryAux {
 
 	public static int blockModel;
 
-	public static final String items1png = "C:/Users/Reika/Downloads/mcp744/src/minecraft/Reika/RotaryCraft/Textures/GUI/items.png";
-	public static final String items2png = "C:/Users/Reika/Downloads/mcp744/src/minecraft/Reika/RotaryCraft/Textures/GUI/items2.png";
-	public static final String terrainpng = "C:/Users/Reika/Downloads/mcp744/src/minecraft/Reika/RotaryCraft/Textures/Terrain/textures.png";
-	public static final String tileentdir = "C:/Users/Reika/Downloads/mcp744/src/minecraft/Reika/RotaryCraft/Textures/TileEntityTex/";
-	public static final String mididir = "C:/Users/Reika/Downloads/mcp744/src/minecraft/Reika/RotaryCraft/MIDIs/";
+	public static final String items1png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/GUI/items.png";
+	public static final String items2png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/GUI/items2.png";
+	public static final String terrainpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Terrain/textures.png";
+	public static final String tileentdir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/TileEntityTex/";
+	public static final String mididir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/MIDIs/";
 
 	public static void initializeModel (BaseMod mod) {
-		 blockModel = ModLoader.getUniqueBlockModelID(mod, true);
+		blockModel = ModLoader.getUniqueBlockModelID(mod, true);
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {
@@ -170,32 +171,32 @@ public class RotaryAux {
 		Random par5Random = new Random();
 		if (ii != null) {
 			label0:
-			for (int i = 0; i < ii.getSizeInventory(); i++){
-				ItemStack itemstack = ii.getStackInSlot(i);
-				if (itemstack == null)
-					continue;
-				float f = par5Random.nextFloat() * 0.8F + 0.1F;
-				float f1 = par5Random.nextFloat() * 0.8F + 0.1F;
-				float f2 = par5Random.nextFloat() * 0.8F + 0.1F;
-				do {
-					if (itemstack.stackSize <= 0)
-						continue label0;
-					int j = par5Random.nextInt(21) + 10;
-					if (j > itemstack.stackSize)
-						j = itemstack.stackSize;
-					itemstack.stackSize -= j;
-					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
-					if (itemstack.hasTagCompound())
-						entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-					float f3 = 0.05F;
-					entityitem.motionX = (float)par5Random.nextGaussian() * f3;
-					entityitem.motionY = (float)par5Random.nextGaussian() * f3 + 0.2F;
-					entityitem.motionZ = (float)par5Random.nextGaussian() * f3;
-					entityitem.delayBeforeCanPickup = 10;
-					world.spawnEntityInWorld(entityitem);
+				for (int i = 0; i < ii.getSizeInventory(); i++){
+					ItemStack itemstack = ii.getStackInSlot(i);
+					if (itemstack == null)
+						continue;
+					float f = par5Random.nextFloat() * 0.8F + 0.1F;
+					float f1 = par5Random.nextFloat() * 0.8F + 0.1F;
+					float f2 = par5Random.nextFloat() * 0.8F + 0.1F;
+					do {
+						if (itemstack.stackSize <= 0)
+							continue label0;
+						int j = par5Random.nextInt(21) + 10;
+						if (j > itemstack.stackSize)
+							j = itemstack.stackSize;
+						itemstack.stackSize -= j;
+						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
+						if (itemstack.hasTagCompound())
+							entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+						float f3 = 0.05F;
+						entityitem.motionX = (float)par5Random.nextGaussian() * f3;
+						entityitem.motionY = (float)par5Random.nextGaussian() * f3 + 0.2F;
+						entityitem.motionZ = (float)par5Random.nextGaussian() * f3;
+						entityitem.delayBeforeCanPickup = 10;
+						world.spawnEntityInWorld(entityitem);
+					}
+					while (true);
 				}
-				while (true);
-			}
 		}
 	}
 }

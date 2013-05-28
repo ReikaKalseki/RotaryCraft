@@ -105,7 +105,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			return;
 		}
 		float a = 0; float b = 0;
-		if (item.itemID == mod_RotaryCraft.engineitems.itemID) {
+		if (item.itemID == RotaryCraft.engineitems.itemID) {
 			TileEntityEngine eng = new TileEntityEngine();
 			eng.type = EnumEngineType.DC;
 			if (type == type.ENTITY) {
@@ -114,28 +114,28 @@ public class ItemMachineRenderer implements IItemRenderer {
 			}
 			TileEntityRenderer.instance.renderTileEntityAt(eng, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
-		else if (item.itemID == mod_RotaryCraft.gbxitems.itemID) {
+		else if (item.itemID == RotaryCraft.gbxitems.itemID) {
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
 			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityGearbox(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
-		else if (item.itemID == mod_RotaryCraft.advgearitems.itemID) {
+		else if (item.itemID == RotaryCraft.advgearitems.itemID) {
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
 			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAdvancedGear(), a, -0.1D, b, -1000F*(item.getItemDamage()+1));
 		}
-		else if (item.itemID == mod_RotaryCraft.flywheelitems.itemID) {
+		else if (item.itemID == RotaryCraft.flywheelitems.itemID) {
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
 			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFlywheel(), a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
 		}
-		else if (item.itemID == mod_RotaryCraft.shaftitems.itemID) {
+		else if (item.itemID == RotaryCraft.shaftitems.itemID) {
 			if (type == type.ENTITY) {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 				a = -0.5F; b = -0.5F;
@@ -145,7 +145,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			else
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
-		else if (item.itemID == mod_RotaryCraft.machineplacer.itemID) {
+		else if (item.itemID == RotaryCraft.machineplacer.itemID) {
 			if (type == type.ENTITY) {
 				a = -0.5F;
 				b = -0.5F;

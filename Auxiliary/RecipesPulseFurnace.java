@@ -16,7 +16,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesPulseFurnace
 {
@@ -36,8 +36,8 @@ public class RecipesPulseFurnace
 
 	private RecipesPulseFurnace()
 	{
-		this.addSmelting(Block.obsidian.blockID, 0, new ItemStack(mod_RotaryCraft.obsidianglass, 1, 0), 0.7F);
-		this.addSmelting(Item.ingotIron.itemID, 0, new ItemStack(mod_RotaryCraft.shaftcraft, 1, 1), 0.4F);	//Iron ingot
+		this.addSmelting(Block.obsidian.blockID, 0, new ItemStack(RotaryCraft.obsidianglass, 1, 0), 0.7F);
+		this.addSmelting(Item.ingotIron.itemID, 0, new ItemStack(RotaryCraft.shaftcraft, 1, 1), 0.4F);	//Iron ingot
 
 		//RECYCLING
 		this.addSmelting(Item.helmetChain.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
@@ -69,8 +69,8 @@ public class RecipesPulseFurnace
 		this.addSmelting(Item.doorIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 6, 0), 0F);
 		this.addSmelting(Item.cauldron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
 
-		//addSmelting(mod_RotaryCraft.shaftcraft.itemID, 10, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//scrap
-		//addSmelting(mod_RotaryCraft.shaftcraft.itemID, 9, new ItemStack(mod_RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap
+		//addSmelting(RotaryCraft.shaftcraft.itemID, 10, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//scrap
+		//addSmelting(RotaryCraft.shaftcraft.itemID, 9, new ItemStack(RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap
 		this.addSmelting(Block.railDetector.blockID, 0, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//1 ingot per block of rail
 		this.addSmelting(Block.railPowered.blockID, 0, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
 

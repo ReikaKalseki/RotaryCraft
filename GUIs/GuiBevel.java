@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 
@@ -245,7 +245,7 @@ public class GuiBevel extends GuiNonPoweredMachine
     	}
     	this.getDirectionFromIO();
     	this.initGui();
-        ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 4, bevel, player, posn);
+        ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 4, bevel, player, posn);
     }
 
     @Override

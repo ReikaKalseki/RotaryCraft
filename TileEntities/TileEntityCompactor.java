@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -61,9 +61,9 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 	public void testIdle() {
 		boolean coal = ReikaInventoryHelper.checkForItemStack(Item.coal.itemID, 0, compactorItemStacks);
-		boolean anth = ReikaInventoryHelper.checkForItemStack(mod_RotaryCraft.compacts.itemID, 0, compactorItemStacks);
-		boolean pris = ReikaInventoryHelper.checkForItemStack(mod_RotaryCraft.compacts.itemID, 1, compactorItemStacks);
-		boolean lons = ReikaInventoryHelper.checkForItemStack(mod_RotaryCraft.compacts.itemID, 2, compactorItemStacks);
+		boolean anth = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 0, compactorItemStacks);
+		boolean pris = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 1, compactorItemStacks);
+		boolean lons = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 2, compactorItemStacks);
 		boolean full = true;
 		if (compactorItemStacks[4] == null)
 			full = false;
@@ -287,7 +287,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 		int item = is1.itemID;
 		int meta = is1.getItemDamage();
-		if (item != mod_RotaryCraft.compacts.itemID && item != Item.coal.itemID)
+		if (item != RotaryCraft.compacts.itemID && item != Item.coal.itemID)
 			return -1;
 
 		if (item == Item.coal.itemID)
@@ -392,11 +392,11 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		int meta = compactorItemStacks[0].getItemDamage();
 		if (id == Item.coal.itemID && meta == 0)
 			return 1;
-		if (id == mod_RotaryCraft.compacts.itemID && meta == 0)
+		if (id == RotaryCraft.compacts.itemID && meta == 0)
 			return 2;
-		if (id == mod_RotaryCraft.compacts.itemID && meta == 1)
+		if (id == RotaryCraft.compacts.itemID && meta == 1)
 			return 3;
-		if (id == mod_RotaryCraft.compacts.itemID && meta == 2)
+		if (id == RotaryCraft.compacts.itemID && meta == 2)
 			return 4;
 		return -1;
 	}
@@ -547,7 +547,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		if (slot == 4)
 			return false;
-		return (is.itemID == Item.coal.itemID || is.itemID == mod_RotaryCraft.compacts.itemID);
+		return (is.itemID == Item.coal.itemID || is.itemID == RotaryCraft.compacts.itemID);
 	}
 
 	@Override

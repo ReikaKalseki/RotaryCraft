@@ -30,7 +30,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumLook;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -99,7 +99,7 @@ public abstract class BlockBasicMultiTE extends Block {
 
 	@Override
 	public int idDropped(int id, Random r, int fortune) {
-		return mod_RotaryCraft.machineplacer.itemID;
+		return RotaryCraft.machineplacer.itemID;
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public abstract class BlockBasicMultiTE extends Block {
 				return false;
 		}
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
-			ep.openGui(mod_RotaryCraft.instance, 0, world, x, y, z);
+			ep.openGui(RotaryCraft.instance, 0, world, x, y, z);
 			return true;
 		}
 		if (te instanceof TileEntityScreen) {
@@ -178,10 +178,10 @@ public abstract class BlockBasicMultiTE extends Block {
 		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
 		if (!m.hasCustomPlacerItem()) {
-			return new ItemStack(mod_RotaryCraft.machineplacer.itemID, 1, m.ordinal());
+			return new ItemStack(RotaryCraft.machineplacer.itemID, 1, m.ordinal());
 		}
 		else if (m.isPipe()) {
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, m.getMachineMetadata());
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, m.getMachineMetadata());
 		}
 		return null;
 	}

@@ -21,7 +21,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.IO.ReikaMIDIReader;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 
@@ -181,7 +181,7 @@ public class GuiMusic extends GuiNonPoweredMachine
     public void actionPerformed(GuiButton button) {
     	if (ReikaMathLibrary.isValueInsideBoundsIncl(LENGTHSTART, LENGTHSTART+4, button.id)) {
     		noteLength = button.id-LENGTHSTART;
-    		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 21, music, player, noteLength, 0, 0, 0);
+    		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 21, music, player, noteLength, 0, 0, 0);
         	this.initGui();
     	}
     	if (button.id == 0)
@@ -190,26 +190,26 @@ public class GuiMusic extends GuiNonPoweredMachine
     		this.addNote(button.id);
     	}
     	if (button.id == 1) {
-    		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 23, music, player, channel, voice, addednote, volume);
+    		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 23, music, player, channel, voice, addednote, volume);
     	}
        	if (button.id == 2) {
-       		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 24, music, player, channel, voice, addednote, volume);
+       		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 24, music, player, channel, voice, addednote, volume);
     	}
        	if (button.id == 3) {
-       		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 25, music, player, channel, 0, 0, 0);
+       		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 25, music, player, channel, 0, 0, 0);
     	}
        	if (button.id == 4) {
-       		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 26, music, player, 0, 0, 0, 0);
+       		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 26, music, player, 0, 0, 0, 0);
     	}
        	if (button.id == 5) {
-       		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 27, music, player, 0, 0, 0, 0);
+       		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 27, music, player, 0, 0, 0, 0);
     	}
     }
 
     private void addNote(int note) {
     	note -= NOTESTART;
     	addednote = note;
-    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 22, music, player, channel, voice, addednote, volume);
+    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 22, music, player, channel, voice, addednote, volume);
     }
 
     /**

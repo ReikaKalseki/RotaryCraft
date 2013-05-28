@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -37,8 +37,8 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 
 	public static final ItemStack[] ingredients =
 		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(Item.coal.itemID, 1, 0),
-		new ItemStack(mod_RotaryCraft.powders.itemID, 1, 0), new ItemStack(mod_RotaryCraft.powders.itemID, 1, 1),
-		new ItemStack(mod_RotaryCraft.ethanol.itemID, 1, 0), new ItemStack(Item.magmaCream.itemID, 1, 0)};
+		new ItemStack(RotaryCraft.powders.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 1),
+		new ItemStack(RotaryCraft.ethanol.itemID, 1, 0), new ItemStack(Item.magmaCream.itemID, 1, 0)};
 
 	public ItemStack[] inv = new ItemStack[ingredients.length+1+1];
 

@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemStunGun extends ItemBasic {
@@ -30,7 +30,7 @@ public class ItemStunGun extends ItemBasic {
 	public ItemStunGun(int itemID) {
 		super(itemID, 192);
 		maxStackSize = 1;
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
 	}

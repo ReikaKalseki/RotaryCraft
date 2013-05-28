@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -66,7 +66,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
         	emptySlide = false;
         	channel = -1;
     	}
-    	if (slides[0].itemID != mod_RotaryCraft.slides.itemID) {
+    	if (slides[0].itemID != RotaryCraft.slides.itemID) {
     		emptySlide = true;
     		return;
     	}
@@ -280,7 +280,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == mod_RotaryCraft.slides.itemID;
+		return is.itemID == RotaryCraft.slides.itemID;
 	}
 
 	 @Override

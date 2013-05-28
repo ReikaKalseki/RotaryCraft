@@ -19,7 +19,7 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
@@ -96,9 +96,9 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
     		range = 0;
     		input.deleteFromCursor(-1);
     		if (te instanceof TileEntityForceField)
-    			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
+    			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
     		else if (te instanceof TileEntityContainment)
-    			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
+    			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
     		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Illegal Chars");
     		return;
     	}
@@ -107,9 +107,9 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
     	range = Integer.parseInt(input.getText());
     	if (range >= 0) {
     		if (te instanceof TileEntityForceField)
-    			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
+    			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
     		else if (te instanceof TileEntityContainment)
-    			ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
+    			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
     	}
     }
 

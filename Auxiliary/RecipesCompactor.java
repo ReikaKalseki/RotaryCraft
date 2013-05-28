@@ -15,7 +15,7 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesCompactor
 {
@@ -35,10 +35,10 @@ public class RecipesCompactor
 	
 	private RecipesCompactor()
 	{
-		addSmelting(Item.coal.itemID, 0, new ItemStack(mod_RotaryCraft.compacts.itemID, 1, 0), 0.2F); //No charcoal
-		addSmelting(mod_RotaryCraft.compacts.itemID, 0, new ItemStack(mod_RotaryCraft.compacts.itemID, 1, 1), 0.2F);
-		addSmelting(mod_RotaryCraft.compacts.itemID, 1, new ItemStack(mod_RotaryCraft.compacts.itemID, 1, 2), 0.2F);
-		addSmelting(mod_RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, 1, 0), 0.2F);
+		addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 1, 0), 0.2F); //No charcoal
+		addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 1, 1), 0.2F);
+		addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, 1, 2), 0.2F);
+		addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, 1, 0), 0.2F);
 	}
 	
     /** Adds a smelting recipe. */

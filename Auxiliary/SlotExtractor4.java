@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class SlotExtractor4 extends Slot {
 	
@@ -32,7 +32,7 @@ public class SlotExtractor4 extends Slot {
      */
     public boolean isItemValid(ItemStack is)
     {
-    	return (is.itemID == mod_RotaryCraft.extracts.itemID && is.getItemDamage() < 24 && is.getItemDamage() >= 16);
+    	return (is.itemID == RotaryCraft.extracts.itemID && is.getItemDamage() < 24 && is.getItemDamage() >= 16);
     }
 
     /**

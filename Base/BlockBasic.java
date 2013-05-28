@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class BlockBasic extends Block implements SidedTextureIndex {
 
@@ -26,7 +26,7 @@ public abstract class BlockBasic extends Block implements SidedTextureIndex {
 		super(par1, par3Material);
 		if (par1 != RotaryConfig.miningpipeid && par1 != RotaryConfig.lightblockid && par1 != RotaryConfig.lightbridgeid &&
 				par1 != RotaryConfig.bedrocksliceid && par1 != RotaryConfig.beamblockid && par1 != RotaryConfig.canolaid)
-			this.setCreativeTab(mod_RotaryCraft.tabRotary);
+			this.setCreativeTab(RotaryCraft.tabRotary);
 	}
 
 	@Override

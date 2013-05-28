@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
@@ -35,13 +35,13 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements IInvento
 	public ItemStack[] ammo = new ItemStack[54];
 
 	public int getPowerLevel() {
-		int meta = ReikaInventoryHelper.findMaxMetadataOfID(mod_RotaryCraft.railammo.itemID, ammo);
+		int meta = ReikaInventoryHelper.findMaxMetadataOfID(RotaryCraft.railammo.itemID, ammo);
 		return meta;
 	}
 
 	@Override
 	public boolean hasAmmo() {
-		return ReikaInventoryHelper.checkForItem(mod_RotaryCraft.railammo.itemID, ammo);
+		return ReikaInventoryHelper.checkForItem(RotaryCraft.railammo.itemID, ammo);
 	}
 
 	@Override
@@ -100,8 +100,8 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements IInvento
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
 		int maxmeta = this.getMaxThrust();
-		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(mod_RotaryCraft.railammo.itemID, ammo, maxmeta);
-		int slot = ReikaInventoryHelper.locateInInventory(mod_RotaryCraft.railammo.itemID, m, ammo);
+		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(RotaryCraft.railammo.itemID, ammo, maxmeta);
+		int slot = ReikaInventoryHelper.locateInInventory(RotaryCraft.railammo.itemID, m, ammo);
 		ReikaInventoryHelper.decrStack(slot, ammo);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
@@ -278,7 +278,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements IInvento
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == mod_RotaryCraft.railammo.itemID;
+		return is.itemID == RotaryCraft.railammo.itemID;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -95,7 +95,7 @@ public class GuiCVT extends GuiNonPoweredMachine
     	if (ratio > cvt.getMaxRatio())
     		ratio = cvt.getMaxRatio();
     	ratio = -ratio;
-        ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 11, cvt, player, ratio);
+        ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
 
          	super.updateScreen();
          	x = Mouse.getX();
@@ -114,12 +114,12 @@ public class GuiCVT extends GuiNonPoweredMachine
     	if (!(input.getText().matches("^[0-9 ]+$"))) {
     		ratio = 1;
     		input.deleteFromCursor(-1);
-    		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 11, cvt, player, ratio);
+    		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
     		return;
     	}
     	ratio = Integer.parseInt(input.getText());
     	if (ratio != 0)
-    		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 11, cvt, player, ratio);
+    		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
     }
 
     /**

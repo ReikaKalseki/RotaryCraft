@@ -30,7 +30,7 @@ import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Items.ItemDebug;
@@ -184,7 +184,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			}
 		}
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
-			ep.openGui(mod_RotaryCraft.instance, 9, world, x, y, z);
+			ep.openGui(RotaryCraft.instance, 9, world, x, y, z);
 			return true;
 		}
 		return false;
@@ -201,7 +201,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng == null)
 				return null;
-			return new ItemStack(mod_RotaryCraft.engineitems.itemID, 1, eng.type.getID());
+			return new ItemStack(RotaryCraft.engineitems.itemID, 1, eng.type.getID());
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
@@ -218,27 +218,27 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				dmg += 15;
 				break;
 			}
-			return new ItemStack(mod_RotaryCraft.gbxitems.itemID, 1, dmg);
+			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, dmg);
 		}
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 			meta = sha.getBlockMetadata();
 			if (meta >= 6)
-				return new ItemStack(mod_RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1);
-			return new ItemStack(mod_RotaryCraft.shaftitems.itemID, 1, sha.type.ordinal());
+				return new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1);
+			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, sha.type.ordinal());
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
 			meta = fly.getBlockMetadata();
-			return new ItemStack(mod_RotaryCraft.flywheelitems.itemID, 1, meta/4);
+			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta/4);
 		}
 		if (m == MachineRegistry.ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 			meta = adv.getBlockMetadata();
-			return new ItemStack(mod_RotaryCraft.advgearitems.itemID, 1, meta/4);
+			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
 		}
 		if (m.isPipe()) {
-			return new ItemStack(mod_RotaryCraft.pipeplacer.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, meta);
 		}
 		return null;
 	}

@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -95,7 +95,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			page--;
 		if (page == oldpage)
 			return;
-		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 18, tile, player, page);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 18, tile, player, page);
 		//player.closeScreen();
 		//this.refreshScreen();
 		//this.setValues();
@@ -105,7 +105,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		int lastx = x;
 		int lasty = y;
 		mc.thePlayer.closeScreen();
-		player.openGui(mod_RotaryCraft.instance, 9, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+		player.openGui(RotaryCraft.instance, 9, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 		Mouse.setCursorPosition(lastx, lasty);
 		invsize = tile.getSizeInventory();
 		numrows = (int)Math.ceil(invsize/9D);

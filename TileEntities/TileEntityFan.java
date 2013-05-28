@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -213,7 +213,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public void rip2(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		if (id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID && id != Block.fire.blockID &&
-				id != Block.crops.blockID && id != Block.potato.blockID && id != Block.carrot.blockID && id != mod_RotaryCraft.canola.blockID && id != Block.netherStalk.blockID)
+				id != Block.crops.blockID && id != Block.potato.blockID && id != Block.carrot.blockID && id != RotaryCraft.canola.blockID && id != Block.netherStalk.blockID)
 			return;
 		if ((par5Random.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (par5Random.nextInt(200) > 0 && id == Block.tallGrass.blockID))
 			return;
@@ -226,10 +226,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (id == Block.fire.blockID && omega < FIRESPEED)
 			return;
 		if ((id == Block.crops.blockID || id == Block.potato.blockID || id == Block.carrot.blockID ||
-				id == mod_RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) && omega < HARVESTSPEED)
+				id == RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) && omega < HARVESTSPEED)
 			return;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", id, world.getBlockMetadata(x, y, z), x, y, z));
-		if (id == Block.crops.blockID || id == Block.potato.blockID || id == Block.carrot.blockID || id == mod_RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) {
+		if (id == Block.crops.blockID || id == Block.potato.blockID || id == Block.carrot.blockID || id == RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) {
 			this.harvest(world, x, y, z, this.getBlockMetadata(), id);
 			return;
 		}
@@ -275,8 +275,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			itemmeta = 0;
 			itemsize = 1+par5Random.nextInt(4);
 		}
-		if (id == mod_RotaryCraft.canola.blockID && world.getBlockMetadata(x, y, z) == 9) {
-			itemid = mod_RotaryCraft.canolaseed.itemID;
+		if (id == RotaryCraft.canola.blockID && world.getBlockMetadata(x, y, z) == 9) {
+			itemid = RotaryCraft.canolaseed.itemID;
 			itemmeta = 0;
 			itemsize = 1+par5Random.nextInt(6)+par5Random.nextInt(3);
 		}

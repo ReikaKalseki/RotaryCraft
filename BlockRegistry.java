@@ -69,7 +69,7 @@ public enum BlockRegistry {
 	}
 
 	public Block getBlockVariable() {
-		return mod_RotaryCraft.machineBlocks[this.ordinal()];
+		return RotaryCraft.machineBlocks[this.ordinal()];
 	}
 
 	public Block createInstance() {
@@ -129,7 +129,7 @@ public enum BlockRegistry {
 	}
 
 	public int getBlockID() {
-		return mod_RotaryCraft.machineBlocks[this.ordinal()].blockID;
+		return RotaryCraft.machineBlocks[this.ordinal()].blockID;
 	}
 
 	public String getName() {

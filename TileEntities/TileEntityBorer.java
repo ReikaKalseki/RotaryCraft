@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 
@@ -180,7 +180,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements GuiControl
 
 					if (dmg == -1)
 						return;
-					ItemStack is = new ItemStack(mod_RotaryCraft.spawner.itemID, 1, dmg);
+					ItemStack is = new ItemStack(RotaryCraft.spawner.itemID, 1, dmg);
 					EntityItem ent = new EntityItem(world, x, y, z, is);
 					ent.delayBeforeCanPickup = 10;
 					if (!this.chestCheck(world, x, y, z, is))
@@ -262,7 +262,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements GuiControl
 				if (cutShape[i][j] || step == 1) {
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
 					this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlockId(xread, yread, zread), world.getBlockMetadata(xread, yread, zread));
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, xread, yread, zread, mod_RotaryCraft.miningpipe.blockID, pipemeta);
+					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, xread, yread, zread, RotaryCraft.miningpipe.blockID, pipemeta);
 				}
 			}
 		}

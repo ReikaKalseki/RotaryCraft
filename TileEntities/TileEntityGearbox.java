@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -549,7 +549,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements IInven
 	 public boolean isStackValidForSlot(int i, ItemStack itemstack) {
 		 if (itemstack == null)
 			 return false;
-		 return (itemstack.itemID == mod_RotaryCraft.fuelbucket.itemID && itemstack.getItemDamage() == 0);
+		 return (itemstack.itemID == RotaryCraft.fuelbucket.itemID && itemstack.getItemDamage() == 0);
 	 }
 
 	@Override

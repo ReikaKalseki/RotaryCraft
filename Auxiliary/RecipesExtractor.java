@@ -15,7 +15,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesExtractor
 {
@@ -36,16 +36,16 @@ public class RecipesExtractor
 	private RecipesExtractor()
 	{
 		for (int i = 0; i < 24; i++)
-			addSmelting(mod_RotaryCraft.extracts.itemID, i, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, i+8), 0.7F);
+			addSmelting(RotaryCraft.extracts.itemID, i, new ItemStack(RotaryCraft.extracts.itemID, 1, i+8), 0.7F);
 		
-		addSmelting(Block.oreCoal.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 0), 0F);
-		addSmelting(Block.oreIron.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 1), 0F);
-		addSmelting(Block.oreGold.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 2), 0F);
-		addSmelting(Block.oreRedstone.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 3), 0F);
-		addSmelting(Block.oreLapis.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 4), 0F);
-		addSmelting(Block.oreDiamond.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 5), 0F);
-		addSmelting(Block.oreEmerald.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 6), 0F);
-		//addSmelting(Block.oreNether.blockID, 0, new ItemStack(mod_RotaryCraft.extracts.itemID, 1, 7), 0.7F);
+		addSmelting(Block.oreCoal.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 0), 0F);
+		addSmelting(Block.oreIron.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 1), 0F);
+		addSmelting(Block.oreGold.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 2), 0F);
+		addSmelting(Block.oreRedstone.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 3), 0F);
+		addSmelting(Block.oreLapis.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 4), 0F);
+		addSmelting(Block.oreDiamond.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 5), 0F);
+		addSmelting(Block.oreEmerald.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 6), 0F);
+		//addSmelting(Block.oreNether.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 7), 0.7F);
 	}
 	
     /** Adds a smelting recipe. */

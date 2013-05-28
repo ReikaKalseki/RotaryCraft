@@ -16,13 +16,13 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 public class ItemNightVisionHelmet extends ItemRotaryArmor implements IArmorTextureProvider {
 
 	public ItemNightVisionHelmet(int itemID, int texID) {
-		super(itemID, mod_RotaryCraft.NVHM, texID, 0, 48);
+		super(itemID, RotaryCraft.NVHM, texID, 0, 48);
 		//this.setNoRepair();
 		//this.damageReduceAmount = EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0);
 		//this.setMaxDamage((int)(1.2*EnumArmorMaterial.DIAMOND.getDurability(0)));

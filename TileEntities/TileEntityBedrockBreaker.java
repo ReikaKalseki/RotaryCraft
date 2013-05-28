@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
@@ -186,7 +186,7 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 				id = 0;
 				break;
 			}
-			if ((id == 7) || (id == mod_RotaryCraft.bedrockslice.blockID))
+			if ((id == 7) || (id == RotaryCraft.bedrockslice.blockID))
 				return true;
 			if (id == 10 || id == 11) //If lava
 			return false;
@@ -200,18 +200,18 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 		if (!world.isRemote) {
 			if (world.getBlockId(harvestx, harvesty, harvestz) == 7) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
-				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, mod_RotaryCraft.bedrockslice.blockID, 0);
+				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0);
 			}
 			else {
 				int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
 				if (rockmetadata < 15) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, mod_RotaryCraft.bedrockslice.blockID, rockmetadata+1);
+					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1);
 				}
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
-					EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 4));
+					EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, new ItemStack(RotaryCraft.powders.itemID, 1, 4));
 					itementity.delayBeforeCanPickup = 0;
 					itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
 					itementity.motionZ = -0.025+0.05*par5Random.nextFloat();

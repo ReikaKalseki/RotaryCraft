@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 
@@ -98,7 +98,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
     		dat = -1;
     	else
     		dat = timer;
-    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 	        		dat = -1;
 	        	else
 	        		dat = timer;
-	        	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+	        	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
 	    		return;
 	    	}
 	    	//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
@@ -130,7 +130,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 	    	else
 	    		dat = timer;
 	    	if (timer >= 0)
-	    		ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+	    		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
     	}
     }
 

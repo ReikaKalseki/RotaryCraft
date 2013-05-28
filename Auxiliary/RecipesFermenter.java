@@ -15,7 +15,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesFermenter {
 	private static final RecipesFermenter FermenterBase = new RecipesFermenter();
@@ -34,14 +34,14 @@ public class RecipesFermenter {
 	
 	private RecipesFermenter()
 	{
-		addSmelting(Item.reed.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.tallGrass.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 2, 2), 0.7F);
-		addSmelting(Block.leaves.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.waterlily.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.sapling.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.vine.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.plantRed.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
-		addSmelting(Block.plantYellow.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Item.reed.itemID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.tallGrass.blockID, new ItemStack(RotaryCraft.powders.itemID, 2, 2), 0.7F);
+		addSmelting(Block.leaves.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.waterlily.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.sapling.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.vine.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.plantRed.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
+		addSmelting(Block.plantYellow.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, 2), 0.7F);
 	}
 	
 	/**

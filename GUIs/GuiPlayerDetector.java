@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 
@@ -78,7 +78,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 
     @Override
     public void actionPerformed(GuiButton button) {
-    	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 9, playerdetector, player, range);
+    	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
     	if (!(input.getText().matches("^[0-9 ]+$"))) {
     		range = 0;
     		input.deleteFromCursor(-1);
-        	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 9, playerdetector, player, range);
+        	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
     		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Illegal Chars");
     		return;
     	}
@@ -106,7 +106,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
     	//System.out.println(input.getText());
     	range = Integer.parseInt(input.getText());
     	if (range >= 0)
-        	ReikaPacketHelper.sendPacket(mod_RotaryCraft.packetChannel, 9, playerdetector, player, range);
+        	ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
     }
 
     /**

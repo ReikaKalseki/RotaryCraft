@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -177,7 +177,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public int getSmeltNumber(ItemStack is) {
 		int num = is.stackSize;
-		if (is.itemID != mod_RotaryCraft.shaftcraft.itemID || is.getItemDamage() != 1) //if not making steel
+		if (is.itemID != RotaryCraft.shaftcraft.itemID || is.getItemDamage() != 1) //if not making steel
 			return 1;/*
 	    	int a = par5Random.nextInt(2);
 	    	int b = par5Random.nextInt(2);
@@ -406,7 +406,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 			return -1;
 		int id = is.itemID;
 		int meta = is.getItemDamage();
-		if (id == mod_RotaryCraft.shaftcraft.itemID) {
+		if (id == RotaryCraft.shaftcraft.itemID) {
 			if (meta == 9)
 				return 900;
 			if (meta == 10)

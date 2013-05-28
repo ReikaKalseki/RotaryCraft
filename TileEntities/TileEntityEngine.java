@@ -36,7 +36,7 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -276,7 +276,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 		switch(type) {
 		case GAS:
 			if (fuelslot[0] != null && ethanols < FUELCAP) {
-				if (fuelslot[0].itemID == mod_RotaryCraft.ethanol.itemID) {
+				if (fuelslot[0].itemID == RotaryCraft.ethanol.itemID) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
 					ethanols++;
 				}
@@ -289,7 +289,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 			break;
 		case SPORT:
 			if (fuelslot[0] != null && ethanols < FUELCAP) {
-				if (fuelslot[0].itemID == mod_RotaryCraft.ethanol.itemID) {
+				if (fuelslot[0].itemID == RotaryCraft.ethanol.itemID) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
 					ethanols++;
 				}

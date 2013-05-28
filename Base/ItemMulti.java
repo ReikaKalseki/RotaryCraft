@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -47,7 +47,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		type = par2type;
 		maxStackSize = 64;
 		//this.setIconCoord(0, 0);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 	}
 
 	public ItemMulti(int ID, int par2type, int max) {
@@ -58,7 +58,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		type = par2type;
 		maxStackSize = max;
 		//this.setIconCoord(0, 0);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 	}
 
 	@Override

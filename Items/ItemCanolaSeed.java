@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemCanolaSeed extends ItemBasic {
@@ -51,7 +51,7 @@ public class ItemCanolaSeed extends ItemBasic {
 		{
 			if (!player.capabilities.isCreativeMode)
 				--items.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, mod_RotaryCraft.canola.blockID);
+			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, RotaryCraft.canola.blockID);
 			return true;
 		}
 	}

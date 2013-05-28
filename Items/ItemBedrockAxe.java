@@ -14,7 +14,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockGravLeaves;
 import Reika.RotaryCraft.Blocks.BlockGravLog;
 
@@ -24,7 +24,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	public ItemBedrockAxe(int par1) {
 		super(par1, EnumToolMaterial.GOLD);
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		this.maxStackSize = 1;
 		this.setMaxDamage(0);

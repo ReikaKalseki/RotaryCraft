@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -146,14 +149,14 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 
 	private boolean isModSteel(ItemStack is) {
 		if (is == null)
-			return false;/*
+			return false;
 		List steel = ItemStacks.getModSteels();
 		for (int i = 0; i < steel.size(); i++) {
 			ItemStack s = (ItemStack)steel.get(i);
 			if (is.itemID == s.itemID && (is.getItemDamage() == s.getItemDamage() || !s.getHasSubtypes()))
 				return true;
 		}
-		return false;*/return is.itemID == Item.ingotGold.itemID;
+		return false;
 	}
 
 	@Override
@@ -234,37 +237,37 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 
-    	int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-    	if (waterside != -1) {
-    		Tamb /= 2;
-    	}
-    	int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-    	if (iceside != -1) {
-    		if (Tamb > 0)
-    			Tamb /= 4;
-    		ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
-    	}
-    	int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-    	if (fireside != -1) {
-    		Tamb += 200;
-    	}
-    	int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-    	if (lavaside != -1) {
-    		Tamb += 600;
-    	}
-    	if (temperature > Tamb)
-    		temperature--;
-    	if (temperature > Tamb*2)
-    		temperature--;
-    	if (temperature < Tamb)
-    		temperature++;
-    	if (temperature*2 < Tamb)
-    		temperature++;
-    	if (temperature > MAXTEMP) {
-    		temperature = MAXTEMP;
-    		this.overheat(world, x, y, z);
-    	}
-    }
+		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (waterside != -1) {
+			Tamb /= 2;
+		}
+		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != -1) {
+			if (Tamb > 0)
+				Tamb /= 4;
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+		}
+		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != -1) {
+			Tamb += 200;
+		}
+		int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != -1) {
+			Tamb += 600;
+		}
+		if (temperature > Tamb)
+			temperature--;
+		if (temperature > Tamb*2)
+			temperature--;
+		if (temperature < Tamb)
+			temperature++;
+		if (temperature*2 < Tamb)
+			temperature++;
+		if (temperature > MAXTEMP) {
+			temperature = MAXTEMP;
+			this.overheat(world, x, y, z);
+		}
+	}
 
 	private void overheat(World world, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);

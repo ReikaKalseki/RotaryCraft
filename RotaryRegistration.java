@@ -28,21 +28,21 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class RotaryRegistration {
 
 	public static  void addBlocks() {
-		GameRegistry.registerBlock(mod_RotaryCraft.bedrockslice, "BedrockSlice");
+		GameRegistry.registerBlock(RotaryCraft.bedrockslice, "BedrockSlice");
 
-		GameRegistry.registerBlock(mod_RotaryCraft.decoblock, ItemBlockDeco.class, "MachineBlock");
-		GameRegistry.registerBlock(mod_RotaryCraft.blastglass, "BlastGlass");
-		GameRegistry.registerBlock(mod_RotaryCraft.obsidianglass, "BlastGlassPane");
+		GameRegistry.registerBlock(RotaryCraft.decoblock, ItemBlockDeco.class, "MachineBlock");
+		GameRegistry.registerBlock(RotaryCraft.blastglass, "BlastGlass");
+		GameRegistry.registerBlock(RotaryCraft.obsidianglass, "BlastGlassPane");
 
-		GameRegistry.registerBlock(mod_RotaryCraft.lightblock, "LightBlock");
-		GameRegistry.registerBlock(mod_RotaryCraft.beamblock, "BeamBlock");
-		GameRegistry.registerBlock(mod_RotaryCraft.lightbridge, "Bridge");
+		GameRegistry.registerBlock(RotaryCraft.lightblock, "LightBlock");
+		GameRegistry.registerBlock(RotaryCraft.beamblock, "BeamBlock");
+		GameRegistry.registerBlock(RotaryCraft.lightbridge, "Bridge");
 
-		GameRegistry.registerBlock(mod_RotaryCraft.miningpipe, "MiningPipe");
-		GameRegistry.registerBlock(mod_RotaryCraft.gravlog, ItemBlockGravLog.class, "GravLog");
-		GameRegistry.registerBlock(mod_RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
+		GameRegistry.registerBlock(RotaryCraft.miningpipe, "MiningPipe");
+		GameRegistry.registerBlock(RotaryCraft.gravlog, ItemBlockGravLog.class, "GravLog");
+		GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
-		GameRegistry.registerBlock(mod_RotaryCraft.canola, "Canola");
+		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
 
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			String regname = BlockRegistry.blockList[i].getName().toLowerCase().replaceAll("\\s","");
@@ -63,18 +63,18 @@ public class RotaryRegistration {
 	}
 
 	public static void addEntities() {
-		EntityRegistry.registerModEntity(EntityFallingBlock.class, "Falling Block", EntityRegistry.findGlobalUniqueEntityId(), mod_RotaryCraft.instance, 160, 20, true);
-		EntityRegistry.registerModEntity(EntityCustomTNT.class, "Custom TNT", EntityRegistry.findGlobalUniqueEntityId()+1, mod_RotaryCraft.instance, 160, 20, true);
-		EntityRegistry.registerModEntity(EntityRailGunShot.class, "RailGun Shot", EntityRegistry.findGlobalUniqueEntityId()+2, mod_RotaryCraft.instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityFreezeGunShot.class, "Freeze Gun Shot", EntityRegistry.findGlobalUniqueEntityId()+3, mod_RotaryCraft.instance, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityIceBlock.class, "Ice Block", EntityRegistry.findGlobalUniqueEntityId()+4, mod_RotaryCraft.instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityFallingBlock.class, "Falling Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 160, 20, true);
+		EntityRegistry.registerModEntity(EntityCustomTNT.class, "Custom TNT", EntityRegistry.findGlobalUniqueEntityId()+1, RotaryCraft.instance, 160, 20, true);
+		EntityRegistry.registerModEntity(EntityRailGunShot.class, "RailGun Shot", EntityRegistry.findGlobalUniqueEntityId()+2, RotaryCraft.instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityFreezeGunShot.class, "Freeze Gun Shot", EntityRegistry.findGlobalUniqueEntityId()+3, RotaryCraft.instance, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityIceBlock.class, "Ice Block", EntityRegistry.findGlobalUniqueEntityId()+4, RotaryCraft.instance, 64, 20, true);
 	}
 
 	public static void instantiateMachines() {
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			mod_RotaryCraft.machineBlocks[i] = BlockRegistry.blockList[i].createInstance();
+			RotaryCraft.machineBlocks[i] = BlockRegistry.blockList[i].createInstance();
 			if (RotaryConfig.consoleMsg)
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+mod_RotaryCraft.machineBlocks[i]+" (slot "+i+")");
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+RotaryCraft.machineBlocks[i]+" (slot "+i+")");
 		}
 	}
 }

@@ -125,118 +125,118 @@ public class RotaryNames {
 	public static void addNames() {
 
 		for (int i = 0; i < blockNames.length; i++) {
-			ItemStack machineStack = new ItemStack(mod_RotaryCraft.decoblock, 1, i);
+			ItemStack machineStack = new ItemStack(RotaryCraft.decoblock, 1, i);
 			LanguageRegistry.addName(machineStack, blockNames[machineStack.getItemDamage()]);
 		}
 
-		LanguageRegistry.addName(mod_RotaryCraft.debug, "Magic Wand");
-		LanguageRegistry.addName(mod_RotaryCraft.worldedit, "WorldEdit Tool");
+		LanguageRegistry.addName(RotaryCraft.debug, "Magic Wand");
+		LanguageRegistry.addName(RotaryCraft.worldedit, "WorldEdit Tool");
 
-		LanguageRegistry.addName(mod_RotaryCraft.bedrockslice, "Bedrock Slice (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.bedrockslice, "Bedrock Slice (Technical Block)");
 
-		LanguageRegistry.addName(mod_RotaryCraft.screwdriver, "Screwdriver");
-		LanguageRegistry.addName(mod_RotaryCraft.meter, "Angular Transducer");
-		LanguageRegistry.addName(mod_RotaryCraft.infobook, "RotaryCraft Handbook");
+		LanguageRegistry.addName(RotaryCraft.screwdriver, "Screwdriver");
+		LanguageRegistry.addName(RotaryCraft.meter, "Angular Transducer");
+		LanguageRegistry.addName(RotaryCraft.infobook, "RotaryCraft Handbook");
 
-		LanguageRegistry.addName(mod_RotaryCraft.blastglass, "Blast Glass Pane");
-		LanguageRegistry.addName(mod_RotaryCraft.obsidianglass, "Blast Glass");
-		LanguageRegistry.addName(mod_RotaryCraft.gravlog, "Gravity Log Block (Technical Block)");
-		LanguageRegistry.addName(mod_RotaryCraft.gravleaves, "Gravity Leaf Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.blastglass, "Blast Glass Pane");
+		LanguageRegistry.addName(RotaryCraft.obsidianglass, "Blast Glass");
+		LanguageRegistry.addName(RotaryCraft.gravlog, "Gravity Log Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.gravleaves, "Gravity Leaf Block (Technical Block)");
 
-		LanguageRegistry.addName(mod_RotaryCraft.yeast, "Yeast");
-		LanguageRegistry.addName(mod_RotaryCraft.ethanol, "Ethanol Crystals");
+		LanguageRegistry.addName(RotaryCraft.yeast, "Yeast");
+		LanguageRegistry.addName(RotaryCraft.ethanol, "Ethanol Crystals");
 
-		LanguageRegistry.addName(mod_RotaryCraft.canola, "Canola Plant (Technical Block)");
-		LanguageRegistry.addName(mod_RotaryCraft.canolaseed, "Canola Seed");
-		//LanguageRegistry.addName(mod_RotaryCraft.wind, "Wind Spring");
-		LanguageRegistry.addName(mod_RotaryCraft.motiontracker, "Motion Tracker");
-		LanguageRegistry.addName(mod_RotaryCraft.ultra, "Ultrasound");
-		LanguageRegistry.addName(mod_RotaryCraft.vac, "Vacuum");
-		LanguageRegistry.addName(mod_RotaryCraft.stun, "Knockback Gun");
-		LanguageRegistry.addName(mod_RotaryCraft.gravelgun, "Gravel Gun");
-		LanguageRegistry.addName(mod_RotaryCraft.fireball, "Fireball Launcher");
-		//LanguageRegistry.addName(mod_RotaryCraft.calc, "Calculator");
-		LanguageRegistry.addName(mod_RotaryCraft.bedpick, "Bedrock Pickaxe");
-		LanguageRegistry.addName(mod_RotaryCraft.bedaxe, "Bedrock Axe");
-		LanguageRegistry.addName(mod_RotaryCraft.bedshov, "Bedrock Shovel");
-		LanguageRegistry.addName(mod_RotaryCraft.nvg, "Night Vision Goggles");
-		LanguageRegistry.addName(mod_RotaryCraft.nvh, "Night Vision Helmet");
-		LanguageRegistry.addName(mod_RotaryCraft.handcraft, "Handheld Crafting Tool");
-		LanguageRegistry.addName(mod_RotaryCraft.target, "TNT Cannon Targeting Aid");
-		//LanguageRegistry.addName(mod_RotaryCraft.slides, "Projector Slide");
-		LanguageRegistry.addName(mod_RotaryCraft.iogoggles, "I/O Goggles");
+		LanguageRegistry.addName(RotaryCraft.canola, "Canola Plant (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.canolaseed, "Canola Seed");
+		//LanguageRegistry.addName(RotaryCraft.wind, "Wind Spring");
+		LanguageRegistry.addName(RotaryCraft.motiontracker, "Motion Tracker");
+		LanguageRegistry.addName(RotaryCraft.ultra, "Ultrasound");
+		LanguageRegistry.addName(RotaryCraft.vac, "Vacuum");
+		LanguageRegistry.addName(RotaryCraft.stun, "Knockback Gun");
+		LanguageRegistry.addName(RotaryCraft.gravelgun, "Gravel Gun");
+		LanguageRegistry.addName(RotaryCraft.fireball, "Fireball Launcher");
+		//LanguageRegistry.addName(RotaryCraft.calc, "Calculator");
+		LanguageRegistry.addName(RotaryCraft.bedpick, "Bedrock Pickaxe");
+		LanguageRegistry.addName(RotaryCraft.bedaxe, "Bedrock Axe");
+		LanguageRegistry.addName(RotaryCraft.bedshov, "Bedrock Shovel");
+		LanguageRegistry.addName(RotaryCraft.nvg, "Night Vision Goggles");
+		LanguageRegistry.addName(RotaryCraft.nvh, "Night Vision Helmet");
+		LanguageRegistry.addName(RotaryCraft.handcraft, "Handheld Crafting Tool");
+		LanguageRegistry.addName(RotaryCraft.target, "TNT Cannon Targeting Aid");
+		//LanguageRegistry.addName(RotaryCraft.slides, "Projector Slide");
+		LanguageRegistry.addName(RotaryCraft.iogoggles, "I/O Goggles");
 
-		LanguageRegistry.addName(mod_RotaryCraft.miningpipe, "Mining Pipe (Technical Block)");
-		LanguageRegistry.addName(mod_RotaryCraft.lightblock, "Light Block (Technical Block)");
-		LanguageRegistry.addName(mod_RotaryCraft.beamblock, "Beam Block (Technical Block)");
-		LanguageRegistry.addName(mod_RotaryCraft.lightbridge, "Bridge Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.miningpipe, "Mining Pipe (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.lightblock, "Light Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.beamblock, "Beam Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.lightbridge, "Bridge Block (Technical Block)");
 
 		for (int i = 0; i < shaftPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.shaftcraft.itemID, 1, i), shaftPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), shaftPartNames[i]);
 		}
 		for (int i = 0; i < heatPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.heatcraft, 1, i), heatPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.heatcraft, 1, i), heatPartNames[i]);
 		}
 		for (int i = 0; i < enginePartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.enginecraft, 1, i), enginePartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.enginecraft, 1, i), enginePartNames[i]);
 		}
 		for (int i = 0; i < borerPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.borecraft, 1, i), borerPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.borecraft, 1, i), borerPartNames[i]);
 		}
 		for (int i = 0; i < extractNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.extracts, 1, i), extractNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), extractNames[i]);
 		}
 		for (int i = 0; i < compactNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.compacts, 1, i), compactNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), compactNames[i]);
 		}
 		for (int i = 0; i < engineNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.engineitems, 1, i), engineNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.engineitems, 1, i), engineNames[i]);
 		}
 		for (int i = 0; i < powderNames.length; i++) {
-			ItemStack jetfuelstack = new ItemStack(mod_RotaryCraft.powders, 1, i);
+			ItemStack jetfuelstack = new ItemStack(RotaryCraft.powders, 1, i);
 			LanguageRegistry.addName(jetfuelstack, powderNames[jetfuelstack.getItemDamage()]);
 		}
 		for (int i = 0; i < spawnerNames.length; i++) {
-			ItemStack spawnerstack = new ItemStack(mod_RotaryCraft.spawner, 1, i);
+			ItemStack spawnerstack = new ItemStack(RotaryCraft.spawner, 1, i);
 			LanguageRegistry.addName(spawnerstack, spawnerNames[spawnerstack.getItemDamage()]);
 		}
 		for (int i = 0; i < 65536; i++) {
-			ItemStack coilstack = new ItemStack(mod_RotaryCraft.wind, 1, i);
+			ItemStack coilstack = new ItemStack(RotaryCraft.wind, 1, i);
 			LanguageRegistry.addName(coilstack, "Wind Spring ("+String.format("%d", i)+" kJ)");
 		}
 		for (int i = 0; i < 24; i++) {
-			ItemStack slidestack = new ItemStack(mod_RotaryCraft.slides, 1, i);
+			ItemStack slidestack = new ItemStack(RotaryCraft.slides, 1, i);
 			LanguageRegistry.addName(slidestack, "Projector Slide "+String.format("%d", i));
 		}
 		for (int i = 0; i < pipeNames.length; i++) {
-			ItemStack pipestack = new ItemStack(mod_RotaryCraft.pipeplacer, 1, i);
+			ItemStack pipestack = new ItemStack(RotaryCraft.pipeplacer, 1, i);
 			LanguageRegistry.addName(pipestack, pipeNames[pipestack.getItemDamage()]);
 		}
 		for (int i = 0; i < shaftItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.shaftitems, 1, i), shaftItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), shaftItemNames[i]);
 		}
 		for (int i = 0; i < gearboxItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.gbxitems, 1, i), gearboxItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.gbxitems, 1, i), gearboxItemNames[i]);
 		}
 		for (int i = 0; i < flywheelItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.flywheelitems, 1, i), flywheelItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.flywheelitems, 1, i), flywheelItemNames[i]);
 		}
 		for (int i = 0; i < advGearItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.advgearitems, 1, i), advGearItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.advgearitems, 1, i), advGearItemNames[i]);
 		}
 		for (int i = 0; i < gearUnitNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.gearunits, 1, i), gearUnitNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.gearunits, 1, i), gearUnitNames[i]);
 		}
 		for (int i = 0; i < 16; i++) {
-			ItemStack ammostack = new ItemStack(mod_RotaryCraft.railammo, 1, i);
+			ItemStack ammostack = new ItemStack(RotaryCraft.railammo, 1, i);
 			LanguageRegistry.addName(ammostack, "RailGun Ammunition ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, i))+" kg)");
 		}
 		for (int i = 0; i < bucketNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.fuelbucket, 1, i), bucketNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.fuelbucket, 1, i), bucketNames[i]);
 		}
 
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			LanguageRegistry.addName(new ItemStack(mod_RotaryCraft.machineplacer, 1, i), MachineRegistry.machineList[i].getName());
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.machineplacer, 1, i), MachineRegistry.machineList[i].getName());
 		}
 
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {

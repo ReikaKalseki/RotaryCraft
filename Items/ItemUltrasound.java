@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemUltrasound extends ItemBasic {
@@ -25,7 +25,7 @@ public class ItemUltrasound extends ItemBasic {
 	public ItemUltrasound(int itemID) {
 		super(itemID, 128);
 		maxStackSize = 1;
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
 	}

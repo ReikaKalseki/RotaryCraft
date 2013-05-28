@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.BlockRegistry;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemMulti;
 
 public class ItemPipePlacer extends ItemMulti {
@@ -30,7 +30,7 @@ public class ItemPipePlacer extends ItemMulti {
 		super(id, 10);
 		this.setHasSubtypes(true);
 		//setItemName("pipeplacer");
-		this.setCreativeTab(mod_RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.tabRotary);
 	}
 
 	@Override

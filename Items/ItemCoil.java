@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,7 +28,7 @@ public class ItemCoil extends ItemBasic
 	public ItemCoil(int itemID) {
 		super(itemID, 96); //calling the super constructor and giving him the itemID so minecraft knows the itemID
 		this.maxStackSize = 1;
-		this.setCreativeTab(mod_RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.hasSubtypes = true;
 		this.setMaxDamage(0);
 		for (int i = 0; i < 65536; i++)

@@ -15,7 +15,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.mod_RotaryCraft;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesGrinder {
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
@@ -49,35 +49,35 @@ public class RecipesGrinder {
 		this.addSmelting(Item.brick.itemID, new ItemStack(Item.clay.itemID, 1, 0), 0.2F);
 		this.addSmelting(Block.stairsCobblestone.blockID, new ItemStack(Block.gravel.blockID, 6, 0), 0.2F);
 		this.addSmelting(Block.stairsStoneBrick.blockID, new ItemStack(Block.cobblestone.blockID, 1, 0), 0.2F);
-		this.addSmelting(Block.netherrack.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, ItemStacks.netherrackdust.getItemDamage()), 0.2F); //create a netherrack powder
-		this.addSmelting(Block.slowSand.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 1, ItemStacks.tar.getItemDamage()), 0.3F); //create a tar
+		this.addSmelting(Block.netherrack.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.netherrackdust.getItemDamage()), 0.2F); //create a netherrack powder
+		this.addSmelting(Block.slowSand.blockID, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.tar.getItemDamage()), 0.3F); //create a tar
 
 		this.addSmelting(ItemStacks.anthrablock.itemID, new ItemStack(ItemStacks.anthracite.itemID, 1, ItemStacks.anthracite.getItemDamage()), 0.3F);
 		this.addSmelting(ItemStacks.lonsblock.itemID, new ItemStack(ItemStacks.lonsda.itemID, 1, ItemStacks.lonsda.getItemDamage()), 0.3F);
 
-		this.addSmelting(Block.wood.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 16, 3), 0.3F); //sawdust
-		this.addSmelting(Block.planks.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.music.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.jukebox.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.fence.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodOak.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodBirch.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodSpruce.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodJungle.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.chest.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.workbench.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 16, 3), 0.3F);
-		this.addSmelting(Block.ladder.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.pressurePlatePlanks.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 8, 3), 0.3F);
+		this.addSmelting(Block.wood.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F); //sawdust
+		this.addSmelting(Block.planks.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
+		this.addSmelting(Block.music.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
+		this.addSmelting(Block.jukebox.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
+		this.addSmelting(Block.fence.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
+		this.addSmelting(Block.stairsWoodOak.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Block.stairsWoodBirch.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Block.stairsWoodSpruce.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Block.stairsWoodJungle.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Block.chest.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
+		this.addSmelting(Block.workbench.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F);
+		this.addSmelting(Block.ladder.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
+		this.addSmelting(Block.pressurePlatePlanks.blockID, new ItemStack(RotaryCraft.powders.itemID, 8, 3), 0.3F);
 		this.addSmelting(Block.pressurePlateStone.blockID, new ItemStack(Block.cobblestone.blockID, 2, 3), 0.3F);
-		this.addSmelting(Item.bowlEmpty.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 12, 3), 0.3F);
-		this.addSmelting(Item.doorWood.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.sign.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.doorWood.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.stick.itemID, new ItemStack(mod_RotaryCraft.powders.itemID, 2, 3), 0.3F);
-		this.addSmelting(Block.trapdoor.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.fenceGate.blockID, new ItemStack(mod_RotaryCraft.powders.itemID, 16, 3), 0.3F);
+		this.addSmelting(Item.bowlEmpty.itemID, new ItemStack(RotaryCraft.powders.itemID, 12, 3), 0.3F);
+		this.addSmelting(Item.doorWood.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Item.sign.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Item.doorWood.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Item.stick.itemID, new ItemStack(RotaryCraft.powders.itemID, 2, 3), 0.3F);
+		this.addSmelting(Block.trapdoor.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
+		this.addSmelting(Block.fenceGate.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F);
 
-		//addSmelting(mod_RotaryCraft.canolaseed.itemID, null, 0.7F);
+		//addSmelting(RotaryCraft.canolaseed.itemID, null, 0.7F);
 	}
 
 	/**
