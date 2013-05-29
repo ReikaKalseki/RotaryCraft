@@ -73,9 +73,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 			int fx = x-spread+par5Random.nextInt(spread*2+1);
 			int fz = z-spread+par5Random.nextInt(spread*2+1);
 			int fy = y-yspread+par5Random.nextInt(yspread+1);
-			this.adjustAim(world, x, y, z);
-			if (this.isAimingAt(world, x, y, z, fx, fy, fz))
-				this.fire(world, x, y, z, fx, fy, fz);
+			this.fire(world, x, y, z, fx, fy, fz);
 		}
 		if (temperature < ANIMALIGNITION)
 			return;
@@ -84,14 +82,6 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 			EntityLiving ent = (EntityLiving)in.get(i);
 			ent.setFire(1);
 		}
-	}
-
-	private void adjustAim(World world, int x, int y, int z) {
-
-	}
-
-	private boolean isAimingAt(World world, int x, int y, int z, int fx, int fy, int fz) {
-		return true;
 	}
 
 	private void fire (World world, int x, int y, int z, int fx, int fy, int fz) {

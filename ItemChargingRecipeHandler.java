@@ -9,54 +9,59 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
+import cpw.mods.fml.common.ICraftingHandler;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 
-public class ItemChargingRecipeHandler implements IRecipe {
+public class ItemChargingRecipeHandler implements ICraftingHandler {
 
-	private ItemStack[] slots;//Use a list!
-	List<ItemStack> craftItems = new ArrayList<ItemStack>();
-	private int springdmg;
-	private int tooldmg;
-
-	@Override
-	public boolean matches(InventoryCrafting ic, World world) {
-		return false;
-	}
-
-	@Override
-	public ItemStack getCraftingResult(InventoryCrafting ic) {
-		slots = ReikaInventoryHelper.convertCraftToItemStacks(ic);
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getRecipeSize() {
-		//this.slots = ReikaInventoryHelper.convertCraftToItemStacks(ic);
-		return slots.length;
-	}
-
-	@Override
-	public ItemStack getRecipeOutput() {
-		return null;
-	}
-
-	private boolean checkHasTool(InventoryCrafting ic) {
+	private boolean checkHasTool(IInventory ic) {
 		for (int i = 0; i < ic.getSizeInventory(); i++) {
 			ItemStack is = ic.getStackInSlot(i);
 			if (is != null) {
-				if (is.getItem() instanceof ItemChargedTool)
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == RotaryCraft.nvg.itemID)
 					return true;
 			}
 		}
 		return false;
 	}
+
+	private int getTool(IInventory ic) {
+		for (int i = 0; i < ic.getSizeInventory(); i++) {
+			ItemStack is = ic.getStackInSlot(i);
+			if (is != null) {
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == RotaryCraft.nvg.itemID)
+					return ic.getStackInSlot(i).itemID;
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public void onCrafting(EntityPlayer player, ItemStack item,	IInventory ii) {
+		boolean hasSpring = ReikaInventoryHelper.hasItem(RotaryCraft.wind.itemID, ii);
+		boolean hasTool = this.checkHasTool(ii);
+		boolean onlyThose = ReikaInventoryHelper.hasNEmptyStacks(ii, 7);
+
+		if (hasSpring && hasTool && onlyThose) {
+			int toolid = this.getTool(ii);
+			int toolslot = ReikaInventoryHelper.locateIDInInventory(toolid, ii);
+			int springslot = ReikaInventoryHelper.locateIDInInventory(RotaryCraft.wind.itemID, ii);
+			int toolmeta = ii.getStackInSlot(toolslot).getItemDamage();
+			int springmeta = ii.getStackInSlot(springslot).getItemDamage();
+			//ItemStack newtool = new ItemStack(toolid, 1, springmeta);
+			ItemStack newspring = new ItemStack(RotaryCraft.wind.itemID, 1, toolmeta);
+			item.setItemDamage(springmeta);
+			if (!player.inventory.addItemStackToInventory(newspring))
+				ReikaItemHelper.dropItem(player.worldObj, player.posX, player.posY, player.posZ, newspring);
+		}
+	}
+
+	@Override
+	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -81,20 +82,7 @@ import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemPipePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 
-/** @author Reika
- *
- * This code as part of the mod "RotaryCraft" for the game "Minecraft" are the property of and owned by Reika
- *
- * Any unauthorized distribution, modification, and especially sale of this code is a full violation of copyright law and will be
- * dealt with accordingly.
- *
- * This restriction and these copyrights apply not only to this class file, but also to every other RotaryCraft class.
- *
- */
-
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="beta")/*
-@NetworkMod(clientSideRequired=true, serverSideRequired=false,
-channels={"RotaryCraftData"}, packetHandler = PacketHandler.class)*/
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version="beta")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
@@ -102,8 +90,8 @@ serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, 
 public class RotaryCraft {
 	public static final String packetChannel = "RotaryCraftData";
 
-	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft"); //Our custom creative tab's object
-	public static CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems"); //Our custom creative tab's object
+	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
+	public static CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
 
 	private static int[] dmgs = {EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(1),
 		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(2), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(3)};
@@ -114,16 +102,10 @@ public class RotaryCraft {
 	public static Item debug;
 	public static Item worldedit;
 
-	//public static Item nullitem;
-
-	//public static Item bedrockingot;
-
 	public static Item screwdriver;
 	public static Item meter;
 	public static Item infobook;
 
-	// public static Item ItemStacks.steelingot;
-	// public static Item ItemStacks.steelgear;
 	public static Block decoblock;
 	public static Block blastglass;
 	public static Block obsidianglass;
@@ -179,6 +161,8 @@ public class RotaryCraft {
 	public static Block gravleaves;
 
 	public static Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
+	
+	public static Achievement[] achievements;
 
 	public static Entity arrow;
 	public static Entity fallblock;
@@ -210,6 +194,7 @@ public class RotaryCraft {
 		RotaryRegistration.addTileEntities();
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
+		RotaryAchievements.registerAcheivements();
 		DemoMusic.addTracks();
 		proxy.registerSounds();
 

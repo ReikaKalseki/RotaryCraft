@@ -614,7 +614,7 @@ public final class HandbookAuxData {
     		ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 20, 1, false, page1);
     	}
     	if (screen == GuiHandbook.CRAFTSTART+1 && page == 5) {
-    		int[] icons = {1, 1, 1, 100, 100, 100, 1, 1, 1};
+    		int[] icons = {74, 74, 74, 100, 100, 100, 1, 1, 1};
     		ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 22, 1, false, page1);
     	}
     	if (screen == GuiHandbook.CRAFTSTART+1 && page == 6) {

@@ -29,8 +29,8 @@ public class GuiHandbook extends GuiScreen
     private EntityPlayer player;
     private int x;
     private int y;
-    private static final int xSize = 256;
-    private static final int ySize = 220;
+    private final int xSize = 256;
+    private final int ySize = 220;
     public World worldObj;
 
     /** One second in nanoseconds. */
@@ -80,6 +80,8 @@ public class GuiHandbook extends GuiScreen
     	if (MAXPAGE < MISCSTART) {
     		ReikaJavaLibrary.spamConsole("HANDBOOK MAX PAGE IS TOO LOW, CANNOT ACCESS HIGH PAGES!");
     	}
+    	staticwidth = xSize;
+    	staticheight = ySize;
     }
 
     @Override

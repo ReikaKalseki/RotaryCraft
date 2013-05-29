@@ -106,6 +106,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWoodcutter;
+import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
 public enum MachineRegistry {
@@ -176,6 +177,7 @@ public enum MachineRegistry {
 	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			10),
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon");
+	//WORKTABLE(			"Work Table",				BlockIMachine.class,		TileEntityWorktable.class,			11);
 
 	private String name;
 	private Class te;

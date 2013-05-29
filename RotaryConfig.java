@@ -21,8 +21,6 @@ public class RotaryConfig {
 
 	public static int debugitemid;
 	public static int worldeditid;
-	//public static int nullid;
-	//public static int bedrockingotid;
 	public static int screwdriverid;
 	public static int meterid;
 
@@ -66,11 +64,6 @@ public class RotaryConfig {
 	public static int machineplacerid;
 	public static int flywheelitemsid;
 	public static int advgearitemsid;
-
-	/*public static int steelingotid;
-	public static int steelgearid;
-	public static int steelshaftid;
-	public static int gearunitid;*/
 
 	public static int infobookid;
 

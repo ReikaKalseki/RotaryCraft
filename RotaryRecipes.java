@@ -16,11 +16,13 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
@@ -237,7 +239,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
 				"SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Item.redstone});
 		GameRegistry.addRecipe(ItemStacks.radiator, new Object[]{
-				"SSS", "PPP", "SSS", 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
+				"GGG", "PPP", "SSS", 'I', Item.ingotGold, 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.condenser, new Object[]{
 				"SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.goldcoil, new Object[]{
@@ -651,7 +653,17 @@ public class RotaryRecipes {
 	}
 
 	public static void addCharging() {
-
+		GameRegistry.registerCraftingHandler(new ItemChargingRecipeHandler());
+		//GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.motiontracker), RotaryCraft.wind, RotaryCraft.motiontracker);
+		//CraftingManager.getInstance().addShapelessRecipe(new ItemStack(RotaryCraft.motiontracker), RotaryCraft.wind, RotaryCraft.motiontracker);
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.motiontracker)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.fireball)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.vac)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.stun)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.ultra)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.gravelgun)));
+		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.nvg)));
+		//CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.nvh)));
 	}
 
 	public static void addFurnace() {

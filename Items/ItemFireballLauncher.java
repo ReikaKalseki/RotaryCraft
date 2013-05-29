@@ -16,11 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFireballLauncher extends ItemChargedTool {
 
@@ -52,89 +53,93 @@ public class ItemFireballLauncher extends ItemChargedTool {
 		}
 		if (!ep.capabilities.isCreativeMode && par5Random.nextInt(3) == 0)
 			ReikaInventoryHelper.findAndDecrStack(Item.fireballCharge.itemID, -1, ep.inventory.mainInventory);
-		ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+		int decr = (int)(charge/2F);
+		if (decr <= 0)
+			decr = 1;
+		ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-decr));
 	}
 
-    @Override
+	@Override
 	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int par4) {
-    	texture = defaulttex;
-    	float power = (is.getMaxItemUseDuration()-par4)/20F;
-    	float charge = 0;
-    	if (ep.capabilities.isCreativeMode) {
-    		power *= 2;
-    		if (ep.isSneaking())
-    			power *= 2;
-    	}
-    	if (power < 0.1F) {
-    		charge = 0;
-    	}
-    	else if (power < 0.25F) {
-    		charge = 1;
-    	}
-    	else if (power < 0.5F) {
-    		charge = 2;
-    	}
-    	else if (power < 1F) {
-    		charge = 3;
-    	}
-    	else if (power < 2F) {
-    		charge = 4;
-    	}
-    	else if (power < 3F) {
-    		charge = 5;
-    	}
-    	else if (power < 5F) {
-    		charge = 6;
-    	}
-    	else if (power < 8F) {
-    		charge = 7;
-    	}
-    	else {
-    		charge = 8;
-    	}
-    	//ReikaChatHelper.write(power+"  ->  "+charge);
-    	this.fire(is, world, ep, charge);
-    }
+		texture = defaulttex;
+		float power = (is.getMaxItemUseDuration()-par4)/20F;
+		float charge = 0;
+		if (ep.capabilities.isCreativeMode) {
+			power *= 2;
+			if (ep.isSneaking())
+				power *= 2;
+		}
+		if (power < 0.1F) {
+			charge = 0;
+		}
+		else if (power < 0.25F) {
+			charge = 1;
+		}
+		else if (power < 0.5F) {
+			charge = 2;
+		}
+		else if (power < 1F) {
+			charge = 3;
+		}
+		else if (power < 2F) {
+			charge = 4;
+		}
+		else if (power < 3F) {
+			charge = 5;
+		}
+		else if (power < 5F) {
+			charge = 6;
+		}
+		else if (power < 8F) {
+			charge = 7;
+		}
+		else {
+			charge = 8;
+		}
+		//ReikaChatHelper.write(power+"  ->  "+charge);
+		this.fire(is, world, ep, charge);
+	}
 
-    @Override
+	@Override
 	public ItemStack onEaten(ItemStack is, World world, EntityPlayer ep)
-    {
-        return is;
-    }
+	{
+		return is;
+	}
 
-    /**
-     * How long it takes to use or consume an item
-     */
-    @Override
+	/**
+	 * How long it takes to use or consume an item
+	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack is)
-    {
-        return 72000;
-    }
+	{
+		return 72000;
+	}
 
-    /**
-     * returns the action that specifies what animation to play when the items is being used
-     */
-    @Override
+	/**
+	 * returns the action that specifies what animation to play when the items is being used
+	 */
+	@Override
 	public EnumAction getItemUseAction(ItemStack is)
-    {
-        return EnumAction.bow;
-    }
+	{
+		return EnumAction.bow;
+	}
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    @Override
+	/**
+	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
+	 */
+	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep)
-    {
-		is.setItemDamage(32);
+	{
 		if (is.getItemDamage() <= 0) {
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		if (!ReikaInventoryHelper.playerHasOrIsCreative(ep, Item.fireballCharge.itemID, -1))
 			return is;
-    	ep.setItemInUse(is, this.getMaxItemUseDuration(is));
-        return is;
-    }
+		ep.setItemInUse(is, this.getMaxItemUseDuration(is));
+		return is;
+	}
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
@@ -144,39 +149,39 @@ public class ItemFireballLauncher extends ItemChargedTool {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void onUsingItemTick(ItemStack is, EntityPlayer ep, int count) {
-    	float power = (is.getMaxItemUseDuration()-count)/20F;
-    	if (ep.capabilities.isCreativeMode) {
-    		power *= 2;
-    		if (ep.isSneaking())
-    			power *= 2;
-    	}
-    	if (power < 0.1F) {
-    		texture = defaulttex;
-    	}
-    	else if (power < 0.25F) {
-    		texture = defaulttex+1;
-    	}
-    	else if (power < 0.5F) {
-    		texture = defaulttex+2;
-    	}
-    	else if (power < 1F) {
-    		texture = defaulttex+3;
-    	}
-    	else if (power < 2F) {
-    		texture = defaulttex+4;
-    	}
-    	else if (power < 3F) {
-    		texture = defaulttex+5;
-    	}
-    	else if (power < 5F) {
-    		texture = defaulttex+6;
-    	}
-    	else if (power < 8F) {
-    		texture = defaulttex+7;
-    	}
-    	else {
-    		texture = defaulttex+8;
-    	}
-    }
+	public void onUsingItemTick(ItemStack is, EntityPlayer ep, int count) {
+		float power = (is.getMaxItemUseDuration()-count)/20F;
+		if (ep.capabilities.isCreativeMode) {
+			power *= 2;
+			if (ep.isSneaking())
+				power *= 2;
+		}
+		if (power < 0.1F) {
+			texture = defaulttex;
+		}
+		else if (power < 0.25F) {
+			texture = defaulttex+1;
+		}
+		else if (power < 0.5F) {
+			texture = defaulttex+2;
+		}
+		else if (power < 1F) {
+			texture = defaulttex+3;
+		}
+		else if (power < 2F) {
+			texture = defaulttex+4;
+		}
+		else if (power < 3F) {
+			texture = defaulttex+5;
+		}
+		else if (power < 5F) {
+			texture = defaulttex+6;
+		}
+		else if (power < 8F) {
+			texture = defaulttex+7;
+		}
+		else {
+			texture = defaulttex+8;
+		}
+	}
 }

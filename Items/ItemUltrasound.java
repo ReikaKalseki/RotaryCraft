@@ -18,27 +18,23 @@ import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemChargedTool;
 
-public class ItemUltrasound extends ItemBasic {
+public class ItemUltrasound extends ItemChargedTool {
 
 	public ItemUltrasound(int itemID) {
 		super(itemID, 128);
-		maxStackSize = 1;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
-		hasSubtypes = true;
-		this.setMaxDamage(0);
 	}
 	//Can find ores, detect near caves, detect silverfish stone
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		is.setItemDamage(30);
 		if (is.getItemDamage() <= 0) {
 			ReikaChatHelper.clearChat(); //clr
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		//ReikaChatHelper.writeString(String.format("%.3f", look.xCoord)+" "+String.format("%.3f", look.yCoord)+" "+String.format("%.3f", look.zCoord));
 		boolean ores = false;
 		boolean cave = false;

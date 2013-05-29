@@ -51,6 +51,7 @@ import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.Containers.ContainerSteam;
 import Reika.RotaryCraft.Containers.ContainerTNTCannon;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
+import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.GUIs.GuiAerosolizer;
 import Reika.RotaryCraft.GUIs.GuiBevel;
 import Reika.RotaryCraft.GUIs.GuiBlastFurnace;
@@ -89,6 +90,7 @@ import Reika.RotaryCraft.GUIs.GuiSteam;
 import Reika.RotaryCraft.GUIs.GuiTNTCannon;
 import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
+import Reika.RotaryCraft.GUIs.GuiWorktable;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
@@ -123,6 +125,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
+import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -221,6 +224,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemCannon) {
 			return new ContainerItemCannon(player, (TileEntityItemCannon)te);
+		}
+		if (te instanceof TileEntityWorktable) {
+			return new ContainerWorktable(player, world, (TileEntityWorktable)te);
 		}
 		if (te instanceof OneSlotMachine)
 			return new OneSlotContainer(player, te);
@@ -358,6 +364,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemCannon) {
 			return new GuiItemCannon(player, (TileEntityItemCannon)te);
+		}
+		if (te instanceof TileEntityWorktable) {
+			return new GuiWorktable(player, (TileEntityWorktable)te);
 		}
 		if (te instanceof OneSlotMachine) {
 			return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);

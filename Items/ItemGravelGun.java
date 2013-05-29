@@ -22,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -37,10 +38,11 @@ public class ItemGravelGun extends ItemChargedTool {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		is.setItemDamage(30000);
 		if (is.getItemDamage() <= 0) {
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		if (!ReikaInventoryHelper.playerHasOrIsCreative(ep, Block.gravel.blockID, -1)) {
 			if (!world.isRemote)
 				world.playAuxSFX(1001, (int)ep.posX, (int)ep.posY, (int)ep.posZ, 1);

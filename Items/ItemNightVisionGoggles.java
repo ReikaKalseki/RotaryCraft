@@ -16,6 +16,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
@@ -24,11 +25,15 @@ public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTex
 	public ItemNightVisionGoggles(int itemID, int texID) {
 		super(itemID, RotaryCraft.NVGM, texID, 0, 97);
 		this.setNoRepair();
+		hasSubtypes = true;
 	}
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
-		ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
+		if (is.getItemDamage() > 0) {
+			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
+			ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+		}
 	}
 
 	@Override

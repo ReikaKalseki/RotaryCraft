@@ -24,25 +24,21 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemChargedTool;
 
-public class ItemStunGun extends ItemBasic {
+public class ItemStunGun extends ItemChargedTool {
 
 	public ItemStunGun(int itemID) {
 		super(itemID, 192);
-		maxStackSize = 1;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
-		hasSubtypes = true;
-		this.setMaxDamage(0);
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		is.setItemDamage(30);
 		if (is.getItemDamage() <= 0) {
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		//if (!world.isRemote) {
 		double[] part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
 		for (int i = 0; i < 12; i++)

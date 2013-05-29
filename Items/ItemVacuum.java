@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -35,13 +36,14 @@ public class ItemVacuum extends ItemChargedTool {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		is.setItemDamage(30);
 		if (is.getItemDamage() <= 0) {
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		if (ep.isSneaking()) {
 			this.empty(is, world, ep);
-			return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
+			return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
 		}
 		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(ep.posX-8, ep.posY-8, ep.posZ-8, ep.posX+8, ep.posY+8, ep.posZ+8);
 		List inrange = world.getEntitiesWithinAABB(EntityItem.class, range);
@@ -49,9 +51,9 @@ public class ItemVacuum extends ItemChargedTool {
 			EntityItem ent = (EntityItem)inrange.get(i);
 			ItemStack is2 = ent.getEntityItem();
 			if (ReikaInventoryHelper.canAcceptMoreOf(is2.itemID, is2.getItemDamage(), ep.inventory.mainInventory)) {
-	            double dx = (ep.posX - ent.posX);
-	            double dy = (ep.posY - ent.posY);
-	            double dz = (ep.posZ - ent.posZ);
+				double dx = (ep.posX - ent.posX);
+				double dy = (ep.posY - ent.posY);
+				double dz = (ep.posZ - ent.posZ);
 				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
 				ent.motionX += dx/ddt/ddt/2;
 				ent.motionY += dy/ddt/ddt/2;
@@ -65,9 +67,9 @@ public class ItemVacuum extends ItemChargedTool {
 		List inbox2 = world.getEntitiesWithinAABB(EntityXPOrb.class, range);
 		for (int i = 0; i < inbox2.size(); i++) {
 			EntityXPOrb ent = (EntityXPOrb)inbox2.get(i);
-            double dx = (ep.posX - ent.posX);
-            double dy = (ep.posY - ent.posY);
-            double dz = (ep.posZ - ent.posZ);
+			double dx = (ep.posX - ent.posX);
+			double dy = (ep.posY - ent.posY);
+			double dz = (ep.posZ - ent.posZ);
 			double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
 			ent.motionX += dx/ddt/ddt/2;
 			ent.motionY += dy/ddt/ddt/2;

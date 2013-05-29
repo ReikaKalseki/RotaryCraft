@@ -25,10 +25,10 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.src.ModLoader;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -47,10 +47,11 @@ public class ItemMotionTracker extends ItemChargedTool {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		is.setItemDamage(30);
 		if (is.getItemDamage() <= 0) {
+			this.noCharge();
 			return is;
 		}
+		this.warnCharge(is);
 		ReikaChatHelper.clearChat(); //clr
 		rendertick = 512;
 		for (float i = 1; i <= 128; i += 0.5) {
@@ -70,8 +71,6 @@ public class ItemMotionTracker extends ItemChargedTool {
 					mob = "Mobs";
 				else
 					mob = "Mob";
-				if (world.isRemote)
-					return is;
 				//ReikaChatHelper.write(infov.size()+String.format(" %s", mob)+" Detected:");
 				for (int k = 0; k < infov.size(); k++) {
 					EntityLiving ent = (EntityLiving)infov.get(k);
