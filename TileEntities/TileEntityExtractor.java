@@ -13,9 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -387,7 +388,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 			this.bonusItems(extractorItemStacks[i]);
 
 		// if (extractorItemStacks[i].getItem().func_46056_k())
-			//   extractorItemStacks[i] = new ItemStack(extractorItemStacks[i].getItem().setFull3D());
+		//   extractorItemStacks[i] = new ItemStack(extractorItemStacks[i].getItem().setFull3D());
 		// else
 		extractorItemStacks[i].stackSize--;
 
@@ -439,6 +440,6 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return ReikaWorldHelper.isOre(is.itemID) && slot == 0;
+		return ReikaBlockHelper.isOre(is.itemID) && slot == 0;
 	}
 }

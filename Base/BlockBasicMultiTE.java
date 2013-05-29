@@ -145,8 +145,11 @@ public abstract class BlockBasicMultiTE extends Block {
 			return false;
 		}
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
-			((EnchantableMachine)te).applyEnchants(is);
-			return true;
+			if (((EnchantableMachine)te).applyEnchants(is)) {
+				ep.setCurrentItemOrArmor(0, null);
+				return true;
+			}
+			return false;
 		}
 		if (te instanceof TileEntityScaleableChest) {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;

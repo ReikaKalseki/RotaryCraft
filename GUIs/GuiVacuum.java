@@ -29,7 +29,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiVacuum extends GuiPowerOnlyMachine
 {
     private IInventory upperVacuumInventory;
-    private IInventory lowerVacuumInventory;
     private TileEntityVacuum vac;
     EntityPlayer ep;
 
@@ -42,7 +41,6 @@ public class GuiVacuum extends GuiPowerOnlyMachine
     {
         super(new ContainerVacuum(player, te), te);
         upperVacuumInventory = player.inventory;
-        lowerVacuumInventory = te;
         allowUserInput = false;
         short var3 = 222;
         int var4 = var3 - 108;

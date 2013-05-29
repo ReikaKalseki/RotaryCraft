@@ -23,16 +23,14 @@ public class GuiBasicStorage extends GuiMachine {
 
     private int inventoryRows = 0;
     private IInventory upperInventory;
-    private IInventory lowerInventory;
 
 	public GuiBasicStorage(EntityPlayer ep, TileEntityInventoriedPowerReceiver te) {
 		super(new ContainerBasicStorage(ep, te), te);
         upperInventory = ep.inventory;
-        lowerInventory = te;
         allowUserInput = false;
         short var3 = 222;
         int var4 = var3 - 108;
-        inventoryRows = lowerInventory.getSizeInventory() / 9;
+        inventoryRows = te.getSizeInventory() / 9;
         ySize = var4 + inventoryRows * 18;
 	}
 

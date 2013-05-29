@@ -20,7 +20,9 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -88,6 +90,9 @@ public class RenderHarvester extends RotaryTERenderer
     @Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
     {
+    	int error = GL11.glGetError();
+    	if (error != 0)
+    		ReikaJavaLibrary.pConsole(error);
     	if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
         this.renderTileEntityMobHarvesterAt((TileEntityMobHarvester)tile, par2, par4, par6, par8);
         if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
@@ -96,6 +101,8 @@ public class RenderHarvester extends RotaryTERenderer
         	ReikaAABBHelper.renderAABB(tile.worldObj, ((TileEntityMobHarvester)tile).getBox(), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 255, 127, 0, true);
         if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
         	this.renderLaser((TileEntityMobHarvester)tile, par2, par4, par6);
+        	if (((TileEntityMobHarvester)tile).hasEnchantments())
+        		EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
         }
     }
 

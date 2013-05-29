@@ -12,8 +12,9 @@ package Reika.RotaryCraft.Items;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -54,7 +55,7 @@ public class ItemUltrasound extends ItemBasic {
 			if (z < 0)
 				z--;
 			int id = world.getBlockId(x, y, z);
-			if (ReikaWorldHelper.isOre(id) && !ores) {
+			if (ReikaBlockHelper.isOre(id) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");
 			}

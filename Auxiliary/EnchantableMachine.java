@@ -9,15 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.List;
+import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 
 public interface EnchantableMachine {
 
-	public void applyEnchants(ItemStack is);
+	public boolean applyEnchants(ItemStack is);
 
-	public List<Enchantment> getEnchantments();
+	public HashMap<Enchantment,Integer> getEnchantments();
+
+	public boolean hasEnchantment(Enchantment e);
+	
+	public boolean hasEnchantments();
+
+	public int getEnchantment(Enchantment e);
 
 }

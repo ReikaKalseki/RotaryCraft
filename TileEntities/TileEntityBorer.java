@@ -9,8 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -24,8 +23,11 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -36,7 +38,7 @@ import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController {
 
-	private List enchantments = new ArrayList<Enchantment>();
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	private int pipemeta2 = 0;
 
@@ -63,6 +65,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		//ReikaJavaLibrary.pConsole(this.hasEnchantments());
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
@@ -76,12 +79,17 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
+		if (this.hasEnchantments()) {
+			for (int i = 0; i < 8; i++) {
+				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
+			}
+		}
 		if (nodig)
 			return;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(cutShape[0][0]));
 		if (omega <= 0)
 			return;
-		if (this.operationComplete(tickcount, 0)) {
+		if (this.operationComplete((int)(tickcount*ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency))), 0)) {
 			this.calcReqPower(world, x, y, z, meta);
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.reqpow));
 			if (power > reqpow && reqpow != -1)
@@ -196,13 +204,23 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					return;
 				}
 			}
-			int dropid = Block.blocksList[id].idDropped(id, par5Random, 0);
-			int dropmeta = Block.blocksList[id].damageDropped(world.getBlockMetadata(xread, yread, zread));
+			int metaread = world.getBlockMetadata(xread, yread, zread);
+			int dropid = Block.blocksList[id].idDropped(id, par5Random, this.getEnchantment(Enchantment.fortune));
+			int dropmeta = Block.blocksList[id].damageDropped(metaread);
 			int dropsize = Block.blocksList[id].quantityDropped(par5Random);
+			if (this.getEnchantment(Enchantment.silkTouch) > 0 && ReikaBlockHelper.canSilkTouch(id, metaread)) {
+				dropid = id;
+				dropmeta = metaread;
+			}
 			ItemStack is = new ItemStack(dropid, dropsize, dropmeta);
 			if (dropid != 0) {
-				if (!this.chestCheck(world, x, y, z, is))
-					Block.blocksList[id].dropBlockAsItem(world, x, y+1, z, world.getBlockMetadata(xread, yread, zread), 0);
+				if (!this.chestCheck(world, x, y, z, is)) {
+					if (this.getEnchantment(Enchantment.silkTouch) <= 0)
+						Block.blocksList[id].dropBlockAsItem(world, x, y+1, z, metaread, this.getEnchantment(Enchantment.fortune));
+					else {
+						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+					}
+				}
 			}
 		}
 	}
@@ -277,13 +295,23 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		step++;
 	}
 
-	public void applyEnchants(ItemStack is) {
+	public boolean applyEnchants(ItemStack is) {
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
-
+			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
+			return true;
 		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
+			return true;
+		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
+			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
+			return true;
+		}
+		return false;
 	}
 
-	public List getEnchantments() {
+	public HashMap<Enchantment,Integer> getEnchantments() {
 		return enchantments;
 	}
 
@@ -301,6 +329,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			for (int j = 0; j < 5; j++)
 				NBT.setBoolean("cut"+String.valueOf(i*7+j), cutShape[i][j]);
 		}
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
 	}
 
 	/**
@@ -316,6 +350,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++)
 				cutShape[i][j] = NBT.getBoolean("cut"+String.valueOf(i*7+j));
+		}
+		this.enchantments = new HashMap<Enchantment,Integer>();
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
+				this.enchantments.put(Enchantment.enchantmentsList[i], lvl);
+			}
 		}
 	}
 
@@ -340,5 +381,29 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.BORER.ordinal();
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
 	}
 }

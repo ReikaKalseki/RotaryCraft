@@ -30,7 +30,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiScaleChest extends GuiPowerOnlyMachine
 {
 	private IInventory upperScaleChestInventory;
-	private IInventory lowerScaleChestInventory;
 	private TileEntityScaleableChest tile;
 	private int numrows;
 	private int page;
@@ -44,7 +43,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	{
 		super(new ContainerScaleChest(player, te), te);
 		upperScaleChestInventory = player.inventory;
-		lowerScaleChestInventory = par2IInventory;
 		allowUserInput = false;
 		short var3 = 222;
 		int var4 = var3 - 108;
@@ -135,7 +133,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.setValues();
-		fontRenderer.drawString(StatCollector.translateToLocal(lowerScaleChestInventory.getInvName()), 8, 6, 4210752);
+		fontRenderer.drawString(this.tile.getMultiValuedName(), 8, 6, 4210752);
 		fontRenderer.drawString(StatCollector.translateToLocal(upperScaleChestInventory.getInvName()), 8, ySize - 96 + 2, 4210752);
 		int var3 = 0;
 		int pageinv = invsize-page*9*tile.MAXROWS;

@@ -30,7 +30,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiHeater extends GuiMachine
 {
     private IInventory upperHeaterInventory;
-    private IInventory lowerHeaterInventory;
     private TileEntityHeater heater;
     private GuiTextField input;
     public int temperature;
@@ -47,7 +46,6 @@ public class GuiHeater extends GuiMachine
     {
         super(new ContainerHeater(player, te), te);
         upperHeaterInventory = player.inventory;
-        lowerHeaterInventory = par2IInventory;
         allowUserInput = false;
         short var3 = 256;
         int var4 = var3 - 108;
@@ -104,7 +102,7 @@ public class GuiHeater extends GuiMachine
     @Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
-        fontRenderer.drawString(StatCollector.translateToLocal(lowerHeaterInventory.getInvName()), 8, 6, 4210752);
+        fontRenderer.drawString(this.heater.getMultiValuedName(), 8, 6, 4210752);
         fontRenderer.drawString("Temperature Control:", 26, 59, 4210752);
         fontRenderer.drawString(StatCollector.translateToLocal(upperHeaterInventory.getInvName()), 8, ySize - 96 -14, 4210752);
         if (!input.isFocused()) {
