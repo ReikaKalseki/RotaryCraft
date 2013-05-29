@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
@@ -60,61 +61,61 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 	//public abstract void getIOSides();
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("torque", torque);
-        NBT.setInteger("omega", omega);
-        NBT.setInteger("io", iotick);
-        NBT.setInteger("rx", readx);
-        NBT.setInteger("ry", ready);
-        NBT.setInteger("rz", readz);
-        NBT.setInteger("rx2", readx2);
-        NBT.setInteger("ry2", ready2);
-        NBT.setInteger("rz2", readz2);
-        NBT.setInteger("rx3", readx3);
-        NBT.setInteger("ry3", ready3);
-        NBT.setInteger("rz3", readz3);
-        NBT.setInteger("rx4", readx4);
-        NBT.setInteger("ry4", ready4);
-        NBT.setInteger("rz4", readz4);
-    }
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("torque", torque);
+		NBT.setInteger("omega", omega);
+		NBT.setInteger("io", iotick);
+		NBT.setInteger("rx", readx);
+		NBT.setInteger("ry", ready);
+		NBT.setInteger("rz", readz);
+		NBT.setInteger("rx2", readx2);
+		NBT.setInteger("ry2", ready2);
+		NBT.setInteger("rz2", readz2);
+		NBT.setInteger("rx3", readx3);
+		NBT.setInteger("ry3", ready3);
+		NBT.setInteger("rz3", readz3);
+		NBT.setInteger("rx4", readx4);
+		NBT.setInteger("ry4", ready4);
+		NBT.setInteger("rz4", readz4);
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        torque = NBT.getInteger("torque");
-        omega = NBT.getInteger("omega");
-        iotick = NBT.getInteger("io");
-        readx = NBT.getInteger("rx");
-        ready = NBT.getInteger("ry");
-        readz = NBT.getInteger("rz");
-        readx2 = NBT.getInteger("rx2");
-        ready2 = NBT.getInteger("ry2");
-        readz2 = NBT.getInteger("rz2");
-        readx3 = NBT.getInteger("rx3");
-        ready3 = NBT.getInteger("ry3");
-        readz3 = NBT.getInteger("rz3");
-        readx4 = NBT.getInteger("rx4");
-        ready4 = NBT.getInteger("ry4");
-        readz4 = NBT.getInteger("rz4");
+	{
+		super.readFromNBT(NBT);
+		torque = NBT.getInteger("torque");
+		omega = NBT.getInteger("omega");
+		iotick = NBT.getInteger("io");
+		readx = NBT.getInteger("rx");
+		ready = NBT.getInteger("ry");
+		readz = NBT.getInteger("rz");
+		readx2 = NBT.getInteger("rx2");
+		ready2 = NBT.getInteger("ry2");
+		readz2 = NBT.getInteger("rz2");
+		readx3 = NBT.getInteger("rx3");
+		ready3 = NBT.getInteger("ry3");
+		readz3 = NBT.getInteger("rz3");
+		readx4 = NBT.getInteger("rx4");
+		ready4 = NBT.getInteger("ry4");
+		readz4 = NBT.getInteger("rz4");
 
-        if (torque < 0)
-        {
-            torque = 0;
-        }
-        if (omega < 0)
-        {
-            omega = 0;
-        }
+		if (torque < 0)
+		{
+			torque = 0;
+		}
+		if (omega < 0)
+		{
+			omega = 0;
+		}
 
 		if (!superCalled && this.isInWorld()) {
 			superTick++;
@@ -123,7 +124,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			ReikaJavaLibrary.pConsole("Super() not called for "+this.getName()+"! Contact Reika immediately!");
 			ReikaChatHelper.write("Super() not called for "+this.getName()+"! Contact Reika immediately!");
 		}
-    }
+	}
 
 	protected boolean isProvider(TileEntity te) {
 		if (!(te instanceof TileEntityIOMachine))
@@ -154,5 +155,23 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			}
 		}
 		return false;
+	}
+
+	public TileEntityIOMachine getInput() {
+		if (ready == Integer.MIN_VALUE)
+			ready = yCoord;
+		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		if (te instanceof TileEntityIOMachine)
+			return (TileEntityIOMachine)te;
+		return null;
+	}
+
+	public TileEntityIOMachine getOutput() {
+		if (writey == Integer.MIN_VALUE)
+			writey = yCoord;
+		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		if (te instanceof TileEntityIOMachine)
+			return (TileEntityIOMachine)te;
+		return null;
 	}
 }

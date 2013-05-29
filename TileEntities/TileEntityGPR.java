@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -13,19 +13,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
-
-	public static final int FALLOFF = 2097152;	//2MW for each +1m FOV
 
 	/** A depth-by-width array of the discovered block IDs, materials, colors
 	 * drawn downwards (first slots are top layer) */
@@ -37,54 +35,54 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 
 	private int oldmeta = 0;
 
-    @Override
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-    {
-        if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-        {
-            return false;
-        }
+	{
+		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+		{
+			return false;
+		}
 
-        if (yCoord > 96)
-        	return false;
-        /*
+		if (yCoord > 96)
+			return false;
+		/*
         if (this.power < MINPOWER)
         	return false;*/
 
-        return par1EntityPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
-    }
+		return par1EntityPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
+	}
 
-    public double getSpongy(World world, int x, int y, int z) {
-    	int range = (this.getBounds()[1]-this.getBounds()[0])/2;
-    	int numcave = 0;
-    	int numsolid = 0;
-    	boolean dungeon = false;
-    	boolean mineshaft = false;
-    	boolean stronghold = false;
+	public double getSpongy(World world, int x, int y, int z) {
+		int range = (this.getBounds()[1]-this.getBounds()[0])/2;
+		int numcave = 0;
+		int numsolid = 0;
+		boolean dungeon = false;
+		boolean mineshaft = false;
+		boolean stronghold = false;
 
-    	for (int i = -range; i <= range; i++) {
-        	for (int j = -range; j <= range; j++) {
-            	for (int k = y; k >= 0; k--) {
-            		int id = (world.getBlockId(x+i, k, z+j));
-            		if (ReikaWorldHelper.caveBlock(id))
-            			numcave++;
-            		else
-            			numsolid++;
-            		if (id == Block.web.blockID)
-            			mineshaft = true;
-            		if (id == Block.endPortal.blockID || id == Block.endPortalFrame.blockID)
-            			stronghold = true;
-            		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
-            	}
-        	}
-    	}
-    	double ans = (double)numcave/(double)(numcave+numsolid);
-    	return ans;
-    }
+		for (int i = -range; i <= range; i++) {
+			for (int j = -range; j <= range; j++) {
+				for (int k = y; k >= 0; k--) {
+					int id = (world.getBlockId(x+i, k, z+j));
+					if (ReikaWorldHelper.caveBlock(id))
+						numcave++;
+					else
+						numsolid++;
+					if (id == Block.web.blockID)
+						mineshaft = true;
+					if (id == Block.endPortal.blockID || id == Block.endPortalFrame.blockID)
+						stronghold = true;
+					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
+				}
+			}
+		}
+		double ans = (double)numcave/(double)(numcave+numsolid);
+		return ans;
+	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		if (y > 96)
 			return;
 		tickcount++;
@@ -138,7 +136,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			return val;
 		val[0] -= range;
 		val[1] += range;
-
+		/*
 		long jetpower = EnumEngineType.JET.getPower();
 
 		if (power >= EnumEngineType.AC.getPower() && power < jetpower) {
@@ -154,7 +152,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (power >= EnumEngineType.MICRO.getPower() && power < jetpower) {
 			val[0] -= 3;
 			val[1] += 3;
-		}
+		}*/
 
 		if (val[0] < 0)
 			val[0] = 0;
@@ -165,8 +163,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	}
 
 	public int getRange() {
-		int excesspower = ReikaMathLibrary.ceil2exp((int)(power-MINPOWER));
-		return excesspower/FALLOFF;
+		return 2*(int)ReikaMathLibrary.logbase(power-MINPOWER, 2);
 	}
 
 	@Override

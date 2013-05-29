@@ -7,17 +7,17 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Base;
+package Reika.RotaryCraft.Auxiliary;
 
-import net.minecraft.inventory.Container;
+import java.util.List;
 
-public abstract class GuiNonPoweredMachine extends GuiMachine {
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
 
-	public GuiNonPoweredMachine(Container par1Container, RotaryCraftTileEntity te) {
-		super(par1Container, te);
-	}
+public interface EnchantableMachine {
 
-	@Override
-	protected final void drawPowerTab(int j, int k) {}
+	public void applyEnchants(ItemStack is);
+
+	public List<Enchantment> getEnchantments();
 
 }

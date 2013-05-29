@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
@@ -208,10 +209,16 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					cannon.phi = data[1];
 				}
 				if (control == 13) {
-					cannon.theta = data[1];
+					if (data[1] > cannon.getMaxTheta())
+						cannon.theta = cannon.getMaxTheta();
+					else
+						cannon.theta = data[1];
 				}
 				if (control == 14) {
-					cannon.velocity = data[1];
+					if (data[1] > cannon.getMaxLaunchVelocity())
+						cannon.velocity = cannon.getMaxLaunchVelocity();
+					else
+						cannon.velocity = data[1];
 				}
 			}
 			else {
@@ -223,6 +230,14 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				}
 				if (control == 14) {
 					cannon.target[2] = data[1];
+				}
+				double dx = cannon.target[0]-cannon.xCoord;
+				double dz = cannon.target[2]-cannon.zCoord;
+				double dd = ReikaMathLibrary.py3d(dx, 0, dz);
+				if (dd > cannon.getMaxLaunchDistance()) {
+					cannon.target[0] = cannon.xCoord;
+					cannon.target[1] = 512;
+					cannon.target[2] = cannon.zCoord;
 				}
 			}
 		}

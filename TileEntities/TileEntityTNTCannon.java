@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -36,6 +37,8 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 
 	public int delay = 20;
 
+	public static final double torquecap = 32768D;
+
 	public boolean isCreative = false;
 
 	public boolean targetMode = false;
@@ -43,227 +46,245 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	public int[] target = new int[3];
 	//Make torque affect max incline angle, speed max distance
 
+	public int getMaxLaunchVelocity() {
+		return (int)Math.sqrt(power/67.5D);
+	}
 
+	public int getMaxTheta() {
+		if (torque > torquecap)
+			return 90;
+		int ang = 2*(int)Math.ceil(Math.toDegrees(Math.asin(torque/torquecap)));
+		if (ang > 90)
+			return 90;
+		return ang;
+	}
+
+	public double getMaxLaunchDistance() {
+		double v = this.getMaxLaunchVelocity();
+		double vy = v*Math.sin(Math.toRadians(45));
+		double t = vy/9.81D;
+		return t*vy; //vx = vy @ 45
+	}
 
 	public ItemStack[] inventory = new ItemStack[9];
 
 	/**
-     * Returns the number of slots in the inventory.
-     */
-    public int getSizeInventory()
-    {
-        return inventory.length;
-    }
+	 * Returns the number of slots in the inventory.
+	 */
+	public int getSizeInventory()
+	{
+		return inventory.length;
+	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		this.getSummativeSidedPower();
-    	if (power < MINPOWER)
-    		return;
-    	tickcount++;
-    	if (tickcount < delay)
-    		return;
-    	tickcount = 0;
-    	if (targetMode)
-    		this.calcTarget(world, x, y, z);
-    	if (this.canFire())
-    		this.fire(world, x, y, z);
-    	if (targetMode) {
-    		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(256, 256, 256);
-    		List in = world.getEntitiesWithinAABB(EntityTNTPrimed.class, box);
-    		for (int i = 0; i < in.size(); i++) {
-    			EntityTNTPrimed tnt = (EntityTNTPrimed)in.get(i);
-    			if (!tnt.onGround) {
-	    			//Nullify air resistance
-	    			tnt.motionX /= 0.869800000190734863D;
-	    			tnt.motionZ /= 0.869800000190734863D;
-	    			if (!world.isRemote)
-	    				tnt.velocityChanged = true;
-    			}
-    			else {
-    				tnt.motionX = 0;
-    				tnt.motionZ = 0;
-	    			if (!world.isRemote)
-	    				tnt.velocityChanged = true;
-    			}
-    		}
-    	}
-    }
+		if (power < MINPOWER)
+			return;
+		tickcount++;
+		if (tickcount < delay)
+			return;
+		tickcount = 0;
+		if (targetMode)
+			this.calcTarget(world, x, y, z);
+		if (this.canFire())
+			this.fire(world, x, y, z);
+		if (targetMode) {
+			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(256, 256, 256);
+			List in = world.getEntitiesWithinAABB(EntityTNTPrimed.class, box);
+			for (int i = 0; i < in.size(); i++) {
+				EntityTNTPrimed tnt = (EntityTNTPrimed)in.get(i);
+				if (!tnt.onGround) {
+					//Nullify air resistance
+					tnt.motionX /= 0.869800000190734863D;
+					tnt.motionZ /= 0.869800000190734863D;
+					if (!world.isRemote)
+						tnt.velocityChanged = true;
+				}
+				else {
+					tnt.motionX = 0;
+					tnt.motionZ = 0;
+					if (!world.isRemote)
+						tnt.velocityChanged = true;
+				}
+			}
+		}
+	}
 
-    private void calcTarget(World world, int x, int y, int z) {
-    	// North is -Z
-    	double dx = target[0]-x-0.5;
-    	double dy = target[1]-y-1;
-    	double dz = target[2]-z-0.5;
-    	double dl = ReikaMathLibrary.py3d(dx, 0, dz); //Horiz distance
-    	double g = 8.4695*ReikaMathLibrary.doubpow(dl, 0.2701);
-    	if (dy > 0)
-    		g *= (0.8951*ReikaMathLibrary.doubpow(dy, 0.0601));
-    	velocity = 10;
-    	theta = 0;
-    	while (theta <= 0) {
-        velocity++;
-    	double s = ReikaMathLibrary.intpow(velocity, 4)-g*(g*dl*dl+2*dy*velocity*velocity);
-    	double a = velocity*velocity+Math.sqrt(s);
-    	theta = (int)Math.toDegrees(Math.atan(a/(g*dl)));
-    	phi = (int)Math.toDegrees(Math.atan2(dz, dx));
-    	}
-    }
+	private void calcTarget(World world, int x, int y, int z) {
+		// North is -Z
+		double dx = target[0]-x-0.5;
+		double dy = target[1]-y-1;
+		double dz = target[2]-z-0.5;
+		double dl = ReikaMathLibrary.py3d(dx, 0, dz); //Horiz distance
+		double g = 8.4695*ReikaMathLibrary.doubpow(dl, 0.2701);
+		if (dy > 0)
+			g *= (0.8951*ReikaMathLibrary.doubpow(dy, 0.0601));
+		velocity = 10;
+		theta = 0;
+		while (theta <= 0) {
+			velocity++;
+			double s = ReikaMathLibrary.intpow(velocity, 4)-g*(g*dl*dl+2*dy*velocity*velocity);
+			double a = velocity*velocity+Math.sqrt(s);
+			theta = (int)Math.toDegrees(Math.atan(a/(g*dl)));
+			phi = (int)Math.toDegrees(Math.atan2(dz, dx));
+		}
+	}
 
-    private boolean canFire() {
-    	boolean hasTNT = ReikaInventoryHelper.checkForItem(Block.tnt.blockID, inventory);
-    	return (hasTNT || isCreative);
-    }
+	private boolean canFire() {
+		boolean hasTNT = ReikaInventoryHelper.checkForItem(Block.tnt.blockID, inventory);
+		return (hasTNT || isCreative);
+	}
 
-    private void fire(World world, int x, int y, int z) {
-    	for (int i = 0; i < 1; i++) {
-    	ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
-    	//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*par5Random.nextFloat()*12, 0.1F*par5Random.nextFloat());
-    	//world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
-    	EntityTNTPrimed tnt = new EntityTNTPrimed(world, x+0.5, y+1.5-0.0625, z+0.5, null);
-    	double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
-    	tnt.motionX = xyz[0];
-    	tnt.motionY = xyz[1];
-    	tnt.motionZ = xyz[2];
-       	tnt.fuse = 80;
-    	if (world.isRemote)
-    		return;
-       	tnt.velocityChanged = true;
-    	world.spawnEntityInWorld(tnt);
-    	}
-    }
+	private void fire(World world, int x, int y, int z) {
+		for (int i = 0; i < 1; i++) {
+			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
+			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*par5Random.nextFloat()*12, 0.1F*par5Random.nextFloat());
+			//world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
+			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x+0.5, y+1.5-0.0625, z+0.5, null);
+			double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
+			tnt.motionX = xyz[0];
+			tnt.motionY = xyz[1];
+			tnt.motionZ = xyz[2];
+			tnt.fuse = 80;
+			if (world.isRemote)
+				return;
+			tnt.velocityChanged = true;
+			world.spawnEntityInWorld(tnt);
+		}
+	}
 
-    public static boolean func_52005_b(ItemStack par0ItemStack)
-    {
-        return true;
-    }
+	public static boolean func_52005_b(ItemStack par0ItemStack)
+	{
+		return true;
+	}
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int par1)
-    {
-        return inventory[par1];
-    }
+	/**
+	 * Returns the stack in slot i
+	 */
+	public ItemStack getStackInSlot(int par1)
+	{
+		return inventory[par1];
+	}
 
-    /**
-     * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-     * stack.
-     */
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	/**
+	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
+	 * stack.
+	 */
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize <= 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize <= 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
+	/**
 
 
-     */
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	 */
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
-     *
-     */
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
+	/**
+	 *
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        velocity = NBT.getInteger("svelocity");
-        phi = NBT.getInteger("sphi");
-        theta = NBT.getInteger("stheta");
-        targetMode = NBT.getBoolean("istarget");
-        isCreative = NBT.getBoolean("creative");
-        target = NBT.getIntArray("targetxyz");
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
+	{
+		super.readFromNBT(NBT);
+		velocity = NBT.getInteger("svelocity");
+		phi = NBT.getInteger("sphi");
+		theta = NBT.getInteger("stheta");
+		targetMode = NBT.getBoolean("istarget");
+		isCreative = NBT.getBoolean("creative");
+		target = NBT.getIntArray("targetxyz");
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("svelocity", velocity);
-        NBT.setInteger("sphi", phi);
-        NBT.setInteger("stheta", theta);
-        NBT.setBoolean("istarget", targetMode);
-        NBT.setBoolean("creative", isCreative);
-        NBT.setIntArray("targetxyz", target);
-        NBTTagList nbttaglist = new NBTTagList();
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("svelocity", velocity);
+		NBT.setInteger("sphi", phi);
+		NBT.setInteger("stheta", theta);
+		NBT.setBoolean("istarget", targetMode);
+		NBT.setBoolean("creative", isCreative);
+		NBT.setIntArray("targetxyz", target);
+		NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-        NBT.setTag("Items", nbttaglist);
-    }
+		NBT.setTag("Items", nbttaglist);
+	}
 
 	@Override
 	public boolean hasModelTransparency() {

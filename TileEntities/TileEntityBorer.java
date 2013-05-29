@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,15 +24,19 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 
-public class TileEntityBorer extends TileEntityBeamMachine implements GuiController {
+public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController {
+
+	private List enchantments = new ArrayList<Enchantment>();
 
 	private int pipemeta2 = 0;
 
@@ -267,6 +275,16 @@ public class TileEntityBorer extends TileEntityBeamMachine implements GuiControl
 			}
 		}
 		step++;
+	}
+
+	public void applyEnchants(ItemStack is) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
+
+		}
+	}
+
+	public List getEnchantments() {
+		return enchantments;
 	}
 
 	/**

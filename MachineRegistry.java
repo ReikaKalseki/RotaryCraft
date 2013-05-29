@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -766,5 +766,13 @@ public enum MachineRegistry {
 			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, meta);
 		}
 		return null;
+	}
+
+	public boolean isEnchantable() {
+		if (this == BORER)
+			return true;
+		if (this == MOBHARVESTER)
+			return true;
+		return false;
 	}
 }

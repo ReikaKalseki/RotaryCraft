@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -22,6 +22,8 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.MachineRegistry;
@@ -62,9 +64,16 @@ public class RotaryAux {
 		}
 		if (m == MachineRegistry.SCREEN)
 			return !ep.isSneaking();
-		Object GUI = GuiHandler.instance.getClientGuiElement(9, ep, world, x, y, z);
-		if (GUI != null)
-			return true;
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			Object GUI = GuiHandler.instance.getClientGuiElement(9, ep, world, x, y, z);
+			if (GUI != null)
+				return true;
+		}
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			Object GUI = GuiHandler.instance.getServerGuiElement(9, ep, world, x, y, z);
+			if (GUI != null)
+				return true;
+		}
 		return false;
 	}
 

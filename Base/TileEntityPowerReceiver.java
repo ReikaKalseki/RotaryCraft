@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -16,8 +16,8 @@ import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.Auxiliary.EnumReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
@@ -30,13 +30,13 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public final int MINTORQUE;
 	public final int MINSPEED;
 
-	public EnumReceivers machine;
+	public PowerReceivers machine;
 
 	private int[][] powerin = new int[4][3]; //stores P, T, omega
 
 	public TileEntityPowerReceiver() {
 		//ReikaJavaLibrary.pConsole(this.getClass()+" goes to "+this.getMachineIndex());
-		machine = EnumReceivers.getEnumFromMachineIndex(this.getMachineIndex());
+		machine = PowerReceivers.getEnumFromMachineIndex(this.getMachineIndex());
 		if (machine == null)
 			throw new RuntimeException("Machine "+this.getName()+" in "+this.getClass()+" has no enum! Case?");
 		if (!machine.hasMultiValuedPower()) {

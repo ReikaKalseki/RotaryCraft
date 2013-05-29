@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -7,11 +7,10 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft;
 
-import Reika.RotaryCraft.MachineRegistry;
 
-public enum EnumReceivers {
+public enum PowerReceivers {
 
 	AEROSOLIZER(65536),
 	AUTOBREEDER(16384),
@@ -49,7 +48,7 @@ public enum EnumReceivers {
 	SCALECHEST(4096),
 	SONICWEAPON(262144),
 	SPAWNERCONTROLLER(131072),
-	TNTCANNON(131072),
+	TNTCANNON(65536),
 	VACUUM(32768),
 	WEATHERCONTROLLER(32768),
 	WINDER(),
@@ -69,25 +68,25 @@ public enum EnumReceivers {
 	private int[] speeds;
 
 	/** Min Torque, Min Speed, Min Power */
-	private EnumReceivers(int T, int S, int P) {
+	private PowerReceivers(int T, int S, int P) {
 		minT = T;
 		minS = S;
 		minP = P;
 	}
 
-	private EnumReceivers() {
+	private PowerReceivers() {
 		minT = 1;
 		minS = 1;
 		minP = 1;
 	}
 
-	private EnumReceivers(int P) {
+	private PowerReceivers(int P) {
 		minT = 1;
 		minS = 1;
 		minP = P;
 	}
 
-	private EnumReceivers(int[] T, int[] S, int[] P) {
+	private PowerReceivers(int[] T, int[] S, int[] P) {
 		torques = new int[T.length];
 		speeds = new int[S.length];
 		powers = new int[P.length];
@@ -188,7 +187,7 @@ public enum EnumReceivers {
 		return (minP == 1 && minS == 1 && minT != 1);
 	}
 
-	public static EnumReceivers getEnumFromMachineIndex(int index) {
+	public static PowerReceivers getEnumFromMachineIndex(int index) {
 		MachineRegistry m = MachineRegistry.machineList[index];
 		String name = m.getName();
 		String em = m.toString();
@@ -197,7 +196,7 @@ public enum EnumReceivers {
 		}
 		if (name == null)
 			throw new RuntimeException(m+" does not correspond to an existing machine Enum!");
-		for (EnumReceivers e : EnumReceivers.values()) {
+		for (PowerReceivers e : PowerReceivers.values()) {
 			String en = e.toString();
 			if (en.equals(em) || en.contains(em) || em.contains(en)) {
 				return e;

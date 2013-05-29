@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -9,31 +9,38 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelHarvester;
 
-public class TileEntityMobHarvester extends TileEntityPowerReceiver {
+public class TileEntityMobHarvester extends TileEntityPowerReceiver implements EnchantableMachine {
+
+	private List enchantments = new ArrayList<Enchantment>();
 
 	public String owner;
 	public boolean laser;
 
 	public List inbox;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		//this.tickcount++;
 		this.getSummativeSidedPower();
 		EntityPlayer ep = null;
@@ -42,7 +49,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver {
 		if (ep == null)
 			ep = world.getClosestPlayer(x, y, z, -1);
 		//if (this.tickcount < 5)
-			//return;
+		//return;
 		//this.tickcount = 0;
 		AxisAlignedBB box = this.getBox();
 		inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
@@ -75,20 +82,28 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver {
 		return AxisAlignedBB.getBoundingBox(xCoord+0.4, yCoord+1, zCoord+0.4, xCoord+0.6, yCoord+3, zCoord+0.6);
 	}
 
-    @Override
-	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        if (owner != null && !owner.isEmpty())
-        	NBT.setString("sowner", owner);
-    }
+	public void applyEnchants(ItemStack is) {
 
-    @Override
+	}
+
+	public List getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		if (owner != null && !owner.isEmpty())
+			NBT.setString("sowner", owner);
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        owner = NBT.getString("sowner");
-    }
+	{
+		super.readFromNBT(NBT);
+		owner = NBT.getString("sowner");
+	}
 
 	@Override
 	public boolean hasModelTransparency() {

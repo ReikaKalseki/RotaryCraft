@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.RotaryCraft.Auxiliary.EnumReceivers;
+import Reika.RotaryCraft.PowerReceivers;
 
 public class GuiBasicStorage extends GuiMachine {
 
@@ -56,7 +56,7 @@ public class GuiBasicStorage extends GuiMachine {
         this.drawTexturedModalRect(var5, var6, 0, 0, xSize, inventoryRows * 18 + 17);
         this.drawTexturedModalRect(var5, var6 + inventoryRows * 18 + 17, 0, 126, xSize, 96);
 
-    	if (EnumReceivers.getEnumFromMachineIndex(tile.getMachineIndex()).isMinPowerOnly())
+    	if (PowerReceivers.getEnumFromMachineIndex(tile.getMachineIndex()).isMinPowerOnly())
     		this.drawPowerOnly(var5, var6);
     	else
     		this.drawPowerTab(var5, var6);

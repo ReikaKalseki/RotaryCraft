@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -28,15 +29,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
+
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.EnumLook;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Items.ItemDebug;
-import Reika.RotaryCraft.Items.ItemMeter;
-import Reika.RotaryCraft.Items.ItemScrewdriver;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -137,10 +137,16 @@ public abstract class BlockBasicMultiTE extends Block {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking() && !((RotaryCraftTileEntity)te).getMachine().hasSneakActions())
 			return false;
-		if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver || ep.getCurrentEquippedItem().getItem() instanceof ItemMeter || ep.getCurrentEquippedItem().getItem() instanceof ItemDebug)) {
+		if (is != null && (ep.getCurrentEquippedItem().itemID == RotaryCraft.screwdriver.itemID || ep.getCurrentEquippedItem().itemID == RotaryCraft.meter.itemID || ep.getCurrentEquippedItem().itemID == RotaryCraft.debug.itemID)) {
 			return false;
+		}
+		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
+			((EnchantableMachine)te).applyEnchants(is);
+			return true;
 		}
 		if (te instanceof TileEntityScaleableChest) {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
@@ -243,24 +249,24 @@ public abstract class BlockBasicMultiTE extends Block {
 		return MachineRegistry.createTEFromIDAndMetadata(blockID, meta);
 	}
 
-    /**
-     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
-     */
-    @Override
+	/**
+	 * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+	 */
+	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e)
-    {
-    	MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-    	RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
-    	if (m.dealsContactDamage(e)) {
-    		e.attackEntityFrom(DamageSource.generic, m.getContactDamage(tile));
-    	}
-    	if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
-    		int dmg = ((TemperatureTE)tile).getThermalDamage();
-    		if (dmg > 0) {
-	    		e.attackEntityFrom(DamageSource.lava, dmg);
-	    		e.setFire(6);
-    		}
-    	}
-    }
+	{
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
+		if (m.dealsContactDamage(e)) {
+			e.attackEntityFrom(DamageSource.generic, m.getContactDamage(tile));
+		}
+		if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
+			int dmg = ((TemperatureTE)tile).getThermalDamage();
+			if (dmg > 0) {
+				e.attackEntityFrom(DamageSource.lava, dmg);
+				e.setFire(6);
+			}
+		}
+	}
 
 }

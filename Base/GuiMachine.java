@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @author Reika
+ * @author Reika Kalseki
  * 
  * Copyright 2013
  * 
@@ -13,8 +13,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.StatCollector;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiMachine extends GuiContainer {
 
 	protected RotaryCraftTileEntity tile;
@@ -31,17 +35,17 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected abstract void drawGuiContainerBackgroundLayer(float par1, int par2, int par3);
 
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
-    @Override
+	/**
+	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
+	 */
+	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
-    {
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2;
-        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 3, 4210752);
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 4, 4210752);
-    }
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 3, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 4, 4210752);
+	}
 
 	protected abstract void drawPowerTab(int j, int k);
 
