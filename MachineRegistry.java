@@ -77,6 +77,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
+import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
@@ -175,8 +176,10 @@ public enum MachineRegistry {
 	SCREEN(				"CCTV Screen",				BlockDMIMachine.class,		TileEntityScreen.class,				6,	"RenderCCTVScreen"),
 	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			10),
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
-	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon");
-	//WORKTABLE(			"Work Table",				BlockIMachine.class,		TileEntityWorktable.class,			11);
+	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
+	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			0);
+	//MAYBE TRY REGISTRATION WITH METADATA 16 and register intelligently?
+
 
 	private String name;
 	private Class te;

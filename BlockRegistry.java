@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
@@ -47,13 +48,14 @@ public enum BlockRegistry {
 	MODEL(BlockMMachine.class),
 	PIPING(BlockPiping.class),
 	SHAFT(BlockShaft.class),
-	TRANS(BlockTrans.class);
+	TRANS(BlockTrans.class),
+	MODELINV2(BlockMIMachine.class);
 
 	private Class block;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission"
+		"Transmission", "MI-Machines 2"
 	};
 
 	private BlockRegistry(Class cl) {

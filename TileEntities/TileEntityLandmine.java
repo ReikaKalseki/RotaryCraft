@@ -1,0 +1,288 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package Reika.RotaryCraft.TileEntities;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+
+public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedInventory {
+
+	private ItemStack[] inv = new ItemStack[8];
+
+	private boolean flaming = false;
+	private boolean poison = false;
+	private boolean chain = false;
+	private boolean shrapnel = false;
+
+	private int explosionDelay = 0;
+	private boolean isChainExploding = false;
+
+	@Override
+	public int getSizeInventory() {
+		return inv.length;
+	}
+
+	private boolean checkForPlayer(World world, int x, int y, int z) {
+		AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x, y+1, z, x+1, y+3, z+1);
+		List in = world.getEntitiesWithinAABB(EntityLiving.class, above);
+		for (int i = 0; i < in.size(); i++) {
+			EntityLiving e = (EntityLiving)in.get(i);
+			if (e.onGround && !e.isSneaking())
+				return true;
+		}
+		return false;
+	}
+
+	private boolean checkForArrow(World world, int x, int y, int z) {
+		AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(1, 1, 1);
+		List in = world.getEntitiesWithinAABB(EntityArrow.class, above);
+		return in.size() > 0;
+	}
+
+	private boolean ageFail() {
+		if (par5Random.nextInt(20) > 0)
+			return false;
+		int age = this.getAge();
+		if (age == 0)
+			return false;
+		return (par5Random.nextInt(1+65536-this.getAge()) == 0);
+	}
+
+	private void maxPowerExplosion(World world, int x, int y, int z) {
+		world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 0, 0, 0);
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x-1, y, z, world.getBlockId(x-1, y, z), -1, x, y, z, 4);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x+1, y, z, world.getBlockId(x+1, y, z), -1, x, y, z, 4);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-1, z, world.getBlockId(x, y-1, z), -1, x, y, z, 4);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+1, z, world.getBlockId(x, y+1, z), -1, x, y, z, 4);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-1, world.getBlockId(x, y, z-1), -1, x, y, z, 4);
+		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+1, world.getBlockId(x, y, z+1), -1, x, y, z, 4);
+	}
+
+	public void detonate(World world, int x, int y, int z) {
+		if (chain)
+			this.chainedExplosion(world, x, y, z);
+		float power = this.getExplosionPower();
+		world.setBlock(x, y, z, 0);
+		if (flaming)
+			world.newExplosion(null, x+0.5, y+0.5, z+0.5, power, true, true);
+		else
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, power, true);
+		AxisAlignedBB region = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(2, 2, 2);
+		List in = world.getEntitiesWithinAABB(EntityLiving.class, region);
+		for (int i = 0; i < in.size(); i++) {
+			EntityLiving e = (EntityLiving)in.get(i);
+			e.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 0));
+			if (poison)
+				e.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+			if (shrapnel) {
+				double dx = e.posX-x-0.5;
+				double dy = e.posY-y-0.5;
+				double dz = e.posZ-z-0.5;
+				double dd = ReikaMathLibrary.py3d(dx, dy, dz);
+				e.attackEntityFrom(DamageSource.generic, (int)(10D/Math.sqrt(dd)));
+				ReikaEntityHelper.spawnParticlesAround("crit", world, e, 8);
+			}
+		}
+	}
+
+	private void getExplosionModifiers() {
+		for (int i = 5; i <= 8; i++)
+			if (inv[i] != null) {
+				if (inv[i].itemID == Item.blazePowder.itemID)
+					flaming = true;
+				if (inv[i].itemID == Item.spiderEye.itemID)
+					flaming = true;
+				if (inv[i].itemID == Block.tnt.blockID)
+					chain = true;
+				if (inv[i].itemID == Block.glass.blockID)
+					shrapnel = true;
+			}
+	}
+
+	private float getExplosionPower() {
+		int num = 0;
+		for (int i = 1; i <= 4; i++)
+			if (inv[i] != null) {
+				if (inv[i].itemID == Item.gunpowder.itemID)
+					num++;
+			}
+		return 2F*num; //Each item is 1/2 block TNT (so capped at 2x)
+	}
+
+	private int getAge() {
+		if (inv[0] == null)
+			return 0;
+		return 65536-inv[0].getItemDamage();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inv[i];
+	}
+
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inv[par1] != null) {
+			if (inv[par1].stackSize <= par2) {
+				ItemStack itemstack = inv[par1];
+				inv[par1] = null;
+				return itemstack;
+			}
+			ItemStack itemstack1 = inv[par1].splitStack(par2);
+			if (inv[par1].stackSize == 0)
+				inv[par1] = null;
+			return itemstack1;
+		}
+		else
+			return null;
+	}
+
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inv[par1] != null) {
+			ItemStack itemstack = inv[par1];
+			inv[par1] = null;
+			return itemstack;
+		}
+		else
+			return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inv[i] = itemstack;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		return this.isStandard8mReach(entityplayer, this);
+	}
+
+	@Override
+	public void openChest() {
+		if (par5Random.nextInt(65536-this.getAge())/2 == 0)
+			this.detonate(worldObj, xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public void closeChest() {
+
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack is) {
+		switch (i) {
+		case 0:
+			return is.itemID == RotaryCraft.wind.itemID;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			return is.itemID == Item.gunpowder.itemID;
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			return this.isModifier(is);
+		default:
+			return false;
+		}
+	}
+
+	private boolean isModifier(ItemStack is) {
+		if (is.itemID == Item.blazePowder.itemID)
+			return true;
+		if (is.itemID == Item.spiderEye.itemID)
+			return true;
+		if (is.itemID == Block.tnt.blockID)
+			return true;
+		if (is.itemID == Block.glass.blockID)
+			return true;
+		return false;
+	}
+
+	private void chainedExplosion(World world, int x, int y, int z) {
+		for (int i = 0; i < 4; i++) {
+			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x-5+par5Random.nextInt(11), y, z-5+par5Random.nextInt(11), null);
+			tnt.fuse = 5+par5Random.nextInt(40);
+			world.spawnEntityInWorld(tnt);
+		}
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.LANDMINE.ordinal();
+	}
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		tickcount++;
+		this.getExplosionModifiers();
+		if (this.ageFail())
+			this.detonate(world, x, y, z);
+		if (this.checkForArrow(world, x, y, z))
+			this.detonate(world, x, y, z);
+		if (this.checkForPlayer(world, x, y, z))
+			this.detonate(world, x, y, z);
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
+
+}

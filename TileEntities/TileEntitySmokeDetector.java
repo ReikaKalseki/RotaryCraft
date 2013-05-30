@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -119,57 +120,35 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 	public ItemStack getStackInSlot(int var1) {
 		return battery[0];
 	}
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
+
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (battery[par1] != null)
-		{
-			if (battery[par1].stackSize <= par2)
-			{
+		if (battery[par1] != null) {
+			if (battery[par1].stackSize <= par2) {
 				ItemStack itemstack = battery[par1];
 				battery[par1] = null;
 				return itemstack;
 			}
-
 			ItemStack itemstack1 = battery[par1].splitStack(par2);
-
 			if (battery[par1].stackSize == 0)
-			{
 				battery[par1] = null;
-			}
-
 			return itemstack1;
 		}
 		else
-		{
 			return null;
-		}
 	}
 
-	/**
-	 *
-	 *
-	 */
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		if (battery[par1] != null)
-		{
+		if (battery[par1] != null) {
 			ItemStack itemstack = battery[par1];
 			battery[par1] = null;
 			return itemstack;
 		}
 		else
-		{
 			return null;
-		}
 	}
 
-	/**
-
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		battery[par1] = par2ItemStack;
@@ -187,15 +166,12 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 
 	@Override
 	public void openChest() {
-		// TODO Auto-generated method stub
 	}
 	@Override
 	public void closeChest() {
-		// TODO Auto-generated method stub
 	}
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	@Override
