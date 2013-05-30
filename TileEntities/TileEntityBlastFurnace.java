@@ -13,11 +13,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -27,7 +29,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
-public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IInventory, TemperatureTE {
+public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IInventory, TemperatureTE, ISidedInventory {
 
 	public int temperature;
 	public ItemStack[] inventory = new ItemStack[14];
@@ -36,7 +38,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IIn
 	public static final int SMELTTEMP = 600;
 	public static final int MAXTEMP = 1200;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
 		if (tickcount >= 20) {
@@ -171,117 +173,117 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IIn
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 
-    	int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-    	if (waterside != -1) {
-    		Tamb /= 2;
-    	}
-    	int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-    	if (iceside != -1) {
-    		if (Tamb > 0)
-    			Tamb /= 4;
-    		ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
-    	}
-    	int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-    	if (fireside != -1) {
-    		Tamb += 200;
-    	}
-    	int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-    	if (lavaside != -1) {
-    		Tamb += 600;
-    	}
-    	if (temperature > Tamb)
-    		temperature--;
-    	if (temperature > Tamb*2)
-    		temperature--;
-    	if (temperature < Tamb)
-    		temperature++;
-    	if (temperature*2 < Tamb)
-    		temperature++;
-    	if (temperature > MAXTEMP)
-    		temperature = MAXTEMP;
-    }
+		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (waterside != -1) {
+			Tamb /= 2;
+		}
+		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != -1) {
+			if (Tamb > 0)
+				Tamb /= 4;
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+		}
+		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != -1) {
+			Tamb += 200;
+		}
+		int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != -1) {
+			Tamb += 600;
+		}
+		if (temperature > Tamb)
+			temperature--;
+		if (temperature > Tamb*2)
+			temperature--;
+		if (temperature < Tamb)
+			temperature++;
+		if (temperature*2 < Tamb)
+			temperature++;
+		if (temperature > MAXTEMP)
+			temperature = MAXTEMP;
+	}
 
 	/**
-     * Returns the number of slots in the inventory.
-     */
-    public int getSizeInventory()
-    {
-        return inventory.length;
-    }
+	 * Returns the number of slots in the inventory.
+	 */
+	public int getSizeInventory()
+	{
+		return inventory.length;
+	}
 
-    public static boolean func_52005_b(ItemStack par0ItemStack)
-    {
-        return true;
-    }
+	public static boolean func_52005_b(ItemStack par0ItemStack)
+	{
+		return true;
+	}
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int par1)
-    {
-        return inventory[par1];
-    }
+	/**
+	 * Returns the stack in slot i
+	 */
+	public ItemStack getStackInSlot(int par1)
+	{
+		return inventory[par1];
+	}
 
-    /**
-     * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-     * stack.
-     */
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	/**
+	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
+	 * stack.
+	 */
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize <= 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize <= 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
+	/**
 
 
-     */
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	 */
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
-     *
-     */
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
+	/**
+	 *
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -303,56 +305,56 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IIn
 		// TODO Auto-generated method stub
 	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("melt", meltTime);
-        NBT.setInteger("temp", temperature);
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("melt", meltTime);
+		NBT.setInteger("temp", temperature);
 
-        NBTTagList nbttaglist = new NBTTagList();
+		NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-        NBT.setTag("Items", nbttaglist);
-    }
+		NBT.setTag("Items", nbttaglist);
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        meltTime = NBT.getInteger("melt");
-        temperature = NBT.getInteger("temp");
+	{
+		super.readFromNBT(NBT);
+		meltTime = NBT.getInteger("melt");
+		temperature = NBT.getInteger("temp");
 
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
 	@Override
 	public boolean isInvNameLocalized() {
@@ -396,5 +398,20 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IIn
 	@Override
 	public int getThermalDamage() {
 		return 0;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		return null;
+	}
+
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 }

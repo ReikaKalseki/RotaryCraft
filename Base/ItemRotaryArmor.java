@@ -9,12 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 
@@ -35,7 +35,9 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	}
 
 	@Override
-	public abstract void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5);
+	public final ItemStack onItemRightClick(ItemStack is, World par2World, EntityPlayer par3Entity) {
+		return is;
+	}
 
 	@Override
 	public abstract void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is);

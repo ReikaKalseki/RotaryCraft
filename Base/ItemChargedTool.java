@@ -20,7 +20,7 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	public ItemChargedTool(int itemID, int index) {
 		super(itemID, index);
 		hasSubtypes = true;
-		this.setMaxDamage(0);
+		//this.setMaxDamage(0);
 	}
 
 	@Override

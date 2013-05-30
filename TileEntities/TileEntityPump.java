@@ -9,8 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -22,6 +25,8 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 
 	public int liquidID = -1;
 	public int liquidLevel;
+
+	private BlockArray blocks = new BlockArray();
 
 	public boolean waterOnly = true;
 
@@ -50,8 +55,16 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		soundtick++;
+		if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
+			return;
+		if (blocks.isEmpty() || liquidLevel == 0) {
+			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
+			blocks.recursiveFillLiquidWithBounds(world, x, y-1, z, x-32, 0, z-32, x+32, y-1, z+32);
+			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
+			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
+			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-32, 0, z-32, x+32, y-1, z+32);
+		}
 		boolean res = false;
-		int delay = 20;
 		tile = null;
 		tickcount++;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
@@ -61,11 +74,15 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		if (this.checkForReservoir(world, x, y, z, meta)) {
 			tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
 			res = true;
-			delay = 5;	//4x speed for draining reservoir -- no longer used
 		}
+		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
+		if (blocks.isEmpty())
+			return;
 		if (this.operationComplete(tickcount, 0) && power > MINPOWER) {
 			if (!res) {
-				int loc[] = this.findSourceBlock(world, x, y, z);
+				//int loc[] = this.findSourceBlock(world, x, y, z);
+				int[] loc = blocks.getNextAndMoveOn();
+				//ReikaJavaLibrary.pConsole(loc[0]+"  "+loc[1]+"  "+loc[2]+"  for side "+FMLCommonHandler.instance().getEffectiveSide());
 				this.harvest(world, x, y, z, loc);
 				tickcount = 0;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));

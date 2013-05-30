@@ -17,6 +17,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
 
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
@@ -32,12 +33,32 @@ public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTex
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
 		if (is.getItemDamage() > 0) {
 			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
-			ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+			if (itemRand.nextInt(40) == 0) {
+				ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+				if (is.getItemDamage() == 2) {
+					ReikaChatHelper.clearChat();
+					ReikaChatHelper.write("Night-Vision Goggles charge is very low (2 kJ)!");
+				}
+				if (is.getItemDamage() == 4) {
+					ReikaChatHelper.clearChat();
+					ReikaChatHelper.write("Night-Vision Goggles charge is low (4 kJ)!");
+				}
+				if (is.getItemDamage() == 16) {
+					ReikaChatHelper.clearChat();
+					ReikaChatHelper.write("Night-Vision Goggles charge is low (16 kJ)!");
+				}
+				if (is.getItemDamage() == 32) {
+					ReikaChatHelper.clearChat();
+					ReikaChatHelper.write("Night-Vision Goggles charge is low (32 kJ)!");
+				}
+			}
 		}
 	}
 
 	@Override
-	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {}
+	public void onUpdate(ItemStack is, World par2World, Entity e, int par4, boolean par5) {
+		super.onUpdate(is, par2World, e, par4, par5);
+	}
 
 	@Override
 	public String getArmorTextureFile(ItemStack itemstack) {

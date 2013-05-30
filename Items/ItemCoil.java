@@ -15,11 +15,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCoil extends ItemBasic
 {
@@ -27,12 +28,12 @@ public class ItemCoil extends ItemBasic
 
 	public ItemCoil(int itemID) {
 		super(itemID, 96); //calling the super constructor and giving him the itemID so minecraft knows the itemID
-		this.maxStackSize = 1;
+		maxStackSize = 1;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
-		this.hasSubtypes = true;
+		hasSubtypes = true;
 		this.setMaxDamage(0);
 		for (int i = 0; i < 65536; i++)
-			this.subNames[i] = String.format("%d", i);
+			subNames[i] = String.format("%d", i);
 	}
 
 	@Override
@@ -48,6 +49,16 @@ public class ItemCoil extends ItemBasic
 		for (int i = 0; i < 65536; i++)
 			if (ReikaMathLibrary.isPowerOf(i, 2) || i == 65535 || i == 0)
 				par3List.add(new ItemStack(par1, 1, i));
+	}
+
+	@Override
+	public ItemStack getContainerItemStack(ItemStack itemStack) {
+		return itemStack;
+	}
+
+	@Override
+	public boolean doesContainerItemLeaveCraftingGrid(ItemStack par1ItemStack) {
+		return false;
 	}
 
 	@Override

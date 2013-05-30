@@ -9,24 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.List;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.world.World;
-
 public class ChargingRecipe implements IRecipe {
-	
+
 	private ItemStack output;
 
 	public ChargingRecipe(ItemStack par1ItemStack) {
-		this.output = par1ItemStack;
+		output = par1ItemStack;
 	}
 
 	@Override
@@ -43,7 +39,7 @@ public class ChargingRecipe implements IRecipe {
 
 	@Override
 	public int getRecipeSize() {
-		return 1;
+		return 2;
 	}
 
 	@Override

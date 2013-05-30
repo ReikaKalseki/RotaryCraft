@@ -654,7 +654,7 @@ public class RotaryRecipes {
 
 	public static void addCharging() {
 		GameRegistry.registerCraftingHandler(new ItemChargingRecipeHandler());
-		//GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.motiontracker), RotaryCraft.wind, RotaryCraft.motiontracker);
+		GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.motiontracker), RotaryCraft.wind, RotaryCraft.motiontracker);
 		//CraftingManager.getInstance().addShapelessRecipe(new ItemStack(RotaryCraft.motiontracker), RotaryCraft.wind, RotaryCraft.motiontracker);
 		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.motiontracker)));
 		CraftingManager.getInstance().getRecipeList().add(new ChargingRecipe(new ItemStack(RotaryCraft.fireball)));

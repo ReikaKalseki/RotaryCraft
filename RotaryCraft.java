@@ -161,7 +161,7 @@ public class RotaryCraft {
 	public static Block gravleaves;
 
 	public static Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
-	
+
 	public static Achievement[] achievements;
 
 	public static Entity arrow;
@@ -246,7 +246,7 @@ public class RotaryCraft {
 		yeast = new ItemBasic(RotaryConfig.yeastid, 32).setUnlocalizedName("Yeast");
 		ethanol = new ItemBasic(RotaryConfig.ethanolid, 64).setUnlocalizedName("EthanolCrystals");
 		canolaseed = new ItemCanolaSeed(RotaryConfig.canolaseedid).setUnlocalizedName("CanolaSeed");
-		wind = new ItemCoil(RotaryConfig.windid).setUnlocalizedName("Winder");
+		wind = new ItemCoil(RotaryConfig.windid).setUnlocalizedName("Winder").setContainerItem(wind);
 		motiontracker = new ItemMotionTracker(RotaryConfig.motionid).setUnlocalizedName("Motion");
 		ultra = new ItemUltrasound(RotaryConfig.ultraid).setUnlocalizedName("Ultra");
 		vac = new ItemVacuum(RotaryConfig.vacid).setUnlocalizedName("Vac");
