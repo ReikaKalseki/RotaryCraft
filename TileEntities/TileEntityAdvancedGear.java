@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -28,7 +28,7 @@ import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Models.ModelCVT;
 import Reika.RotaryCraft.Models.ModelCoil;
 
-public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements IInventory {
+public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory {
 
 	public boolean worm = true;
 	public boolean coil = false;
@@ -428,7 +428,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		return true;
+		return itemstack.itemID == ItemStacks.belt.itemID && itemstack.getItemDamage() == ItemStacks.belt.getItemDamage();
 	}
 
 	@Override
@@ -468,5 +468,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.ADVANCEDGEARS.ordinal();
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 }

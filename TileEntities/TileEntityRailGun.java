@@ -12,7 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Models.ModelRailGun;
 
-public class TileEntityRailGun extends TileEntityAimedCannon implements IInventory {
+public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedInventory {
 
 	public ItemStack[] ammo = new ItemStack[54];
 
@@ -77,10 +77,10 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements IInvento
 						double dy = -(ent.posY-y);
 						double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
 						if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1))
-						if (dist < mindist) {
-							mindist = dist;
-							i_at_min = i;
-						}
+							if (dist < mindist) {
+								mindist = dist;
+								i_at_min = i;
+							}
 					}
 				}
 			}
@@ -284,6 +284,11 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements IInvento
 	@Override
 	public int getMaxRange() {
 		return 256;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 }

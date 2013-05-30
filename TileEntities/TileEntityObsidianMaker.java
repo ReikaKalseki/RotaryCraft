@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -42,6 +43,11 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public static final int MINTORQUE = 1;
 
 	public ItemStack[] inventory = new ItemStack[9];
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -285,7 +291,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		else
 			return null;
 	}
-	
+
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
 		if (inventory[par1] != null) {

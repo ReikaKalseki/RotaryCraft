@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -52,6 +53,11 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 
 
 	private int temperaturetick = 0;
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 3;
+	}
 
 	// Return the itemstack product from the input items.
 	private ItemStack getRecipe() {
@@ -150,10 +156,10 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			tickcount = 0;
 		}
 		if (slots[3] != null)
-		if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
-			fermenterCookTime = 0;
-			return;
-		}
+			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
+				fermenterCookTime = 0;
+				return;
+			}
 		fermenterCookTime++;
 		if (fermenterCookTime*this.getFermentRate() >= this.operationTime(omega, 0)) {
 			this.make(product);

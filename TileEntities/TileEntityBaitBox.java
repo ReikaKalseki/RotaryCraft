@@ -47,6 +47,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -64,8 +65,12 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
@@ -82,7 +87,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 				//ReikaChatHelper.write(this.canAttract(ent)+"  "+ent.getEntityName());
 				if (this.canRepel(ent)) {
 					this.applyEffect(world, x, y, z, ent, false);
-				//ReikaChatHelper.write(this.canAttract(ent));
+					//ReikaChatHelper.write(this.canAttract(ent));
 				}
 				else if (this.canAttract(ent))
 					this.applyEffect(world, x, y, z, ent, true);
@@ -324,12 +329,12 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		}
 		if (ent instanceof EntityPigZombie) {
 			if (ent.getNavigator().getPath() != null)
-			//ReikaChatHelper.write(ent.getNavigator().getPath().getFinalPathPoint().xCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().yCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().zCoord);
-			if (attract)
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-			}
+				//ReikaChatHelper.write(ent.getNavigator().getPath().getFinalPathPoint().xCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().yCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().zCoord);
+				if (attract)
+					path = ent.getNavigator().getPathToXYZ(x, y, z);
+				else {
+					path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
+				}
 			((EntityPigZombie)ent).setPathToEntity(path);
 		}
 		if (ent instanceof EntityEnderman) {
@@ -359,11 +364,11 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 					ent.motionZ = -0.02*(z-ent.posZ);
 				}
 			}
-		    float var1 = (float)ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
-		    ent.renderYawOffset += (-((float)Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float)Math.PI - ent.renderYawOffset) * 0.1F;
-		    ent.rotationYaw = ent.renderYawOffset;
-		    if (!world.isRemote)
-		    	ent.velocityChanged = true;
+			float var1 = (float)ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
+			ent.renderYawOffset += (-((float)Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float)Math.PI - ent.renderYawOffset) * 0.1F;
+			ent.rotationYaw = ent.renderYawOffset;
+			if (!world.isRemote)
+				ent.velocityChanged = true;
 		}
 		if (ent instanceof EntityBat) {
 			if (attract) {
@@ -378,11 +383,11 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 				ent.motionY = -0.1*(y-ent.posY);
 				ent.motionZ = -0.1*(z-ent.posZ);
 			}
-		    float var1 = (float)ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
-		    ent.renderYawOffset += (-((float)Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float)Math.PI - ent.renderYawOffset) * 0.1F;
-		    ent.rotationYaw = ent.renderYawOffset;
-		    if (!world.isRemote)
-		    	ent.velocityChanged = true;
+			float var1 = (float)ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
+			ent.renderYawOffset += (-((float)Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float)Math.PI - ent.renderYawOffset) * 0.1F;
+			ent.rotationYaw = ent.renderYawOffset;
+			if (!world.isRemote)
+				ent.velocityChanged = true;
 		}
 	}
 
@@ -415,123 +420,123 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		return inventory[var1];
 	}
 
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize == 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize == 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
-
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
-
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
-	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
-
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
-	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
-
-        NBT.setTag("Items", nbttaglist);
-    }
-
-	@Override
-	public boolean hasModelTransparency() {
-		return false;
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBaitBox();
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
-	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
 	}
 
-	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BAITBOX.ordinal();
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	 @Override
+	 public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
 	}
 
-	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return true;
-	}
+	 /**
+	  * Writes a tile entity to NBT.
+	  */
+	 @Override
+	 public void writeToNBT(NBTTagCompound NBT)
+	 {
+		 super.writeToNBT(NBT);
+		 NBTTagList nbttaglist = new NBTTagList();
+
+		 for (int i = 0; i < inventory.length; i++)
+		 {
+			 if (inventory[i] != null)
+			 {
+				 NBTTagCompound nbttagcompound = new NBTTagCompound();
+				 nbttagcompound.setByte("Slot", (byte)i);
+				 inventory[i].writeToNBT(nbttagcompound);
+				 nbttaglist.appendTag(nbttagcompound);
+			 }
+		 }
+
+		 NBT.setTag("Items", nbttaglist);
+	 }
+
+	 @Override
+	 public boolean hasModelTransparency() {
+		 return false;
+	 }
+
+	 @Override
+	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		 return new ModelBaitBox();
+	 }
+
+	 @Override
+	 public void animateWithTick(World world, int x, int y, int z) {
+
+	 }
+
+	 @Override
+	 public int getMachineIndex() {
+		 return MachineRegistry.BAITBOX.ordinal();
+	 }
+
+	 @Override
+	 public boolean isStackValidForSlot(int slot, ItemStack is) {
+		 return true;
+	 }
 }

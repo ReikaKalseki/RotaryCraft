@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements IInventory {
+public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
 
 	public void openChest() {
 
@@ -23,21 +23,26 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 
 	}
 
-    /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-     * this more of a set than a get?*
-     */
-    public int getInventoryStackLimit()
-    {
-        return 64;
-    }
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound NBT, ItemStack[] inventory)
-    {
-        super.readFromNBT(NBT);/*
+	/**
+	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
+	 * this more of a set than a get?*
+	 */
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	public void readFromNBT(NBTTagCompound NBT, ItemStack[] inventory)
+	{
+		super.readFromNBT(NBT);/*
         NBTTagList nbttaglist = NBT.getTagList("Items");
         inventory = new ItemStack[inventory.length];
 
@@ -51,14 +56,14 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
                 inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
             }
         }*/
-    }
+	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound NBT, ItemStack[] inventory)
-    {
-        super.writeToNBT(NBT);/*
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	public void writeToNBT(NBTTagCompound NBT, ItemStack[] inventory)
+	{
+		super.writeToNBT(NBT);/*
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < inventory.length; i++)
@@ -73,7 +78,7 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
         }
 
         NBT.setTag("Items", nbttaglist);*/
-    }
+	}
 
 	@Override
 	public boolean isInvNameLocalized() {

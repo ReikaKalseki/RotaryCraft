@@ -125,7 +125,7 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 			return;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
-			ReikaWorldHelper.legacySetBlockWithNotify(world, loc[0], loc[1], loc[2], 0);
+			world.setBlock(loc[0], loc[1], loc[2], 0);
 		liquidLevel++;
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}

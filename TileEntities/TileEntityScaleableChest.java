@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -50,6 +51,11 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 	public int numUsingPlayers;
 
 	public ItemStack[] inventory = new ItemStack[MAXSIZE];
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
 
 	@Override
 	public int getSizeInventory() {
@@ -105,7 +111,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		}
 		else if (numchanges > 3) {
 			for (int i = 0; i < numchanges/3; i++)
-			worldObj.spawnParticle("smoke", xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), 0, 0, 0);
+				worldObj.spawnParticle("smoke", xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), 0, 0, 0);
 			if (par5Random.nextInt(11-numchanges) == 0)
 				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 		}

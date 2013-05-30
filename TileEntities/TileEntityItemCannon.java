@@ -29,6 +29,11 @@ public class TileEntityItemCannon extends TileEntityInventoriedPowerReceiver {
 	public int[] target = new int[3];
 
 	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return j == 0;
+	}
+
+	@Override
 	public int getSizeInventory() {
 		return inv.length;
 	}

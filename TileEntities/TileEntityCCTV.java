@@ -12,7 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +29,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;
 
-public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory {
+public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInventory {
 
 	public boolean cameraIsMoved = false;
 	private double[] playerCam = new double[5];
@@ -45,60 +45,60 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
 
 	public ItemStack[] inv = new ItemStack[4];
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	if (theta > 60) {
-    		theta = -60;
-    	}
-    	if (theta < -60) {
-    		theta = 60;
-    	}
-    	if (theta > 0)
-    		this.setBlockMetadata(1);
-    	if (theta < 0)
-    		this.setBlockMetadata(0);
-    	this.setColors();
-    	if (inv[0] == null) {
-    		on = false;
-    		return;
-    	}
-    	if (inv[0].itemID != RotaryCraft.wind.itemID) {
-    		on = false;
-    		return;
-    	}
-    	if (inv[0].getItemDamage() <= 0) {
-    		on = false;
-    		return;
-    	}
-    	tickcount2++;
-    	int dmg = inv[0].getItemDamage();
-    	if (tickcount2 > 120) {
-    		ItemStack is = new ItemStack(RotaryCraft.wind.itemID, 1, dmg-1);
-    		inv[0] = is;
-    		tickcount2 = 0;
-    	}
-    	on = true;
-    	if (cameraIsMoved) {
-    		this.moveCameraToLook(clicked);
-    		EntityPlayer e = world.getPlayerEntityByName(owner);
-    		tickcount++;
-    	}
-    	//ReikaJavaLibrary.pConsole("X: "+e.posX+"  Y: "+e.posY+"  Z: "+e.posZ+"  Y: "+e.rotationYaw+"  P: "+e.rotationPitch);
-    	//ReikaJavaLibrary.pConsole("X: "+playerCam[0]+"  Y: "+playerCam[1]+"  Z: "+playerCam[2]+"  Y: "+playerCam[3]+"  P: "+playerCam[4]);
-    	//ReikaJavaLibrary.pConsole("X: "+cameraPos[0]+"  Y: "+cameraPos[1]+"  Z: "+cameraPos[2]+"  Y: "+cameraPos[3]+"  P: "+cameraPos[4]);
-    	double[] dd = ReikaPhysicsHelper.polarToCartesian(1, theta, phi);
-    	//ReikaJavaLibrary.pConsole(dd[0]+"  "+dd[1]+"  "+dd[2]);
+		if (theta > 60) {
+			theta = -60;
+		}
+		if (theta < -60) {
+			theta = 60;
+		}
+		if (theta > 0)
+			this.setBlockMetadata(1);
+		if (theta < 0)
+			this.setBlockMetadata(0);
+		this.setColors();
+		if (inv[0] == null) {
+			on = false;
+			return;
+		}
+		if (inv[0].itemID != RotaryCraft.wind.itemID) {
+			on = false;
+			return;
+		}
+		if (inv[0].getItemDamage() <= 0) {
+			on = false;
+			return;
+		}
+		tickcount2++;
+		int dmg = inv[0].getItemDamage();
+		if (tickcount2 > 120) {
+			ItemStack is = new ItemStack(RotaryCraft.wind.itemID, 1, dmg-1);
+			inv[0] = is;
+			tickcount2 = 0;
+		}
+		on = true;
+		if (cameraIsMoved) {
+			this.moveCameraToLook(clicked);
+			EntityPlayer e = world.getPlayerEntityByName(owner);
+			tickcount++;
+		}
+		//ReikaJavaLibrary.pConsole("X: "+e.posX+"  Y: "+e.posY+"  Z: "+e.posZ+"  Y: "+e.rotationYaw+"  P: "+e.rotationPitch);
+		//ReikaJavaLibrary.pConsole("X: "+playerCam[0]+"  Y: "+playerCam[1]+"  Z: "+playerCam[2]+"  Y: "+playerCam[3]+"  P: "+playerCam[4]);
+		//ReikaJavaLibrary.pConsole("X: "+cameraPos[0]+"  Y: "+cameraPos[1]+"  Z: "+cameraPos[2]+"  Y: "+cameraPos[3]+"  P: "+cameraPos[4]);
+		double[] dd = ReikaPhysicsHelper.polarToCartesian(1, theta, phi);
+		//ReikaJavaLibrary.pConsole(dd[0]+"  "+dd[1]+"  "+dd[2]);
 
-    	this.setLook(x+0.5+dd[2], y+0.25-dd[1], z+0.40625+dd[0], -phi, theta);
-    	if (tickcount < 20)
-    		;//return;
-    	if (!cameraIsMoved)
-    		return;
-    	if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == RotaryCraft.wind.itemID && inv[0].getItemDamage() > 0)
-    		return;
-    	tickcount = 0;
-    	this.moveCameraToPlayer();
-    }
+		this.setLook(x+0.5+dd[2], y+0.25-dd[1], z+0.40625+dd[0], -phi, theta);
+		if (tickcount < 20)
+			;//return;
+		if (!cameraIsMoved)
+			return;
+		if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == RotaryCraft.wind.itemID && inv[0].getItemDamage() > 0)
+			return;
+		tickcount = 0;
+		this.moveCameraToPlayer();
+	}
 
 	private void setColors() {
 		for (int i = 0; i < 3; i++) {
@@ -141,7 +141,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
 			return;
 		clicked = ep;
 		if (!cameraIsMoved)
-		this.setPlayerCam();
+			this.setPlayerCam();
 		cameraIsMoved = true;
 		this.alignCameras(false);
 	}
@@ -274,58 +274,65 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements IInventory 
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
-		return is.itemID == RotaryCraft.wind.itemID;
+		if (i == 0)
+			return is.itemID == RotaryCraft.wind.itemID;
+		return is.itemID == Item.dyePowder.itemID;
 	}
 
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-	     theta = NBT.getFloat("thetad");
-	     owner = NBT.getString("sowner");
-	     cameraIsMoved = NBT.getBoolean("moved");
-	     colors = NBT.getIntArray("color");
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inv = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		theta = NBT.getFloat("thetad");
+		owner = NBT.getString("sowner");
+		cameraIsMoved = NBT.getBoolean("moved");
+		colors = NBT.getIntArray("color");
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inv.length)
-			 {
-				 inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-	 }
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-	     if (owner != null && !owner.isEmpty())
-	    	 NBT.setString("sowner", owner);
-	     NBT.setFloat("thetad", theta);
-	     NBT.setBoolean("moved", cameraIsMoved);
-	     NBT.setIntArray("color", colors);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		if (owner != null && !owner.isEmpty())
+			NBT.setString("sowner", owner);
+		NBT.setFloat("thetad", theta);
+		NBT.setBoolean("moved", cameraIsMoved);
+		NBT.setIntArray("color", colors);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inv.length; i++)
-		 {
-			 if (inv[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inv[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
 }

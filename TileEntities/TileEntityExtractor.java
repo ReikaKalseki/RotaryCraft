@@ -27,7 +27,7 @@ import Reika.RotaryCraft.Models.ModelExtractor;
 
 public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 {
-	private ItemStack extractorItemStacks[] = new ItemStack[9];
+	private ItemStack inv[] = new ItemStack[9];
 
 	/** The number of ticks that the current item has been cooking for */
 	public int[] extractorCookTime = new int[4];
@@ -49,6 +49,11 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		idle = !works;
 	}
 
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 7 || i == 8;
+	}
+
 	public int getSmeltNumber(int num) {
 		if (num == 63)
 			return 1;
@@ -57,15 +62,15 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 
 	public void throughPut() {
 		for (int i = 1; i < 4; i++) {
-			if (extractorItemStacks[i+3] != null) {
-				if (extractorItemStacks[i] == null) {
-					extractorItemStacks[i] = extractorItemStacks[i+3];
-					extractorItemStacks[i+3] = null;
+			if (inv[i+3] != null) {
+				if (inv[i] == null) {
+					inv[i] = inv[i+3];
+					inv[i+3] = null;
 				}
-				else if (extractorItemStacks[i].stackSize < extractorItemStacks[i].getMaxStackSize()) {
-					if (extractorItemStacks[i].itemID == extractorItemStacks[i+3].itemID && extractorItemStacks[i].getItemDamage() == extractorItemStacks[i+3].getItemDamage()) {
-						extractorItemStacks[i].stackSize++;
-						ReikaInventoryHelper.decrStack(i+3, extractorItemStacks);
+				else if (inv[i].stackSize < inv[i].getMaxStackSize()) {
+					if (inv[i].itemID == inv[i+3].itemID && inv[i].getItemDamage() == inv[i+3].getItemDamage()) {
+						inv[i].stackSize++;
+						ReikaInventoryHelper.decrStack(i+3, inv);
 					}
 				}
 			}
@@ -131,7 +136,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	 */
 	public int getSizeInventory()
 	{
-		return extractorItemStacks.length;
+		return inv.length;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
@@ -144,7 +149,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	 */
 	public ItemStack getStackInSlot(int par1)
 	{
-		return extractorItemStacks[par1];
+		return inv[par1];
 	}
 
 	/**
@@ -153,20 +158,20 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	 */
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (extractorItemStacks[par1] != null)
+		if (inv[par1] != null)
 		{
-			if (extractorItemStacks[par1].stackSize <= par2)
+			if (inv[par1].stackSize <= par2)
 			{
-				ItemStack itemstack = extractorItemStacks[par1];
-				extractorItemStacks[par1] = null;
+				ItemStack itemstack = inv[par1];
+				inv[par1] = null;
 				return itemstack;
 			}
 
-			ItemStack itemstack1 = extractorItemStacks[par1].splitStack(par2);
+			ItemStack itemstack1 = inv[par1].splitStack(par2);
 
-			if (extractorItemStacks[par1].stackSize <= 0)
+			if (inv[par1].stackSize <= 0)
 			{
-				extractorItemStacks[par1] = null;
+				inv[par1] = null;
 			}
 
 			return itemstack1;
@@ -183,10 +188,10 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	 */
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		if (extractorItemStacks[par1] != null)
+		if (inv[par1] != null)
 		{
-			ItemStack itemstack = extractorItemStacks[par1];
-			extractorItemStacks[par1] = null;
+			ItemStack itemstack = inv[par1];
+			inv[par1] = null;
 			return itemstack;
 		}
 		else
@@ -200,7 +205,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		extractorItemStacks[par1] = par2ItemStack;
+		inv[par1] = par2ItemStack;
 
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
 		{
@@ -216,16 +221,16 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	{
 		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
-		extractorItemStacks = new ItemStack[this.getSizeInventory()];
+		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
-			if (byte0 >= 0 && byte0 < extractorItemStacks.length)
+			if (byte0 >= 0 && byte0 < inv.length)
 			{
-				extractorItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 
@@ -244,13 +249,13 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		NBT.setInteger("water", waterLevel);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < extractorItemStacks.length; i++)
+		for (int i = 0; i < inv.length; i++)
 		{
-			if (extractorItemStacks[i] != null)
+			if (inv[i] != null)
 			{
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
-				extractorItemStacks[i].writeToNBT(nbttagcompound);
+				inv[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
 			}
 		}
@@ -307,13 +312,13 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 			if (!worldObj.isRemote) {
 				if (this.canSmelt(i)) {
 					flag1 = true;/*
-	                if (extractorItemStacks[i] != null) {
-	                    if (extractorItemStacks[i].getItem().func_46056_k())
-	                        extractorItemStacks[i] = new ItemStack(extractorItemStacks[i].getItem().setFull3D());
+	                if (inv[i] != null) {
+	                    if (inv[i].getItem().func_46056_k())
+	                        inv[i] = new ItemStack(inv[i].getItem().setFull3D());
 	                    else
-	                        extractorItemStacks[i].stackSize--;
-	                    if (extractorItemStacks[i].stackSize == 0)
-	                        extractorItemStacks[i] = null;
+	                        inv[i].stackSize--;
+	                    if (inv[i].stackSize == 0)
+	                        inv[i] = null;
 	                }*/
 				}
 				if (this.canSmelt(i)) {
@@ -351,22 +356,22 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage("DSFFD");
 
-		if (extractorItemStacks[i] == null)
+		if (inv[i] == null)
 			return false;
-		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(extractorItemStacks[i]);
+		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", itemstack.itemID));
 		if (itemstack == null) {
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage("!!!!@#");
 			return false;
 		}
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage("45656");
-		if (extractorItemStacks[i+4] == null)
+		if (inv[i+4] == null)
 			return true;
-		if (!extractorItemStacks[i+4].isItemEqual(itemstack))
+		if (!inv[i+4].isItemEqual(itemstack))
 			return false;
-		if (extractorItemStacks[i+4].stackSize < this.getInventoryStackLimit() && extractorItemStacks[i+4].stackSize < extractorItemStacks[i+4].getMaxStackSize())
+		if (inv[i+4].stackSize < this.getInventoryStackLimit() && inv[i+4].stackSize < inv[i+4].getMaxStackSize())
 			return true;
-		return extractorItemStacks[i+4].stackSize < itemstack.getMaxStackSize();
+		return inv[i+4].stackSize < itemstack.getMaxStackSize();
 	}
 
 	/**
@@ -376,27 +381,27 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	{
 		if (!this.canSmelt(i))
 			return;
-		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(extractorItemStacks[i]);
-		if (extractorItemStacks[i+4] == null) {
-			extractorItemStacks[i+4] = itemstack.copy();
-			extractorItemStacks[i+4].stackSize *= this.getSmeltNumber(0);
+		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
+		if (inv[i+4] == null) {
+			inv[i+4] = itemstack.copy();
+			inv[i+4].stackSize *= this.getSmeltNumber(0);
 		}
-		else if (extractorItemStacks[i+4].itemID == itemstack.itemID)
-			extractorItemStacks[i+4].stackSize += this.getSmeltNumber(extractorItemStacks[i+4].stackSize);
+		else if (inv[i+4].itemID == itemstack.itemID)
+			inv[i+4].stackSize += this.getSmeltNumber(inv[i+4].stackSize);
 
 		if (i == 3)
-			this.bonusItems(extractorItemStacks[i]);
+			this.bonusItems(inv[i]);
 
-		// if (extractorItemStacks[i].getItem().func_46056_k())
-		//   extractorItemStacks[i] = new ItemStack(extractorItemStacks[i].getItem().setFull3D());
+		// if (inv[i].getItem().func_46056_k())
+		//   inv[i] = new ItemStack(inv[i].getItem().setFull3D());
 		// else
-		extractorItemStacks[i].stackSize--;
+		inv[i].stackSize--;
 
-		if (extractorItemStacks[i].stackSize <= 0)
-			extractorItemStacks[i] = null;/*
+		if (inv[i].stackSize <= 0)
+			inv[i] = null;/*
         if (i == 3) {
         	int xp = 0;
-        	switch(extractorItemStacks[i+4].getItemDamage()) {
+        	switch(inv[i+4].getItemDamage()) {
 
         	}
         	ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord, yCoord, zCoord, xp);
@@ -409,11 +414,11 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		if (is.itemID == RotaryCraft.extracts.itemID) {
 			if (is.getItemDamage() == ItemStacks.goldoresolution.getItemDamage()) {
 				if (par5Random.nextInt(8) == 0)
-					ReikaInventoryHelper.addOrSetStack(ItemStacks.silverflakes.itemID, 1, ItemStacks.silverflakes.getItemDamage(), extractorItemStacks, 8);
+					ReikaInventoryHelper.addOrSetStack(ItemStacks.silverflakes.itemID, 1, ItemStacks.silverflakes.getItemDamage(), inv, 8);
 			}
 			if (is.getItemDamage() == ItemStacks.ironoresolution.getItemDamage()) {
 				if (par5Random.nextInt(8) == 0)
-					ReikaInventoryHelper.addOrSetStack(ItemStacks.aluminumpowder.itemID, 1, ItemStacks.aluminumpowder.getItemDamage(), extractorItemStacks, 8);
+					ReikaInventoryHelper.addOrSetStack(ItemStacks.aluminumpowder.itemID, 1, ItemStacks.aluminumpowder.getItemDamage(), inv, 8);
 			}
 		}
 	}

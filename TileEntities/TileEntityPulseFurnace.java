@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -61,6 +62,11 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		pulseFurnaceCookTime = 0;
 		//SMELTTEMPS.put(new ItemStack(Item.ingotIron.itemID, 1, 0), Integer.valueOf(900));//900C for steelmaking
 		//SMELTTEMPS.put(new ItemStack(Block.obsidian.blockID, 1, 0), Integer.valueOf(800)); //650-900C melting obsidian
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 2;
 	}
 
 	public void testIdle() {
@@ -384,7 +390,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 				biome == BiomeGenBase.jungle || biome == BiomeGenBase.jungleHills)
 			temperature -= 1;
 		else if (biome != BiomeGenBase.hell) //do not cool in the nether
-		temperature -= 2;
+			temperature -= 2;
 	}
 
 	public void smeltHeat() {
@@ -444,7 +450,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		case 28:
 		case 101:
 		case 157:	//activator rails (6 iron)
-		return 780;	//iron /2
+			return 780;	//iron /2
 		case 283:
 		case 284:
 		case 285:

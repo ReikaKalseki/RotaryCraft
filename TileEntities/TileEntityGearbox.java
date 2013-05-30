@@ -10,16 +10,16 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Models.ModelGearbox16;
 import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements IInventory {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 	public int lubricant;
@@ -500,60 +500,65 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements IInven
 	 *
 	 *
 	 */
-	 public ItemStack getStackInSlotOnClosing(int par1)
-	 {
-		 if (inv[par1] != null)
-		 {
-			 ItemStack itemstack = inv[par1];
-			 inv[par1] = null;
-			 return itemstack;
-		 }
-		 else
-		 {
-			 return null;
-		 }
-	 }
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inv[par1] != null)
+		{
+			ItemStack itemstack = inv[par1];
+			inv[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-	 /**
-	  *
-	  */
-	 public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	 {
-		 inv[par1] = par2ItemStack;
+	/**
+	 *
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inv[par1] = par2ItemStack;
 
-		 if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		 {
-			 par2ItemStack.stackSize = this.getInventoryStackLimit();
-		 }
-	 }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
-	 @Override
-	 public boolean isInvNameLocalized() {
-		 return false;
-	 }
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
 
-	 @Override
-	 public int getInventoryStackLimit() {
-		 return 1;
-	 }
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
 
-	 @Override
-	 public void openChest() {
-	 }
+	@Override
+	public void openChest() {
+	}
 
-	 @Override
-	 public void closeChest() {
-	 }
+	@Override
+	public void closeChest() {
+	}
 
-	 @Override
-	 public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		 if (itemstack == null)
-			 return false;
-		 return (itemstack.itemID == RotaryCraft.fuelbucket.itemID && itemstack.getItemDamage() == 0);
-	 }
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		if (itemstack == null)
+			return false;
+		return (itemstack.itemID == ItemStacks.lubebucket.itemID && itemstack.getItemDamage() == ItemStacks.lubebucket.getItemDamage());
+	}
 
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.GEARBOX.ordinal();
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return itemstack.itemID == Item.bucketEmpty.itemID;
 	}
 }

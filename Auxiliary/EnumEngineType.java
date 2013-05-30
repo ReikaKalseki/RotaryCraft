@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import Reika.RotaryCraft.RotaryCraft;
+
 public enum EnumEngineType {
 	DC(256, 4),
 	WIND(1024, 4),
@@ -170,6 +175,22 @@ public enum EnumEngineType {
 			return true;
 		if (this == STEAM)
 			return true;
+		return false;
+	}
+
+	public boolean isValidFuel(ItemStack is) {
+		if (this == GAS)
+			return is.itemID == RotaryCraft.ethanol.itemID;
+		if (this == SPORT)
+			return is.itemID == RotaryCraft.ethanol.itemID || this.isAdditive(is);
+		if (this == AC)
+			return is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage();
+		return false;
+	}
+
+	public boolean isAdditive(ItemStack is) {
+		if (this == SPORT)
+			return is.itemID == Item.redstone.itemID || is.itemID == Item.gunpowder.itemID || is.itemID == Item.blazePowder.itemID;
 		return false;
 	}
 }

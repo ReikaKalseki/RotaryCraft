@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -57,6 +58,11 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	{
 		compactorItemStacks = new ItemStack[5];
 		compactorCookTime = 0;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 4;
 	}
 
 	public void testIdle() {

@@ -20,7 +20,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,6 +29,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -54,7 +55,7 @@ import Reika.RotaryCraft.Models.ModelPerformance;
 import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
 
-public class TileEntityEngine extends TileEntityIOMachine implements IInventory, TemperatureTE {
+public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE {
 	/** s/e *//*
 	public long power = 0;
 	public int torque = 0;
@@ -283,8 +284,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 			}
 			if (fueltick >= 1200) {	//every 60s
 				fueltick = 0;
-			if (ethanols > 0)
-				ethanols--;
+				if (ethanols > 0)
+					ethanols--;
 			}
 			break;
 		case SPORT:
@@ -389,16 +390,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 		switch(this.getBlockMetadata()) {
 		case 0:
 			pos[1] += -1;
-		break;
+			break;
 		case 1:
 			pos[1] += 1;
-		break;
+			break;
 		case 2:
 			pos[0] += 1;
-		break;
+			break;
 		case 3:
 			pos[0] += -1;
-		break;
+			break;
 		}
 		return pos;
 	}
@@ -439,16 +440,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 		switch (meta) {
 		case 0:
 			c = 1;
-		break;
+			break;
 		case 1:
 			c = -1;
-		break;
+			break;
 		case 2:
 			d = 1;
-		break;
+			break;
 		case 3:
 			d = -1;
-		break;
+			break;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord+c, yCoord, zCoord+d, xCoord+1+c, yCoord+1, zCoord+1+d).expand(a, 1, b);
 		List in = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
@@ -468,16 +469,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 		switch (meta) {
 		case 0:
 			c = 1;
-		break;
+			break;
 		case 1:
 			c = -1;
-		break;
+			break;
 		case 2:
 			d = 1;
-		break;
+			break;
 		case 3:
 			d = -1;
-		break;
+			break;
 		}
 		for (int i = 1; i < 16; i++) {
 			int id = world.getBlockId(x+c*i, y, z+d*i);
@@ -716,16 +717,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 		switch(meta) {
 		case 0:
 			pos[0] += 1;
-		break;
+			break;
 		case 1:
 			pos[0] += -1;
-		break;
+			break;
 		case 2:
 			pos[1] += 1;
-		break;
+			break;
 		case 3:
 			pos[1] += -1;
-		break;
+			break;
 		}
 		int id = world.getBlockId(pos[0], y, pos[1]);
 		int dmg = world.getBlockMetadata(pos[0], y, pos[1]);
@@ -1236,12 +1237,27 @@ public class TileEntityEngine extends TileEntityIOMachine implements IInventory,
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	public boolean isStackValidForSlot(int i, ItemStack is) {
+		if (!type.isValidFuel(is))
+			return false;
+		switch(type) {
+		case GAS:
+		case AC:
+			return true;
+		case SPORT:
+			return (i == 0 && is.itemID == RotaryCraft.ethanol.itemID) || (i == 1 && type.isAdditive(is));
+		default:
+			return false;
+		}
 	}
 
 	@Override
 	public boolean hasModelTransparency() {
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
 	}
 

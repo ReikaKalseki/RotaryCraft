@@ -13,20 +13,25 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class RotaryCraftTileEntity extends TileEntity implements RenderFetcher {
 
@@ -56,18 +61,18 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 			try {
 				return (TextureFetcher)(Class.forName(this.getMachine().getRenderer()).newInstance());
 			}
-			catch (InstantiationException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Tried to call nonexistent render!");
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Tried to call illegal render!");
-			}
+		catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Tried to call nonexistent render!");
+		}
+		catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Tried to call illegal render!");
+		}
 		catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				throw new RuntimeException("No class found for Renderer!");
-			}
+			e.printStackTrace();
+			throw new RuntimeException("No class found for Renderer!");
+		}
 		else
 			return null;
 	}
@@ -244,7 +249,15 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 		tickcount = NBT.getInteger("tick");
 		pseudometa = NBT.getInteger("meta");
 	}
-/*
+
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		return ReikaInventoryHelper.getWholeInventoryForISided((ISidedInventory)this);
+	}
+
+	public boolean canInsertItem(int i, ItemStack is, int side) {
+		return ((IInventory)this).isStackValidForSlot(i, is);
+	}
+	/*
 	public String getName() {
 		return Block.blocksList[this.getTileEntityBlockID()].getLocalizedName();
 	}*/

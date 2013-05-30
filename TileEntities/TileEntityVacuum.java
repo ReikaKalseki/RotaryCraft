@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -33,9 +34,14 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 	public ItemStack[] inventory = new ItemStack[54];
 	public int experience = 0;
 
-    @Override
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		this.getSummativeSidedPower();
 		if (worldObj.isRemote)
 			return;
@@ -52,10 +58,10 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 
 	}
 
-    public void spawnXP() {
+	public void spawnXP() {
 		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord-1+2*par5Random.nextFloat(), yCoord+2*par5Random.nextFloat(), zCoord-1+2*par5Random.nextFloat(), experience);
 		experience = 0;
-    }
+	}
 
 	@SuppressWarnings("unused")
 	public void suck(World world, int x, int y, int z) {
@@ -66,9 +72,9 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 			//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);
 			//if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
 			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
-	            double dx = (x+0.5 - ent.posX);
-	            double dy = (y+0.5 - ent.posY);
-	            double dz = (z+0.5 - ent.posZ);
+				double dx = (x+0.5 - ent.posX);
+				double dy = (y+0.5 - ent.posY);
+				double dz = (z+0.5 - ent.posZ);
 				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
 				ent.motionX += dx/ddt/ddt/2;
 				ent.motionY += dy/ddt/ddt/2;
@@ -83,9 +89,9 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 		for (int i = 0; i < inbox2.size(); i++) {
 			EntityXPOrb ent = (EntityXPOrb)inbox2.get(i);
 			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
-	            double dx = (x+0.5 - ent.posX);
-	            double dy = (y+0.5 - ent.posY);
-	            double dz = (z+0.5 - ent.posZ);
+				double dx = (x+0.5 - ent.posX);
+				double dy = (y+0.5 - ent.posY);
+				double dz = (z+0.5 - ent.posZ);
 				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
 				ent.motionX += dx/ddt/ddt/2;
 				ent.motionY += dy/ddt/ddt/2;
@@ -175,134 +181,134 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 		return ReikaMathLibrary.extrema(8+(int)(power/MINPOWER), this.getMaxRange(), "min");
 	}
 
-	 /**
-     * Returns the number of slots in the inventory.
-     */
-    public int getSizeInventory()
-    {
-        return inventory.length;
-    }
+	/**
+	 * Returns the number of slots in the inventory.
+	 */
+	public int getSizeInventory()
+	{
+		return inventory.length;
+	}
 
-    public static boolean func_52005_b(ItemStack par0ItemStack)
-    {
-        return true;
-    }
+	public static boolean func_52005_b(ItemStack par0ItemStack)
+	{
+		return true;
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        experience = NBT.getInteger("xp");
-        inventory = new ItemStack[this.getSizeInventory()];
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		experience = NBT.getInteger("xp");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBTTagList nbttaglist = new NBTTagList();
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-        NBT.setTag("Items", nbttaglist);
-        NBT.setInteger("xp", experience);
-    }
+		NBT.setTag("Items", nbttaglist);
+		NBT.setInteger("xp", experience);
+	}
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int par1)
-    {
-        return inventory[par1];
-    }
+	/**
+	 * Returns the stack in slot i
+	 */
+	public ItemStack getStackInSlot(int par1)
+	{
+		return inventory[par1];
+	}
 
-    /**
-     * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-     * stack.
-     */
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	/**
+	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
+	 * stack.
+	 */
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize == 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize == 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
+	/**
 
 
-     */
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	 */
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
+	/**
 
-     */
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
 	@Override
 	public boolean hasModelTransparency() {

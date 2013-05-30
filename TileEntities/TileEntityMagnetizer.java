@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -24,6 +25,11 @@ import Reika.RotaryCraft.Models.ModelMagnetizer;
 public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver implements OneSlotMachine {
 
 	public ItemStack[] inv = new ItemStack[1];
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return j == 0;
+	}
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -154,50 +160,50 @@ public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return (is.itemID == ItemStacks.steelingot.itemID && is.getItemDamage() == ItemStacks.steelingot.getItemDamage());
+		return (is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage() && inv[0] == null);
 	}
 
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inv = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inv.length)
-			 {
-				 inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-	 }
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inv.length; i++)
-		 {
-			 if (inv[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inv[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
 }

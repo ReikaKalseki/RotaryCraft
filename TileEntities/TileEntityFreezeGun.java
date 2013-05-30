@@ -14,7 +14,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Models.ModelFreezeGun;
 
-public class TileEntityFreezeGun extends TileEntityAimedCannon implements IInventory {
+public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISidedInventory {
 
 	private ItemStack[] inv = new ItemStack[27];
 	public List<EntityLiving> frozen = new ArrayList<EntityLiving>();
@@ -275,5 +275,10 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements IInven
 		for (int i = 0; i < nbttaglist.tagCount(); i++)	{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 		}
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 }

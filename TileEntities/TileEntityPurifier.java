@@ -39,6 +39,11 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 	public static final int MAXTEMP = 1000;
 
 	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 6;
+	}
+
+	@Override
 	public int getSizeInventory() {
 		return inv.length;
 	}

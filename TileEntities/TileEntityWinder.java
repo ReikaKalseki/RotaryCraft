@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -29,6 +30,11 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	public boolean winding = true;
 	public static final int UNWINDTORQUE = 4;
 	public static final int UNWINDSPEED = 2048;
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return j == 0;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

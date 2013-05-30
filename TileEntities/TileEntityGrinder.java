@@ -41,8 +41,13 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 
 	public TileEntityGrinder()
 	{
-		inventory = new ItemStack[3];
+		inventory = new ItemStack[2];
 		grinderCookTime = 0;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i == 1;
 	}
 
 	public void testIdle() { //Test if have sufficient power, only idling if powered but empty

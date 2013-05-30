@@ -25,6 +25,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -33,8 +36,6 @@ import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelAerosolizer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
 
@@ -64,12 +65,12 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 		idle = empty;
 	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta)
-    {
+	{
 		super.updateTileEntity();
-    	power = omega*torque;
-    	//this.getIOSides(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		power = omega*torque;
+		//this.getIOSides(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		this.getSummativeSidedPower();
 		tickcount++;
 		tickcount2++;
@@ -106,10 +107,10 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 
 	public void colorize() {
 		for (int i = 0; i < 9; i++) {
-	    	if (potionIDs[i] > 0)
-	    		slotColor[i] = Potion.potionTypes[potionIDs[i]].getLiquidColor();
-	    	else
-	    		slotColor[i] = 0xff000000; //solid black
+			if (potionIDs[i] > 0)
+				slotColor[i] = Potion.potionTypes[potionIDs[i]].getLiquidColor();
+			else
+				slotColor[i] = 0xff000000; //solid black
 		}
 	}
 
@@ -144,10 +145,10 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 		}
 	}
 
-    public int getLiquidScaled(int par1, int par2)
-    {
-        return (par2*par1)/CAPACITY;
-    }
+	public int getLiquidScaled(int par1, int par2)
+	{
+		return (par2*par1)/CAPACITY;
+	}
 
 	public int getPotion(int i) {
 		if (this.getStackInSlot(i) != null) {
@@ -228,31 +229,31 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 
 	public void dispense2(World world, int x, int y, int z, int meta, AxisAlignedBB room, int i) { // id, duration, amplifier
 		if (!worldObj.isRemote) {
-            List effects = Item.potion.getEffects(potionDamage[i]);
-            //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionDamage[i]));
-            if (effects != null && !effects.isEmpty()) {
-                List inroom = worldObj.getEntitiesWithinAABB(EntityLiving.class, room);
-                //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inroom.size()));
-                if (inroom != null && !inroom.isEmpty()) {
-                    Iterator iter = inroom.iterator();
-                    while (iter.hasNext()) {
-                        EntityLiving mob = (EntityLiving)iter.next();
-                        Iterator potioneffects = effects.iterator();
-                        while (potioneffects.hasNext()) {
-                            PotionEffect effect = (PotionEffect)potioneffects.next();
-                            int id = effect.getPotionID();
-                            if (!Potion.potionTypes[id].isInstant()) {
-                            	int bonus = this.getMultiplier(i) - 1;  //-1 since adding
-                            	if (effect.getAmplifier() == 1)
-                            		bonus *= 2;
-                            	mob.addPotionEffect(new PotionEffect(id, 100, effect.getAmplifier()+bonus));
-                            	//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", effect.getAmplifier()));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+			List effects = Item.potion.getEffects(potionDamage[i]);
+			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionDamage[i]));
+			if (effects != null && !effects.isEmpty()) {
+				List inroom = worldObj.getEntitiesWithinAABB(EntityLiving.class, room);
+				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inroom.size()));
+				if (inroom != null && !inroom.isEmpty()) {
+					Iterator iter = inroom.iterator();
+					while (iter.hasNext()) {
+						EntityLiving mob = (EntityLiving)iter.next();
+						Iterator potioneffects = effects.iterator();
+						while (potioneffects.hasNext()) {
+							PotionEffect effect = (PotionEffect)potioneffects.next();
+							int id = effect.getPotionID();
+							if (!Potion.potionTypes[id].isInstant()) {
+								int bonus = this.getMultiplier(i) - 1;  //-1 since adding
+								if (effect.getAmplifier() == 1)
+									bonus *= 2;
+								mob.addPotionEffect(new PotionEffect(id, 100, effect.getAmplifier()+bonus));
+								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", effect.getAmplifier()));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public int getMultiplier(int i) {
@@ -266,150 +267,150 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 
 	//method to return number of occurrences of the numbers in diceRolls
 	public int[] countCopies() {
-	    int occurrence[] = new int[Potion.potionTypes.length]; //to hold the counts
+		int occurrence[] = new int[Potion.potionTypes.length]; //to hold the counts
 
-	    for(int i = 0; i < 9; i++) { //Loop over the dice rolls array
-	       int value = potionIDs[i]; //Get the value of the next roll
-	       if (value != -1) {
-	    	   occurrence[value]++; //Increment the value in the count array;
-	    	   //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", occurrence[value]));
-	       }
-	    }
-	    return occurrence; //return the counts
+		for(int i = 0; i < 9; i++) { //Loop over the dice rolls array
+			int value = potionIDs[i]; //Get the value of the next roll
+			if (value != -1) {
+				occurrence[value]++; //Increment the value in the count array;
+				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", occurrence[value]));
+			}
+		}
+		return occurrence; //return the counts
 	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        NBTTagList var2 = NBT.getTagList("Items");
-        contents = new ItemStack[potionDamage.length];
+	{
+		super.readFromNBT(NBT);
+		NBTTagList var2 = NBT.getTagList("Items");
+		contents = new ItemStack[potionDamage.length];
 
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
-        {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            int var5 = var4.getByte("Slot") & 255;
+		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+		{
+			NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
+			int var5 = var4.getByte("Slot") & 255;
 
-            if (var5 >= 0 && var5 < contents.length)
-            {
-                contents[var5] = ItemStack.loadItemStackFromNBT(var4);
-            }
-        }
-        potionDamage = NBT.getIntArray("damages");
-        potionLevel = NBT.getIntArray("levels");
-        potionIDs = NBT.getIntArray("IDs");
-    }
+			if (var5 >= 0 && var5 < contents.length)
+			{
+				contents[var5] = ItemStack.loadItemStackFromNBT(var4);
+			}
+		}
+		potionDamage = NBT.getIntArray("damages");
+		potionLevel = NBT.getIntArray("levels");
+		potionIDs = NBT.getIntArray("IDs");
+	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBTTagList var2 = new NBTTagList();
+	{
+		super.writeToNBT(NBT);
+		NBTTagList var2 = new NBTTagList();
 
-        for (int var3 = 0; var3 < contents.length; ++var3)
-        {
-            if (contents[var3] != null)
-            {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                contents[var3].writeToNBT(var4);
-                var2.appendTag(var4);
-            }
-        }
+		for (int var3 = 0; var3 < contents.length; ++var3)
+		{
+			if (contents[var3] != null)
+			{
+				NBTTagCompound var4 = new NBTTagCompound();
+				var4.setByte("Slot", (byte)var3);
+				contents[var3].writeToNBT(var4);
+				var2.appendTag(var4);
+			}
+		}
 
-        NBT.setTag("Items", var2);
-        NBT.setIntArray("damages", potionDamage);
-        NBT.setIntArray("levels", potionLevel);
-        NBT.setIntArray("IDs", potionIDs);
-    }
+		NBT.setTag("Items", var2);
+		NBT.setIntArray("damages", potionDamage);
+		NBT.setIntArray("levels", potionLevel);
+		NBT.setIntArray("IDs", potionIDs);
+	}
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
-    public int getSizeInventory()
-    {
-        return contents.length;
-    }
+	/**
+	 * Returns the number of slots in the inventory.
+	 */
+	public int getSizeInventory()
+	{
+		return contents.length;
+	}
 
-    public static boolean func_52005_b(ItemStack par0ItemStack)
-    {
-        return true;
-    }
+	public static boolean func_52005_b(ItemStack par0ItemStack)
+	{
+		return true;
+	}
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int par1)
-    {
-        return contents[par1];
-    }
+	/**
+	 * Returns the stack in slot i
+	 */
+	public ItemStack getStackInSlot(int par1)
+	{
+		return contents[par1];
+	}
 
-    /**
-     * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-     * stack.
-     */
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (contents[par1] != null)
-        {
-            if (contents[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = contents[par1];
-                contents[par1] = null;
-                return itemstack;
-            }
+	/**
+	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
+	 * stack.
+	 */
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (contents[par1] != null)
+		{
+			if (contents[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = contents[par1];
+				contents[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = contents[par1].splitStack(par2);
+			ItemStack itemstack1 = contents[par1].splitStack(par2);
 
-            if (contents[par1].stackSize <= 0)
-            {
-                contents[par1] = null;
-            }
+			if (contents[par1].stackSize <= 0)
+			{
+				contents[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
+	/**
 
 
-     */
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (contents[par1] != null)
-        {
-            ItemStack itemstack = contents[par1];
-            contents[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	 */
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (contents[par1] != null)
+		{
+			ItemStack itemstack = contents[par1];
+			contents[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
-     *
-     */
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        contents[par1] = par2ItemStack;
+	/**
+	 *
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		contents[par1] = par2ItemStack;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
 	@Override
 	public boolean hasModelTransparency() {

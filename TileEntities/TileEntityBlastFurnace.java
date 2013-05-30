@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
-public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IInventory, TemperatureTE, ISidedInventory {
+public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements TemperatureTE, ISidedInventory {
 
 	public int temperature;
 	public ItemStack[] inventory = new ItemStack[14];
@@ -401,17 +400,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements IIn
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		return null;
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return false;
-	}
-
-	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return i == 10 || i == 12 || i == 13;
 	}
 }
