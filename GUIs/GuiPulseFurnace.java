@@ -38,12 +38,10 @@ public class GuiPulseFurnace extends GuiMachine {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		String i = "/Reika/RotaryCraft/Textures/GUI/pulsejetgui.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 
 		int i1 = tile.getCookProgressScaled(10);
 		int i2 = tile.getFuelScaled(52);
@@ -58,8 +56,6 @@ public class GuiPulseFurnace extends GuiMachine {
 		this.drawTexturedModalRect(j + 20, k + 70-i4, 176, 55-i4, 11, 1*(i4));
 		this.drawTexturedModalRect(j + 115, k + 61-i5, 177, 95-i5, 9, 1*(i5));
 		this.drawTexturedModalRect(j + 142, k + 61-i5, 204, 95-i5, 9, 1*(i5));
-
-		this.drawPowerTab(j, k);
 	}
 
 	@Override
@@ -88,6 +84,11 @@ public class GuiPulseFurnace extends GuiMachine {
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "pulsejetgui";
 	}
 
 }

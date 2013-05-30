@@ -57,9 +57,12 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		soundtick++;
 		if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
 			return;
+		if (!ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, world.getBlockId(x, y-1, z)))
+			return;
 		if (blocks.isEmpty() || liquidLevel == 0) {
 			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
 			blocks.recursiveFillLiquidWithBounds(world, x, y-1, z, x-32, 0, z-32, x+32, y-1, z+32);
+			blocks.reverseBlockOrder();
 			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
 			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
 			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-32, 0, z-32, x+32, y-1, z+32);

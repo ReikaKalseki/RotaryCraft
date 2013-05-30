@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.ISidedInventory;
@@ -23,6 +24,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -35,7 +37,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedInventory {
 
-	private ItemStack[] inv = new ItemStack[8];
+	private ItemStack[] inv = new ItemStack[9];
 
 	private boolean flaming = false;
 	private boolean poison = false;
@@ -79,31 +81,57 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	private void maxPowerExplosion(World world, int x, int y, int z) {
 		world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 0, 0, 0);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x-1, y, z, world.getBlockId(x-1, y, z), -1, x, y, z, 4);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x+1, y, z, world.getBlockId(x+1, y, z), -1, x, y, z, 4);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-1, z, world.getBlockId(x, y-1, z), -1, x, y, z, 4);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+1, z, world.getBlockId(x, y+1, z), -1, x, y, z, 4);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-1, world.getBlockId(x, y, z-1), -1, x, y, z, 4);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+1, world.getBlockId(x, y, z+1), -1, x, y, z, 4);
+		for (int i = 1; i < 6; i++) {
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x-i, y, z, world.getBlockId(x-1, y, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x+i, y, z, world.getBlockId(x+1, y, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-i, z, world.getBlockId(x, y-1, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+i, z, world.getBlockId(x, y+1, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-i, world.getBlockId(x, y, z-1), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+i, world.getBlockId(x, y, z+1), -1, x, y, z, 4);
+			this.chainedExplosion(world, x, y, z);
+		}
 	}
 
 	public void detonate(World world, int x, int y, int z) {
 		if (chain)
 			this.chainedExplosion(world, x, y, z);
+		if (inv[1] != null && inv[2] != null && inv[3] != null && inv[4] != null) {
+			if (inv[1].itemID == Block.tnt.blockID && inv[2].itemID == Block.tnt.blockID && inv[3].itemID == Block.tnt.blockID && inv[4].itemID == Block.tnt.blockID)
+				this.maxPowerExplosion(world, x, y, z);
+		}
 		float power = this.getExplosionPower();
 		world.setBlock(x, y, z, 0);
-		if (flaming)
-			world.newExplosion(null, x+0.5, y+0.5, z+0.5, power, true, true);
-		else
+		if (flaming) {
+			if (!world.isRemote)
+				world.newExplosion(null, x+0.5, y+0.5, z+0.5, power, true, true);
+		}
+		else if (!world.isRemote)
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, power, true);
 		AxisAlignedBB region = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(2, 2, 2);
 		List in = world.getEntitiesWithinAABB(EntityLiving.class, region);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLiving e = (EntityLiving)in.get(i);
-			e.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 0));
-			if (poison)
-				e.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-			if (shrapnel) {
+			boolean inv = false;
+			if (e instanceof EntityPlayer) {
+				if (((EntityPlayer)e).capabilities.isCreativeMode)
+					inv = true;
+			}
+			if (!inv) {
+				e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);
+				e.addPotionEffect(new PotionEffect(Potion.blindness.id, 400, 0));
+				e.addPotionEffect(new PotionEffect(Potion.confusion.id, 450, 5));
+				if (poison)
+					e.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+			}
+			if (e instanceof EntityCreeper) {
+				world.createExplosion(e, x+0.5, y+0.5, z+0.5, 3, true);
+			}
+		}
+		if (shrapnel) {
+			AxisAlignedBB region2 = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
+			List in2 = world.getEntitiesWithinAABB(EntityLiving.class, region);
+			for (int i = 0; i < in.size(); i++) {
+				EntityLiving e = (EntityLiving)in.get(i);
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;
 				double dz = e.posZ-z-0.5;
@@ -111,7 +139,18 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 				e.attackEntityFrom(DamageSource.generic, (int)(10D/Math.sqrt(dd)));
 				ReikaEntityHelper.spawnParticlesAround("crit", world, e, 8);
 			}
-		}
+		}/*
+		for (int i = -8; i <= 8; i++) {
+			for (int j = -8; j <= 8; j++) {
+				for (int k = -8; k <= 8; k++) {
+					if (world.getBlockId(x+i, y+j, z+k) == this.getTileEntityBlockID()) {
+						TileEntity te = world.getBlockTileEntity(x+i, y+j, z+k);
+						if (te instanceof TileEntityLandmine)
+							((TileEntityLandmine)te).detonate(world, te.xCoord, te.yCoord, te.zCoord);
+					}
+				}
+			}
+		}*/
 	}
 
 	private void getExplosionModifiers() {
@@ -139,8 +178,6 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	}
 
 	private int getAge() {
-		if (inv[0] == null)
-			return 0;
 		return 65536-inv[0].getItemDamage();
 	}
 
@@ -199,6 +236,8 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 
 	@Override
 	public void openChest() {
+		if (inv[0] == null)
+			return;
 		if (par5Random.nextInt(65536-this.getAge())/2 == 0)
 			this.detonate(worldObj, xCoord, yCoord, zCoord);
 	}
@@ -241,10 +280,11 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	}
 
 	private void chainedExplosion(World world, int x, int y, int z) {
-		for (int i = 0; i < 4; i++) {
-			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x-5+par5Random.nextInt(11), y, z-5+par5Random.nextInt(11), null);
-			tnt.fuse = 5+par5Random.nextInt(40);
-			world.spawnEntityInWorld(tnt);
+		for (int i = 0; i < 12; i++) {
+			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x-5+par5Random.nextInt(11), y-5+par5Random.nextInt(11), z-5+par5Random.nextInt(11), null);
+			tnt.fuse = 5+par5Random.nextInt(10);
+			if (!world.isRemote)
+				world.spawnEntityInWorld(tnt);
 		}
 	}
 
@@ -270,7 +310,20 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (inv[0] == null)
+			return;
+		if (inv[0].itemID != RotaryCraft.wind.itemID)
+			return;
 		tickcount++;
+		if (inv[0].getItemDamage() > 0) {
+			int dmg = inv[0].getItemDamage();
+			if (tickcount > 120) {
+				ItemStack is = new ItemStack(RotaryCraft.wind.itemID, 1, dmg-1);
+				inv[0] = is;
+				tickcount = 0;
+			}
+		}
+
 		this.getExplosionModifiers();
 		if (this.ageFail())
 			this.detonate(world, x, y, z);

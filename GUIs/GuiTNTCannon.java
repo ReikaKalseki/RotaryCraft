@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -281,8 +280,8 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 	{
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		//fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 2, 4210752);
-		fontRenderer.drawString("TNT Cannon", xSize/3, 4, 4210752);
+
+		super.drawGuiContainerForegroundLayer(a, b);
 
 		if (targetMode) {
 			fontRenderer.drawString("Target X", xSize/3-20, 18, 4210752);
@@ -319,22 +318,15 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		String i;
-		if (targetMode)
-			i = "/Reika/RotaryCraft/Textures/GUI/targetgui.png";
-		else
-			i = "/Reika/RotaryCraft/Textures/GUI/cannongui.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 
 		input.drawTextBox();
 		input2.drawTextBox();
 		input3.drawTextBox();
 
-		this.drawPowerTab(j, k);
 		if (!targetMode) {
 			this.drawGrid(j, k);
 			this.drawAngles(j, k);
@@ -389,5 +381,13 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 			int size = 30;
 			ReikaGuiAPI.instance.drawCircle(basex3, basey3, (int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*30))), color);
 		}
+	}
+
+	@Override
+	public String getGuiTexture() {
+		if (targetMode)
+			return "targetgui";
+		else
+			return "cannongui";
 	}
 }

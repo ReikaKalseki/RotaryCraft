@@ -9,9 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 
@@ -29,6 +34,13 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
 		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	{
+		par3List.add(new ItemStack(par1, 1, 8192));
 	}
 
 	protected void noCharge() {

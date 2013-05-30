@@ -41,7 +41,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 
 	public TileEntityGrinder()
 	{
-		inventory = new ItemStack[2];
+		inventory = new ItemStack[3];
 		grinderCookTime = 0;
 	}
 

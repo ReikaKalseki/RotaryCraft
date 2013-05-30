@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +19,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -58,6 +63,13 @@ public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTex
 	@Override
 	public void onUpdate(ItemStack is, World par2World, Entity e, int par4, boolean par5) {
 		super.onUpdate(is, par2World, e, par4, par5);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	{
+		par3List.add(new ItemStack(par1, 1, 8192));
 	}
 
 	@Override

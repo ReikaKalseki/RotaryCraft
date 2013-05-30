@@ -34,12 +34,10 @@ public class GuiExtractor extends GuiMachine
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		String i = "/Reika/RotaryCraft/Textures/GUI/extractorgui.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 
 		int i1 = tile.getCookProgressScaled(32, 0);
 		int i2 = tile.getCookProgressScaled(28, 1);
@@ -49,8 +47,6 @@ public class GuiExtractor extends GuiMachine
 		this.drawTexturedModalRect(j + 63, k + 35, 186, 48, 14, i2);
 		this.drawTexturedModalRect(j + 99, k + 35, 200, 48, 14, i3);
 		this.drawTexturedModalRect(j + 133, k + 49-i4, 176, 79-i4, 17, i4);
-
-		this.drawPowerTab(j, k);
 	}
 
 	@Override
@@ -85,5 +81,10 @@ public class GuiExtractor extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+60, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+111, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "extractorgui";
 	}
 }

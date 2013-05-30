@@ -19,5 +19,4 @@ public abstract class GuiNonPoweredMachine extends GuiMachine {
 
 	@Override
 	protected final void drawPowerTab(int j, int k) {}
-
 }

@@ -177,8 +177,7 @@ public enum MachineRegistry {
 	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			10),
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
-	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			0);
-	//MAYBE TRY REGISTRATION WITH METADATA 16 and register intelligently?
+	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine");
 
 
 	private String name;
@@ -188,6 +187,7 @@ public enum MachineRegistry {
 	private static HashMap<Class,boolean[]> mappedData = new HashMap<Class,boolean[]>();
 	private boolean hasRender = false;
 	private String renderClass;
+	private int rollover;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -197,7 +197,8 @@ public enum MachineRegistry {
 		meta = m;
 		te = tile;
 		if (meta > 15)
-			throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			//	throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			rollover = m/16;
 		//this.updateMappingRegistry();
 	}
 
@@ -207,7 +208,8 @@ public enum MachineRegistry {
 		meta = m;
 		te = tile;
 		if (meta > 15)
-			throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			//throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			rollover = m/16;
 		//this.updateMappingRegistry();
 		hasRender = true;
 		renderClass = r;
@@ -259,6 +261,10 @@ public enum MachineRegistry {
 		return "Reika.RotaryCraft.Renders."+renderClass;
 	}
 
+	public int getBlockOffset() {
+		return rollover;
+	}
+
 	public int getBlockID() {
 		return this.getBlockVariable().blockID;
 	}
@@ -274,6 +280,7 @@ public enum MachineRegistry {
 	}
 
 	public static int getMachineIndexFromIDandMetadata(int id, int metad) {
+		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
 		for (int i = 0; i < machineList.length; i++) {
 			MachineRegistry m = machineList[i];
 			if (m.getBlockID() == id && ReikaMathLibrary.isValueInsideBoundsIncl(m.getMachineMetadata(), m.getMachineMetadata()+m.getNumberMetadatas()-1, metad))
@@ -415,6 +422,8 @@ public enum MachineRegistry {
 			return 0.9375F;
 		if (this == SCALECHEST)
 			return 0.875F;
+		if (this == LANDMINE)
+			return 0.4375F;
 		return 1;
 	}
 
@@ -479,7 +488,7 @@ public enum MachineRegistry {
 	}
 
 	public int getBlockVariableIndex() {
-		return BlockRegistry.getBlockVariableIndexFromClass(blockClass);
+		return BlockRegistry.getBlockVariableIndexFromClassAndMetadata(blockClass, meta);
 	}
 
 	public boolean isPipe() {
@@ -547,8 +556,6 @@ public enum MachineRegistry {
 			throw new RuntimeException("Machine "+name+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
 			TileEntityGearbox te = (TileEntityGearbox)tile;
-			ReikaJavaLibrary.pConsole(te.type.ordinal());
-			ReikaJavaLibrary.pConsole(te.getBlockMetadata());
 			return RotaryNames.gearboxItemNames[te.getBlockMetadata()/4*5+te.type.ordinal()];
 		}
 		if (this == ENGINE) {

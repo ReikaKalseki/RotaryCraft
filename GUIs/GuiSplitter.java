@@ -11,13 +11,8 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.src.ModLoader;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -44,6 +39,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 
 	@Override
 	public void initGui() {
+		super.initGui();
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		buttonList.add(new GuiButton(0, j+8, -1+k+32, 72, 20, "31:1 Inline"));
@@ -78,45 +74,8 @@ public class GuiSplitter extends GuiNonPoweredMachine
 
 	}
 
-	public void refreshScreen() {
-		int lastx = x;
-		int lasty = y;
-		mc.thePlayer.closeScreen();
-		ModLoader.openGUI(player, new GuiSplitter(player, splitter));
-		Mouse.setCursorPosition(lastx, lasty);
-
-	}
-
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
+	public String getGuiTexture() {
+		return "splittergui";
 	}
-
-    @Override
-	protected void drawGuiContainerForegroundLayer(int a, int b)
-    {
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2;
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getName(), j+xSize/2, k+5, 4210752);
-    }
-
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-	{
-		String i = "/Reika/RotaryCraft/Textures/GUI/splittergui.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
-
-		//int i1 = splitterInventory.getCookProgressScaled(48);
-		//drawTexturedModalRect(j + 79, k + 34, 176, 14, 1*(i1)+1, 16);
-	}
-
 }

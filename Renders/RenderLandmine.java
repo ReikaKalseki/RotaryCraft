@@ -19,19 +19,19 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelFraction;
-import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
+import Reika.RotaryCraft.Models.ModelLandmine;
+import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 
-public class RenderFraction extends RotaryTERenderer
+public class RenderLandmine extends RotaryTERenderer
 {
 
-	private ModelFraction FractionModel = new ModelFraction();
-	//private ModelFractionV FractionModelV = new ModelFractionV();
+	private ModelLandmine LandmineModel = new ModelLandmine();
+	//private ModelLandmineV LandmineModelV = new ModelLandmineV();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityFractionatorAt(TileEntityFractionator tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityLandmineAt(TileEntityLandmine tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -40,10 +40,10 @@ public class RenderFraction extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelFraction var14;
-		var14 = FractionModel;
+		ModelLandmine var14;
+		var14 = LandmineModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fractex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/landminetex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -68,13 +68,13 @@ public class RenderFraction extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityFractionatorAt((TileEntityFractionator)tile, par2, par4, par6, par8);
+			this.renderTileEntityLandmineAt((TileEntityLandmine)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "fractex.png";
+		return "landminetex.png";
 	}
 }

@@ -12,10 +12,12 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
@@ -23,8 +25,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScaleChest extends GuiPowerOnlyMachine
@@ -79,12 +79,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public boolean doesGuiPauseGame()
-	{
-		return false;
-	}
-
-	@Override
 	public void actionPerformed(GuiButton button) {
 		int oldpage = page;
 		if (button.id == 0 && page < tile.getMaxPage())
@@ -95,11 +89,11 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			return;
 		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 18, tile, player, page);
 		//player.closeScreen();
-		//this.refreshScreen();
+		//this.refresh();
 		//this.setValues();
 	}
 
-	private void refreshScreen() {
+	private void refresh() {
 		int lastx = x;
 		int lasty = y;
 		mc.thePlayer.closeScreen();
@@ -119,22 +113,14 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		this.initGui();
 	}
 
-	@Override
-	public void updateScreen() {
-		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
-	}
-
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 	 */
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2)
+	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
 		this.setValues();
-		fontRenderer.drawString(this.tile.getMultiValuedName(), 8, 6, 4210752);
-		fontRenderer.drawString(StatCollector.translateToLocal(upperScaleChestInventory.getInvName()), 8, ySize - 96 + 2, 4210752);
+		super.drawGuiContainerForegroundLayer(a, b);
 		int var3 = 0;
 		int pageinv = invsize-page*9*tile.MAXROWS;
 		int pagerows = numrows;
@@ -163,10 +149,9 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		if (tile.power < tile.MINPOWER) {
-
 			return;
 		}
-		String var4 = "/gui/container.png";
+		String var4 = this.getGuiTexture();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(var4);
 		int var5 = (width - xSize) / 2;
@@ -175,5 +160,10 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		this.drawTexturedModalRect(var5, var6 + tile.MAXROWS*18 + 17, 0, 126, xSize, 96);
 
 		this.drawPowerTab(var5, var6);
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "/Reika/RotaryCraft/Textures/GUI/basicstorage.png";
 	}
 }

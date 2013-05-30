@@ -12,17 +12,17 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.entity.player.EntityPlayer;
 
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.ContainerCCTV;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
+import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Containers.ContainerLandmine;
 
-public class GuiCCTV extends GuiNonPoweredMachine {
+public class GuiLandmine extends GuiNonPoweredMachine {
 
-	public GuiCCTV(EntityPlayer player, TileEntityCCTV tile) {
-		super(new ContainerCCTV(player, tile), tile);
+	public GuiLandmine(EntityPlayer ep, RotaryCraftTileEntity te) {
+		super(new ContainerLandmine(ep, te), te);
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "cctvgui";
+		return "landminegui";
 	}
 }

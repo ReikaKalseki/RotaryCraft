@@ -21,14 +21,15 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
 
 public class GuiBorer extends GuiMachine
 {
@@ -61,16 +62,10 @@ public class GuiBorer extends GuiMachine
 
 	@Override
 	public void initGui() {
+		super.initGui();
 		buttonList.clear();
 		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;/*
-            this.buttonList.add(new GuiButton(0, j+8, -1+k+32, 72, 20, "1x1 Square"));
-            this.buttonList.add(new GuiButton(1, j+8, -1+k+52, 72, 20, "1x2 Hallway"));
-            this.buttonList.add(new GuiButton(2, j+8, -1+k+72, 72, 20, "2x2 Square"));
-            this.buttonList.add(new GuiButton(3, j+8, -1+k+92, 72, 20, "3x3 Square"));
-            this.buttonList.add(new GuiButton(4, j+8, -1+k+112, 72, 20, "5x5 Circle"));
-            this.buttonList.add(new GuiButton(5, j+8, -1+k+132, 72, 20, "7x4 Archway"));
-            this.buttonList.add(new GuiButton(6, j+8, -1+k+152, 72, 20, "4x4 Tunnel"));*/
+		int k = (height - ySize) / 2;
 
 		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
 		for (int i = 0; i < 7; i++)
@@ -107,15 +102,6 @@ public class GuiBorer extends GuiMachine
 
 	public void updateMode(int mode) {
 		borer.mode = (byte)mode;
-	}
-
-	/**
-	 * Returns true if this GUI should pause the game when it is displayed in single-player
-	 */
-	@Override
-	public boolean doesGuiPauseGame()
-	{
-		return false;
 	}
 
 	@Override
@@ -220,40 +206,6 @@ public class GuiBorer extends GuiMachine
 		this.initGui();
 	}
 
-    @Override
-	protected void drawGuiContainerForegroundLayer(int a, int b)
-    {
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2;
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getName(), j+xSize/2, k+5, 4210752);
-    }
-
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-	{
-		String i = "/Reika/RotaryCraft/Textures/GUI/borergui2.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
-		/*
-        for (int i5 = 0; i5 < 7; i5++)
-        	for (int l = 0; l < 5; l++)
-        		if (this.dig[i5][l])
-        			this.drawRect(5+i5*5, 5+l*5, 10+i5*5, 10+l*5, 0xffffffff);
-        		else
-        			this.drawRect(5+i5*5, 5+l*5, 10+i5*5, 10+l*5, 0xff000000);*/
-
-		//int i1 = borerInventory.getCookProgressScaled(48);
-		//drawTexturedModalRect(j + 79, k + 34, 176, 14, 1*(i1)+1, 16);
-
-		this.drawPowerTab(j, k);
-	}
-
 	@Override
 	protected void drawPowerTab(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
@@ -280,6 +232,11 @@ public class GuiBorer extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20-13, var6+63, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20-13, var6+122, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", borer.power, borer.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return "borergui2";
 	}
 
 }

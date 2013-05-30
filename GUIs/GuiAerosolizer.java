@@ -11,8 +11,6 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
@@ -22,12 +20,12 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
 {
 	TileEntityAerosolizer tile;
 
-    public GuiAerosolizer(EntityPlayer player, TileEntityAerosolizer Aerosolizer)
-    {
-        super(new ContainerAerosolizer(player, Aerosolizer), Aerosolizer);
-        tile = Aerosolizer;
-    }
-    /*
+	public GuiAerosolizer(EntityPlayer player, TileEntityAerosolizer Aerosolizer)
+	{
+		super(new ContainerAerosolizer(player, Aerosolizer), Aerosolizer);
+		tile = Aerosolizer;
+	}
+	/*
     public void drawScreen(int m, int n, float f) {
         int var5 = (this.width - this.xSize) / 2;
         int var6 = (this.height - this.ySize) / 2;
@@ -43,30 +41,29 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
         }
     }*/
 
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
-     */
-    @Override
+	/**
+	 * Draw the background layer for the GuiContainer (everything behind the items)
+	 */
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-    {
-        int var5 = (width - xSize) / 2;
-        int var6 = (height - ySize) / 2;
+	{
+		int var5 = (width - xSize) / 2;
+		int var6 = (height - ySize) / 2;
 
-        String var4 = "/Reika/RotaryCraft/Textures/GUI/aerosolizergui.png";
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(var4);
+		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
-        this.drawTexturedModalRect(var5, var6, 0, 0, xSize, ySize);
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				int amount = tile.potionLevel[3*i+j]/4;
+				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d %d %d %d %d %d %d", tile.potionLevel[0], tile.potionLevel[1], tile.potionLevel[2], tile.potionLevel[3], tile.potionLevel[4], tile.potionLevel[5], tile.potionLevel[6], tile.potionLevel[7], tile.potionLevel[8]));
+				ReikaGuiAPI.instance.fillBar(var5+62+18*j, var6+17+18*i, 16, var6+17+18*i+16, tile.slotColor[3*i+j]+0xff000000, amount, 16, true);
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", tile.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
+			}
+		}
+	}
 
-
-        for (int i = 0; i < 3; i++) {
-        	for (int j = 0; j < 3; j++) {
-        		int amount = tile.potionLevel[3*i+j]/4;
-        		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d %d %d %d %d %d %d", tile.potionLevel[0], tile.potionLevel[1], tile.potionLevel[2], tile.potionLevel[3], tile.potionLevel[4], tile.potionLevel[5], tile.potionLevel[6], tile.potionLevel[7], tile.potionLevel[8]));
-        		ReikaGuiAPI.instance.fillBar(var5+62+18*j, var6+17+18*i, 16, var6+17+18*i+16, tile.slotColor[3*i+j]+0xff000000, amount, 16, true);
-        		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", tile.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
-        	}
-        }
-        this.drawPowerTab(var5, var6);
-    }
+	@Override
+	public String getGuiTexture() {
+		return "aerosolizergui";
+	}
 }

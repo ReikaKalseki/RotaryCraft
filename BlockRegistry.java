@@ -62,12 +62,33 @@ public enum BlockRegistry {
 		block = cl;
 	}
 
-	public static int getBlockVariableIndexFromClass(Class cl) {
+	public boolean isNthBlock(int n) {
+		return this.getOffset() == n-1;
+	}
+
+	public int getOffset() {
+		String name = this.getBlockVariableName();
+		String num = name.substring(name.length()-1);
+		if (!ReikaJavaLibrary.isValidInteger(num))
+			return 0;
+		return (Integer.parseInt(num)-1);
+	}
+
+	public static int getBlockVariableIndexFromClassAndMetadata(Class cl, int metadata) {
+		int offset = 1+metadata/16;
 		for (int i = 0; i < blockList.length; i++) {
-			if (blockList[i].block == cl)
+			if (blockList[i].block == cl && blockList[i].isNthBlock(offset))
 				return i;
 		}
 		throw new RuntimeException("Unregistered block class "+cl);
+	}
+
+	public static int getOffsetFromBlockID(int id) {
+		for (int i = 0; i < blockList.length; i++) {
+			if (blockList[i].getBlockID() == id)
+				return blockList[i].getOffset();
+		}
+		throw new RuntimeException("Unregistered block ID "+id);
 	}
 
 	public Block getBlockVariable() {

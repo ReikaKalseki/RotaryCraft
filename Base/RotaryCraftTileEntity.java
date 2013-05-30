@@ -261,4 +261,11 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 	public String getName() {
 		return Block.blocksList[this.getTileEntityBlockID()].getLocalizedName();
 	}*/
+
+	public boolean isSelfBlock() {
+		if (worldObj.getBlockId(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
+			return false;
+		int meta = this.getMachine().getMachineMetadata();
+		return ReikaMathLibrary.isValueInsideBoundsIncl(meta, meta+this.getMachine().getNumberMetadatas()-1, worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+	}
 }

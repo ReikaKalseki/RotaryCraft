@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -119,10 +120,11 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 		if (!superCalled && this.isInWorld()) {
 			superTick++;
-			if (superTick < 100)
-				return;
-			ReikaJavaLibrary.pConsole("Super() not called for "+this.getName()+"! Contact Reika immediately!");
-			ReikaChatHelper.write("Super() not called for "+this.getName()+"! Contact Reika immediately!");
+			EntityPlayer ep = worldObj.getClosestPlayer(xCoord, yCoord, zCoord, -1);
+			if (ep != null && this.isSelfBlock() && superTick > 40) {
+				ReikaJavaLibrary.pConsole("Super() not called for "+this.getName()+"! Contact Reika immediately!");
+				ReikaChatHelper.write("Super() not called for "+this.getName()+"! Contact Reika immediately!");
+			}
 		}
 	}
 

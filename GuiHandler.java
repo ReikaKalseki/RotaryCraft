@@ -24,7 +24,6 @@ import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCCTV;
@@ -40,6 +39,7 @@ import Reika.RotaryCraft.Containers.ContainerHandCraft;
 import Reika.RotaryCraft.Containers.ContainerHeater;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
 import Reika.RotaryCraft.Containers.ContainerJet;
+import Reika.RotaryCraft.Containers.ContainerLandmine;
 import Reika.RotaryCraft.Containers.ContainerObsidian;
 import Reika.RotaryCraft.Containers.ContainerPerformance;
 import Reika.RotaryCraft.Containers.ContainerProjector;
@@ -73,6 +73,7 @@ import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.GUIs.GuiHeater;
 import Reika.RotaryCraft.GUIs.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.GuiJet;
+import Reika.RotaryCraft.GUIs.GuiLandmine;
 import Reika.RotaryCraft.GUIs.GuiMobRadar;
 import Reika.RotaryCraft.GUIs.GuiMusic;
 import Reika.RotaryCraft.GUIs.GuiObsidian;
@@ -109,6 +110,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
@@ -228,6 +230,10 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityWorktable) {
 			return new ContainerWorktable(player, world, (TileEntityWorktable)te);
 		}
+		if (te instanceof TileEntityLandmine) {
+			return new ContainerLandmine(player, te);
+		}
+
 		if (te instanceof OneSlotMachine)
 			return new OneSlotContainer(player, te);
 		if (te instanceof GuiController)
@@ -368,11 +374,15 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityWorktable) {
 			return new GuiWorktable(player, (TileEntityWorktable)te);
 		}
+		if (te instanceof TileEntityLandmine) {
+			return new GuiLandmine(player, (TileEntityLandmine)te);
+		}
+
 		if (te instanceof OneSlotMachine) {
 			return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 		}
-		if (te instanceof TileEntityInventoriedPowerReceiver)
-			return new GuiBasicStorage(player, (TileEntityInventoriedPowerReceiver)te);
+		if (te instanceof IInventory)
+			return new GuiBasicStorage(player, (RotaryCraftTileEntity)te);
 		return null;
 	}
 }

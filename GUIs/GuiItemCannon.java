@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -192,8 +191,8 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	{
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		//fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 2, 4210752);
-		fontRenderer.drawString(tile.getMultiValuedName(), xSize/3, 4, 4210752);
+
+		super.drawGuiContainerForegroundLayer(a, b);
 
 		fontRenderer.drawString("Target X", xSize/3-20, 18, 4210752);
 		fontRenderer.drawString("Target Y", xSize/3-20, 34, 4210752);
@@ -213,18 +212,15 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		String i;
-		i = "/Reika/RotaryCraft/Textures/GUI/targetgui.png";
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
+		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
 		input.drawTextBox();
 		input2.drawTextBox();
 		input3.drawTextBox();
+	}
 
-		this.drawPowerTab(j, k);
+	@Override
+	public String getGuiTexture() {
+		return "targetgui";
 	}
 }
