@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
+import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -445,5 +446,10 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 	@Override
 	public int getMaxRange() {
 		return RotaryConfig.maxaerorange;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return ((int)((ReikaArrayHelper.sumArray(potionLevel)/576D)*15));
 	}
 }

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
@@ -47,16 +48,16 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 		switch(metadata) {
 		case 0:
 			dir = 3;
-		break;
+			break;
 		case 1:
 			dir = 1;
-		break;
+			break;
 		case 2:
 			dir = 2;
-		break;
+			break;
 		case 3:
 			dir = 0;
-		break;
+			break;
 		}
 		//Make punch thru snow, tall grass, etc!
 		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID)
@@ -145,5 +146,10 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 	@Override
 	public int getMaxRange() {
 		return RotaryConfig.maxbridgerange;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

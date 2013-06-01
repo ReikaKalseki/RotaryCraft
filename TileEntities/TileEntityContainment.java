@@ -19,6 +19,7 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -157,20 +158,22 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 		return INFINITE_EXTENT_AABB;
 	}
 
-    @Override
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("setRange", setRange);
-    }
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("setRange", setRange);
+	}
 
-    @Override
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        setRange = NBT.getInteger("setRange");
-    }
+	{
+		super.readFromNBT(NBT);
+		setRange = NBT.getInteger("setRange");
+	}
 
-
-
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -200,5 +201,10 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.CLUTCH.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

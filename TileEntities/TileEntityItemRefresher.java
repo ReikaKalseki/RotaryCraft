@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -72,6 +73,11 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 	@Override
 	public int getMaxRange() {
 		return this.getRange();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

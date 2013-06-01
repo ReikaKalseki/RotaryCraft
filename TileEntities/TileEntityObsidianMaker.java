@@ -404,4 +404,15 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public int getThermalDamage() {
 		return 0;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (this.getNonFullStack() == -1)
+			return 15;
+		if (lavaLevel <= 0)
+			return 15;
+		if (waterLevel <= 0)
+			return 15;
+		return 0;
+	}
 }

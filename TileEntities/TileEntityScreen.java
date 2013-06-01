@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -179,47 +180,55 @@ public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 		return is.itemID == Item.dyePowder.itemID;
 	}
 
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inv = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inv.length)
-			 {
-				 inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-	 }
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inv.length; i++)
-		 {
-			 if (inv[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inv[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		int[] cam = this.getCameraFromColors(worldObj);
+		if (this.isValidCamera(cam))
+			return 0;
+		return 15;
+	}
 
 }

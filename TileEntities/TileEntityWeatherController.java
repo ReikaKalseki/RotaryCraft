@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -73,19 +74,19 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		case 1:
 			wi.setRaining(false);
 			wi.setThundering(false);
-		break;
+			break;
 		case 2:
 			wi.setRaining(true);
 			wi.setThundering(false);
-		break;
+			break;
 		case 3:
 			wi.setRaining(true);
 			wi.setThundering(true);
-		break;
+			break;
 		case 4:
 			wi.setRaining(true);
 			wi.setThundering(true);
-		break;
+			break;
 		}
 	}
 
@@ -98,7 +99,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			ei.age = 5900;
 			ei.motionY = 3;
 			if (!worldObj.isRemote)
-			worldObj.spawnEntityInWorld(ei);
+				worldObj.spawnEntityInWorld(ei);
 		}
 		if (is2 != null) {
 			EntityItem ei = new EntityItem(worldObj, xCoord+0.5, yCoord+1.0625, zCoord+0.5, new ItemStack(is2.itemID, 1, is2.getItemDamage()));
@@ -107,7 +108,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			ei.age = 5900;
 			ei.motionY = 3;
 			if (!worldObj.isRemote)
-			worldObj.spawnEntityInWorld(ei);
+				worldObj.spawnEntityInWorld(ei);
 		}
 	}
 
@@ -193,103 +194,103 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 	}
 
 	@Override
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize == 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize == 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
+	/**
+	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
+	 */
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBTTagList nbttaglist = new NBTTagList();
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-        NBT.setTag("Items", nbttaglist);
-    }
+		NBT.setTag("Items", nbttaglist);
+	}
 
 	@Override
 	public boolean hasModelTransparency() {
@@ -316,4 +317,8 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		return this.isValidWeatherItem(is);
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

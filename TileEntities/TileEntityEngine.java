@@ -89,6 +89,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public int additives;
 	private boolean starvedengine;
 
+	private boolean isJetFailing = false;
+
 	/** Used by turbine engines */
 	public int jetfuels;
 
@@ -827,6 +829,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				torque = EnumEngineType.MICRO.getTorque();
 				break;
 			case JET:
+				this.checkJetFailure();
 				omega = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
 				torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
 				if (omega == 0)
@@ -849,6 +852,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			if (soundtick == 0)
 				soundtick = 2000;
 		}
+	}
+
+	private void checkJetFailure() {
+		if (isJetFailing)
+			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
+		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0)
+			isJetFailing = true;
 	}
 
 	/** Like BC obsidian pipe - suck in entities in a "funnel" in front of the engine, and deal damage (50 hearts).
@@ -1139,7 +1149,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:	//works
+		case 0:
 			writex = xCoord-1;
 			writez = zCoord;
 			backx = xCoord+1;
@@ -1182,6 +1192,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		NBT.setInteger("jetfuel", jetfuels);
 		NBT.setInteger("additive", additives);
 		NBT.setBoolean("choke", isChoking);
+		NBT.setBoolean("jetfail", isJetFailing);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -1212,6 +1223,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		jetfuels = NBT.getInteger("jetfuel");
 		additives = NBT.getInteger("additive");
 		isChoking = NBT.getBoolean("choke");
+		isJetFailing = NBT.getBoolean("jetfail");
 
 		type = EnumEngineType.setType(NBT.getInteger("type"));
 		FOD = NBT.getInteger("FOD");
@@ -1313,5 +1325,107 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (type.canHurtPlayer() && type.hasTemperature())
 			return (temperature)/100;
 		return 0;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (type.burnsFuel()) {
+			if (type.isEthanolFueled())
+				return 15*ethanols/FUELCAP;
+			if (type.isJetFueled())
+				return 15*jetfuels/FUELCAP;
+		}
+		return 0;
+	}
+
+	public void jetEngineDetonation(World world, int x, int y, int z, int meta) {
+		AxisAlignedBB zone = this.getFlameZone();
+		List in = world.getEntitiesWithinAABB(EntityLiving.class, zone);
+		for (int i = 0; i < in.size(); i++) {
+			EntityLiving e = (EntityLiving)in.get(i);
+			e.setFire(2);
+		}
+		double vx = (x-backx)/2D;
+		double vz = (z-backz)/2D;
+		for (int i = 0; i < 16; i++) {
+			String part;
+			if (i%2 == 0)
+				part = "flame";
+			else
+				part = "smoke";
+			world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), vz-0.1+0.2*par5Random.nextDouble());
+		}
+		int dx = x-backx;
+		int dz = z-backz;
+		for (int i = 0; i < 8; i++) {
+			ReikaWorldHelper.temperatureEnvironment(world, x+dx*i, y, z+dz*i, 800);
+		}
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
+		if (jetfuels < FUELCAP/12 && par5Random.nextInt(10) == 0) {
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
+			for (int i = 0; i < 32; i++) {
+				String part;
+				if (i%2 == 0)
+					part = "flame";
+				else
+					part = "smoke";
+				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
+			}
+		}
+		if (jetfuels < FUELCAP/4 && par5Random.nextInt(20) == 0) {
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
+			for (int i = 0; i < 32; i++) {
+				String part;
+				if (i%2 == 0)
+					part = "flame";
+				else
+					part = "smoke";
+				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
+			}
+		}
+		else if (par5Random.nextInt(40) == 0) {
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
+			for (int i = 0; i < 32; i++) {
+				String part;
+				if (i%2 == 0)
+					part = "flame";
+				else
+					part = "smoke";
+				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
+			}
+		}
+		if (par5Random.nextInt(2) == 0)
+			temperature++;
+		if (temperature > 1000) {
+			for (int i = -6; i <= 6; i++) {
+				for (int j = -6; j <= 6; j++) {
+					for (int k = -6; k <= 6; k++) {
+						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
+						world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
+						world.spawnParticle("lava", x+i, y+j, z+k, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5);
+					}
+				}
+			}
+			if (!world.isRemote) {
+				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
+				for (int m = 0; m < 6; m++)
+					world.newExplosion(null, x-4+par5Random.nextInt(5), y-4+par5Random.nextInt(5), z-4+par5Random.nextInt(5), 4F+par5Random.nextFloat(), true, true);
+			}
+		}
+	}
+
+	private AxisAlignedBB getFlameZone() {
+		switch(this.getBlockMetadata()) {
+		case 0: //-x
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord-6, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
+		case 1: //+x
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+7, yCoord+1, zCoord+1);
+		case 2: //-z
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord-6, xCoord+1, yCoord+1, zCoord+1);
+		case 3: //+z
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+7);
+		default:
+			return null;
+		}
 	}
 }

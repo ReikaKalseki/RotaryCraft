@@ -175,6 +175,8 @@ public enum EnumEngineType {
 			return true;
 		if (this == STEAM)
 			return true;
+		if (this == JET)
+			return true;
 		return false;
 	}
 

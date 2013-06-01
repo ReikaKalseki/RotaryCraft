@@ -47,6 +47,8 @@ public class RotaryConfig {
 	public static int slidesid;
 	public static int iogogglesid;
 
+	public static int modextractsid;
+
 	public static int heatcraftid;
 	public static int enginecraftid;
 	public static int borecraftid;
@@ -118,108 +120,109 @@ public class RotaryConfig {
 	// Args: String mod used to name the config file to mods name
 	public static void initProps(String mod, FMLPreInitializationEvent event){
 
-	//creating a folder for the mod in the folder config within the .minecraft folder
-	//File file = new File(Minecraft.getMinecraftDir() + "/config/" + mod);
-	//file.mkdir(); //creates the folder
-	//getting the config file
+		//creating a folder for the mod in the folder config within the .minecraft folder
+		//File file = new File(Minecraft.getMinecraftDir() + "/config/" + mod);
+		//file.mkdir(); //creates the folder
+		//getting the config file
 
-	//allocate the file to the config
-	config = new Configuration(event.getSuggestedConfigurationFile());
+		//allocate the file to the config
+		config = new Configuration(event.getSuggestedConfigurationFile());
 
-	//load data
-	config.load();
-	/********************************/
-	//here you add all configurations like BlockIDs ItemIDs or other settings
-	debugitemid = 		config.getItem("Tool Item IDs", "Debug Item ID", 30610).getInt();
-	worldeditid = 		config.getItem("Tool Item IDs", "WorldEdit Item ID", 30609).getInt();
+		//load data
+		config.load();
+		/********************************/
+		//here you add all configurations like BlockIDs ItemIDs or other settings
+		debugitemid = 		config.getItem("Tool Item IDs", "Debug Item ID", 30610).getInt();
+		worldeditid = 		config.getItem("Tool Item IDs", "WorldEdit Item ID", 30609).getInt();
 
-	screwdriverid = 	config.getItem("Tool Item IDs", "Screwdriver ID", 30617).getInt();
-	meterid = 			config.getItem("Tool Item IDs", "Transducer ID", 30618).getInt();
-	yeastid = 			config.getItem("Item IDs", "Yeast ID", 30619).getInt();
-	ethanolid = 		config.getItem("Item IDs", "Ethanol ID", 30620).getInt();
-	canolaseedid = 		config.getItem("Item IDs", "Canola Seed ID", 30621).getInt();
-	infobookid = 		config.getItem("Item IDs", "Handbook ID", 30622).getInt();
-	windid = 			config.getItem("Item IDs", "Wind Spring ID", 30623).getInt();
-	ultraid = 			config.getItem("Tool Item IDs", "Ultrasound ID", 30624).getInt();
-	motionid = 			config.getItem("Tool Item IDs", "Motion Tracker ID", 30625).getInt();
-	vacid = 			config.getItem("Tool Item IDs", "Vacuum ID", 30626).getInt();
-	stunid = 			config.getItem("Tool Item IDs", "Knockback Gun ID", 30627).getInt();
-	gravelgunid = 		config.getItem("Tool Item IDs", "Gravel Gun ID", 30660).getInt();
-	bedaxeid = 			config.getItem("Tool Item IDs", "Bedrock Axe ID", 30661).getInt();
-	bedpickid = 		config.getItem("Tool Item IDs", "Bedrock Pickaxe ID", 30662).getInt();
-	bedshovid = 		config.getItem("Tool Item IDs", "Bedrock Shovel ID", 30663).getInt();
-	calcid = 			config.getItem("Tool Item IDs", "Calculator ID", 30664).getInt();
-	fireballid = 		config.getItem("Tool Item IDs", "Fireball Launcher ID", 30665).getInt();
-	nvgid = 			config.getItem("Tool Item IDs", "NightVision Goggles ID", 30666).getInt();
-	handcraftid = 		config.getItem("Tool Item IDs", "Handheld Crafting ID", 30667).getInt();
-	nvhid = 			config.getItem("Tool Item IDs", "NightVision Helmet ID", 30668).getInt();
-	railammoid = 		config.getItem("Item IDs", "Railgun Ammo ID", 30669).getInt();
-	fuelbucketid = 		config.getItem("Tool Item IDs", "Bucket ID", 30670).getInt();
-	targetid = 			config.getItem("Tool Item IDs", "Targeting Aid ID", 30671).getInt();
-	iogogglesid = 		config.getItem("Tool Item IDs", "I/O Goggles", 30672).getInt();
-	slidesid = 			config.getItem("Tool Item IDs", "Slide", 30673).getInt();
+		screwdriverid = 	config.getItem("Tool Item IDs", "Screwdriver ID", 30617).getInt();
+		meterid = 			config.getItem("Tool Item IDs", "Transducer ID", 30618).getInt();
+		yeastid = 			config.getItem("Item IDs", "Yeast ID", 30619).getInt();
+		ethanolid = 		config.getItem("Item IDs", "Ethanol ID", 30620).getInt();
+		canolaseedid = 		config.getItem("Item IDs", "Canola Seed ID", 30621).getInt();
+		infobookid = 		config.getItem("Item IDs", "Handbook ID", 30622).getInt();
+		windid = 			config.getItem("Item IDs", "Wind Spring ID", 30623).getInt();
+		ultraid = 			config.getItem("Tool Item IDs", "Ultrasound ID", 30624).getInt();
+		motionid = 			config.getItem("Tool Item IDs", "Motion Tracker ID", 30625).getInt();
+		vacid = 			config.getItem("Tool Item IDs", "Vacuum ID", 30626).getInt();
+		stunid = 			config.getItem("Tool Item IDs", "Knockback Gun ID", 30627).getInt();
+		gravelgunid = 		config.getItem("Tool Item IDs", "Gravel Gun ID", 30660).getInt();
+		bedaxeid = 			config.getItem("Tool Item IDs", "Bedrock Axe ID", 30661).getInt();
+		bedpickid = 		config.getItem("Tool Item IDs", "Bedrock Pickaxe ID", 30662).getInt();
+		bedshovid = 		config.getItem("Tool Item IDs", "Bedrock Shovel ID", 30663).getInt();
+		calcid = 			config.getItem("Tool Item IDs", "Calculator ID", 30664).getInt();
+		fireballid = 		config.getItem("Tool Item IDs", "Fireball Launcher ID", 30665).getInt();
+		nvgid = 			config.getItem("Tool Item IDs", "NightVision Goggles ID", 30666).getInt();
+		handcraftid = 		config.getItem("Tool Item IDs", "Handheld Crafting ID", 30667).getInt();
+		nvhid = 			config.getItem("Tool Item IDs", "NightVision Helmet ID", 30668).getInt();
+		railammoid = 		config.getItem("Item IDs", "Railgun Ammo ID", 30669).getInt();
+		fuelbucketid = 		config.getItem("Tool Item IDs", "Bucket ID", 30670).getInt();
+		targetid = 			config.getItem("Tool Item IDs", "Targeting Aid ID", 30671).getInt();
+		iogogglesid = 		config.getItem("Tool Item IDs", "I/O Goggles", 30672).getInt();
+		slidesid = 			config.getItem("Tool Item IDs", "Slide", 30673).getInt();
 
-	machineplacerid = 	config.getItem("Item IDs", "Machine Items", 30616).getInt();
-	heatcraftid = 		config.getItem("Item IDs", "Heat Ray Crafting Items", 30628).getInt();
-	enginecraftid = 	config.getItem("Item IDs", "Engine Crafting Items", 30629).getInt();
-	borecraftid = 		config.getItem("Item IDs", "Borer Crafting Items", 30630).getInt();
-	shaftcraftid = 		config.getItem("Item IDs", "Shaft Crafting Items", 30631).getInt();
-	extractsid = 		config.getItem("Item IDs", "Extractor Items", 30632).getInt();
-	compactsid = 		config.getItem("Item IDs", "Compactor Items", 30633).getInt();
-	engineitemsid = 	config.getItem("Item IDs", "Engine Items", 30634).getInt();
-	powderid = 			config.getItem("Item IDs", "Powders", 30635).getInt();
-	spawnerid = 		config.getItem("Item IDs", "Spawner", 30636).getInt();
-	pipeplacerid = 		config.getItem("Item IDs", "Pipe Items", 30637).getInt();
-	shaftitemsid = 		config.getItem("Item IDs", "Shaft Items", 30639).getInt();
-	gbxitemsid = 		config.getItem("Item IDs", "Gearbox Items", 30640).getInt();
-	gearunitsid = 		config.getItem("Item IDs", "Gear Units", 30641).getInt();
-	advgearitemsid = 	config.getItem("Item IDs", "Advnaced Gear Items", 30642).getInt();
-	flywheelitemsid = 	config.getItem("Item IDs", "Flywheel Items", 30643).getInt();
+		machineplacerid = 	config.getItem("Item IDs", "Machine Items", 30616).getInt();
+		heatcraftid = 		config.getItem("Item IDs", "Heat Ray Crafting Items", 30628).getInt();
+		enginecraftid = 	config.getItem("Item IDs", "Engine Crafting Items", 30629).getInt();
+		borecraftid = 		config.getItem("Item IDs", "Borer Crafting Items", 30630).getInt();
+		shaftcraftid = 		config.getItem("Item IDs", "Shaft Crafting Items", 30631).getInt();
+		extractsid = 		config.getItem("Item IDs", "Extractor Items", 30632).getInt();
+		compactsid = 		config.getItem("Item IDs", "Compactor Items", 30633).getInt();
+		engineitemsid = 	config.getItem("Item IDs", "Engine Items", 30634).getInt();
+		powderid = 			config.getItem("Item IDs", "Powders", 30635).getInt();
+		spawnerid = 		config.getItem("Item IDs", "Spawner", 30636).getInt();
+		pipeplacerid = 		config.getItem("Item IDs", "Pipe Items", 30637).getInt();
+		shaftitemsid = 		config.getItem("Item IDs", "Shaft Items", 30639).getInt();
+		gbxitemsid = 		config.getItem("Item IDs", "Gearbox Items", 30640).getInt();
+		gearunitsid = 		config.getItem("Item IDs", "Gear Units", 30641).getInt();
+		advgearitemsid = 	config.getItem("Item IDs", "Advanced Gear Items", 30642).getInt();
+		flywheelitemsid = 	config.getItem("Item IDs", "Flywheel Items", 30643).getInt();
+		modextractsid = 	config.getItem("Item IDs", "Mod Ore Extractor Items", 30644).getInt();
 
-	decoblockid = 		config.getBlock("Extra Block IDs", "Deco Block", 450).getInt();
-	bedrocksliceid = 	config.getBlock("Extra Block IDs", "Bedrock Slice", 451).getInt();
-	gravlogid = 		config.getBlock("Extra Block IDs", "Tree Log", 452).getInt();
-	gravleavesid = 		config.getBlock("Extra Block IDs", "Tree Leaves", 453).getInt();
-	lightblockid = 		config.getBlock("Extra Block IDs", "LightBlock", 454).getInt();
-	canolaid = 			config.getBlock("Extra Block IDs", "Canola", 455).getInt();
-	miningpipeid = 		config.getBlock("Extra Block IDs", "Mining Pipe", 456).getInt();
-	lightbridgeid = 	config.getBlock("Extra Block IDs", "Light Bridge", 457).getInt();
-	blastpaneid = 		config.getBlock("Extra Block IDs", "Blast Glass Pane", 458).getInt();
-	blastglassid = 		config.getBlock("Extra Block IDs", "Blast Glass", 459).getInt();
-	beamblockid = 		config.getBlock("Extra Block IDs", "Beam Block", 460).getInt();
+		decoblockid = 		config.getBlock("Extra Block IDs", "Deco Block", 450).getInt();
+		bedrocksliceid = 	config.getBlock("Extra Block IDs", "Bedrock Slice", 451).getInt();
+		gravlogid = 		config.getBlock("Extra Block IDs", "Tree Log", 452).getInt();
+		gravleavesid = 		config.getBlock("Extra Block IDs", "Tree Leaves", 453).getInt();
+		lightblockid = 		config.getBlock("Extra Block IDs", "LightBlock", 454).getInt();
+		canolaid = 			config.getBlock("Extra Block IDs", "Canola", 455).getInt();
+		miningpipeid = 		config.getBlock("Extra Block IDs", "Mining Pipe", 456).getInt();
+		lightbridgeid = 	config.getBlock("Extra Block IDs", "Light Bridge", 457).getInt();
+		blastpaneid = 		config.getBlock("Extra Block IDs", "Blast Glass Pane", 458).getInt();
+		blastglassid = 		config.getBlock("Extra Block IDs", "Blast Glass", 459).getInt();
+		beamblockid = 		config.getBlock("Extra Block IDs", "Beam Block", 460).getInt();
 
-	playsounds = 		config.get("Control Setup", "Engine Running Sounds", true).getBoolean(true);
-	renderores = 		config.get("Control Setup", "GPR Renders Ores", false).getBoolean(false);
-	gravtree = 			config.get("Control Setup", "Woodcutter Falling Trees", true).getBoolean(true);
-	alwaysGravLeaves = 	config.get("Control Setup", "Unlimited Jungle Tree Felling", false).getBoolean(false);
-	renderforcefield = 	config.get("Control Setup", "Show Force Fields", true).getBoolean(true);
-	craftableBedrock = 	config.get("Control Setup", "Allow Craftable Bedrock", true).getBoolean(true);
-	oreDict = 			config.get("Control Setup", "Ore Dictionary Interchangeability", true).getBoolean(true);
-	consoleMsg =		config.get("Control Setup", "Console Loading Info", true).getBoolean(true);
-	//SIUnits = 			config.getOrCreateBooleanProperty("SI Metric Units", "Control Setup", true).getBoolean(true);
-	maxlamprange = 		config.get("Control Setup", "Max Floodlight Range", 128).getInt();
-	maxheatrayrange = 	config.get("Control Setup", "Max Heat Ray Range", 128).getInt();
-	maxbridgerange = 	config.get("Control Setup", "Max Bridge Range", 128).getInt();
-	maxfanrange = 		config.get("Control Setup", "Max Fan Range", 128).getInt();
-	maxaerorange = 		config.get("Control Setup", "Max Aerosolizer Range", 128).getInt();
-	maxvacuumrange = 	config.get("Control Setup", "Max Vacuum Range", 128).getInt();
-	maxsonicrange = 	config.get("Control Setup", "Max Sonic Weapon Range", 128).getInt();
-	maxforcerange = 	config.get("Control Setup", "Max Force Field Range", 128).getInt();
-	spawnerlimit = 		config.get("Control Setup", "Spawner Mob Limit", 128).getInt();
-	maxdetectorrange = 	config.get("Control Setup", "Player Detector Range", 128).getInt();
-	maxbreederrange = 	config.get("Control Setup", "Breeder Range", 128).getInt();
-	maxbaitrange = 		config.get("Control Setup", "Bait Box Range", 128).getInt();
-	maxbaitmobs = 		config.get("Control Setup", "Max Bait Box Mob Count", 256).getInt();
-	cavefinderrange = 	config.get("Control Setup", "Cave Finder FOV", 16).getInt();
+		playsounds = 		config.get("Control Setup", "Engine Running Sounds", true).getBoolean(true);
+		renderores = 		config.get("Control Setup", "GPR Renders Ores", false).getBoolean(false);
+		gravtree = 			config.get("Control Setup", "Woodcutter Falling Trees", true).getBoolean(true);
+		alwaysGravLeaves = 	config.get("Control Setup", "Unlimited Jungle Tree Felling", false).getBoolean(false);
+		renderforcefield = 	config.get("Control Setup", "Show Force Fields", true).getBoolean(true);
+		craftableBedrock = 	config.get("Control Setup", "Allow Craftable Bedrock", true).getBoolean(true);
+		oreDict = 			config.get("Control Setup", "Ore Dictionary Interchangeability", true).getBoolean(true);
+		consoleMsg =		config.get("Control Setup", "Console Loading Info", true).getBoolean(true);
+		//SIUnits = 			config.getOrCreateBooleanProperty("SI Metric Units", "Control Setup", true).getBoolean(true);
+		maxlamprange = 		config.get("Control Setup", "Max Floodlight Range", 128).getInt();
+		maxheatrayrange = 	config.get("Control Setup", "Max Heat Ray Range", 128).getInt();
+		maxbridgerange = 	config.get("Control Setup", "Max Bridge Range", 128).getInt();
+		maxfanrange = 		config.get("Control Setup", "Max Fan Range", 128).getInt();
+		maxaerorange = 		config.get("Control Setup", "Max Aerosolizer Range", 128).getInt();
+		maxvacuumrange = 	config.get("Control Setup", "Max Vacuum Range", 128).getInt();
+		maxsonicrange = 	config.get("Control Setup", "Max Sonic Weapon Range", 128).getInt();
+		maxforcerange = 	config.get("Control Setup", "Max Force Field Range", 128).getInt();
+		spawnerlimit = 		config.get("Control Setup", "Spawner Mob Limit", 128).getInt();
+		maxdetectorrange = 	config.get("Control Setup", "Player Detector Range", 128).getInt();
+		maxbreederrange = 	config.get("Control Setup", "Breeder Range", 128).getInt();
+		maxbaitrange = 		config.get("Control Setup", "Bait Box Range", 128).getInt();
+		maxbaitmobs = 		config.get("Control Setup", "Max Bait Box Mob Count", 256).getInt();
+		cavefinderrange = 	config.get("Control Setup", "Cave Finder FOV", 16).getInt();
 
-	for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-		String name = BlockRegistry.blockList[i].getBlockVariableName();
-		machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
-	}
+		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
+			String name = BlockRegistry.blockList[i].getBlockVariableName();
+			machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
+		}
 
-	/*******************************/
-	//save the data
-	config.save();
+		/*******************************/
+		//save the data
+		config.save();
 	}
 
 }

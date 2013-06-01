@@ -143,11 +143,12 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		}
 		if (product.itemID != RotaryCraft.yeast.itemID && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
 			return;
-		if (slots[3] != null)
+		if (slots[3] != null) {
 			if (product.itemID != slots[3].itemID) {
 				fermenterCookTime = 0;
 				return;
 			}
+		}
 		idle = false;
 		if (power < MINPOWER || omega < MINSPEED)
 			return;
@@ -155,17 +156,36 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			this.testYeastKill();
 			tickcount = 0;
 		}
-		if (slots[3] != null)
+		if (slots[3] != null) {
 			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
 				fermenterCookTime = 0;
 				return;
 			}
+		}
 		fermenterCookTime++;
 		if (fermenterCookTime*this.getFermentRate() >= this.operationTime(omega, 0)) {
 			this.make(product);
 			fermenterCookTime = 0;
 		}
 
+	}
+
+	private boolean canMake() {
+		ItemStack product = this.getRecipe();
+		if (product == null) {
+			return false;
+		}
+		if (product.itemID != RotaryCraft.yeast.itemID && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
+			return false;
+		if (slots[3] != null) {
+			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
+				return false;
+			}
+			if (product.itemID != slots[3].itemID) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private void make(ItemStack product) {
@@ -494,6 +514,13 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canMake())
+			return 15;
 		return 0;
 	}
 }

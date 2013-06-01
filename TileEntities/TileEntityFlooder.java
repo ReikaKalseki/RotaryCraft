@@ -170,4 +170,9 @@ public class TileEntityFlooder extends TileEntityPiping {
 
 	@Override
 	public void transfer(World world, int x, int y, int z) {}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

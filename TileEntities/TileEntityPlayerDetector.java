@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -37,9 +38,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	/** Used to determine reaction time */
 	private int ticksdetected = 0;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Run");
 
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.selectedrange));
@@ -89,9 +90,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox;
 		//if (world.isRemote)
-			//inbox = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+		//inbox = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
 		//else
-			inbox = world.getEntitiesWithinAABB(EntityPlayer.class, box);
+		inbox = world.getEntitiesWithinAABB(EntityPlayer.class, box);
 		int count = inbox.size();
 		if (count > 15)
 			count = 15; //15 is max redstone
@@ -103,9 +104,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox;
 		//if (world.isRemote)
-			//inbox = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+		//inbox = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
 		//else
-			inbox = world.getEntitiesWithinAABB(EntityPlayer.class, box);
+		inbox = world.getEntitiesWithinAABB(EntityPlayer.class, box);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inbox.size()));
 		return (inbox.size() > 0);
 	}
@@ -126,25 +127,25 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 		return range;
 	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("range", selectedrange);
-    }
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("range", selectedrange);
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        selectedrange = NBT.getInteger("range");
-    }
+	{
+		super.readFromNBT(NBT);
+		selectedrange = NBT.getInteger("range");
+	}
 
 	@Override
 	public boolean hasModelTransparency() {
@@ -164,5 +165,12 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.PLAYERDETECTOR.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (isActive)
+			return 15;
+		return 0;
 	}
 }

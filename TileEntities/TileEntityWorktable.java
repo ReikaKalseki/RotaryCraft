@@ -42,4 +42,9 @@ public class TileEntityWorktable extends RotaryCraftTileEntity {
 		return false;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
 }

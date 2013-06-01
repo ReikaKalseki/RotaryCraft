@@ -281,4 +281,11 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.hasAmmo())
+			return 15;
+		return 0;
+	}
 }

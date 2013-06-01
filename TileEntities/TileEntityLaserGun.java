@@ -207,4 +207,9 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 		return false;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
 }

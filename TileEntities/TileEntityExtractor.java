@@ -396,6 +396,9 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		//   inv[i] = new ItemStack(inv[i].getItem().setFull3D());
 		// else
 		inv[i].stackSize--;
+		if (par5Random.nextInt(8) == 0)
+			if (i == 1 || i == 2)
+				waterLevel--;
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;/*
@@ -423,6 +426,16 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		}
 	}
 
+	private boolean isValidModOre() {
+		return false;
+	}
+
+	private void processModOre(ItemStack is) {
+		if (is == null || is.itemID != RotaryCraft.modextracts.itemID)
+			return;
+
+	}
+
 	@Override
 	public boolean hasModelTransparency() {
 		return true;
@@ -446,5 +459,12 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		return ReikaBlockHelper.isOre(is.itemID) && slot == 0;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canSmelt(0) && !this.canSmelt(1) && !this.canSmelt(2) && !this.canSmelt(3))
+			return 15;
+		return 0;
 	}
 }

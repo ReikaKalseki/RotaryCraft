@@ -315,4 +315,11 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		return is.itemID == Block.tnt.blockID;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canFire())
+			return 15;
+		return 0;
+	}
 }

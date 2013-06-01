@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -234,6 +235,11 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	@Override
 	public int getMaxRange() {
 		return 4;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

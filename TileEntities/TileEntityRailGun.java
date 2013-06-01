@@ -291,4 +291,9 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		return false;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return this.getMaxThrust();
+	}
+
 }

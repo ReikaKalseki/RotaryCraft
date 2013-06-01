@@ -203,4 +203,9 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 		return this.getRange();
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
 }

@@ -190,4 +190,9 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	public int getMaxRange() {
 		return 40;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

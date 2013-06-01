@@ -338,4 +338,9 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 		return false;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
 }

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -28,37 +29,8 @@ public class TileEntityFuelLine extends TileEntityPiping {
 			fuel = 0;
 	}
 
+	@Override
 	public void draw(World world, int x, int y, int z) {
-		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
-			}
-		}
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y-1, z);
 			if (tile != null) {
@@ -69,28 +41,9 @@ public class TileEntityFuelLine extends TileEntityPiping {
 				}
 			}
 		}
-		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
-			}
-		}
 	}
 
+	@Override
 	public void transfer(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x+1, y, z);
@@ -182,5 +135,10 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.FUELLINE.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

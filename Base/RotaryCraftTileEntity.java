@@ -268,4 +268,6 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 		int meta = this.getMachine().getMachineMetadata();
 		return ReikaMathLibrary.isValueInsideBoundsIncl(meta, meta+this.getMachine().getNumberMetadatas()-1, worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
 	}
+
+	public abstract int getRedstoneOverride();
 }

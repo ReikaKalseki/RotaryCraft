@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
@@ -296,5 +297,12 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 		if (slot == ingredients.length)
 			return is.itemID == Item.ghastTear.itemID;
 		return ReikaInventoryHelper.checkForItem(is.itemID, ingredients);
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.getAllIngredients())
+			return 15;
+		return 15*fuel/CAPACITY;
 	}
 }

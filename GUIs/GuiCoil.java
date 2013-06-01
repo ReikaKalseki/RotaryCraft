@@ -46,6 +46,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 
 	@Override
 	public void initGui() {
+		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		input = new GuiTextField(fontRenderer, j+xSize/2-15, k+30, 56, 16);
@@ -129,16 +130,16 @@ public class GuiCoil extends GuiNonPoweredMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRenderer.drawString("Output Speed", j+xSize/2-82, k+22, 4210752);
-		fontRenderer.drawString("Output Torque", j+xSize/2-82, k+52, 4210752);
+		fontRenderer.drawString("Output Speed", xSize/2-82, 22, 4210752);
+		fontRenderer.drawString("Output Torque", xSize/2-82, 52, 4210752);
 
-		fontRenderer.drawString("rad/s", j+xSize/2+53, k+22, 4210752);
-		fontRenderer.drawString("Nm", j+xSize/2+53, k+52, 4210752);
+		fontRenderer.drawString("rad/s", xSize/2+53, 22, 4210752);
+		fontRenderer.drawString("Nm", xSize/2+53, 52, 4210752);
 
 		if (!input.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.releaseOmega), j+xSize/2-3, k+22, 0xffffffff);
+			fontRenderer.drawString(String.format("%d", coil.releaseOmega), xSize/2-3, 22, 0xffffffff);
 		if (!input2.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.releaseTorque), j+xSize/2-3, k+52, 0xffffffff);
+			fontRenderer.drawString(String.format("%d", coil.releaseTorque), xSize/2-3, 52, 0xffffffff);
 	}
 
 	/**

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -147,5 +148,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.RESERVOIR.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 15*liquidLevel/CAPACITY;
 	}
 }

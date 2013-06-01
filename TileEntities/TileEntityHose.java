@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -28,6 +29,7 @@ public class TileEntityHose extends TileEntityPiping {
 			lubricant = 0;
 	}
 
+	@Override
 	public void draw(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x+1, y, z);
@@ -91,6 +93,7 @@ public class TileEntityHose extends TileEntityPiping {
 		}
 	}
 
+	@Override
 	public void transfer(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
@@ -182,5 +185,10 @@ public class TileEntityHose extends TileEntityPiping {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.HOSE.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

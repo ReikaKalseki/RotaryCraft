@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -70,7 +71,7 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 		idle = (!wheat && !carrot && !meat && !fish && !seed);
 	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
@@ -136,13 +137,13 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 						if (!ent.isInLove())
 							this.useFeedItem(ent);
 						ent.inLove = 600;
-			            for (int var3 = 0; var3 < 1; ++var3)
-			            {
-			                double var4 = par5Random.nextGaussian() * 0.02D;
-			                double var6 = par5Random.nextGaussian() * 0.02D;
-			                double var8 = par5Random.nextGaussian() * 0.02D;
-			                ent.worldObj.spawnParticle("heart", ent.posX + par5Random.nextFloat() * ent.width * 2.0F - ent.width, ent.posY + 0.5D + par5Random.nextFloat() * ent.height, ent.posZ + par5Random.nextFloat() * ent.width * 2.0F - ent.width, var4, var6, var8);
-			            }
+						for (int var3 = 0; var3 < 1; ++var3)
+						{
+							double var4 = par5Random.nextGaussian() * 0.02D;
+							double var6 = par5Random.nextGaussian() * 0.02D;
+							double var8 = par5Random.nextGaussian() * 0.02D;
+							ent.worldObj.spawnParticle("heart", ent.posX + par5Random.nextFloat() * ent.width * 2.0F - ent.width, ent.posY + 0.5D + par5Random.nextFloat() * ent.height, ent.posZ + par5Random.nextFloat() * ent.width * 2.0F - ent.width, var4, var6, var8);
+						}
 					}
 				}
 			}
@@ -219,124 +220,131 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 		return inventory[var1];
 	}
 
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (inventory[par1] != null)
-        {
-            if (inventory[par1].stackSize <= par2)
-            {
-                ItemStack itemstack = inventory[par1];
-                inventory[par1] = null;
-                return itemstack;
-            }
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (inventory[par1] != null)
+		{
+			if (inventory[par1].stackSize <= par2)
+			{
+				ItemStack itemstack = inventory[par1];
+				inventory[par1] = null;
+				return itemstack;
+			}
 
-            ItemStack itemstack1 = inventory[par1].splitStack(par2);
+			ItemStack itemstack1 = inventory[par1].splitStack(par2);
 
-            if (inventory[par1].stackSize == 0)
-            {
-                inventory[par1] = null;
-            }
+			if (inventory[par1].stackSize == 0)
+			{
+				inventory[par1] = null;
+			}
 
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (inventory[par1] != null)
-        {
-            ItemStack itemstack = inventory[par1];
-            inventory[par1] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        inventory[par1] = par2ItemStack;
-
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
-
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
-	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        NBTTagList nbttaglist = NBT.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-            byte byte0 = nbttagcompound.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < inventory.length)
-            {
-                inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-            }
-        }
-    }
-
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
-	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if (inventory[i] != null)
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setByte("Slot", (byte)i);
-                inventory[i].writeToNBT(nbttagcompound);
-                nbttaglist.appendTag(nbttagcompound);
-            }
-        }
-
-        NBT.setTag("Items", nbttaglist);
-    }
-
-	@Override
-	public boolean hasModelTransparency() {
-		return false;
+			return itemstack1;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBreeder();
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inventory[par1] != null)
+		{
+			ItemStack itemstack = inventory[par1];
+			inventory[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
-	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inventory[par1] = par2ItemStack;
 
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
 	}
 
-	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.AUTOBREEDER.ordinal();
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	 @Override
+	 public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
 	}
 
-	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
-	}
+	 /**
+	  * Writes a tile entity to NBT.
+	  */
+	 @Override
+	 public void writeToNBT(NBTTagCompound NBT)
+	 {
+		 super.writeToNBT(NBT);
+		 NBTTagList nbttaglist = new NBTTagList();
+
+		 for (int i = 0; i < inventory.length; i++)
+		 {
+			 if (inventory[i] != null)
+			 {
+				 NBTTagCompound nbttagcompound = new NBTTagCompound();
+				 nbttagcompound.setByte("Slot", (byte)i);
+				 inventory[i].writeToNBT(nbttagcompound);
+				 nbttaglist.appendTag(nbttagcompound);
+			 }
+		 }
+
+		 NBT.setTag("Items", nbttaglist);
+	 }
+
+	 @Override
+	 public boolean hasModelTransparency() {
+		 return false;
+	 }
+
+	 @Override
+	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		 return new ModelBreeder();
+	 }
+
+	 @Override
+	 public void animateWithTick(World world, int x, int y, int z) {
+
+	 }
+
+	 @Override
+	 public int getMachineIndex() {
+		 return MachineRegistry.AUTOBREEDER.ordinal();
+	 }
+
+	 @Override
+	 public boolean isStackValidForSlot(int slot, ItemStack is) {
+		 return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
+	 }
+
+	 @Override
+	 public int getRedstoneOverride() {
+		 if (idle)
+			 return 15;
+		 return 0;
+	 }
 
 }

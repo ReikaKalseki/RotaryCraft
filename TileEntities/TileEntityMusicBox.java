@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
@@ -127,23 +128,23 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			if (notes[i][0] != 0)
 				worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, notes[i][1]/24D, 0.0D, 0.0D);
 			switch(notes[i][0]) {
-				case 1:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.harp"+pit, volume, pitch);
+			case 1:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.harp"+pit, volume, pitch);
 				break;
-				case 2:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.bass"+pit, volume, pitch);
+			case 2:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.bass"+pit, volume, pitch);
 				break;
-				case 3:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.pling"+pit, volume, pitch);
+			case 3:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.pling"+pit, volume, pitch);
 				break;
-				case 4:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
+			case 4:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
 				break;
-				case 5:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
+			case 5:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
 				break;
-				case 6:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
+			case 6:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
 				break;
 			}
 		}
@@ -176,19 +177,19 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		switch(type) {
 		case 4:
 			currentNoteLength = 3;
-		return;
+			return;
 		case 3:
 			currentNoteLength = 6;
-		return;
+			return;
 		case 2:
 			currentNoteLength = 12;
-		return;
+			return;
 		case 1:
 			currentNoteLength = 24;
-		return;
+			return;
 		case 0:
 			currentNoteLength = 48;
-		return;
+			return;
 		}
 	}
 
@@ -371,6 +372,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.MUSICBOX.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

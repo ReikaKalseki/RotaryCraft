@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
@@ -134,5 +135,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	@Override
 	public int getMaxRange() {
 		return RotaryConfig.maxlamprange;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

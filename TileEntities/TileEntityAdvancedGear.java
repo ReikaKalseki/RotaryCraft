@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
@@ -108,7 +107,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	private void store(World world, int x, int y, int z, int meta) {
 		this.transferPower(world, x, y, z, meta);
 		isReleasing = world.isBlockIndirectlyGettingPowered(x, y, z);
-		ReikaJavaLibrary.pConsole(energy);
 		if (!isReleasing) {
 			torque = omega = 0;
 			power = 0;
@@ -473,5 +471,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

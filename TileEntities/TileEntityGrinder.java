@@ -386,4 +386,11 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return is.itemID == Item.bucketEmpty.itemID;
 		return RecipesGrinder.smelting().getSmeltingResult(is.itemID) != null;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canSmelt())
+			return 15;
+		return 0;
+	}
 }

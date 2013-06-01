@@ -561,4 +561,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return itemstack.itemID == Item.bucketEmpty.itemID;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 15*lubricant/MAXLUBE;
+	}
 }

@@ -261,4 +261,14 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 		return is.itemID == RotaryCraft.wind.itemID;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		if (inslot[0] == null)
+			return 15;
+		if (inslot[0].itemID != RotaryCraft.wind.itemID)
+			return 15;
+		if (inslot[0].getItemDamage() >= torque && winding)
+			return 15;
+		return 0;
+	}
 }

@@ -30,7 +30,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		super(new ContainerReservoir(player, tile), tile);
 		Reservoir = tile;
 		xSize = 176;
-		ySize = 166;
+		ySize = 96;
 		this.player = player;
 		water = (tile.liquidID == 8 || tile.liquidID == 9);
 	}

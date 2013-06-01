@@ -12,35 +12,22 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -53,6 +40,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.Auxiliary.MobBait;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -134,128 +122,11 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	private boolean canRepel(EntityLiving ent) {
-		int itemcheck = -1;
-		int metacheck = -1;
-
-		if (ent instanceof EntityPlayer)
-			return false;
-		if (ent instanceof EntityBlaze)
-			itemcheck = Item.bucketWater.itemID;
-		if (ent instanceof EntitySpider)
-			itemcheck = Block.fence.blockID; //Spiders often get stuck in mineshafts on these
-		if (ent instanceof EntityCreeper)
-			itemcheck = Block.obsidian.blockID;
-		if (ent instanceof EntityEnderman)
-			itemcheck = Block.slowSand.blockID; //Faces on the block staring at them
-		if (ent instanceof EntityGhast)
-			itemcheck = Item.bow.itemID;
-		if (ent instanceof EntityIronGolem)
-			itemcheck = Item.bucketLava.itemID; //One of the few things that can kill them with any rapidity
-		if (ent instanceof EntityMagmaCube)
-			itemcheck = Item.snowball.itemID;
-		if (ent instanceof EntitySilverfish)
-			itemcheck = Item.pickaxeWood.itemID;
-		if (ent instanceof EntitySkeleton)
-			itemcheck = Block.glowStone.blockID;
-		if (ent instanceof EntitySlime)
-			itemcheck = Block.ice.blockID;
-		if (ent instanceof EntitySnowman)
-			itemcheck = Block.torchWood.blockID; //melting
-		if (ent instanceof EntityWitch)
-			itemcheck = Item.enderPearl.itemID; //only form of magic stronger than them
-		if (ent instanceof EntityZombie) {
-			itemcheck = Item.potion.itemID;
-			metacheck = 8197; //regular instant health
-		}
-		if (ent instanceof EntityPigZombie) {
-			itemcheck = Item.blazeRod.itemID; //Blazes are their only real threat
-			metacheck = -1;
-		}
-		if (ent instanceof EntityAgeable) {
-			itemcheck = Item.stick.itemID;
-			if (ent instanceof EntityWolf)
-				itemcheck = Block.gravel.blockID; //throwing it at them?
-		}
-		if (ent instanceof EntityBat)
-			itemcheck = Block.music.blockID;
-		if (ent instanceof EntityVillager)
-			itemcheck = Block.cactus.blockID;
-		if (ent instanceof EntitySquid)
-			itemcheck = Block.waterlily.blockID;
-
-		if (itemcheck == -1)
-			return true;
-		if (metacheck == -1)
-			return ReikaInventoryHelper.checkForItem(itemcheck, inventory);
-		else
-			return ReikaInventoryHelper.checkForItemStack(itemcheck, metacheck, inventory);
+		return MobBait.hasRepelItem(ent, inventory);
 	}
 
 	private boolean canAttract(EntityLiving ent) {
-		int itemcheck = -1;
-		int metacheck = -1;
-
-		if (ent instanceof EntityPlayer)
-			return false;
-		if (ent instanceof EntityBlaze)
-			itemcheck = Item.fireballCharge.itemID;
-		if (ent instanceof EntitySpider) {
-			itemcheck = Item.dyePowder.itemID;
-			metacheck = 3; //cocoa beans
-		}
-		if (ent instanceof EntityCreeper)
-			itemcheck = Block.tnt.blockID;
-		if (ent instanceof EntityEnderman)
-			itemcheck = Block.grass.blockID;
-		if (ent instanceof EntityGhast)
-			itemcheck = Item.lightStoneDust.itemID;
-		if (ent instanceof EntityIronGolem) {
-			itemcheck = Block.cloth.blockID;
-			metacheck = 14; //red wool
-		}
-		if (ent instanceof EntityMagmaCube)
-			itemcheck = Item.blazePowder.itemID;
-		if (ent instanceof EntitySilverfish)
-			itemcheck = Block.stoneBrick.blockID;
-		if (ent instanceof EntitySkeleton)
-			itemcheck = Item.saddle.itemID;
-		if (ent instanceof EntitySlime)
-			itemcheck = Item.diamond.itemID;
-		if (ent instanceof EntitySnowman)
-			itemcheck = Item.carrot.itemID;
-		if (ent instanceof EntityWitch)
-			itemcheck = Item.netherStalkSeeds.itemID;
-		if (ent instanceof EntityZombie) {
-			itemcheck = Item.appleGold.itemID;
-			metacheck = 0;
-		}
-		if (ent instanceof EntityPigZombie) {
-			itemcheck = Item.appleRed.itemID;
-			metacheck = -1;
-		}
-		if (ent instanceof EntityAgeable) {
-			itemcheck = Item.wheat.itemID;
-			if (ent instanceof EntityPig)
-				itemcheck = Item.carrot.itemID;
-			if (ent instanceof EntityChicken)
-				itemcheck = Item.seeds.itemID;
-			if (ent instanceof EntityWolf)
-				itemcheck = Item.porkRaw.itemID;
-			if (ent instanceof EntityOcelot)
-				itemcheck = Item.fishRaw.itemID;
-		}
-		if (ent instanceof EntityBat)
-			itemcheck = Item.melon.itemID;
-		if (ent instanceof EntityVillager)
-			itemcheck = Item.emerald.itemID;
-		if (ent instanceof EntitySquid)
-			itemcheck = Item.ingotGold.itemID; //Butter ingot ;)
-		if (itemcheck == -1)
-			return true;
-		if (metacheck == -1)
-			return ReikaInventoryHelper.checkForItem(itemcheck, inventory);
-		else
-			return ReikaInventoryHelper.checkForItemStack(itemcheck, metacheck, inventory);
+		return MobBait.hasAttractItem(ent, inventory);
 	}
 
 	private int[] getRepelTo(World world, int x, int y, int z, EntityLiving ent) {
@@ -473,8 +344,8 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 	/**
 	 * Reads a tile entity from NBT.
 	 */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
@@ -492,51 +363,62 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		}
 	}
 
-	 /**
-	  * Writes a tile entity to NBT.
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inventory.length; i++)
-		 {
-			 if (inventory[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inventory[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
-	 @Override
-	 public boolean hasModelTransparency() {
-		 return false;
-	 }
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
 
-	 @Override
-	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		 return new ModelBaitBox();
-	 }
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return new ModelBaitBox();
+	}
 
-	 @Override
-	 public void animateWithTick(World world, int x, int y, int z) {
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
 
-	 }
+	}
 
-	 @Override
-	 public int getMachineIndex() {
-		 return MachineRegistry.BAITBOX.ordinal();
-	 }
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.BAITBOX.ordinal();
+	}
 
-	 @Override
-	 public boolean isStackValidForSlot(int slot, ItemStack is) {
-		 return true;
-	 }
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack is) {
+		return true;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (ReikaInventoryHelper.isEmpty(inventory))
+			return 15;
+		for (int i = 0; i < inventory.length; i++) {
+			if (MobBait.isValidItem(inventory[i]))
+				return 0;
+		}
+		return 15;
+	}
 }

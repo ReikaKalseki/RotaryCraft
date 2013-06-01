@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -737,5 +738,10 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.SPLITTER.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

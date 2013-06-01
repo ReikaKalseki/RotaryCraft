@@ -403,4 +403,11 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return i == 10 || i == 12 || i == 13;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.haveIngredients())
+			return 15;
+		return 0;
+	}
 }

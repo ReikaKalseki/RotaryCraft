@@ -62,6 +62,7 @@ import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.ItemIOGoggles;
 import Reika.RotaryCraft.Items.ItemMeter;
+import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.ItemMotionTracker;
 import Reika.RotaryCraft.Items.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.ItemNightVisionHelmet;
@@ -149,6 +150,8 @@ public class RotaryCraft {
 	public static Item target;
 	public static Item iogoggles;
 	public static Item slides;
+
+	public static Item modextracts;
 
 	public static Block canola;
 	public static Block miningpipe;
@@ -267,6 +270,8 @@ public class RotaryCraft {
 		nvg = new ItemNightVisionGoggles(RotaryConfig.nvgid, proxy.NVGoggles).setUnlocalizedName("NVGMhelmet");
 		handcraft = new ItemHandheldCrafting(RotaryConfig.handcraftid).setUnlocalizedName("HandCraft");
 		nvh = new ItemNightVisionHelmet(RotaryConfig.nvhid, proxy.NVHelmet).setUnlocalizedName("NVHMhelmet");
+
+		modextracts = new ItemModOre(RotaryConfig.modextractsid).setUnlocalizedName("modextracts");
 
 		decoblock = new BlockDeco(RotaryConfig.decoblockid);
 		blastglass = new BlockBlastGlass(RotaryConfig.blastpaneid).setUnlocalizedName("BlastGlassPane");

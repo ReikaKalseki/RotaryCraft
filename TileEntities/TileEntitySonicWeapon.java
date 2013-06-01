@@ -24,6 +24,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -79,9 +80,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	public int brainrange;
 	public int eyerange;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		tickcount++;
 		this.getSummativeSidedPower();
 		if (power < MINPOWER)
@@ -161,7 +162,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 						ent.setRevengeTarget((EntityLiving)target);
 						ent.setLastAttackingEntity(target);
 					}
-			}
+				}
 			}
 		}
 	}
@@ -253,32 +254,32 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 			return false;
 		if (ep.inventory.armorInventory[3] != null) {
 			//if (ep.inventory.armorInventory[0].itemID == RotaryCraft.earmuff.itemID)
-				return false;
+			return false;
 		}
 		return true;
 	}
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setLong("setfrequency", setpitch);
-        NBT.setLong("setvolume", setvolume);
-    }
+	{
+		super.writeToNBT(NBT);
+		NBT.setLong("setfrequency", setpitch);
+		NBT.setLong("setvolume", setvolume);
+	}
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        setpitch = NBT.getLong("setfrequency");
-        setvolume = NBT.getLong("setvolume");
-    }
+	{
+		super.readFromNBT(NBT);
+		setpitch = NBT.getLong("setfrequency");
+		setvolume = NBT.getLong("setvolume");
+	}
 
 	@Override
 	public boolean hasModelTransparency() {
@@ -303,5 +304,10 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	@Override
 	public int getMaxRange() {
 		return RotaryConfig.maxsonicrange;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

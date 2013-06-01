@@ -36,6 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
@@ -97,9 +98,9 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 		return range;
 	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		tickcount++;
 		this.getPowerBelow();
 		if (power < MINPOWER)
@@ -156,35 +157,35 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			}
 			if (threat instanceof EntityPotion) {
 				if (!threat.isDead) {
-	            List var2 = Item.potion.getEffects(((EntityPotion)threat).getPotionDamage());
-	            if (var2 != null && !var2.isEmpty()) {
-	                AxisAlignedBB var3 = ((EntityPotion)threat).boundingBox.expand(4.0D, 2.0D, 4.0D);
-	                List var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLiving.class, var3);
-	                if (var4 != null && !var4.isEmpty()) {
-	                    Iterator var5 = var4.iterator();
-	                    while (var5.hasNext()) {
-	                        EntityLiving var6 = (EntityLiving)var5.next();
-	                        double var7 = ((EntityPotion)threat).getDistanceSqToEntity(var6);
-	                        if (var7 < 16.0D) {
-	                            double var9 = 1.0D - Math.sqrt(var7) / 4.0D;
-	                            Iterator var11 = var2.iterator();
-	                            while (var11.hasNext()) {
-	                                PotionEffect var12 = (PotionEffect)var11.next();
-	                                int var13 = var12.getPotionID();
-	                                if (Potion.potionTypes[var13].isInstant())
-	                                    Potion.potionTypes[var13].affectEntity(((EntityPotion)threat).getThrower(), var6, var12.getAmplifier(), var9);
-	                                else {
-	                                    int var14 = (int)(var9 * var12.getDuration() + 0.5D);
-	                                    if (var14 > 20)
-	                                        var6.addPotionEffect(new PotionEffect(var13, var14, var12.getAmplifier()));
-	                                }
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-	            ((EntityPotion)threat).worldObj.playAuxSFX(2002, (int)Math.round(((EntityPotion)threat).posX), (int)Math.round(((EntityPotion)threat).posY), (int)Math.round(((EntityPotion)threat).posZ), ((EntityPotion)threat).getPotionDamage());
-	            ((EntityPotion)threat).setDead();
+					List var2 = Item.potion.getEffects(((EntityPotion)threat).getPotionDamage());
+					if (var2 != null && !var2.isEmpty()) {
+						AxisAlignedBB var3 = ((EntityPotion)threat).boundingBox.expand(4.0D, 2.0D, 4.0D);
+						List var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLiving.class, var3);
+						if (var4 != null && !var4.isEmpty()) {
+							Iterator var5 = var4.iterator();
+							while (var5.hasNext()) {
+								EntityLiving var6 = (EntityLiving)var5.next();
+								double var7 = ((EntityPotion)threat).getDistanceSqToEntity(var6);
+								if (var7 < 16.0D) {
+									double var9 = 1.0D - Math.sqrt(var7) / 4.0D;
+									Iterator var11 = var2.iterator();
+									while (var11.hasNext()) {
+										PotionEffect var12 = (PotionEffect)var11.next();
+										int var13 = var12.getPotionID();
+										if (Potion.potionTypes[var13].isInstant())
+											Potion.potionTypes[var13].affectEntity(((EntityPotion)threat).getThrower(), var6, var12.getAmplifier(), var9);
+										else {
+											int var14 = (int)(var9 * var12.getDuration() + 0.5D);
+											if (var14 > 20)
+												var6.addPotionEffect(new PotionEffect(var13, var14, var12.getAmplifier()));
+										}
+									}
+								}
+							}
+						}
+					}
+					((EntityPotion)threat).worldObj.playAuxSFX(2002, (int)Math.round(((EntityPotion)threat).posX), (int)Math.round(((EntityPotion)threat).posY), (int)Math.round(((EntityPotion)threat).posZ), ((EntityPotion)threat).getPotionDamage());
+					((EntityPotion)threat).setDead();
 				}
 				tickcount = 0;
 			}
@@ -200,18 +201,18 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 				for (int j = 0; j < 3+par5Random.nextInt(3); j++)
 					world.spawnParticle("snowballpoof", x-0.2+0.4*par5Random.nextFloat(), y-0.2+0.4*par5Random.nextFloat(), z-0.2+0.4*par5Random.nextFloat(), 0, 0, 0);
 				world.playSoundEffect(x, y, z, "random.glass", 1F, 5F);
-		        if (!world.isRemote && par5Random.nextInt(8) == 0) {
-		            byte var2 = 1;
-		            if (par5Random.nextInt(32) == 0)
-		                var2 = 4;
-		            for (int var3 = 0; var3 < var2; ++var3) {
-		                EntityChicken var4 = new EntityChicken(world);
-		                var4.setGrowingAge(-24000);
-		                var4.setLocationAndAngles(x, y, z, threat.rotationYaw, 0);
-		                worldObj.spawnEntityInWorld(var4);
-		            }
-		        }
-		        tickcount = 0;
+				if (!world.isRemote && par5Random.nextInt(8) == 0) {
+					byte var2 = 1;
+					if (par5Random.nextInt(32) == 0)
+						var2 = 4;
+					for (int var3 = 0; var3 < var2; ++var3) {
+						EntityChicken var4 = new EntityChicken(world);
+						var4.setGrowingAge(-24000);
+						var4.setLocationAndAngles(x, y, z, threat.rotationYaw, 0);
+						worldObj.spawnEntityInWorld(var4);
+					}
+				}
+				tickcount = 0;
 			}
 			if (threat instanceof EntityPlayer) {
 
@@ -245,7 +246,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 				threat.motionZ = mult*dz/dist/10;
 				threat.rotationYaw = threat.rotationYaw - 30 + par5Random.nextInt(61);
 				//if (!world.isRemote)
-					threat.velocityChanged = true;
+				threat.velocityChanged = true;
 			}
 			if (threat instanceof EntityWolf) {
 				if (((EntityWolf)threat).isAngry()) {
@@ -262,7 +263,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 					threat.motionZ = mult*dz/dist/15;
 					threat.rotationYaw = par5Random.nextInt(360);
 					//if (!world.isRemote)
-						threat.velocityChanged = true;
+					threat.velocityChanged = true;
 				}
 			}
 		}
@@ -288,25 +289,25 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 		return (ReikaMathLibrary.approxr(dist, this.getRange(), 3));
 	}
 
-    @Override
+	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
-    }
+		return INFINITE_EXTENT_AABB;
+	}
 
-    @Override
+	@Override
 	public void writeToNBT(NBTTagCompound NBT)
-    {
-        super.writeToNBT(NBT);
-        NBT.setInteger("setRange", setRange);
-    }
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("setRange", setRange);
+	}
 
-    @Override
+	@Override
 	public void readFromNBT(NBTTagCompound NBT)
-    {
-        super.readFromNBT(NBT);
-        setRange = NBT.getInteger("setRange");
-    }
-    /*
+	{
+		super.readFromNBT(NBT);
+		setRange = NBT.getInteger("setRange");
+	}
+	/*
     @SideOnly(Side.CLIENT)
     public double getMaxRenderDistanceSquared()
     {
@@ -331,5 +332,10 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.FORCEFIELD.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -439,5 +440,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	@Override
 	public int getMaxRange() {
 		return 32;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

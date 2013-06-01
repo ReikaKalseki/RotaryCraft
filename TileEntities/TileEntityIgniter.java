@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -139,29 +140,29 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		}
 	}
 
-	 public ItemStack getStackInSlotOnClosing(int par1)
-	 {
-		 if (inv[par1] != null)
-		 {
-			 ItemStack itemstack = inv[par1];
-			 inv[par1] = null;
-			 return itemstack;
-		 }
-		 else
-		 {
-			 return null;
-		 }
-	 }
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (inv[par1] != null)
+		{
+			ItemStack itemstack = inv[par1];
+			inv[par1] = null;
+			return itemstack;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-	 public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	 {
-		 inv[par1] = par2ItemStack;
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		inv[par1] = par2ItemStack;
 
-		 if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		 {
-			 par2ItemStack.stackSize = this.getInventoryStackLimit();
-		 }
-	 }
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -184,23 +185,23 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		switch(temp) {
 		case 300:
 			slot = ReikaInventoryHelper.locateInInventory(Block.planks.blockID, inv);
-		break;
+			break;
 		case 400:
 			slot = ReikaInventoryHelper.locateInInventory(Block.wood.blockID, inv);
-		break;
+			break;
 		case 600:
 			slot = ReikaInventoryHelper.locateInInventory(Item.coal.itemID, inv);
-		break;
+			break;
 		case 800:
 			slot = ReikaInventoryHelper.locateInInventory(Item.blazePowder.itemID, inv);
-		break;
+			break;
 		case 1200:
 			slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
-		break;
+			break;
 		case 2500:
 			slot = ReikaInventoryHelper.locateInInventory(Item.ingotIron.itemID, inv);
 			slot2 = ReikaInventoryHelper.locateInInventory(ItemStacks.aluminumpowder.itemID, inv);
-		break;
+			break;
 		}
 		ReikaInventoryHelper.decrStack(slot, inv);
 		if (slot2 > -1)
@@ -278,50 +279,50 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	/**
 	 * Reads a tile entity from NBT.
 	 */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT, inv);
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inv = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT, inv);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inv.length)
-			 {
-				 inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-		 temperature = NBT.getInteger("temperature");
-	 }
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+		temperature = NBT.getInteger("temperature");
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT, inv);
-		 NBT.setInteger("temperature", temperature);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT, inv);
+		NBT.setInteger("temperature", temperature);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inv.length; i++)
-		 {
-			 if (inv[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inv[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
 	@Override
 	public int getMachineIndex() {
@@ -341,5 +342,12 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public int getThermalDamage() {
 		return (temperature)/50;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.hasValidItems())
+			return 15;
+		return 0;
 	}
 }

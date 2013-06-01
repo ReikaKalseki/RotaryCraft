@@ -641,4 +641,11 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	public int getThermalDamage() {
 		return (temperature)/100;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canSmelt())
+			return 15;
+		return 0;
+	}
 }

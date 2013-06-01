@@ -214,4 +214,11 @@ public class TileEntityItemCannon extends TileEntityInventoriedPowerReceiver {
 
 		NBT.setTag("Items", nbttaglist);
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (ReikaInventoryHelper.isEmpty(inv))
+			return 15;
+		return 0;
+	}
 }

@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -351,11 +350,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			for (int j = 0; j < 5; j++)
 				cutShape[i][j] = NBT.getBoolean("cut"+String.valueOf(i*7+j));
 		}
-		this.enchantments = new HashMap<Enchantment,Integer>();
+		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				this.enchantments.put(Enchantment.enchantmentsList[i], lvl);
+				enchantments.put(Enchantment.enchantmentsList[i], lvl);
 			}
 		}
 	}
@@ -405,5 +404,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (torque < mintorque)
+			return 15;
+		if (power < reqpow)
+			return 15;
+		return 0;
 	}
 }

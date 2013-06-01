@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -22,9 +23,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity {
 	public int fuelLevel = 0;
 	public static final int FUELCAP = 300;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	this.drawFuel(world, x, y, z, meta);
+		this.drawFuel(world, x, y, z, meta);
 		if (world.isBlockIndirectlyGettingPowered(x, y, z))
 			enabled = false;
 		else
@@ -147,5 +148,10 @@ public class TileEntityEngineController extends RotaryCraftTileEntity {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.ECU.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

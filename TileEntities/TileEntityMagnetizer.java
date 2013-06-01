@@ -63,15 +63,7 @@ public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver imp
 			tickcount = 0;
 			return;
 		}
-		if (inv[0] == null) {
-			tickcount = 0;
-			return;
-		}
-		if (inv[0].stackSize > 1) {
-			tickcount = 0;
-			return;
-		}
-		if (inv[0].itemID != ItemStacks.shaftcore.itemID || inv[0].getItemDamage() != ItemStacks.shaftcore.getItemDamage()) {
+		if (!this.hasCore()) {
 			tickcount = 0;
 			return;
 		}
@@ -80,6 +72,19 @@ public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver imp
 			return;
 		tickcount = 0;
 		this.magnetize();
+	}
+
+	private boolean hasCore() {
+		if (inv[0] == null) {
+			return false;
+		}
+		if (inv[0].stackSize > 1) {
+			return false;
+		}
+		if (inv[0].itemID != ItemStacks.shaftcore.itemID || inv[0].getItemDamage() != ItemStacks.shaftcore.getItemDamage()) {
+			return false;
+		}
+		return true;
 	}
 
 	private void magnetize() {
@@ -204,6 +209,13 @@ public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver imp
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.hasCore())
+			return 15;
+		return 0;
 	}
 
 }

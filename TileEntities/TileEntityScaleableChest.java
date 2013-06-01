@@ -390,4 +390,9 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		return true;
 	}
 
+	@Override
+	public int getRedstoneOverride() {
+		return 15*this.getSizeInventory()/MAXSIZE;
+	}
+
 }

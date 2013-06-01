@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -399,65 +400,65 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	/**
 	 * Reads a tile entity from NBT.
 	 */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT, inventory);
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inventory = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT, inventory);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inventory.length)
-			 {
-				 inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-		 temperature = NBT.getInteger("temperature");
-	 }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+		temperature = NBT.getInteger("temperature");
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving inventory since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT, inventory);
-		 NBT.setInteger("temperature", temperature);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving inventory since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT, inventory);
+		NBT.setInteger("temperature", temperature);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inventory.length; i++)
-		 {
-			 if (inventory[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inventory[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
-	 @Override
-	 public boolean hasModelTransparency() {
-		 return false;
-	 }
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
 
-	 @Override
-	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		 return new ModelHeater();
-	 }
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return new ModelHeater();
+	}
 
-	 @Override
-	 public void animateWithTick(World world, int x, int y, int z) {
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
 
-	 }
+	}
 
 	@Override
 	public int getMachineIndex() {
@@ -472,5 +473,12 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public int getThermalDamage() {
 		return 0; // Done in TE code itself
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (idle)
+			return 15;
+		return 0;
 	}
 }

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -41,9 +42,9 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	public boolean animal = true;
 	public boolean player = true;
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
+		super.updateTileEntity();
 		this.getPowerBelow();
 		this.getMobs(world, x, y, z);
 	}
@@ -115,7 +116,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	{
 		super.writeToNBT(NBT);
 		if (owner != null && !owner.isEmpty())
-		NBT.setString("own", owner);
+			NBT.setString("own", owner);
 	}
 
 	@Override
@@ -133,6 +134,11 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	@Override
 	public int getMaxRange() {
 		return 24;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

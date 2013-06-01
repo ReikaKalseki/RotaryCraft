@@ -245,4 +245,9 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 	public int getMachineIndex() {
 		return MachineRegistry.PUMP.ordinal();
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 15*liquidPressure/1000;
+	}
 }

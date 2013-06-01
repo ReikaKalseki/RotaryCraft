@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -189,7 +190,7 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 			if ((id == 7) || (id == RotaryCraft.bedrockslice.blockID))
 				return true;
 			if (id == 10 || id == 11) //If lava
-			return false;
+				return false;
 		}
 		return false;
 	}
@@ -252,5 +253,12 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.BEDROCKBREAKER.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.getBlockInFront(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
+			return 15;
+		return 0;
 	}
 }

@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
@@ -123,7 +122,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		super.writeToNBT(NBT);
 		if (owner != null && !owner.isEmpty())
 			NBT.setString("sowner", owner);
-		
+
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
@@ -137,12 +136,12 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	{
 		super.readFromNBT(NBT);
 		owner = NBT.getString("sowner");
-		
-		this.enchantments = new HashMap<Enchantment,Integer>();
+
+		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				this.enchantments.put(Enchantment.enchantmentsList[i], lvl);
+				enchantments.put(Enchantment.enchantmentsList[i], lvl);
 			}
 		}
 	}
@@ -189,5 +188,10 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

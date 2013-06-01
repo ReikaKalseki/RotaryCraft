@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -338,5 +339,10 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public int getMaxRange() {
 		return RotaryConfig.maxvacuumrange;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return Container.calcRedstoneFromInventory(this);
 	}
 }

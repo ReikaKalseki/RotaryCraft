@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -46,19 +47,19 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			switch(type) {
 			case WOOD:
 				item = new ItemStack(ItemStacks.sawdust.itemID, 1, ItemStacks.sawdust.getItemDamage());
-			break;
+				break;
 			case STONE:
 				item = new ItemStack(Block.gravel, 1, 0);
-			break;
+				break;
 			case STEEL:
 				item = new ItemStack(ItemStacks.scrap.itemID, 1, ItemStacks.scrap.getItemDamage());
-			break;
+				break;
 			case DIAMOND:
 				item = new ItemStack(Item.diamond, 1, 0);
-			break;
+				break;
 			case BEDROCK:
 				item = new ItemStack(ItemStacks.bedrockdust.itemID, 1, ItemStacks.bedrockdust.getItemDamage());
-			break;
+				break;
 			}
 			EntityItem ei = new EntityItem(world, x+0.5, y+1.25, z+0.5, item);
 			ei.motionY = 0.4F+0.6F*par5Random.nextFloat();
@@ -296,11 +297,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			ready = writey = y;
 			break;
 		case 4:	//moving up
-		readx = writex = x;
-		readz = writez = z;
-		ready = y-1;
-		writey = y+1;
-		break;
+			readx = writex = x;
+			readz = writez = z;
+			ready = y-1;
+			writey = y+1;
+			break;
 		case 5:	//moving down
 			readx = writex = x;
 			readz = writez = z;
@@ -628,54 +629,59 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	/**
 	 * Writes a tile entity to NBT.
 	 */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setBoolean("failed", failed);
 		if (type != null)
-		NBT.setInteger("type", type.ordinal());
+			NBT.setInteger("type", type.ordinal());
 	}
 
-	 /**
-	  * Reads a tile entity from NBT.
-	  */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-		 failed = NBT.getBoolean("failed");
-		 type = EnumMaterials.setType(NBT.getInteger("type"));
-	 }
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		failed = NBT.getBoolean("failed");
+		type = EnumMaterials.setType(NBT.getInteger("type"));
+	}
 
-	 @Override
-	 public boolean hasModelTransparency() {
-		 return false;
-	 }
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
 
-	 @Override
-	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		 int dmg = world.getBlockMetadata(x, y, z);
-		 if (dmg < 4)
-			 return new ModelShaft();
-		 else
-			 return new ModelShaftV();
-	 }
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		int dmg = world.getBlockMetadata(x, y, z);
+		if (dmg < 4)
+			return new ModelShaft();
+		else
+			return new ModelShaftV();
+	}
 
-	 @Override
-	 public void animateWithTick(World world, int x, int y, int z) {
-		 if (!this.isInWorld()) {
-			 phi = 0;
-			 return;
-		 }
-		 phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.25);
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.25);
 
-		 crossphi1 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[0]+1, 2), 1.25);
-		 crossphi2 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[1]+1, 2), 1.25);
-	 }
+		crossphi1 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[0]+1, 2), 1.25);
+		crossphi2 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[1]+1, 2), 1.25);
+	}
 
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.SHAFT.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

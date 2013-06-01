@@ -335,4 +335,9 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

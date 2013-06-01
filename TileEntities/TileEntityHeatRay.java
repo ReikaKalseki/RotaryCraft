@@ -283,4 +283,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	public int getMaxRange() {
 		return RotaryConfig.maxheatrayrange;
 	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
 }

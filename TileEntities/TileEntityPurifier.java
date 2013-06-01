@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -281,6 +282,28 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 
 	@Override
 	public int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (inv[0] == null)
+			return 15;
+		if (inv[0].itemID != Item.gunpowder.itemID)
+			return 0;
+		boolean hasModSteel = false;
+		for (int i = 1; i < 6; i++) {
+			if (this.isModSteel(inv[i]))
+				hasModSteel = true;
+		}
+		if (!hasModSteel)
+			return 15;
+		if (inv[6] == null)
+			return 0;
+		if (ReikaItemHelper.isMatch(inv[6], ItemStacks.steelingot))
+			return 15;
+		if (inv[6].stackSize >= ItemStacks.steelingot.getMaxStackSize())
+			return 15;
 		return 0;
 	}
 

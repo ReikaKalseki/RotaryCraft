@@ -70,6 +70,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				--is.stackSize;
 			world.setBlock(x, y, z, m.getBlockID(), m.getMachineMetadata(), 3);
 		}
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		if (te instanceof TemperatureTE) {
 			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);

@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.EnumLook;
@@ -71,7 +72,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	public void animateWithTick(World world, int x, int y, int z) {
 
 	}
-/*
+	/*
 	@Override
 	public double getMaxRenderDistanceSquared() {
 		return 65536D;
@@ -149,6 +150,11 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	@Override
 	public int getMaxRange() {
 		return 128;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
@@ -189,5 +190,10 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.DYNAMOMETER.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 }

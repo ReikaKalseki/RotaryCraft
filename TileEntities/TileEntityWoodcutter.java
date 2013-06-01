@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -425,5 +426,20 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.WOODCUTTER.ordinal();
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.hasWood())
+			return 15;
+		return 0;
+	}
+
+	private boolean hasWood() {
+		if (worldObj.getBlockId(editx, edity, editz) == Block.wood.blockID)
+			return true;
+		if (worldObj.getBlockId(editx, edity, editz) == RotaryCraft.gravlog.blockID)
+			return true;
+		return false;
 	}
 }

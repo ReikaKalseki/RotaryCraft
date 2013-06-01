@@ -272,4 +272,24 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 	}
 
+	/**
+	 * If this returns true, then comparators facing away from this block will use the value from
+	 * getComparatorInputOverride instead of the actual redstone signal strength.
+	 */
+	@Override
+	public final boolean hasComparatorInputOverride()
+	{
+		return true;
+	}
+
+	/**
+	 * If hasComparatorInputOverride returns true, the return value from this is used instead of the redstone signal
+	 * strength when this block inputs to a comparator.
+	 */
+	@Override
+	public final int getComparatorInputOverride(World world, int x, int y, int z, int par5)
+	{
+		return ((RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z)).getRedstoneOverride();
+	}
+
 }

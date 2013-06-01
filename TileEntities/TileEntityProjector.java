@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -38,74 +39,74 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		return true;
 	}
 
-    @Override
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-    	super.updateTileEntity();
-    	tickcount++;
-    	this.getIOSides(world, x, y, z, meta);
-    	this.getPower(false, false);
-    	if (power < MINPOWER) {
-    		on = false;
-    		return;
-    	}
-    	on = true;
-    	if (tickcount >= DELAY) {
-    		tickcount = 0;
-    		this.cycleInv();
-    	}
-    	this.getChannelFromActiveSlide();
-    }
+		super.updateTileEntity();
+		tickcount++;
+		this.getIOSides(world, x, y, z, meta);
+		this.getPower(false, false);
+		if (power < MINPOWER) {
+			on = false;
+			return;
+		}
+		on = true;
+		if (tickcount >= DELAY) {
+			tickcount = 0;
+			this.cycleInv();
+		}
+		this.getChannelFromActiveSlide();
+	}
 
-    private void getChannelFromActiveSlide() {
-    	if (slides[0] == null) {
-    		emptySlide = true;
-    		channel = 0;
-    		return;
-    	}
-    	if (slides[0].itemID == Item.eyeOfEnder.itemID) {
-        	emptySlide = false;
-        	channel = -1;
-    	}
-    	if (slides[0].itemID != RotaryCraft.slides.itemID) {
-    		emptySlide = true;
-    		return;
-    	}
-    	emptySlide = false;
+	private void getChannelFromActiveSlide() {
+		if (slides[0] == null) {
+			emptySlide = true;
+			channel = 0;
+			return;
+		}
+		if (slides[0].itemID == Item.eyeOfEnder.itemID) {
+			emptySlide = false;
+			channel = -1;
+		}
+		if (slides[0].itemID != RotaryCraft.slides.itemID) {
+			emptySlide = true;
+			return;
+		}
+		emptySlide = false;
 		channel = slides[0].getItemDamage();
 	}
 
 	public void cycleInv() {
-    	ItemStack active = slides[0];
-    	for (int i = 0; i < slides.length-1; i++) {
-    		slides[i] = slides[i+1];
-    	}
-    	slides[slides.length-1] = active;
-    	worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.projector", 1F, 1F);
-    }
+		ItemStack active = slides[0];
+		for (int i = 0; i < slides.length-1; i++) {
+			slides[i] = slides[i+1];
+		}
+		slides[slides.length-1] = active;
+		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.projector", 1F, 1F);
+	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
-    	switch(metadata) {
-    	case 0:
-    		readx = x+1;
-    		readz = z;
-    		ready = y;
-    	break;
-    	case 1:
-    		readx = x-1;
-    		readz = z;
-    		ready = y;
-    	break;
-    	case 2:
-    		readz = z-1;
-    		readx = x;
-    		ready = y;
-    	break;
-    	case 3:
-    		readz = z+1;
-    		readx = x;
-    		ready = y;
-    	break;
-    	}
+		switch(metadata) {
+		case 0:
+			readx = x+1;
+			readz = z;
+			ready = y;
+			break;
+		case 1:
+			readx = x-1;
+			readz = z;
+			ready = y;
+			break;
+		case 2:
+			readz = z-1;
+			readx = x;
+			ready = y;
+			break;
+		case 3:
+			readz = z+1;
+			readx = x;
+			ready = y;
+			break;
+		}
 	}
 
 	@Override
@@ -136,22 +137,22 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 			x = xCoord-1;
 			while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
 				x--;
-		return x-xCoord+1;
+			return x-xCoord+1;
 		case 1:
 			x = xCoord+1;
 			while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
 				x++;
-		return -(x-xCoord);
+			return -(x-xCoord);
 		case 2:
 			z = zCoord+1;
 			while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
 				z++;
-		return -(z-zCoord);
+			return -(z-zCoord);
 		case 3:
 			z = zCoord-1;
 			while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
 				z--;
-		return z-zCoord+1;
+			return z-zCoord+1;
 		default:
 			return 0;
 		}
@@ -167,34 +168,34 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		case 0:
 			x += r-1;
 			a = 1;
-		break;
+			break;
 		case 1:
 			x -= r;
 			a = 1;
-		break;
+			break;
 		case 2:
 			z -= r;
 			b = 1;
-		break;
+			break;
 		case 3:
 			z += r-1;
 			b = 1;
-		break;
+			break;
 		}
 		int x2 = x; int z2 = z;
 		switch(this.getBlockMetadata()) {
 		case 0:
 			x2++;
-		break;
+			break;
 		case 1:
 			x2--;
-		break;
+			break;
 		case 2:
 			z2--;
-		break;
+			break;
 		case 3:
 			z2++;
-		break;
+			break;
 		}
 		World world = worldObj;
 		for (int k = 0; k <= 4; k++) {
@@ -283,56 +284,63 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		return is.itemID == RotaryCraft.slides.itemID;
 	}
 
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-	     channel = NBT.getInteger("ch");
-	     emptySlide = NBT.getBoolean("empty");
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 slides = new ItemStack[this.getSizeInventory()];
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		channel = NBT.getInteger("ch");
+		emptySlide = NBT.getBoolean("empty");
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		slides = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < slides.length)
-			 {
-				 slides[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-	 }
+			if (byte0 >= 0 && byte0 < slides.length)
+			{
+				slides[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.  Maybe was not saving slides since seems to be acting like
-	  * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-	     NBT.setInteger("ch", channel);
-	     NBT.setBoolean("empty", emptySlide);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.  Maybe was not saving slides since seems to be acting like
+	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("ch", channel);
+		NBT.setBoolean("empty", emptySlide);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < slides.length; i++)
-		 {
-			 if (slides[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 slides[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < slides.length; i++)
+		{
+			if (slides[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				slides[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
 	@Override
 	public int getMaxRange() {
 		return 8;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canShow())
+			return 15;
+		return 0;
 	}
 
 }
