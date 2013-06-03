@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -45,8 +46,8 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 	 */
 	//public boolean graphicsLevel = ModLoader.getMinecraftInstance().isFancyGraphicsEnabled();
 
-	public BlockGravLeaves(int blockID) {
-		super(blockID, Material.leaves);
+	public BlockGravLeaves(int ID) {
+		super(ID, Material.leaves);
 		this.setHardness(0.2F);
 		this.setResistance(1F);
 		this.setLightValue(0F);
@@ -60,27 +61,27 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random par5Random) {
+	public void updateTick(World world, int x, int y, int z, Random rand) {
 		boolean permaleaves = false;
-		super.updateTick(world, x, y, z, par5Random);/*
+		super.updateTick(world, x, y, z, rand);/*
 		if (this.nonRandomTick) {
 	        this.nonRandomTick = false;
 			return;
 		}*/
-		if (par5Random.nextInt(4) > 0 || permaleaves)
+		if (rand.nextInt(4) > 0 || permaleaves)
 			return;
 		if (!world.isRemote) { //Halved drop rates since falling counts as a destruction event
 			int meta = world.getBlockMetadata(x, y, z);
-			if ((par5Random.nextInt(10) == 0 && meta != 3) || (par5Random.nextInt(20) == 0 && meta == 3)) {
+			if ((rand.nextInt(10) == 0 && meta != 3) || (rand.nextInt(20) == 0 && meta == 3)) {
 				ItemStack is = new ItemStack(Block.sapling.blockID, 1, meta);
 				EntityItem ent = new EntityItem(world, x+0.5, y+0.5, z+0.5, is);
-				ent.motionY = 0.2*par5Random.nextFloat();
+				ent.motionY = 0.2*rand.nextFloat();
 				world.spawnEntityInWorld(ent);
 			}
-			if (par5Random.nextInt(400) == 0 && meta == 0) {
+			if (rand.nextInt(400) == 0 && meta == 0) {
 				ItemStack is = new ItemStack(Item.appleRed.itemID, 1, 0);
 				EntityItem ent = new EntityItem(world, x+0.5, y+0.5, z+0.5, is);
-				ent.motionY = 0.2*par5Random.nextFloat();
+				ent.motionY = 0.2*rand.nextFloat();
 				world.spawnEntityInWorld(ent);
 			}
 		}

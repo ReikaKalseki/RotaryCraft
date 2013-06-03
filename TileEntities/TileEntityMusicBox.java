@@ -4,20 +4,27 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.DemoMusic;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -28,7 +35,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	 * 0 = silence, 1 = piano, 2 = bass, 3 = pling, 4 = bassdrum, 5 = snare, 6 = click */
 	//public int[][][] musicQueue = new int[16][9600][2];
 	//public List<int[][]> musicQueue = new ArrayList<int[][]>();
-	public int[][][] musicQueue = new int[8192][16][3];
+	public int[][][] musicQueue = new int[8192][16][4];
 
 	public int pauseDelay = 0;
 	public boolean demo = false;
@@ -47,7 +54,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private boolean toSave = false;
 	private boolean toRead = false;
 
-	private boolean isOneTimePlaying = false;
+	public boolean isOneTimePlaying = false;
 
 	private boolean lastPower = false;
 
@@ -174,23 +181,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	/** 4: 16th, 3: 8th, 2: qtr, 1: half, 0: whole */
 	public void chooseNoteType(int type) {
-		switch(type) {
-		case 4:
-			currentNoteLength = 3;
-			return;
-		case 3:
-			currentNoteLength = 6;
-			return;
-		case 2:
-			currentNoteLength = 12;
-			return;
-		case 1:
-			currentNoteLength = 24;
-			return;
-		case 0:
-			currentNoteLength = 48;
-			return;
-		}
+		currentNoteLength = this.getNoteLengthFromValue(type);
 	}
 
 	public void addNote() {
@@ -201,10 +192,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		musicQueue[entryPosn[entryChannel]][entryChannel][0] = entryVoice;
 		musicQueue[entryPosn[entryChannel]][entryChannel][1] = entryNote;
 		musicQueue[entryPosn[entryChannel]][entryChannel][2] = entryVolume;
+		musicQueue[entryPosn[entryChannel]][entryChannel][3] = this.getCurrentNoteType();
 		this.playSound(entryPosn[entryChannel]);
 		entryPosn[entryChannel] += currentNoteLength;
 		if (entryPosn[entryChannel] > lastNote[entryChannel])
-			lastNote[entryChannel] = entryPosn[entryChannel];
+			lastNote[entryChannel] = entryPosn[entryChannel]-1;
 		if (entryPosn[entryChannel] >= musicQueue.length) {
 			ReikaChatHelper.write("Music Capacity Reached!");
 			fullChannels[entryChannel] = true;
@@ -290,25 +282,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
 		NBT.setBoolean("lastpwr", lastPower);
-
-		if (toSave) {
-			//ReikaJavaLibrary.pConsole("Saving");
-			NBT.setIntArray("last", lastNote);
-			NBT.setIntArray("posn", entryPosn);
-
-			for (int i = 0; i < 16; i++)
-				NBT.setBoolean("full"+String.valueOf(i), fullChannels[i]);
-
-			for (int i = 0; i < 8192; i++) {
-				for (int j = 0; j < 16; j++) {
-					for (int k = 0; k < 3; k++) {
-						//ReikaJavaLibrary.pConsole("i: "+i+"; j: "+j+"; k: "+k);
-						NBT.setInteger(String.format("T%dCh%dN%d", i, j, k), musicQueue[i][j][k]);
-					}
-				}
-			}
-			toSave = false;
-		}
 	}
 
 	/**
@@ -330,34 +303,121 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
-
-		if (toRead) {
-			//ReikaJavaLibrary.pConsole("Reading");
-			lastNote = NBT.getIntArray("last");
-			entryPosn = NBT.getIntArray("posn");
-
-			for (int i = 0; i < 16; i++)
-				fullChannels[i] = NBT.getBoolean("full"+String.valueOf(i));
-
-			for (int i = 0; i < 8192; i++) {
-				for (int j = 0; j < 16; j++) {
-					for (int k = 0; k < 3; k++) {
-						musicQueue = new int[8192][16][3];
-						//ReikaJavaLibrary.pConsole("i: "+i+"; j: "+j+"; k: "+k);
-						musicQueue[i][j][k] = NBT.getInteger(String.format("T%dCh%dN%d", i, j, k));
-					}
-				}
-			}
-			toRead = false;
-		}
 	}
 
 	public void save() {
-		toSave = true;
+		try {
+			File save = DimensionManager.getCurrentSaveRootDirectory();
+			String name = "musicbox.txt";
+			File f = new File(save.getPath()+"\\"+name);
+			if (f.exists())
+				f.delete();
+			PrintWriter p = new PrintWriter(f);
+			f.createNewFile();
+			for (int i = 0; i < 8192; i++) {
+				for (int j = 0; j < 16; j++) {
+					String line = String.format("%d,%d,%d,%d", musicQueue[i][j][0], musicQueue[i][j][1], musicQueue[i][j][2], musicQueue[i][j][3]);
+					String ex;
+					if (j == 15)
+						ex = "\n";
+					else
+						ex = ";";
+					p.append(line+ex);
+				}
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
+		}
 	}
 
 	public void read() {
-		toRead = true;
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		String name = "musicbox.txt";
+		File f = new File(save.getPath()+"\\"+name);
+		if (!f.exists()) {
+			ReikaChatHelper.write("No saved music file exists for this world!");
+			return;
+		}
+		try {
+			BufferedReader p = new BufferedReader(new FileReader(f));
+			musicQueue = new int[8192][16][4];
+			for (int i = 0; i < 8192; i++) {
+				String line = p.readLine();
+				String[] groups = line.split("[,;]");
+				for (int j = 0; j < 16; j++) {
+					for (int k = 0; k < 4; k++) {
+						int val = Integer.parseInt(groups[4*j+k]);
+						if (k != 0 || (val > 0)) {
+							musicQueue[i][j][k] = val;
+							if (k == 0 && val > 0) {
+								int len = Integer.parseInt(groups[4*j+3]);
+								lastNote[j] = i+this.getNoteLengthFromValue(len)-1;
+							}
+						}
+					}
+				}
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ReikaChatHelper.write(e.getCause()+" caused the read to fail!");
+		}
+	}
+
+	public void loadDemo() {
+		String path = RotaryCraft.class.getResource("Resources/demomusic.txt").getPath();
+		ReikaJavaLibrary.pConsole(path);
+		File f = new File(path);
+		if (!f.exists()) {
+			ReikaChatHelper.write("Demo file not found!");
+			ReikaJavaLibrary.pConsole("Demo file not found!");
+			return;
+		}
+		try {
+			BufferedReader p = new BufferedReader(new FileReader(f));
+			musicQueue = new int[8192][16][4];
+			for (int i = 0; i < 8192; i++) {
+				String line = p.readLine();
+				String[] groups = line.split("[,;]");
+				for (int j = 0; j < 16; j++) {
+					for (int k = 0; k < 4; k++) {
+						int val = Integer.parseInt(groups[4*j+k]);
+						if (k != 0 || (val > 0)) {
+							musicQueue[i][j][k] = val;
+							if (k == 0 && val > 0) {
+								int len = Integer.parseInt(groups[4*j+3]);
+								lastNote[j] = i+this.getNoteLengthFromValue(len)-1;
+							}
+						}
+					}
+				}
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ReikaChatHelper.write(e.getCause()+" caused the read to fail!");
+		}
+	}
+
+	public static int getNoteLengthFromValue(int val) {
+		switch(val) {
+		case 4:
+			return 3;
+		case 3:
+			return 6;
+		case 2:
+			return 12;
+		case 1:
+			return 24;
+		case 0:
+			return 48;
+		}
+		return 0;
 	}
 
 	public int getLastNote() {

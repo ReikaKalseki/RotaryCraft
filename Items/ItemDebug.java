@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -16,7 +17,6 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -40,8 +40,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
 public class ItemDebug extends ItemRotaryTool {
 
-	public ItemDebug(int itemID) {
-		super(itemID, 112);
+	public ItemDebug(int ID) {
+		super(ID, 112);
 	}
 
 	@Override

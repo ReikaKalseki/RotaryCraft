@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -22,7 +23,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -273,8 +273,8 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 	/**
 	 * Reads a tile entity from NBT.
 	 */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
@@ -292,59 +292,59 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 		}
 	}
 
-	 /**
-	  * Writes a tile entity to NBT.
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inventory.length; i++)
-		 {
-			 if (inventory[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inventory[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
-	 @Override
-	 public boolean hasModelTransparency() {
-		 return false;
-	 }
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
 
-	 @Override
-	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		 return new ModelBreeder();
-	 }
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return new ModelBreeder();
+	}
 
-	 @Override
-	 public void animateWithTick(World world, int x, int y, int z) {
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
 
-	 }
+	}
 
-	 @Override
-	 public int getMachineIndex() {
-		 return MachineRegistry.AUTOBREEDER.ordinal();
-	 }
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.AUTOBREEDER.ordinal();
+	}
 
-	 @Override
-	 public boolean isStackValidForSlot(int slot, ItemStack is) {
-		 return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
-	 }
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack is) {
+		return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
+	}
 
-	 @Override
-	 public int getRedstoneOverride() {
-		 if (idle)
-			 return 15;
-		 return 0;
-	 }
+	@Override
+	public int getRedstoneOverride() {
+		if (idle)
+			return 15;
+		return 0;
+	}
 
 }

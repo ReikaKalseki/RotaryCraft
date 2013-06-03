@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
@@ -30,7 +40,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;

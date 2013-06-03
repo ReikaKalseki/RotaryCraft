@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,12 +21,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityPurifier;
 
 public class GuiPurifier extends GuiMachine
 {
-	private TileEntityPurifier tile;
+	private TileEntityPurifier pur;
 
-	public GuiPurifier(EntityPlayer player, TileEntityPurifier Purifier)
+	public GuiPurifier(EntityPlayer p5ep, TileEntityPurifier Purifier)
 	{
-		super(new ContainerPurifier(player, Purifier), Purifier);
-		tile = Purifier;
+		super(new ContainerPurifier(p5ep, Purifier), Purifier);
+		pur = Purifier;
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class GuiPurifier extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = tile.getCookScaled(17);
+		int i1 = pur.getCookScaled(17);
 		this.drawTexturedModalRect(j + 11, k + 34, 4, 167, 82, 1*(i1));
 	}
 
@@ -50,17 +51,17 @@ public class GuiPurifier extends GuiMachine
 		mc.renderEngine.bindTexture(var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (tile.power*29L)/tile.MINPOWER;
+		long frac = (pur.power*29L)/pur.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.omega*29L)/tile.MINSPEED;
+		frac = (int)(pur.omega*29L)/pur.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.torque*29L)/tile.MINTORQUE;
+		frac = (int)(pur.torque*29L)/pur.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -68,7 +69,7 @@ public class GuiPurifier extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", pur.power, pur.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

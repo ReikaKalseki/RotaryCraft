@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -13,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -39,8 +39,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class ItemMeter extends ItemRotaryTool
 {
-	public ItemMeter(int itemID) {
-		super(itemID, 16);
+	public ItemMeter(int ID) {
+		super(ID, 16);
 	}
 
 	@Override

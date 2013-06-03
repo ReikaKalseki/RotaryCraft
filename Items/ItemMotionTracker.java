@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -28,7 +29,6 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -41,8 +41,8 @@ public class ItemMotionTracker extends ItemChargedTool {
 	double lastdist;
 	String lastmobname;
 
-	public ItemMotionTracker(int itemID) {
-		super(itemID, 144);
+	public ItemMotionTracker(int ID) {
+		super(ID, 144);
 	}
 
 	@Override

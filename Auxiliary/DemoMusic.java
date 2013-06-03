@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -52,7 +53,7 @@ public final class DemoMusic {
 
 	public static void addTracks() {
 		//for (int i = 0; i < midis.length; i++)
-			setTrack2(2);
+		setTrack2(2);
 	}
 
 	private static void setTrack2(int track) {
@@ -61,7 +62,7 @@ public final class DemoMusic {
 		//int length = midis[track].getLength();
 		demo[track] = midis[track].fill();
 	}
-/*
+	/*
 	private static void setTrack(int track) {
 		if (midis[track] == null)
 			return;

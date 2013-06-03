@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -27,8 +28,8 @@ import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex {
 
-	public BlockObsidianGlass(int blockID) {
-		super(blockID, Material.glass);
+	public BlockObsidianGlass(int ID) {
+		super(ID, Material.glass);
 		this.setHardness(25F);
 		this.setResistance(6000F);
 		this.setLightValue(0F);

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 30/05/2013 7:20:24 PM
 // Template version 1.1
@@ -18,7 +19,6 @@ package Reika.RotaryCraft.Models;
 import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
-
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelLandmine extends RotaryModelBase
@@ -134,7 +134,7 @@ public class ModelLandmine extends RotaryModelBase
 	}
 
 	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5);
 	}

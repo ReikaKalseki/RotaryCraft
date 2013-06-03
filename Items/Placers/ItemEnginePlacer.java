@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
@@ -93,7 +94,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 					if (id != 0) {
 						int meta = world.getBlockMetadata(x+a*i, y+j, z+b*i);
 						world.setBlock(x+a*i, y+j, z+b*i, 0);
-						Block.blocksList[id].dropBlockAsItem(world, x+a*i, y+j, z+b*i, id, meta);
+						Block.blocksList[id].dropBlockAsItem(world, x+a*i, y+j, z+b*i, meta, 0);
 					}
 				}
 			}
@@ -142,16 +143,16 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 					switch (m) {
 					case 0:
 						c = 1;
-					break;
+						break;
 					case 1:
 						c = -1;
-					break;
+						break;
 					case 2:
 						d = 1;
-					break;
+						break;
 					case 3:
 						d = -1;
-					break;
+						break;
 					}
 					int id = world.getBlockId(x+a*i+c, y+j, z+b*i+d);
 					if (!ReikaWorldHelper.softBlocks(id))

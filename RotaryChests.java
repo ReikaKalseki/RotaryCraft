@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -16,7 +17,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class RotaryChests {
 
-    public static void addToChests() {
+	public static void addToChests() {
 		ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(RotaryCraft.shaftcraft.itemID, 0, 1), 1, 5, 50));
 
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(RotaryCraft.shaftcraft.itemID, 0, 9), 1, 6, 40)); //steel
@@ -60,5 +61,5 @@ public class RotaryChests {
 		ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomChestContent(new ItemStack(RotaryCraft.shaftcraft.itemID, 0, 1), 1, 3, 20));
 		ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomChestContent(new ItemStack(RotaryCraft.shaftcraft.itemID, 0, 9), 1, 4, 30)); //steel
 		ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomChestContent(new ItemStack(RotaryCraft.shaftcraft.itemID, 0, 10), 1, 8, 60)); //iron
-    }
+	}
 }

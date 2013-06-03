@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
@@ -19,133 +20,130 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelPulseFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
 
 public class RenderPulseFurnace extends RotaryTERenderer
 {
-    
-    private ModelPulseFurnace PulseFurnaceModel = new ModelPulseFurnace();
-    //private ModelPulseFurnaceV PulseFurnaceModelV = new ModelPulseFurnaceV();
-    
-    private TileEntity te;
 
-    /**
-     * Renders the TileEntity for the position.
-     */
-    public void renderTileEntityPulseFurnaceAt(TileEntityPulseFurnace tile, double par2, double par4, double par6, float par8)
-    {
-    	te = tile;
-        int var9;
+	private ModelPulseFurnace PulseFurnaceModel = new ModelPulseFurnace();
+	//private ModelPulseFurnaceV PulseFurnaceModelV = new ModelPulseFurnaceV();
 
-        if (!tile.isInWorld())
-        {
-            var9 = 0;
-        }
-        else
-        {
-            
-            var9 = tile.getBlockMetadata();
+	/**
+	 * Renders the TileEntity for the position.
+	 */
+	public void renderTileEntityPulseFurnaceAt(TileEntityPulseFurnace tile, double par2, double par4, double par6, float par8)
+	{
+		int var9;
 
-            
-            {
-                //((BlockPulseFurnaceBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-                var9 = tile.getBlockMetadata();
-            }
-        }
+		if (!tile.isInWorld())
+		{
+			var9 = 0;
+		}
+		else
+		{
 
-        if (true)
-        {
-            ModelPulseFurnace var14;
-            var14 = this.PulseFurnaceModel;
-            int temp = tile.temperature;
-            int maxtemp = tile.MAXTEMP;
-            //ModelPulseFurnaceV var15;
-            //var14 = this.PulseFurnaceModelV;
-            if (temp < maxtemp/10)
-            	this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetex.png");
-            else if (temp < maxtemp/5)
-            	this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot-1.png");
-            else if (temp < maxtemp/2)
-            	this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot0.png");
-            else if (temp < maxtemp/1.2)
-            	this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot2.png");
-            else
-            	this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot3.png");
+			var9 = tile.getBlockMetadata();
 
-            GL11.glPushMatrix();
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-            GL11.glScalef(1.0F, -1.0F, -1.0F);
-            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-            int var11 = 0;	 //used to rotate the model about metadata
-            
-            if (tile.isInWorld()) {
-            
-	            switch(tile.getBlockMetadata()) {
-	            case 0:
-	            	var11 = 180;
-	            break;
-	            case 1:
-	            	var11 = 0;
-	            break;
-	            case 2:
-	            	var11 = 270;
-	            break;
-	            case 3:
-	            	var11 = 90;
-	            break;
-	            }
-	
-	            if (tile.getBlockMetadata() <= 3)
-	            	GL11.glRotatef((float)var11+0, 0.0F, 1.0F, 0.0F);
-	            else {
-	            	GL11.glRotatef((float)var11, 1F, 0F, 0.0F);
-	            	GL11.glTranslatef(0F, -1F, 1F);
-	            	if (tile.getBlockMetadata() == 5)
-	            		GL11.glTranslatef(0F, 0F, -2F);
-	            }
-            }
-            //float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-            float var13;/*
+
+			{
+				//((BlockPulseFurnaceBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+				var9 = tile.getBlockMetadata();
+			}
+		}
+
+		if (true)
+		{
+			ModelPulseFurnace var14;
+			var14 = PulseFurnaceModel;
+			int temp = tile.temperature;
+			int maxtemp = tile.MAXTEMP;
+			//ModelPulseFurnaceV var15;
+			//var14 = this.PulseFurnaceModelV;
+			if (temp < maxtemp/10)
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetex.png");
+			else if (temp < maxtemp/5)
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot-1.png");
+			else if (temp < maxtemp/2)
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot0.png");
+			else if (temp < maxtemp/1.2)
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot2.png");
+			else
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot3.png");
+
+			GL11.glPushMatrix();
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+			GL11.glScalef(1.0F, -1.0F, -1.0F);
+			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+			int var11 = 0;	 //used to rotate the model about metadata
+
+			if (tile.isInWorld()) {
+
+				switch(tile.getBlockMetadata()) {
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				}
+
+				if (tile.getBlockMetadata() <= 3)
+					GL11.glRotatef((float)var11+0, 0.0F, 1.0F, 0.0F);
+				else {
+					GL11.glRotatef(var11, 1F, 0F, 0.0F);
+					GL11.glTranslatef(0F, -1F, 1F);
+					if (tile.getBlockMetadata() == 5)
+						GL11.glTranslatef(0F, 0F, -2F);
+				}
+			}
+			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+			float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-           // if (tile.getBlockMetadata() < 4)
-            var14.renderAll(null, 0);
-           // else
-            	//var15.renderAll();
-            if (tile.isInWorld())
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glPopMatrix();
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        }
-    }
+			// if (tile.getBlockMetadata() < 4)
+			var14.renderAll(null, 0);
+			// else
+			//var15.renderAll();
+			if (tile.isInWorld())
+				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopMatrix();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		}
+	}
 
-    public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-    {
-    	if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-        this.renderTileEntityPulseFurnaceAt((TileEntityPulseFurnace)tile, par2, par4, par6, par8);
-        if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-        	IORenderer.renderIO((TileEntityIOMachine)tile, par2, par4, par6);
-    }
-    
+	@Override
+	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
+	{
+		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+			this.renderTileEntityPulseFurnaceAt((TileEntityPulseFurnace)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+			IORenderer.renderIO(tile, par2, par4, par6);
+	}
+
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityPulseFurnace tp = (TileEntityPulseFurnace)te;
-        int temp = tp.temperature;
-        int maxtemp = tp.MAXTEMP;
-        if (temp < maxtemp/10)
-        	return "pulsetex.png";
-        else if (temp < maxtemp/5)
-        	return "pulsetexhot-1.png";
-        else if (temp < maxtemp/2)
-        	return "pulsetexhot0.png";
-        else if (temp < maxtemp/1.2)
-        	return "pulsetexhot2.png";
-        else
-        	return "pulsetexhot3.png";
+		int temp = tp.temperature;
+		int maxtemp = tp.MAXTEMP;
+		if (temp < maxtemp/10)
+			return "pulsetex.png";
+		else if (temp < maxtemp/5)
+			return "pulsetexhot-1.png";
+		else if (temp < maxtemp/2)
+			return "pulsetexhot0.png";
+		else if (temp < maxtemp/1.2)
+			return "pulsetexhot2.png";
+		else
+			return "pulsetexhot3.png";
 	}
 }

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -27,8 +28,8 @@ public class ItemWorldEdit extends ItemBasic {
 	public int[] start = new int[3];
 	public int[] end = new int[3];
 
-	public ItemWorldEdit(int itemID) {
-		super(itemID, 0);
+	public ItemWorldEdit(int ID) {
+		super(ID, 0);
 	}
 
 	@Override
@@ -115,14 +116,14 @@ public class ItemWorldEdit extends ItemBasic {
 						}
 					}
 					if (!world.isRemote)
-					for (int i = s[0]; i <= e[0]; i += 1) {
-						for (int j = s[1]; j <= e[1]; j += 1) {
-							for (int k = s[2]; k <= e[2]; k += 1) {
-								world.setBlock(i, j, k, id, meta, 3);
-								world.markBlockForUpdate(i, j, k);
+						for (int i = s[0]; i <= e[0]; i += 1) {
+							for (int j = s[1]; j <= e[1]; j += 1) {
+								for (int k = s[2]; k <= e[2]; k += 1) {
+									world.setBlock(i, j, k, id, meta, 3);
+									world.markBlockForUpdate(i, j, k);
+								}
 							}
 						}
-					}
 					this.reset(is, ep);
 				}
 			}

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -17,15 +18,14 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityHeater;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiHeater extends GuiMachine
@@ -34,7 +34,7 @@ public class GuiHeater extends GuiMachine
 	private TileEntityHeater heater;
 	private GuiTextField input;
 	public int temperature;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 
@@ -43,10 +43,10 @@ public class GuiHeater extends GuiMachine
 	 */
 	private int inventoryRows = 0;
 
-	public GuiHeater(EntityPlayer player, IInventory par2IInventory, TileEntityHeater te)
+	public GuiHeater(EntityPlayer p5ep, IInventory par2IInventory, TileEntityHeater te)
 	{
-		super(new ContainerHeater(player, te), te);
-		upperHeaterInventory = player.inventory;
+		super(new ContainerHeater(p5ep, te), te);
+		upperHeaterInventory = ep.inventory;
 		allowUserInput = false;
 		short var3 = 256;
 		int var4 = var3 - 108;
@@ -89,12 +89,12 @@ public class GuiHeater extends GuiMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			temperature = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 10, heater, player, temperature);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 10, heater, ep, temperature);
 			return;
 		}
 		temperature = Integer.parseInt(input.getText());
 		if (temperature >= 0)
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 10, heater, player, temperature);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 10, heater, ep, temperature);
 	}
 
 	/**

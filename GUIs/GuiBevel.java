@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -35,16 +36,16 @@ public class GuiBevel extends GuiNonPoweredMachine
 
 	private TileEntityGearBevel bevel;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 
-	public GuiBevel(EntityPlayer player, TileEntityGearBevel GearBevel)
+	public GuiBevel(EntityPlayer p5ep, TileEntityGearBevel GearBevel)
 	{
-		super(new CoreContainer(player, GearBevel), GearBevel);
+		super(new CoreContainer(p5ep, GearBevel), GearBevel);
 		bevel = GearBevel;
 		ySize = 192;
-		this.player = player;
+		ep = p5ep;
 		posn = GearBevel.direction;
 		this.getIOFromDirection();
 	}
@@ -207,7 +208,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		}
 		this.getDirectionFromIO();
 		this.initGui();
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 4, bevel, player, posn);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 4, bevel, ep, posn);
 	}
 
 	@Override

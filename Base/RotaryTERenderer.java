@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -30,7 +31,7 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
 	HashMap textures = new HashMap();
 	float phi = 0;
 
-    @Override
+	@Override
 	public void bindTextureByName(String file) {/*
         RenderEngine renderengine = this.tileEntityRenderer.renderEngine;
         //String filename = RotaryCraft.class.getResource(file).getPath();
@@ -63,22 +64,22 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
         	}
         	GL11.glBindTexture(GL11.GL_TEXTURE_2D, img);
         }*/
-    	String filename = file.substring(18, file.length());
-    	super.bindTextureByName(file);
-    }
+		String filename = file.substring(18, file.length());
+		super.bindTextureByName(file);
+	}
 
-    //public abstract String getImageFileName(RotaryCraftTileEntity te);
+	//public abstract String getImageFileName(RotaryCraftTileEntity te);
 
-    public final boolean isValidMachineRenderpass(RotaryCraftTileEntity te) {
-    	if (!te.isInWorld())
-    		return true;
-    	int pass = MinecraftForgeClient.getRenderPass();
-    	if (!te.shouldRenderInPass(pass))
-    		return false;
-    	if (pass == 0)
-    		return true;
-    	if (pass == 1)
-    		return (te.hasModelTransparency());
-    	return false;
-    }
+	public final boolean isValidMachineRenderpass(RotaryCraftTileEntity te) {
+		if (!te.isInWorld())
+			return true;
+		int pass = MinecraftForgeClient.getRenderPass();
+		if (!te.shouldRenderInPass(pass))
+			return false;
+		if (pass == 0)
+			return true;
+		if (pass == 1)
+			return (te.hasModelTransparency());
+		return false;
+	}
 }

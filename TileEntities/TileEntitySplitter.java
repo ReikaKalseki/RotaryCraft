@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -13,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -28,8 +28,6 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	public int[] writeinline = new int[2]; //xz coords
 	public int[] writebend = new int[2]; //xz coords
 
-	private int torquein;
-	private int omegain;
 	private int torquein2;
 	private int omegain2;
 	private boolean split = false;

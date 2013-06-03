@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -45,11 +46,11 @@ public class ContainerProjector extends CoreContainer {
 		this.addSlotToContainer(new Slot(te, 23, 80-18, 9));
 
 		int dy = 56;
-        for (int i = 0; i < 3; i++)
-            for (int k = 0; k < 9; k++)
-                this.addSlotToContainer(new Slot(player.inventory, k + i * 9 + 9, 8 + k * 18, 84 + i * 18+dy));
-        for (int j = 0; j < 9; j++)
-            this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 142+dy));
+		for (int i = 0; i < 3; i++)
+			for (int k = 0; k < 9; k++)
+				this.addSlotToContainer(new Slot(player.inventory, k + i * 9 + 9, 8 + k * 18, 84 + i * 18+dy));
+		for (int j = 0; j < 9; j++)
+			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 142+dy));
 	}
 
 }

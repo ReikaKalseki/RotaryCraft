@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -17,43 +18,43 @@ import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public class ContainerSteam extends CoreContainer
 {
-    private TileEntityEngine Steam;
+	private TileEntityEngine Steam;
 
-    public ContainerSteam(EntityPlayer player, TileEntityEngine par2TileEntitySteam)
-    {
-    	super(player, par2TileEntitySteam);
-        Steam = par2TileEntitySteam;
-        int posX = Steam.xCoord;
-        int posY = Steam.yCoord;
-        int posZ = Steam.zCoord;
-        this.addSlotToContainer(new Slot(par2TileEntitySteam, 0, 80, 36));
+	public ContainerSteam(EntityPlayer player, TileEntityEngine par2TileEntitySteam)
+	{
+		super(player, par2TileEntitySteam);
+		Steam = par2TileEntitySteam;
+		int posX = Steam.xCoord;
+		int posY = Steam.yCoord;
+		int posZ = Steam.zCoord;
+		this.addSlotToContainer(new Slot(par2TileEntitySteam, 0, 80, 36));
 
-        this.addPlayerInventory(player);
-    }
+		this.addPlayerInventory(player);
+	}
 
-    /**
-     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-     */
-    @Override
+	/**
+	 * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
+	 */
+	@Override
 	public void detectAndSendChanges()
-    {
-        super.detectAndSendChanges();
+	{
+		super.detectAndSendChanges();
 
-        for (int i = 0; i < crafters.size(); i++)
-        {
-            ICrafting icrafting = (ICrafting)crafters.get(i);
+		for (int i = 0; i < crafters.size(); i++)
+		{
+			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-            icrafting.sendProgressBarUpdate(this, 1, Steam.temperature);
-            icrafting.sendProgressBarUpdate(this, 2, Steam.waterLevel);
-        }
-    }
+			icrafting.sendProgressBarUpdate(this, 1, Steam.temperature);
+			icrafting.sendProgressBarUpdate(this, 2, Steam.waterLevel);
+		}
+	}
 
-    @Override
+	@Override
 	public void updateProgressBar(int par1, int par2)
-    {
-        switch(par1) {
-	        case 1: Steam.temperature = par2; break;
-	        case 2: Steam.waterLevel = par2; break;
-        }
-    }
+	{
+		switch(par1) {
+		case 1: Steam.temperature = par2; break;
+		case 2: Steam.waterLevel = par2; break;
+		}
+	}
 }

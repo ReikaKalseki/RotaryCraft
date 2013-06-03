@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -25,21 +26,19 @@ import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 
 public class GuiBasicRange extends GuiPowerOnlyMachine
 {
-	private TileEntityPowerReceiver te;
 	public int range;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
 	int x;
 	int y;
 	private GuiTextField input;
 
-	public GuiBasicRange(EntityPlayer player, TileEntityPowerReceiver tile)
+	public GuiBasicRange(EntityPlayer p5ep, TileEntityPowerReceiver te)
 	{
-		super(new CoreContainer(player, tile), tile);
-		te = tile;
+		super(new CoreContainer(p5ep, te), te);
+		pwr = te;
 		ySize = 46;
-		this.player = player;
-		range = ((RangedEffect)te).getRange();
+		ep = p5ep;
+		range = ((RangedEffect)pwr).getRange();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.range));
 	}
 
@@ -76,18 +75,18 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			if (te instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
-			else if (te instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
+			if (pwr instanceof TileEntityForceField)
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+			else if (pwr instanceof TileEntityContainment)
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0) {
-			if (te instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), te, player, range);
-			else if (te instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), te, player, range);
+			if (pwr instanceof TileEntityForceField)
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+			else if (pwr instanceof TileEntityContainment)
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
 		}
 	}
 
@@ -100,7 +99,7 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 		fontRenderer.drawString("Field Radius:", xSize/2-72, 25, 4210752);
 		if (!input.isFocused()) {
-			fontRenderer.drawString(String.format("%d", ((RangedEffect)te).getRange()), xSize/2+6, 25, 0xffffffff);
+			fontRenderer.drawString(String.format("%d", ((RangedEffect)pwr).getRange()), xSize/2+6, 25, 0xffffffff);
 		}
 	}
 
@@ -116,9 +115,9 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		int k = (height - ySize) / 2;
 		input.drawTextBox();
 		int color = 4210752;
-		if (range > ((RangedEffect)te).getMaxRange())
+		if (range > ((RangedEffect)pwr).getMaxRange())
 			color = 0xff0000;
-		ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", ((RangedEffect)te).getRange()), j+xSize/2+58, k+25, color);
+		ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", ((RangedEffect)pwr).getRange()), j+xSize/2+58, k+25, color);
 	}
 
 	@Override

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -15,15 +16,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import Reika.DragonAPI.Libraries.ReikaChatHelper;
-
 public abstract class ItemChargedTool extends ItemRotaryTool {
 
-	public ItemChargedTool(int itemID, int index) {
-		super(itemID, index);
+	public ItemChargedTool(int ID, int index) {
+		super(ID, index);
 		hasSubtypes = true;
 		//this.setMaxDamage(0);
 	}

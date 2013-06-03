@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -21,8 +22,8 @@ public class ItemRailGunAmmo extends ItemBasic {
 
 	private static final String subNames[] = new String[16];
 
-	public ItemRailGunAmmo(int itemID) {
-		super(itemID, 113);
+	public ItemRailGunAmmo(int ID) {
+		super(ID, 113);
 		maxStackSize = 16;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
@@ -41,8 +42,8 @@ public class ItemRailGunAmmo extends ItemBasic {
 	@Override
 	public String getUnlocalizedName(ItemStack is)
 	{
-	     int d = is.getItemDamage();
-	    	return super.getUnlocalizedName() + "." + String.valueOf(d);
+		int d = is.getItemDamage();
+		return super.getUnlocalizedName() + "." + String.valueOf(d);
 	}
 
 }

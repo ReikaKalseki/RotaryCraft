@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -17,9 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IPacketHandler;
-import cpw.mods.fml.common.network.Player;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -40,6 +38,8 @@ import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
+import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.Player;
 
 
 public abstract class PacketHandlerCore implements IPacketHandler {
@@ -62,8 +62,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityContainment cont;
 	private TileEntityScreen screen;
 	private TileEntityItemCannon icannon;
-
-	protected World world;
 
 	protected EnumPackets pack;
 
@@ -296,6 +294,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				break;
 			case 27:
 				music.read();
+				break;
+			case 28:
+				music.loadDemo();
+				music.isOneTimePlaying = true;
 				break;
 			}
 			break;

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -21,7 +22,6 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -111,7 +111,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public void calcReqPower(World world, int x, int y, int z, int metadata) {
 		reqpow = 0;
-		int mintorque = -1;
+		int lowtorque = -1;
 		int a = 0;
 		if (metadata > 1)
 			a = 1;
@@ -128,9 +128,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 		}
 
-		if (torque < mintorque)
+		if (torque < lowtorque)
 			reqpow = -1;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", mintorque));
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", lowtorque));
 	}
 
 

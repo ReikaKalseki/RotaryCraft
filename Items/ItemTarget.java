@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -20,8 +21,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
 public class ItemTarget extends ItemBasic {
 
-	public ItemTarget(int itemID) {
-		super(itemID, 98);
+	public ItemTarget(int ID) {
+		super(ID, 98);
 	}
 
 	@Override

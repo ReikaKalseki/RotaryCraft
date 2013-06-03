@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,28 +21,28 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class GuiWinder extends GuiOneSlotInv
 {
-    private TileEntityWinder Winder;
-    //private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-    private EntityPlayer player;
-    int x;
-    int y;
-    private boolean input;
+	private TileEntityWinder Winder;
+	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
-    public GuiWinder(EntityPlayer player, TileEntityWinder tile)
-    {
-        super(new OneSlotContainer(player, tile), tile);
-        Winder = tile;
-        xSize = 176;
-    	ySize = 166;
-    	this.player = player;
-    	input = tile.winding;
-    }
+	int x;
+	int y;
+	private boolean input;
+
+	public GuiWinder(EntityPlayer p5ep, TileEntityWinder te)
+	{
+		super(new OneSlotContainer(p5ep, te), te);
+		Winder = te;
+		xSize = 176;
+		ySize = 166;
+		ep = p5ep;
+		input = te.winding;
+	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
-        int var5 = (width - xSize) / 2;
-        int var6 = (height - ySize) / 2;
+		int var5 = (width - xSize) / 2;
+		int var6 = (height - ySize) / 2;
 		buttonList.clear();
 		if (input)
 			buttonList.add(new GuiButton(0, var5+xSize/2-35, var6+ySize/2-26, 65, 20, "Input Mode"));
@@ -51,7 +52,7 @@ public class GuiWinder extends GuiOneSlotInv
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, player);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, ep);
 		input = !input;
 		this.initGui();
 	}

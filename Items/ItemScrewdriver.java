@@ -4,18 +4,17 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
@@ -29,7 +28,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
@@ -40,8 +38,8 @@ public class ItemScrewdriver extends ItemRotaryTool
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 
 
-	public ItemScrewdriver(int itemID) {
-		super(itemID, 0);
+	public ItemScrewdriver(int ID) {
+		super(ID, 0);
 	}
 
 	public static void setmaxdmgs() {
@@ -63,7 +61,7 @@ public class ItemScrewdriver extends ItemRotaryTool
 		maxdamage[Block.stairsNetherBrick.blockID] = 7;
 		maxdamage[Block.stairsNetherQuartz.blockID] = 7;
 		maxdamage[Block.dropper.blockID] = 3; //dropper
-/*
+		/*
 		maxdamage[MachineRegistry.ENGINE] = 3; //engine
 		maxdamage[MachineRegistry.BEDROCKBREAKER] = 5; //bedrockbreaker
 		maxdamage[MachineRegistry.SHAFT] = 9; //shaft has 6+4 cross
@@ -231,23 +229,6 @@ public class ItemScrewdriver extends ItemRotaryTool
 			else
 				clicked.setBlockMetadata(damage-8);
 			return true;
-		}
-		if (m == MachineRegistry.PUMP && ep.isSneaking()) {	// Toggle water/lava
-			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y, z);
-			if (tile != null) {
-				if (tile.waterOnly) {
-					tile.waterOnly = false;
-					if (!world.isRemote)
-						ReikaChatHelper.write("Pump now set to only absorb lava.");
-				}
-				else {
-					tile.waterOnly = true;
-					if (!world.isRemote)
-						ReikaChatHelper.write("Pump now set to only absorb water.");
-				}
-				return true;
-			}
-			return false;
 		}
 		if (m != null) {
 			int max = m.getNumberDirections()-1;

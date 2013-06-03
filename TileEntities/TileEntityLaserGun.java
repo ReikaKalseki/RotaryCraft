@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -17,13 +18,13 @@ import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Models.ModelLaserGun;
 
 public class TileEntityLaserGun extends TileEntityAimedCannon {
 
@@ -47,8 +48,8 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
-		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
-		List inrange = world.getEntitiesWithinAABB(EntityLiving.class, range);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
+		List inrange = world.getEntitiesWithinAABB(EntityLiving.class, box);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
 		for (int i = 0; i < inrange.size(); i++) {
@@ -178,7 +179,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
+		return new ModelLaserGun();
 	}
 
 	@Override

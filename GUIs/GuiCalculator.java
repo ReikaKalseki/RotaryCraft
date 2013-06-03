@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -19,19 +20,20 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiCalculator extends GuiScreen {
-    private EntityPlayer player;
-    private int x;
-    private int y;
-    private static final int xSize = 194;
-    private static final int ySize = 161;
-    public World worldObj;
 
-    public GuiCalculator(EntityPlayer player, World world)
-    {
-    	this.player = player;
-    	worldObj = world;
-    }
-    /*
+	private int mx;
+	private int my;
+	private static final int xSize = 194;
+	private static final int ySize = 161;
+	private EntityPlayer ep;
+	public World worldObj;
+
+	public GuiCalculator(EntityPlayer p5ep, World world)
+	{
+		ep = p5ep;
+		worldObj = world;
+	}
+	/*
     @Override
     public void initGui() {
     	super.initGui();
@@ -41,51 +43,51 @@ public class GuiCalculator extends GuiScreen {
         int k = (height - ySize) / 2 - 8;
     }*/
 
-    @Override
+	@Override
 	public boolean doesGuiPauseGame()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 
-    @Override
-    public void actionPerformed(GuiButton button) {
+	@Override
+	public void actionPerformed(GuiButton button) {
 
-    }
+	}
 
-    public void refreshScreen() {
-    	int lastx = x;
-    	int lasty = y;
-    	mc.thePlayer.closeScreen();
-    	ModLoader.openGUI(player, new GuiCalculator(player, worldObj));
-    	Mouse.setCursorPosition(lastx, lasty);
-    }
+	public void refreshScreen() {
+		int lastx = mx;
+		int lasty = my;
+		mc.thePlayer.closeScreen();
+		ModLoader.openGUI(ep, new GuiCalculator(ep, worldObj));
+		Mouse.setCursorPosition(lastx, lasty);
+	}
 
-    @Override
+	@Override
 	public void updateScreen() {
-    	super.updateScreen();
-    	x = Mouse.getX();
-    	y = Mouse.getY();
-    }
+		super.updateScreen();
+		mx = Mouse.getX();
+		my = Mouse.getY();
+	}
 
-    @Override
+	@Override
 	public void drawScreen(int x, int y, float f)
-    {
-    	String var4 = "/Reika/RotaryCraft/Textures/GUI/calcgui.png";
-    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    	mc.renderEngine.bindTexture(var4);
+	{
+		String var4 = "/Reika/RotaryCraft/Textures/GUI/calcgui.png";
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		mc.renderEngine.bindTexture(var4);
 
-    	int posX = (width - xSize) / 2;
-    	int posY = (height - ySize) / 2 - 8;
+		int posX = (width - xSize) / 2;
+		int posY = (height - ySize) / 2 - 8;
 
-    	this.drawTexturedModalRect(posX, posY, 0, 0, xSize, ySize);
-    	this.drawKeys();
-    	super.drawScreen(x, y, f);
-    }
+		this.drawTexturedModalRect(posX, posY, 0, 0, xSize, ySize);
+		this.drawKeys();
+		super.drawScreen(x, y, f);
+	}
 
-    private void drawKeys() {
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2 - 8;
-    	int color = 0x000000;/*
+	private void drawKeys() {
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2 - 8;
+		int color = 0x000000;/*
     	ImagedGuiButton.drawCenteredStringNoShadow(this.fontRenderer, "π", j+16, k+141-18, color);
     	ImagedGuiButton.drawCenteredStringNoShadow(this.fontRenderer, "Int", j+16, k+141-54, color);
 
@@ -145,5 +147,5 @@ public class GuiCalculator extends GuiScreen {
     	ImagedGuiButton.drawCenteredStringNoShadow(this.fontRenderer, "%", j+178, k+131-26-18, color);
     	ImagedGuiButton.drawCenteredStringNoShadow(this.fontRenderer, "√", j+178, k+131-26-36, color);
     	ImagedGuiButton.drawCenteredStringNoShadow(this.fontRenderer, "M-", j+178, k+131-26-54, color);*/
-    }
+	}
 }

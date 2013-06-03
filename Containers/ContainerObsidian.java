@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -17,61 +18,61 @@ import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 
 public class ContainerObsidian extends CoreContainer
 {
-    private TileEntityObsidianMaker obsidian;
-    private int lastObsidianCookTime;
-    private int lastObsidianBurnTime;
-    private int lastObsidianItemBurnTime;
+	private TileEntityObsidianMaker obsidian;
+	private int lastObsidianCookTime;
+	private int lastObsidianBurnTime;
+	private int lastObsidianItemBurnTime;
 
-    public ContainerObsidian(EntityPlayer player, TileEntityObsidianMaker par2TileEntityObsidian)
-    {
-    	super(player, par2TileEntityObsidian);
-        lastObsidianCookTime = 0;
-        lastObsidianBurnTime = 0;
-        lastObsidianItemBurnTime = 0;
-        obsidian = par2TileEntityObsidian;
+	public ContainerObsidian(EntityPlayer player, TileEntityObsidianMaker par2TileEntityObsidian)
+	{
+		super(player, par2TileEntityObsidian);
+		lastObsidianCookTime = 0;
+		lastObsidianBurnTime = 0;
+		lastObsidianItemBurnTime = 0;
+		obsidian = par2TileEntityObsidian;
 
-        int var3; int var4;
-        for (var3 = 0; var3 < 3; ++var3)
-        {
-            for (var4 = 0; var4 < 3; ++var4)
-            {
-            	this.addSlotToContainer(new Slot(par2TileEntityObsidian, var4 + var3 * 3, 62 + var4 * 18, 18 + var3 * 18));
-            }
-        }
+		int var3; int var4;
+		for (var3 = 0; var3 < 3; ++var3)
+		{
+			for (var4 = 0; var4 < 3; ++var4)
+			{
+				this.addSlotToContainer(new Slot(par2TileEntityObsidian, var4 + var3 * 3, 62 + var4 * 18, 18 + var3 * 18));
+			}
+		}
 
-        this.addPlayerInventory(player);
-    }
+		this.addPlayerInventory(player);
+	}
 
-    /**
-     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-     */
-    @Override
-	public void detectAndSendChanges()
-    {
-        super.detectAndSendChanges();
+	/**
+	 * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
+	 */
+	 @Override
+	 public void detectAndSendChanges()
+	 {
+		 super.detectAndSendChanges();
 
-        for (int i = 0; i < crafters.size(); i++)
-        {
-            ICrafting icrafting = (ICrafting)crafters.get(i);
+		 for (int i = 0; i < crafters.size(); i++)
+		 {
+			 ICrafting icrafting = (ICrafting)crafters.get(i);
 
-            if (lastObsidianCookTime != obsidian.mixTime)
-            {
-                icrafting.sendProgressBarUpdate(this, 0, obsidian.mixTime);
-            }
-            icrafting.sendProgressBarUpdate(this, 1, obsidian.waterLevel);
-            icrafting.sendProgressBarUpdate(this, 2, obsidian.lavaLevel);
-        }
+			 if (lastObsidianCookTime != obsidian.mixTime)
+			 {
+				 icrafting.sendProgressBarUpdate(this, 0, obsidian.mixTime);
+			 }
+			 icrafting.sendProgressBarUpdate(this, 1, obsidian.waterLevel);
+			 icrafting.sendProgressBarUpdate(this, 2, obsidian.lavaLevel);
+		 }
 
-        lastObsidianCookTime = obsidian.mixTime;
-    }
+		 lastObsidianCookTime = obsidian.mixTime;
+	 }
 
-    @Override
-	public void updateProgressBar(int par1, int par2)
-    {
-        switch(par1) {
-	        case 0: obsidian.mixTime = par2; break;
-	        case 1: obsidian.waterLevel = par2; break;
-	        case 2: obsidian.lavaLevel = par2; break;
-        }
-    }
+	 @Override
+	 public void updateProgressBar(int par1, int par2)
+	 {
+		 switch(par1) {
+		 case 0: obsidian.mixTime = par2; break;
+		 case 1: obsidian.waterLevel = par2; break;
+		 case 2: obsidian.lavaLevel = par2; break;
+		 }
+	 }
 }

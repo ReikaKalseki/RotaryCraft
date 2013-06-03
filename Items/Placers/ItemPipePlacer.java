@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
@@ -20,8 +21,8 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.BlockRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemMulti;
 
 public class ItemPipePlacer extends ItemMulti {
@@ -51,7 +52,7 @@ public class ItemPipePlacer extends ItemMulti {
 			if (side == 5)
 				++x;
 			//if (world.blockHasTileEntity(x, y, z))
-				//return false;
+			//return false;
 			if (!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z)) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
 				return false;
 		}

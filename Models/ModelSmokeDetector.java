@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 01/04/2013 7:50:34 PM
 // Template version 1.1
@@ -22,33 +23,34 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelSmokeDetector extends RotaryModelBase
 {
-  //fields
-    ModelRenderer Shape1;
-    ModelRenderer Shape2;
-  
-  public ModelSmokeDetector()
-  {
-    textureWidth = 64;
-    textureHeight = 32;
-    
-      Shape1 = new ModelRenderer(this, 0, 0);
-      Shape1.addBox(0F, 0F, 0F, 8, 1, 8);
-      Shape1.setRotationPoint(-4F, 8F, -4F);
-      Shape1.setTextureSize(64, 32);
-      Shape1.mirror = true;
-      setRotation(Shape1, 0F, 0F, 0F);
-      Shape2 = new ModelRenderer(this, 32, 0);
-      Shape2.addBox(0F, 0F, 0F, 6, 1, 6);
-      Shape2.setRotationPoint(-3F, 9F, -3F);
-      Shape2.setTextureSize(64, 32);
-      Shape2.mirror = true;
-      setRotation(Shape2, 0F, 0F, 0F);
-  }
-  
-  public void renderAll(List li, float phi)
-  {
-    Shape1.render(f5);
-    Shape2.render(f5);
-  }
+	//fields
+	ModelRenderer Shape1;
+	ModelRenderer Shape2;
+
+	public ModelSmokeDetector()
+	{
+		textureWidth = 64;
+		textureHeight = 32;
+
+		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1.addBox(0F, 0F, 0F, 8, 1, 8);
+		Shape1.setRotationPoint(-4F, 8F, -4F);
+		Shape1.setTextureSize(64, 32);
+		Shape1.mirror = true;
+		this.setRotation(Shape1, 0F, 0F, 0F);
+		Shape2 = new ModelRenderer(this, 32, 0);
+		Shape2.addBox(0F, 0F, 0F, 6, 1, 6);
+		Shape2.setRotationPoint(-3F, 9F, -3F);
+		Shape2.setTextureSize(64, 32);
+		Shape2.mirror = true;
+		this.setRotation(Shape2, 0F, 0F, 0F);
+	}
+
+	@Override
+	public void renderAll(List li, float phi)
+	{
+		Shape1.render(f5);
+		Shape2.render(f5);
+	}
 
 }

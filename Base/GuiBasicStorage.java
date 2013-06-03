@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -23,8 +24,9 @@ public class GuiBasicStorage extends GuiMachine {
 	private int inventoryRows = 0;
 	private IInventory upperInventory;
 
-	public GuiBasicStorage(EntityPlayer ep, RotaryCraftTileEntity te) {
-		super(new ContainerBasicStorage(ep, te), te);
+	public GuiBasicStorage(EntityPlayer p5ep, RotaryCraftTileEntity te) {
+		super(new ContainerBasicStorage(p5ep, te), te);
+		ep = p5ep;
 		upperInventory = ep.inventory;
 		allowUserInput = false;
 		short var3 = 222;

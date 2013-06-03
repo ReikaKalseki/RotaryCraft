@@ -4,13 +4,13 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -19,17 +19,16 @@ public class GuiEthanol extends GuiNonPoweredMachine
 {
 	private TileEntityEngine Ethanol;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
 	int x;
 	int y;
 
-	public GuiEthanol(EntityPlayer player, TileEntityEngine tile)
+	public GuiEthanol(EntityPlayer p5ep, TileEntityEngine te)
 	{
-		super(new ContainerEthanol(player, tile), tile);
-		Ethanol = tile;
+		super(new ContainerEthanol(p5ep, te), te);
+		Ethanol = te;
 		xSize = 176;
 		ySize = 166;
-		this.player = player;
+		ep = p5ep;
 	}
 
 	/**

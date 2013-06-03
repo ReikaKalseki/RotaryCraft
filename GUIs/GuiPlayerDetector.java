@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -27,17 +28,17 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 	private TileEntityPlayerDetector playerdetector;
 	public int range;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 	private GuiTextField input;
 
-	public GuiPlayerDetector(EntityPlayer player, TileEntityPlayerDetector PlayerDetector)
+	public GuiPlayerDetector(EntityPlayer p5ep, TileEntityPlayerDetector PlayerDetector)
 	{
-		super(new CoreContainer(player, PlayerDetector), PlayerDetector);
+		super(new CoreContainer(p5ep, PlayerDetector), PlayerDetector);
 		playerdetector = PlayerDetector;
 		ySize = 46;
-		this.player = player;
+		ep = p5ep;
 		range = playerdetector.selectedrange;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.range));
 	}
@@ -66,7 +67,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, ep, range);
 	}
 
 	@Override
@@ -80,12 +81,12 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, ep, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0)
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, player, range);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 9, playerdetector, ep, range);
 	}
 
 	/**

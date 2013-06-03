@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -16,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
@@ -41,39 +41,39 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public EnumMaterials type;
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
-		int ratio = spl.getRatioFromMode();
-		if (ratio == 0)
+		int sratio = spl.getRatioFromMode();
+		if (sratio == 0)
 			return;
 		boolean favorbent = false;
-		if (ratio < 0) {
+		if (sratio < 0) {
 			favorbent = true;
-			ratio = -ratio;
+			sratio = -sratio;
 		}
 		if (reduction) {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-				omega = spl.omega/this.ratio; //omega always constant
-				if (ratio == 1) { //Even split, favorbent irrelevant
-					torque = spl.torque/2*this.ratio;
+				omega = spl.omega/ratio; //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = spl.torque/2*ratio;
 					return;
 				}
 				if (favorbent) {
-					torque = spl.torque/this.ratio;
+					torque = spl.torque/ratio;
 				}
 				else {
-					torque = (int)(spl.torque*((ratio-1D)/(this.ratio)));
+					torque = (int)(spl.torque*((sratio-1D)/(ratio)));
 				}
 			}
 			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-				omega = spl.omega/this.ratio; //omega always constant
-				if (ratio == 1) { //Even split, favorbent irrelevant
-					torque = spl.torque/2*this.ratio;
+				omega = spl.omega/ratio; //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = spl.torque/2*ratio;
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((ratio-1D)*(this.ratio)));
+					torque = (int)(spl.torque*((sratio-1D)*(ratio)));
 				}
 				else {
-					torque = spl.torque*this.ratio;
+					torque = spl.torque*ratio;
 				}
 			}
 			else //We are not one of its write-to blocks
@@ -81,29 +81,29 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		}
 		else {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-				omega = spl.omega*this.ratio; //omega always constant
-				if (ratio == 1) { //Even split, favorbent irrelevant
-					torque = spl.torque/2/this.ratio;
+				omega = spl.omega*ratio; //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = spl.torque/2/ratio;
 					return;
 				}
 				if (favorbent) {
-					torque = spl.torque/ratio/this.ratio;
+					torque = spl.torque/sratio/ratio;
 				}
 				else {
-					torque = (int)(spl.torque*((ratio-1D))/ratio)/(this.ratio);
+					torque = (int)(spl.torque*((sratio-1D))/sratio)/(ratio);
 				}
 			}
 			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-				omega = spl.omega*this.ratio; //omega always constant
-				if (ratio == 1) { //Even split, favorbent irrelevant
-					torque = spl.torque/2/this.ratio;
+				omega = spl.omega*ratio; //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = spl.torque/2/ratio;
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((ratio-1D)/(this.ratio)));
+					torque = (int)(spl.torque*((sratio-1D)/(ratio)));
 				}
 				else {
-					torque = spl.torque/this.ratio;
+					torque = spl.torque/ratio;
 				}
 			}
 			else //We are not one of its write-to blocks

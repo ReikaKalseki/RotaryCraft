@@ -4,16 +4,22 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import java.util.List;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import Reika.DragonAPI.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -28,9 +34,9 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 
 	private BlockArray blocks = new BlockArray();
 
-	public boolean waterOnly = true;
-
 	private int soundtick = 200;
+
+	public int damage = 0;
 
 
 	public final static int CAPACITY = 24;
@@ -61,7 +67,7 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 			return;
 		if (blocks.isEmpty() || liquidLevel == 0) {
 			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
-			blocks.recursiveFillLiquidWithBounds(world, x, y-1, z, x-32, 0, z-32, x+32, y-1, z+32);
+			blocks.recursiveFillLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
 			blocks.reverseBlockOrder();
 			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
 			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
@@ -73,6 +79,8 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
 		this.getPower(true, false);
 		power = omega*torque;
+		if (damage > 400)
+			power = 0;
 		this.getPressure();
 		if (this.checkForReservoir(world, x, y, z, meta)) {
 			tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
@@ -104,12 +112,33 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 			soundtick = 0;
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.pump", 0.5F, 1F);
 		}
+		if (power > MINPOWER)
+			this.suckUpMobs(world, x, y, z);
+	}
+
+	private void suckUpMobs(World world, int x, int y, int z) {
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y-1, z, x+1, y, z+1);
+		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		for (int i = 0; i < inbox.size(); i++) {
+			EntityLiving e = (EntityLiving)inbox.get(i);
+			e.attackEntityFrom(DamageSource.generic, 5);
+		}
+		if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))
+			damage++;
+		if (damage > 400)
+			this.breakPump(world, x, y, z);
+	}
+
+	private void breakPump(World world, int x, int y, int z) {
+		world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
+		//for (int i = 0; i < 8; i++)
+		//	ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), ItemStacks.scrap);
 	}
 
 	private boolean checkForReservoir(World world, int x, int y, int z, int meta) {
 		MachineRegistry id = MachineRegistry.getMachine(world, x, y-1, z);
 		if (id == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
+			tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
 			if (tile == null)
 				return false;
 			if (tile.liquidID != liquidID && liquidID != -1)
@@ -140,10 +169,6 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		int liqid = world.getBlockId(x, y, z);
 		if (liqid == 10 || liqid == 8)
 			liqid++;
-		if (liqid == 9 && !waterOnly)
-			return false;
-		if (liqid == 11 && waterOnly)
-			return false;
 		boolean liq = (liqid == liquidID);
 		if (liquidID == -1 && world.getBlockId(x, y, z) > 7 && world.getBlockId(x, y, z) < 12) {
 			liq = true;
@@ -206,6 +231,7 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		NBT.setInteger("liquidLevel", liquidLevel);
 		NBT.setInteger("liquid", liquidID);
 		NBT.setInteger("pressure", liquidPressure);
+		NBT.setInteger("dmg", damage);
 	}
 
 	/**
@@ -218,6 +244,7 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		liquidLevel = NBT.getInteger("liquidLevel");
 		liquidID = NBT.getInteger("liquid");
 		liquidPressure = NBT.getInteger("pressure");
+		damage = NBT.getInteger("dmg");
 	}
 
 	@Override

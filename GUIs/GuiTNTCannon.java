@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,20 +21,19 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 public class GuiTNTCannon extends GuiPowerOnlyMachine
 {
-	private TileEntityTNTCannon tile;
+	private TileEntityTNTCannon tnt;
 	private GuiTextField input;
 	private GuiTextField input2;
 	private GuiTextField input3;
@@ -52,24 +52,24 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 
 	EntityPlayer player;
 
-	public GuiTNTCannon(EntityPlayer player, TileEntityTNTCannon TNTCannon)
+	public GuiTNTCannon(EntityPlayer p5ep, TileEntityTNTCannon TNTCannon)
 	{
-		super(new ContainerTNTCannon(player, TNTCannon), TNTCannon);
-		tile = TNTCannon;
+		super(new ContainerTNTCannon(p5ep, TNTCannon), TNTCannon);
+		tnt = TNTCannon;
 		ySize = 236;
-		phi = tile.phi;
-		theta = tile.theta;
-		velocity = tile.velocity;
-		targetMode = tile.targetMode;
+		phi = tnt.phi;
+		theta = tnt.theta;
+		velocity = tnt.velocity;
+		targetMode = tnt.targetMode;
 		if (targetMode) {
 			ySize = 170;
-			target = tile.target;
+			target = tnt.target;
 		}
 		thetad = theta;
 		phid = phi;
 		theta = ReikaPhysicsHelper.degToRad(theta);
 		phi = ReikaPhysicsHelper.degToRad(phi);
-		this.player = player;
+		ep = p5ep;
 	}
 
 	@Override
@@ -143,9 +143,9 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 				if (a == 14)
 					outputStream.writeInt(velocity);
 			}
-			outputStream.writeInt(tile.xCoord);
-			outputStream.writeInt(tile.yCoord);
-			outputStream.writeInt(tile.zCoord);
+			outputStream.writeInt(tnt.xCoord);
+			outputStream.writeInt(tnt.yCoord);
+			outputStream.writeInt(tnt.zCoord);
 
 		}
 		catch (Exception ex) {
@@ -304,11 +304,11 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 		}
 		else {
 			if (!input.isFocused())
-				fontRenderer.drawString(String.format("%d", tile.phi), 122, 96, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", tnt.phi), 122, 96, 0xffffffff);
 			if (!input2.isFocused())
-				fontRenderer.drawString(String.format("%d", tile.theta), 35, 96, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", tnt.theta), 35, 96, 0xffffffff);
 			if (!input3.isFocused())
-				fontRenderer.drawString(String.format("%d", tile.velocity), 122, 116, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", tnt.velocity), 122, 116, 0xffffffff);
 		}
 	}
 

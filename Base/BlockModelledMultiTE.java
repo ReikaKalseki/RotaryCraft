@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -64,24 +65,24 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 		return AxisAlignedBB.getAABBPool().getAABB(x+m.getMinX(te), y+m.getMinY(te), z+m.getMinZ(te), x+m.getMaxX(te), y+m.getMaxY(te), z+m.getMaxZ(te));
 	}
 
-    @Override
+	@Override
 	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-    {
-        return this.getCollisionBoundingBoxFromPool(world, x, y, z);
-    }
+	{
+		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
+	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public final boolean addBlockDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer eff)
-    {
-    	return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
-    }
+	public final boolean addBlockDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer eff)
+	{
+		return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
+	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public final boolean addBlockHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
-    {
-    	return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, tg, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
-    }
+	public final boolean addBlockHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
+	{
+		return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, tg, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
+	}
 
 }

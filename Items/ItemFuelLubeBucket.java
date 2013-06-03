@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -24,8 +25,8 @@ public class ItemFuelLubeBucket extends ItemRotaryTool implements IndexedItemSpr
 	public static final int[] value = {64,8,16}; //How many units in a bucket (64 lube, 8 jet fuel, 8 ethanol)
 
 	private static final String subNames[] = new String[RotaryNames.bucketNames.length];
-	public ItemFuelLubeBucket(int itemID) {
-		super(itemID, 0);
+	public ItemFuelLubeBucket(int ID) {
+		super(ID, 0);
 		hasSubtypes = true;
 		for (int i = 0; i < RotaryNames.bucketNames.length; i++)
 			subNames[i] = String.format("%d", i);
@@ -42,8 +43,8 @@ public class ItemFuelLubeBucket extends ItemRotaryTool implements IndexedItemSpr
 	@Override
 	public String getUnlocalizedName(ItemStack is)
 	{
-	     int d = is.getItemDamage();
-	    	return super.getUnlocalizedName() + "." + String.valueOf(d);
+		int d = is.getItemDamage();
+		return super.getUnlocalizedName() + "." + String.valueOf(d);
 	}
 
 	@Override

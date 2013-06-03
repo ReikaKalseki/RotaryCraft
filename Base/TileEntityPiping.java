@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -41,27 +42,27 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		case DOWN:
 			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord);
 			tile = worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
-		break;
+			break;
 		case MINX:
 			m = MachineRegistry.getMachine(worldObj, xCoord-1, yCoord, zCoord);
 			tile = worldObj.getBlockTileEntity(xCoord-1, yCoord, zCoord);
-		break;
+			break;
 		case MINZ:
 			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord-1);
 			tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord-1);
-		break;
+			break;
 		case PLUSX:
 			m = MachineRegistry.getMachine(worldObj, xCoord+1, yCoord, zCoord);
 			tile = worldObj.getBlockTileEntity(xCoord+1, yCoord, zCoord);
-		break;
+			break;
 		case PLUSZ:
 			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord+1);
 			tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord+1);
-		break;
+			break;
 		case UP:
 			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord);
 			tile = worldObj.getBlockTileEntity(xCoord, yCoord+1, zCoord);
-		break;
+			break;
 		}
 		switch(this.getMachine()) {
 		case PIPE:

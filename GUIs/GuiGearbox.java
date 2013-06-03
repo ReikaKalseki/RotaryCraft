@@ -4,13 +4,13 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
@@ -20,9 +20,9 @@ public class GuiGearbox extends GuiNonPoweredMachine
 {
 	private TileEntityGearbox gearboxInventory;
 
-	public GuiGearbox(EntityPlayer player, TileEntityGearbox Gearbox)
+	public GuiGearbox(EntityPlayer p5ep, TileEntityGearbox Gearbox)
 	{
-		super(new ContainerGearbox(player, Gearbox), Gearbox);
+		super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
 		gearboxInventory = Gearbox;
 	}
 

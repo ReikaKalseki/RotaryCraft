@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
@@ -101,8 +102,8 @@ public class RenderCaveFinder extends RotaryTERenderer {
 	}
 
 	public void renderPoints(TileEntityCaveFinder te, double p2, double p4, double p6) {
-	  	if (te == null)
-    		return;
+		if (te == null)
+			return;
 		if (!te.isInWorld())
 			return;
 		if (!te.on)

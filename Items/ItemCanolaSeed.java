@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -14,15 +15,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemCanolaSeed extends ItemBasic {
 
-	public ItemCanolaSeed(int itemID) {
-		super(itemID, 80); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemCanolaSeed(int ID) {
+		super(ID, 80); //calling the super constructor and giving him the itemID so minecraft knows the itemID
 		this.setMaxDamage(0);
 		hasSubtypes = true;
 	}

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -16,12 +17,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 
 public class ContainerScreen extends CoreContainer {
 
-	public ContainerScreen(EntityPlayer player, TileEntityScreen tile) {
-		super(player, tile);
+	public ContainerScreen(EntityPlayer player, TileEntityScreen te) {
+		super(player, te);
 
-		this.addSlotToContainer(new Slot(tile, 0, 62, 35));
-		this.addSlotToContainer(new Slot(tile, 1, 80, 35));
-		this.addSlotToContainer(new Slot(tile, 2, 98, 35));
+		this.addSlotToContainer(new Slot(te, 0, 62, 35));
+		this.addSlotToContainer(new Slot(te, 1, 80, 35));
+		this.addSlotToContainer(new Slot(te, 2, 98, 35));
 
 		this.addPlayerInventory(player);
 	}

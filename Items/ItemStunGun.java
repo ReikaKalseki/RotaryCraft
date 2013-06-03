@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -18,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -28,8 +28,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemStunGun extends ItemChargedTool {
 
-	public ItemStunGun(int itemID) {
-		super(itemID, 192);
+	public ItemStunGun(int ID) {
+		super(ID, 192);
 	}
 
 	@Override
@@ -47,31 +47,7 @@ public class ItemStunGun extends ItemChargedTool {
 		world.playSoundAtEntity(ep, "Reika.RotaryCraft.knockback", 2, 2F);
 		if (ep.isSneaking()) {
 			if (world.isRemote)
-				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);/*
-			for (float i = 0; i <= 5; i += 0.5) {
-				double[] look = ReikaVectorHelper.getPlayerLookCoords(ep, i);
-				int x = (int)look[0];
-				int y = (int)look[1];
-				int z = (int)look[2];
-				int id = world.getBlockId(x, y, z);
-
-				if (id != 0 && (id < 8 || id > 11) && (id == Block.web.blockID || id == Block.mushroomRed.blockID ||
-				id == Block.gravel.blockID ||  id == Block.silverfish.blockID  || id == Block.mushroomBrown.blockID ||
-					id == Block.waterlily.blockID || id == Block.flowerPot.blockID ||
-					ReikaWorldHelper.isOre(id) || ReikaWorldHelper.softBlocks(id))) {
-					for (int k = 0; i < 64; i++)
-						world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-					ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);
-					return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
-				}
-				int leafrange = 4;
-				if (id == Block.leaves.blockID || id == Block.sand.blockID) {
-					for (int k = 0; i < 64; i++)
-						world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-					ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);
-					return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
-				}
-			}*/
+				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
 			MovingObjectPosition mov = ReikaPlayerAPI.getLookedAtBlock(5);
 			//ReikaChatHelper.write(mov);
 			if (mov != null) {

@@ -4,16 +4,17 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
 
 public abstract class ItemRotaryTool extends ItemBasic {
 
-	public ItemRotaryTool(int itemID, int index) {
-		super(itemID, index);
+	public ItemRotaryTool(int ID, int index) {
+		super(ID, index);
 		maxStackSize = 1;
 		this.setNoRepair();
 	}

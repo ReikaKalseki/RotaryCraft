@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,12 +21,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 
 public class GuiObsidian extends GuiMachine
 {
-	private TileEntityObsidianMaker tile;
+	private TileEntityObsidianMaker obs;
 
-	public GuiObsidian(EntityPlayer player, TileEntityObsidianMaker Obsidian)
+	public GuiObsidian(EntityPlayer p5ep, TileEntityObsidianMaker Obsidian)
 	{
-		super(new ContainerObsidian(player, Obsidian), Obsidian);
-		tile = Obsidian;
+		super(new ContainerObsidian(p5ep, Obsidian), Obsidian);
+		obs = Obsidian;
 	}
 
 	/**
@@ -39,8 +40,8 @@ public class GuiObsidian extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = tile.getWaterScaled(54);
-		int i2 = tile.getLavaScaled(54);
+		int i1 = obs.getWaterScaled(54);
+		int i2 = obs.getLavaScaled(54);
 		this.drawTexturedModalRect(j+48, k+71-i1, 193, 55-i1, 7, i1);
 		this.drawTexturedModalRect(j+120, k+71-i2, 202, 55-i2, 7, i2);
 	}
@@ -52,17 +53,17 @@ public class GuiObsidian extends GuiMachine
 		mc.renderEngine.bindTexture(var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (tile.power*29L)/tile.MINPOWER;
+		long frac = (obs.power*29L)/obs.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.omega*29L)/tile.MINSPEED;
+		frac = (int)(obs.omega*29L)/obs.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.torque*29L)/tile.MINTORQUE;
+		frac = (int)(obs.torque*29L)/obs.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -70,7 +71,7 @@ public class GuiObsidian extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", obs.power, obs.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

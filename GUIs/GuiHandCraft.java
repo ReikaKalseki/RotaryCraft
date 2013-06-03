@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -23,30 +24,32 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiHandCraft extends GuiContainer
 {
-    public GuiHandCraft(EntityPlayer player, World par2World)
-    {
-        super(new ContainerHandCraft(player, par2World));
-    }
+	public GuiHandCraft(EntityPlayer p5ep, World par2World)
+	{
+		super(new ContainerHandCraft(p5ep, par2World));
+	}
 
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
-    protected void drawGuiContainerForegroundLayer(int par1, int par2)
-    {
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), 28, 6, 4210752);
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
-    }
+	/**
+	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
+	 */
+	@Override
+	protected void drawGuiContainerForegroundLayer(int par1, int par2)
+	{
+		fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), 28, 6, 4210752);
+		fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+	}
 
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
-     */
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-    {
-        String var4 = "/gui/crafting.png";
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(var4);
-        int var5 = (this.width - this.xSize) / 2;
-        int var6 = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
-    }
+	/**
+	 * Draw the background layer for the GuiContainer (everything behind the items)
+	 */
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+	{
+		String var4 = "/gui/crafting.png";
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		mc.renderEngine.bindTexture(var4);
+		int var5 = (width - xSize) / 2;
+		int var6 = (height - ySize) / 2;
+		this.drawTexturedModalRect(var5, var6, 0, 0, xSize, ySize);
+	}
 }

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -24,11 +25,11 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		super(par1, EnumToolMaterial.GOLD);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
-		this.maxStackSize = 1;
+		maxStackSize = 1;
 		this.setMaxDamage(0);
-		this.efficiencyOnProperMaterial = 12F;
+		efficiencyOnProperMaterial = 12F;
 		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
-		this.damageVsEntity = 4;
+		damageVsEntity = 4;
 		this.setNoRepair();
 		this.setIndex(102);
 	}
@@ -42,8 +43,8 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	public float getStrVsBlock(ItemStack is, Block par2Block) {
 		if (par2Block == null)
 			return 0;
-		for (int i = 0; i < this.blocksEffectiveAgainst.length; i++) {
-			if (this.blocksEffectiveAgainst[i] == par2Block)
+		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
+			if (blocksEffectiveAgainst[i] == par2Block)
 				return 12F;
 		}
 		return 1F;
@@ -54,10 +55,10 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {
-		return this.index;
+		return index;
 	}
 
 	public void setIndex(int a) {
-		this.index = a;
+		index = a;
 	}
 }

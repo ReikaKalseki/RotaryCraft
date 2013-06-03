@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -29,8 +30,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAdvGear extends BlockModelledMachine {
 
-	public BlockAdvGear(int blockID, Material mat) {
-		super(blockID, mat);
+	public BlockAdvGear(int ID, Material mat) {
+		super(ID, mat);
 		////this.blockIndexInTexture = 8;
 	}
 

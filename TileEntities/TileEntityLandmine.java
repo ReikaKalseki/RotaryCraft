@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -26,7 +27,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -34,6 +34,7 @@ import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Models.ModelLandmine;
 
 public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedInventory {
 
@@ -111,12 +112,12 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 		List in = world.getEntitiesWithinAABB(EntityLiving.class, region);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLiving e = (EntityLiving)in.get(i);
-			boolean inv = false;
+			boolean invuln = false;
 			if (e instanceof EntityPlayer) {
 				if (((EntityPlayer)e).capabilities.isCreativeMode)
-					inv = true;
+					invuln = true;
 			}
-			if (!inv) {
+			if (!invuln) {
 				e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);
 				e.addPotionEffect(new PotionEffect(Potion.blindness.id, 400, 0));
 				e.addPotionEffect(new PotionEffect(Potion.confusion.id, 450, 5));
@@ -295,7 +296,7 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
+		return new ModelLandmine();
 	}
 
 	@Override

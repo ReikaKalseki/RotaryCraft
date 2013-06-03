@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
@@ -204,7 +205,7 @@ public class EntityRailGunShot extends EntityFireball {
 							//ReikaWorldHelper.recursiveFillWithinSphere(world, x0+i, y0+j-7, z0+k, Block.grass.blockID, -1, Block.dirt.blockID, 0, x0+i, y0+j-7, z0+k, 5);
 							if (id == Block.grass.blockID) {
 								if (power >= 5) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, id, 0);
+									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
 									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
 								}
 								else
@@ -214,7 +215,7 @@ public class EntityRailGunShot extends EntityFireball {
 							if (id == Block.dirt.blockID) {
 								int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
 								if (meta >= 3 || (meta > 3-(power-6) && power > 6)) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, id, 0);
+									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
 									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
 								}
 								else
@@ -228,7 +229,7 @@ public class EntityRailGunShot extends EntityFireball {
 									if (power <= 12)
 										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.cobblestone.blockID);
 									else {
-										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, id, 0);
+										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
 										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
 									}
 								}
@@ -238,7 +239,7 @@ public class EntityRailGunShot extends EntityFireball {
 							if (id == Block.cobblestone.blockID || id == Block.cobblestoneWall.blockID || id == Block.cobblestoneMossy.blockID) {
 								int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
 								if (meta >= 3 || (meta > 3-(power-8) && power > 8)) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, id, 0);
+									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
 									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
 								}
 								else

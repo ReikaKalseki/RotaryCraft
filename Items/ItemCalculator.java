@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -18,8 +19,8 @@ import Reika.RotaryCraft.GUIs.GuiCalculator;
 
 public class ItemCalculator extends ItemRotaryTool {
 
-	public ItemCalculator(int itemID) {
-		super(itemID, 240);
+	public ItemCalculator(int ID) {
+		super(ID, 240);
 	}
 
 	@Override

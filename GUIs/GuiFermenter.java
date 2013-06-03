@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,12 +21,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityFermenter;
 
 public class GuiFermenter extends GuiMachine
 {
-	private TileEntityFermenter tile;
+	private TileEntityFermenter ferm;
 
-	public GuiFermenter(EntityPlayer player, TileEntityFermenter Fermenter)
+	public GuiFermenter(EntityPlayer p5ep, TileEntityFermenter Fermenter)
 	{
-		super(new ContainerFermenter(player, Fermenter), Fermenter);
-		tile = Fermenter;
+		super(new ContainerFermenter(p5ep, Fermenter), Fermenter);
+		ferm = Fermenter;
 	}
 
 	/**
@@ -39,10 +40,10 @@ public class GuiFermenter extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = tile.getCookProgressScaled(48);
+		int i1 = ferm.getCookProgressScaled(48);
 		this.drawTexturedModalRect(j + 79, k + 34, 176, 14, 1*(i1)+1, 16);
 
-		int i2 = tile.getTemperatureScaled(54);
+		int i2 = ferm.getTemperatureScaled(54);
 		if (i2 > 54)
 			i2 = 54;
 		this.drawTexturedModalRect(j+24, k+70-i2, 177, 86-i2, 9, i2);
@@ -55,17 +56,17 @@ public class GuiFermenter extends GuiMachine
 		mc.renderEngine.bindTexture(var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (tile.power*29L)/tile.MINPOWER;
+		long frac = (ferm.power*29L)/ferm.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.omega*29L)/tile.MINSPEED;
+		frac = (int)(ferm.omega*29L)/ferm.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.torque*29L)/tile.MINTORQUE;
+		frac = (int)(ferm.torque*29L)/ferm.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -73,7 +74,7 @@ public class GuiFermenter extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", ferm.power, ferm.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

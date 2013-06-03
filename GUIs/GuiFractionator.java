@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,19 +21,19 @@ import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
 
 public class GuiFractionator extends GuiMachine
 {
-	private TileEntityFractionator tile;
+	private TileEntityFractionator fct;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 
-	public GuiFractionator(EntityPlayer player, TileEntityFractionator tilef)
+	public GuiFractionator(EntityPlayer p5ep, TileEntityFractionator tilef)
 	{
-		super(new ContainerFractionator(player, tilef), tilef);
-		tile = tilef;
+		super(new ContainerFractionator(p5ep, tilef), tilef);
+		fct = tilef;
 		xSize = 176;
 		ySize = 166;
-		this.player = player;
+		ep = p5ep;
 	}
 
 	/**
@@ -46,9 +47,9 @@ public class GuiFractionator extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = tile.getStorageScaled(17);
-		int i2 = tile.getFuelScaled(50);
-		int i3 = tile.getMixScaled(30);
+		int i1 = fct.getStorageScaled(17);
+		int i2 = fct.getFuelScaled(50);
+		int i3 = fct.getMixScaled(30);
 		if (i3 > 30)
 			i3 = 30;
 		this.drawTexturedModalRect(j+64, k+25, 177, 1, i3, 38);
@@ -62,17 +63,17 @@ public class GuiFractionator extends GuiMachine
 		mc.renderEngine.bindTexture(var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (tile.power*29L)/tile.MINPOWER;
+		long frac = (fct.power*29L)/fct.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = tile.omega*29L/tile.MINSPEED;
+		frac = fct.omega*29L/fct.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = tile.torque*29L/tile.MINTORQUE;
+		frac = fct.torque*29L/fct.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -80,7 +81,7 @@ public class GuiFractionator extends GuiMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", fct.power, fct.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

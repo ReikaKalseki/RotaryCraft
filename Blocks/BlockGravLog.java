@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -28,8 +29,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 
-	public BlockGravLog(int blockID) {
-		super(blockID, Material.wood);
+	public BlockGravLog(int ID) {
+		super(ID, Material.wood);
 		this.setHardness(2F);
 		this.setResistance(2F);
 		this.setLightValue(0F);

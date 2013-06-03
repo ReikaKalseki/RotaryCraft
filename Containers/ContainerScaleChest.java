@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -77,11 +78,11 @@ public class ContainerScaleChest extends CoreContainer
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer ep)
+	public boolean canInteractWith(EntityPlayer player)
 	{
-		if (ep != null)
+		if (player != null)
 			return true;
-		boolean b = chest.isUseableByPlayer(ep);
+		boolean b = chest.isUseableByPlayer(player);
 		if (!b) {
 			chest.closeChest();
 			chest.lidAngle = 1;

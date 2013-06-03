@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -19,41 +20,41 @@ public class CommonProxy implements IGuiHandler
 	public static int NVGoggles;
 	public static int NVHelmet;
 
-/**
- * Client side only register stuff...
- */
-public void registerRenderers()
-  {
-  //unused server side. -- see ClientProxy for implementation
-  }
+	/**
+	 * Client side only register stuff...
+	 */
+	public void registerRenderers()
+	{
+		//unused server side. -- see ClientProxy for implementation
+	}
 
-public void addArmorRenders() {}
+	public void addArmorRenders() {}
 
-@Override
-public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-@Override
-public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-public World getClientWorld() {
-	return null;
-}
+	public World getClientWorld() {
+		return null;
+	}
 
-public void registerRenderInformation() {
-	// TODO Auto-generated method stub
+	public void registerRenderInformation() {
+		// TODO Auto-generated method stub
 
-}
+	}
 
-public void registerSounds() {
-	// TODO Auto-generated method stub
-}
+	public void registerSounds() {
+		// TODO Auto-generated method stub
+	}
 
 }// End class CommonProxy

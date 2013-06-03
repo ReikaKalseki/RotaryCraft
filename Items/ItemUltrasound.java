@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -13,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
@@ -22,8 +22,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemUltrasound extends ItemChargedTool {
 
-	public ItemUltrasound(int itemID) {
-		super(itemID, 128);
+	public ItemUltrasound(int ID) {
+		super(ID, 128);
 	}
 	//Can find ores, detect near caves, detect silverfish stone
 

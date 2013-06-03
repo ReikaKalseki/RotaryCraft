@@ -4,14 +4,14 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -24,16 +24,16 @@ public class GuiSplitter extends GuiNonPoweredMachine
 
 	private TileEntitySplitter splitter;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 
-	public GuiSplitter(EntityPlayer player, TileEntitySplitter Splitter)
+	public GuiSplitter(EntityPlayer p5ep, TileEntitySplitter Splitter)
 	{
-		super(new CoreContainer(player, Splitter), Splitter);
+		super(new CoreContainer(p5ep, Splitter), Splitter);
 		splitter = Splitter;
 		ySize = 140;
-		this.player = player;
+		ep = p5ep;
 		mode = splitter.splitmode;
 	}
 
@@ -57,8 +57,8 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		//this.buttonList.add(new GuiButton(9, j+52, -1+k+140, 72, 20, "Merge"));
 	}
 
-	public void updateMode(int mode) {
-		splitter.splitmode = mode;
+	public void updateMode(int md) {
+		splitter.splitmode = md;
 	}
 
 	@Override
@@ -66,10 +66,10 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id <= 8) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 6, splitter, player, mode);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 6, splitter, ep, mode);
 		}
 		if (button.id == 9)
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 7, splitter, player, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 7, splitter, ep, 0);
 		this.updateScreen();
 
 	}

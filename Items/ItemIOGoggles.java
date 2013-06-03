@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -18,10 +19,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 
+@SuppressWarnings("deprecation")
 public class ItemIOGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
 
-	public ItemIOGoggles(int itemID, int texID) {
-		super(itemID, RotaryCraft.IOGM, texID, 0, 1);
+	public ItemIOGoggles(int ID, int texID) {
+		super(ID, RotaryCraft.IOGM, texID, 0, 1);
 		this.setNoRepair();
 	}
 
@@ -45,7 +47,6 @@ public class ItemIOGoggles extends ItemRotaryArmor implements IArmorTextureProvi
 	@Override
 	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {}
 
-	@Override
 	public String getArmorTextureFile(ItemStack itemstack) {
 		return "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png";
 	}

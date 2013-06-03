@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -17,8 +18,8 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemHandBook extends ItemRotaryTool {
 
-	public ItemHandBook(int itemID) {
-		super(itemID, 208); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemHandBook(int ID) {
+		super(ID, 208); //calling the super constructor and giving him the itemID so minecraft knows the itemID
 	}
 
 	@Override

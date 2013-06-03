@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -50,6 +51,8 @@ public final class RotarySounds {
 				new File(mc.mcDataDir, "resources/sound3/mod/Reika/RotaryCraft/knockback.ogg"));
 		mc.installResource("sound3/Reika/RotaryCraft/flywheel.ogg",
 				new File(mc.mcDataDir, "resources/sound3/mod/Reika/RotaryCraft/flywheel.ogg"));
+		mc.installResource("sound3/Reika/RotaryCraft/projector.ogg",
+				new File(mc.mcDataDir, "resources/sound3/mod/Reika/RotaryCraft/projector.ogg"));
 
 		mc.installResource("sound3/Reika/RotaryCraft/music/basslo.ogg",
 				new File(mc.mcDataDir, "resources/sound3/mod/Reika/RotaryCraft/music/basslo.ogg"));

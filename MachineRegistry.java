@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
@@ -67,6 +67,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.TileEntityFreezeGun;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
@@ -177,7 +178,8 @@ public enum MachineRegistry {
 	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			10),
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
-	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine");
+	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
+	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction");
 
 
 	private String name;
@@ -322,10 +324,10 @@ public enum MachineRegistry {
 		return name;
 	}
 
-	public float getMinX(RotaryCraftTileEntity te) {
+	public float getMinX(RotaryCraftTileEntity tile) {
 		if (this == SPRINKLER)
 			return 0.3125F;
-		if (this == WOODCUTTER && te.getBlockMetadata() == 0)
+		if (this == WOODCUTTER && tile.getBlockMetadata() == 0)
 			return 0.0625F;
 		if (this == SMOKEDETECTOR)
 			return 0.25F;
@@ -336,20 +338,20 @@ public enum MachineRegistry {
 		return 0;
 	}
 
-	public float getMinY(RotaryCraftTileEntity te) {
+	public float getMinY(RotaryCraftTileEntity tile) {
 		if (this == SPRINKLER)
 			return 0.4375F;
 		if (this == SMOKEDETECTOR)
 			return 0.875F;
-		if (this == CCTV && te.getBlockMetadata() == 1)
-			return 0.5F-0.5F*(float)Math.sin(Math.toRadians(((TileEntityCCTV)te).theta));
+		if (this == CCTV && tile.getBlockMetadata() == 1)
+			return 0.5F-0.5F*(float)Math.sin(Math.toRadians(((TileEntityCCTV)tile).theta));
 		return 0;
 	}
 
-	public float getMinZ(RotaryCraftTileEntity te) {
+	public float getMinZ(RotaryCraftTileEntity tile) {
 		if (this == SPRINKLER)
 			return 0.3125F;
-		if (this == WOODCUTTER && te.getBlockMetadata() == 2)
+		if (this == WOODCUTTER && tile.getBlockMetadata() == 2)
 			return 0.0625F;
 		if (this == SMOKEDETECTOR)
 			return 0.25F;
@@ -360,28 +362,28 @@ public enum MachineRegistry {
 		return 0;
 	}
 
-	public float getMaxX(RotaryCraftTileEntity te) {
+	public float getMaxX(RotaryCraftTileEntity tile) {
 		if (this == SPRINKLER)
 			return 0.6875F;
 		if (this == SMOKEDETECTOR)
 			return 0.75F;
 		if (this == CCTV)
 			return 0.75F;
-		if (this == WOODCUTTER && te.getBlockMetadata() == 1)
+		if (this == WOODCUTTER && tile.getBlockMetadata() == 1)
 			return 0.9375F;
 		if (this == SCALECHEST)
 			return 0.9375F;
 		return 1;
 	}
 
-	public float getMaxY(RotaryCraftTileEntity te) {
+	public float getMaxY(RotaryCraftTileEntity tile) {
 		if (this == FLOODLIGHT) {
-			if (((TileEntityFloodlight)te).beammode)
+			if (((TileEntityFloodlight)tile).beammode)
 				return 1;
 			return 0.875F;
 		}
-		if (this == CCTV && te.getBlockMetadata() == 0)
-			return 0.5F-0.5F*(float)Math.sin(Math.toRadians(((TileEntityCCTV)te).theta));
+		if (this == CCTV && tile.getBlockMetadata() == 0)
+			return 0.5F-0.5F*(float)Math.sin(Math.toRadians(((TileEntityCCTV)tile).theta));
 		if (this == GRINDER)
 			return 0.8125F;
 		if (this == HEATRAY)
@@ -427,14 +429,14 @@ public enum MachineRegistry {
 		return 1;
 	}
 
-	public float getMaxZ(RotaryCraftTileEntity te) {
+	public float getMaxZ(RotaryCraftTileEntity tile) {
 		if (this == SPRINKLER)
 			return 0.6875F;
 		if (this == SMOKEDETECTOR)
 			return 0.75F;
 		if (this == CCTV)
 			return 0.75F;
-		if (this == WOODCUTTER && te.getBlockMetadata() == 3)
+		if (this == WOODCUTTER && tile.getBlockMetadata() == 3)
 			return 0.9375F;
 		if (this == SCALECHEST)
 			return 0.9375F;
@@ -555,28 +557,28 @@ public enum MachineRegistry {
 		if (!this.isMultiNamed())
 			throw new RuntimeException("Machine "+name+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
-			TileEntityGearbox te = (TileEntityGearbox)tile;
-			return RotaryNames.gearboxItemNames[te.getBlockMetadata()/4*5+te.type.ordinal()];
+			TileEntityGearbox gbx = (TileEntityGearbox)tile;
+			return RotaryNames.gearboxItemNames[gbx.getBlockMetadata()/4*5+gbx.type.ordinal()];
 		}
 		if (this == ENGINE) {
-			TileEntityEngine te = (TileEntityEngine)tile;
-			return RotaryNames.engineNames[te.type.ordinal()];
+			TileEntityEngine eng = (TileEntityEngine)tile;
+			return RotaryNames.engineNames[eng.type.ordinal()];
 		}
 		if (this == SHAFT) {
-			TileEntityShaft te = (TileEntityShaft)tile;
-			return RotaryNames.shaftItemNames[te.type.ordinal()];
+			TileEntityShaft sha = (TileEntityShaft)tile;
+			return RotaryNames.shaftItemNames[sha.type.ordinal()];
 		}
 		if (this == FLYWHEEL) {
-			TileEntityFlywheel te = (TileEntityFlywheel)tile;
-			return RotaryNames.flywheelItemNames[te.getBlockMetadata()/4];
+			TileEntityFlywheel fly = (TileEntityFlywheel)tile;
+			return RotaryNames.flywheelItemNames[fly.getBlockMetadata()/4];
 		}
 		if (this == ADVANCEDGEARS) {
-			TileEntityAdvancedGear te = (TileEntityAdvancedGear)tile;
-			if (te.getBlockMetadata() < 4)
+			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
+			if (adv.getBlockMetadata() < 4)
 				return "Worm Gear";
-			else if (te.getBlockMetadata() < 8)
+			else if (adv.getBlockMetadata() < 8)
 				return "CVT Unit";
-			else if (te.getBlockMetadata() < 12)
+			else if (adv.getBlockMetadata() < 12)
 				return "Industrial Coil";
 		}
 		throw new RuntimeException("Machine "+name+" has an unspecified multi name!");
@@ -626,14 +628,14 @@ public enum MachineRegistry {
 		return false;
 	}
 
-	public int getContactDamage(RotaryCraftTileEntity te) {
+	public int getContactDamage(RotaryCraftTileEntity tile) {
 		if (this == WOODCUTTER) {
-			if (((TileEntityWoodcutter)te).power == 0)
+			if (((TileEntityWoodcutter)tile).power == 0)
 				return 0;
 			return 3;
 		}
 		if (this == GRINDER) {
-			if (((TileEntityGrinder)te).power == 0)
+			if (((TileEntityGrinder)tile).power == 0)
 				return 0;
 			return 1;
 		}
@@ -680,6 +682,8 @@ public enum MachineRegistry {
 		if (this == MAGNETIZER)
 			return true;
 		if (this == SCREEN)
+			return true;
+		if (this == FRICTION)
 			return true;
 		return false;
 	}
@@ -760,21 +764,21 @@ public enum MachineRegistry {
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 
-	public ItemStack getCraftedMetadataProduct(int meta) {
+	public ItemStack getCraftedMetadataProduct(int metadata) {
 		if (this == ADVANCEDGEARS) {
-			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, metadata);
 		}
 		if (this == FLYWHEEL) {
-			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata);
 		}
 		if (this == ENGINE) {
-			return new ItemStack(RotaryCraft.engineitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.engineitems.itemID, 1, metadata);
 		}
 		if (this == SHAFT) {
-			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, metadata);
 		}
 		if (this == GEARBOX) {
-			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, meta);
+			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, metadata);
 		}
 		return null;
 	}

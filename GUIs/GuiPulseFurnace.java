@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -13,23 +14,22 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiPulseFurnace extends GuiMachine {
 
-	private TileEntityPulseFurnace tile;
+	private TileEntityPulseFurnace puls;
 
-	public GuiPulseFurnace(EntityPlayer player, TileEntityPulseFurnace pulseFurnace)
+	public GuiPulseFurnace(EntityPlayer p5ep, TileEntityPulseFurnace pulseFurnace)
 	{
-		super(new ContainerPulseFurnace(player, pulseFurnace), pulseFurnace);
-		tile = pulseFurnace;
+		super(new ContainerPulseFurnace(p5ep, pulseFurnace), pulseFurnace);
+		puls = pulseFurnace;
 	}
 
 	/**
@@ -43,13 +43,13 @@ public class GuiPulseFurnace extends GuiMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = tile.getCookProgressScaled(10);
-		int i2 = tile.getFuelScaled(52);
-		int i3 = tile.getWaterScaled(52);
-		int i4 = tile.getTempScaled(54);
+		int i1 = puls.getCookProgressScaled(10);
+		int i2 = puls.getFuelScaled(52);
+		int i3 = puls.getWaterScaled(52);
+		int i4 = puls.getTempScaled(54);
 		if (i4 < 9)
 			i4 = 9;
-		int i5 = tile.getFireScaled(38);
+		int i5 = puls.getFireScaled(38);
 		this.drawTexturedModalRect(j + 131, k + 36, 215, 55, 4, 1*(i1));
 		this.drawTexturedModalRect(j + 91, k + 68-i2, 248, 53-i2, 5, 1*(i2));
 		this.drawTexturedModalRect(j + 59, k + 68-i3, 199, 53-i3, 5, 1*(i3));
@@ -65,17 +65,17 @@ public class GuiPulseFurnace extends GuiMachine {
 		mc.renderEngine.bindTexture(var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (tile.power*29L)/tile.MINPOWER;
+		long frac = (puls.power*29L)/puls.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.omega*29L)/tile.MINSPEED;
+		frac = (int)(puls.omega*29L)/puls.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = (int)(tile.torque*29L)/tile.MINTORQUE;
+		frac = (int)(puls.torque*29L)/puls.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -83,7 +83,7 @@ public class GuiPulseFurnace extends GuiMachine {
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", tile.power, tile.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", puls.power, puls.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

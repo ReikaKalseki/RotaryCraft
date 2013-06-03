@@ -4,14 +4,14 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
@@ -739,8 +739,8 @@ public final class HandbookAuxData {
 			int[] icons2 = {-1, 110, -1, 131, 131, 131, -1+GuiHandbook.i*70, -1+GuiHandbook.i*70, -1+GuiHandbook.i*70};
 			if (GuiHandbook.i == 0)
 				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 67, 1, false, page1); //change output icon
-				else
-					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 111, 1, false, page1); //change output icon
+			else
+				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 111, 1, false, page1); //change output icon
 		}
 
 		if (screen == GuiHandbook.CRAFTSTART+5 && page == 0) {

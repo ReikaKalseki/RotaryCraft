@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -17,42 +18,42 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
 public class ContainerVacuum extends ContainerBasicStorage
 {
-    private IInventory lowerVacuumInventory;
-    private int numRows;
-    private TileEntityVacuum vac;
+	private IInventory lowerVacuumInventory;
+	private int numRows;
+	private TileEntityVacuum vac;
 
-    public ContainerVacuum(EntityPlayer player, TileEntityVacuum te)
-    {
-    	super(player, te);
-    	vac = te;
-    	lowerVacuumInventory = te;
-    }
+	public ContainerVacuum(EntityPlayer player, TileEntityVacuum te)
+	{
+		super(player, te);
+		vac = te;
+		lowerVacuumInventory = te;
+	}
 
-    @Override
+	@Override
 	public void detectAndSendChanges()
-    {
-        super.detectAndSendChanges();
+	{
+		super.detectAndSendChanges();
 
-        for (int i = 0; i < crafters.size(); i++)
-        {
-            ICrafting icrafting = (ICrafting)crafters.get(i);
-            icrafting.sendProgressBarUpdate(this, 1, vac.experience);
-        }
-    }
+		for (int i = 0; i < crafters.size(); i++)
+		{
+			ICrafting icrafting = (ICrafting)crafters.get(i);
+			icrafting.sendProgressBarUpdate(this, 1, vac.experience);
+		}
+	}
 
-    @Override
+	@Override
 	public void updateProgressBar(int par1, int par2)
-    {
-        switch(par1) {
-        	case 1: vac.experience = par2; break;
-        }
-    }
+	{
+		switch(par1) {
+		case 1: vac.experience = par2; break;
+		}
+	}
 
-    /**
-     * Return this vacuum container's lower vacuum inventory.
-     */
-    public IInventory getLowerVacuumInventory()
-    {
-        return lowerVacuumInventory;
-    }
+	/**
+	 * Return this vacuum container's lower vacuum inventory.
+	 */
+	 public IInventory getLowerVacuumInventory()
+	 {
+		 return lowerVacuumInventory;
+	 }
 }

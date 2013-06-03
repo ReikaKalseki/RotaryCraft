@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -21,7 +22,7 @@ public interface EnchantableMachine {
 	public HashMap<Enchantment,Integer> getEnchantments();
 
 	public boolean hasEnchantment(Enchantment e);
-	
+
 	public boolean hasEnchantments();
 
 	public int getEnchantment(Enchantment e);

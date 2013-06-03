@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -31,9 +32,6 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -41,6 +39,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPileDriver;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
@@ -73,14 +73,14 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(true, false);
 		int speed = BASESPEED;
-		int MINPOWER = BASEPOWER*(step+1);
+		int minpower = BASEPOWER*(step+1);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", readx, ready, readz));
-		if (power < MINPOWER || torque < MINTORQUE) {
+		if (power < minpower || torque < MINTORQUE) {
 			//this.climbing = true;
 			return;
 		}
-		if (power > MINPOWER)
-			speed = ReikaMathLibrary.extrema(BASESPEED/((int)(power/MINPOWER)), MINTIME, "max");
+		if (power > minpower)
+			speed = ReikaMathLibrary.extrema(BASESPEED/((int)(power/minpower)), MINTIME, "max");
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", step, step2));
 		tickcount++;
 

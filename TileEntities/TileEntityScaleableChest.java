@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -21,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -99,7 +99,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		numchanges = powerchanges.size();
 		lastpower = pw;
 		if (numchanges > 18) {
-			Block.blocksList[this.getTileEntityBlockID()].dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getTileEntityBlockID(), this.getBlockMetadata());
+			Block.blocksList[this.getTileEntityBlockID()].dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2F, true);
 		}

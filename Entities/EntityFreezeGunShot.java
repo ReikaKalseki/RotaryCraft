@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
@@ -84,10 +85,10 @@ public class EntityFreezeGunShot extends EntityFireball {
 					el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -9));
 				}
 				if (el != null) {
-				if (frozen != null)
-					frozen.add(el);
-				EntityIceBlock ice = new EntityIceBlock(world, el);
-				world.spawnEntityInWorld(ice);
+					if (frozen != null)
+						frozen.add(el);
+					EntityIceBlock ice = new EntityIceBlock(world, el);
+					world.spawnEntityInWorld(ice);
 				}
 			}
 		}

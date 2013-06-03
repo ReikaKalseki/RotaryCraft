@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
@@ -34,12 +35,12 @@ public class PipeRenderer extends RotaryTERenderer {
 	@SuppressWarnings("unused")
 	public void renderPipe(TileEntityPiping te, MachineRegistry m, double p2, double p4, double p6) {
 		GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glTranslatef((float)p2-0.5F, (float)p4 + 1.5F, (float)p6 + 1.5F);
-        GL11.glScalef(1.0F, -1.0F, -1.0F);
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)p2-0.5F, (float)p4 + 1.5F, (float)p6 + 1.5F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		Tessellator v5 = new Tessellator();
 		double t = 0.0625;
 		double mx = 0.33; double my = 0.33; double mz = 0.33;
@@ -50,23 +51,23 @@ public class PipeRenderer extends RotaryTERenderer {
 		case HOSE:
 			dx = 0;
 			dy = 0;
-		break;
+			break;
 		case PIPE:
 			dx = 0.5;
 			dy = 0;
-		break;
+			break;
 		case FUELLINE:
 			dx = 0;
 			dy = 0.5;
-		break;
+			break;
 		case SPILLER:
 			dx = 0.5;
 			dy = 0.5;
-		break;
+			break;
 		default:
-		break;
+			break;
 		}
-        this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/piping.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/piping.png");
 		if (te.isConnectionValidForIDAndSide(EnumLook.UP))
 			my = 0;
 		if (te.isConnectionValidForIDAndSide(EnumLook.DOWN))
@@ -241,7 +242,7 @@ public class PipeRenderer extends RotaryTERenderer {
 			}
 		}
 		else {
-	        this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/liquids.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/liquids.png");
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			int a = 255;
 			boolean liq = false;
@@ -309,11 +310,11 @@ public class PipeRenderer extends RotaryTERenderer {
 		}
 		v5.draw();
 		GL11.glEnable(GL11.GL_CULL_FACE);
-        if (te.isInWorld())
-        	GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.enableStandardItemLighting();
+		if (te.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderHelper.enableStandardItemLighting();
 	}
 
 	@Override
@@ -321,59 +322,59 @@ public class PipeRenderer extends RotaryTERenderer {
 		return null;
 	}
 
-    public void renderTileEntityPipingAt(TileEntityPiping tile, double par2, double par4, double par6, float par8)
-    {
-        int var9;
+	public void renderTileEntityPipingAt(TileEntityPiping tile, double par2, double par4, double par6, float par8)
+	{
+		int var9;
 
-        if (!tile.isInWorld())
-        {
-            var9 = 0;
-        }
-        else
-        {
+		if (!tile.isInWorld())
+		{
+			var9 = 0;
+		}
+		else
+		{
 
-            var9 = tile.getBlockMetadata();
+			var9 = tile.getBlockMetadata();
 
 
-            {
-                //((BlockVacuumBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-                var9 = tile.getBlockMetadata();
-            }
-        }
+			{
+				//((BlockVacuumBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+				var9 = tile.getBlockMetadata();
+			}
+		}
 
-        if (true)
-        {
-            this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/vactex.png");
+		if (true)
+		{
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/vactex.png");
 
-            GL11.glPushMatrix();
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-            GL11.glScalef(1.0F, -1.0F, -1.0F);
-            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-            int var11 = 0;
-            float var13;
-            if (tile.isInWorld())
-            	GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glPopMatrix();
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glPushMatrix();
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+			GL11.glScalef(1.0F, -1.0F, -1.0F);
+			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+			int var11 = 0;
+			float var13;
+			if (tile.isInWorld())
+				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopMatrix();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            Tessellator v5 = new Tessellator();
-            v5.startDrawingQuads();
-            v5.addVertexWithUV(par2+0, par4+0, par6+0, 0, 0);
-            v5.addVertexWithUV(par2+1, par4+0, par6+0, 1, 0);
-            v5.addVertexWithUV(par2+1, par4+1, par6+0, 1, 1);
-            v5.addVertexWithUV(par2+0, par4+1, par6+0, 0, 1);
-            v5.draw();
-        }
-    }
+			Tessellator v5 = new Tessellator();
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(par2+0, par4+0, par6+0, 0, 0);
+			v5.addVertexWithUV(par2+1, par4+0, par6+0, 1, 0);
+			v5.addVertexWithUV(par2+1, par4+1, par6+0, 1, 1);
+			v5.addVertexWithUV(par2+0, par4+1, par6+0, 0, 1);
+			v5.draw();
+		}
+	}
 
-    @Override
+	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-    {
-    	if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-        //this.renderTileEntityPipingAt((TileEntityPiping)tile, par2, par4, par6, par8);
-    	this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
-    }
+	{
+		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+			//this.renderTileEntityPipingAt((TileEntityPiping)tile, par2, par4, par6, par8);
+			this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
+	}
 
 }

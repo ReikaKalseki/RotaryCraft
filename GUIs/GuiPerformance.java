@@ -4,13 +4,13 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerPerformance;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -19,17 +19,17 @@ public class GuiPerformance extends GuiNonPoweredMachine
 {
 	private TileEntityEngine Engine;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+	
 	int x;
 	int y;
 
-	public GuiPerformance(EntityPlayer player, TileEntityEngine tile)
+	public GuiPerformance(EntityPlayer p5ep, TileEntityEngine te)
 	{
-		super(new ContainerPerformance(player, tile), tile);
-		Engine = tile;
+		super(new ContainerPerformance(p5ep, te), te);
+		Engine = te;
 		xSize = 176;
 		ySize = 166;
-		this.player = player;
+		ep = p5ep;
 	}
 
 	/**

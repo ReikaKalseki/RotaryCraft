@@ -4,13 +4,13 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerSteam;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -18,17 +18,17 @@ import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 public class GuiSteam extends GuiNonPoweredMachine
 {
 	private TileEntityEngine Steam;
-	private EntityPlayer player;
+	
 	int x;
 	int y;
 
-	public GuiSteam(EntityPlayer player, TileEntityEngine tile)
+	public GuiSteam(EntityPlayer p5ep, TileEntityEngine te)
 	{
-		super(new ContainerSteam(player, tile), tile);
-		Steam = tile;
+		super(new ContainerSteam(p5ep, te), te);
+		Steam = te;
 		xSize = 176;
 		ySize = 166;
-		this.player = player;
+		ep = p5ep;
 	}
 
 	/**

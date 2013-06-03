@@ -4,13 +4,13 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
@@ -18,12 +18,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 
 public class GuiAerosolizer extends GuiPowerOnlyMachine
 {
-	TileEntityAerosolizer tile;
+	TileEntityAerosolizer aero;
 
-	public GuiAerosolizer(EntityPlayer player, TileEntityAerosolizer Aerosolizer)
+	public GuiAerosolizer(EntityPlayer p5ep, TileEntityAerosolizer Aerosolizer)
 	{
-		super(new ContainerAerosolizer(player, Aerosolizer), Aerosolizer);
-		tile = Aerosolizer;
+		super(new ContainerAerosolizer(p5ep, Aerosolizer), Aerosolizer);
+		aero = Aerosolizer;
 	}
 	/*
     public void drawScreen(int m, int n, float f) {
@@ -54,10 +54,10 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				int amount = tile.potionLevel[3*i+j]/4;
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d %d %d %d %d %d %d", tile.potionLevel[0], tile.potionLevel[1], tile.potionLevel[2], tile.potionLevel[3], tile.potionLevel[4], tile.potionLevel[5], tile.potionLevel[6], tile.potionLevel[7], tile.potionLevel[8]));
-				ReikaGuiAPI.instance.fillBar(var5+62+18*j, var6+17+18*i, 16, var6+17+18*i+16, tile.slotColor[3*i+j]+0xff000000, amount, 16, true);
-				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", tile.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
+				int amount = aero.potionLevel[3*i+j]/4;
+				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d %d %d %d %d %d %d", aero.potionLevel[0], aero.potionLevel[1], aero.potionLevel[2], aero.potionLevel[3], aero.potionLevel[4], aero.potionLevel[5], aero.potionLevel[6], aero.potionLevel[7], aero.potionLevel[8]));
+				ReikaGuiAPI.instance.fillBar(var5+62+18*j, var6+17+18*i, 16, var6+17+18*i+16, aero.slotColor[3*i+j]+0xff000000, amount, 16, true);
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", aero.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
 			}
 		}
 	}

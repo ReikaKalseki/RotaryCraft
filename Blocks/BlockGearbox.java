@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -36,8 +37,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 
 public class BlockGearbox extends BlockModelledMachine {
 
-	public BlockGearbox(int blockID, Material mat) {
-		super(blockID, mat);
+	public BlockGearbox(int ID, Material mat) {
+		super(ID, mat);
 		//this.blockIndexInTexture = 8;
 		//this.blockHardness = 0.5F;
 	}
@@ -197,22 +198,22 @@ public class BlockGearbox extends BlockModelledMachine {
 			switch(tile.type) {
 			case WOOD:
 				fix = ItemStacks.woodgear;
-			break;
+				break;
 			case STONE:
 				fix = ItemStacks.stonegear;
-			break;
+				break;
 			case STEEL:
 				fix = ItemStacks.steelgear;
-			break;
+				break;
 			case DIAMOND:
 				fix = ItemStacks.diamondgear;
-			break;
+				break;
 			case BEDROCK:
 				fix = ItemStacks.bedrockgear;
-			break;
+				break;
 			default:
 				fix = new ItemStack(Block.stone);
-			break;
+				break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
 				tile.damage -= 1 + 20 * tile.par5Random.nextInt(18 - tile.ratio);

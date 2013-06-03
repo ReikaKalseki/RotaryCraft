@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -21,15 +22,14 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
-
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 public class GuiBorer extends GuiMachine
 {
@@ -39,20 +39,20 @@ public class GuiBorer extends GuiMachine
 
 	private TileEntityBorer borer;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 	private boolean[][] dig = new boolean[7][5];
 	private int packetID;
 
-	public GuiBorer(EntityPlayer player, TileEntityBorer Borer)
+	public GuiBorer(EntityPlayer p5ep, TileEntityBorer Borer)
 	{
-		super(new CoreContainer(player, Borer), Borer);
+		super(new CoreContainer(p5ep, Borer), Borer);
 		borer = Borer;
 		ySize = 148;
 		xSize = 176;
 		dropstatus = "Drops On";
-		this.player = player;
+		ep = p5ep;
 		drops = borer.drops;
 		mode = borer.mode;
 		for (int i = 0; i < 7; i++)
@@ -100,8 +100,8 @@ public class GuiBorer extends GuiMachine
 		this.sendPacket(1);
 	}
 
-	public void updateMode(int mode) {
-		borer.mode = (byte)mode;
+	public void updateMode(int md) {
+		borer.mode = (byte)md;
 	}
 
 	@Override
@@ -187,10 +187,10 @@ public class GuiBorer extends GuiMachine
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
 		if (side == Side.SERVER) {
 			// We are on the server side.
-			EntityPlayerMP player2 = (EntityPlayerMP) player;
+			EntityPlayerMP player2 = (EntityPlayerMP) ep;
 		} else if (side == Side.CLIENT) {
 			// We are on the client side.
-			EntityClientPlayerMP player2 = (EntityClientPlayerMP) player;
+			EntityClientPlayerMP player2 = (EntityClientPlayerMP) ep;
 			PacketDispatcher.sendPacketToServer(packet);
 		} else {
 			// We are on the Bukkit server.

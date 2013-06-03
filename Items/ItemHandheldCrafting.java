@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -19,9 +20,9 @@ public class ItemHandheldCrafting extends ItemRotaryTool {
 
 	public ItemStack[] items = new ItemStack[9];
 
-	public ItemHandheldCrafting(int itemID) {
-		super(itemID, 33);
-		this.maxStackSize = 1;
+	public ItemHandheldCrafting(int ID) {
+		super(ID, 33);
+		maxStackSize = 1;
 	}
 
 	@Override

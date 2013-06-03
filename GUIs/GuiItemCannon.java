@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,18 +21,17 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
-
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 public class GuiItemCannon extends GuiPowerOnlyMachine
 {
-	private TileEntityItemCannon tile;
+	private TileEntityItemCannon ica;
 	private GuiTextField input;
 	private GuiTextField input2;
 	private GuiTextField input3;
@@ -41,16 +41,14 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	int x;
 	int y;
 
-	EntityPlayer player;
-
-	public GuiItemCannon(EntityPlayer player, TileEntityItemCannon ItemCannon)
+	public GuiItemCannon(EntityPlayer p5ep, TileEntityItemCannon ItemCannon)
 	{
-		super(new ContainerItemCannon(player, ItemCannon), ItemCannon);
-		tile = ItemCannon;
+		super(new ContainerItemCannon(p5ep, ItemCannon), ItemCannon);
+		ica = ItemCannon;
 		ySize = 236;
 		ySize = 170;
-		target = tile.target;
-		this.player = player;
+		target = ica.target;
+		ep = p5ep;
 	}
 
 	@Override
@@ -99,9 +97,9 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 				outputStream.writeInt(target[1]);
 			if (a == 34)
 				outputStream.writeInt(target[2]);
-			outputStream.writeInt(tile.xCoord);
-			outputStream.writeInt(tile.yCoord);
-			outputStream.writeInt(tile.zCoord);
+			outputStream.writeInt(ica.xCoord);
+			outputStream.writeInt(ica.yCoord);
+			outputStream.writeInt(ica.zCoord);
 
 		}
 		catch (Exception ex) {
@@ -116,10 +114,10 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
 		if (side == Side.SERVER) {
 			// We are on the server side.
-			EntityPlayerMP player2 = (EntityPlayerMP) player;
+			EntityPlayerMP player2 = (EntityPlayerMP) ep;
 		} else if (side == Side.CLIENT) {
 			// We are on the client side.
-			EntityClientPlayerMP player2 = (EntityClientPlayerMP) player;
+			EntityClientPlayerMP player2 = (EntityClientPlayerMP) ep;
 			PacketDispatcher.sendPacketToServer(packet);
 		} else {
 			// We are on the Bukkit server.

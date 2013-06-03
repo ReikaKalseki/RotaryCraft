@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -38,6 +39,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.TileEntityFreezeGun;
+import Reika.RotaryCraft.TileEntities.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.TileEntityGrinder;
@@ -313,6 +315,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case LANDMINE:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityLandmine(), a, -0.1D, b, 0.0F);
+				break;
+			case FRICTION:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFurnaceHeater(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

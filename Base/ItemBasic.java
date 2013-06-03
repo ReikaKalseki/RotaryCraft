@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -23,20 +24,20 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBasic(int itemID, int index) {
-		super(itemID);
+	public ItemBasic(int ID, int tex) {
+		super(ID);
 		maxStackSize = 64;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
-		this.setIndex(index);
+		this.setIndex(tex);
 	}
 
-	public ItemBasic(int itemID, int index, int max) {
-		super(itemID);
+	public ItemBasic(int ID, int tex, int max) {
+		super(ID);
 		maxStackSize = max;
 		if (max == 1);
 		hasSubtypes = true;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
-		this.setIndex(index);
+		this.setIndex(tex);
 	}
 
 	public final void addCreativeItems(ArrayList list) {}

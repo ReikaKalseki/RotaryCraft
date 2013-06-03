@@ -13,7 +13,7 @@ This code is the property of and owned and copyrighted by Reika.
 This code is provided under a modified visible-source license that is as follows:
 
 Any and all users are permitted to use the source for educational purposes, or to create derivative works
-for private use only.
+for private use only. GitHub forks and direct downloads are considered derivative works.
 
 Unless given explicit written permission - electronic writing is acceptable - no user may redistribute this
 source code nor any derivative works. These pre-approved works must prominently contain this copyright notice.

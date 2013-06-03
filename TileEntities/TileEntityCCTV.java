@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -21,7 +22,6 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
@@ -128,12 +128,12 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 
 	}
 
-	public void setLook(double x, double y, double z, double theta, double phi) {
+	public void setLook(double x, double y, double z, double t, double p) {
 		cameraPos[0] = x;
 		cameraPos[1] = y;
 		cameraPos[2] = z;
-		cameraPos[3] = theta;
-		cameraPos[4] = phi;
+		cameraPos[3] = t;
+		cameraPos[4] = p;
 	}
 
 	public void moveCameraToLook(EntityPlayer ep) {
@@ -159,7 +159,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		while(playerCam[3] >= 360)
 			playerCam[3] -= 360;
 		playerCam[4] = e.rotationPitch;
-		ReikaJavaLibrary.pConsole(playerCam[3]);
+		//ReikaJavaLibrary.pConsole(playerCam[3]);
 	}
 
 	public void moveCameraToPlayer() {

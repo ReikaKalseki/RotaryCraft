@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -22,13 +23,13 @@ public class RecipesPulseFurnace
 {
 	private static final RecipesPulseFurnace PulseFurnaceBase = new RecipesPulseFurnace();
 
-    /** The list of smelting results. */
-    private Map smeltingList = new HashMap();
-    private Map metaSmeltingList = new HashMap();
+	/** The list of smelting results. */
+	private Map smeltingList = new HashMap();
+	private Map metaSmeltingList = new HashMap();
 
 	/**
-	* Used to call methods addSmelting and getSmeltingResult.
-	*/
+	 * Used to call methods addSmelting and getSmeltingResult.
+	 */
 	public static final RecipesPulseFurnace smelting()
 	{
 		return PulseFurnaceBase;
@@ -78,53 +79,53 @@ public class RecipesPulseFurnace
 
 	}
 
-    /** Adds a smelting recipe. */
+	/** Adds a smelting recipe. */
 	@Deprecated
-    public void addSmelting(int par1, ItemStack par2ItemStack)
-    {
-        smeltingList.put(Integer.valueOf(par1), par2ItemStack);
-    }
+	public void addSmelting(int par1, ItemStack par2ItemStack)
+	{
+		smeltingList.put(Integer.valueOf(par1), par2ItemStack);
+	}
 
-    /**
-     * Returns the smelting result of an item.
-     * Deprecated in favor of a metadata sensitive version
-     */
-    @Deprecated
-    public ItemStack getSmeltingResult(int par1)
-    {
-        return (ItemStack)smeltingList.get(Integer.valueOf(par1));
-    }
+	/**
+	 * Returns the smelting result of an item.
+	 * Deprecated in favor of a metadata sensitive version
+	 */
+	@Deprecated
+	public ItemStack getSmeltingResult(int par1)
+	{
+		return (ItemStack)smeltingList.get(Integer.valueOf(par1));
+	}
 
-    public Map getSmeltingList()
-    {
-        return smeltingList;
-    }
+	public Map getSmeltingList()
+	{
+		return smeltingList;
+	}
 
-    /**
-     * Add a metadata-sensitive furnace recipe
-     * @param itemID The Item ID
-     * @param metadata The Item Metadata
-     * @param itemstack The ItemStack for the result
-     */
-    public void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
-    {
-        metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
-        //this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
-    }
+	/**
+	 * Add a metadata-sensitive furnace recipe
+	 * @param itemID The Item ID
+	 * @param metadata The Item Metadata
+	 * @param itemstack The ItemStack for the result
+	 */
+	public void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
+	{
+		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
+		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
+	}
 
-    /**
-     * Used to get the resulting ItemStack form a source ItemStack
-     * @param item The Source ItemStack
-     * @return The result ItemStack
-     */
-    public ItemStack getSmeltingResult(ItemStack item)
-    {
-        if (item == null)
-            return null;
-        //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
-        ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
-        if (ret != null)
-            return ret;
-        return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
-    }
+	/**
+	 * Used to get the resulting ItemStack form a source ItemStack
+	 * @param item The Source ItemStack
+	 * @return The result ItemStack
+	 */
+	public ItemStack getSmeltingResult(ItemStack item)
+	{
+		if (item == null)
+			return null;
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
+		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		if (ret != null)
+			return ret;
+		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+	}
 }

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 01/05/2013 1:14:50 AM
 // Template version 1.1
@@ -22,78 +23,80 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelIodide extends RotaryModelBase
 {
-  //fields
-    ModelRenderer Shape1;
-    ModelRenderer Shape2;
-    ModelRenderer Shape3;
-    ModelRenderer Shape4;
-    ModelRenderer Shape4a;
-    ModelRenderer Shape5;
-    ModelRenderer Shape5a;
-  
-  public ModelIodide()
-  {
-    textureWidth = 128;
-    textureHeight = 128;
-    
-      Shape1 = new ModelRenderer(this, 0, 0);
-      Shape1.addBox(0F, 0F, 0F, 16, 8, 16);
-      Shape1.setRotationPoint(-8F, 16F, -8F);
-      Shape1.setTextureSize(128, 128);
-      Shape1.mirror = true;
-      setRotation(Shape1, 0F, 0F, 0F);
-      Shape2 = new ModelRenderer(this, 0, 25);
-      Shape2.addBox(0F, 0F, 0F, 15, 1, 15);
-      Shape2.setRotationPoint(-7.5F, 15F, -7.5F);
-      Shape2.setTextureSize(128, 128);
-      Shape2.mirror = true;
-      setRotation(Shape2, 0F, 0F, 0F);
-      Shape3 = new ModelRenderer(this, 0, 42);
-      Shape3.addBox(0F, 0F, 0F, 11, 1, 11);
-      Shape3.setRotationPoint(-5.5F, 14F, -5.5F);
-      Shape3.setTextureSize(128, 128);
-      Shape3.mirror = true;
-      setRotation(Shape3, 0F, 0F, 0F);
-      Shape4 = new ModelRenderer(this, 0, 55);
-      Shape4.addBox(0F, 0F, 0F, 6, 1, 1);
-      Shape4.setRotationPoint(-3F, 13F, 2F);
-      Shape4.setTextureSize(128, 128);
-      Shape4.mirror = true;
-      setRotation(Shape4, 0F, 0F, 0F);
-      Shape4a = new ModelRenderer(this, 0, 58);
-      Shape4a.addBox(0F, 0F, 0F, 6, 1, 1);
-      Shape4a.setRotationPoint(-3F, 13F, -3F);
-      Shape4a.setTextureSize(128, 128);
-      Shape4a.mirror = true;
-      setRotation(Shape4a, 0F, 0F, 0F);
-      Shape5 = new ModelRenderer(this, 0, 61);
-      Shape5.addBox(0F, 0F, 0F, 1, 1, 4);
-      Shape5.setRotationPoint(2F, 13F, -2F);
-      Shape5.setTextureSize(128, 128);
-      Shape5.mirror = true;
-      setRotation(Shape5, 0F, 0F, 0F);
-      Shape5a = new ModelRenderer(this, 0, 67);
-      Shape5a.addBox(0F, 0F, 0F, 1, 1, 4);
-      Shape5a.setRotationPoint(-3F, 13F, -2F);
-      Shape5a.setTextureSize(128, 128);
-      Shape5a.mirror = true;
-      setRotation(Shape5a, 0F, 0F, 0F);
-  }
-  
-  public void renderAll(List li, float phi)
-  {
-    Shape1.render(f5);
-    Shape2.render(f5);
-    Shape3.render(f5);
-    Shape4.render(f5);
-    Shape4a.render(f5);
-    Shape5.render(f5);
-    Shape5a.render(f5);
-  }
-  
-  public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-  {
-    super.setRotationAngles(f, f1, f2, f3, f4, f5);
-  }
+	//fields
+	ModelRenderer Shape1;
+	ModelRenderer Shape2;
+	ModelRenderer Shape3;
+	ModelRenderer Shape4;
+	ModelRenderer Shape4a;
+	ModelRenderer Shape5;
+	ModelRenderer Shape5a;
+
+	public ModelIodide()
+	{
+		textureWidth = 128;
+		textureHeight = 128;
+
+		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1.addBox(0F, 0F, 0F, 16, 8, 16);
+		Shape1.setRotationPoint(-8F, 16F, -8F);
+		Shape1.setTextureSize(128, 128);
+		Shape1.mirror = true;
+		this.setRotation(Shape1, 0F, 0F, 0F);
+		Shape2 = new ModelRenderer(this, 0, 25);
+		Shape2.addBox(0F, 0F, 0F, 15, 1, 15);
+		Shape2.setRotationPoint(-7.5F, 15F, -7.5F);
+		Shape2.setTextureSize(128, 128);
+		Shape2.mirror = true;
+		this.setRotation(Shape2, 0F, 0F, 0F);
+		Shape3 = new ModelRenderer(this, 0, 42);
+		Shape3.addBox(0F, 0F, 0F, 11, 1, 11);
+		Shape3.setRotationPoint(-5.5F, 14F, -5.5F);
+		Shape3.setTextureSize(128, 128);
+		Shape3.mirror = true;
+		this.setRotation(Shape3, 0F, 0F, 0F);
+		Shape4 = new ModelRenderer(this, 0, 55);
+		Shape4.addBox(0F, 0F, 0F, 6, 1, 1);
+		Shape4.setRotationPoint(-3F, 13F, 2F);
+		Shape4.setTextureSize(128, 128);
+		Shape4.mirror = true;
+		this.setRotation(Shape4, 0F, 0F, 0F);
+		Shape4a = new ModelRenderer(this, 0, 58);
+		Shape4a.addBox(0F, 0F, 0F, 6, 1, 1);
+		Shape4a.setRotationPoint(-3F, 13F, -3F);
+		Shape4a.setTextureSize(128, 128);
+		Shape4a.mirror = true;
+		this.setRotation(Shape4a, 0F, 0F, 0F);
+		Shape5 = new ModelRenderer(this, 0, 61);
+		Shape5.addBox(0F, 0F, 0F, 1, 1, 4);
+		Shape5.setRotationPoint(2F, 13F, -2F);
+		Shape5.setTextureSize(128, 128);
+		Shape5.mirror = true;
+		this.setRotation(Shape5, 0F, 0F, 0F);
+		Shape5a = new ModelRenderer(this, 0, 67);
+		Shape5a.addBox(0F, 0F, 0F, 1, 1, 4);
+		Shape5a.setRotationPoint(-3F, 13F, -2F);
+		Shape5a.setTextureSize(128, 128);
+		Shape5a.mirror = true;
+		this.setRotation(Shape5a, 0F, 0F, 0F);
+	}
+
+	@Override
+	public void renderAll(List li, float phi)
+	{
+		Shape1.render(f5);
+		Shape2.render(f5);
+		Shape3.render(f5);
+		Shape4.render(f5);
+		Shape4a.render(f5);
+		Shape5.render(f5);
+		Shape5a.render(f5);
+	}
+
+	@Override
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6)
+	{
+		super.setRotationAngles(f, f1, f2, f3, f4, f5);
+	}
 
 }

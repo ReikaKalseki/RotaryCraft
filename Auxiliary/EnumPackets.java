@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -26,20 +27,20 @@ public enum EnumPackets {
 	FORCE(17),
 	CHEST(18),
 	COIL(19, 20),
-	MUSIC(21, 27),
-	VACUUM(28),
-	WINDER(29),
-	PROJECTOR(30),
-	CONTAINMENT(31),
-	ITEMCANNON(32, 34);
+	MUSIC(21, 28),
+	VACUUM(29),
+	WINDER(30),
+	PROJECTOR(31),
+	CONTAINMENT(32),
+	ITEMCANNON(33, 35);
 
 	private int min;
 	private int max;
 
-	private EnumPackets(int min, int max)
+	private EnumPackets(int l, int h)
 	{
-		this.min = min;
-		this.max = max;
+		min = l;
+		max = h;
 	}
 
 	private EnumPackets(int id)

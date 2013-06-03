@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -16,8 +17,8 @@ import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
@@ -104,10 +105,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			ready = yCoord;
 			break;
 		case 4:	//moving up
-		readx = xCoord;
-		readz = zCoord;
-		ready = yCoord-1;
-		break;
+			readx = xCoord;
+			readz = zCoord;
+			ready = yCoord-1;
+			break;
 		case 5:	//moving down
 			readx = xCoord;
 			readz = zCoord;
@@ -614,22 +615,22 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	public boolean operationComplete(int ticks, int stage) {
-		MachineRegistry machine = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord);
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord);
 		ticks++; // since tickcount starts at zero
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", machine, this.xCoord, this.yCoord, this.zCoord));
-		if (machine == MachineRegistry.BEDROCKBREAKER) {
+		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", m, this.xCoord, this.yCoord, this.zCoord));
+		if (m == MachineRegistry.BEDROCKBREAKER) {
 			if (ticks < 2)
 				return false;
 			int time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.BORER) {
+		if (m == MachineRegistry.BORER) {
 			if (ticks < 2)
 				return false;
 			int time = 720-(int)(40*ReikaMathLibrary.logbase(omega, 2));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.PUMP) {
+		if (m == MachineRegistry.PUMP) {
 			if (ticks < 5)
 				return false;
 			int time = 4*(int)(50D/(1+ReikaMathLibrary.logbase(omega, 2)));/*
@@ -637,26 +638,26 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
     			ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ticks, time));*/
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.GRINDER) {
+		if (m == MachineRegistry.GRINDER) {
 			if (ticks < 2)
 				return false;
 			int time = (3600-(int)(240*ReikaMathLibrary.logbase(omega, 2)))/4;
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.FRACTIONATOR) {
+		if (m == MachineRegistry.FRACTIONATOR) {
 			if (ticks < 10)
 				return false;
 			int time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.FERMENTER) {
+		if (m == MachineRegistry.FERMENTER) {
 			if (ticks < 2)
 				return false;
 			int time = 600-(int)(40*ReikaMathLibrary.logbase(omega, 2));
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d >= %d? ", ticks, time)+String.valueOf(ticks >= time));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.EXTRACTOR) {
+		if (m == MachineRegistry.EXTRACTOR) {
 			if (ticks < 2)
 				return false;
 			int time;
@@ -677,14 +678,14 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				return false;
 			}
 		}
-		if (machine == MachineRegistry.COMPACTOR) {
+		if (m == MachineRegistry.COMPACTOR) {
 			if (ticks < 2)
 				return false;
 			int time = 10*(60-(int)(3*ReikaMathLibrary.logbase(omega, 2)));
 			time *= stage;
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.WOODCUTTER) {
+		if (m == MachineRegistry.WOODCUTTER) {
 			if (ticks < 2)
 				return false;
 			int time = 300-(int)(20*ReikaMathLibrary.logbase(omega, 2));
@@ -692,71 +693,71 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ticks, time));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.OBSIDIAN) {
+		if (m == MachineRegistry.OBSIDIAN) {
 			if (ticks < 2)
 				return false;
 			int time = 800-(int)(60*ReikaMathLibrary.logbase(omega, 2));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.HEATER) {
+		if (m == MachineRegistry.HEATER) {
 			if (ticks < 2)
 				return false;
 			int time = 200-(int)(10*ReikaMathLibrary.logbase(omega, 2));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.FIREWORK) {
+		if (m == MachineRegistry.FIREWORK) {
 			if (ticks < 2)
 				return false;
 			int time = 300-(int)(16*ReikaMathLibrary.logbase(omega, 2));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.WINDER) {
+		if (m == MachineRegistry.WINDER) {
 			if (ticks < 2)
 				return false;
 			int time = 300-(int)(16*ReikaMathLibrary.logbase(omega, 2));
 			return (true);
 		}
-		if (machine == MachineRegistry.MAGNETIZER) {
+		if (m == MachineRegistry.MAGNETIZER) {
 			if (ticks < 2)
 				return false;
 			int time = (400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 			return (ticks >= time);
 		}
-		if (machine == MachineRegistry.PURIFIER) {
+		if (m == MachineRegistry.PURIFIER) {
 			if (ticks < 2)
 				return false;
 			int time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 			return (ticks >= time);
 		}
-		if (machine != null)
-			ReikaChatHelper.write(String.format("Non-speed machine called operationComplete! ID: %d; Coords %d %d %d", machine, xCoord, yCoord, zCoord));
+		if (m != null)
+			ReikaChatHelper.write(String.format("Non-speed m called operationComplete! ID: %d; Coords %d %d %d", m, xCoord, yCoord, zCoord));
 		return true; //should never happen
 	}
 
 	public int operationTime(int omegap, int stage) {
-		MachineRegistry machine = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord);
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord);
 		int time = -1;
 		//ReikaChatHelper.writeInt(omegap);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", machine, this.xCoord, this.yCoord, this.zCoord));
-		if (machine == MachineRegistry.BEDROCKBREAKER) {
+		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", m, this.xCoord, this.yCoord, this.zCoord));
+		if (m == MachineRegistry.BEDROCKBREAKER) {
 			time = 600-(int)(30*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.BORER) {
+		if (m == MachineRegistry.BORER) {
 			time = 720-(int)(40*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.PUMP) {
+		if (m == MachineRegistry.PUMP) {
 			time = 4*(int)(50D/(1+ReikaMathLibrary.logbase(omegap, 2)));
 		}
-		if (machine == MachineRegistry.GRINDER) {
+		if (m == MachineRegistry.GRINDER) {
 			time = (3600-(int)(240*ReikaMathLibrary.logbase(omegap, 2)))/4;
 		}
-		if (machine == MachineRegistry.FRACTIONATOR) {
+		if (m == MachineRegistry.FRACTIONATOR) {
 			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omegap, 2)));
 		}
-		if (machine == MachineRegistry.FERMENTER) {
+		if (m == MachineRegistry.FERMENTER) {
 			time = 600-(int)(40*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.EXTRACTOR) {
+		if (m == MachineRegistry.EXTRACTOR) {
 			switch (stage) {
 			case 1:
 				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omegap, 2)));
@@ -772,33 +773,33 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				break;
 			}
 		}
-		if (machine == MachineRegistry.COMPACTOR) {
+		if (m == MachineRegistry.COMPACTOR) {
 			time = 10*(60-(int)(3*ReikaMathLibrary.logbase(omegap, 2)));
 			time *= stage;
 		}
-		if (machine == MachineRegistry.WOODCUTTER) {
+		if (m == MachineRegistry.WOODCUTTER) {
 			time = 300-(int)(20*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.OBSIDIAN) {
+		if (m == MachineRegistry.OBSIDIAN) {
 			time = 800-(int)(60*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.HEATER) {
+		if (m == MachineRegistry.HEATER) {
 			time = 200-(int)(10*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.FIREWORK) {
+		if (m == MachineRegistry.FIREWORK) {
 			time = 300-(int)(16*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (machine == MachineRegistry.WINDER) {
+		if (m == MachineRegistry.WINDER) {
 			time = 1-(int)(16*ReikaMathLibrary.logbase(1, 2));
 		}
-		if (machine == MachineRegistry.MAGNETIZER) {
+		if (m == MachineRegistry.MAGNETIZER) {
 			time = (400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 		}
-		if (machine == MachineRegistry.PURIFIER) {
+		if (m == MachineRegistry.PURIFIER) {
 			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 		}
-		if (machine != null && time == -1) {
-			ReikaChatHelper.write(String.format("Non-speed machine called operationTime! Coords %d %d %d", machine, xCoord, yCoord, zCoord));
+		if (m != null && time == -1) {
+			ReikaChatHelper.write(String.format("Non-speed m called operationTime! Coords %d %d %d", m, xCoord, yCoord, zCoord));
 			return -1; //should never happen
 		}
 		if (time == 0)

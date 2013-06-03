@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -20,8 +21,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSlide extends ItemBasic {
 
-	public ItemSlide(int itemID, int index) {
-		super(itemID, index);
+	public ItemSlide(int ID, int index) {
+		super(ID, index);
 		maxStackSize = 1;
 		hasSubtypes = true;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);

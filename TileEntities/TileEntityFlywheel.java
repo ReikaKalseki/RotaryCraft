@@ -4,14 +4,14 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -30,7 +30,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine {
 	public static final int GOLDFLYTORQUEMAX = 4096;	// rho 19.3	-> 32	-> 256
 	public double DECAY;
 
-	private int omegain;
 	private int maxtorque;
 	public boolean failed = false;
 	private int soundtick = 0;
@@ -86,9 +85,9 @@ public class TileEntityFlywheel extends TileEntityIOMachine {
 		return 0;
 	}
 
-	public int frictionLosses(int omega) {
+	public int frictionLosses(int speed) {
 		int fric = RotaryConfig.friction;
-		return (omega*fric);
+		return (speed*fric);
 	}
 
 	@Override
@@ -270,15 +269,15 @@ public class TileEntityFlywheel extends TileEntityIOMachine {
 		}
 	}
 
-	public int readFromCross(TileEntityShaft cross, boolean torque) {
+	public int readFromCross(TileEntityShaft cross, boolean isTorque) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
 		if (xCoord == cross.writex && zCoord == cross.writez) {
-			if (torque)
+			if (isTorque)
 				return cross.readtorque[0];
 			return cross.readomega[0];
 		}
 		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
-			if (torque)
+			if (isTorque)
 				return cross.readtorque[1];
 			return cross.readomega[1];
 		}

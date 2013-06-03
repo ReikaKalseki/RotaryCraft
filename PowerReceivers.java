@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -58,7 +59,8 @@ public enum PowerReceivers {
 	SCREEN(4, 1, 1024),
 	PURIFIER(64, 1, 16384),
 	LASERGUN(8388608),
-	ITEMCANNON(128, 1, 32768);
+	ITEMCANNON(128, 1, 32768),
+	FRICTION(256, 1, 16384);
 
 	private int minT;
 	private int minS;

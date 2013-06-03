@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -164,164 +165,164 @@ public abstract class IORenderer {
 
 	private static void renderBox(double x, double y, double z, int[] color) {
 		ReikaRenderHelper.prepareGeoDraw(true);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-        GL11.glScalef(1.0F, -1.0F, -1.0F);
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    	GL11.glEnable(GL11.GL_BLEND);
-    	GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-    	GL11.glEnable(GL11.GL_CULL_FACE);
-    	if (color[3] > 255)
-    		color[3] = 255;
-    	boolean filled = true;
+		GL11.glPushMatrix();
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		if (color[3] > 255)
+			color[3] = 255;
+		boolean filled = true;
 
-    	Tessellator var5 = new Tessellator();
-    	var5.startDrawing(GL11.GL_LINE_LOOP);
-    	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-    	var5.draw();
-    	var5.startDrawing(GL11.GL_LINE_LOOP);
-    	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-    	var5.draw();
-    	var5.startDrawing(GL11.GL_LINE_LOOP);
-    	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-    	var5.draw();
-       	var5.startDrawing(GL11.GL_LINE_LOOP);
-       	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-    	var5.draw();
-       	var5.startDrawing(GL11.GL_LINE_LOOP);
-       	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-    	var5.draw();
-       	var5.startDrawing(GL11.GL_LINE_LOOP);
-       	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-    	var5.draw();
+		Tessellator var5 = new Tessellator();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+		var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+		var5.draw();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+		var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+		var5.draw();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+		var5.draw();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+		var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+		var5.draw();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+		var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+		var5.draw();
+		var5.startDrawing(GL11.GL_LINE_LOOP);
+		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+		var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+		var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+		var5.draw();
 
-    	if (filled)
-    	{
-	    	var5.startDrawing(GL11.GL_QUADS);
-	    	//var5.setBrightness(255);
-	    	var5.setColorRGBA(color[0], color[1], color[2], (int)(color[3]*0.375));
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+		if (filled)
+		{
+			var5.startDrawing(GL11.GL_QUADS);
+			//var5.setBrightness(255);
+			var5.setColorRGBA(color[0], color[1], color[2], (int)(color[3]*0.375));
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
 
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
 
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
 
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
 
-	    	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z-0.0625*expand);
 
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
-	    	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-	    	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
-	    	var5.draw();
-    	}
-    	else {
-    		var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.5);
-        	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.5);
-        	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.5);
-        	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.5);
-        	var5.draw();
-    		var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.25);
-        	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.25);
-        	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.25);
-        	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.25);
-        	var5.draw();
-    		var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.75);
-        	var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.75);
-        	var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.75);
-        	var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.75);
-        	var5.draw();
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.draw();
+		}
+		else {
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.5);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.5);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.5);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.5);
+			var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.25);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.25);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.25);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.25);
+			var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z+0.75);
+			var5.addVertex(x-0.0625*expand, y+1+0.0625*expand, z+0.75);
+			var5.addVertex(x-0.0625*expand, y-0.0625*expand, z+0.75);
+			var5.addVertex(x+1+0.0625*expand, y-0.0625*expand, z+0.75);
+			var5.draw();
 
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+0.5, y+1+0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.5, y-0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.5, y-0.0625*expand, z+1+0.0625*expand);
-        	var5.addVertex(x+0.5, y+1+0.0625*expand, z+1+0.0625*expand);
-        	var5.draw();
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+0.25, y+1+0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.25, y-0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.25, y-0.0625*expand, z+1+0.0625*expand);
-        	var5.addVertex(x+0.25, y+1+0.0625*expand, z+1+0.0625*expand);
-        	var5.draw();
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+0.75, y+1+0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.75, y-0.0625*expand, z-0.0625*expand);
-        	var5.addVertex(x+0.75, y-0.0625*expand, z+1+0.0625*expand);
-        	var5.addVertex(x+0.75, y+1+0.0625*expand, z+1+0.0625*expand);
-        	var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+0.5, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.5, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.5, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+0.5, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+0.25, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.25, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.25, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+0.25, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+0.75, y+1+0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.75, y-0.0625*expand, z-0.0625*expand);
+			var5.addVertex(x+0.75, y-0.0625*expand, z+1+0.0625*expand);
+			var5.addVertex(x+0.75, y+1+0.0625*expand, z+1+0.0625*expand);
+			var5.draw();
 
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+0.5, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.5, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.5, z+1+0.0625*expand);
-        	var5.addVertex(x+1+0.0625*expand, y+0.5, z+1+0.0625*expand);
-        	var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+0.5, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.5, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.5, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+0.5, z+1+0.0625*expand);
+			var5.draw();
 
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+0.25, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.25, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.25, z+1+0.0625*expand);
-        	var5.addVertex(x+1+0.0625*expand, y+0.25, z+1+0.0625*expand);
-        	var5.draw();
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+0.25, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.25, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.25, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+0.25, z+1+0.0625*expand);
+			var5.draw();
 
-        	var5.startDrawing(GL11.GL_LINE_LOOP);
-        	var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-        	var5.addVertex(x+1+0.0625*expand, y+0.75, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.75, z-0.0625*expand);
-        	var5.addVertex(x-0.0625*expand, y+0.75, z+1+0.0625*expand);
-        	var5.addVertex(x+1+0.0625*expand, y+0.75, z+1+0.0625*expand);
-        	var5.draw();
-    	}
+			var5.startDrawing(GL11.GL_LINE_LOOP);
+			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
+			var5.addVertex(x+1+0.0625*expand, y+0.75, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.75, z-0.0625*expand);
+			var5.addVertex(x-0.0625*expand, y+0.75, z+1+0.0625*expand);
+			var5.addVertex(x+1+0.0625*expand, y+0.75, z+1+0.0625*expand);
+			var5.draw();
+		}
 
-    	GL11.glEnable(GL11.GL_CULL_FACE);
-    	GL11.glDisable(GL11.GL_BLEND);
-    	GL11.glEnable(GL11.GL_DEPTH_TEST);
-    	ReikaRenderHelper.exitGeoDraw();
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		ReikaRenderHelper.exitGeoDraw();
 	}
 }

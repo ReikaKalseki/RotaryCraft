@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
@@ -13,7 +14,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -68,19 +68,19 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	}
 
 	public boolean isAimingAtTarget(World world, int x, int y, int z, double[] t) {
-		double[] target = ReikaPhysicsHelper.cartesianToPolar(x-t[0], y-t[1], z-t[2]);
-		target[1] = Math.abs(target[1])-90;
+		double[] tg = ReikaPhysicsHelper.cartesianToPolar(x-t[0], y-t[1], z-t[2]);
+		tg[1] = Math.abs(tg[1])-90;
 		float phi2 = phi;
 		while (phi2 < 0)
 			phi2 += 360;
 		while (phi2 >= 360)
 			phi2 -= 360;
-		//ReikaJavaLibrary.pConsole("PHI: "+phi2+" THETA: "+theta+" for "+target[2]+", "+target[1]);
-		if (target[2] - phi2 > 180)
-			target[2] -= 360;
-		if (!ReikaMathLibrary.approxr(theta, target[1], 3))
+		//ReikaJavaLibrary.pConsole("PHI: "+phi2+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
+		if (tg[2] - phi2 > 180)
+			tg[2] -= 360;
+		if (!ReikaMathLibrary.approxr(theta, tg[1], 3))
 			return false;
-		if (!ReikaMathLibrary.approxr(phi2, target[2], 3))
+		if (!ReikaMathLibrary.approxr(phi2, tg[2], 3))
 			return false;
 		return true;
 	}
@@ -91,19 +91,19 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		double dx = x+0.5-t[0];
 		double dy = y+0.5-t[1];
 		double dz = z+0.5-t[2];
-		double[] target = ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz);
-		target[1] = Math.abs(target[1])-90+0.25;
-		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+target[2]+", "+target[1]);
-		if (target[2] - phi > 180)
-			target[2] -= 360;
+		double[] tg = ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz);
+		tg[1] = Math.abs(tg[1])-90+0.25;
+		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
+		if (tg[2] - phi > 180)
+			tg[2] -= 360;
 		float movespeed = 1F;
-		if (phi < target[2])
+		if (phi < tg[2])
 			phi += movespeed*2;
-		if (phi > target[2])
+		if (phi > tg[2])
 			phi -= movespeed*2;
-		if (theta < target[1])
+		if (theta < tg[1])
 			theta += movespeed;
-		if (theta > target[1])
+		if (theta > tg[1])
 			theta -= movespeed;
 		if (theta < MAXLOWANGLE && dir == 1)
 			theta = MAXLOWANGLE;

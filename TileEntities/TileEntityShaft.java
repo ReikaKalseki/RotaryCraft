@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -16,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -160,86 +160,88 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return; //not its output
 	}
 
+	//FIX THIS;
 	private void crossReadFromSplitter(TileEntitySplitter spl, int dir) {
 		reading2Dir = true;
-		int ratio = spl.getRatioFromMode();
-		if (ratio == 0)
+		int sratio = spl.getRatioFromMode();
+		if (sratio == 0)
 			return;
 		boolean favorbent = false;
-		if (ratio < 0) {
+		if (sratio < 0) {
 			favorbent = true;
-			ratio = -ratio;
+			sratio = -sratio;
 		}
 		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 			readomega[dir] = spl.omega; //omega always constant
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, ratio));
-			if (ratio == 1) { //Even split, favorbent irrelevant
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, sratio));
+			if (sratio == 1) { //Even split, favorbent irrelevant
 				readtorque[dir] = spl.torque/2;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.readtorque[dir], this.readomega[dir]));
 				return;
 			}
 			if (favorbent) {
-				readtorque[dir] = spl.torque/ratio;
+				readtorque[dir] = spl.torque/sratio;
 			}
 			else {
-				readtorque[dir] = (int)(spl.torque*((ratio-1D)/(ratio)));
+				readtorque[dir] = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 		}
 		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
 			readomega[dir] = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
-			if (ratio == 1) { //Even split, favorbent irrelevant
+			if (sratio == 1) { //Even split, favorbent irrelevant
 				readtorque[dir] = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
-				readtorque[dir] = (int)(spl.torque*((ratio-1D)/(ratio)));
+				readtorque[dir] = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 			else {
-				readtorque[dir] = spl.torque/ratio;
+				readtorque[dir] = spl.torque/sratio;
 			}
 		}
 		else //We are not one of its write-to blocks
 			return;
 	}
 
+	//FIX THIS;
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		reading2Dir = true;
-		int ratio = spl.getRatioFromMode();
-		if (ratio == 0)
+		int sratio = spl.getRatioFromMode();
+		if (sratio == 0)
 			return;
 		boolean favorbent = false;
-		if (ratio < 0) {
+		if (sratio < 0) {
 			favorbent = true;
-			ratio = -ratio;
+			sratio = -sratio;
 		}
 		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 			omega = spl.omega; //omega always constant
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, ratio));
-			if (ratio == 1) { //Even split, favorbent irrelevant
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, sratio));
+			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.torque, this.omega));
 				return;
 			}
 			if (favorbent) {
-				torque = spl.torque/ratio;
+				torque = spl.torque/sratio;
 			}
 			else {
-				torque = (int)(spl.torque*((ratio-1D)/(ratio)));
+				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 		}
 		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
 			omega = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
-			if (ratio == 1) { //Even split, favorbent irrelevant
+			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
-				torque = (int)(spl.torque*((ratio-1D)/(ratio)));
+				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 			else {
-				torque = spl.torque/ratio;
+				torque = spl.torque/sratio;
 			}
 		}
 		else  {	//We are not one of its write-to blocks
@@ -355,7 +357,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 	}
 
-	private void crossTransfer(World world, int ratio) {
+	private void crossTransfer(World world) {
 		ready = ready2 = ready;
 		readomega[0] = 0;
 		readomega[1] = 0;
@@ -531,7 +533,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		reading2Dir = false;
 		if (meta >= 6) {
-			this.crossTransfer(world, ratio);
+			this.crossTransfer(world);
 			return;
 		}
 		omegain = torquein = 0;

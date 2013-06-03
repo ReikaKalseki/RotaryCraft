@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 27/05/2013 5:48:02 PM
 // Template version 1.1
@@ -223,7 +224,7 @@ public class ModelLaserGun extends RotaryModelBase
 	}
 
 	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5);
 	}

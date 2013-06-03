@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -36,24 +37,23 @@ public class GuiMusic extends GuiNonPoweredMachine
 	private int channel = 0;
 	private int addednote;
 
-	private static final int NOTESTART = 11;
-	private static final int LENGTHSTART = 6;
+	private static final int NOTESTART = 12;
+	private static final int LENGTHSTART = 7;
 	private static final int ROWWIDTH = 12;
 	private static final int ROWHEIGHT = 5;
 
 	private TileEntityMusicBox music;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
 	int x;
 	int y;
 
-	public GuiMusic(EntityPlayer player, TileEntityMusicBox MusicBox)
+	public GuiMusic(EntityPlayer p5ep, TileEntityMusicBox MusicBox)
 	{
-		super(new CoreContainer(player, MusicBox), MusicBox);
+		super(new CoreContainer(p5ep, MusicBox), MusicBox);
 		music = MusicBox;
 		ySize = 217;
 		xSize = 256;
-		this.player = player;
+		ep = p5ep;
 		noteLength = music.getCurrentNoteType();
 		int[] entryData = music.getCurrentEntryData();
 		channel = entryData[0];
@@ -97,6 +97,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 		buttonList.add(new GuiButton(0, j+xSize-33, k+17, 20, 20, "X"));
 		buttonList.add(new GuiButton(4, j-3, k+17, 36, 20, "Save"));
 		buttonList.add(new GuiButton(5, j-3+35, k+17, 36, 20, "Read"));
+		buttonList.add(new GuiButton(6, j-3+174, k+17, 36, 20, "Demo"));
 
 		input = new GuiTextField(fontRenderer, j+xSize/2-83, k+49, 26, 16);
 		input.setFocused(false);
@@ -176,35 +177,38 @@ public class GuiMusic extends GuiNonPoweredMachine
 	public void actionPerformed(GuiButton button) {
 		if (ReikaMathLibrary.isValueInsideBoundsIncl(LENGTHSTART, LENGTHSTART+4, button.id)) {
 			noteLength = button.id-LENGTHSTART;
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 21, music, player, noteLength, 0, 0, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 21, music, ep, noteLength, 0, 0, 0);
 			this.initGui();
 		}
 		if (button.id == 0)
-			player.closeScreen();
+			ep.closeScreen();
 		if (button.id >= NOTESTART) {
 			this.addNote(button.id);
 		}
 		if (button.id == 1) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 23, music, player, channel, voice, addednote, volume);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 23, music, ep, channel, voice, addednote, volume);
 		}
 		if (button.id == 2) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 24, music, player, channel, voice, addednote, volume);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 24, music, ep, channel, voice, addednote, volume);
 		}
 		if (button.id == 3) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 25, music, player, channel, 0, 0, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 25, music, ep, channel, 0, 0, 0);
 		}
 		if (button.id == 4) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 26, music, player, 0, 0, 0, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 26, music, ep, 0, 0, 0, 0);
 		}
 		if (button.id == 5) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 27, music, player, 0, 0, 0, 0);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 27, music, ep, 0, 0, 0, 0);
+		}
+		if (button.id == 6) {
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 28, music, ep, 0, 0, 0, 0);
 		}
 	}
 
 	private void addNote(int note) {
 		note -= NOTESTART;
 		addednote = note;
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 22, music, player, channel, voice, addednote, volume);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 22, music, ep, channel, voice, addednote, volume);
 	}
 
 	/**

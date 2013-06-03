@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
@@ -28,77 +29,77 @@ import Reika.RotaryCraft.TileEntities.TileEntityFreezeGun;
 
 public class RenderFreezeGun extends RotaryTERenderer {
 
-	    private ModelFreezeGun freezegunModel = new ModelFreezeGun();
+	private ModelFreezeGun freezegunModel = new ModelFreezeGun();
 
-	    /**
-	     * Renders the TileEntity for the position.
-	     */
-	    public void renderTileEntityFreezeGunAt(TileEntityFreezeGun tile, double par2, double par4, double par6, float par8)
-	    {
-	        int var9;
+	/**
+	 * Renders the TileEntity for the position.
+	 */
+	public void renderTileEntityFreezeGunAt(TileEntityFreezeGun tile, double par2, double par4, double par6, float par8)
+	{
+		int var9;
 
-	        if (!tile.isInWorld())
-	        {
-	            var9 = 0;
-	        }
-	        else
-	        {
+		if (!tile.isInWorld())
+		{
+			var9 = 0;
+		}
+		else
+		{
 
-	            var9 = tile.getBlockMetadata();
+			var9 = tile.getBlockMetadata();
 
 
-	            {
-	                //((BlockForceFieldBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-	                var9 = tile.getBlockMetadata();
-	            }
-	        }
+			{
+				//((BlockForceFieldBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+				var9 = tile.getBlockMetadata();
+			}
+		}
 
-	        if (true)
-	        {
-	            ModelFreezeGun var14;
-	            var14 = freezegunModel;
+		if (true)
+		{
+			ModelFreezeGun var14;
+			var14 = freezegunModel;
 
-	            this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/freezeguntex.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/freezeguntex.png");
 
-	            GL11.glPushMatrix();
-	            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	            GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-	            GL11.glScalef(1.0F, -1.0F, -1.0F);
-	            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-	            int var11 = 1;	 //used to rotate the model about metadata
-	            int var12 = 0;
-	            if (tile.isInWorld()) {
-	            	if (tile.getBlockMetadata() == 1) {
-	            		var11 = -1;
-	            		var12 = 2;
-	            	    GL11.glFrontFace(GL11.GL_CW);
-	            	}
-	            }
-	            GL11.glTranslated(0, var12, 0);
-	            GL11.glScaled(1, var11, 1);
-	            var14.renderAll(null, -tile.phi, -tile.theta*var11);
-	            GL11.glScaled(1, var11, 1);
-	            GL11.glTranslated(0, -var12, 0);
-	            GL11.glFrontFace(GL11.GL_CCW);
+			GL11.glPushMatrix();
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+			GL11.glScalef(1.0F, -1.0F, -1.0F);
+			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+			int var11 = 1;	 //used to rotate the model about metadata
+			int var12 = 0;
+			if (tile.isInWorld()) {
+				if (tile.getBlockMetadata() == 1) {
+					var11 = -1;
+					var12 = 2;
+					GL11.glFrontFace(GL11.GL_CW);
+				}
+			}
+			GL11.glTranslated(0, var12, 0);
+			GL11.glScaled(1, var11, 1);
+			var14.renderAll(null, -tile.phi, -tile.theta*var11);
+			GL11.glScaled(1, var11, 1);
+			GL11.glTranslated(0, -var12, 0);
+			GL11.glFrontFace(GL11.GL_CCW);
 
-	            if (tile.isInWorld())
-	            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-	            GL11.glPopMatrix();
-	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	        }
-	    }
+			if (tile.isInWorld())
+				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopMatrix();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		}
+	}
 
-	    @Override
-		public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-	    {
-	    	if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-	        this.renderTileEntityFreezeGunAt((TileEntityFreezeGun)tile, par2, par4, par6, par8);
-	        if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-	        	IORenderer.renderIO(tile, par2, par4, par6);
-	        	this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
-	        }
-	    }
+	@Override
+	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
+	{
+		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+			this.renderTileEntityFreezeGunAt((TileEntityFreezeGun)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			IORenderer.renderIO(tile, par2, par4, par6);
+			this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
+		}
+	}
 
 	private void renderIce(TileEntityFreezeGun tile, double par2, double par4, double par6) {
 		if (tile == null)

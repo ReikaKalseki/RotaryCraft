@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
@@ -14,16 +15,16 @@ import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.RotaryNames;
 
 public class ItemBlockDeco extends ItemBlock {
-	
+
 	// This is for your naming of the metablock
 	private static final String subNames[] =
-	{
-	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
-	};
+		{
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
+		};
 
 	public ItemBlockDeco(int id) {
 		super(id);
-		setHasSubtypes(true);
+		this.setHasSubtypes(true);
 		//setItemName("machine");
 	}
 	/*
@@ -32,24 +33,25 @@ public class ItemBlockDeco extends ItemBlock {
 		for (int i = 0; i < 4; i++)
 			list.add(new ItemStack(this.shiftedIndex, 1, i));
 	}*/
-	
+
 	@Override
 	public int getMetadata (int damageValue) {
 		return damageValue;
 	}
-		
+
+	@Override
 	public String getUnlocalizedName(ItemStack is)
 	{
-	    int d = is.getItemDamage();
-	    if (d > 2)
-	    	d = 0;
-	    return this.getUnlocalizedName() + RotaryNames.blockNames[d];
+		int d = is.getItemDamage();
+		if (d > 2)
+			d = 0;
+		return this.getUnlocalizedName() + RotaryNames.blockNames[d];
 	}
 
 	public String getItemNameIS(ItemStack itemstack){
-	//this returns a string with the block name
-	//example: blockXXX
-	return new StringBuilder().append("machineblock").append(subNames[itemstack.getItemDamage()]).toString();
+		//this returns a string with the block name
+		//example: blockXXX
+		return new StringBuilder().append("machineblock").append(subNames[itemstack.getItemDamage()]).toString();
 	}
 
 	public String getTextureFile() {

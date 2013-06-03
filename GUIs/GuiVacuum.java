@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -15,39 +16,37 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiVacuum extends GuiPowerOnlyMachine
 {
 	private IInventory upperVacuumInventory;
 	private TileEntityVacuum vac;
-	EntityPlayer ep;
 
 	/**
 	 * window height is calculated with this values, the more rows, the heigher
 	 */
 	private int inventoryRows = 0;
 
-	public GuiVacuum(EntityPlayer player, TileEntityVacuum te)
+	public GuiVacuum(EntityPlayer p5ep, TileEntityVacuum te)
 	{
-		super(new ContainerVacuum(player, te), te);
-		upperVacuumInventory = player.inventory;
+		super(new ContainerVacuum(p5ep, te), te);
+		upperVacuumInventory = p5ep.inventory;
 		allowUserInput = false;
 		short var3 = 222;
 		int var4 = var3 - 108;
 		inventoryRows = te.getSizeInventory() / 9;
 		ySize = var4 + inventoryRows * 18;
 		vac = te;
-		ep = player;
+		ep = p5ep;
 	}
 
 	@Override

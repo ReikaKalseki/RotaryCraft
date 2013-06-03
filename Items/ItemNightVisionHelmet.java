@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -19,10 +20,11 @@ import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
+@SuppressWarnings("deprecation")
 public class ItemNightVisionHelmet extends ItemRotaryArmor implements IArmorTextureProvider {
 
-	public ItemNightVisionHelmet(int itemID, int texID) {
-		super(itemID, RotaryCraft.NVHM, texID, 0, 48);
+	public ItemNightVisionHelmet(int ID, int texID) {
+		super(ID, RotaryCraft.NVHM, texID, 0, 48);
 		//this.setNoRepair();
 		//this.damageReduceAmount = EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0);
 		//this.setMaxDamage((int)(1.2*EnumArmorMaterial.DIAMOND.getDurability(0)));
@@ -36,7 +38,6 @@ public class ItemNightVisionHelmet extends ItemRotaryArmor implements IArmorText
 	@Override
 	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {}
 
-	@Override
 	public String getArmorTextureFile(ItemStack itemstack) {
 		return "/Reika/RotaryCraft/Textures/Misc/NVHelmet.png";
 	}

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -16,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
+import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -31,6 +32,8 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	public int channel = 0;
 	public boolean on = false;
 	public boolean emptySlide = true;
+
+	private boolean lastPower = false;
 
 	private ItemStack[] slides = new ItemStack[MAXCHANNELS];
 
@@ -55,6 +58,9 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 			this.cycleInv();
 		}
 		this.getChannelFromActiveSlide();
+		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
+			this.cycleInv();
+		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
 	private void getChannelFromActiveSlide() {

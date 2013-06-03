@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 09/03/2013 11:44:16 PM
 // Template version 1.1
@@ -22,80 +23,80 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelObsidian extends RotaryModelBase
 {
-  //fields
-    ModelRenderer Shape1;
-    ModelRenderer Shape2;
-    ModelRenderer Shape2a;
-    ModelRenderer Shape3;
-    ModelRenderer Shape3a;
-    ModelRenderer Shape4;
-    ModelRenderer Shape5;
+	//fields
+	ModelRenderer Shape1;
+	ModelRenderer Shape2;
+	ModelRenderer Shape2a;
+	ModelRenderer Shape3;
+	ModelRenderer Shape3a;
+	ModelRenderer Shape4;
+	ModelRenderer Shape5;
 
-  public ModelObsidian()
-  {
-    textureWidth = 128;
-    textureHeight = 128;
+	public ModelObsidian()
+	{
+		textureWidth = 128;
+		textureHeight = 128;
 
-      Shape1 = new ModelRenderer(this, 0, 0);
-      Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
-      Shape1.setRotationPoint(-8F, 23F, -8F);
-      Shape1.setTextureSize(128, 128);
-      Shape1.mirror = true;
-      this.setRotation(Shape1, 0F, 0F, 0F);
-      Shape2 = new ModelRenderer(this, 0, 18);
-      Shape2.addBox(0F, 0F, 0F, 1, 11, 14);
-      Shape2.setRotationPoint(7F, 12F, -7F);
-      Shape2.setTextureSize(128, 128);
-      Shape2.mirror = true;
-      this.setRotation(Shape2, 0F, 0F, 0F);
-      Shape2a = new ModelRenderer(this, 0, 18);
-      Shape2a.addBox(0F, 0F, 0F, 1, 11, 14);
-      Shape2a.setRotationPoint(-8F, 12F, -7F);
-      Shape2a.setTextureSize(128, 128);
-      Shape2a.mirror = true;
-      this.setRotation(Shape2a, 0F, 0F, 0F);
-      Shape3 = new ModelRenderer(this, 32, 18);
-      Shape3.addBox(0F, 0F, 0F, 16, 11, 1);
-      Shape3.setRotationPoint(-8F, 12F, 7F);
-      Shape3.setTextureSize(128, 128);
-      Shape3.mirror = true;
-      this.setRotation(Shape3, 0F, 0F, 0F);
-      Shape3a = new ModelRenderer(this, 32, 18);
-      Shape3a.addBox(0F, 0F, 0F, 16, 11, 1);
-      Shape3a.setRotationPoint(-8F, 12F, -8F);
-      Shape3a.setTextureSize(128, 128);
-      Shape3a.mirror = true;
-      this.setRotation(Shape3a, 0F, 0F, 0F);
-      Shape4 = new ModelRenderer(this, 64, 0);
-      Shape4.addBox(0F, 0F, 0F, 14, 1, 14);
-      Shape4.setRotationPoint(-7F, 14F, -7F);
-      Shape4.setTextureSize(128, 128);
-      Shape4.mirror = true;
-      this.setRotation(Shape4, 0F, 0F, 0F);
-      Shape5 = new ModelRenderer(this, 0, 44);
-      Shape5.addBox(0F, 0F, 0F, 14, 1, 14);
-      Shape5.setRotationPoint(-7F, 12F, -7F);
-      Shape5.setTextureSize(128, 128);
-      Shape5.mirror = true;
-      this.setRotation(Shape5, 0F, 0F, 0F);
-  }
+		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
+		Shape1.setRotationPoint(-8F, 23F, -8F);
+		Shape1.setTextureSize(128, 128);
+		Shape1.mirror = true;
+		this.setRotation(Shape1, 0F, 0F, 0F);
+		Shape2 = new ModelRenderer(this, 0, 18);
+		Shape2.addBox(0F, 0F, 0F, 1, 11, 14);
+		Shape2.setRotationPoint(7F, 12F, -7F);
+		Shape2.setTextureSize(128, 128);
+		Shape2.mirror = true;
+		this.setRotation(Shape2, 0F, 0F, 0F);
+		Shape2a = new ModelRenderer(this, 0, 18);
+		Shape2a.addBox(0F, 0F, 0F, 1, 11, 14);
+		Shape2a.setRotationPoint(-8F, 12F, -7F);
+		Shape2a.setTextureSize(128, 128);
+		Shape2a.mirror = true;
+		this.setRotation(Shape2a, 0F, 0F, 0F);
+		Shape3 = new ModelRenderer(this, 32, 18);
+		Shape3.addBox(0F, 0F, 0F, 16, 11, 1);
+		Shape3.setRotationPoint(-8F, 12F, 7F);
+		Shape3.setTextureSize(128, 128);
+		Shape3.mirror = true;
+		this.setRotation(Shape3, 0F, 0F, 0F);
+		Shape3a = new ModelRenderer(this, 32, 18);
+		Shape3a.addBox(0F, 0F, 0F, 16, 11, 1);
+		Shape3a.setRotationPoint(-8F, 12F, -8F);
+		Shape3a.setTextureSize(128, 128);
+		Shape3a.mirror = true;
+		this.setRotation(Shape3a, 0F, 0F, 0F);
+		Shape4 = new ModelRenderer(this, 64, 0);
+		Shape4.addBox(0F, 0F, 0F, 14, 1, 14);
+		Shape4.setRotationPoint(-7F, 14F, -7F);
+		Shape4.setTextureSize(128, 128);
+		Shape4.mirror = true;
+		this.setRotation(Shape4, 0F, 0F, 0F);
+		Shape5 = new ModelRenderer(this, 0, 44);
+		Shape5.addBox(0F, 0F, 0F, 14, 1, 14);
+		Shape5.setRotationPoint(-7F, 12F, -7F);
+		Shape5.setTextureSize(128, 128);
+		Shape5.mirror = true;
+		this.setRotation(Shape5, 0F, 0F, 0F);
+	}
 
-  @Override
-public void renderAll(List li, float phi)
-  {
-	  this.setRenderPass();
-	  boolean liq = (Boolean)li.get(0);
-	  boolean solid = (Boolean)li.get(1);
-	  if (solid) {
-    Shape1.render(f5);
-    Shape2.render(f5);
-    Shape2a.render(f5);
-    Shape3.render(f5);
-    Shape3a.render(f5);
-	  }
-    if (liq)
-    	Shape4.render(f5);
-    if (solid)
-    Shape5.render(f5);
-  }
+	@Override
+	public void renderAll(List li, float phi)
+	{
+		this.setRenderPass();
+		boolean liq = (Boolean)li.get(0);
+		boolean solid = (Boolean)li.get(1);
+		if (solid) {
+			Shape1.render(f5);
+			Shape2.render(f5);
+			Shape2a.render(f5);
+			Shape3.render(f5);
+			Shape3a.render(f5);
+		}
+		if (liq)
+			Shape4.render(f5);
+		if (solid)
+			Shape5.render(f5);
+	}
 }

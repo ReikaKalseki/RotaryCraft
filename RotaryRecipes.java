@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -19,12 +20,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.common.registry.GameRegistry;
-
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
 	public static void addRecipes() {
@@ -394,22 +394,22 @@ public class RotaryRecipes {
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.screwdriver), new Object[]{
-			"I  ", " S ", "  W", 'S', ItemStacks.shaftitem, 'I', Item.ingotIron, 'W', Block.planks});
+			"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', Block.planks});
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.screwdriver), new Object[]{
-			"I  ", " S ", "  W", 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot, 'W', Block.planks});
+			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', Block.planks});
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.meter), new Object[]{
-			"WWW", "WEW", " S ", 'S', ItemStacks.shaftitem, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', Block.planks});
+			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', Block.planks});
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.infobook), new Object[]{
 			"RSR", "PPP", "PPP", 'R', Item.redstone, 'S', Item.ingotIron, 'P', Item.paper});
 
 		ItemStack pick = new ItemStack(RotaryCraft.bedpick);
 		pick.addEnchantment(Enchantment.silkTouch, 1);
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.bedaxe), new Object[]{
-			"BB ", "BS ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
+			"BB ", "BS ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot});
 		GameRegistry.addRecipe(pick, new Object[]{
-				"BBB", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
+				"BBB", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot});
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.bedshov), new Object[]{
-			" B ", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.bedingot});
+			" B ", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot});
 
 		GameRegistry.addShapelessRecipe(new ItemStack(RotaryCraft.nvh), Item.helmetDiamond, RotaryCraft.nvg);
 

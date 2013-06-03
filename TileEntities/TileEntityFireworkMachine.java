@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -18,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -591,7 +591,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
-	 public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inventory[par1] = par2ItemStack;
 
@@ -601,80 +601,80 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		}
 	}
 
-	 /**
-	  * Reads a tile entity from NBT.
-	  */
-	 @Override
-	 public void readFromNBT(NBTTagCompound NBT)
-	 {
-		 super.readFromNBT(NBT);
-		 NBTTagList nbttaglist = NBT.getTagList("Items");
-		 inventory = new ItemStack[this.getSizeInventory()];
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
 
-		 for (int i = 0; i < nbttaglist.tagCount(); i++)
-		 {
-			 NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			 byte byte0 = nbttagcompound.getByte("Slot");
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
 
-			 if (byte0 >= 0 && byte0 < inventory.length)
-			 {
-				 inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			 }
-		 }
-	 }
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 
-	 /**
-	  * Writes a tile entity to NBT.
-	  */
-	 @Override
-	 public void writeToNBT(NBTTagCompound NBT)
-	 {
-		 super.writeToNBT(NBT);
-		 NBTTagList nbttaglist = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
 
-		 for (int i = 0; i < inventory.length; i++)
-		 {
-			 if (inventory[i] != null)
-			 {
-				 NBTTagCompound nbttagcompound = new NBTTagCompound();
-				 nbttagcompound.setByte("Slot", (byte)i);
-				 inventory[i].writeToNBT(nbttagcompound);
-				 nbttaglist.appendTag(nbttagcompound);
-			 }
-		 }
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
 
-		 NBT.setTag("Items", nbttaglist);
-	 }
+		NBT.setTag("Items", nbttaglist);
+	}
 
-	 @Override
-	 public boolean hasModelTransparency() {
-		 return false;
-	 }
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
 
-	 @Override
-	 public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		 return null;
-	 }
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
 
-	 @Override
-	 public void animateWithTick(World world, int x, int y, int z) {
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
 
-	 }
+	}
 
-	 @Override
-	 public int getMachineIndex() {
-		 return MachineRegistry.FIREWORK.ordinal();
-	 }
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.FIREWORK.ordinal();
+	}
 
-	 @Override
-	 public boolean isStackValidForSlot(int slot, ItemStack is) {
-		 return ReikaItemHelper.isFireworkIngredient(is.itemID);
-	 }
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack is) {
+		return ReikaItemHelper.isFireworkIngredient(is.itemID);
+	}
 
-	 @Override
-	 public int getRedstoneOverride() {
-		 if (!this.canCraftARocket())
-			 return 15;
-		 return 0;
-	 }
+	@Override
+	public int getRedstoneOverride() {
+		if (!this.canCraftARocket())
+			return 15;
+		return 0;
+	}
 }

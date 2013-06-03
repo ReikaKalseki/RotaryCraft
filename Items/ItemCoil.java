@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -15,19 +16,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCoil extends ItemBasic
 {
 	private static final String subNames[] = new String[65536];
 
-	public ItemCoil(int itemID) {
-		super(itemID, 96); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemCoil(int ID) {
+		super(ID, 96); //calling the super constructor and giving him the itemID so minecraft knows the itemID
 		maxStackSize = 1;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		hasSubtypes = true;

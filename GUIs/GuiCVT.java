@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -27,20 +28,20 @@ public class GuiCVT extends GuiNonPoweredMachine
 	private TileEntityAdvancedGear cvt;
 	public int ratio;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 	private GuiTextField input;
 
 	//Make gui look cool (like connecting spindles with belts)
 
-	public GuiCVT(EntityPlayer player, TileEntityAdvancedGear AdvancedGear)
+	public GuiCVT(EntityPlayer p5ep, TileEntityAdvancedGear AdvancedGear)
 	{
-		super(new ContainerCVT(player, AdvancedGear), AdvancedGear);
+		super(new ContainerCVT(p5ep, AdvancedGear), AdvancedGear);
 		cvt = AdvancedGear;
 		ySize = 237;
 		xSize = 240;
-		this.player = player;
+		ep = p5ep;
 		ratio = cvt.ratio;
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
@@ -79,7 +80,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		ratio = -ratio;
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, ep, ratio);
 
 		super.updateScreen();
 		x = Mouse.getX();
@@ -98,12 +99,12 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			ratio = 1;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, ep, ratio);
 			return;
 		}
 		ratio = Integer.parseInt(input.getText());
 		if (ratio != 0)
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, player, ratio);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 11, cvt, ep, ratio);
 	}
 
 	/**

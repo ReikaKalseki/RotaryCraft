@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -26,7 +27,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 {
 	private TileEntitySonicWeapon sonic;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 	private GuiTextField input;
@@ -37,16 +38,16 @@ public class GuiSonic extends GuiPowerOnlyMachine
 
 	private int dB;
 
-	public GuiSonic(EntityPlayer player, TileEntitySonicWeapon SonicWeapon)
+	public GuiSonic(EntityPlayer p5ep, TileEntitySonicWeapon SonicWeapon)
 	{
-		super(new CoreContainer(player, SonicWeapon), SonicWeapon);
+		super(new CoreContainer(p5ep, SonicWeapon), SonicWeapon);
 		sonic = SonicWeapon;
 		ySize = 92;
 		if (!sonic.DECIBELMODE)
 			xSize = 235;
 		if (!sonic.ENABLEFREQ)
 			ySize = 56;
-		this.player = player;
+		ep = p5ep;
 		vol = SonicWeapon.setvolume;
 		freq = SonicWeapon.setpitch;
 
@@ -94,7 +95,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
+		ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
 	}
 
 	@Override
@@ -114,14 +115,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			freq = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, player, freq);
+			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, ep, freq);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			dB = 0;
 			this.getVolFromdB();
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
+			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -131,13 +132,13 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (valid1) {
 			freq = Long.parseLong(input.getText());
 			if (freq >= 0)
-				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, player, freq);
+				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, ep, freq);
 		}
 		if (valid2) {
 			dB = Integer.parseInt(input2.getText());
 			if (dB >= 0) {
 				this.getVolFromdB();
-				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, player, vol);
+				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
 			}
 		}
 	}

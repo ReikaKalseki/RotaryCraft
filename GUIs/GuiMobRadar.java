@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -23,7 +24,7 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 
 	private TileEntityMobRadar radar;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 	public static final int UNIT = 4;
@@ -32,17 +33,17 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 	private boolean players = true;
 	private int direction;
 
-	public GuiMobRadar(EntityPlayer player, TileEntityMobRadar MobRadar)
+	public GuiMobRadar(EntityPlayer p5ep, TileEntityMobRadar MobRadar)
 	{
-		super(new CoreContainer(player, MobRadar), MobRadar);
+		super(new CoreContainer(p5ep, MobRadar), MobRadar);
 		radar = MobRadar;
 		ySize = 223;
 		xSize = 214;
-		this.player = player;
+		ep = p5ep;
 		hostile = radar.hostile;
 		animal = radar.animal;
 		players = radar.player;
-		direction = MathHelper.floor_double((player.rotationYaw * 4F) / 360F + 0.5D);
+		direction = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
 		while (direction > 3)
 			direction -= 4;
 		while (direction < 0)
@@ -69,17 +70,14 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 	}
 
 	private void drawRadar(int a, int b) {
-		int width = radar.getBounds()[1]-radar.getBounds()[0];
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", width));
 		for (int i = radar.getBounds()[0]; i <= radar.getBounds()[1]; i++) {
 			for (int j = radar.getBounds()[0]; j <=	 radar.getBounds()[1]; j++) {
-				//this.drawRect(a+7+UNIT*i, b+16+UNIT*j, a+7+UNIT+UNIT*i, b+16+UNIT*j+UNIT, radar.colors[j][i]);
 				this.drawMobIcon(a+7, b+16, UNIT*i, UNIT*j, radar.mobs[i][j], i, j);
 			}
 		}
 	}
 
-	private void drawMobIcon(int a, int b, int x, int y, int id, int i, int j) {
+	private void drawMobIcon(int a, int b, int px, int py, int id, int i, int j) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/mobicons.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(var4);
@@ -89,7 +87,7 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 			u = 2*UNIT;
 			v = 0;
 		}
-		this.drawTexturedModalRect(a+x-UNIT/2, b+y-UNIT/2, u, v, UNIT*2, UNIT*2);
+		this.drawTexturedModalRect(a+px-UNIT/2, b+py-UNIT/2, u, v, UNIT*2, UNIT*2);
 	}
 
 

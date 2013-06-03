@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -25,8 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -39,8 +40,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 public class BlockShaft extends BlockModelledMachine {
 
 
-	public BlockShaft(int blockID, Material mat) {
-		super(blockID, mat);
+	public BlockShaft(int ID, Material mat) {
+		super(ID, mat);
 	}
 
 	/**
@@ -120,22 +121,22 @@ public class BlockShaft extends BlockModelledMachine {
 			switch(tile.type) {
 			case WOOD:
 				fix = new ItemStack(Item.stick);
-			break;
+				break;
 			case STONE:
 				fix = ItemStacks.stonerod;
-			break;
+				break;
 			case STEEL:
 				fix = ItemStacks.shaftitem;
-			break;
+				break;
 			case DIAMOND:
 				fix = ItemStacks.diamondshaft;
-			break;
+				break;
 			case BEDROCK:
 				fix = ItemStacks.bedrockshaft;
-			break;
+				break;
 			default:
 				fix = new ItemStack(Block.stone);
-			break;
+				break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
 				tile.repair();
@@ -152,15 +153,15 @@ public class BlockShaft extends BlockModelledMachine {
 		return false;
 	}
 
-    @Override
+	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-    	if (world.getBlockMetadata(x, y, z) < 6)
-    		return;
+		if (world.getBlockMetadata(x, y, z) < 6)
+			return;
 		TileEntityShaft t = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
-    	if (t != null) {
+		if (t != null) {
 			t.type = EnumMaterials.STEEL;
-    	}
-    }
+		}
+	}
 
 	@Override
 	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {

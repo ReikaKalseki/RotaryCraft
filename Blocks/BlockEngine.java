@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -28,8 +29,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public class BlockEngine extends BlockModelledMachine {
 
-	public BlockEngine (int blockID, Material mat) {
-		super(blockID, mat);
+	public BlockEngine (int ID, Material mat) {
+		super(ID, mat);
 		//this.blockIndexInTexture = 14;
 	}
 
@@ -116,11 +117,11 @@ public class BlockEngine extends BlockModelledMachine {
 		return this.getBlockAABB(x, y, z);
 	}
 
-    @Override
+	@Override
 	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-    {
+	{
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
-    }
+	}
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)

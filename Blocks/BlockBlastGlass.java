@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -26,8 +27,8 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 
 	public Icon icon;
 
-	public BlockBlastGlass(int blockID) {
-		super(blockID, "RotaryCraft:obsidiglass", "RotaryCraft:obsidiglass_side", Material.glass, true); //there was a 74 here
+	public BlockBlastGlass(int ID) {
+		super(ID, "RotaryCraft:obsidiglass", "RotaryCraft:obsidiglass_side", Material.glass, true); //there was a 74 here
 		this.setHardness(12.5F);
 		this.setResistance(6000F);
 		this.setLightValue(0F);
@@ -72,7 +73,7 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 	/** This block can only be destroyed by the wither explosions - this in effect makes it witherproof */
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex) {
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, this.blockID);
+		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, blockID);
 	}
 
 	public String getTextureFile(){

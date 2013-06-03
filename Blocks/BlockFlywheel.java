@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -30,8 +31,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlywheel extends BlockModelledMachine {
 
-	public BlockFlywheel(int blockID, Material mat) {
-		super(blockID, mat);
+	public BlockFlywheel(int ID, Material mat) {
+		super(ID, mat);
 		//this.blockIndexInTexture = 23;
 	}
 

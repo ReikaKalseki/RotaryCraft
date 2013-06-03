@@ -4,15 +4,15 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -23,8 +23,6 @@ import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
 
 public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
-	public static final int MINPOWER = 131072;	//was 4096
-	public static final int MINTORQUE = 8192;	//was 512
 	private int harvestx;
 	private int harvesty;
 	private int harvestz;

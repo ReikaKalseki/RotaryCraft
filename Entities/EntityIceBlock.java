@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
@@ -89,22 +90,22 @@ public class EntityIceBlock extends Entity {
 		NBT.setDouble("zw", zWidth);
 	}
 
-    @Override
+	@Override
 	public AxisAlignedBB getBoundingBox()
-    {
-        return AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX+xWidth, posY+yWidth, posZ+zWidth);
-    }
+	{
+		return AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX+xWidth, posY+yWidth, posZ+zWidth);
+	}
 
-    @Override
+	@Override
 	public boolean canBeCollidedWith()
-    {
-        return !isDead;
-    }
+	{
+		return !isDead;
+	}
 
-    @Override
+	@Override
 	public boolean canBePushed()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 
 }

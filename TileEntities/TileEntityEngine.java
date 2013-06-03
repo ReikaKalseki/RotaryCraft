@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -29,7 +30,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -60,8 +60,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public long power = 0;
 	public int torque = 0;
 	public int omega = 0;*/
-
-	public EnumEngineType engine;
 
 	/** Water capacity */
 	public static final int CAPACITY = 600;
@@ -352,17 +350,17 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		case STEAM:
 			return this.steamCheck(world, x, y, z);
 		case GAS:
-			return this.combustionCheck(world, x, y, z, 0);
+			return this.combustionCheck(world, x, y, z, false);
 		case AC:
 			return this.acPower(world, x, y, z);
 		case SPORT:
-			return this.combustionCheck(world, x, y, z, 1);
+			return this.combustionCheck(world, x, y, z, true);
 		case HYDRO:
 			return this.hydroCheck(world, x, y, z, this.getBlockMetadata());
 		case MICRO:
-			return this.jetCheck(world, x, y, z, 0);
+			return this.jetCheck(world, x, y, z);
 		case JET:
-			return this.jetCheck(world, x, y, z, 1);
+			return this.jetCheck(world, x, y, z);
 		}
 		return false;
 	}
@@ -526,14 +524,14 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return true;
 	}
 
-	private boolean combustionCheck(World world, int x, int y, int z, int type) {
+	private boolean combustionCheck(World world, int x, int y, int z, boolean isPerf) {
 		if (tickcount2 >= 20) {
 			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
 			tickcount2 = 0;
 		}
 		if (ethanols <= 0)
 			return false;
-		if (type == 1) {
+		if (isPerf) {
 			if (additives <= 0)
 				starvedengine = true;
 			else
@@ -706,8 +704,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return (ac);
 	}
 
-	private boolean jetCheck(World world, int x, int y, int z, int type) {
-		if (this.type == EnumEngineType.JET) {
+	private boolean jetCheck(World world, int x, int y, int z) {
+		if (type == EnumEngineType.JET) {
 			if (FOD >= 8)
 				return false;
 		}
@@ -1077,6 +1075,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.elecengine", 0.125F, 1F);
+		//SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F);
 		if (type.turbineNoise()) {
 			float volume = 0.125F;
 			float pitch = 1F;

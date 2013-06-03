@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
@@ -57,7 +58,7 @@ public class RenderWinder extends RotaryTERenderer
 		if (true)
 		{
 			ModelWinder var14;
-			var14 = this.WinderModel;
+			var14 = WinderModel;
 			//ModelWinderV var15;
 			//var14 = this.WinderModelV;
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windertex.png");

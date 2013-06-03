@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -23,7 +24,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -32,8 +32,8 @@ public class BlockCanola extends BlockBasic {
 
 	Random rand = new Random();
 
-	public BlockCanola(int blockID) {
-		super(blockID, Material.plants);
+	public BlockCanola(int ID) {
+		super(ID, Material.plants);
 		this.setHardness(0F);
 		this.setResistance(0F);
 		this.setLightValue(0F);

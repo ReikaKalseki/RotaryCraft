@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
@@ -21,47 +22,47 @@ public class ContainerHeater extends CoreContainer {
 
 	public ContainerHeater(EntityPlayer player, TileEntity te) {
 		super(player, te);
-        lowerInv = (IInventory)te;
-        int numRows = lowerInv.getSizeInventory() / 9;
-        lowerInv.openChest();
-        int var3 = (numRows - 4) * 18;
-        int var4;
-        int var5;
-        int py = 18;
-        for (var4 = 0; var4 < numRows; ++var4)
-        {
-            for (var5 = 0; var5 < 9; ++var5)
-            {
-                this.addSlotToContainer(new Slot(lowerInv, var5 + var4 * 9, 8 + var5 * 18, 18 + var4 * 18));
-            }
-        }
-        for (var4 = 0; var4 < 3; ++var4)
-        {
-            for (var5 = 0; var5 < 9; ++var5)
-            {
-                this.addSlotToContainer(new Slot(player.inventory, var5 + var4 * 9 + 9, 8 + var5 * 18, 103 + var4 * 18 + var3+py));
-            }
-        }
+		lowerInv = (IInventory)te;
+		int numRows = lowerInv.getSizeInventory() / 9;
+		lowerInv.openChest();
+		int var3 = (numRows - 4) * 18;
+		int var4;
+		int var5;
+		int py = 18;
+		for (var4 = 0; var4 < numRows; ++var4)
+		{
+			for (var5 = 0; var5 < 9; ++var5)
+			{
+				this.addSlotToContainer(new Slot(lowerInv, var5 + var4 * 9, 8 + var5 * 18, 18 + var4 * 18));
+			}
+		}
+		for (var4 = 0; var4 < 3; ++var4)
+		{
+			for (var5 = 0; var5 < 9; ++var5)
+			{
+				this.addSlotToContainer(new Slot(player.inventory, var5 + var4 * 9 + 9, 8 + var5 * 18, 103 + var4 * 18 + var3+py));
+			}
+		}
 
-        for (var4 = 0; var4 < 9; ++var4)
-        {
-            this.addSlotToContainer(new Slot(player.inventory, var4, 8 + var4 * 18, 161 + var3+py));
-        }
-    }
+		for (var4 = 0; var4 < 9; ++var4)
+		{
+			this.addSlotToContainer(new Slot(player.inventory, var4, 8 + var4 * 18, 161 + var3+py));
+		}
+	}
 
-    /**
-     * Callback for when the crafting gui is closed.
-     */
-    @Override
-	public final void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
-    {
-        super.onCraftGuiClosed(par1EntityPlayer);
-        lowerInv.closeChest();
-    }
+	/**
+	 * Callback for when the crafting gui is closed.
+	 */
+	 @Override
+	 public final void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+	{
+		 super.onCraftGuiClosed(par1EntityPlayer);
+		 lowerInv.closeChest();
+	}
 
-    public final IInventory getLowerInventory()
-    {
-        return lowerInv;
-    }
+	 public final IInventory getLowerInventory()
+	 {
+		 return lowerInv;
+	 }
 
 }

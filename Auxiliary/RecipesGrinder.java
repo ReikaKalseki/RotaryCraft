@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -25,8 +26,8 @@ public class RecipesGrinder {
 	private Map GrinderExperience = new HashMap();
 
 	/**
-	* Used to call methods addSmelting and getSmeltingResult.
-	*/
+	 * Used to call methods addSmelting and getSmeltingResult.
+	 */
 	public static final RecipesGrinder smelting()
 	{
 		return GrinderBase;
@@ -81,8 +82,8 @@ public class RecipesGrinder {
 	}
 
 	/**
-	* Adds a smelting recipe.
-	*/
+	 * Adds a smelting recipe.
+	 */
 	public void addSmelting(int id, ItemStack itemStack, float experience)
 	{
 		GrinderList.put(Integer.valueOf(id), itemStack);
@@ -90,8 +91,8 @@ public class RecipesGrinder {
 	}
 
 	/**
-	* Returns the smelting result of an item.
-	*/
+	 * Returns the smelting result of an item.
+	 */
 	public ItemStack getSmeltingResult(int id)
 	{
 		return (ItemStack)GrinderList.get(Integer.valueOf(id));

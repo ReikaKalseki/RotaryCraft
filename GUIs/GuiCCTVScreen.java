@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -20,11 +21,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 
 public class GuiCCTVScreen extends GuiMachine {
 
-	TileEntityScreen te;
-
-	public GuiCCTVScreen(EntityPlayer ep, TileEntityScreen tile) {
-		super(new ContainerScreen(ep, tile), tile);
-		te = tile;
+	public GuiCCTVScreen(EntityPlayer p5ep, TileEntityScreen te) {
+		super(new ContainerScreen(p5ep, te), te);
 		ySize = 166;
 		xSize = 176;
 	}

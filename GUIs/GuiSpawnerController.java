@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -31,18 +32,17 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 
 	private TileEntitySpawnerController spawnercontroller;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
 	int x;
 	int y;
 	private GuiTextField input;
 	boolean hasPower;
 
-	public GuiSpawnerController(EntityPlayer player, TileEntitySpawnerController tile)
+	public GuiSpawnerController(EntityPlayer p5ep, TileEntitySpawnerController spw)
 	{
-		super(new CoreContainer(player, tile), tile);
-		spawnercontroller = tile;
+		super(new CoreContainer(p5ep, spw), spw);
+		spawnercontroller = spw;
 		ySize = 75;
-		this.player = player;
+		ep = p5ep;
 		timer = spawnercontroller.setDelay;
 		disabled = spawnercontroller.disable;
 		hasPower = (spawnercontroller.power >= spawnercontroller.machine.getMinPower());
@@ -89,7 +89,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			dat = -1;
 		else
 			dat = timer;
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, ep, dat);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 					dat = -1;
 				else
 					dat = timer;
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, ep, dat);
 				return;
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
@@ -121,7 +121,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			else
 				dat = timer;
 			if (timer >= 0)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, player, dat);
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 8, spawnercontroller, ep, dat);
 		}
 	}
 

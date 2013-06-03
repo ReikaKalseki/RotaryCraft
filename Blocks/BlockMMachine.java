@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
@@ -22,24 +23,24 @@ public class BlockMMachine extends BlockModelledMultiTE {
 		super(id, mat);
 	}
 
-    @Override
+	@Override
 	public int isProvidingWeakPower(IBlockAccess iba, int x, int y, int z, int par5)
-    {
-    	RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
-    	if (!(te instanceof TileEntityPlayerDetector))
-    		return 0;
-    	TileEntityPlayerDetector tp = (TileEntityPlayerDetector)te;
-        if (tp.isActive)
-        	return 15;
-        else
-        	return 0;
-    }
+	{
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
+		if (!(te instanceof TileEntityPlayerDetector))
+			return 0;
+		TileEntityPlayerDetector tp = (TileEntityPlayerDetector)te;
+		if (tp.isActive)
+			return 15;
+		else
+			return 0;
+	}
 
-    @Override
+	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-    	MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-    	if (m == MachineRegistry.FORCEFIELD || m == MachineRegistry.CONTAINMENT)
-    		return 15;
-    	return 0;
-    }
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.FORCEFIELD || m == MachineRegistry.CONTAINMENT)
+			return 15;
+		return 0;
+	}
 }

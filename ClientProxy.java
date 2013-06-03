@@ -4,20 +4,15 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.BlockSheetTexRenderer;
 import Reika.DragonAPI.ItemSpriteSheetRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -31,6 +26,11 @@ import Reika.RotaryCraft.Entities.RenderFallingBlock;
 import Reika.RotaryCraft.Entities.RenderFreezeGunShot;
 import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
@@ -45,6 +45,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerSounds() {
 		RotarySounds.addSounds();
+		//MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
 
 	@Override

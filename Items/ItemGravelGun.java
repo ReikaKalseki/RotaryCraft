@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
@@ -22,7 +23,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -32,8 +32,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemGravelGun extends ItemChargedTool {
 
-	public ItemGravelGun(int itemID) {
-		super(itemID, 176);
+	public ItemGravelGun(int ID) {
+		super(ID, 176);
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public class ItemGravelGun extends ItemChargedTool {
 				EntityLiving ent = (EntityLiving)infov.get(k);
 				if (!(ent instanceof EntityPlayer) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
 					double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
-					ItemStack flint = new ItemStack(Item.flint.itemID, 0, 0);
-					EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, flint);
+					ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);
+					EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, fl);
 					ei.delayBeforeCanPickup = 100;
 					ei.motionX = look.xCoord/look.lengthVector()*dist/5;
 					ei.motionY = look.yCoord/look.lengthVector()*dist/5;
@@ -95,8 +95,8 @@ public class ItemGravelGun extends ItemChargedTool {
 		Vec3 look = ep.getLookVec();
 		double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
 		if (!(ent instanceof EntityPlayer) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
-			ItemStack flint = new ItemStack(Item.flint.itemID, 0, 0);
-			EntityItem ei = new EntityItem(world, looks[0]/look.lengthVector(), looks[1]/look.lengthVector(), looks[2]/look.lengthVector(), flint);
+			ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);
+			EntityItem ei = new EntityItem(world, looks[0]/look.lengthVector(), looks[1]/look.lengthVector(), looks[2]/look.lengthVector(), fl);
 			ei.delayBeforeCanPickup = 100;
 			ei.motionX = look.xCoord/look.lengthVector();
 			ei.motionY = look.yCoord/look.lengthVector();

@@ -4,8 +4,9 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
+ * 
+ * Distribution of the software in any form is only allowed
+ * with explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -31,17 +32,17 @@ public class GuiCoil extends GuiNonPoweredMachine
 
 	private TileEntityAdvancedGear coil;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	private EntityPlayer player;
+
 	int x;
 	int y;
 
-	public GuiCoil(EntityPlayer player, TileEntityAdvancedGear AdvancedGear)
+	public GuiCoil(EntityPlayer p5ep, TileEntityAdvancedGear AdvancedGear)
 	{
-		super(new CoreContainer(player, AdvancedGear), AdvancedGear);
+		super(new CoreContainer(p5ep, AdvancedGear), AdvancedGear);
 		coil = AdvancedGear;
 		ySize = 72;
 		xSize = 176;
-		this.player = player;
+		ep = p5ep;
 	}
 
 	@Override
@@ -88,13 +89,13 @@ public class GuiCoil extends GuiNonPoweredMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			omega = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, player, omega);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, ep, omega);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			torque = 0;
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, player, torque);
+			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, ep, torque);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -106,7 +107,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (omega >= 0) {
 				if (omega > RotaryConfig.omegalimit)
 					omega = RotaryConfig.omegalimit;
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, player, omega);
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 19, coil, ep, omega);
 			}
 		}
 		if (valid2) {
@@ -114,7 +115,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (torque >= 0) {
 				if (torque > RotaryConfig.torquelimit)
 					torque = RotaryConfig.torquelimit;
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, player, torque);
+				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 20, coil, ep, torque);
 			}
 		}
 	}
