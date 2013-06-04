@@ -27,6 +27,7 @@ public class GuiExtractor extends GuiMachine
 	{
 		super(new ContainerExtractor(p5ep, Extractor), Extractor);
 		ext = Extractor;
+		ep = p5ep;
 	}
 
 	/**

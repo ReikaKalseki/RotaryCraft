@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -97,7 +98,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.write("Engine Intake is Blocked!");
 				if (clicked.FOD >= 8)
 					ReikaChatHelper.writeString("Engine Destroyed from Animal Strikes!");
-				if (clicked.type.isCooled()) {
+				if (clicked.type.isCooled() || clicked.isJetFailing) {
 					ReikaChatHelper.writeString(String.format("Temperature: %dC", clicked.temperature));
 				}
 				return true;

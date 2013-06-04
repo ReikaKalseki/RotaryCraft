@@ -27,6 +27,7 @@ public class GuiPurifier extends GuiMachine
 	{
 		super(new ContainerPurifier(p5ep, Purifier), Purifier);
 		pur = Purifier;
+		ep = p5ep;
 	}
 
 	/**

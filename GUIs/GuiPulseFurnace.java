@@ -14,12 +14,13 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiPulseFurnace extends GuiMachine {
@@ -30,6 +31,7 @@ public class GuiPulseFurnace extends GuiMachine {
 	{
 		super(new ContainerPulseFurnace(p5ep, pulseFurnace), pulseFurnace);
 		puls = pulseFurnace;
+		ep = p5ep;
 	}
 
 	/**

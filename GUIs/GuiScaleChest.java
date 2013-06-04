@@ -17,14 +17,15 @@ import net.minecraft.inventory.IInventory;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScaleChest extends GuiPowerOnlyMachine
@@ -121,6 +122,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	{
 		this.setValues();
 		super.drawGuiContainerForegroundLayer(a, b);
+		fontRenderer.drawString("Page "+String.valueOf(scale.page), xSize-48, 6, 4210752);
 		int var3 = 0;
 		int pageinv = invsize-page*9*scale.MAXROWS;
 		int pagerows = numrows;
@@ -133,12 +135,13 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			diff = 0;
 		int color1 = 0xffeeeeee;
 		int color2 = 0xff939393;
-		ReikaGuiAPI.drawRect(var4, var5, var4+18*diff, var5+18, color1);
+		int color3 = 0xffcacaca;
+		ReikaGuiAPI.drawRect(var4, var5, var4+18*diff, var5+18, color3);
 		if (pagerows < scale.MAXROWS) {
 			var4 = 7;
 			var5 += 18;
 			diff = scale.MAXROWS-pagerows;
-			ReikaGuiAPI.drawRect(var4, var5, var4+18*9, var5+18*diff, color1);
+			ReikaGuiAPI.drawRect(var4, var5, var4+18*9, var5+18*diff, color3);
 		}
 	}
 

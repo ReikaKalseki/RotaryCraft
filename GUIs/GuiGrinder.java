@@ -27,6 +27,7 @@ public class GuiGrinder extends GuiMachine
 	{
 		super(new ContainerGrinder(p5ep, Grinder), Grinder);
 		grin = Grinder;
+		ep = p5ep;
 	}
 
 	/**

@@ -17,9 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -87,7 +89,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 			slides[i] = slides[i+1];
 		}
 		slides[slides.length-1] = active;
-		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.projector", 1F, 1F);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.PROJECTOR, worldObj, xCoord, yCoord, zCoord, 1, 1);
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

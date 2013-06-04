@@ -11,6 +11,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
@@ -24,6 +25,7 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine
 	{
 		super(new ContainerBlastFurnace(p5ep, BlastFurnace), BlastFurnace);
 		blast = BlastFurnace;
+		ep = p5ep;
 	}
 
 	/**

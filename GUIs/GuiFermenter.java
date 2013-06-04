@@ -27,6 +27,7 @@ public class GuiFermenter extends GuiMachine
 	{
 		super(new ContainerFermenter(p5ep, Fermenter), Fermenter);
 		ferm = Fermenter;
+		ep = p5ep;
 	}
 
 	/**

@@ -20,6 +20,22 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.FingerprintWarning;
+import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PostInit;
+import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+
+import Reika.DragonAPI.LanguageArray;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
@@ -69,22 +85,8 @@ import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemPipePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.FingerprintWarning;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="@GET_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version="beta", certificateFingerprint = "@GET_FINGERPRINT@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
@@ -207,6 +209,8 @@ public class RotaryCraft {
 		RotaryRegistration.addEntities();
 		RotaryAchievements.registerAcheivements();
 		//DemoMusic.addTracks();
+
+		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});
 
 		OreDictionary.registerOre("HSLA", ItemStacks.steelingot);
 		ItemStacks.registerSteels();

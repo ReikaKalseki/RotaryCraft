@@ -18,12 +18,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemStunGun extends ItemChargedTool {
@@ -44,7 +47,8 @@ public class ItemStunGun extends ItemChargedTool {
 		for (int i = 0; i < 12; i++)
 			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 		//}
-		world.playSoundAtEntity(ep, "Reika.RotaryCraft.knockback", 2, 2F);
+		Vec3 norm = ep.getLookVec();
+		SoundRegistry.playSound(SoundRegistry.KNOCKBACK, world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		if (ep.isSneaking()) {
 			if (world.isRemote)
 				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);

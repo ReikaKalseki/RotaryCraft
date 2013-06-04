@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
@@ -222,33 +223,31 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 		tickcount++;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 
-		if (!world.isRemote || true) {
-			if (this.canSmelt()) {
-				flag1 = true;/*
+		if (this.canSmelt()) {
+			flag1 = true;/*
 				if (inventory[1] != null) {
 					inventory[1].stackSize--;
 					if (inventory[1].stackSize <= 0)
 						inventory[1] = null;
 				}*/
-			}
-			if (this.canSmelt()) {
-				grinderCookTime++;
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-				if (this.operationComplete(grinderCookTime, 0)) {
-					grinderCookTime = 0;
-					tickcount = 0;
-					this.smeltItem();
-					flag1 = true;
-				}
-			}
-			else
-				grinderCookTime = 0;
 		}
+		if (this.canSmelt()) {
+			grinderCookTime++;
+			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
+			if (this.operationComplete(grinderCookTime, 0)) {
+				grinderCookTime = 0;
+				tickcount = 0;
+				this.smeltItem();
+				flag1 = true;
+			}
+		}
+		else
+			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inventory[1] != null && lubricant >= ItemFuelLubeBucket.value[0]) {
-			if (inventory[1].itemID == Item.bucketEmpty.itemID && inventory[1].stackSize == 1) {
-				inventory[1] = ItemStacks.lubebucket;
+		if (inventory[2] != null && lubricant >= ItemFuelLubeBucket.value[0]) {
+			if (inventory[2].itemID == Item.bucketEmpty.itemID && inventory[2].stackSize == 1) {
+				inventory[2] = ItemStacks.lubebucket;
 				lubricant -= ItemFuelLubeBucket.value[0];
 			}
 		}

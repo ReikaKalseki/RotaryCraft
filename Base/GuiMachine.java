@@ -18,10 +18,14 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.RotaryCraft.GUIs.GuiTNTCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiMachine extends GuiContainer {
@@ -47,11 +51,13 @@ public abstract class GuiMachine extends GuiContainer {
 	{
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		if (!(tile instanceof TileEntityProjector))
-			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
+		if (tile instanceof TileEntityProjector)
+			fontRenderer.drawString(tile.getMultiValuedName(), 6, 6, 4210752);
+		else if (tile instanceof TileEntityScaleableChest)
+			fontRenderer.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
 		else
-			fontRenderer.drawString(tile.getMultiValuedName(), 6, 5, 4210752);
-		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui")
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
+		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiTNTCannon))
 			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
 	}
 
@@ -89,6 +95,8 @@ public abstract class GuiMachine extends GuiContainer {
 			this.drawPowerTab(j, k);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(i);
+		if (ep == null && !(this instanceof GuiOneSlotInv))
+			ReikaJavaLibrary.pConsole("Gui for "+tile.getMultiValuedName()+" did not set player entity!");
 	}
 
 	protected abstract void drawPowerTab(int j, int k);

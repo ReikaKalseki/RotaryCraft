@@ -27,6 +27,7 @@ public class GuiCompactor extends GuiMachine
 	{
 		super(new ContainerCompactor(p5ep, Compactor), Compactor);
 		comp = Compactor;
+		ep = p5ep;
 	}
 
 	/**

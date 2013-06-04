@@ -16,11 +16,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -483,7 +485,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		if (this.canSmelt()) {
 			if (soundtick >= 18 && temperature > reqtemp && reqtemp != -1) {
 				soundtick = 0;
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.pulsejet", 1F, 1F);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.PULSEJET, world, x, y, z, 1, 1);
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("$$");
 			if (!flag2)

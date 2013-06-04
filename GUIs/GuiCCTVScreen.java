@@ -23,6 +23,7 @@ public class GuiCCTVScreen extends GuiMachine {
 
 	public GuiCCTVScreen(EntityPlayer p5ep, TileEntityScreen te) {
 		super(new ContainerScreen(p5ep, te), te);
+		ep = p5ep;
 		ySize = 166;
 		xSize = 176;
 	}

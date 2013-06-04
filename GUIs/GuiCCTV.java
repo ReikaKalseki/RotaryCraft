@@ -11,6 +11,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
@@ -19,6 +20,7 @@ public class GuiCCTV extends GuiNonPoweredMachine {
 
 	public GuiCCTV(EntityPlayer p5ep, TileEntityCCTV te) {
 		super(new ContainerCCTV(p5ep, te), te);
+		ep = p5ep;
 	}
 
 	@Override

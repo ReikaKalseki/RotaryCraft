@@ -13,15 +13,18 @@ package Reika.RotaryCraft;
 import java.net.URL;
 
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 
 public enum SoundRegistry {
 
 	ELECTRIC("elecengine"),
 	WIND("windengine"),
 	STEAM("steamengine"),
-	GAS("gasengine"),
+	CAR("gasengine"),
 	HYDRO("hydroengine"),
 	MICRO("microengine"),
 	JET("jetengine"),
@@ -47,6 +50,7 @@ public enum SoundRegistry {
 
 	private static final String SOUND_FOLDER = "Reika/RotaryCraft/Sounds/";
 	private static final String SOUND_PREFIX = "Reika.RotaryCraft.Sounds.";
+	private static final String SOUND_DIR = "Sounds/";
 	private static final String SOUND_EXT = ".ogg";
 	private static final String MUSIC_FOLDER = "music/";
 	private static final String MUSIC_PREFIX = "music.";
@@ -63,8 +67,10 @@ public enum SoundRegistry {
 	}
 
 	public static void playSound(SoundRegistry s, World world, double x, double y, double z, float vol, float pitch) {
+		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
+			return;
 		FMLClientHandler.instance().getClient().sndManager.playSound(s.getPlayableReference(), (float)x, (float)y, (float)z, vol, pitch);
-		ReikaJavaLibrary.pConsole(s.getPlayableReference());
 	}
 
 	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {
@@ -86,11 +92,26 @@ public enum SoundRegistry {
 	}
 
 	public URL getURL() {
-		return RotaryCraft.class.getResource("/" + name+SOUND_EXT);
+		if (this.isNote())
+			return RotaryCraft.class.getResource(SOUND_DIR+MUSIC_FOLDER+name+SOUND_EXT);
+		else
+			return RotaryCraft.class.getResource(SOUND_DIR+name+SOUND_EXT);
 	}
 
 	public boolean isNote() {
 		return (this.name().contains("HARP") || this.name().contains("BASS") || this.name().contains("PLING"));
 	}
 
+	public static SoundRegistry getNoteFromVoiceAndPitch(SoundRegistry voice, String pitch) {
+		return SoundRegistry.getSoundByName(pitch.toUpperCase()+voice.name());
+	}
+
+	public static SoundRegistry getSoundByName(String name) {
+		for (int i = 0; i < soundList.length; i++) {
+			if (soundList[i].name().equals(name))
+				return soundList[i];
+		}
+		ReikaJavaLibrary.pConsole("\""+name+"\" does not correspond to a registered sound!");
+		return null;
+	}
 }

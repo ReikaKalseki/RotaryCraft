@@ -13,10 +13,12 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -65,7 +67,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		}
 		this.hydrate(world, x, y, z, meta);
 		if (this.getRange() > 0 && waterLevel > 0 && soundtick >= 40) {
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.sprinkler", 1F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.SPRINKLER, world, x, y, z, 1, 1);
 			soundtick = 0;
 		}
 		else {

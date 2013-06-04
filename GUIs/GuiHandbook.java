@@ -249,7 +249,7 @@ public class GuiHandbook extends GuiScreen
 		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 120, 0, file2));
 		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 120, 0, file2));
 		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 120, 0, file2));
-		//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file2));
+		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file2));
 		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 120, 0, file2));
 		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 120, 0, file2));
 		break;
@@ -528,6 +528,8 @@ public class GuiHandbook extends GuiScreen
 		if (screen == RESOURCESTART+1 && page == 3)
 			return 2;
 		if (screen == RESOURCESTART+1 && page == 7)
+			return 1;
+		if (screen == TOOLSTART && page == 0)
 			return 1;
 		if (screen == TOOLSTART+1 && page == 2) {
 			if (System.nanoTime()-time > SECOND*2) {

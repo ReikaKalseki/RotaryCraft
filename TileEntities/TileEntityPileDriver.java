@@ -32,15 +32,17 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPileDriver;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
@@ -94,7 +96,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		this.bounce(world, x, y-step-1, z);
 		this.dealDamage(world, x, y-step-1, z);
 		this.addNausea(world, x, y-step-1, z);
-		world.playSoundEffect(x+0.5D, y+0.5D, z+0.5D, "Reika.RotaryCraft.piledriver", 1F, 1F);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.PILEDRIVER, world, x, y, z, 1, 1);
 	}
 
 	public void bounce(World world, int x, int y, int z) { //bounce entities
@@ -105,7 +107,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			Entity ent = (Entity)inzone.get(i);
 			if (ent != null) {
 				if (ent.onGround && !world.isRemote)
-					ent.motionY += 0.35 / ReikaMathLibrary.doubpow(ReikaMathLibrary.py3d(ent.posX-x, ent.posY-y, ent.posZ-z), 0.5);
+					ent.motionY += 0.5 / ReikaMathLibrary.doubpow(ReikaMathLibrary.py3d(ent.posX-x, ent.posY-y, ent.posZ-z), 0.5);
 				//ent.motionX += (-0.05+par5Random.nextFloat()*0.1F);
 				//ent.motionZ += (-0.05+par5Random.nextFloat()*0.1F);
 				ent.velocityChanged = true;

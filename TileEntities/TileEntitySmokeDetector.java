@@ -15,11 +15,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -70,7 +72,7 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 			soundDelay = -1;
 		if (tickcount >= soundDelay && soundDelay != -1) {
 			tickcount = 0;
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.smokealarm", 0.1F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.SMOKE, world, x, y, z, 0.1F, 1);
 		}
 	}
 	/*

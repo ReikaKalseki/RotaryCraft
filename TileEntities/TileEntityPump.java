@@ -18,11 +18,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPump;
@@ -110,7 +112,7 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 		}
 		if (power > MINPOWER && soundtick >= 100) {
 			soundtick = 0;
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.pump", 0.5F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.PUMP, world, x, y, z, 0.5F, 1);
 		}
 		if (power > MINPOWER)
 			this.suckUpMobs(world, x, y, z);

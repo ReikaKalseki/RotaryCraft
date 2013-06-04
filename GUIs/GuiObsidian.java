@@ -27,6 +27,7 @@ public class GuiObsidian extends GuiMachine
 	{
 		super(new ContainerObsidian(p5ep, Obsidian), Obsidian);
 		obs = Obsidian;
+		ep = p5ep;
 	}
 
 	/**

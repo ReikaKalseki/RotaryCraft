@@ -11,6 +11,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
@@ -24,6 +25,7 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
 	{
 		super(new ContainerAerosolizer(p5ep, Aerosolizer), Aerosolizer);
 		aero = Aerosolizer;
+		ep = p5ep;
 	}
 	/*
     public void drawScreen(int m, int n, float f) {

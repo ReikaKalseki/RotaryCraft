@@ -19,12 +19,15 @@ import java.util.Arrays;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.DemoMusic;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -57,6 +60,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	public boolean isOneTimePlaying = false;
 
 	private boolean lastPower = false;
+
+	private int activeVolume;
+	private int activeVoice;
+	private int activeNote;
 
 	/** Position of last note */
 	private int[] lastNote = new int[16];
@@ -119,11 +126,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		String pit;
 		int[][] notes = musicQueue[tick];
 		for (int i = 0; i < 16; i++) {
-			float pitch = (float)Math.pow(2.0D, (notes[i][1]-24)/12.0D);
-			float volume = notes[i][2]/100F;
+			if (!worldObj.isRemote) {
+				activeVolume = notes[i][2];
+				activeNote = notes[i][1];
+				activeVoice = notes[i][0];
+			}
+			float pitch = (float)Math.pow(2.0D, (activeNote-24)/12.0D);
+			float volume = activeVolume/100F;
 			if (pitch < 0.5F) {
 				pitch *= 2F;
-				pit = "lo";
+				pit = "low";
 			}
 			else if (pitch > 2F) {
 				pitch *= 0.25F;
@@ -132,17 +144,21 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			else
 				pit = "";
 			//ReikaJavaLibrary.pConsole(pit);
-			if (notes[i][0] != 0)
-				worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, notes[i][1]/24D, 0.0D, 0.0D);
-			switch(notes[i][0]) {
+			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
+			if (activeVoice != 0)
+				worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
+			if (activeVoice != 0) {
+				ReikaJavaLibrary.pConsole(activeVoice+" on "+FMLCommonHandler.instance().getEffectiveSide());
+			}
+			switch(activeVoice) {
 			case 1:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.harp"+pit, volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 2:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.bass"+pit, volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 3:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.music.pling"+pit, volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 4:
 				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
@@ -282,6 +298,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
 		NBT.setBoolean("lastpwr", lastPower);
+
+		NBT.setInteger("avol", activeVolume);
+		NBT.setInteger("avoice", activeVoice);
+		NBT.setInteger("anote", activeNote);
 	}
 
 	/**
@@ -300,6 +320,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		entryChannel = NBT.getInteger("ch");
 		entryNote = NBT.getInteger("note");
 		entryVoice = NBT.getInteger("voice");
+
+		activeNote = NBT.getInteger("anote");
+		activeVoice = NBT.getInteger("avoice");
+		activeVolume = NBT.getInteger("avol");
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
@@ -370,7 +394,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public void loadDemo() {
 		String path = RotaryCraft.class.getResource("Resources/demomusic.txt").getPath();
-		ReikaJavaLibrary.pConsole(path);
 		File f = new File(path);
 		if (!f.exists()) {
 			ReikaChatHelper.write("Demo file not found!");

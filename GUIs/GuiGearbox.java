@@ -11,6 +11,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
@@ -24,6 +25,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 	{
 		super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
 		gearboxInventory = Gearbox;
+		ep = p5ep;
 	}
 
 	/**

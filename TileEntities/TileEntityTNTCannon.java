@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -31,7 +32,6 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 
 	public static final double gTNT = 7.5;	//Calculated from EntityTNTPrimed; vy -= 0.04, *0.98, 20x a sec
 
-	@SuppressWarnings("hiding")
 	public int phi = 0;
 	public int theta = 0;
 	public int velocity = 0;

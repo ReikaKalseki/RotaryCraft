@@ -30,6 +30,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -38,6 +39,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -87,7 +89,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public int additives;
 	private boolean starvedengine;
 
-	private boolean isJetFailing = false;
+	public boolean isJetFailing = false;
 
 	/** Used by turbine engines */
 	public int jetfuels;
@@ -1048,19 +1050,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
 	}
 
-	/**
-	 * Returns block data at the location of this entity (client-only). Call parent one.
-	 *//*
-    public int getBlockMetadata()
-    {
-        if (this.blockMetadata == -1)
-        {
-            this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        }
-
-        return this.blockMetadata;
-    }*/
-
 	private void playSounds(World world, int x, int y, int z) {
 		soundtick++;
 		if (type.jetNoise() && FOD > 0 && par5Random.nextInt(2*(9-FOD)) == 0) {
@@ -1074,8 +1063,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		soundtick = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.elecengine", 0.125F, 1F);
-		//SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F);
 		if (type.turbineNoise()) {
 			float volume = 0.125F;
 			float pitch = 1F;
@@ -1084,18 +1072,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				pitch = 1F/(0.125F*FOD+1);
 			}
 			if (type.jetNoise())
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.jetengine", volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch);
 			else
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.microengine", volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch);
 		}
 		if (type.steamNoise())
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.steamengine", 0.7F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F);
 		if (type.carNoise())
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.gasengine", 0.33F, 0.9F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F);
 		if (type.waterNoise())
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.hydroengine", 1F, 0.9F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F);
 		if (type.windNoise()) {
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "Reika.RotaryCraft.windengine", 1.1F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F);
 		}
 	}
 

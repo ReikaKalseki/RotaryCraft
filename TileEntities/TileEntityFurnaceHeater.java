@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -32,6 +33,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	public int fz;
 
 	public static final int MAXTEMP = 1200;
+	private int smeltTime = 0;
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -107,9 +109,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		TileEntityFurnace tile = (TileEntityFurnace)world.getBlockTileEntity(fx, fy, fz);
 		tile.currentItemBurnTime = this.getBurnTimeFromTemperature();
 		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
-		tile.furnaceCookTime = ReikaMathLibrary.extrema(tile.furnaceCookTime+this.getSpeedFactorFromTemperature(), 200, "min");
-		if (par5Random.nextInt(6) == 0)
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 2F, 3F);
+		this.smeltCalculation();
+		tile.furnaceCookTime = smeltTime;
+		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);
 		switch(meta) {
 		case 0:
 			world.spawnParticle("crit", x, fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
@@ -124,6 +126,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			world.spawnParticle("crit", fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), z+1, -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
 			break;
 		}
+	}
+
+	private void smeltCalculation() {
+		int factor = this.getSpeedFactorFromTemperature();
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {

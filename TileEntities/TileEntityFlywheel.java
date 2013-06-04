@@ -12,11 +12,13 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelFlywheel;
@@ -120,7 +122,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine {
 		if (soundtick < -3F/(pitch*pitch)+69/(pitch))
 			return;
 		soundtick = 0;
-		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "Reika.RotaryCraft.flywheel", 1, pitch);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.FLYWHEEL, worldObj, xCoord, yCoord, zCoord, 1, pitch);
 	}
 
 	public void getType(int meta) {

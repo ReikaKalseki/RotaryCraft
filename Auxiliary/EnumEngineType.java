@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import Reika.RotaryCraft.RotaryCraft;
 
 public enum EnumEngineType {
@@ -99,19 +100,19 @@ public enum EnumEngineType {
 
 	public int getSoundLength(int FOD) {
 		if (this.carNoise()) {
-			return 90;
+			return 88;
 		}
 		if (this.electricNoise()) {
-			return 75;
+			return 74;
 		}
 		if (this.steamNoise()) {
-			return 50;
+			return 49;
 		}
 		if (this.waterNoise()) {
-			return 60;
+			return 59;
 		}
 		if (this.windNoise()) {
-			return 108;
+			return 105;
 		}
 		if (this.jetNoise()) {
 			return 79+FOD*11;
