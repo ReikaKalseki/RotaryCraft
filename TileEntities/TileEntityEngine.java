@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
@@ -971,7 +972,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 							caught.setFire(2);
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
 							//ReikaChatHelper.writeInt(FOD);
-							if (!worldObj.isRemote && ((EntityLiving)caught).getHealth() > 0 && !(caught instanceof EntityChicken) && !(caught instanceof EntityBat) && !(caught instanceof EntityItem) && !(caught instanceof EntityXPOrb))
+							if (!worldObj.isRemote && ((EntityLiving)caught).getHealth() > 0 && !(caught instanceof EntityChicken) && !(caught instanceof EntityBat) && !(caught instanceof EntitySilverfish) && !(caught instanceof EntityItem) && !(caught instanceof EntityXPOrb))
 								FOD++;
 							if (FOD > 8)
 								FOD = 8;

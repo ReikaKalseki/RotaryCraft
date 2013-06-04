@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -16,16 +16,22 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 
@@ -56,6 +62,46 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		return true;
 	}
 
+    @Override
+	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
+    {
+    	World world = ep.worldObj;
+    	if (world.getBlockId(x, y, z) != Block.silverfish.blockID)
+    		return false;
+    	int meta = world.getBlockMetadata(x, y, z);
+    	world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+    	world.setBlock(x, y, z, 0);/*
+    	if (world.isRemote) {
+    		for (int i = 0; i < 16; i++) {
+	    		ReikaModelledBreakFX e = new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), 0.4*itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), Block.silverfish, meta, 0, Minecraft.getMinecraft().renderEngine, "/terrain.png", 0, 0);
+	    		world.spawnEntityInWorld(e);
+    		}
+    	}*/
+    	ItemStack drop;
+    	switch(meta) {
+    		case 0:
+    			drop = new ItemStack(Block.stone);
+    			break;
+    		case 1:
+    			drop = new ItemStack(Block.cobblestone);
+    			break;
+    		case 2:
+    			drop = new ItemStack(Block.stoneBrick);
+    			break;
+    		default:
+    			drop = null;
+    	}
+    	ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
+    	EntitySilverfish si = new EntitySilverfish(world);
+    	si.setPosition(x+0.5, y, z+0.5);
+    	si.setEntityHealth(0);
+    	if (world.isRemote)
+    		world.spawnEntityInWorld(si);
+    	world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
+    	ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
+        return true;
+    }
+
 	@Override
 	public float getStrVsBlock(ItemStack is, Block par2Block) {
 		if (par2Block == null)
@@ -72,6 +118,8 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 			return 32F;
 		if (par2Block.blockID == Block.mobSpawner.blockID)
 			return 18F;
+		if (par2Block.blockID == Block.silverfish.blockID)
+			return 6F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == par2Block)
 				return 12F;

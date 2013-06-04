@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -20,11 +20,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
 	public static void addRecipes() {
@@ -428,8 +429,10 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.handcraft), new Object[]{
 			" g ", "scs", " g ", 's', ItemStacks.steelingot, 'g', Item.ingotGold, 'c', Block.workbench});
 		GameRegistry.addRecipe(new ItemStack(RotaryCraft.nvg), new Object[]{
-			"   ", "scs", "ese", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'e', Item.enderPearl});
+			"   ", "scs", "ese", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'e', Item.eyeOfEnder});
 
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.iogoggles), new Object[]{
+			"   ", "scs", "ese", 's', ItemStacks.steelingot, 'c', Item.enderPearl, 'e', Item.redstone});
 
 	}
 

@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -20,7 +20,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -55,6 +57,13 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 	{
 		return 6000F;
 	}
+
+    @Override
+	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int s)
+    {
+        int i1 = iba.getBlockId(x, y, z);
+        return i1 == blockID ? false : super.shouldSideBeRendered(iba, z, y, z, s);
+    }
 
 	@Override
 	public int getRenderType() {

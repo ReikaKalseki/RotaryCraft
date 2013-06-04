@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -34,6 +35,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	public static final int MAXTEMP = 1200;
 	private int smeltTime = 0;
+	private int soundtick = 0;
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -111,6 +113,11 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
 		this.smeltCalculation();
 		tile.furnaceCookTime = smeltTime;
+		soundtick++;
+		if (soundtick > 49) {
+			SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 1);
+			soundtick = 0;
+		}
 		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);
 		switch(meta) {
 		case 0:

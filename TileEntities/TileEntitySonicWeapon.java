@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -25,6 +26,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -53,6 +55,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	public static final long LUNGDAMAGE = 2971000; //5 psi causes pulmonary damage -> cause drowning effect
 	public static final long BRAINDAMAGE = 3906200; //125kPa causes TBIs
 	public static final long EYEDAMAGE = 1807500; //Causes blindness
+	public static final long SILVERFISHKILL = 400000;
 
 	public static final long REFERENCE = 1000000000000L; // 10^-12 W/m^2 reference
 
@@ -60,7 +63,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 
 	public static final int FALLOFF = 16384;
 
-	public static final long INTENSITYPERTORQUE = 262144L*65536L*256L;
+	public static final long INTENSITYPERTORQUE = 262144L*65536L*256L*8L;
 	public static final int HZPEROMEGA = 8192;
 
 	public static final boolean ENABLEFREQ = false;
@@ -93,6 +96,34 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (setvolume > this.getMaxVolume())
 			setvolume = this.getMaxVolume();
 		this.applyEffects(world, x, y, z);
+		if (this.getVolume() < SILVERFISHKILL)
+			return;
+		int range = (int)(6D*this.getVolume()/SILVERFISHKILL);
+		if (range > 20)
+			range = 20;
+		//ReikaJavaLibrary.pConsole(range);
+		for (int i = 0; i < range; i++) {
+			int bx = x-range+par5Random.nextInt(range+1);
+			int by = y-range+par5Random.nextInt(range+1);
+			int bz = z-range+par5Random.nextInt(range+1);
+			//ReikaJavaLibrary.pConsole("Block "+world.getBlockId(bx, by, bz)+" @ "+bx+", "+by+", "+bz);
+			if (world.getBlockId(bx, by, bz) == Block.silverfish.blockID) {
+				//ReikaJavaLibrary.pConsole("Killed at "+bx+", "+by+", "+bz);
+				int metadata = world.getBlockMetadata(bx, by, bz);
+				switch(metadata) {
+					case 0:
+						world.setBlock(bx, by, bz, Block.stone.blockID);
+					break;
+					case 1:
+						world.setBlock(bx, by, bz, Block.cobblestone.blockID);
+					break;
+					case 2:
+						world.setBlock(bx, by, bz, Block.stoneBrick.blockID);
+					break;
+				}
+				world.playSoundEffect(bx+0.5, by+0.5, bz+0.5, "mob.silverfish.kill", 1, 1);
+			}
+		}
 	}
 
 	public void applyEffects(World world, int x, int y, int z) {

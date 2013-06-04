@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 
@@ -54,7 +55,7 @@ public final class HandbookAuxData {
 
 		"Tool Items", "Wind Spring", "Ultrasound", "Motion Tracker", "Vacuum", "Knockback Gun", "Gravel Gun", "Fireball Launcher",
 
-		"Handheld Crafting Unit", "Night Vision Goggles", "Buckets", "Bedrock Tools", "TNT Cannon Targeter", "", "", "",
+		"Handheld Crafting Unit", "Night Vision Goggles", "Buckets", "Bedrock Tools", "TNT Cannon Targeter", "I/O Goggles", "", "",
 
 		"Basic Items", "Steel Ingot", "Base Panel", "Shaft", "Steel Gear", "Gear Unit", "Mount", "Scrap",
 
@@ -503,6 +504,10 @@ public final class HandbookAuxData {
 		if (screen == GuiHandbook.TOOLSTART+1 && page == 4) {
 			int[] icons = {-1, 81, -1, 1, 75, 1, 1, 76, 1};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 119, 1, false, page1);
+		}
+		if (screen == GuiHandbook.TOOLSTART+1 && page == 5) {
+			int[] icons = {-1, -1, -1, 1, 81, 1, 75, 1, 75};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 62, 1, false, i1o2);
 		}
 
 		if (screen == GuiHandbook.CRAFTSTART && page == 2) {

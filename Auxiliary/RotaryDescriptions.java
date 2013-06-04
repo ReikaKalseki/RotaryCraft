@@ -241,9 +241,11 @@ public final class RotaryDescriptions {
 		"4-block range. When each block is consumed, it will expel a piece of bedrock dust, which can be used to make the highest tier " +
 		"of tools or shafts and gears - bedrock. This machine's operational speed goes up as the input speed does.",
 
-		"The fermenter is how you actually produce the ethanol for the engines that require it. Simply load in nearly any plant matter " +
-		"and power it, and it will break it down into a blue-green sludge. Dry that out in a furnace, and you will get crystals of " +
-		"ethanol. This machine's operational speed goes up as the input speed does.",
+		"The fermenter is how you actually produce the ethanol for the engines that require it. To make yeast, place sugar in the top"+
+		"slot, water in the middle, and dirt on the bottom. To make sludge, put yeast on top, plant matter in the middle, and water on "+
+		"the bottom. Dry that sludge out in a furnace, and you will get crystals of ethanol. This machine's operational speed goes up as"+
+		"the input speed does. This machine is very temperature-sensitive, and excessively low or high temperatures will slow it down or"+
+		"even kill the yeast.",
 
 		"The grinder does exactly what its name suggests - it grinds things. Stone to cobblestone, cobble to gravel, gravel to sand, " +
 		"that sort of thing. It also plays a critical role in the lubrication of gearboxes - it grinds the canola seeds into an oil " +
@@ -523,7 +525,7 @@ public final class RotaryDescriptions {
 		"crosshairs directly on it, and the TNT cannon, if it is set to target mode, will target the block you are looking at. This tool " +
 		"may not work for extremely far targets, but they are outside the TNT cannon's range anyways.",
 
-		"",
+		"IO Goggles are a utility device to see the input and ouput sides of machines at all times, useful when debugging complex setups.",
 
 		"",
 

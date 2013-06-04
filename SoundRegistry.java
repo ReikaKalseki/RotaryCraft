@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -44,7 +44,8 @@ public enum SoundRegistry {
 	HIHARP("harphi"),
 	LOWPLING("plinglo"),
 	PLING("pling"),
-	HIPLING("plinghi");
+	HIPLING("plinghi"),
+	FRICTION("friction");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
