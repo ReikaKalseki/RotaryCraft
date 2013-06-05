@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -388,7 +388,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ReikaChatHelper.write(e.getCause()+" caused the read to fail!");
+			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
 		}
 	}
 
@@ -423,7 +423,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ReikaChatHelper.write(e.getCause()+" caused the read to fail!");
+			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
 		}
 	}
 

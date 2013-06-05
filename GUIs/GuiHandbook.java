@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -613,10 +613,10 @@ public class GuiHandbook extends GuiScreen
 		fontRenderer.drawString(HandbookAuxData.names[8*screen+page], posX+xo+6, posY+yo+6, 0x000000);
 		if (subpage == 0) {
 			this.drawRecipes();
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.machineInfo[page+8*screen]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
 		}
 		else
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.machineNotes[page+8*screen]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
 
 
 		if (screen == INFOSTART && page == 0) {

@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -40,6 +40,8 @@ public enum EnumEngineType {
 	private int torque = 0;
 	private int omega = 0;
 
+	public static final EnumEngineType[] engineList = EnumEngineType.values();
+
 	private EnumEngineType(int rpm, int tq)
 	{
 		omega = rpm;
@@ -68,6 +70,14 @@ public enum EnumEngineType {
 
 	public String getStringPowerMW() {
 		return String.format("%.3f", (torque*omega)/1000000D);
+	}
+
+	public double getPowerForDisplay() {
+		if (this.getPower() < 1000)
+			return this.getPower();
+		else if (this.getPower() < 1000000)
+			return this.getPowerKW();
+		return this.getPowerMW();
 	}
 
 	public int getID() {
