@@ -103,7 +103,7 @@ public class GuiHandbook extends GuiScreen
 		buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, "<<", 220, 20, 0, false, file));	//Next page
 		buttonList.add(new GuiButton(12, j+xSize-27, k+6, 20, 20, "X"));	//Close gui button
 
-		if ((screen >= ENGINESTART && screen < TRANSSTART) || (screen >= MACHINESTART && screen < TOOLSTART)) {
+		if (screen >= ENGINESTART && screen < CRAFTSTART) {
 			buttonList.add(new GuiButton(13, j+xSize-27, k+40, 20, 20, ">"));
 			buttonList.add(new GuiButton(14, j+xSize-27, k+60, 20, 20, "<"));
 		}

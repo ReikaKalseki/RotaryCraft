@@ -101,8 +101,8 @@ public class RotaryCraft {
 	private static int[] dmgs = {EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(1),
 		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(2), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(3)};
 	public static EnumArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", EnumArmorMaterial.DIAMOND.getDurability(0), dmgs, EnumArmorMaterial.GOLD.getEnchantability());
-	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 0, new int[]{0, 0, 0, 0}, 0);
-	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 0, new int[]{0, 0, 0, 0}, 0);
+	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 
 	public static Item debug;
 	public static Item worldedit;
