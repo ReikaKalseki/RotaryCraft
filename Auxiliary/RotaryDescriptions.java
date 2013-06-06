@@ -57,118 +57,59 @@ public final class RotaryDescriptions {
 	private static String[] category;
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
-	public static String[] machineNotes = {
+	public static Object[][] machineNotes = {
 
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nRequired Speed: %d rad/s\nPower Input: Back", PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque(), 1),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nRequired Speed: %d rad/s\nPower Input: Back", PowerReceivers.FERMENTER.getMinPower(), 1, PowerReceivers.FERMENTER.getMinSpeed()),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nRequired Speed: %d rad/s\nPower Input: Back", PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque(), 1),
-
-		String.format("Required Power: %dW\nPower Input: Back", PowerReceivers.FLOODLIGHT.getMinPower()),
-
-		String.format("Required Power: %dW\nRange = 8+Power/%d m\nPower Input: Back", PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF),
-
-		String.format("Required Power: Varies, Up to %dW\nRequired Torque: Varies, Up to %d Nm\nPower Input: Back", TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE),
-
-		String.format("Required Power: %dW per meter\nPower Input: Back or Front", TileEntityPileDriver.BASEPOWER),
-
-		String.format("Required Power: %dW\nPower Input: Any horizontal side or bottom", PowerReceivers.AEROSOLIZER.getMinPower()),
-
-		String.format("Required Power: %dW\nPower Input: Back", PowerReceivers.LIGHTBRIDGE.getMinPower()),
-
-		String.format("Stage 1 Power: %dW\nStage 2 Power: %dW\nStage 3 Power: %dW\nStage 4 Power: %dW\n", PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3))+
-		String.format("Stage 1 Torque: %dNm\nStage 4 Torque: %dNm\n", PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3))+
-		String.format("Stage 2 Speed: %drad/s\nStage 3 Speed: %drad/s\n", PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2))+
-		"Power Input: Bottom\nNotes: Stages 2 and 3 require a water supply",
-
-		String.format("Required Speed: %d rad/s\nPower Input: Bottom\nMax Temperature: %dC", PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP),
-
-		String.format("Required Power: %d W\nPower Input: Front or Back", PowerReceivers.PUMP.getMinPower()),
-
-		String.format("Capacity: %d m^3", TileEntityReservoir.CAPACITY),
-
-		String.format("Required Power: %dW\nRange = 8+(Power-%d)/%d m\nPower Input: Back", PowerReceivers.FAN.getMinPower(), PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nRequired Pressure: %dkPa\nRequired Temperature: %dC\nMax Pressure: %dkPa\nMax Temperature: %dC\nPower Input: Back", PowerReceivers.COMPACTOR.getMinPower(), PowerReceivers.COMPACTOR.getMinTorque(), TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP, TileEntityCompactor.MAXPRESSURE, TileEntityCompactor.MAXTEMP),
-
-		String.format("Required Power: %dW\nRange = 8+(Power-%d)/%d m\nPower Input: Bottom", PowerReceivers.AUTOBREEDER.getMinPower(), PowerReceivers.AUTOBREEDER.getMinPower(), TileEntityAutoBreeder.FALLOFF),
-
-		String.format("Required Power: %dW\nRange = 8+(Power-%d)/%d m\nPower Input: Any side", PowerReceivers.BAITBOX.getMinPower(), PowerReceivers.BAITBOX.getMinPower(), TileEntityBaitBox.FALLOFF),
-
-		String.format("Required Power: %dW\nRequired Speed: %d rad/s\nPower Input: Any side", PowerReceivers.FIREWORK.getMinPower(), PowerReceivers.FIREWORK.getMinSpeed()),
-
-		String.format("Required Power: %dW\nRequired Speed: %d rad/s\nPower Input: Bottom", PowerReceivers.FRACTIONATOR.getMinPower(), PowerReceivers.FRACTIONATOR.getMinSpeed()),
-
-		String.format("Required Power: %dW\nField-of-View = 1+2*log_2(power-%d) m\nPower Input: Back", PowerReceivers.GPR.getMinPower(), PowerReceivers.GPR.getMinPower()),
-
-		String.format("Required Power: %dW\nMax Attainable Temperature: %dC\nPower Input: Bottom", PowerReceivers.HEATER.getMinPower(), TileEntityHeater.MAXTEMP),
-
-		String.format("Required Power: %dW\nRequired Speed: %d rad/s\nMaximum Temperature: %dC\nLiquid Capacity: %d m^3\nPower Input: Any horizontal side", PowerReceivers.OBSIDIAN.getMinPower(), PowerReceivers.OBSIDIAN.getMinSpeed(), TileEntityObsidianMaker.MAXTEMP, TileEntityObsidianMaker.CAPACITY),
-
-		String.format("Required Power: %dW\nRange = (Power) m\nPower Input: Bottom\nReaction Time: %d-(Speed/%d)", TileEntityPlayerDetector.FALLOFF, TileEntityPlayerDetector.BASESPEED, TileEntityPlayerDetector.SPEEDFACTOR),
-
-
-		String.format("Required Power: %dW\nMin Delay: %d-log_2(Speed)\nPower Input: Spawner Block", PowerReceivers.SPAWNERCONTROLLER.getMinPower(), TileEntitySpawnerController.BASEDELAY),
-
-		String.format("Internal Capacity: %d m^3\nRange: Water Pressure/400", TileEntitySprinkler.CAPACITY),
-
-		String.format("Required Power: %dW\nRange = 8+Power/%d m\nPower Input: Any side", PowerReceivers.VACUUM.getMinPower(), PowerReceivers.VACUUM.getMinPower()),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nPower Input: Back", PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque()),
-
-		"Method of activation: Redstone",
-
-		String.format("Required Power: %dW\nRange = 8+(Power-%d)/%d m\nPower Input: Bottom", PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), TileEntityMobRadar.FALLOFF),
-
-		"Maximum energy acheivable: Torque input",
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nPower Input: Any horizontal side or bottom", PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque()),
-
-
-		String.format("Required Power: %dW\nRange = 8+(Power-%d)/%d m\nBlindness at: %d W/m^2\nConfusion at: %d W/m^2\nDrowning at: %d W/m^2, Lethality at: %d W/m^2\nPower Input: Any side", PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE, TileEntitySonicWeapon.BRAINDAMAGE, TileEntitySonicWeapon.LUNGDAMAGE, TileEntitySonicWeapon.LETHALVOLUME),
-
-		"Requires: Coal/Charcoal in left slot, Iron in middle slots\nBonuses: Chance increases as the number of filled slots rises, " +
-		"max 49%\nMax bonus size: Increases as the number of filled slots rises, max 100% (doubling)",
-
-		String.format("Required Power: %dW\nRange = 2+(Power-%d)/%d m\nPower Input: Any side", PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF),
-
-		String.format("Activation: Redstone for one cycle, shaft power for looped music\nLoop Power: %d \nData Entry Mode: Sequential\nPower Input: Any side", TileEntityMusicBox.LOOPPOWER),
-
-		String.format("Required Power: %dW\nDamage Dealt: log_2((2+power/%d)^6)\nPower Input: Any horizontal side or bottom", PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower()),
-
-		String.format("Required Power: %dW\nPower Input: Back", PowerReceivers.PROJECTOR.getMinPower()),
-
-		String.format("Required Power: %dW\nRequired Torque: 512*SQRT(mass) Nm\nPower Input: Bottom or top, orientation dependent", PowerReceivers.RAILGUN.getMinPower()),
-
-		String.format("Required Power: %dW\nPower Input: Bottom", PowerReceivers.WEATHERCONTROLLER.getMinPower()),
-
-
-		String.format("Required Power: %dW\nRange = 4+(Power-%d)/%d m\nPower Input: Any side", PowerReceivers.ITEMREFRESHER.getMinPower(), PowerReceivers.ITEMREFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF),
-
-		String.format("Required Power: %dW\nMove the selected region by right-clicking the block\nPower Input: Any side", PowerReceivers.CAVESCANNER.getMinPower()),
-
-		String.format("Required Power: %dW\nInventory Size: 9+(Power-%d)/%d slots\nMax Size: %d\nPower Input: Bottom", PowerReceivers.SCALECHEST.getMinPower(), PowerReceivers.SCALECHEST.getMinPower(), TileEntityScaleableChest.FALLOFF, TileEntityScaleableChest.MAXSIZE),
-
-		"Requires piped liquid to operate",
-
-		"Requires a charged windspring as a power source",
-
-		String.format("Required Power: %dW\nRange = Temperature/50 m\nAcceptable fuels: Coal, Blaze Powder, Wood, Lava, Thermite\nPower Input: Any side", PowerReceivers.IGNITER.getMinPower()),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nPower Input: Bottom or top, orientation dependent", PowerReceivers.FREEZEGUN.getMinPower(), PowerReceivers.FREEZEGUN.getMinTorque()),
-
-		String.format("Required Power: %dW\nRequired Speed: %d rad/s\nPower Input: Back", PowerReceivers.MAGNETIZER.getMinPower(), PowerReceivers.MAGNETIZER.getMinSpeed()),
-
-
-		String.format("Required Power: %dW\nRange = 2+(Power-%d)/%d m\nPower Input: Any side\nRequires %dW to restrain a Wither and %dW to restrain an EnderDragon", PowerReceivers.CONTAINMENT.getMinPower(), PowerReceivers.CONTAINMENT.getMinPower(), TileEntityContainment.FALLOFF, TileEntityContainment.WITHERPOWER, TileEntityContainment.DRAGONPOWER),
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nPower Input: Bottom", PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque()),
-
-		"Requires a charged windspring as a power source",
-
-		String.format("Required Power: %dW\nRequired Torque: %d Nm\nRequired Temperature: %dC\nPower Input: Any Side", PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP),
-
+		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque(), 1},
+		{PowerReceivers.FERMENTER.getMinPower(), 1, PowerReceivers.FERMENTER.getMinSpeed()},
+		{PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque(), 1},
+		{PowerReceivers.FLOODLIGHT.getMinPower()},
+		{PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF},
+		{TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE},
+		{TileEntityPileDriver.BASEPOWER},
+		{PowerReceivers.AEROSOLIZER.getMinPower()},
+		{PowerReceivers.LIGHTBRIDGE.getMinPower()},
+		{PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3), PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3), PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2)},
+		{PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP},
+		{PowerReceivers.PUMP.getMinPower()},
+		{TileEntityReservoir.CAPACITY},
+		{PowerReceivers.FAN.getMinPower(), PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF},
+		{PowerReceivers.COMPACTOR.getMinPower(), PowerReceivers.COMPACTOR.getMinTorque(), TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP, TileEntityCompactor.MAXPRESSURE, TileEntityCompactor.MAXTEMP},
+		{PowerReceivers.AUTOBREEDER.getMinPower(), PowerReceivers.AUTOBREEDER.getMinPower(), TileEntityAutoBreeder.FALLOFF},
+		{PowerReceivers.BAITBOX.getMinPower(), PowerReceivers.BAITBOX.getMinPower(), TileEntityBaitBox.FALLOFF},
+		{PowerReceivers.FIREWORK.getMinPower(), PowerReceivers.FIREWORK.getMinSpeed()},
+		{PowerReceivers.FRACTIONATOR.getMinPower(), PowerReceivers.FRACTIONATOR.getMinSpeed()},
+		{PowerReceivers.GPR.getMinPower(), PowerReceivers.GPR.getMinPower()},
+		{PowerReceivers.HEATER.getMinPower(), TileEntityHeater.MAXTEMP},
+		{PowerReceivers.OBSIDIAN.getMinPower(), PowerReceivers.OBSIDIAN.getMinSpeed(), TileEntityObsidianMaker.MAXTEMP, TileEntityObsidianMaker.CAPACITY},
+		{TileEntityPlayerDetector.FALLOFF, TileEntityPlayerDetector.BASESPEED, TileEntityPlayerDetector.SPEEDFACTOR},
+		{PowerReceivers.SPAWNERCONTROLLER.getMinPower(), TileEntitySpawnerController.BASEDELAY},
+		{TileEntitySprinkler.CAPACITY},
+		{PowerReceivers.VACUUM.getMinPower(), PowerReceivers.VACUUM.getMinPower()},
+		{PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque()},
+		{},
+		{PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), TileEntityMobRadar.FALLOFF},
+		{},
+		{PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque()},
+		{PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE, TileEntitySonicWeapon.BRAINDAMAGE, TileEntitySonicWeapon.LUNGDAMAGE, TileEntitySonicWeapon.LETHALVOLUME},
+		{},
+		{PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF},
+		{TileEntityMusicBox.LOOPPOWER},
+		{PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower()},
+		{PowerReceivers.PROJECTOR.getMinPower()},
+		{PowerReceivers.RAILGUN.getMinPower()},
+		{PowerReceivers.WEATHERCONTROLLER.getMinPower()},
+		{PowerReceivers.ITEMREFRESHER.getMinPower(), PowerReceivers.ITEMREFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF},
+		{PowerReceivers.CAVESCANNER.getMinPower()},
+		{PowerReceivers.SCALECHEST.getMinPower(), PowerReceivers.SCALECHEST.getMinPower(), TileEntityScaleableChest.FALLOFF, TileEntityScaleableChest.MAXSIZE},
+		{},
+		{},
+		{PowerReceivers.IGNITER.getMinPower()},
+		{PowerReceivers.FREEZEGUN.getMinPower(), PowerReceivers.FREEZEGUN.getMinTorque()},
+		{PowerReceivers.MAGNETIZER.getMinPower(), PowerReceivers.MAGNETIZER.getMinSpeed()},
+		{PowerReceivers.CONTAINMENT.getMinPower(), PowerReceivers.CONTAINMENT.getMinPower(), TileEntityContainment.FALLOFF, TileEntityContainment.WITHERPOWER, TileEntityContainment.DRAGONPOWER},
+		{PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque()},
+		{},
+		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
 	};
 
 	public static void loadData() {
@@ -299,7 +240,7 @@ public final class RotaryDescriptions {
 			machines = new String[len+1][2];
 			for (int i = 1; i < len+1; i++) {
 				machines[i][0] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				machines[i][1] = machineNotes[i-1];
+				machines[i][1] = String.format(p2.readLine().replaceAll("\\\\n", "\n"), machineNotes[i-1]);
 				p.readLine();
 				p2.readLine();
 			}

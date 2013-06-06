@@ -418,6 +418,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void loadDemo() {
+		ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
 		String path = RotaryCraft.class.getResource("Resources/demomusic.txt").getPath();
 		File f = new File(path);
 		if (!f.exists()) {
