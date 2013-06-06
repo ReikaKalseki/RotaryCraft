@@ -12,9 +12,10 @@ package Reika.RotaryCraft;
 
 import java.net.URL;
 
+import net.minecraft.network.packet.Packet62LevelSound;
 import net.minecraft.world.World;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -68,10 +69,10 @@ public enum SoundRegistry {
 	}
 
 	public static void playSound(SoundRegistry s, World world, double x, double y, double z, float vol, float pitch) {
-		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
-		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		FMLClientHandler.instance().getClient().sndManager.playSound(s.getPlayableReference(), (float)x, (float)y, (float)z, vol, pitch);
+		Packet62LevelSound p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
+		PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
 	}
 
 	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {

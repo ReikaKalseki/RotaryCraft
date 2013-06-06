@@ -17,9 +17,9 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet63WorldParticles;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
@@ -146,12 +146,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			}
 			else
 				pit = "";
-			//ReikaJavaLibrary.pConsole(pit);
-			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
-			if (activeVoice != 0)
-				worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
 			if (activeVoice != 0) {
-				ReikaJavaLibrary.pConsole(activeVoice+" on "+FMLCommonHandler.instance().getEffectiveSide());
+				//worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
+				Packet63WorldParticles p = new Packet63WorldParticles();
+				//("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
 			}
 			switch(activeVoice) {
 				case 1:
@@ -418,7 +416,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void loadDemo() {
-		ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide());
 		String path = RotaryCraft.class.getResource("Resources/demomusic.txt").getPath();
 		File f = new File(path);
 		if (!f.exists()) {
