@@ -167,7 +167,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
 	}
 
-	private boolean hasFurnace(World world) {
+	public boolean hasFurnace(World world) {
 		return world.getBlockTileEntity(fx, fy, fz) instanceof TileEntityFurnace;
 	}
 

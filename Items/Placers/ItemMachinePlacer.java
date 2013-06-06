@@ -20,16 +20,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.TileEntities.TileEntityGPR;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMachinePlacer extends ItemBlockPlacer {
 
@@ -85,17 +88,23 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				}
 			}catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
 		}
+
+		if (te instanceof EnchantableMachine) {
+			ReikaJavaLibrary.pConsole(is);
+			EnchantableMachine e = (EnchantableMachine)te;
+			e.applyEnchants(is);
+		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
 			switch (RotaryAux.get2SidedMetadataFromPlayerLook(ep)) {
-			case 0:
-			case 2:
-				tile.xdir = true;
-				break;
-			case 1:
-			case 3:
-				tile.xdir = false;
-				break;
+				case 0:
+				case 2:
+					tile.xdir = true;
+					break;
+				case 1:
+				case 3:
+					tile.xdir = false;
+					break;
 			}
 			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, BlockGPR.getBiomeDesign(world, x, y, z));
 			return true;
@@ -104,18 +113,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			return true;
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {
 			switch(RotaryAux.get4SidedMetadataFromPlayerLook(ep)) {
-			case 0:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
-				break;
-			case 1:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 1);
-				break;
-			case 2:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 3);
-				break;
-			case 3:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 2);
-				break;
+				case 0:
+					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
+					break;
+				case 1:
+					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 1);
+					break;
+				case 2:
+					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 3);
+					break;
+				case 3:
+					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 2);
+					break;
 			}
 			te.setBlockMetadata(world.getBlockMetadata(x, y, z));
 			return true;

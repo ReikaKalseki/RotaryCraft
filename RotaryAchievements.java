@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
+
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -24,7 +25,7 @@ public enum RotaryAchievements {
 	MAKESTEEL(24000, "Steelmaker", -2, -1, ItemStacks.steelingot, AchievementList.acquireIron, false),
 	MAKEYEAST(24001, "Fermenter", -2, -2, RotaryCraft.yeast, null, false),
 	EXTRACTOR(24002, "Processor", -2, -3, ItemStacks.lapisoredust, null, false),
-	BORER(24003, "Boring", -2, -4, MachineRegistry.BORER.getCraftedProduct(), null, false),
+	BORER(24003, "Getting Bored", -2, -4, MachineRegistry.BORER.getCraftedProduct(), null, false),
 	RECYCLE(24004, "Green", -2, -5, ItemStacks.scrap, null, false),
 	MAKEJET(24005, "Jet Engine", -2, -6, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal()), null, true),
 	MAKERAILGUN(24006, "Overkill", -2, -7, MachineRegistry.RAILGUN.getCraftedProduct(), null, true),

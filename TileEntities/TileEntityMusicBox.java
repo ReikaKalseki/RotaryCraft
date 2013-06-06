@@ -65,6 +65,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private int activeVoice;
 	private int activeNote;
 
+	private int saveCount = 0;
+	private int readCount = 0;
+
 	/** Position of last note */
 	private int[] lastNote = new int[16];
 
@@ -151,24 +154,24 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				ReikaJavaLibrary.pConsole(activeVoice+" on "+FMLCommonHandler.instance().getEffectiveSide());
 			}
 			switch(activeVoice) {
-			case 1:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-				break;
-			case 2:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-				break;
-			case 3:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-				break;
-			case 4:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
-				break;
-			case 5:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
-				break;
-			case 6:
-				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
-				break;
+				case 1:
+					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+					break;
+				case 2:
+					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+					break;
+				case 3:
+					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+					break;
+				case 4:
+					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
+					break;
+				case 5:
+					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
+					break;
+				case 6:
+					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
+					break;
 			}
 		}
 	}
@@ -221,16 +224,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public int getCurrentNoteType() {
 		switch(currentNoteLength) {
-		case 3:
-			return 4;
-		case 6:
-			return 3;
-		case 12:
-			return 2;
-		case 24:
-			return 1;
-		case 48:
-			return 0;
+			case 3:
+				return 4;
+			case 6:
+				return 3;
+			case 12:
+				return 2;
+			case 24:
+				return 1;
+			case 48:
+				return 0;
 		}
 		return -1;
 	}
@@ -302,6 +305,17 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		NBT.setInteger("avol", activeVolume);
 		NBT.setInteger("avoice", activeVoice);
 		NBT.setInteger("anote", activeNote);
+
+		if (saveCount > 0) {
+			saveCount--;
+			for (int i = 0; i < 8192; i++) {
+				for (int j = 0; j < 16; j++) {
+					for (int k = 0; k < 4; k++) {
+						NBT.setInteger(String.format("t%dc%dn%d", i, j, k), musicQueue[i][j][k]);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -327,6 +341,17 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
+
+		if (readCount > 0) {
+			readCount--;
+			for (int i = 0; i < 8192; i++) {
+				for (int j = 0; j < 16; j++) {
+					for (int k = 0; k < 4; k++) {
+						musicQueue[i][j][k] = NBT.getInteger(String.format("t%dc%dn%d", i, j, k));
+					}
+				}
+			}
+		}
 	}
 
 	public void save() {
@@ -425,20 +450,22 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			e.printStackTrace();
 			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
 		}
+		//readCount = 2;
+		//saveCount = 2;
 	}
 
 	public static int getNoteLengthFromValue(int val) {
 		switch(val) {
-		case 4:
-			return 3;
-		case 3:
-			return 6;
-		case 2:
-			return 12;
-		case 1:
-			return 24;
-		case 0:
-			return 48;
+			case 4:
+				return 3;
+			case 3:
+				return 6;
+			case 2:
+				return 12;
+			case 1:
+				return 24;
+			case 0:
+				return 48;
 		}
 		return 0;
 	}

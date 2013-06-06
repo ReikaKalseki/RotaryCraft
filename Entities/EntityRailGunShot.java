@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2013
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Distribution of the software in any form is only allowed
  * with explicit, prior permission from the owner.
  ******************************************************************************/
@@ -29,6 +29,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -268,6 +269,7 @@ public class EntityRailGunShot extends EntityFireball {
 							ent = (Entity)dmgd.get(l);
 							if (ent instanceof EntityLiving) {
 								el = (EntityLiving)ent;
+								el.clearActivePotions();
 								for (int h = 0; h < 5 && !(ent instanceof EntityPlayer); h++) {
 									ItemStack held = el.getCurrentItemOrArmor(h);
 									el.setCurrentItemOrArmor(h, null);

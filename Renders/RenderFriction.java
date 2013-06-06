@@ -10,6 +10,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -109,7 +110,45 @@ public class RenderFriction extends RotaryTERenderer
 	}
 
 	private void renderHotSide(TileEntityFurnaceHeater tile, double par2, double par4, double par6) {
-
+		if (!tile.hasFurnace(tile.worldObj))
+			return;
+		Tessellator v5 = new Tessellator();
+		if (tile.temperature > 1000)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_2.png");
+		else if (tile.temperature > 750)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_1.png");
+		else if (tile.temperature > 500)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_0.png");
+		else
+			return;
+		v5.startDrawingQuads();
+		switch(tile.getBlockMetadata()) {
+			case 0:
+				v5.addVertexWithUV(par2+0.001, par4, par6+1, 0, 0);
+				v5.addVertexWithUV(par2+0.001, par4, par6, 1, 0);
+				v5.addVertexWithUV(par2+0.001, par4+1, par6, 1, 1);
+				v5.addVertexWithUV(par2+0.001, par4+1, par6+1, 0, 1);
+			break;
+			case 1:
+				v5.addVertexWithUV(par2+0.999, par4, par6, 0, 0);
+				v5.addVertexWithUV(par2+0.999, par4, par6+1, 1, 0);
+				v5.addVertexWithUV(par2+0.999, par4+1, par6+1, 1, 1);
+				v5.addVertexWithUV(par2+0.999, par4+1, par6, 0, 1);
+			break;
+			case 2:
+				v5.addVertexWithUV(par2, par4, par6+0.001, 0, 0);
+				v5.addVertexWithUV(par2+1, par4, par6+0.001, 1, 0);
+				v5.addVertexWithUV(par2+1, par4+1, par6+0.001, 1, 1);
+				v5.addVertexWithUV(par2, par4+1, par6+0.001, 0, 1);
+			break;
+			case 3:
+				v5.addVertexWithUV(par2, par4+1, par6+0.999, 0, 1);
+				v5.addVertexWithUV(par2+1, par4+1, par6+0.999, 1, 1);
+				v5.addVertexWithUV(par2+1, par4, par6+0.999, 1, 0);
+				v5.addVertexWithUV(par2, par4, par6+0.999, 0, 0);
+			break;
+		}
+		v5.draw();
 	}
 
 	@Override

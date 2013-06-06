@@ -292,7 +292,7 @@ public final class RotaryDescriptions {
 		int len = ReikaFileReader.getFileLength(data)/2;
 		int len2 = ReikaFileReader.getFileLength(data2)/2;
 		if (len != len2)
-			throw new RuntimeException("File lengths are different!");
+			throw new RuntimeException("File lengths are different! "+path+" is "+len+" and "+path2+" is "+len2);
 		try {
 			BufferedReader p = new BufferedReader(new FileReader(data));
 			BufferedReader p2 = new BufferedReader(new FileReader(data2));

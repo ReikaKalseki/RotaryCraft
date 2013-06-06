@@ -11,11 +11,13 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -30,6 +32,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
+
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
@@ -99,7 +104,7 @@ public abstract class BlockBasicMultiTE extends Block {
 
 	@Override
 	public int idDropped(int id, Random r, int fortune) {
-		return RotaryCraft.machineplacer.itemID;
+		return 0;//return RotaryCraft.machineplacer.itemID;
 	}
 
 	@Override
@@ -239,6 +244,15 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityFloodlight) {
 			((TileEntityFloodlight)te).lightsOut(world, x, y, z);
+		}
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m != null) {
+			ItemStack is = m.getCraftedProduct();
+			if (m.isEnchantable()) {
+				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
+				is = ReikaEnchantmentHelper.applyEnchantments(is, map);
+			}
+			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
