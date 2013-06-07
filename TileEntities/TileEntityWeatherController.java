@@ -4,9 +4,8 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * 
- * Distribution of the software in any form is only allowed
- * with explicit, prior permission from the owner.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
@@ -18,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -38,8 +38,6 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
-		if (world.isRemote)
-			return;
 		cooldown--;
 		if (power < MINPOWER)
 			return;
@@ -71,22 +69,22 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			}
 		}
 		switch(rainmode) {
-		case 1:
-			wi.setRaining(false);
-			wi.setThundering(false);
-			break;
-		case 2:
-			wi.setRaining(true);
-			wi.setThundering(false);
-			break;
-		case 3:
-			wi.setRaining(true);
-			wi.setThundering(true);
-			break;
-		case 4:
-			wi.setRaining(true);
-			wi.setThundering(true);
-			break;
+			case 1:
+				wi.setRaining(false);
+				wi.setThundering(false);
+				break;
+			case 2:
+				wi.setRaining(true);
+				wi.setThundering(false);
+				break;
+			case 3:
+				wi.setRaining(true);
+				wi.setThundering(true);
+				break;
+			case 4:
+				wi.setRaining(true);
+				wi.setThundering(true);
+				break;
 		}
 	}
 
@@ -146,28 +144,28 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		this.fire(is, is2);
 		int slot = -1;
 		switch(rainmode) {
-		case 0:
-			return;
-		case 1:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			return;
-		case 2:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			return;
-		case 3:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			return;
-		case 4:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			slot = ReikaInventoryHelper.locateInInventory(Item.lightStoneDust.itemID, inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			return;
+			case 0:
+				return;
+			case 1:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				return;
+			case 2:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				return;
+			case 3:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				return;
+			case 4:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				slot = ReikaInventoryHelper.locateInInventory(Item.lightStoneDust.itemID, inventory);
+				ReikaInventoryHelper.decrStack(slot, inventory);
+				return;
 		}
 	}
 

@@ -1,12 +1,11 @@
 /*******************************************************************************
  * @author Reika Kalseki
- *
+ * 
  * Copyright 2013
- *
+ * 
  * All rights reserved.
- *
- * Distribution of the software in any form is only allowed
- * with explicit, prior permission from the owner.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
@@ -58,7 +57,6 @@ public final class RotaryDescriptions {
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
 	public static Object[][] machineNotes = {
-
 		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque(), 1},
 		{PowerReceivers.FERMENTER.getMinPower(), 1, PowerReceivers.FERMENTER.getMinSpeed()},
 		{PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque(), 1},

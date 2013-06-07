@@ -1,12 +1,11 @@
 /*******************************************************************************
  * @author Reika Kalseki
- *
+ * 
  * Copyright 2013
- *
+ * 
  * All rights reserved.
- *
- * Distribution of the software in any form is only allowed
- * with explicit, prior permission from the owner.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
@@ -37,7 +36,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 import Reika.DragonAPI.LanguageArray;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Base.ItemBasic;
@@ -209,7 +207,7 @@ public class RotaryCraft {
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
 		RotaryAchievements.registerAcheivements();
-		RotaryDescriptions.loadData();
+		//RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
 		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});

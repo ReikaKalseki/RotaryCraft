@@ -4,9 +4,8 @@
  * Copyright 2013
  * 
  * All rights reserved.
- * 
- * Distribution of the software in any form is only allowed
- * with explicit, prior permission from the owner.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
  ******************************************************************************/
 // Date: 24/02/2013 3:03:48 AM
 // Template version 1.1

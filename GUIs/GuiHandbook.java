@@ -1,12 +1,11 @@
 /*******************************************************************************
  * @author Reika Kalseki
- *
+ * 
  * Copyright 2013
- *
+ * 
  * All rights reserved.
- *
- * Distribution of the software in any form is only allowed
- * with explicit, prior permission from the owner.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
@@ -23,7 +22,7 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
-import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
+import Reika.RotaryCraft.Auxiliary.HandbookText;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -109,260 +108,260 @@ public class GuiHandbook extends GuiScreen
 		}
 		//buttonList.add(new GuiButton(15, j+xSize-27, k+26, 20, 20, "<"));
 		switch(screen) {
-		case TOCSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k    , 20, 20,   0, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+ 20, 20, 20,  80, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+ 40, 20, 20,  40, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+ 60, 20, 20,  120, 20, 0, file2));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+ 80, 20, 20,  60, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 20, 140, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 20, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 100, 220, 0, file));
+			case TOCSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k    , 20, 20,   0, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+ 20, 20, 20,  80, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+ 40, 20, 20,  40, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+ 60, 20, 20,  120, 20, 0, file2));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+ 80, 20, 20,  60, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 20, 140, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 20, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 100, 220, 0, file));
+				break;
+			case INFOSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 0, 0, 0, file));
+				break;
+			case ENGINESTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 0, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 0, 0, file));
+				break;
+			case ENGINESTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 220, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 220, 0, file2));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 220, 0, file2));
 			break;
-		case INFOSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 0, 0, 0, file));
+			case TRANSSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 20, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 20, 0, file));
+				break;
+			case TRANSSTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 0, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 0, 0, file2));
+			//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 0, 0, file2));
+			//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 0, 0, file2));
+			//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 0, 0, file2));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 0, 0, file2));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 0, 0, file2));
 			break;
-		case ENGINESTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 0, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 0, 0, file));
+			case MACHINESTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 40, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 40, 0, file));
+				break;
+			case MACHINESTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 60, 0, file));
 			break;
-		case ENGINESTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 220, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 220, 0, file2));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 220, 0, file2));
-		break;
-		case TRANSSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 20, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 20, 0, file));
+			case MACHINESTART+2:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 80, 0, file));
 			break;
-		case TRANSSTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 0, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 0, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 0, 0, file2));
-		//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 0, 0, file2));
-		//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 0, 0, file2));
-		//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 0, 0, file2));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 0, 0, file2));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 0, 0, file2));
-		break;
-		case MACHINESTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 40, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 40, 0, file));
+			case MACHINESTART+3:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 100, 0, file));
 			break;
-		case MACHINESTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 60, 0, file));
-		break;
-		case MACHINESTART+2:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 80, 0, file));
-		break;
-		case MACHINESTART+3:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 100, 0, file));
-		break;
-		case MACHINESTART+4:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 20, 0, file2));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 20, 0, file2));
-		break;
-		case MACHINESTART+5:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 40, 0, file2));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 40, 0, file2));
-		break;
-		case MACHINESTART+6:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 60, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 60, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 60, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 60, 0, file2));
-		// buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 60, 0, file2));
-		// buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 60, 0, file2));
-		// buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 60, 0, file2));
-		// buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 60, 0, file2));
-		break;
-		case TOOLSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 100, 0, file2));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 100, 0, file2));
+			case MACHINESTART+4:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 20, 0, file2));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 20, 0, file2));
 			break;
-		case TOOLSTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 120, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 120, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 120, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 120, 0, file2));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 120, 0, file2));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file2));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 120, 0, file2));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 120, 0, file2));
-		break;
-		case CRAFTSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 120, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 120, 0, file));
+			case MACHINESTART+5:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 40, 0, file2));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 40, 0, file2));
 			break;
-		case CRAFTSTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 140, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 140, 0, file));
-		break;
-		case CRAFTSTART+2:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 160, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 160, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 160, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 160, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 160, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 160, 0, file));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 160, 0, file));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 160, 0, file));
-		break;
-		case CRAFTSTART+3:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 200, 0, file2));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 200, 0, file2));
-		break;
-		case CRAFTSTART+4:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 180, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 180, 0, file));
-		break;
-		case CRAFTSTART+5:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 160, 0, file2));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 160, 0, file2));
-		break;
-		case CRAFTSTART+6:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 180, 0, file2));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 180, 0, file2));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 180, 0, file2));
-		break;
-		case RESOURCESTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 200, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 200, 0, file));
+			case MACHINESTART+6:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 60, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 60, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 60, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 60, 0, file2));
+			// buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 60, 0, file2));
+			// buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 60, 0, file2));
+			// buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 60, 0, file2));
+			// buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 60, 0, file2));
 			break;
-		case RESOURCESTART+1:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 160, 0, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 160, 20, 0, file));
-		buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 160, 40, 0, file));
-		buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 160, 60, 0, file));
-		buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 160, 80, 0, file));
-		buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 160, 100, 0, file));
-		buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 160, 120, 0, file));
-		buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 160, 140, 0, file));
-		break;
-		case RESOURCESTART+2:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 180, 0, 0, file));
-		buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 180, 20, 0, file));
-		//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 180, 40, 0, file));
-		//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 180, 60, 0, file));
-		//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 180, 80, 0, file));
-		//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 180, 100, 0, file));
-		//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 180, 120, 0, file));
-		//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 180, 140, 0, file));
-		break;
-		case MISCSTART:
-			buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 220, 0, file));
-			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 220, 0, file));
+			case TOOLSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 100, 0, file2));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 100, 0, file2));
+				break;
+			case TOOLSTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 120, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 120, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 120, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 120, 0, file2));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 120, 0, file2));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file2));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 120, 0, file2));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 120, 0, file2));
 			break;
+			case CRAFTSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 120, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 120, 0, file));
+				break;
+			case CRAFTSTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 140, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 140, 0, file));
+			break;
+			case CRAFTSTART+2:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 160, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 160, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 160, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 160, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 160, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 160, 0, file));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 160, 0, file));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 160, 0, file));
+			break;
+			case CRAFTSTART+3:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 200, 0, file2));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 200, 0, file2));
+			break;
+			case CRAFTSTART+4:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 180, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 180, 0, file));
+			break;
+			case CRAFTSTART+5:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 160, 0, file2));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 160, 0, file2));
+			break;
+			case CRAFTSTART+6:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 180, 0, file2));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 180, 0, file2));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 180, 0, file2));
+			break;
+			case RESOURCESTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 200, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 200, 0, file));
+				break;
+			case RESOURCESTART+1:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 160, 0, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 160, 20, 0, file));
+			buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 160, 40, 0, file));
+			buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 160, 60, 0, file));
+			buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 160, 80, 0, file));
+			buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 160, 100, 0, file));
+			buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 160, 120, 0, file));
+			buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 160, 140, 0, file));
+			break;
+			case RESOURCESTART+2:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 180, 0, 0, file));
+			buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 180, 20, 0, file));
+			//buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 180, 40, 0, file));
+			//buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 180, 60, 0, file));
+			//buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 180, 80, 0, file));
+			//buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 180, 100, 0, file));
+			//buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 180, 120, 0, file));
+			//buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 180, 140, 0, file));
+			break;
+			case MISCSTART:
+				buttonList.add(new ImagedGuiButton(0, j-20, k, 20, 20, 0, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(1, j-20, k+20, 20, 20, 20, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(2, j-20, k+40, 20, 20, 40, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(3, j-20, k+60, 20, 20, 60, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(4, j-20, k+80, 20, 20, 80, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(5, j-20, k+100, 20, 20, 100, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(6, j-20, k+120, 20, 20, 120, 220, 0, file));
+				buttonList.add(new ImagedGuiButton(7, j-20, k+140, 20, 20, 140, 220, 0, file));
+				break;
 		}
 	}
 
@@ -420,30 +419,30 @@ public class GuiHandbook extends GuiScreen
 		}
 		if (screen >= TOCSTART && screen < INFOSTART) {
 			switch(button.id) {
-			case 0:
-				screen = INFOSTART;
-				break;
-			case 1:
-				screen = ENGINESTART;
-				break;
-			case 2:
-				screen = TRANSSTART;
-				break;
-			case 3:
-				screen = MACHINESTART;
-				break;
-			case 4:
-				screen = TOOLSTART;
-				break;
-			case 5:
-				screen = CRAFTSTART;
-				break;
-			case 6:
-				screen = RESOURCESTART;
-				break;
-			case 7:
-				screen = MISCSTART;
-				break;
+				case 0:
+					screen = INFOSTART;
+					break;
+				case 1:
+					screen = ENGINESTART;
+					break;
+				case 2:
+					screen = TRANSSTART;
+					break;
+				case 3:
+					screen = MACHINESTART;
+					break;
+				case 4:
+					screen = TOOLSTART;
+					break;
+				case 5:
+					screen = CRAFTSTART;
+					break;
+				case 6:
+					screen = RESOURCESTART;
+					break;
+				case 7:
+					screen = MISCSTART;
+					break;
 			}
 			this.initGui();
 			page = 0;
@@ -567,36 +566,36 @@ public class GuiHandbook extends GuiScreen
 		bcg = this.getGuiLayout();
 
 		switch(bcg) {
-		case 0:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookgui.png";
-			break;
-		case 1:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png";
-			break;
-		case 2:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguic.png";
-			break;
-		case 3:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguid.png";
-			break;
-		case 4:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguie.png";
-			break;
-		case 5:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguif.png";
-			break;
-		case 6:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguig.png";
-			break;
-		case 7:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguih.png";
-			break;
-		case 8:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguij.png";
-			break;
-		default:
-			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
-			break;
+			case 0:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookgui.png";
+				break;
+			case 1:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png";
+				break;
+			case 2:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguic.png";
+				break;
+			case 3:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguid.png";
+				break;
+			case 4:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguie.png";
+				break;
+			case 5:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguif.png";
+				break;
+			case 6:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguig.png";
+				break;
+			case 7:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguih.png";
+				break;
+			case 8:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguij.png";
+				break;
+			default:
+				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
+				break;
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(var4);
@@ -613,10 +612,12 @@ public class GuiHandbook extends GuiScreen
 		fontRenderer.drawString(HandbookAuxData.names[8*screen+page], posX+xo+6, posY+yo+6, 0x000000);
 		if (subpage == 0) {
 			this.drawRecipes();
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
+			//fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", HandbookText.machineInfo[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 		}
 		else
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
+			//fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", HandbookText.machineNotes[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 
 
 		if (screen == INFOSTART && page == 0) {
