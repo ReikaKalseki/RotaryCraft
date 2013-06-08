@@ -133,32 +133,32 @@ public final class HandbookAuxData {
 					GuiHandbook.i = 0;
 			}
 			switch(GuiHandbook.i) {
-			case 0:
-				int[] icons5 = {-1, -1, -1, 67, 80, 67, 67, 67, 67};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons5, 162+dx, 32+dy, 64, 1, false, i1o2);
-				break;
-			case 1:
-				int[] icons6 = {-1, -1, -1, 116, 61, 116, 116, 116, 116};
-				String[] tex = {GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons2,GuiHandbook.icons1,
-						GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons6, 162+dx, 32+dy, 65, 1, false, tex);
-				break;
-			case 2:
-				int[] icons = {-1, -1, -1, -1, 2, -1, -1, 3, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 176, 1, false, page1);
-				break;
-			case 3:
-				int[] icons2 = {-1, -1, -1, -1, 62, -1, -1, 3, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 66, 1, false, i1o2);
-				break;
-			case 4:
-				int[] icons3 = {-1, -1, -1, -1, 63, -1, -1, 3, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 67, 1, false, i1o2);
-				break;
-			case 5:
-				int[] icons4 = {-1, 2, -1, 2, 2, 2, -1, 3, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons4, 162+dx, 32+dy, 164, 1, false, page1);
-				break;
+				case 0:
+					int[] icons5 = {-1, -1, -1, 67, 80, 67, 67, 67, 67};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons5, 162+dx, 32+dy, 64, 1, false, i1o2);
+					break;
+				case 1:
+					int[] icons6 = {-1, -1, -1, 116, 61, 116, 116, 116, 116};
+					String[] tex = {GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons2,GuiHandbook.icons1,
+							GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons6, 162+dx, 32+dy, 65, 1, false, tex);
+					break;
+				case 2:
+					int[] icons = {-1, -1, -1, -1, 2, -1, -1, 3, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 176, 1, false, page1);
+					break;
+				case 3:
+					int[] icons2 = {-1, -1, -1, -1, 62, -1, -1, 3, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 66, 1, false, i1o2);
+					break;
+				case 4:
+					int[] icons3 = {-1, -1, -1, -1, 63, -1, -1, 3, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 67, 1, false, i1o2);
+					break;
+				case 5:
+					int[] icons4 = {-1, 2, -1, 2, 2, 2, -1, 3, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons4, 162+dx, 32+dy, 164, 1, false, page1);
+					break;
 			}
 		}
 		if (screen == GuiHandbook.TRANSSTART && page == 2) {
@@ -250,7 +250,7 @@ public final class HandbookAuxData {
 		}
 
 		if (screen == GuiHandbook.MACHINESTART+1 && page == 2) {
-			int[] icons = {1, 67, 1, 69, 16, 1, 0, 2, 105};
+			int[] icons = {1, 67, 1, 69, 16, 48, 0, 2, 105};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 216, 1, false, page1);
 		}
 		if (screen == GuiHandbook.MACHINESTART+1 && page == 3) {
@@ -488,14 +488,14 @@ public final class HandbookAuxData {
 			}
 			int a = -1; int b = -1; int c = -1;
 			switch(GuiHandbook.i) {
-			case 0:
-				a = 113;
-				c = 113;
-				break;
-			case 1:
-				a = 113;
-				b = 113;
-				break;
+				case 0:
+					a = 113;
+					c = 113;
+					break;
+				case 1:
+					a = 113;
+					b = 113;
+					break;
 			}
 			int[] icons = {a, 113, b, c, 2, -1, -1, 2, -1};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 114+GuiHandbook.i, 1, false, page1);
@@ -548,46 +548,46 @@ public final class HandbookAuxData {
 			if (GuiHandbook.i > 1)
 				product = 9;
 			switch(GuiHandbook.i) {
-			case 0:
-				amount = 3;
-				ing = 65;
-				break;
-			case 1:
-				amount = 3;
-				ing = 66;
-				break;
-			case 2:
-				amount = 9;
-				ing = 2;
-				break;
-			case 3:
-				amount = 9;
-				ing = 0;
-				break;
-			case 4:
-				amount = 45;
-				ing = 3;
-				break;
-			case 5:
-				amount = 15;
-				ing = 4;
-				break;
-			case 6:
-				amount = 48;
-				ing = 5;
-				break;
-			case 7:
-				amount = 114;
-				ing = 6;
-				break;
-			case 8:
-				amount = 246;
-				ing = 7;
-				break;
-			case 9:
-				amount = 510;
-				ing = 8;
-				break;
+				case 0:
+					amount = 3;
+					ing = 65;
+					break;
+				case 1:
+					amount = 3;
+					ing = 66;
+					break;
+				case 2:
+					amount = 9;
+					ing = 2;
+					break;
+				case 3:
+					amount = 9;
+					ing = 0;
+					break;
+				case 4:
+					amount = 45;
+					ing = 3;
+					break;
+				case 5:
+					amount = 15;
+					ing = 4;
+					break;
+				case 6:
+					amount = 48;
+					ing = 5;
+					break;
+				case 7:
+					amount = 114;
+					ing = 6;
+					break;
+				case 8:
+					amount = 246;
+					ing = 7;
+					break;
+				case 9:
+					amount = 510;
+					ing = 8;
+					break;
 			}
 
 			int[] icons = {ing, -1, -1, -1, -1, -1, -1, -1, -1};
@@ -689,11 +689,11 @@ public final class HandbookAuxData {
 			}
 			int item;
 			switch(GuiHandbook.i) {
-			case 0: item = 67; break;
-			case 1: item = 69; break;
-			case 2: item = 73; break;
-			case 3: item = 74; break;
-			default: item = 0; break;
+				case 0: item = 67; break;
+				case 1: item = 69; break;
+				case 2: item = 73; break;
+				case 3: item = 74; break;
+				default: item = 0; break;
 			}
 			int[] icons = {item, item, item, item, 1, item, item, item, item};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, GuiHandbook.i+11, 1, false, page1);
@@ -775,22 +775,22 @@ public final class HandbookAuxData {
 					GuiHandbook.i = 0;
 			}
 			switch(GuiHandbook.i) {
-			case 0:
-				int[] icons = {-1, 67, -1, 67, 67, 67, -1, 67, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 25, 1, false, page1);
-				break;
-			case 1:
-				int[] icons2 = {-1, 69, -1, 69, 69, 69, -1, 69, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 26, 2, false, page1);
-				break;
-			case 2:
-				int[] icons3 = {-1, 77, -1, 77, 77, 77, -1, 77, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 27, 8, false, page1);
-				break;
-			case 3:
-				int[] icons4 = {85, 1, 85, 1, 1, 1, 85, 1, 85};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons4, 162+dx, 32+dy, 28, 8, false, page1);
-				break;
+				case 0:
+					int[] icons = {-1, 67, -1, 67, 67, 67, -1, 67, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 25, 1, false, page1);
+					break;
+				case 1:
+					int[] icons2 = {-1, 69, -1, 69, 69, 69, -1, 69, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 26, 2, false, page1);
+					break;
+				case 2:
+					int[] icons3 = {-1, 77, -1, 77, 77, 77, -1, 77, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 27, 8, false, page1);
+					break;
+				case 3:
+					int[] icons4 = {85, 1, 85, 1, 1, 1, 85, 1, 85};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons4, 162+dx, 32+dy, 28, 8, false, page1);
+					break;
 			}
 		}
 		if (screen == GuiHandbook.CRAFTSTART+5 && page == 6) {
@@ -801,18 +801,18 @@ public final class HandbookAuxData {
 					GuiHandbook.i = 0;
 			}
 			switch(GuiHandbook.i) {
-			case 0:
-				int[] icons = {69, -1, -1, -1, 69, -1, -1, -1, 69};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 29+32, 2, false, page1);
-				break;
-			case 1:
-				int[] icons2 = {77, -1, -1, -1, 77, -1, -1, -1, 77};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 30+32, 8, false, page1);
-				break;
-			case 2:
-				int[] icons3 = {-1, 85, -1, 85, 2, 85, -1, 85, -1};
-				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 31+32, 4, false, page1);
-				break;
+				case 0:
+					int[] icons = {69, -1, -1, -1, 69, -1, -1, -1, 69};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 29+32, 2, false, page1);
+					break;
+				case 1:
+					int[] icons2 = {77, -1, -1, -1, 77, -1, -1, -1, 77};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons2, 162+dx, 32+dy, 30+32, 8, false, page1);
+					break;
+				case 2:
+					int[] icons3 = {-1, 85, -1, 85, 2, 85, -1, 85, -1};
+					ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons3, 162+dx, 32+dy, 31+32, 4, false, page1);
+					break;
 			}
 		}
 		if (screen == GuiHandbook.CRAFTSTART+5 && page == 7) {
@@ -826,22 +826,22 @@ public final class HandbookAuxData {
 			int gear = 0;
 			String[] tex = i1o2;
 			switch(GuiHandbook.i/4) {
-			case 0:
-				shaft = 80;
-				gear = 25;
-				break;
-			case 1:
-				shaft = 29+32;
-				gear = 26;
-				break;
-			case 2:
-				shaft = 30+32;
-				gear = 27;
-				break;
-			case 3:
-				shaft = 31+32;
-				gear = 28;
-				break;
+				case 0:
+					shaft = 80;
+					gear = 25;
+					break;
+				case 1:
+					shaft = 29+32;
+					gear = 26;
+					break;
+				case 2:
+					shaft = 30+32;
+					gear = 27;
+					break;
+				case 3:
+					shaft = 31+32;
+					gear = 28;
+					break;
 			}
 			if (GuiHandbook.i%4 != 0) {
 				tex[4] = GuiHandbook.icons2;
@@ -882,10 +882,10 @@ public final class HandbookAuxData {
 					GuiHandbook.i = 0;
 			}
 			switch(GuiHandbook.i) {
-			case 0: item = 1; break;
-			case 1: item = 96; break;
-			case 2: item = 98; break;
-			default: item = -1; break;
+				case 0: item = 1; break;
+				case 1: item = 96; break;
+				case 2: item = 98; break;
+				default: item = -1; break;
 			}
 			int[] icons = {item, item, item, item, item, item, item, item, item};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, GuiHandbook.i+150, 1, false, page1); //change output icon
@@ -973,38 +973,38 @@ public final class HandbookAuxData {
 			int ind = -1;
 			a[4] = 36;
 			switch(GuiHandbook.i) {
-			case 0:
-				a[0] = 1;
-				a[1] = 1;
-				a[3] = 1;
-				a[4] = -1;
-				amt = 3;
-				break;
-			case 1:
-			case 2:
-			case 3:
-				ind = 67;
-				break;
-			case 4:
-			case 5:
-			case 6:
-				ind = 69;
-				break;
-			case 7:
-			case 8:
-			case 9:
-				ind = 73;
-				break;
-			case 10:
-			case 11:
-			case 12:
-				ind = 74;
-				break;
-			case 13:
-			case 14:
-			case 15:
-				ind = 113;
-				break;
+				case 0:
+					a[0] = 1;
+					a[1] = 1;
+					a[3] = 1;
+					a[4] = -1;
+					amt = 3;
+					break;
+				case 1:
+				case 2:
+				case 3:
+					ind = 67;
+					break;
+				case 4:
+				case 5:
+				case 6:
+					ind = 69;
+					break;
+				case 7:
+				case 8:
+				case 9:
+					ind = 73;
+					break;
+				case 10:
+				case 11:
+				case 12:
+					ind = 74;
+					break;
+				case 13:
+				case 14:
+				case 15:
+					ind = 113;
+					break;
 			}
 			if (GuiHandbook.i != 0) {
 				a[0] = ind;

@@ -55,18 +55,18 @@ public class RenderFriction extends RotaryTERenderer
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-		case 0:
-			var11 = 0;
-			break;
-		case 1:
-			var11 = 180;
-			break;
-		case 2:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 		}
 
 		if (tile.isInWorld()) {
@@ -123,29 +123,29 @@ public class RenderFriction extends RotaryTERenderer
 		v5.startDrawingQuads();
 		switch(tile.getBlockMetadata()) {
 			case 0:
-				v5.addVertexWithUV(par2+0.001, par4, par6+1, 0, 0);
-				v5.addVertexWithUV(par2+0.001, par4, par6, 1, 0);
-				v5.addVertexWithUV(par2+0.001, par4+1, par6, 1, 1);
-				v5.addVertexWithUV(par2+0.001, par4+1, par6+1, 0, 1);
-			break;
+				v5.addVertexWithUV(par2+0.001, par4, par6+1, 0, 1);
+				v5.addVertexWithUV(par2+0.001, par4, par6, 1, 1);
+				v5.addVertexWithUV(par2+0.001, par4+1, par6, 1, 0);
+				v5.addVertexWithUV(par2+0.001, par4+1, par6+1, 0, 0);
+				break;
 			case 1:
-				v5.addVertexWithUV(par2+0.999, par4, par6, 0, 0);
-				v5.addVertexWithUV(par2+0.999, par4, par6+1, 1, 0);
-				v5.addVertexWithUV(par2+0.999, par4+1, par6+1, 1, 1);
-				v5.addVertexWithUV(par2+0.999, par4+1, par6, 0, 1);
-			break;
+				v5.addVertexWithUV(par2+0.999, par4, par6, 0, 1);
+				v5.addVertexWithUV(par2+0.999, par4, par6+1, 1, 1);
+				v5.addVertexWithUV(par2+0.999, par4+1, par6+1, 1, 0);
+				v5.addVertexWithUV(par2+0.999, par4+1, par6, 0, 0);
+				break;
 			case 2:
-				v5.addVertexWithUV(par2, par4, par6+0.001, 0, 0);
-				v5.addVertexWithUV(par2+1, par4, par6+0.001, 1, 0);
-				v5.addVertexWithUV(par2+1, par4+1, par6+0.001, 1, 1);
-				v5.addVertexWithUV(par2, par4+1, par6+0.001, 0, 1);
-			break;
+				v5.addVertexWithUV(par2, par4, par6+0.001, 0, 1);
+				v5.addVertexWithUV(par2+1, par4, par6+0.001, 1, 1);
+				v5.addVertexWithUV(par2+1, par4+1, par6+0.001, 1, 0);
+				v5.addVertexWithUV(par2, par4+1, par6+0.001, 0, 0);
+				break;
 			case 3:
-				v5.addVertexWithUV(par2, par4+1, par6+0.999, 0, 1);
-				v5.addVertexWithUV(par2+1, par4+1, par6+0.999, 1, 1);
-				v5.addVertexWithUV(par2+1, par4, par6+0.999, 1, 0);
 				v5.addVertexWithUV(par2, par4, par6+0.999, 0, 0);
-			break;
+				v5.addVertexWithUV(par2+1, par4, par6+0.999, 1, 0);
+				v5.addVertexWithUV(par2+1, par4+1, par6+0.999, 1, 1);
+				v5.addVertexWithUV(par2, par4+1, par6+0.999, 0, 1);
+				break;
 		}
 		v5.draw();
 	}

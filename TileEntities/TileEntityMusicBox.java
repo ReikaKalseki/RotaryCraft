@@ -11,7 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
@@ -22,7 +22,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
@@ -354,7 +353,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	public void save() {
 		try {
 			File save = DimensionManager.getCurrentSaveRootDirectory();
-			String name = "musicbox.txt";
+			String name = "musicbox@"+xCoord+","+yCoord+","+zCoord+".txt";
 			File f = new File(save.getPath()+"\\"+name);
 			if (f.exists())
 				f.delete();
@@ -381,14 +380,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public void read() {
 		File save = DimensionManager.getCurrentSaveRootDirectory();
-		String name = "musicbox.txt";
-		File f = new File(save.getPath()+"\\"+name);
-		if (!f.exists()) {
-			ReikaChatHelper.write("No saved music file exists for this world!");
-			return;
-		}
+		String name = "musicbox@"+xCoord+","+yCoord+","+zCoord+".txt";
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(f));
+			BufferedReader p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(save.getPath()+"\\"+name)));
 			musicQueue = new int[8192][16][4];
 			for (int i = 0; i < 8192; i++) {
 				String line = p.readLine();
@@ -415,15 +409,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void loadDemo() {
-		String path = RotaryCraft.class.getResource("Resources/demomusic.txt").getPath();
-		File f = new File(path);
-		if (!f.exists()) {
-			ReikaChatHelper.write("Demo file not found!");
-			ReikaJavaLibrary.pConsole("Demo file not found!");
-			return;
-		}
+		String path = "Resources/demomusic.txt";
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(f));
+			BufferedReader p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
 			musicQueue = new int[8192][16][4];
 			for (int i = 0; i < 8192; i++) {
 				String line = p.readLine();

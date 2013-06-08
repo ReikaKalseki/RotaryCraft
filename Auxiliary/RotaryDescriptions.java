@@ -10,20 +10,22 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
+import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityFan;
+import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.TileEntityHeater;
@@ -40,20 +42,21 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
+import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public final class RotaryDescriptions {
 
 	public static String[][] data;
 
-	private static String[][] engines;
-	private static String[][] machines;
-	private static String[] crafting;
-	private static String[][] tools;
-	private static String[] resource;
-	private static String[] misc;
-	private static String[][] trans;
-	private static String[] info;
-	private static String[] category;
+	private static ArrayList<String[]> engines = new ArrayList<String[]>();
+	private static ArrayList<String[]> machines = new ArrayList<String[]>();
+	private static ArrayList<String[]> crafting = new ArrayList<String[]>();
+	private static ArrayList<String[]> tools = new ArrayList<String[]>();
+	private static ArrayList<String[]> resource = new ArrayList<String[]>();
+	private static ArrayList<String[]> misc = new ArrayList<String[]>();
+	private static ArrayList<String[]> trans = new ArrayList<String[]>();
+	private static ArrayList<String[]> info = new ArrayList<String[]>();
+	private static ArrayList<String[]> category = new ArrayList<String[]>();
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
 	public static Object[][] machineNotes = {
@@ -110,7 +113,62 @@ public final class RotaryDescriptions {
 		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
 	};
 
+	public static Object[][] machineData = {
+		{},
+		{},
+		{},
+		{TileEntityFloodlight.FALLOFF},
+		{},
+		{TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE},
+		{TileEntityPileDriver.BASEPOWER},
+		{},
+		{},
+		{PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2)},
+		{},
+		{},
+		{TileEntityReservoir.CAPACITY},
+		{PowerReceivers.FAN.getMinPower(), TileEntityFan.MAXPOWER},
+		{TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{TileEntityWinder.UNWINDTORQUE, TileEntityWinder.UNWINDSPEED},
+		{},
+		{},
+		{TileEntityBlastFurnace.SMELTTEMP},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{TileEntityScaleableChest.MAXSIZE},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{TileEntityPurifier.SMELTTEMP}
+	};
+
 	public static void loadData() {
+		pad();
 		loadCategories();
 		loadEngineData();
 		loadMachineData();
@@ -123,57 +181,63 @@ public final class RotaryDescriptions {
 		assignData();
 	}
 
+	private static void pad() {
+		engines.add(null);
+		crafting.add(null);
+		machines.add(null);
+		trans.add(null);
+		tools.add(null);
+		misc.add(null);
+		resource.add(null);
+	}
+
 	private static void assignData() {
 		data = new String[GuiHandbook.MAXPAGE*8+8][2];
 
-		for (int i = 0; i < engines.length; i++) {
-			data[GuiHandbook.ENGINESTART*8+i][0] = engines[i][0];
-			data[GuiHandbook.ENGINESTART*8+i][1] = engines[i][1];
+		for (int i = 1; i < engines.size(); i++) {
+			data[GuiHandbook.ENGINESTART*8+i][0] = engines.get(i)[0];
+			data[GuiHandbook.ENGINESTART*8+i][1] = engines.get(i)[1];
 		}
-		for (int i = 0; i < machines.length; i++) {
-			data[GuiHandbook.MACHINESTART*8+i][0] = machines[i][0];
-			data[GuiHandbook.MACHINESTART*8+i][1] = machines[i][1];
+		for (int i = 1; i < machines.size(); i++) {
+			data[GuiHandbook.MACHINESTART*8+i][0] = machines.get(i)[0];
+			data[GuiHandbook.MACHINESTART*8+i][1] = machines.get(i)[1];
 		}
-		for (int i = 0; i < trans.length; i++) {
-			data[GuiHandbook.TRANSSTART*8+i][0] = trans[i][0];
-			data[GuiHandbook.TRANSSTART*8+i][1] = trans[i][1];
+		for (int i = 1; i < trans.size(); i++) {
+			data[GuiHandbook.TRANSSTART*8+i][0] = trans.get(i)[0];
+			data[GuiHandbook.TRANSSTART*8+i][1] = trans.get(i)[1];
 		}
-		for (int i = 0; i < tools.length; i++) {
-			data[GuiHandbook.TOOLSTART*8+i][0] = tools[i][0];
-			data[GuiHandbook.TOOLSTART*8+i][1] = tools[i][1];
+		for (int i = 1; i < tools.size(); i++) {
+			data[GuiHandbook.TOOLSTART*8+i][0] = tools.get(i)[0];
+			data[GuiHandbook.TOOLSTART*8+i][1] = tools.get(i)[1];
 		}
-		for (int i = 0; i < info.length; i++) {
-			data[GuiHandbook.INFOSTART*8+i][0] = info[i];
+		for (int i = 0; i < info.size(); i++) {
+			data[GuiHandbook.INFOSTART*8+i][0] = info.get(i)[0];
 		}
-		for (int i = 0; i < crafting.length; i++) {
-			data[GuiHandbook.CRAFTSTART*8+i][0] = crafting[i];
+		for (int i = 1; i < crafting.size(); i++) {
+			data[GuiHandbook.CRAFTSTART*8+i][0] = crafting.get(i)[0];
 		}
-		for (int i = 0; i < misc.length; i++) {
-			data[GuiHandbook.MISCSTART*8+i][0] = misc[i];
+		for (int i = 1; i < misc.size(); i++) {
+			data[GuiHandbook.MISCSTART*8+i][0] = misc.get(i)[0];
 		}
-		for (int i = 0; i < resource.length; i++) {
-			data[GuiHandbook.RESOURCESTART*8+i][0] = resource[i];
+		for (int i = 1; i < resource.size(); i++) {
+			data[GuiHandbook.RESOURCESTART*8+i][0] = resource.get(i)[0];
 		}
-		for (int i = 0; i < category.length; i++) {
-			if (category[i] != null && !category[i].isEmpty() && !category[i].equalsIgnoreCase("EMPTY"))
-				data[i*8][0] = category[i];
+		for (int i = 0; i < category.size(); i++) {
+			if (category.get(i)[0] != null && !category.get(i)[0].isEmpty() && !category.get(i)[0].equalsIgnoreCase("empty"))
+				data[i*8][0] = category.get(i)[0];
 		}
 		data[0][0] = ToC;
 	}
 
 	private static void loadCategories() {
-		String path = RotaryCraft.class.getResource("Resources/Categories.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
+		String path = "Resources/Categories.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			category = new String[len];
-			for (int i = 0; i < len; i++) {
-				category[i] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				p.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					category.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
 			}
 			p.close();
 		}
@@ -184,29 +248,22 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadEngineData() {
-		String path = RotaryCraft.class.getResource("Resources/EngineDesc.txt").getPath();
-		String path2 = RotaryCraft.class.getResource("Resources/EngineNotes.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		File data2 = new File(path2);
-		if (!data2.exists()) {
-			throw new RuntimeException(path2+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
-		int len2 = ReikaFileReader.getFileLength(data2)/2;
-		if (len != len2)
-			throw new RuntimeException("File lengths are different!");
+		String path = "Resources/EngineDesc.txt";
+		String path2 = "Resources/EngineNotes.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
+		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			BufferedReader p2 = new BufferedReader(new FileReader(data2));
-			engines = new String[len+1][2];
-			for (int i = 1; i < len+1; i++) {
-				engines[i][0] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				engines[i][1] = ReikaStringParser.getStringWithEmbeddedReferences(String.format(p2.readLine(), EnumEngineType.engineList[i-1].getTorque(), EnumEngineType.engineList[i-1].getSpeed(), EnumEngineType.engineList[i-1].getPowerForDisplay()));
-				p.readLine();
-				p2.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
+			String line = null;
+			int i = 0;
+			while((line = p.readLine()) != null) {
+				String line2 = p2.readLine();
+				if (!line.isEmpty()) {
+					Object[] args = {EnumEngineType.engineList[i].getTorque(), EnumEngineType.engineList[i].getSpeed(), EnumEngineType.engineList[i].getPowerForDisplay()};
+					engines.add(new String[]{String.format(line, args), String.format(line2.replaceAll("\\\\n", "\n"), args)});
+					i++;
+				}
 			}
 			p.close();
 			p2.close();
@@ -218,29 +275,21 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadMachineData() {
-		String path = RotaryCraft.class.getResource("Resources/MachineDesc.txt").getPath();
-		String path2 = RotaryCraft.class.getResource("Resources/MachineNotes.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		File data2 = new File(path2);
-		if (!data2.exists()) {
-			throw new RuntimeException(path2+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
-		int len2 = ReikaFileReader.getFileLength(data2)/2;
-		if (len != len2)
-			throw new RuntimeException("File lengths are different! "+path+" is "+len+" and "+path2+" is "+len2);
+		String path = "Resources/MachineDesc.txt";
+		String path2 = "Resources/MachineNotes.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
+		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			BufferedReader p2 = new BufferedReader(new FileReader(data2));
-			machines = new String[len+1][2];
-			for (int i = 1; i < len+1; i++) {
-				machines[i][0] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				machines[i][1] = String.format(p2.readLine().replaceAll("\\\\n", "\n"), machineNotes[i-1]);
-				p.readLine();
-				p2.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
+			String line = null;
+			int i = 0;
+			while((line = p.readLine()) != null) {
+				String line2 = p2.readLine();
+				if (!line.isEmpty()) {
+					machines.add(new String[]{String.format(line, machineData[i]), String.format(line2.replaceAll("\\\\n", "\n"), machineNotes[i])});
+					i++;
+				}
 			}
 			p.close();
 			p2.close();
@@ -252,29 +301,21 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadToolData() {
-		String path = RotaryCraft.class.getResource("Resources/ToolDesc.txt").getPath();
-		String path2 = RotaryCraft.class.getResource("Resources/ToolNotes.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		File data2 = new File(path2);
-		if (!data2.exists()) {
-			throw new RuntimeException(path2+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
-		int len2 = ReikaFileReader.getFileLength(data2)/2;
-		if (len != len2)
-			throw new RuntimeException("File lengths are different!");
+		String path = "Resources/ToolDesc.txt";
+		String path2 = "Resources/ToolNotes.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
+		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			BufferedReader p2 = new BufferedReader(new FileReader(data2));
-			tools = new String[len+1][2];
-			for (int i = 1; i < len+1; i++) {
-				tools[i][0] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				tools[i][1] = ReikaStringParser.getStringWithEmbeddedReferences(p2.readLine());
-				p.readLine();
-				p2.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
+			String line = null;
+			int i = 0;
+			while((line = p.readLine()) != null) {
+				String line2 = p2.readLine();
+				if (!line.isEmpty()) {
+					tools.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line), ReikaStringParser.getStringWithEmbeddedReferences(line2)});
+					i++;
+				}
 			}
 			p.close();
 			p2.close();
@@ -286,29 +327,21 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadTransData() {
-		String path = RotaryCraft.class.getResource("Resources/TransDesc.txt").getPath();
-		String path2 = RotaryCraft.class.getResource("Resources/TransNotes.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		File data2 = new File(path2);
-		if (!data2.exists()) {
-			throw new RuntimeException(path2+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
-		int len2 = ReikaFileReader.getFileLength(data2)/2;
-		if (len != len2)
-			throw new RuntimeException("File lengths are different!");
+		String path = "Resources/TransDesc.txt";
+		String path2 = "Resources/TransNotes.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
+		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			BufferedReader p2 = new BufferedReader(new FileReader(data2));
-			trans = new String[len+1][2];
-			for (int i = 1; i < len+1; i++) {
-				trans[i][0] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				trans[i][1] = ReikaStringParser.getStringWithEmbeddedReferences(p2.readLine());
-				p.readLine();
-				p2.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
+			String line = null;
+			int i = 0;
+			while((line = p.readLine()) != null) {
+				String line2 = p2.readLine();
+				if (!line.isEmpty()) {
+					trans.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line), ReikaStringParser.getStringWithEmbeddedReferences(line2)});
+					i++;
+				}
 			}
 			p.close();
 			p2.close();
@@ -320,18 +353,14 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadCraftingData() {
-		String path = RotaryCraft.class.getResource("Resources/CraftDesc.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
+		String path = "Resources/CraftDesc.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			crafting = new String[len+1];
-			for (int i = 1; i < len+1; i++) {
-				crafting[i] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				p.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					crafting.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
 			}
 			p.close();
 		}
@@ -342,18 +371,14 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadResourceData() {
-		String path = RotaryCraft.class.getResource("Resources/ResourceDesc.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
+		String path = "Resources/ResourceDesc.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			resource = new String[len+1];
-			for (int i = 1; i < len+1; i++) {
-				resource[i] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				p.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					resource.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
 			}
 			p.close();
 		}
@@ -364,18 +389,14 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadMiscData() {
-		String path = RotaryCraft.class.getResource("Resources/MiscDesc.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
+		String path = "Resources/MiscDesc.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			misc = new String[len+1];
-			for (int i = 1; i < len+1; i++) {
-				misc[i] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				p.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					misc.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
 			}
 			p.close();
 		}
@@ -386,18 +407,14 @@ public final class RotaryDescriptions {
 	}
 
 	private static void loadInfoData() {
-		String path = RotaryCraft.class.getResource("Resources/Info.txt").getPath();
-		File data = new File(path);
-		if (!data.exists()) {
-			throw new RuntimeException(path+" does not exist!");
-		}
-		int len = ReikaFileReader.getFileLength(data)/2;
+		String path = "Resources/Info.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		try {
-			BufferedReader p = new BufferedReader(new FileReader(data));
-			info = new String[len];
-			for (int i = 0; i < len; i++) {
-				info[i] = ReikaStringParser.getStringWithEmbeddedReferences(p.readLine());
-				p.readLine();
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					info.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
 			}
 			p.close();
 		}

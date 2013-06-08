@@ -22,7 +22,7 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
-import Reika.RotaryCraft.Auxiliary.HandbookText;
+import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -612,12 +612,12 @@ public class GuiHandbook extends GuiScreen
 		fontRenderer.drawString(HandbookAuxData.names[8*screen+page], posX+xo+6, posY+yo+6, 0x000000);
 		if (subpage == 0) {
 			this.drawRecipes();
-			//fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
-			fontRenderer.drawSplitString(String.format("%s", HandbookText.machineInfo[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
+			//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineInfo[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 		}
 		else
-			//fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
-			fontRenderer.drawSplitString(String.format("%s", HandbookText.machineNotes[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
+		//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineNotes[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 
 
 		if (screen == INFOSTART && page == 0) {
