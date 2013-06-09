@@ -11,12 +11,18 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet63WorldParticles;
+import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -65,6 +71,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	private int saveCount = 0;
 	private int readCount = 0;
+
+	private String musicFile;
 
 	/** Position of last note */
 	private int[] lastNote = new int[16];
@@ -302,6 +310,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		NBT.setInteger("avoice", activeVoice);
 		NBT.setInteger("anote", activeNote);
 
+		if (musicFile != null && !musicFile.isEmpty())
+			NBT.setString("music", musicFile);
+
 		if (saveCount > 0) {
 			saveCount--;
 			for (int i = 0; i < 8192; i++) {
@@ -338,6 +349,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
 
+		musicFile = NBT.getString("music");
+
 		if (readCount > 0) {
 			readCount--;
 			for (int i = 0; i < 8192; i++) {
@@ -351,10 +364,15 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void save() {
+		if (musicFile == null)
+			;//this.generateMusicName();
 		try {
 			File save = DimensionManager.getCurrentSaveRootDirectory();
-			String name = "musicbox@"+xCoord+","+yCoord+","+zCoord+".txt";
-			File f = new File(save.getPath()+"\\"+name);
+			String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
+			File dir = new File(save.getPath()+"\\Music Box\\");
+			if (!dir.exists())
+				dir.mkdir();
+			File f = new File(save.getPath()+"\\Music Box\\"+name);
 			if (f.exists())
 				f.delete();
 			PrintWriter p = new PrintWriter(f);
@@ -380,9 +398,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public void read() {
 		File save = DimensionManager.getCurrentSaveRootDirectory();
-		String name = "musicbox@"+xCoord+","+yCoord+","+zCoord+".txt";
+		//ReikaJavaLibrary.pConsole(musicFile);
+		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
 		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(save.getPath()+"\\"+name)));
+			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(save.getPath()+"\\Music Box\\"+name)));
 			musicQueue = new int[8192][16][4];
 			for (int i = 0; i < 8192; i++) {
 				String line = p.readLine();
@@ -472,6 +491,52 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	public void setMusicFile(ItemStack is) {
+		if (!is.stackTagCompound.hasKey("music"))
+			return;
+		musicFile = is.stackTagCompound.getString("music");
+	}
+	/*
+	public ItemStack getMusicFile() {
+		ItemStack is = new ItemStack(RotaryCraft.disk);
+		if (musicFile == null || musicFile.isEmpty())
+			return is;
+		is.stackTagCompound = new NBTTagCompound();
+		//ReikaJavaLibrary.spamConsole(musicFile);
+		is.stackTagCompound.setString("music", musicFile);
+		return is;
+	}
+	 */
+	private void generateMusicName() {/*
+		if (musicFile == null)
+			musicFile = "0000";
+		else {
+			int num = Integer.parseInt(musicFile);
+			num++;
+			musicFile = String.format("%04d", num);
+		}*/
+		String world = DimensionManager.getCurrentSaveRootDirectory().getPath().substring(8);
+		String biome = worldObj.getBiomeGenForCoords(xCoord, zCoord).biomeName;
+		String mob = EntityList.getStringFromID(50+par5Random.nextInt(15));
+		String day = "Day"+String.valueOf(worldObj.getWorldTime()/24000);
+		String time = String.valueOf(System.nanoTime());
+		String ench = EnchantmentNameParts.instance.generateRandomEnchantName();
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MMMMM.dd HH:mm:ss");
+		String date = sdf.format(cal.getTime());
+		musicFile = mob+" "+ench+" "+biome+" "+date;
+		//ReikaJavaLibrary.pConsole(musicFile);
+	}
+
+	public void deleteFiles(int x, int y, int z) {
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		//ReikaJavaLibrary.pConsole(musicFile);
+		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
+		File f = new File(save.getPath()+"\\Music Box\\"+name);
+		if (f.exists())
+			f.delete();
 	}
 
 }

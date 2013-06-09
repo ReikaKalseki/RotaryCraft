@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.MachineRegistry;
@@ -228,18 +229,18 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		int slot = -1;
 		int id = -1;
 		switch (shape) {
-		case 0:
-			id = Item.fireballCharge.itemID;
-			break;
-		case 1:
-			id = Item.goldNugget.itemID;
-			break;
-		case 2:
-			id = Item.feather.itemID;
-			break;
-		case 3:
-			id = Item.skull.itemID;
-			break;
+			case 0:
+				id = Item.fireballCharge.itemID;
+				break;
+			case 1:
+				id = Item.goldNugget.itemID;
+				break;
+			case 2:
+				id = Item.feather.itemID;
+				break;
+			case 3:
+				id = Item.skull.itemID;
+				break;
 		}
 		if (id != -1 && this.consumeChance())
 			ReikaInventoryHelper.findAndDecrStack(id, -1, inventory);
@@ -283,20 +284,20 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 			inputitems[3] = glowstone;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		switch(shape) {
-		case 1:
-			inputitems[4] = new ItemStack(Item.fireballCharge.itemID, 1, 0);
-			break;
-		case 2:
-			inputitems[4] = new ItemStack(Item.goldNugget.itemID, 1, 0);
-			break;
-		case 3:
-			inputitems[4] = new ItemStack(Item.feather.itemID, 1, 0);
-			break;
-		case 4:
-			inputitems[4] = new ItemStack(Item.skull.itemID, 1, 0);
-			break;
-		default:
-			inputitems[4] = null;
+			case 1:
+				inputitems[4] = new ItemStack(Item.fireballCharge.itemID, 1, 0);
+				break;
+			case 2:
+				inputitems[4] = new ItemStack(Item.goldNugget.itemID, 1, 0);
+				break;
+			case 3:
+				inputitems[4] = new ItemStack(Item.feather.itemID, 1, 0);
+				break;
+			case 4:
+				inputitems[4] = new ItemStack(Item.skull.itemID, 1, 0);
+				break;
+			default:
+				inputitems[4] = null;
 		}
 		/*
 		for (int k = 0; k < inputitems.length; k++) {
@@ -544,47 +545,6 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 	@Override
 	public ItemStack getStackInSlot(int var1) {
 		return inventory[var1];
-	}
-
-	@Override
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null)
-		{
-			if (inventory[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-
-			if (inventory[par1].stackSize == 0)
-			{
-				inventory[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null)
-		{
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
 	}
 
 	/**

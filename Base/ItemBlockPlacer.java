@@ -13,17 +13,17 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class ItemBlockPlacer extends Item {
+import Reika.RotaryCraft.RotaryCraft;
+
+public abstract class ItemBlockPlacer extends ItemBasic {
 
 	public ItemBlockPlacer(int id) {
-		super(id);
+		super(id, 0);
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;

@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.ItemRegistry;
 
 public enum EnumEngineType {
 	DC(256, 4),
@@ -192,9 +192,9 @@ public enum EnumEngineType {
 
 	public boolean isValidFuel(ItemStack is) {
 		if (this == GAS)
-			return is.itemID == RotaryCraft.ethanol.itemID;
+			return is.itemID == ItemRegistry.ETHANOL.getID();
 		if (this == SPORT)
-			return is.itemID == RotaryCraft.ethanol.itemID || this.isAdditive(is);
+			return is.itemID == ItemRegistry.ETHANOL.getID() || this.isAdditive(is);
 		if (this == AC)
 			return is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage();
 		return false;

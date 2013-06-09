@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
@@ -19,8 +20,8 @@ public class ItemHandheldCrafting extends ItemRotaryTool {
 
 	public ItemStack[] items = new ItemStack[9];
 
-	public ItemHandheldCrafting(int ID) {
-		super(ID, 33);
+	public ItemHandheldCrafting(int ID, int tex) {
+		super(ID, tex);
 		maxStackSize = 1;
 	}
 

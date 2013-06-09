@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
@@ -115,46 +116,6 @@ public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver imp
 	@Override
 	public ItemStack getStackInSlot(int i) {
 		return inv[i];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize == 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
 	}
 
 	@Override

@@ -13,21 +13,18 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import Reika.RotaryCraft.Base.ItemBasic;
+
 public class ItemRailGunAmmo extends ItemBasic {
 
-	private static final String subNames[] = new String[16];
-
-	public ItemRailGunAmmo(int ID) {
-		super(ID, 113);
+	public ItemRailGunAmmo(int ID, int tex) {
+		super(ID, tex);
 		maxStackSize = 16;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
-		for (int i = 0; i < 16; i++)
-			subNames[i] = String.format("%d", i);
 	}
 
 	@Override

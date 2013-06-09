@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
+import Reika.DragonAPI.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
@@ -96,33 +98,27 @@ public enum BlockRegistry {
 
 	public Block createInstance() {
 		try {
-			Constructor<?> c = this.getBlockClass().getConstructor(int.class, Material.class);
+			Constructor c = this.getBlockClass().getConstructor(int.class, Material.class);
 			Block instance = (Block)(c.newInstance(RotaryConfig.machineids[this.ordinal()], this.getBlockMaterial()));
 			return (instance.setUnlocalizedName(this.getUnlocName()));
 		}
 		catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" does not have the specified constructor!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" does not have the specified constructor!");
 		}
 		catch (SecurityException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" threw security exception!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw security exception!");
 		}
 		catch (InstantiationException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" did not allow instantiation!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" did not allow instantiation!");
 		}
 		catch (IllegalAccessException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" threw illegal access exception! (Nonpublic constructor)");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw illegal access exception! (Nonpublic constructor)");
 		}
 		catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" was given invalid parameters!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" was given invalid parameters!");
 		}
 		catch (InvocationTargetException e) {
-			e.printStackTrace();
-			throw new RuntimeException(this.getBlockClass().toString()+" threw invocation target exception! Check Block ID conflicts!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw invocation target exception! Check Block ID conflicts!");
 		}
 	}
 

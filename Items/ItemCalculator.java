@@ -13,13 +13,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.GUIs.GuiCalculator;
 
 public class ItemCalculator extends ItemRotaryTool {
 
-	public ItemCalculator(int ID) {
-		super(ID, 240);
+	public ItemCalculator(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

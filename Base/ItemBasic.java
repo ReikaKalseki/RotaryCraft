@@ -12,8 +12,12 @@ package Reika.RotaryCraft.Base;
 import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 
@@ -52,4 +56,8 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	public void setIndex(int a) {
 		index = a;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void registerIcons(IconRegister ico) {}
 }

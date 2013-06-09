@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
@@ -21,10 +22,9 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemUltrasound extends ItemChargedTool {
 
-	public ItemUltrasound(int ID) {
-		super(ID, 128);
+	public ItemUltrasound(int ID, int tex) {
+		super(ID, tex);
 	}
-	//Can find ores, detect near caves, detect silverfish stone
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {

@@ -248,14 +248,14 @@ public class EntityRailGunShot extends EntityFireball {
 						}
 						if (power == 14) {
 							for (int n = 1; n < Block.blocksList.length; n++) {
-								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(8, 11, n)) {
+								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
 									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 3);
 								}
 							}
 						}
 						if (power == 15) {
 							for (int n = 1; n < Block.blocksList.length; n++) {
-								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(8, 11, n)) {
+								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
 									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 6);
 								}
 							}

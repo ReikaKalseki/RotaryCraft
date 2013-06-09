@@ -191,47 +191,6 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		return inventory[i];
 	}
 
-	@Override
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null)
-		{
-			if (inventory[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-
-			if (inventory[par1].stackSize == 0)
-			{
-				inventory[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null)
-		{
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */

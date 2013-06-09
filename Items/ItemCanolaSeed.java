@@ -14,20 +14,23 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemCanolaSeed extends ItemBasic {
 
-	public ItemCanolaSeed(int ID) {
-		super(ID, 80); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemCanolaSeed(int ID, int tex) {
+		super(ID, tex);
 		this.setMaxDamage(0);
 		hasSubtypes = true;
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack items, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+		if (items.getItemDamage() > 0)
+			return false;
 		if (!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z)) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
 			if (side == 0)
 				--y;

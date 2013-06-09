@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -82,29 +83,29 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			return false;
 		int id = 0;
 		switch (metadata) {
-		case 0:
-			id = world.getBlockId(x+1, y, z);
-			readx = x+1;
-			readz = z;
-			break;
-		case 1:
-			id = world.getBlockId(x-1, y, z);
-			readx = x-1;
-			readz = z;
-			break;
-		case 2:
-			id = world.getBlockId(x, y, z+1);
-			readx = x;
-			readz = z+1;
-			break;
-		case 3:
-			id = world.getBlockId(x, y, z-1);
-			readx = x;
-			readz = z-1;
-			break;
-		default:
-			id = 0;
-			break;
+			case 0:
+				id = world.getBlockId(x+1, y, z);
+				readx = x+1;
+				readz = z;
+				break;
+			case 1:
+				id = world.getBlockId(x-1, y, z);
+				readx = x-1;
+				readz = z;
+				break;
+			case 2:
+				id = world.getBlockId(x, y, z+1);
+				readx = x;
+				readz = z+1;
+				break;
+			case 3:
+				id = world.getBlockId(x, y, z-1);
+				readx = x;
+				readz = z-1;
+				break;
+			default:
+				id = 0;
+				break;
 		}
 		ready = yCoord;
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, powinx, y, powinz, 4);
@@ -140,57 +141,6 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		return compactorItemStacks[par1];
 	}
 
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (compactorItemStacks[par1] != null)
-		{
-			if (compactorItemStacks[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = compactorItemStacks[par1];
-				compactorItemStacks[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = compactorItemStacks[par1].splitStack(par2);
-
-			if (compactorItemStacks[par1].stackSize <= 0)
-			{
-				compactorItemStacks[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (compactorItemStacks[par1] != null)
-		{
-			ItemStack itemstack = compactorItemStacks[par1];
-			compactorItemStacks[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		compactorItemStacks[par1] = par2ItemStack;
@@ -298,14 +248,14 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (item == Item.coal.itemID)
 			return 80;
 		switch(meta) {
-		case 0:
-			return 160;
-		case 1:
-			return 320;
-		case 2:
-			return 640;
-		default:
-			return -1;
+			case 0:
+				return 160;
+			case 1:
+				return 320;
+			case 2:
+				return 640;
+			default:
+				return -1;
 		}
 	}
 

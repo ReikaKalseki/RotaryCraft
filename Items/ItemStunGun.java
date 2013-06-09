@@ -30,8 +30,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemStunGun extends ItemChargedTool {
 
-	public ItemStunGun(int ID) {
-		super(ID, 192);
+	public ItemStunGun(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

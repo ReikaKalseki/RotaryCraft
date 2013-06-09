@@ -18,12 +18,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
@@ -34,13 +35,13 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	public ItemStack[] ammo = new ItemStack[54];
 
 	public int getPowerLevel() {
-		int meta = ReikaInventoryHelper.findMaxMetadataOfID(RotaryCraft.railammo.itemID, ammo);
+		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getID(), ammo);
 		return meta;
 	}
 
 	@Override
 	public boolean hasAmmo() {
-		return ReikaInventoryHelper.checkForItem(RotaryCraft.railammo.itemID, ammo);
+		return ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getID(), ammo);
 	}
 
 	@Override
@@ -99,8 +100,8 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
 		int maxmeta = this.getMaxThrust();
-		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(RotaryCraft.railammo.itemID, ammo, maxmeta);
-		int slot = ReikaInventoryHelper.locateInInventory(RotaryCraft.railammo.itemID, m, ammo);
+		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getID(), ammo, maxmeta);
+		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getID(), m, ammo);
 		ReikaInventoryHelper.decrStack(slot, ammo);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
@@ -277,7 +278,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == RotaryCraft.railammo.itemID;
+		return is.itemID == ItemRegistry.RAILGUN.getID();
 	}
 
 	@Override

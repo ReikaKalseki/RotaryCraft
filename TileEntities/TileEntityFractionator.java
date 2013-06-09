@@ -14,7 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -38,7 +40,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 	public static final ItemStack[] ingredients =
 		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(Item.coal.itemID, 1, 0),
 		new ItemStack(RotaryCraft.powders.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 1),
-		new ItemStack(RotaryCraft.ethanol.itemID, 1, 0), new ItemStack(Item.magmaCream.itemID, 1, 0)};
+		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream.itemID, 1, 0)};
 
 	public ItemStack[] inv = new ItemStack[ingredients.length+1+1];
 
@@ -157,57 +159,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 		return inv[par1];
 	}
 
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize == 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inv[par1] = par2ItemStack;

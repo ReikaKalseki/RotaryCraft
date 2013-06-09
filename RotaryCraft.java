@@ -35,11 +35,11 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 import Reika.DragonAPI.LanguageArray;
+import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
-import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemMulti;
 import Reika.RotaryCraft.Blocks.BlockBeam;
 import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
@@ -52,32 +52,8 @@ import Reika.RotaryCraft.Blocks.BlockLightBridge;
 import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Blocks.BlockObsidianGlass;
-import Reika.RotaryCraft.Items.ItemBedrockAxe;
-import Reika.RotaryCraft.Items.ItemBedrockPickaxe;
-import Reika.RotaryCraft.Items.ItemBedrockShovel;
-import Reika.RotaryCraft.Items.ItemCanolaSeed;
-import Reika.RotaryCraft.Items.ItemCoil;
-import Reika.RotaryCraft.Items.ItemDebug;
-import Reika.RotaryCraft.Items.ItemFireballLauncher;
-import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Items.ItemGravelGun;
-import Reika.RotaryCraft.Items.ItemHandBook;
-import Reika.RotaryCraft.Items.ItemHandheldCrafting;
-import Reika.RotaryCraft.Items.ItemIOGoggles;
-import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemModOre;
-import Reika.RotaryCraft.Items.ItemMotionTracker;
-import Reika.RotaryCraft.Items.ItemNightVisionGoggles;
-import Reika.RotaryCraft.Items.ItemNightVisionHelmet;
-import Reika.RotaryCraft.Items.ItemRailGunAmmo;
-import Reika.RotaryCraft.Items.ItemScrewdriver;
-import Reika.RotaryCraft.Items.ItemSlide;
 import Reika.RotaryCraft.Items.ItemSpawner;
-import Reika.RotaryCraft.Items.ItemStunGun;
-import Reika.RotaryCraft.Items.ItemTarget;
-import Reika.RotaryCraft.Items.ItemUltrasound;
-import Reika.RotaryCraft.Items.ItemVacuum;
-import Reika.RotaryCraft.Items.ItemWorldEdit;
 import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
@@ -102,14 +78,14 @@ public class RotaryCraft {
 	public static EnumArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", EnumArmorMaterial.DIAMOND.getDurability(0), dmgs, EnumArmorMaterial.GOLD.getEnchantability());
 	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
-
+	/*
 	public static Item debug;
 	public static Item worldedit;
 
 	public static Item screwdriver;
 	public static Item meter;
 	public static Item infobook;
-
+	 */
 	public static Block decoblock;
 	public static Block blastglass;
 	public static Block obsidianglass;
@@ -130,30 +106,6 @@ public class RotaryCraft {
 	public static Item machineplacer;
 	public static Item flywheelitems;
 	public static Item advgearitems;
-
-	public static Item yeast;
-	public static Item ethanol;
-	public static Item canolaseed;
-	public static Item wind;
-	public static Item ultra;
-	public static Item motiontracker;
-	public static Item vac;
-	public static Item stun;
-	public static Item gravelgun;
-	public static Item fireball;
-	// public static Item calc;
-	public static Item bedpick;
-	public static Item bedaxe;
-	public static Item bedshov;
-	public static Item nvg;
-	public static Item nvh;
-	public static Item handcraft;
-	public static Item railammo;
-	public static Item fuelbucket;
-	public static Item target;
-	public static Item iogoggles;
-	public static Item slides;
-
 	public static Item modextracts;
 
 	public static Block canola;
@@ -167,19 +119,16 @@ public class RotaryCraft {
 	public static Block gravleaves;
 
 	public static Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
+	public static Item[] basicItems = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
 
 	public static Entity arrow;
 	public static Entity fallblock;
-	//public static int fallblockid = EntityRegistry.findGlobalUniqueEntityId();
-	//public static int tntid = EntityRegistry.findGlobalUniqueEntityId();
 
-	// The instance of your mod that Forge uses, in my case tutorial.
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance;
 
-	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
@@ -207,6 +156,7 @@ public class RotaryCraft {
 		RotaryRegistration.addTileEntities();
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
+		AchievementDescriptions.loadDesc();
 		RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
@@ -218,28 +168,17 @@ public class RotaryCraft {
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
-		MinecraftForge.addGrassSeed(new ItemStack(canolaseed.itemID, 1, 0), 2);
+		MinecraftForge.addGrassSeed(new ItemStack(ItemRegistry.CANOLA.getID(), 1, 0), 2);
 	}
 
 	@PostInit // Like the modsLoaded thing from ModLoader
 	public void myNewPostLoadMethod(FMLPostInitializationEvent evt)
 	{
-		/*
-    	Minecraft mc = ModLoader.getMinecraftInstance();
-    	EnumOS os = mc.getOs();
-    	if (os == EnumOS.MACOS)
-    		ReikaJavaLibrary.pConsole("Hi, person with lots of money! ;)");
-    	if (os == EnumOS.WINDOWS)
-    		ReikaJavaLibrary.pConsole("Hi!");*/
+		//LoadAux.texMsg();
 	}
 
 	private static void setupClassFiles() {
-		debug = new ItemDebug(RotaryConfig.debugitemid).setUnlocalizedName("debug");
-		worldedit = new ItemWorldEdit(RotaryConfig.worldeditid).setUnlocalizedName("worldedit");
-
-		screwdriver = new ItemScrewdriver(RotaryConfig.screwdriverid).setUnlocalizedName("Screwdriver");
-		meter = new ItemMeter(RotaryConfig.meterid).setUnlocalizedName("Angular Transducer");
-		infobook = new ItemHandBook(RotaryConfig.infobookid).setUnlocalizedName("RotaryCraft Handbook");
+		RotaryRegistration.instantiateItems();
 
 		shaftcraft = new ItemMulti(RotaryConfig.shaftcraftid, 0).setUnlocalizedName("shaftcraft");
 		enginecraft = new ItemMulti(RotaryConfig.enginecraftid, 1).setUnlocalizedName("enginecraft");
@@ -257,31 +196,6 @@ public class RotaryCraft {
 		machineplacer = new ItemMachinePlacer(RotaryConfig.machineplacerid).setUnlocalizedName("machineplacer");
 		advgearitems = new ItemAdvGearPlacer(RotaryConfig.advgearitemsid).setUnlocalizedName("advgearitem");
 		flywheelitems = new ItemFlywheelPlacer(RotaryConfig.flywheelitemsid).setUnlocalizedName("flywheelitem");
-
-		yeast = new ItemBasic(RotaryConfig.yeastid, 32).setUnlocalizedName("Yeast");
-		ethanol = new ItemBasic(RotaryConfig.ethanolid, 64).setUnlocalizedName("EthanolCrystals");
-		canolaseed = new ItemCanolaSeed(RotaryConfig.canolaseedid).setUnlocalizedName("CanolaSeed");
-		wind = new ItemCoil(RotaryConfig.windid).setUnlocalizedName("Winder").setContainerItem(wind);
-		motiontracker = new ItemMotionTracker(RotaryConfig.motionid).setUnlocalizedName("Motion");
-		ultra = new ItemUltrasound(RotaryConfig.ultraid).setUnlocalizedName("Ultra");
-		vac = new ItemVacuum(RotaryConfig.vacid).setUnlocalizedName("Vac");
-		gravelgun = new ItemGravelGun(RotaryConfig.gravelgunid).setUnlocalizedName("GravelGun");
-		stun = new ItemStunGun(RotaryConfig.stunid).setUnlocalizedName("StunGun");
-		//calc = new ItemCalculator(RotaryConfig.calcid).setUnlocalizedName("Calc");
-		fireball = new ItemFireballLauncher(RotaryConfig.fireballid).setUnlocalizedName("FireBall");
-		bedpick = new ItemBedrockPickaxe(RotaryConfig.bedpickid).setUnlocalizedName("BedPick");
-		bedaxe = new ItemBedrockAxe(RotaryConfig.bedaxeid).setUnlocalizedName("BedAxe");
-		bedshov = new ItemBedrockShovel(RotaryConfig.bedshovid).setUnlocalizedName("BedShovel");
-		railammo = new ItemRailGunAmmo(RotaryConfig.railammoid).setUnlocalizedName("Railgunammo");
-		fuelbucket = new ItemFuelLubeBucket(RotaryConfig.fuelbucketid).setUnlocalizedName("Fuelbucket");
-		target = new ItemTarget(RotaryConfig.targetid).setUnlocalizedName("Target");
-
-		slides = new ItemSlide(RotaryConfig.slidesid, 2).setUnlocalizedName("Slides");
-		iogoggles = new ItemIOGoggles(RotaryConfig.iogogglesid, proxy.IOGoggles).setUnlocalizedName("IOGMgoggles");
-
-		nvg = new ItemNightVisionGoggles(RotaryConfig.nvgid, proxy.NVGoggles).setUnlocalizedName("NVGMhelmet");
-		handcraft = new ItemHandheldCrafting(RotaryConfig.handcraftid).setUnlocalizedName("HandCraft");
-		nvh = new ItemNightVisionHelmet(RotaryConfig.nvhid, proxy.NVHelmet).setUnlocalizedName("NVHMhelmet");
 
 		modextracts = new ItemModOre(RotaryConfig.modextractsid).setUnlocalizedName("modextracts");
 
@@ -306,4 +220,3 @@ public class RotaryCraft {
 	}
 
 }
-

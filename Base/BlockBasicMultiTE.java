@@ -35,6 +35,7 @@ import net.minecraftforge.common.ForgeHooks;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
@@ -44,6 +45,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
@@ -145,7 +147,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking() && !((RotaryCraftTileEntity)te).getMachine().hasSneakActions())
 			return false;
-		if (is != null && (ep.getCurrentEquippedItem().itemID == RotaryCraft.screwdriver.itemID || ep.getCurrentEquippedItem().itemID == RotaryCraft.meter.itemID || ep.getCurrentEquippedItem().itemID == RotaryCraft.debug.itemID)) {
+		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick()) {
 			return false;
 		}
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
@@ -159,7 +161,19 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
 				return false;
-		}
+		}/*
+		if (te instanceof TileEntityMusicBox) {
+			TileEntityMusicBox mb = (TileEntityMusicBox)te;
+			if (is != null && is.itemID == RotaryCraft.disk.itemID) {
+				if (is.hasTagCompound()) {
+					mb.setMusicFile(is);
+				}
+				else {
+					ep.setCurrentItemOrArmor(0, mb.getMusicFile());
+				}
+				return true;
+			}
+		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
 			ep.openGui(RotaryCraft.instance, 0, world, x, y, z);
 			return true;
@@ -167,7 +181,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (te instanceof TileEntityScreen) {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
-				tc.activate(ep);
+				;//tc.activate(ep);
 				return true;
 			}
 		}
@@ -243,6 +257,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityFloodlight) {
 			((TileEntityFloodlight)te).lightsOut(world, x, y, z);
+		}
+		if (te instanceof TileEntityMusicBox) {
+			((TileEntityMusicBox)te).deleteFiles(x, y, z);
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {

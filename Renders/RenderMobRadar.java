@@ -19,19 +19,20 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelRadar;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMobRadar extends RotaryTERenderer
@@ -121,7 +122,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		EntityPlayer ep = te.worldObj.getPlayerEntityByName(te.owner);
 		if (ep == null)
 			return;
-		if (!ReikaInventoryHelper.checkForItem(RotaryCraft.motiontracker.itemID, ep.inventory.mainInventory))
+		if (!ReikaInventoryHelper.checkForItem(ItemRegistry.MOTION.getID(), ep.inventory.mainInventory))
 			return;
 		if (mc.thePlayer.getEntityName() != ep.getEntityName())
 			return;

@@ -13,10 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWinder;
@@ -47,7 +48,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			}
 			return;
 		}
-		if (inslot[0].itemID != RotaryCraft.wind.itemID) {
+		if (inslot[0].itemID != ItemRegistry.SPRING.getID()) {
 			if (!winding) {
 				torque = 0;
 				omega = 0;
@@ -61,7 +62,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			tickcount = 0;
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
 				return;
-			inslot[0] = new ItemStack(RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()+1);
+			inslot[0] = new ItemStack(ItemRegistry.SPRING.getID(), 1, inslot[0].getItemDamage()+1);
 			if (par5Random.nextInt((65536-inslot[0].getItemDamage())) == 0) {
 				inslot[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
@@ -77,7 +78,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			if (tickcount < 20)
 				return;
 			tickcount = 0;
-			inslot[0] = new ItemStack(RotaryCraft.wind.itemID, 1, inslot[0].getItemDamage()-1);
+			inslot[0] = new ItemStack(ItemRegistry.SPRING.getID(), 1, inslot[0].getItemDamage()-1);
 			omega = UNWINDSPEED;
 			torque = UNWINDTORQUE;
 			power = omega;
@@ -166,54 +167,6 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	}
 
 	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inslot[par1] != null)
-		{
-			if (inslot[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inslot[par1];
-				inslot[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inslot[par1].splitStack(par2);
-
-			if (inslot[par1].stackSize == 0)
-			{
-				inslot[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inslot[par1] != null)
-		{
-			ItemStack itemstack = inslot[par1];
-			inslot[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
 	 * Sets the given item stack to the specified slot in the inslotentory (can be crafting or armor sections).
 	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -257,14 +210,14 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == RotaryCraft.wind.itemID;
+		return is.itemID == ItemRegistry.SPRING.getID();
 	}
 
 	@Override
 	public int getRedstoneOverride() {
 		if (inslot[0] == null)
 			return 15;
-		if (inslot[0].itemID != RotaryCraft.wind.itemID)
+		if (inslot[0].itemID != ItemRegistry.SPRING.getID())
 			return 15;
 		if (inslot[0].getItemDamage() >= torque && winding)
 			return 15;

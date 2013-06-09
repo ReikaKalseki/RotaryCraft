@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
@@ -45,8 +47,10 @@ import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
+import Reika.RotaryCraft.TileEntities.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
+import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -178,7 +182,9 @@ public enum MachineRegistry {
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
 	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
-	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction");
+	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction"),
+	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17),
+	BUCKETFILLER(		"Bucket Filler",			BlockMIMachine.class,		TileEntityBucketFiller.class,		18);
 
 
 	private String name;
@@ -198,7 +204,7 @@ public enum MachineRegistry {
 		meta = m;
 		te = tile;
 		if (meta > 15)
-			//	throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			//	throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
 			rollover = m/16;
 		//this.updateMappingRegistry();
 	}
@@ -209,7 +215,7 @@ public enum MachineRegistry {
 		meta = m;
 		te = tile;
 		if (meta > 15)
-			//throw new RuntimeException("Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
+			//throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
 			rollover = m/16;
 		//this.updateMappingRegistry();
 		hasRender = true;
@@ -218,11 +224,11 @@ public enum MachineRegistry {
 
 	private void updateMappingRegistry() {
 		if (mappedData == null)
-			throw new RuntimeException("Mapped data has not yet been created!");
+			throw new RegistrationException(RotaryCraft.instance, "Mapped data has not yet been created!");
 		if (mappedData.containsKey(blockClass)) {
 			boolean[] maps = mappedData.get(blockClass);
 			if (maps[meta])
-				throw new RuntimeException("Machine "+name+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
+				throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
 			else {
 				maps[meta] = true;
 				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+name);
@@ -244,11 +250,11 @@ public enum MachineRegistry {
 		}
 		catch (InstantiationException e) {
 			e.printStackTrace();
-			throw new RuntimeException("ID "+id+" and metadata "+metad+" failed to instantiate their TileEntity of "+TEClass);
+			throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" failed to instantiate their TileEntity of "+TEClass);
 		}
 		catch (IllegalAccessException e) {
 			e.printStackTrace();
-			throw new RuntimeException("ID "+id+" and metadata "+metad+" failed illegally accessed their TileEntity of "+TEClass);
+			throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" failed illegally accessed their TileEntity of "+TEClass);
 		}
 	}
 
@@ -287,7 +293,7 @@ public enum MachineRegistry {
 			if (m.getBlockID() == id && ReikaMathLibrary.isValueInsideBoundsIncl(m.getMachineMetadata(), m.getMachineMetadata()+m.getNumberMetadatas()-1, metad))
 				return i;
 		}
-		throw new RuntimeException("ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
+		throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
 	}
 
 	public static MachineRegistry getMachine(World world, int x, int y, int z) {
@@ -580,7 +586,7 @@ public enum MachineRegistry {
 			else if (adv.getBlockMetadata() < 12)
 				return "Industrial Coil";
 		}
-		throw new RuntimeException("Machine "+name+" has an unspecified multi name!");
+		throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" has an unspecified multi name!");
 	}
 
 	public boolean isMultiNamed() {

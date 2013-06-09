@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
@@ -37,8 +38,8 @@ public class ItemScrewdriver extends ItemRotaryTool
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 
 
-	public ItemScrewdriver(int ID) {
-		super(ID, 0);
+	public ItemScrewdriver(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	public static void setmaxdmgs() {
@@ -263,30 +264,30 @@ public class ItemScrewdriver extends ItemRotaryTool
 		if (dir >= 8 && dir <= 15)
 			return dir-4;
 		switch (dir) {
-		case 4:
-			return 3;
-		case 5:
-			return 0;
-		case 6:
-			return 1;
-		case 7:
-			return 2;
-		case 16:
-			return 8;
-		case 17:
-			return 9;
-		case 18:
-			return 10;
-		case 19:
-			return 11;
-		case 20:
-			return 4;
-		case 21:
-			return 5;
-		case 22:
-			return 6;
-		case 23:
-			return 7;
+			case 4:
+				return 3;
+			case 5:
+				return 0;
+			case 6:
+				return 1;
+			case 7:
+				return 2;
+			case 16:
+				return 8;
+			case 17:
+				return 9;
+			case 18:
+				return 10;
+			case 19:
+				return 11;
+			case 20:
+				return 4;
+			case 21:
+				return 5;
+			case 22:
+				return 6;
+			case 23:
+				return 7;
 		}
 		return 0;
 	}

@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -21,8 +22,8 @@ import Reika.RotaryCraft.Base.TileEntityIOMachine;
 @SuppressWarnings("deprecation")
 public class ItemIOGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
 
-	public ItemIOGoggles(int ID, int texID) {
-		super(ID, RotaryCraft.IOGM, texID, 0, 1);
+	public ItemIOGoggles(int ID, int tex, int render) {
+		super(ID, RotaryCraft.IOGM, render, 0, tex);
 		this.setNoRepair();
 	}
 

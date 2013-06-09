@@ -24,7 +24,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -69,14 +71,14 @@ public class BlockGearbox extends BlockModelledMachine {
 			return 0;
 		EnumMaterials type = gbx.type;
 		switch(type) {
-		case WOOD:
-			return 5F;
-		case STONE:
-			return 10F;
-		case STEEL:
-		case DIAMOND:
-		case BEDROCK:
-			return 15F;
+			case WOOD:
+				return 5F;
+			case STONE:
+				return 10F;
+			case STEEL:
+			case DIAMOND:
+			case BEDROCK:
+				return 15F;
 		}
 		return 0;
 	}
@@ -89,7 +91,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return 0.01F;
 		int mult = 1;
 		if (ep.inventory.getCurrentItem() != null) {
-			if (ep.inventory.getCurrentItem().itemID == RotaryCraft.bedpick.itemID)
+			if (ep.inventory.getCurrentItem().itemID == ItemRegistry.BEDPICK.getID())
 				mult = 2;
 		}
 		if (this.canHarvest(world, ep, x, y, z))
@@ -167,18 +169,18 @@ public class BlockGearbox extends BlockModelledMachine {
 			i += 4;
 
 		switch (i) {
-		case 0:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+2);
-			break;
-		case 1:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+1);
-			break;
-		case 2:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+3);
-			break;
-		case 3:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+0);
-			break;
+			case 0:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+2);
+				break;
+			case 1:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+1);
+				break;
+			case 2:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+3);
+				break;
+			case 3:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+0);
+				break;
 		}
 	}
 
@@ -195,24 +197,24 @@ public class BlockGearbox extends BlockModelledMachine {
 		if (tile != null) {
 			ItemStack fix;
 			switch(tile.type) {
-			case WOOD:
-				fix = ItemStacks.woodgear;
-				break;
-			case STONE:
-				fix = ItemStacks.stonegear;
-				break;
-			case STEEL:
-				fix = ItemStacks.steelgear;
-				break;
-			case DIAMOND:
-				fix = ItemStacks.diamondgear;
-				break;
-			case BEDROCK:
-				fix = ItemStacks.bedrockgear;
-				break;
-			default:
-				fix = new ItemStack(Block.stone);
-				break;
+				case WOOD:
+					fix = ItemStacks.woodgear;
+					break;
+				case STONE:
+					fix = ItemStacks.stonegear;
+					break;
+				case STEEL:
+					fix = ItemStacks.steelgear;
+					break;
+				case DIAMOND:
+					fix = ItemStacks.diamondgear;
+					break;
+				case BEDROCK:
+					fix = ItemStacks.bedrockgear;
+					break;
+				default:
+					fix = new ItemStack(Block.stone);
+					break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
 				tile.damage -= 1 + 20 * tile.par5Random.nextInt(18 - tile.ratio);

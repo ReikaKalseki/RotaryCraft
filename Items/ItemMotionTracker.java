@@ -28,6 +28,7 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -40,8 +41,8 @@ public class ItemMotionTracker extends ItemChargedTool {
 	double lastdist;
 	String lastmobname;
 
-	public ItemMotionTracker(int ID) {
-		super(ID, 144);
+	public ItemMotionTracker(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

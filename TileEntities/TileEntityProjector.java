@@ -18,8 +18,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -74,7 +74,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 			emptySlide = false;
 			channel = -1;
 		}
-		if (slides[0].itemID != RotaryCraft.slides.itemID) {
+		if (slides[0].itemID != ItemRegistry.SLIDE.getID()) {
 			emptySlide = true;
 			return;
 		}
@@ -93,26 +93,26 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
-			break;
-		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
-			break;
-		case 2:
-			readz = z-1;
-			readx = x;
-			ready = y;
-			break;
-		case 3:
-			readz = z+1;
-			readx = x;
-			ready = y;
-			break;
+			case 0:
+				readx = x+1;
+				readz = z;
+				ready = y;
+				break;
+			case 1:
+				readx = x-1;
+				readz = z;
+				ready = y;
+				break;
+			case 2:
+				readz = z-1;
+				readx = x;
+				ready = y;
+				break;
+			case 3:
+				readz = z+1;
+				readx = x;
+				ready = y;
+				break;
 		}
 	}
 
@@ -140,28 +140,28 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	public int getRange() {
 		int x; int z;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x = xCoord-1;
-			while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
-				x--;
-			return x-xCoord+1;
-		case 1:
-			x = xCoord+1;
-			while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
-				x++;
-			return -(x-xCoord);
-		case 2:
-			z = zCoord+1;
-			while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
-				z++;
-			return -(z-zCoord);
-		case 3:
-			z = zCoord-1;
-			while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
-				z--;
-			return z-zCoord+1;
-		default:
-			return 0;
+			case 0:
+				x = xCoord-1;
+				while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+					x--;
+				return x-xCoord+1;
+			case 1:
+				x = xCoord+1;
+				while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+					x++;
+				return -(x-xCoord);
+			case 2:
+				z = zCoord+1;
+				while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+					z++;
+				return -(z-zCoord);
+			case 3:
+				z = zCoord-1;
+				while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+					z--;
+				return z-zCoord+1;
+			default:
+				return 0;
 		}
 	}
 
@@ -172,37 +172,37 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		int z = zCoord;
 		int a = 0; int b = 0;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x += r-1;
-			a = 1;
-			break;
-		case 1:
-			x -= r;
-			a = 1;
-			break;
-		case 2:
-			z -= r;
-			b = 1;
-			break;
-		case 3:
-			z += r-1;
-			b = 1;
-			break;
+			case 0:
+				x += r-1;
+				a = 1;
+				break;
+			case 1:
+				x -= r;
+				a = 1;
+				break;
+			case 2:
+				z -= r;
+				b = 1;
+				break;
+			case 3:
+				z += r-1;
+				b = 1;
+				break;
 		}
 		int x2 = x; int z2 = z;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x2++;
-			break;
-		case 1:
-			x2--;
-			break;
-		case 2:
-			z2--;
-			break;
-		case 3:
-			z2++;
-			break;
+			case 0:
+				x2++;
+				break;
+			case 1:
+				x2--;
+				break;
+			case 2:
+				z2--;
+				break;
+			case 3:
+				z2++;
+				break;
 		}
 		World world = worldObj;
 		for (int k = 0; k <= 4; k++) {
@@ -241,46 +241,6 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		return slides[i];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (slides[par1] != null)
-		{
-			if (slides[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = slides[par1];
-				slides[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = slides[par1].splitStack(par2);
-
-			if (slides[par1].stackSize == 0)
-			{
-				slides[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (slides[par1] != null)
-		{
-			ItemStack itemstack = slides[par1];
-			slides[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	@Override
 	public void setInventorySlotContents(int i, ItemStack is) {
 		slides[i] = is;
@@ -288,7 +248,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == RotaryCraft.slides.itemID;
+		return is.itemID == ItemRegistry.SLIDE.getID();
 	}
 
 	@Override

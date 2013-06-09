@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
@@ -22,8 +25,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRegistration {
 
@@ -74,7 +75,15 @@ public class RotaryRegistration {
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			RotaryCraft.machineBlocks[i] = BlockRegistry.blockList[i].createInstance();
 			if (RotaryConfig.consoleMsg)
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+RotaryCraft.machineBlocks[i]+" (slot "+i+")");
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+RotaryCraft.machineBlocks[i].getClass().getSimpleName()+" (slot "+i+")");
+		}
+	}
+
+	public static void instantiateItems() {
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			RotaryCraft.basicItems[i] = ItemRegistry.itemList[i].createInstance();
+			if (RotaryConfig.consoleMsg)
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Item "+ItemRegistry.itemList[i].getBasicName()+" with ID "+ItemRegistry.itemList[i].getID()+" to Item Variable "+RotaryCraft.basicItems[i].getClass().getSimpleName()+" (slot "+i+")");
 		}
 	}
 }

@@ -18,7 +18,7 @@ public class RotaryConfig {
 
 	//Configuration, used for save and load data
 	public static Configuration config;
-
+	/*
 	public static int debugitemid;
 	public static int worldeditid;
 	public static int screwdriverid;
@@ -46,6 +46,7 @@ public class RotaryConfig {
 	public static int targetid;
 	public static int slidesid;
 	public static int iogogglesid;
+	public static int diskid;*/
 
 	public static int modextractsid;
 
@@ -67,7 +68,7 @@ public class RotaryConfig {
 	public static int flywheelitemsid;
 	public static int advgearitemsid;
 
-	public static int infobookid;
+	//public static int infobookid;
 
 	public static boolean playsounds;
 	public static boolean renderores;
@@ -106,6 +107,7 @@ public class RotaryConfig {
 	public static int blastglassid;
 
 	public static int[] machineids = new int[BlockRegistry.blockList.length];
+	public static int[] itemids = new int[ItemRegistry.itemList.length];
 
 	private static HashMap<String,Integer> id = new HashMap<String,Integer>();
 
@@ -131,36 +133,6 @@ public class RotaryConfig {
 		//load data
 		config.load();
 		/********************************/
-		//here you add all configurations like BlockIDs ItemIDs or other settings
-		debugitemid = 		config.getItem("Tool Item IDs", "Debug Item ID", 30610).getInt();
-		worldeditid = 		config.getItem("Tool Item IDs", "WorldEdit Item ID", 30609).getInt();
-
-		screwdriverid = 	config.getItem("Tool Item IDs", "Screwdriver ID", 30617).getInt();
-		meterid = 			config.getItem("Tool Item IDs", "Transducer ID", 30618).getInt();
-		yeastid = 			config.getItem("Item IDs", "Yeast ID", 30619).getInt();
-		ethanolid = 		config.getItem("Item IDs", "Ethanol ID", 30620).getInt();
-		canolaseedid = 		config.getItem("Item IDs", "Canola Seed ID", 30621).getInt();
-		infobookid = 		config.getItem("Item IDs", "Handbook ID", 30622).getInt();
-		windid = 			config.getItem("Item IDs", "Wind Spring ID", 30623).getInt();
-		ultraid = 			config.getItem("Tool Item IDs", "Ultrasound ID", 30624).getInt();
-		motionid = 			config.getItem("Tool Item IDs", "Motion Tracker ID", 30625).getInt();
-		vacid = 			config.getItem("Tool Item IDs", "Vacuum ID", 30626).getInt();
-		stunid = 			config.getItem("Tool Item IDs", "Knockback Gun ID", 30627).getInt();
-		gravelgunid = 		config.getItem("Tool Item IDs", "Gravel Gun ID", 30660).getInt();
-		bedaxeid = 			config.getItem("Tool Item IDs", "Bedrock Axe ID", 30661).getInt();
-		bedpickid = 		config.getItem("Tool Item IDs", "Bedrock Pickaxe ID", 30662).getInt();
-		bedshovid = 		config.getItem("Tool Item IDs", "Bedrock Shovel ID", 30663).getInt();
-		calcid = 			config.getItem("Tool Item IDs", "Calculator ID", 30664).getInt();
-		fireballid = 		config.getItem("Tool Item IDs", "Fireball Launcher ID", 30665).getInt();
-		nvgid = 			config.getItem("Tool Item IDs", "NightVision Goggles ID", 30666).getInt();
-		handcraftid = 		config.getItem("Tool Item IDs", "Handheld Crafting ID", 30667).getInt();
-		nvhid = 			config.getItem("Tool Item IDs", "NightVision Helmet ID", 30668).getInt();
-		railammoid = 		config.getItem("Item IDs", "Railgun Ammo ID", 30669).getInt();
-		fuelbucketid = 		config.getItem("Tool Item IDs", "Bucket ID", 30670).getInt();
-		targetid = 			config.getItem("Tool Item IDs", "Targeting Aid ID", 30671).getInt();
-		iogogglesid = 		config.getItem("Tool Item IDs", "I/O Goggles", 30672).getInt();
-		slidesid = 			config.getItem("Tool Item IDs", "Slide", 30673).getInt();
-
 		machineplacerid = 	config.getItem("Item IDs", "Machine Items", 30616).getInt();
 		heatcraftid = 		config.getItem("Item IDs", "Heat Ray Crafting Items", 30628).getInt();
 		enginecraftid = 	config.getItem("Item IDs", "Engine Crafting Items", 30629).getInt();
@@ -218,6 +190,11 @@ public class RotaryConfig {
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			String name = BlockRegistry.blockList[i].getBlockVariableName();
 			machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
+		}
+
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			String name = ItemRegistry.itemList[i].getBasicName();
+			itemids[i] = config.get("Item IDs", name, 30500+i).getInt();
 		}
 
 		/*******************************/

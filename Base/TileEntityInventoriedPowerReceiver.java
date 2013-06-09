@@ -13,6 +13,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+
 public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
 
 	public void openChest() {
@@ -86,4 +88,12 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 	}
 
 	public abstract boolean isStackValidForSlot(int slot, ItemStack is);
+
+	public final ItemStack decrStackSize(int par1, int par2) {
+		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+	}
+
+	public final ItemStack getStackInSlotOnClosing(int par1) {
+		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
+	}
 }

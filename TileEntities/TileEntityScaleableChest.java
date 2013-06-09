@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -128,32 +129,6 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		return inventory[i];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null)
-		{
-			if (inventory[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-
-			if (inventory[par1].stackSize <= 0)
-			{
-				inventory[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer ep) {
 		if (!this.isStandard8mReach(ep, this))
@@ -161,20 +136,6 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		if (numchanges > 0)
 			return false;
 		return (power >= MINPOWER);
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null)
-		{
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
 	}
 
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -255,26 +216,26 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
-			break;
-		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
-			break;
-		case 3:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
-			break;
-		case 2:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
-			break;
+			case 0:
+				readx = xCoord+1;
+				readz = zCoord;
+				ready = yCoord;
+				break;
+			case 1:
+				readx = xCoord-1;
+				readz = zCoord;
+				ready = yCoord;
+				break;
+			case 3:
+				readz = zCoord+1;
+				readx = xCoord;
+				ready = yCoord;
+				break;
+			case 2:
+				readz = zCoord-1;
+				readx = xCoord;
+				ready = yCoord;
+				break;
 		}
 	}
 

@@ -29,8 +29,8 @@ import Reika.RotaryCraft.Base.ItemRotaryArmor;
 @SuppressWarnings("deprecation")
 public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
 
-	public ItemNightVisionGoggles(int ID, int texID) {
-		super(ID, RotaryCraft.NVGM, texID, 0, 97);
+	public ItemNightVisionGoggles(int ID, int tex, int render) {
+		super(ID, RotaryCraft.NVGM, render, 0, tex);
 		this.setNoRepair();
 		hasSubtypes = true;
 	}

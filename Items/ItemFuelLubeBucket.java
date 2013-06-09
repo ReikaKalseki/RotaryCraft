@@ -13,22 +13,20 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFuelLubeBucket extends ItemRotaryTool implements IndexedItemSprites {
 
 	public static final int[] value = {64,8,16}; //How many units in a bucket (64 lube, 8 jet fuel, 8 ethanol)
 
-	private static final String subNames[] = new String[RotaryNames.bucketNames.length];
-	public ItemFuelLubeBucket(int ID) {
-		super(ID, 0);
+	public ItemFuelLubeBucket(int ID, int tex) {
+		super(ID, tex);
 		hasSubtypes = true;
-		for (int i = 0; i < RotaryNames.bucketNames.length; i++)
-			subNames[i] = String.format("%d", i);
 	}
 
 	@Override

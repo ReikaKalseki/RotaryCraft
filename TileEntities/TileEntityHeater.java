@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -338,46 +339,6 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 			}
 			if (tile.temperature > tile.MAXTEMP)
 				tile.overheat(world, x, y, z);
-		}
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null)
-		{
-			if (inventory[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-
-			if (inventory[par1].stackSize == 0)
-			{
-				inventory[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null)
-		{
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
 		}
 	}
 

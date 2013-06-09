@@ -22,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -31,8 +32,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemGravelGun extends ItemChargedTool {
 
-	public ItemGravelGun(int ID) {
-		super(ID, 176);
+	public ItemGravelGun(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

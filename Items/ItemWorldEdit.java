@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.Base.ItemBasic;
@@ -27,8 +28,8 @@ public class ItemWorldEdit extends ItemBasic {
 	public int[] start = new int[3];
 	public int[] end = new int[3];
 
-	public ItemWorldEdit(int ID) {
-		super(ID, 0);
+	public ItemWorldEdit(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

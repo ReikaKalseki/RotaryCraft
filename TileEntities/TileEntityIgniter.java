@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -113,46 +114,6 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		return inv[i];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize <= 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inv[par1] = par2ItemStack;
@@ -182,25 +143,25 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		int slot = -1;
 		int slot2 = -1;
 		switch(temp) {
-		case 300:
-			slot = ReikaInventoryHelper.locateInInventory(Block.planks.blockID, inv);
-			break;
-		case 400:
-			slot = ReikaInventoryHelper.locateInInventory(Block.wood.blockID, inv);
-			break;
-		case 600:
-			slot = ReikaInventoryHelper.locateInInventory(Item.coal.itemID, inv);
-			break;
-		case 800:
-			slot = ReikaInventoryHelper.locateInInventory(Item.blazePowder.itemID, inv);
-			break;
-		case 1200:
-			slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
-			break;
-		case 2500:
-			slot = ReikaInventoryHelper.locateInInventory(Item.ingotIron.itemID, inv);
-			slot2 = ReikaInventoryHelper.locateInInventory(ItemStacks.aluminumpowder.itemID, inv);
-			break;
+			case 300:
+				slot = ReikaInventoryHelper.locateInInventory(Block.planks.blockID, inv);
+				break;
+			case 400:
+				slot = ReikaInventoryHelper.locateInInventory(Block.wood.blockID, inv);
+				break;
+			case 600:
+				slot = ReikaInventoryHelper.locateInInventory(Item.coal.itemID, inv);
+				break;
+			case 800:
+				slot = ReikaInventoryHelper.locateInInventory(Item.blazePowder.itemID, inv);
+				break;
+			case 1200:
+				slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
+				break;
+			case 2500:
+				slot = ReikaInventoryHelper.locateInInventory(Item.ingotIron.itemID, inv);
+				slot2 = ReikaInventoryHelper.locateInInventory(ItemStacks.aluminumpowder.itemID, inv);
+				break;
 		}
 		ReikaInventoryHelper.decrStack(slot, inv);
 		if (slot2 > -1)

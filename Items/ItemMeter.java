@@ -39,8 +39,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class ItemMeter extends ItemRotaryTool
 {
-	public ItemMeter(int ID) {
-		super(ID, 16);
+	public ItemMeter(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

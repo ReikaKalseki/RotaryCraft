@@ -16,6 +16,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -39,8 +40,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
 public class ItemDebug extends ItemRotaryTool {
 
-	public ItemDebug(int ID) {
-		super(ID, 112);
+	public ItemDebug(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

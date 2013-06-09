@@ -15,24 +15,21 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemBasic;
+
 public class ItemCoil extends ItemBasic
 {
-	private static final String subNames[] = new String[65536];
-
-	public ItemCoil(int ID) {
-		super(ID, 96); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemCoil(int ID, int tex) {
+		super(ID, tex);
 		maxStackSize = 1;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		hasSubtypes = true;
 		this.setMaxDamage(0);
-		for (int i = 0; i < 65536; i++)
-			subNames[i] = String.format("%d", i);
 	}
 
 	@Override
@@ -63,14 +60,6 @@ public class ItemCoil extends ItemBasic
 	@Override
 	public int getMetadata (int damageValue) {
 		return damageValue;
-	}
-
-	public String getItemNameIS(ItemStack is) {
-		//int dmg = is.getItemDamage();
-		//return this.subNames[dmg];
-		if (is.getItemDamage() < 0)
-			is.setItemDamage(0);
-		return new StringBuilder().append("wind").append(subNames[is.getItemDamage()]).toString();
 	}
 
 	@Override

@@ -11,16 +11,14 @@ package Reika.RotaryCraft.Base;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -29,15 +27,10 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 
 	private int type;
-
-	private Icon[][] ico = new Icon[16][16];
-	private String[][] tex = new String[16][16];
 
 	public ItemMulti(int ID, int par2type) {
 		super(ID, 0); //Returns super constructor: par1 is ID
@@ -115,48 +108,48 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 	{
 		int j;
 		switch (type) {
-		case 0: //shaftcraft
-			j = RotaryNames.shaftPartNames.length;
-			break;
-		case 1: //enginecraft
-			j = RotaryNames.enginePartNames.length;
-			break;
-		case 2: //heatcraft
-			j = RotaryNames.heatPartNames.length;
-			break;
-		case 3: //misccraft 2
-			j = RotaryNames.borerPartNames.length;
-			break;
-		case 4: //extracts
-			j = RotaryNames.extractNames.length;
-			break;
-		case 6: //compacts
-			j = RotaryNames.compactNames.length;
-			break;
-		case 7: //engines
-			j = RotaryNames.engineNames.length;
-			break;
-		case 8: //powders
-			j = RotaryNames.powderNames.length;
-			break;
-		case 9: //spawner
-			j = RotaryNames.spawnerNames.length;
-			break;
-		case 10: //pipe items
-			j = RotaryNames.pipeNames.length;
-			break;
-		case 11: //shafts
-			j = RotaryNames.shaftItemNames.length;
-			break;
-		case 12: //gearboxes
-			j = RotaryNames.gearboxItemNames.length;
-			break;
-		case 23: //gearunits
-			j = RotaryNames.gearUnitNames.length;
-			break;
-		default:
-			j = 0;
-			break;
+			case 0: //shaftcraft
+				j = RotaryNames.shaftPartNames.length;
+				break;
+			case 1: //enginecraft
+				j = RotaryNames.enginePartNames.length;
+				break;
+			case 2: //heatcraft
+				j = RotaryNames.heatPartNames.length;
+				break;
+			case 3: //misccraft 2
+				j = RotaryNames.borerPartNames.length;
+				break;
+			case 4: //extracts
+				j = RotaryNames.extractNames.length;
+				break;
+			case 6: //compacts
+				j = RotaryNames.compactNames.length;
+				break;
+			case 7: //engines
+				j = RotaryNames.engineNames.length;
+				break;
+			case 8: //powders
+				j = RotaryNames.powderNames.length;
+				break;
+			case 9: //spawner
+				j = RotaryNames.spawnerNames.length;
+				break;
+			case 10: //pipe items
+				j = RotaryNames.pipeNames.length;
+				break;
+			case 11: //shafts
+				j = RotaryNames.shaftItemNames.length;
+				break;
+			case 12: //gearboxes
+				j = RotaryNames.gearboxItemNames.length;
+				break;
+			case 23: //gearunits
+				j = RotaryNames.gearUnitNames.length;
+				break;
+			default:
+				j = 0;
+				break;
 		}
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
@@ -176,46 +169,6 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public Icon getIconFromDamage(int i) {
-		this.setIcons();
-		int ty = type;/*
-		int ty = this.type;
-		while (ty >= 16)
-			ty -= 16;
-		i += this.type*16;
-		//return i;
-		return null;*/
-		if (i >= 16) {
-			ty++;
-			i -= 16;
-		}
-		while (ty >= 16)
-			ty -= 16;
-		return ico[ty][i];
-	}
-
-	private void setIcons() {
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				tex[i][j] = null;
-			}
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1)
-	{
-		for (int i = 0; i < 16; ++i)
-			for (int j = 0; j < 16; ++j) {
-				tex[i][j] = "RotaryCraft:items"; //backup plan read RotaryNames for filename
-				ico[i][j] = par1.registerIcon(tex[i][j]);
-				GL11.glColor3f(1, 1, 0);
-			}
-	}
-
 	@Override
 	public int getMetadata (int damageValue) {
 		return damageValue;
@@ -226,32 +179,32 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 	{
 		int d = is.getItemDamage();
 		switch(type) {
-		case 0:
-			return super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
-		case 1:
-			return super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
-		case 2:
-			return super.getUnlocalizedName() + "." + RotaryNames.heatPartNames[d];
-		case 3:
-			return super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
-		case 4:
-			return super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
-		case 6:
-			return super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
-		case 7:
-			return super.getUnlocalizedName() + "." + RotaryNames.engineNames[d];
-		case 8:
-			return super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
-		case 9:
-			return super.getUnlocalizedName() + "." + RotaryNames.spawnerNames[d];
-		case 10:
-			return super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
-		case 11:
-			return super.getUnlocalizedName() + "." + RotaryNames.shaftNames[d];
-		case 12:
-			return super.getUnlocalizedName() + "." + RotaryNames.gearboxItemNames[d];
-		case 23:
-			return super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
+			case 0:
+				return super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+			case 1:
+				return super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+			case 2:
+				return super.getUnlocalizedName() + "." + RotaryNames.heatPartNames[d];
+			case 3:
+				return super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+			case 4:
+				return super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+			case 6:
+				return super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+			case 7:
+				return super.getUnlocalizedName() + "." + RotaryNames.engineNames[d];
+			case 8:
+				return super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+			case 9:
+				return super.getUnlocalizedName() + "." + RotaryNames.spawnerNames[d];
+			case 10:
+				return super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
+			case 11:
+				return super.getUnlocalizedName() + "." + RotaryNames.shaftNames[d];
+			case 12:
+				return super.getUnlocalizedName() + "." + RotaryNames.gearboxItemNames[d];
+			case 23:
+				return super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
 		}
 		return super.getUnlocalizedName();
 	}

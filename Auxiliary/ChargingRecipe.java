@@ -13,8 +13,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.ItemRegistry;
 
 public class ChargingRecipe implements IRecipe {
 
@@ -26,7 +27,7 @@ public class ChargingRecipe implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting ic, World world) {
-		if (ReikaInventoryHelper.checkForItem(ic, output.itemID, -1) && ReikaInventoryHelper.checkForItem(ic, RotaryCraft.wind.itemID, -1))
+		if (ReikaInventoryHelper.checkForItem(ic, output.itemID, -1) && ReikaInventoryHelper.checkForItem(ic, ItemRegistry.SPRING.getID(), -1))
 			return true;
 		return false;
 	}

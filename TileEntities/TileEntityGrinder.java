@@ -16,8 +16,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -57,29 +57,29 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return false;
 		int id = 0;
 		switch (metadata) {
-		case 0:
-			id = world.getBlockId(x+1, y, z);
-			readx = x+1;
-			readz = z;
-			break;
-		case 1:
-			id = world.getBlockId(x-1, y, z);
-			readx = x-1;
-			readz = z;
-			break;
-		case 2:
-			id = world.getBlockId(x, y, z+1);
-			readx = x;
-			readz = z+1;
-			break;
-		case 3:
-			id = world.getBlockId(x, y, z-1);
-			readx = x;
-			readz = z-1;
-			break;
-		default:
-			id = 0;
-			break;
+			case 0:
+				id = world.getBlockId(x+1, y, z);
+				readx = x+1;
+				readz = z;
+				break;
+			case 1:
+				id = world.getBlockId(x-1, y, z);
+				readx = x-1;
+				readz = z;
+				break;
+			case 2:
+				id = world.getBlockId(x, y, z+1);
+				readx = x;
+				readz = z+1;
+				break;
+			case 3:
+				id = world.getBlockId(x, y, z-1);
+				readx = x;
+				readz = z-1;
+				break;
+			default:
+				id = 0;
+				break;
 		}
 		ready = yCoord;
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready+3, readz, 4);
@@ -109,35 +109,6 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 	public ItemStack getStackInSlot(int par1)
 	{
 		return inventory[par1];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null) {
-			if (inventory[par1].stackSize <= par2) {
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-			if (inventory[par1].stackSize == 0)
-				inventory[par1] = null;
-
-			return itemstack1;
-		}
-		else
-			return null;
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null) {
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-			return null;
 	}
 
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -265,10 +236,10 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return false;
 		}
 
-		if (inventory[0].itemID == RotaryCraft.canolaseed.itemID && inventory[0].getItemDamage() == 0) {
+		if (inventory[0].itemID == ItemRegistry.CANOLA.getID() && inventory[0].getItemDamage() == 0) {
 			return (lubricant < MAXLUBE);
 		}
-		if (inventory[0].itemID == RotaryCraft.canolaseed.itemID && inventory[0].getItemDamage() == 1) {
+		if (inventory[0].itemID == ItemRegistry.CANOLA.getID() && inventory[0].getItemDamage() == 1) {
 			return (lubricant < MAXLUBE-9);
 		}
 
@@ -312,7 +283,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 		{
 			return;
 		}
-		if (inventory[0] != null && inventory[0].itemID == RotaryCraft.canolaseed.itemID) {
+		if (inventory[0] != null && inventory[0].itemID == ItemRegistry.CANOLA.getID()) {
 			int num = 1;
 			if (inventory[0].getItemDamage() == 1)
 				num = 9;

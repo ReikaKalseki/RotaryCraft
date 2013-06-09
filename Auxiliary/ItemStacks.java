@@ -14,6 +14,8 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 
 public final class ItemStacks {
@@ -28,9 +30,9 @@ public final class ItemStacks {
 	public static final ItemStack silveriodide = new ItemStack(RotaryCraft.powders.itemID, 1, 7);
 	public static final ItemStack aluminumpowder = new ItemStack(RotaryCraft.powders.itemID, 1, 8);
 
-	public static final ItemStack lubebucket = new ItemStack(RotaryCraft.fuelbucket.itemID, 1, 0);
-	public static final ItemStack fuelbucket = new ItemStack(RotaryCraft.fuelbucket.itemID, 1, 1);
-	public static final ItemStack ethanolbucket = new ItemStack(RotaryCraft.fuelbucket.itemID, 1, 2);
+	public static final ItemStack lubebucket = ItemRegistry.BUCKET.getStackOfMetadata(0);
+	public static final ItemStack fuelbucket = ItemRegistry.BUCKET.getStackOfMetadata(1);
+	public static final ItemStack ethanolbucket = ItemRegistry.BUCKET.getStackOfMetadata(2);
 
 	public static final ItemStack bedingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 3);
 	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);

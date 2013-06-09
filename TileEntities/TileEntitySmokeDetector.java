@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -85,7 +85,7 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 	public boolean checkValidCoil() {
 		if (battery[0] == null)
 			return false;
-		if (battery[0].itemID != RotaryCraft.wind.itemID)
+		if (battery[0].itemID != ItemRegistry.SPRING.getID())
 			return false;
 		return true;
 	}

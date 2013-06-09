@@ -14,14 +14,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
 public class ItemTarget extends ItemBasic {
 
-	public ItemTarget(int ID) {
-		super(ID, 98);
+	public ItemTarget(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

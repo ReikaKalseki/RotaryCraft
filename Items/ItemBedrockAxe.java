@@ -10,9 +10,13 @@
 package Reika.RotaryCraft.Items;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockGravLeaves;
@@ -22,8 +26,9 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockAxe(int par1) {
-		super(par1, EnumToolMaterial.GOLD);
+	public ItemBedrockAxe(int ID, int tex) {
+		super(ID, EnumToolMaterial.GOLD);
+		this.setIndex(tex);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		maxStackSize = 1;
@@ -32,7 +37,6 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 6;
 		this.setNoRepair();
-		this.setIndex(100);
 	}
 
 	@Override
@@ -67,4 +71,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	public void setIndex(int a) {
 		index = a;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void registerIcons(IconRegister ico) {}
 }

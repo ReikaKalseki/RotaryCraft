@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -29,8 +30,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemVacuum extends ItemChargedTool {
 
-	public ItemVacuum(int ID) {
-		super(ID, 160);
+	public ItemVacuum(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

@@ -12,13 +12,14 @@ package Reika.RotaryCraft.Items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemHandBook extends ItemRotaryTool {
 
-	public ItemHandBook(int ID) {
-		super(ID, 208); //calling the super constructor and giving him the itemID so minecraft knows the itemID
+	public ItemHandBook(int ID, int tex) {
+		super(ID, tex);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.monster.EntitySilverfish;
@@ -36,15 +37,15 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 
 	private int index;
 
-	public ItemBedrockPickaxe(int par1) {
-		super(par1, EnumToolMaterial.GOLD);
+	public ItemBedrockPickaxe(int ID, int tex) {
+		super(ID, EnumToolMaterial.GOLD);
+		this.setIndex(tex);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 5;
 		this.setNoRepair();
-		this.setIndex(101);
 	}
 
 	@Override
@@ -61,45 +62,45 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		return true;
 	}
 
-    @Override
+	@Override
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
-    {
-    	World world = ep.worldObj;
-    	if (world.getBlockId(x, y, z) != Block.silverfish.blockID)
-    		return false;
-    	int meta = world.getBlockMetadata(x, y, z);
-    	world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-    	world.setBlock(x, y, z, 0);/*
+	{
+		World world = ep.worldObj;
+		if (world.getBlockId(x, y, z) != Block.silverfish.blockID)
+			return false;
+		int meta = world.getBlockMetadata(x, y, z);
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+		world.setBlock(x, y, z, 0);/*
     	if (world.isRemote) {
     		for (int i = 0; i < 16; i++) {
 	    		ReikaModelledBreakFX e = new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), 0.4*itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), Block.silverfish, meta, 0, Minecraft.getMinecraft().renderEngine, "/terrain.png", 0, 0);
 	    		world.spawnEntityInWorld(e);
     		}
     	}*/
-    	ItemStack drop;
-    	switch(meta) {
-    		case 0:
-    			drop = new ItemStack(Block.stone);
-    			break;
-    		case 1:
-    			drop = new ItemStack(Block.cobblestone);
-    			break;
-    		case 2:
-    			drop = new ItemStack(Block.stoneBrick);
-    			break;
-    		default:
-    			drop = null;
-    	}
-    	ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
-    	EntitySilverfish si = new EntitySilverfish(world);
-    	si.setPosition(x+0.5, y, z+0.5);
-    	si.setEntityHealth(0);
-    	if (world.isRemote)
-    		world.spawnEntityInWorld(si);
-    	world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
-    	ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
-        return true;
-    }
+		ItemStack drop;
+		switch(meta) {
+			case 0:
+				drop = new ItemStack(Block.stone);
+				break;
+			case 1:
+				drop = new ItemStack(Block.cobblestone);
+				break;
+			case 2:
+				drop = new ItemStack(Block.stoneBrick);
+				break;
+			default:
+				drop = null;
+		}
+		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
+		EntitySilverfish si = new EntitySilverfish(world);
+		si.setPosition(x+0.5, y, z+0.5);
+		si.setEntityHealth(0);
+		if (world.isRemote)
+			world.spawnEntityInWorld(si);
+		world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
+		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
+		return true;
+	}
 
 	@Override
 	public float getStrVsBlock(ItemStack is, Block par2Block) {
@@ -147,4 +148,8 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	public void setIndex(int a) {
 		index = a;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void registerIcons(IconRegister ico) {}
 }

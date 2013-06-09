@@ -36,9 +36,9 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -279,7 +279,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		switch(type) {
 			case GAS:
 				if (fuelslot[0] != null && ethanols < FUELCAP) {
-					if (fuelslot[0].itemID == RotaryCraft.ethanol.itemID) {
+					if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
 						ReikaInventoryHelper.decrStack(0, fuelslot);
 						ethanols++;
 					}
@@ -292,7 +292,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				break;
 			case SPORT:
 				if (fuelslot[0] != null && ethanols < FUELCAP) {
-					if (fuelslot[0].itemID == RotaryCraft.ethanol.itemID) {
+					if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
 						ReikaInventoryHelper.decrStack(0, fuelslot);
 						ethanols++;
 					}
@@ -928,7 +928,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 								item.motionZ = dumpvz*1.5D;
 								if (!worldObj.isRemote)
 									caught.velocityChanged = true;
-								if (is.itemID == RotaryCraft.screwdriver.itemID) {
+								if (is.itemID == ItemRegistry.SCREWDRIVER.getID()) {
 									caught.setDead();
 									isJetFailing = true;
 								}
@@ -1248,7 +1248,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			case AC:
 				return true;
 			case SPORT:
-				return (i == 0 && is.itemID == RotaryCraft.ethanol.itemID) || (i == 1 && type.isAdditive(is));
+				return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getID()) || (i == 1 && type.isAdditive(is));
 			default:
 				return false;
 		}

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -151,57 +152,6 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		return inv[par1];
 	}
 
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize <= 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inv[par1] = par2ItemStack;
@@ -271,18 +221,18 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		int j = i+1;
 		int time = -1;
 		switch (j) {
-		case 1:
-			time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
-			break;
-		case 2:
-			time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
-			break;
-		case 3:
-			time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		case 4:
-			time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-			break;
+			case 1:
+				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
+				break;
+			case 2:
+				time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
+				break;
+			case 3:
+				time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+				break;
+			case 4:
+				time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+				break;
 		}
 		if (time == -1)
 			return 0;

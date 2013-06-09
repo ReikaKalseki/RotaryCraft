@@ -26,11 +26,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelLandmine;
@@ -250,20 +251,20 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
 		switch (i) {
-		case 0:
-			return is.itemID == RotaryCraft.wind.itemID;
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			return is.itemID == Item.gunpowder.itemID;
-		case 5:
-		case 6:
-		case 7:
-		case 8:
-			return this.isModifier(is);
-		default:
-			return false;
+			case 0:
+				return is.itemID == ItemRegistry.SPRING.getID();
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				return is.itemID == Item.gunpowder.itemID;
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				return this.isModifier(is);
+			default:
+				return false;
 		}
 	}
 
@@ -312,13 +313,13 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (inv[0] == null)
 			return;
-		if (inv[0].itemID != RotaryCraft.wind.itemID)
+		if (inv[0].itemID != ItemRegistry.SPRING.getID())
 			return;
 		tickcount++;
 		if (inv[0].getItemDamage() > 0) {
 			int dmg = inv[0].getItemDamage();
 			if (tickcount > 120) {
-				ItemStack is = new ItemStack(RotaryCraft.wind.itemID, 1, dmg-1);
+				ItemStack is = new ItemStack(ItemRegistry.SPRING.getID(), 1, dmg-1);
 				inv[0] = is;
 				tickcount = 0;
 			}

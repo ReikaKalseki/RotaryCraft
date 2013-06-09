@@ -16,11 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFireballLauncher extends ItemChargedTool {
 
@@ -28,9 +29,9 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	private int texture;
 	private int defaulttex;
 
-	public ItemFireballLauncher(int ID) {
-		super(ID, 224);
-		texture = 224;
+	public ItemFireballLauncher(int ID, int tex) {
+		super(ID, tex);
+		texture = tex;
 		defaulttex = texture;
 	}
 

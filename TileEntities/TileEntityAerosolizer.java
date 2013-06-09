@@ -25,6 +25,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
@@ -34,8 +37,6 @@ import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelAerosolizer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
 
@@ -351,57 +352,6 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 		return contents[par1];
 	}
 
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (contents[par1] != null)
-		{
-			if (contents[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = contents[par1];
-				contents[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = contents[par1].splitStack(par2);
-
-			if (contents[par1].stackSize <= 0)
-			{
-				contents[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-
-
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (contents[par1] != null)
-		{
-			ItemStack itemstack = contents[par1];
-			contents[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		contents[par1] = par2ItemStack;

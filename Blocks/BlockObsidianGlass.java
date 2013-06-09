@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
@@ -57,12 +58,12 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 		return 6000F;
 	}
 
-    @Override
+	@Override
 	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int s)
-    {
-        int i1 = iba.getBlockId(x, y, z);
-        return i1 == blockID ? false : super.shouldSideBeRendered(iba, z, y, z, s);
-    }
+	{
+		int i1 = iba.getBlockId(x, y, z);
+		return i1 == blockID ? false : super.shouldSideBeRendered(iba, z, y, z, s);
+	}
 
 	@Override
 	public int getRenderType() {
@@ -80,7 +81,7 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 		ItemStack item = ep.inventory.getCurrentItem();
 		if (item == null)
 			return false;
-		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != RotaryCraft.bedpick.itemID)
+		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != ItemRegistry.BEDPICK.getID())
 			return false;
 		return true;
 	}

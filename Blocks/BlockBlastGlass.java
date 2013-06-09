@@ -18,8 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
@@ -64,7 +66,7 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 		ItemStack item = ep.inventory.getCurrentItem();
 		if (item == null)
 			return false;
-		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != RotaryCraft.bedpick.itemID)
+		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != ItemRegistry.BEDPICK.getID())
 			return false;
 		return true;
 	}

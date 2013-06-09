@@ -218,57 +218,6 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		return inv[par1];
 	}
 
-	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize <= 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inv[par1] = par2ItemStack;
@@ -420,49 +369,49 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 				return 780;
 		}
 		switch (id) {
-		case 49:
-			return 800; //obsidian melting
-		case 265:
-			return 900;	//steelmaking
-		case 145:	//anvil (31 iron)
-		case 154: //hopper (5 iron)
-		case 256:
-		case 257:
-		case 258:
-		case 267:
-		case 292:
-		case 306:
-		case 307:
-		case 308:
-		case 309:
-		case 325:
-		case 326:
-		case 327:
-		case 328:
-		case 330:
-		case 335:
-		case 380:
-		case 302:
-		case 303:
-		case 304:
-		case 305:
-		case 259:
-		case 66:
-		case 28:
-		case 101:
-		case 157:	//activator rails (6 iron)
-			return 780;	//iron /2
-		case 283:
-		case 284:
-		case 285:
-		case 286:
-		case 294:
-		case 314:
-		case 315:
-		case 316:
-		case 317:
-		case 27:
-			return 530;	//gold /2
+			case 49:
+				return 800; //obsidian melting
+			case 265:
+				return 900;	//steelmaking
+			case 145:	//anvil (31 iron)
+			case 154: //hopper (5 iron)
+			case 256:
+			case 257:
+			case 258:
+			case 267:
+			case 292:
+			case 306:
+			case 307:
+			case 308:
+			case 309:
+			case 325:
+			case 326:
+			case 327:
+			case 328:
+			case 330:
+			case 335:
+			case 380:
+			case 302:
+			case 303:
+			case 304:
+			case 305:
+			case 259:
+			case 66:
+			case 28:
+			case 101:
+			case 157:	//activator rails (6 iron)
+				return 780;	//iron /2
+			case 283:
+			case 284:
+			case 285:
+			case 286:
+			case 294:
+			case 314:
+			case 315:
+			case 316:
+			case 317:
+			case 27:
+				return 530;	//gold /2
 
 		}
 		return -1;
