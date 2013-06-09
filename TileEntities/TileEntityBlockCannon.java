@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -18,19 +19,21 @@ import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 
 public class TileEntityBlockCannon extends TileEntityInventoriedPowerReceiver {
 
+	public ItemStack[] blocks = new ItemStack[27];
+
 	@Override
 	public int getSizeInventory() {
-		return 0;
+		return blocks.length;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return null;
+		return blocks[i];
 	}
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return false;
+		return is.getItem() instanceof ItemBlock; //Blocks only
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class TileEntityBlockCannon extends TileEntityInventoriedPowerReceiver {
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-
+		blocks[i] = itemstack;
 	}
 
 }

@@ -18,6 +18,7 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 
@@ -85,102 +86,102 @@ public class GuiBevel extends GuiNonPoweredMachine
 	public void getDirectionFromIO() {
 		System.out.print(bevel.colorNames[in]+" to "+bevel.colorNames[out]+" -> data: ");
 		switch(in) {
-		case 0:
-			switch(out) {
-			case 2:
-				posn = 13;
-				break;
-			case 3:
-				posn = 15;
-				break;
-			case 4:
-				posn = 12;
-				break;
-			case 5:
-				posn = 14;
-				break;
-			}
-			break;
-		case 1:
-			switch(out) {
-			case 2:
-				posn = 21;
-				break;
-			case 3:
-				posn = 23;
-				break;
-			case 4:
-				posn = 20;
-				break;
-			case 5:
-				posn = 22;
-				break;
-			}
-			break;
-		case 2:
-			switch(out) {
 			case 0:
-				posn = 17;
+				switch(out) {
+					case 2:
+						posn = 13;
+						break;
+					case 3:
+						posn = 15;
+						break;
+					case 4:
+						posn = 12;
+						break;
+					case 5:
+						posn = 14;
+						break;
+				}
 				break;
 			case 1:
-				posn = 9;
-				break;
-			case 4:
-				posn = 5;
-				break;
-			case 5:
-				posn = 1;
-				break;
-			}
-			break;
-		case 3:
-			switch(out) {
-			case 0:
-				posn = 19;
-				break;
-			case 1:
-				posn = 11;
-				break;
-			case 4:
-				posn = 3;
-				break;
-			case 5:
-				posn = 7;
-				break;
-			}
-			break;
-		case 4:
-			switch(out) {
-			case 0:
-				posn = 16;
-				break;
-			case 1:
-				posn = 8;
+				switch(out) {
+					case 2:
+						posn = 21;
+						break;
+					case 3:
+						posn = 23;
+						break;
+					case 4:
+						posn = 20;
+						break;
+					case 5:
+						posn = 22;
+						break;
+				}
 				break;
 			case 2:
-				posn = 0;
+				switch(out) {
+					case 0:
+						posn = 17;
+						break;
+					case 1:
+						posn = 9;
+						break;
+					case 4:
+						posn = 5;
+						break;
+					case 5:
+						posn = 1;
+						break;
+				}
 				break;
 			case 3:
-				posn = 4;
+				switch(out) {
+					case 0:
+						posn = 19;
+						break;
+					case 1:
+						posn = 11;
+						break;
+					case 4:
+						posn = 3;
+						break;
+					case 5:
+						posn = 7;
+						break;
+				}
 				break;
-			}
-			break;
-		case 5:
-			switch(out) {
-			case 0:
-				posn = 18;
+			case 4:
+				switch(out) {
+					case 0:
+						posn = 16;
+						break;
+					case 1:
+						posn = 8;
+						break;
+					case 2:
+						posn = 0;
+						break;
+					case 3:
+						posn = 4;
+						break;
+				}
 				break;
-			case 1:
-				posn = 10;
+			case 5:
+				switch(out) {
+					case 0:
+						posn = 18;
+						break;
+					case 1:
+						posn = 10;
+						break;
+					case 2:
+						posn = 6;
+						break;
+					case 3:
+						posn = 2;
+						break;
+				}
 				break;
-			case 2:
-				posn = 6;
-				break;
-			case 3:
-				posn = 2;
-				break;
-			}
-			break;
 		}
 	}
 
@@ -207,7 +208,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		}
 		this.getDirectionFromIO();
 		this.initGui();
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 4, bevel, ep, posn);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.BEVEL.getMinValue(), bevel, ep, posn);
 	}
 
 	@Override

@@ -9,15 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.net.URL;
 
-import net.minecraft.network.packet.Packet62LevelSound;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 
 public enum SoundRegistry {
 
@@ -70,8 +73,9 @@ public enum SoundRegistry {
 	public static void playSound(SoundRegistry s, World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
-		Packet62LevelSound p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
-		PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
+		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
+		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
+		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, s.getPlayableReference(), x, y, z, vol, pitch);
 	}
 
 	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {
@@ -114,5 +118,23 @@ public enum SoundRegistry {
 		}
 		ReikaJavaLibrary.pConsole("\""+name+"\" does not correspond to a registered sound!");
 		return null;
+	}
+
+	public static void playSoundPacket(DataInputStream in) {
+		String name;
+		try {
+			name = Packet.readString(in, Short.MAX_VALUE);
+			//ReikaJavaLibrary.pConsole(name+" on "+FMLCommonHandler.instance().getEffectiveSide());
+			double x = in.readDouble();
+			double y = in.readDouble();
+			double z = in.readDouble();
+			float v = in.readFloat();
+			float p = in.readFloat();
+			Minecraft.getMinecraft().theWorld.playSound(x, y, z, name, v, p, false);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			ReikaJavaLibrary.pConsole("Sound could not be played due to IOException!");
+		}
 	}
 }

@@ -140,8 +140,8 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	private void fire(World world, int x, int y, int z) {
 		for (int i = 0; i < 1; i++) {
 			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
-			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*par5Random.nextFloat()*12, 0.1F*par5Random.nextFloat());
-			//world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*par5Random.nextFloat()*12, 0.1F*par5Random.nextFloat());
+			world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
 			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x+0.5, y+1.5-0.0625, z+0.5, null);
 			double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
 			tnt.motionX = xyz[0];
@@ -153,11 +153,6 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 			tnt.velocityChanged = true;
 			world.spawnEntityInWorld(tnt);
 		}
-	}
-
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
 	}
 
 	/**

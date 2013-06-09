@@ -21,6 +21,7 @@ import Reika.DragonAPI.IO.ReikaMIDIReader;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 
@@ -176,7 +177,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 	public void actionPerformed(GuiButton button) {
 		if (ReikaMathLibrary.isValueInsideBoundsIncl(LENGTHSTART, LENGTHSTART+4, button.id)) {
 			noteLength = button.id-LENGTHSTART;
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 21, music, ep, noteLength, 0, 0, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue(), music, ep, noteLength, 0, 0, 0);
 			this.initGui();
 		}
 		if (button.id == 0)
@@ -185,29 +186,29 @@ public class GuiMusic extends GuiNonPoweredMachine
 			this.addNote(button.id);
 		}
 		if (button.id == 1) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 23, music, ep, channel, voice, addednote, volume);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+2, music, ep, channel, voice, addednote, volume);
 		}
 		if (button.id == 2) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 24, music, ep, channel, voice, addednote, volume);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+3, music, ep, channel, voice, addednote, volume);
 		}
 		if (button.id == 3) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 25, music, ep, channel, 0, 0, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+4, music, ep, channel, 0, 0, 0);
 		}
 		if (button.id == 4) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 26, music, ep, 0, 0, 0, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+5, music, ep, 0, 0, 0, 0);
 		}
 		if (button.id == 5) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 27, music, ep, 0, 0, 0, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+6, music, ep, 0, 0, 0, 0);
 		}
 		if (button.id == 6) {
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 28, music, ep, 0, 0, 0, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+7, music, ep, 0, 0, 0, 0);
 		}
 	}
 
 	private void addNote(int note) {
 		note -= NOTESTART;
 		addednote = note;
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 22, music, ep, channel, voice, addednote, volume);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue()+1, music, ep, channel, voice, addednote, volume);
 	}
 
 	/**

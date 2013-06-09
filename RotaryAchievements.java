@@ -117,7 +117,6 @@ public enum RotaryAchievements {
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();
 			//ModLoader.addAchievementDesc(RotaryCraft.achievements[i], list[i].getName(), list[i].getDesc());
-
 		}
 	}
 

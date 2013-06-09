@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -19,6 +18,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 
@@ -93,11 +93,6 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
-	}
-
-	@Override
 	public void updateScreen() {
 		super.updateScreen();
 		boolean valid1 = true;
@@ -114,14 +109,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			freq = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, ep, freq);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMinValue(), sonic, ep, freq);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			dB = 0;
 			this.getVolFromdB();
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMaxValue(), sonic, ep, vol);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -131,13 +126,13 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (valid1) {
 			freq = Long.parseLong(input.getText());
 			if (freq >= 0)
-				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 15, sonic, ep, freq);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMinValue(), sonic, ep, freq);
 		}
 		if (valid2) {
 			dB = Integer.parseInt(input2.getText());
 			if (dB >= 0) {
 				this.getVolFromdB();
-				ReikaPacketHelper.sendLongPacket(RotaryCraft.packetChannel, 16, sonic, ep, vol);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMaxValue(), sonic, ep, vol);
 			}
 		}
 	}

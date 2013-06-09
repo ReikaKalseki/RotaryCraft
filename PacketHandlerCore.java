@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
+import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -64,6 +65,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityItemCannon icannon;
 
 	protected EnumPackets pack;
+	protected PacketTypes packetType;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -83,6 +85,11 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		boolean readinglong = false;
 		//System.out.print(packet.length);
 		try {
+			packetType = PacketTypes.getPacketType(inputStream.readInt());
+			if (packetType == PacketTypes.SOUND) {
+				SoundRegistry.playSoundPacket(inputStream);
+				return;
+			}
 			control = inputStream.readInt();
 			pack = EnumPackets.getEnum(control);
 			len = pack.getNumberDataInts();

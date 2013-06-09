@@ -22,6 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -87,7 +88,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			page--;
 		if (page == oldpage)
 			return;
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 18, scale, ep, page);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CHEST.getMinValue(), scale, ep, page);
 		//player.closeScreen();
 		//this.refresh();
 		//this.setValues();

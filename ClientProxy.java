@@ -117,36 +117,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.compacts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.extracts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gearunits.itemID, items[0]);
-		/*
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.screwdriver.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.meter.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.infobook.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.yeast.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.ethanol.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.canolaseed.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.wind.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.ultra.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.motiontracker.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.vac.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.stun.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gravelgun.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.fireball.itemID, items2);
-		//MinecraftForgeClient.registerItemRenderer(RotaryCraft.calc.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.bedpick.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.bedaxe.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.bedshov.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.nvg.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.nvh.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.handcraft.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.railammo.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.debug.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.worldedit.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.fuelbucket.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.target.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.iogoggles.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.slides.itemID, items2);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.disk.itemID, items2);
-		 */
+
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemList[i].getID(), items[ItemRegistry.itemList[i].getTextureSheet()]);
 		}

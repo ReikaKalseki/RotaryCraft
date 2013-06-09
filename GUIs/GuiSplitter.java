@@ -11,9 +11,11 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 
@@ -65,10 +67,10 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id <= 8) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 6, splitter, ep, mode);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.SPLITTER.getMinValue(), splitter, ep, mode);
 		}
 		if (button.id == 9)
-			ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, 7, splitter, ep, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.SPLITTER.getMaxValue(), splitter, ep, 0);
 		this.updateScreen();
 
 	}

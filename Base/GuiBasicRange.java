@@ -75,17 +75,17 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 			range = 0;
 			input.deleteFromCursor(-1);
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0) {
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
 		}
 	}
 

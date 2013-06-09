@@ -15,14 +15,15 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiVacuum extends GuiPowerOnlyMachine
@@ -59,7 +60,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
 	}
 
 	/**
