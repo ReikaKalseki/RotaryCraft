@@ -59,7 +59,9 @@ public enum PowerReceivers {
 	PURIFIER(64, 1, 16384),
 	LASERGUN(8388608),
 	ITEMCANNON(128, 1, 32768),
-	FRICTION(256, 1, 16384);
+	FRICTION(256, 1, 16384),
+	BLOCKCANNON(),
+	BUCKETFILLER(1, 512, 8192);
 
 	private int minT;
 	private int minS;

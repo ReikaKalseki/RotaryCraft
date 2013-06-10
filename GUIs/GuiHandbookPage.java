@@ -13,15 +13,12 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-
 public class GuiHandbookPage extends GuiHandbook {
 
 	public GuiHandbookPage(EntityPlayer p5ep, World world, int sc, int pg) {
 		super(p5ep, world);
 		screen = (byte)sc;
 		page = (byte)pg;
-		ReikaJavaLibrary.pConsole(screen+"  "+page);
 	}
 
 	@Override

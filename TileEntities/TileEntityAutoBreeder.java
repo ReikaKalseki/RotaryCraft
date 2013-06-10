@@ -230,48 +230,31 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 		}
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
+		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
-
 			if (byte0 >= 0 && byte0 < inventory.length)
-			{
 				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
+	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
+		for (int i = 0; i < inventory.length; i++) {
+			if (inventory[i] != null) {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
 				inventory[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
 			}
 		}
-
 		NBT.setTag("Items", nbttaglist);
 	}
 

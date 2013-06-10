@@ -163,14 +163,6 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
 				}
 			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
 				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {

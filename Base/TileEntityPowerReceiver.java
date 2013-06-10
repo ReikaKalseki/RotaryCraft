@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -83,36 +84,36 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 	public void getIOSidesDefault(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
-			break;
-		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
-			break;
-		case 2:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
-			break;
-		case 3:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
-			break;
-		case 4:	//moving up
-			readx = xCoord;
-			readz = zCoord;
-			ready = yCoord-1;
-			break;
-		case 5:	//moving down
-			readx = xCoord;
-			readz = zCoord;
-			ready = yCoord+1;
-			break;
+			case 0:
+				readx = xCoord+1;
+				readz = zCoord;
+				ready = yCoord;
+				break;
+			case 1:
+				readx = xCoord-1;
+				readz = zCoord;
+				ready = yCoord;
+				break;
+			case 2:
+				readz = zCoord+1;
+				readx = xCoord;
+				ready = yCoord;
+				break;
+			case 3:
+				readz = zCoord-1;
+				readx = xCoord;
+				ready = yCoord;
+				break;
+			case 4:	//moving up
+				readx = xCoord;
+				readz = zCoord;
+				ready = yCoord-1;
+				break;
+			case 5:	//moving down
+				readx = xCoord;
+				readz = zCoord;
+				ready = yCoord+1;
+				break;
 		}
 	}
 
@@ -661,20 +662,20 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				return false;
 			int time;
 			switch (stage) {
-			case 1:
-				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
-				return (ticks >= time);
-			case 2:
-				time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
-				return (ticks >= time);
-			case 3:
-				time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-				return (ticks >= time);
-			case 4:
-				time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-				return (ticks >= time);
-			default:
-				return false;
+				case 1:
+					time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
+					return (ticks >= time);
+				case 2:
+					time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
+					return (ticks >= time);
+				case 3:
+					time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+					return (ticks >= time);
+				case 4:
+					time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+					return (ticks >= time);
+				default:
+					return false;
 			}
 		}
 		if (m == MachineRegistry.COMPACTOR) {
@@ -728,6 +729,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			int time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 			return (ticks >= time);
 		}
+		if (m == MachineRegistry.BUCKETFILLER) {
+			if (ticks < 2)
+				return false;
+			int time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			return (ticks >= time);
+		}
 		if (m != null)
 			ReikaChatHelper.write(String.format("Non-speed m called operationComplete! ID: %d; Coords %d %d %d", m, xCoord, yCoord, zCoord));
 		return true; //should never happen
@@ -758,18 +765,18 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			switch (stage) {
-			case 1:
-				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omegap, 2)));
-				break;
-			case 2:
-				time = (800-(int)(40*ReikaMathLibrary.logbase(omegap, 2)))/2;
-				break;
-			case 3:
-				time = 600-(int)(30*ReikaMathLibrary.logbase(omegap, 2));
-				break;
-			case 4:
-				time = 1200-(int)(80*ReikaMathLibrary.logbase(omegap, 2));
-				break;
+				case 1:
+					time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omegap, 2)));
+					break;
+				case 2:
+					time = (800-(int)(40*ReikaMathLibrary.logbase(omegap, 2)))/2;
+					break;
+				case 3:
+					time = 600-(int)(30*ReikaMathLibrary.logbase(omegap, 2));
+					break;
+				case 4:
+					time = 1200-(int)(80*ReikaMathLibrary.logbase(omegap, 2));
+					break;
 			}
 		}
 		if (m == MachineRegistry.COMPACTOR) {
@@ -796,6 +803,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 		if (m == MachineRegistry.PURIFIER) {
 			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+		}
+		if (m == MachineRegistry.BUCKETFILLER) {
+			time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
 		}
 		if (m != null && time == -1) {
 			ReikaChatHelper.write(String.format("Non-speed m called operationTime! Coords %d %d %d", m, xCoord, yCoord, zCoord));
