@@ -60,9 +60,9 @@ public final class RotaryDescriptions {
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
 	public static Object[][] machineNotes = {
-		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque(), 1},
-		{PowerReceivers.FERMENTER.getMinPower(), 1, PowerReceivers.FERMENTER.getMinSpeed()},
-		{PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque(), 1},
+		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque()},
+		{PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed()},
+		{PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque()},
 		{PowerReceivers.FLOODLIGHT.getMinPower()},
 		{PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF},
 		{TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE},

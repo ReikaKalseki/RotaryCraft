@@ -13,11 +13,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.IGuiHandler;
+
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.RotaryCraft.Auxiliary.HandbookRegistry;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
@@ -68,6 +71,7 @@ import Reika.RotaryCraft.GUIs.GuiGearbox;
 import Reika.RotaryCraft.GUIs.GuiGrinder;
 import Reika.RotaryCraft.GUIs.GuiHandCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.GUIs.GuiHandbookPage;
 import Reika.RotaryCraft.GUIs.GuiHeater;
 import Reika.RotaryCraft.GUIs.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.GuiJet;
@@ -126,7 +130,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -137,6 +140,8 @@ public class GuiHandler implements IGuiHandler {
 		if (id == 10)
 			return new ContainerHandCraft(player, world);
 		if (id == 11)
+			return null;
+		if (id == 12)
 			return null;
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (!(tile instanceof RotaryCraftTileEntity))
@@ -156,19 +161,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).type) {
-			case STEAM:
-				return new ContainerSteam(player, (TileEntityEngine) te);
-			case GAS:
-				return new ContainerEthanol(player, (TileEntityEngine) te);
-			case AC:
-				return new OneSlotContainer(player, te);
-			case SPORT:
-				return new ContainerPerformance(player, (TileEntityEngine) te);
-			case MICRO:
-			case JET:
-				return new ContainerJet(player, (TileEntityEngine)te);
-			default:
-				return null;
+				case STEAM:
+					return new ContainerSteam(player, (TileEntityEngine) te);
+				case GAS:
+					return new ContainerEthanol(player, (TileEntityEngine) te);
+				case AC:
+					return new OneSlotContainer(player, te);
+				case SPORT:
+					return new ContainerPerformance(player, (TileEntityEngine) te);
+				case MICRO:
+				case JET:
+					return new ContainerJet(player, (TileEntityEngine)te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {
@@ -245,11 +250,15 @@ public class GuiHandler implements IGuiHandler {
 	//returns an instance of the Gui you made earlier
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (id == 10)
 			return new GuiHandCraft(player, world);
 		if (id == 11)
 			return new GuiHandbook(player, world);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (id == 12) {
+			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+			return new GuiHandbookPage(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));
+		}
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}
@@ -267,19 +276,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).type) {
-			case STEAM:
-				return new GuiSteam(player, (TileEntityEngine) te);
-			case GAS:
-				return new GuiEthanol(player, (TileEntityEngine) te);
-			case AC:
-				return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
-			case SPORT:
-				return new GuiPerformance(player, (TileEntityEngine) te);
-			case MICRO:
-			case JET:
-				return new GuiJet(player, (TileEntityEngine) te);
-			default:
-				return null;
+				case STEAM:
+					return new GuiSteam(player, (TileEntityEngine) te);
+				case GAS:
+					return new GuiEthanol(player, (TileEntityEngine) te);
+				case AC:
+					return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
+				case SPORT:
+					return new GuiPerformance(player, (TileEntityEngine) te);
+				case MICRO:
+				case JET:
+					return new GuiJet(player, (TileEntityEngine) te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {

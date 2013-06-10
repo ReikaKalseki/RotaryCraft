@@ -12,7 +12,12 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryAchievements;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 
 public class ContainerBlastFurnace extends CoreContainer
@@ -41,5 +46,13 @@ public class ContainerBlastFurnace extends CoreContainer
 		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityBlastFurnace, 13, 148, 53));
 
 		this.addPlayerInventory(player);
+	}
+
+	@Override
+	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer ep) {
+		ItemStack is = super.slotClick(par1, par2, par3, ep);
+		if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is))
+			ep.triggerAchievement(RotaryAchievements.MAKESTEEL.get());
+		return is;
 	}
 }

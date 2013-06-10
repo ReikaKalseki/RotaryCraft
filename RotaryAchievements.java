@@ -14,11 +14,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
+import net.minecraftforge.common.AchievementPage;
 
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
 
 public enum RotaryAchievements {
 
@@ -44,7 +46,7 @@ public enum RotaryAchievements {
 	FLOODLIGHT("Illuminating",  			-4, -2, MachineRegistry.FLOODLIGHT.getCraftedProduct(), null, false), //turn on at Light 15
 	DAMAGEGEARS("Grind My Gears", 			-4, -3, ItemStacks.scrap, null, false),
 	DIAMONDGEARS("Crystal",  				-4, -4, new ItemStack(RotaryCraft.gbxitems.itemID, 1, RotaryNames.gearboxItemNames.length-2), DAMAGEGEARS.ordinal(), false), //make
-	MRADS32("Overspeed",  					-4, -5, new ItemStack(Item.potion.itemID, 1, 8194), null, true), //transmit power at 32Mrad/s
+	MRADS32("Overspeed",  					-4, -5, Item.sugar, null, true), //transmit power at 32Mrad/s
 	GIGAWATT("Overpowered",  				-4, -6, Block.blockRedstone, null, true), //transmit 1GW of power in one shaft w/o breaking
 	TNTCANNON("Sharpshooter", 				-4, -7, MachineRegistry.TNTCANNON.getCraftedProduct(), null, true), //hit mob at >= 100 blocks with TNT cannon
 	RAILDRAGON("Blown Out of the Sky", 		-4, -8, Block.dragonEgg, MAKERAILGUN.ordinal(), true), //kill dragon with railgun
@@ -52,7 +54,7 @@ public enum RotaryAchievements {
 	GRAVELGUN("Sniped",  					-5, -1, ItemRegistry.GRAVELGUN.getStackOf(), null, false), //one hit kill with
 	LANDMINE("Watch Your Step", 			-5, -2, MachineRegistry.LANDMINE.getCraftedProduct(), null, false), //step on
 	GPRENDPORTAL("Who Needs Ender Eyes?", 	-5, -3, Block.endPortalFrame, null, false), //gpr thru end portal
-	NETHERHEATRAY("Boom Miner", 			-5, -4, MachineRegistry.HEATRAY.getCraftedProduct(), null, false); //dig 500m with heat ray in nether
+	NETHERHEATRAY("Boom Miner", 			-5, -4, MachineRegistry.HEATRAY.getCraftedProduct(), null, true); //dig 500m with heat ray in nether
 
 	private int id;
 	private String label;
@@ -105,6 +107,10 @@ public enum RotaryAchievements {
 		desc = AchievementDescriptions.getDesc(this.ordinal());
 	}
 
+	public Achievement get() {
+		return RotaryCraft.achievements[this.ordinal()];
+	}
+
 	public static void registerAcheivements() {
 		RotaryCraft.achievements = new Achievement[RotaryAchievements.list.length];
 		for (int i = 0; i < list.length; i++) {
@@ -113,11 +119,15 @@ public enum RotaryAchievements {
 				parent = list[i].getSelfReference();
 			else
 				parent = list[i].parent;
-			RotaryCraft.achievements[i] = new Achievement(list[i].id, list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent).registerAchievement();
+			RotaryCraft.achievements[i] = new Achievement(list[i].id, list[i].name(), list[i].x, list[i].y, list[i].icon, list[i].parent).registerAchievement();
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();
-			//ModLoader.addAchievementDesc(RotaryCraft.achievements[i], list[i].getName(), list[i].getDesc());
 		}
+		AchievementPage.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));
+	}
+
+	public String getKey() {
+		return "achievement."+this.name()+".desc";
 	}
 
 	public boolean isSelfReferenced() {

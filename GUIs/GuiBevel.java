@@ -55,7 +55,6 @@ public class GuiBevel extends GuiNonPoweredMachine
 		super.initGui();
 		int j = (width - xSize) / 2-2;
 		int k = (height - ySize) / 2 - 12;
-		buttonList.clear();
 
 		String file = "/Reika/RotaryCraft/Textures/GUI/bevelgui2.png";
 		int px = 176;
@@ -197,6 +196,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		if (button.id < 6) {
 			in = button.id;
 			this.setValidStates();

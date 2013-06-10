@@ -54,13 +54,14 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 		super.initGui();
 		int var5 = (width - xSize) / 2;
 		int var6 = (height - ySize) / 2;
-		buttonList.clear();
 		buttonList.add(new GuiButton(0, var5+xSize-1, var6+32, 43, 20, "Get XP"));
 	}
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
+		super.actionPerformed(button);
+		if (button.id == 0)
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
 	}
 
 	/**

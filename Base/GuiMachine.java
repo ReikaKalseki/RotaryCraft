@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,8 +21,11 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.GuiCoil;
 import Reika.RotaryCraft.GUIs.GuiTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -42,6 +46,24 @@ public abstract class GuiMachine extends GuiContainer {
 
 	public abstract String getGuiTexture();
 
+	@Override
+	public void initGui() {
+		super.initGui();
+		buttonList.clear();
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
+		buttonList.add(new ImagedGuiButton(24000, j-17, k+4, 18, ySize-12, 72, 0, 0, file));
+		buttonList.add(new ImagedGuiButton(24001, j-17, k+ySize-8, 18, 4, 72, 252, 0, file));
+	}
+
+	@Override
+	public void actionPerformed(GuiButton b) {
+		if (b.id == 24000 || b.id == 24001) {
+			ep.openGui(RotaryCraft.instance, 12, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+		}
+	}
+
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 	 */
@@ -56,8 +78,10 @@ public abstract class GuiMachine extends GuiContainer {
 			fontRenderer.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
 		else
 			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
-		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiTNTCannon))
+		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiTNTCannon || this instanceof GuiCoil))
 			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
+
+		this.drawHelpTab(j, k);
 	}
 
 	@Override
@@ -101,7 +125,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected abstract void drawPowerTab(int j, int k);
 
 	public void drawHelpTab(int j, int k) {
-
+		fontRenderer.drawString("?", -10, ySize/2-4, 0xffffff);
 	}
 
 	public void callHelpAction(int j, int k) {

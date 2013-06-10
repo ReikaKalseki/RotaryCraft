@@ -51,7 +51,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.clear();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		if (ratio > 0)
@@ -77,10 +76,12 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		ratio = -ratio;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
+		if (button.id == 0)
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
 
 		super.updateScreen();
 		x = Mouse.getX();

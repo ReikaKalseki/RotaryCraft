@@ -64,6 +64,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		if (button.id <= 8) {
 			//this.updateMode(button.id);
 			mode = button.id;

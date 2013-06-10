@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.RotaryAchievements;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelLandmine;
@@ -116,6 +117,8 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 			if (e instanceof EntityPlayer) {
 				if (((EntityPlayer)e).capabilities.isCreativeMode)
 					invuln = true;
+				else
+					((EntityPlayer) e).triggerAchievement(RotaryAchievements.LANDMINE.get());
 			}
 			if (!invuln) {
 				e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);

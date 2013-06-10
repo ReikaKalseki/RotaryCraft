@@ -20,13 +20,14 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
 
 public class GuiItemCannon extends GuiPowerOnlyMachine
 {
@@ -53,7 +54,6 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.clear();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		//this.buttonList.add(new GuiButton(0, j+xSize/2-48, -1+k+32, 80, 20, "Trajectory"));

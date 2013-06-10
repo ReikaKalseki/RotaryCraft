@@ -54,6 +54,10 @@ public class RenderLandmine extends RotaryTERenderer
 		int var11 = 0;
 		float var13;
 
+		if (!tile.isInWorld()) {
+			GL11.glScaled(1.5, 1.5, 1.5);
+			GL11.glTranslated(0, -0.6, 0);
+		}
 
 		var14.renderAll(null, 0);
 

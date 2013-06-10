@@ -57,7 +57,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.clear();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		buttonList.add(new GuiButton(0, -7+j-20, k+16, 20, 20, "+"));
@@ -81,6 +80,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		int oldpage = page;
 		if (button.id == 0 && page < scale.getMaxPage())
 			page++;

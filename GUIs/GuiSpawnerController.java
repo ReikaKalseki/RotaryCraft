@@ -51,7 +51,6 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.clear();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		if (hasPower) {
@@ -78,6 +77,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		if (button.id == 0) {
 			if (spawnercontroller.disable)
 				disabled = false;

@@ -13,8 +13,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesCompactor
@@ -35,10 +37,11 @@ public class RecipesCompactor
 
 	private RecipesCompactor()
 	{
-		this.addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 1, 0), 0.2F); //No charcoal
-		this.addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 1, 1), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, 1, 2), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, 1, 0), 0.2F);
+		this.addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 2, 0), 0.2F); //No charcoal
+		this.addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 2, 1), 0.2F);
+		this.addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, 2, 2), 0.2F);
+		this.addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, 2, 0), 0.2F);
+		this.addSmelting(Item.blazePowder.itemID, 0, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F);
 	}
 
 	/** Adds a smelting recipe. */

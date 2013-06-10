@@ -43,7 +43,6 @@ public class GuiWinder extends GuiOneSlotInv
 		super.initGui();
 		int var5 = (width - xSize) / 2;
 		int var6 = (height - ySize) / 2;
-		buttonList.clear();
 		if (input)
 			buttonList.add(new GuiButton(0, var5+xSize/2-35, var6+ySize/2-26, 65, 20, "Input Mode"));
 		else
@@ -52,6 +51,9 @@ public class GuiWinder extends GuiOneSlotInv
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
+		if (button.id != 0)
+			return;
 		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, ep);
 		input = !input;
 		this.initGui();

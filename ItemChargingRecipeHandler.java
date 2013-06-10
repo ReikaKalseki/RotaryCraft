@@ -16,6 +16,8 @@ import cpw.mods.fml.common.ICraftingHandler;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.EnumEngineType;
+import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemChargingRecipeHandler implements ICraftingHandler {
@@ -59,6 +61,22 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 			item.setItemDamage(springmeta);
 			if (!player.inventory.addItemStackToInventory(newspring))
 				ReikaItemHelper.dropItem(player.worldObj, player.posX, player.posY, player.posZ, newspring);
+		}
+		if (ReikaItemHelper.matchStacks(item, MachineRegistry.RAILGUN.getCraftedProduct()))
+			player.triggerAchievement(RotaryAchievements.MAKERAILGUN.get());
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal())))
+			player.triggerAchievement(RotaryAchievements.MAKEJET.get());
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.STEEL.ordinal())))
+			player.triggerAchievement(RotaryAchievements.STEELSHAFT.get());
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.BEDROCK.ordinal())))
+			player.triggerAchievement(RotaryAchievements.BEDROCKSHAFT.get());
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1)))
+			player.triggerAchievement(RotaryAchievements.CVT.get());
+		if (ItemRegistry.isRegistered(item) && ItemRegistry.getEntry(item).isBedrockTool())
+			player.triggerAchievement(RotaryAchievements.BEDROCKTOOLS.get());
+		for (int i = 0; i < 4; i++) {
+			if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.gbxitems.itemID, 1, EnumMaterials.DIAMOND.ordinal()+i*5)))
+				player.triggerAchievement(RotaryAchievements.DIAMONDGEARS.get());
 		}
 	}
 

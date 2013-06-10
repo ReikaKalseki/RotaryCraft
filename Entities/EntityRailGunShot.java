@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.RotaryAchievements;
 
 public class EntityRailGunShot extends EntityFireball {
 
@@ -282,9 +283,16 @@ public class EntityRailGunShot extends EntityFireball {
 								//ReikaChatHelper.writeEntity(world, el);
 								if (el instanceof EntityDragon) {
 									((EntityDragon) el).attackEntityFromPart(((EntityDragon) el).dragonPartHead, DamageSource.setExplosionSource(new Explosion(worldObj, this, x, y, z, 20)), this.getAttackDamage());
+									if (el.isDead || el.getHealth() <= 0) {
+
+									}
 								}
 								else
 									el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+								if (ent instanceof EntityPlayer) {
+									if (ent.isDead || ((EntityLiving)ent).getHealth() <= 0)
+										((EntityPlayer) ent).triggerAchievement(RotaryAchievements.RAILKILLED.get());
+								}
 							}
 							else if (ent instanceof EntityEnderCrystal || ent instanceof EntityPainting || ent instanceof EntityItemFrame) //Will not target but will destroy
 								ent.attackEntityFrom(DamageSource.generic, this.getAttackDamage());

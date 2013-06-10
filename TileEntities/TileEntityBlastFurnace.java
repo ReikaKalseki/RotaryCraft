@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -295,12 +296,12 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 
 	@Override
 	public void openChest() {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void closeChest() {
-		// TODO Auto-generated method stub
+
 	}
 
 	/**

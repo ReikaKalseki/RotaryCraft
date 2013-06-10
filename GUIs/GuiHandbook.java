@@ -29,8 +29,8 @@ public class GuiHandbook extends GuiScreen
 
 	private int mx;
 	private int my;
-	private final int xSize = 256;
-	private final int ySize = 220;
+	protected final int xSize = 256;
+	protected final int ySize = 220;
 	public World worldObj;
 	private EntityPlayer player;
 
@@ -40,9 +40,9 @@ public class GuiHandbook extends GuiScreen
 	private static final int descX = 8;
 	private static final int descY = 88;
 
-	private byte screen = 0;
-	private byte page = 0;
-	private byte subpage = 0;
+	protected byte screen = 0;
+	protected byte page = 0;
+	protected byte subpage = 0;
 	private byte bcg;
 	private int tickcount;
 
@@ -50,7 +50,7 @@ public class GuiHandbook extends GuiScreen
 	private long buttontime;
 	public static int i = 0;
 	private int buttoni = 0;
-	private int buttontimer = 0;
+	protected int buttontimer = 0;
 
 	private static int staticwidth;
 	private static int staticheight;

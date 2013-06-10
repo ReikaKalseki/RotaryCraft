@@ -38,6 +38,7 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.RotaryAchievements;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.EnumEngineType;
@@ -980,6 +981,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 							if (FOD > 8)
 								FOD = 8;
 							caught.attackEntityFrom(DamageSource.generic, 1000);
+							if (caught instanceof EntityPlayer) {
+								((EntityPlayer)caught).triggerAchievement(RotaryAchievements.SUCKEDINTOJET.get());
+							}
 						}
 						//ReikaChatHelper.writeInt(FOD);
 					}
@@ -1418,5 +1422,26 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			default:
 				return null;
 		}
+	}
+
+	private void launchEntities(World world, int x, int y, int z) {
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(4, 4, 4);
+		List<Entity> inbox = world.getEntitiesWithinAABB(Entity.class, box);
+		for (int i = 0; i < inbox.size(); i++) {
+			Entity e = inbox.get(i);
+			double dx = e.posX-x-0.5;
+			double dy = e.posY-y-0.5;
+			double dz = e.posZ-z-0.5;
+			double dd = ReikaMathLibrary.py3d(dx, dy, dz);
+			e.motionX = 2*dx/dd;
+			e.motionY = 2*dy/dd;
+			e.motionZ = 2*dz/dd;
+			if (!world.isRemote)
+				e.velocityChanged = true;
+		}
+	}
+
+	private void backfire() {
+
 	}
 }

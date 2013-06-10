@@ -64,7 +64,6 @@ public class GuiMusic extends GuiNonPoweredMachine
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.clear();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		String note = "/Reika/RotaryCraft/Textures/GUI/musicbuttons.png";
@@ -175,6 +174,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		super.actionPerformed(button);
 		if (ReikaMathLibrary.isValueInsideBoundsIncl(LENGTHSTART, LENGTHSTART+4, button.id)) {
 			noteLength = button.id-LENGTHSTART;
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.MUSIC.getMinValue(), music, ep, noteLength, 0, 0, 0);

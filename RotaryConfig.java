@@ -133,23 +133,23 @@ public class RotaryConfig {
 		//load data
 		config.load();
 		/********************************/
-		machineplacerid = 	config.getItem("Item IDs", "Machine Items", 30616).getInt();
-		heatcraftid = 		config.getItem("Item IDs", "Heat Ray Crafting Items", 30628).getInt();
-		enginecraftid = 	config.getItem("Item IDs", "Engine Crafting Items", 30629).getInt();
-		borecraftid = 		config.getItem("Item IDs", "Borer Crafting Items", 30630).getInt();
-		shaftcraftid = 		config.getItem("Item IDs", "Shaft Crafting Items", 30631).getInt();
-		extractsid = 		config.getItem("Item IDs", "Extractor Items", 30632).getInt();
-		compactsid = 		config.getItem("Item IDs", "Compactor Items", 30633).getInt();
-		engineitemsid = 	config.getItem("Item IDs", "Engine Items", 30634).getInt();
-		powderid = 			config.getItem("Item IDs", "Powders", 30635).getInt();
-		spawnerid = 		config.getItem("Item IDs", "Spawner", 30636).getInt();
-		pipeplacerid = 		config.getItem("Item IDs", "Pipe Items", 30637).getInt();
-		shaftitemsid = 		config.getItem("Item IDs", "Shaft Items", 30639).getInt();
-		gbxitemsid = 		config.getItem("Item IDs", "Gearbox Items", 30640).getInt();
-		gearunitsid = 		config.getItem("Item IDs", "Gear Units", 30641).getInt();
-		advgearitemsid = 	config.getItem("Item IDs", "Advanced Gear Items", 30642).getInt();
-		flywheelitemsid = 	config.getItem("Item IDs", "Flywheel Items", 30643).getInt();
-		modextractsid = 	config.getItem("Item IDs", "Mod Ore Extractor Items", 30644).getInt();
+		machineplacerid = 	config.getItem("ItemBlock IDs", "Machine Items", 30616).getInt();
+		heatcraftid = 		config.getItem("Crafting Item IDs", "Heat Ray Crafting Items", 30628).getInt();
+		enginecraftid = 	config.getItem("Crafting Item IDs", "Engine Crafting Items", 30629).getInt();
+		borecraftid = 		config.getItem("Crafting Item IDs", "Borer Crafting Items", 30630).getInt();
+		shaftcraftid = 		config.getItem("Crafting Item IDs", "Shaft Crafting Items", 30631).getInt();
+		extractsid = 		config.getItem("Resource Item IDs", "Extractor Items", 30632).getInt();
+		compactsid = 		config.getItem("Resource Item IDs", "Compactor Items", 30633).getInt();
+		engineitemsid = 	config.getItem("ItemBlock IDs", "Engine Items", 30634).getInt();
+		powderid = 			config.getItem("Resource Item IDs", "Powders", 30635).getInt();
+		spawnerid = 		config.getItem("ItemBlock IDs", "Spawner", 30636).getInt();
+		pipeplacerid = 		config.getItem("ItemBlock IDs", "Pipe Items", 30637).getInt();
+		shaftitemsid = 		config.getItem("ItemBlock IDs", "Shaft Items", 30639).getInt();
+		gbxitemsid = 		config.getItem("ItemBlock IDs", "Gearbox Items", 30640).getInt();
+		gearunitsid = 		config.getItem("Crafting Item IDs", "Gear Units", 30641).getInt();
+		advgearitemsid = 	config.getItem("ItemBlock IDs", "Advanced Gear Items", 30642).getInt();
+		flywheelitemsid = 	config.getItem("ItemBlock IDs", "Flywheel Items", 30643).getInt();
+		modextractsid = 	config.getItem("Resource Item IDs", "Mod Ore Extractor Items", 30644).getInt();
 
 		decoblockid = 		config.getBlock("Extra Block IDs", "Deco Block", 450).getInt();
 		bedrocksliceid = 	config.getBlock("Extra Block IDs", "Bedrock Slice", 451).getInt();
