@@ -140,9 +140,9 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			int color = 4210752;
 			if (disabled)
 				color = 0xcccccc;
-			fontRenderer.drawString("Spawn Delay:", j+xSize/2-64, k+51, color);
+			fontRenderer.drawString("Spawn Delay:", xSize/2-64, 51, color);
 			if (!input.isFocused() && !disabled) {
-				fontRenderer.drawString(String.format("%d", spawnercontroller.setDelay), j+xSize/2+5, k+51, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", spawnercontroller.setDelay), xSize/2+5, 51, 0xffffffff);
 			}
 		}
 	}

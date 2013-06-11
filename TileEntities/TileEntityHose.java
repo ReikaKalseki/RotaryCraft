@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -32,62 +33,36 @@ public class TileEntityHose extends TileEntityPiping {
 	public void draw(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
+			this.getFromGrinder(tile);
 		}
 		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
+			this.getFromGrinder(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
+			this.getFromGrinder(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
+			this.getFromGrinder(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
+			this.getFromGrinder(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.GRINDER) {
 			TileEntityGrinder tile = (TileEntityGrinder)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
+			this.getFromGrinder(tile);
+		}
+	}
+
+	private void getFromGrinder(TileEntityGrinder tile) {
+		if (tile != null) {
+			if (tile.lubricant > lubricant) {
+				oldlube = tile.lubricant;
+				tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
+				lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
 			}
 		}
 	}
@@ -96,62 +71,36 @@ public class TileEntityHose extends TileEntityPiping {
 	public void transfer(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
-			}
+			this.interHose(tile);
 		}
 		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
-			}
+			this.interHose(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
-			}
+			this.interHose(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
-			}
+			this.interHose(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
-			}
+			this.interHose(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null) {
-				if (tile.lubricant > lubricant) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
-				}
+			this.interHose(tile);
+		}
+	}
+
+	private void interHose(TileEntityHose tile) {
+		if (tile != null) {
+			if (tile.lubricant > lubricant) {
+				oldlube = tile.lubricant;
+				tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-(tile.lubricant-lubricant)/4, 0, "max");
+				lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant)/4, 0, "max");
 			}
 		}
 	}

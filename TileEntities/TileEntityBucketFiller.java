@@ -150,12 +150,37 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 			return;
 		if (omega < MINSPEED)
 			return;
-		this.getWater(world, x, y, z, meta);
-		this.getLava(world, x, y, z, meta);
-		if (!this.operationComplete(tickcount, 0))
-			return;
-		tickcount = 0;
-		this.fillBuckets();
+		if (filling) {
+			this.getWater(world, x, y, z, meta);
+			this.getLava(world, x, y, z, meta);
+			if (!this.operationComplete(tickcount, 0))
+				return;
+			tickcount = 0;
+			this.fillBuckets();
+		}
+		else {
+			if (!this.operationComplete(tickcount, 0))
+				return;
+			tickcount = 0;
+			this.emptyBuckets();
+		}
+	}
+
+	private void emptyBuckets() {
+		int slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
+		if (slot != -1) {
+			lavaLevel++;
+			ReikaInventoryHelper.decrStack(slot, inv);
+			ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+		}
+		else {
+			slot = ReikaInventoryHelper.locateInInventory(Item.bucketWater.itemID, inv);
+			if (slot != -1) {
+				waterLevel++;
+				ReikaInventoryHelper.decrStack(slot, inv);
+				ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+			}
+		}
 	}
 
 	private void fillBuckets() {

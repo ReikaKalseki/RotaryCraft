@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -24,16 +23,12 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Models.ModelCannon;
 
-public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
+public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	public static final double gTNT = 7.5;	//Calculated from EntityTNTPrimed; vy -= 0.04, *0.98, 20x a sec
-
-	public int phi = 0;
-	public int theta = 0;
-	public int velocity = 0;
 
 	public int delay = 20;
 
@@ -41,15 +36,14 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 
 	public boolean isCreative = false;
 
-	public boolean targetMode = false;
-
-	public int[] target = new int[3];
 	//Make torque affect max incline angle, speed max distance
 
+	@Override
 	public int getMaxLaunchVelocity() {
 		return (int)Math.sqrt(power/67.5D);
 	}
 
+	@Override
 	public int getMaxTheta() {
 		if (torque > torquecap)
 			return 90;
@@ -59,21 +53,12 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 		return ang;
 	}
 
+	@Override
 	public double getMaxLaunchDistance() {
 		double v = this.getMaxLaunchVelocity();
 		double vy = v*Math.sin(Math.toRadians(45));
 		double t = vy/9.81D;
 		return t*vy; //vx = vy @ 45
-	}
-
-	public ItemStack[] inventory = new ItemStack[9];
-
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
-		return inventory.length;
 	}
 
 	@Override
@@ -113,7 +98,6 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	}
 
 	private void calcTarget(World world, int x, int y, int z) {
-		// North is -Z
 		double dx = target[0]-x-0.5;
 		double dy = target[1]-y-1;
 		double dz = target[2]-z-0.5;
@@ -137,7 +121,8 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 		return (hasTNT || isCreative);
 	}
 
-	private void fire(World world, int x, int y, int z) {
+	@Override
+	protected void fire(World world, int x, int y, int z) {
 		for (int i = 0; i < 1; i++) {
 			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*par5Random.nextFloat()*12, 0.1F*par5Random.nextFloat());
@@ -156,49 +141,13 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	}
 
 	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inventory[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		velocity = NBT.getInteger("svelocity");
-		phi = NBT.getInteger("sphi");
-		theta = NBT.getInteger("stheta");
-		targetMode = NBT.getBoolean("istarget");
 		isCreative = NBT.getBoolean("creative");
-		target = NBT.getIntArray("targetxyz");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	/**
@@ -208,26 +157,7 @@ public class TileEntityTNTCannon extends TileEntityInventoriedPowerReceiver {
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("svelocity", velocity);
-		NBT.setInteger("sphi", phi);
-		NBT.setInteger("stheta", theta);
-		NBT.setBoolean("istarget", targetMode);
 		NBT.setBoolean("creative", isCreative);
-		NBT.setIntArray("targetxyz", target);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

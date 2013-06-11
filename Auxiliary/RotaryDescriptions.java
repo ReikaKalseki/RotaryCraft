@@ -111,6 +111,8 @@ public final class RotaryDescriptions {
 		{PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque()},
 		{},
 		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
+		{},
+		{}
 	};
 
 	public static Object[][] machineData = {
@@ -164,7 +166,9 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{},
-		{TileEntityPurifier.SMELTTEMP}
+		{TileEntityPurifier.SMELTTEMP},
+		{},
+		{}
 	};
 
 	public static void loadData() {

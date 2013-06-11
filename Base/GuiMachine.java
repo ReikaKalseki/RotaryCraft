@@ -25,8 +25,8 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.GuiCannon;
 import Reika.RotaryCraft.GUIs.GuiCoil;
-import Reika.RotaryCraft.GUIs.GuiTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 
@@ -78,7 +78,7 @@ public abstract class GuiMachine extends GuiContainer {
 			fontRenderer.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
 		else
 			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
-		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiTNTCannon || this instanceof GuiCoil))
+		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiCannon || this instanceof GuiCoil))
 			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
 
 		this.drawHelpTab(j, k);

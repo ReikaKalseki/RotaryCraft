@@ -49,6 +49,8 @@ public enum ItemRegistry {
 
 	SCREWDRIVER(0, false, 		"Screwdriver", 				ItemScrewdriver.class),
 	METER(16, false, 			"Angular Transducer", 		ItemMeter.class),
+	DEBUG(112, false, 			"Magic Wand", 				ItemDebug.class),
+	WORLDEDIT(114, 115, true, 	"WorldEdit Tool", 			ItemWorldEdit.class),
 	HANDBOOK(208, false, 		"RotaryCraft Handbook", 	ItemHandBook.class),
 	YEAST(32, false, 			"Yeast", 					ItemBasic.class),
 	ETHANOL(64, false, 			"Ethanol Crystals", 		ItemBasic.class),
@@ -67,8 +69,6 @@ public enum ItemRegistry {
 	NVH(48, true, 				"Night Vision Helmet", 		ItemNightVisionHelmet.class),
 	HANDCRAFT(33, false, 		"Handheld Crafting Tool", 	ItemHandheldCrafting.class),
 	RAILGUN(113, true, 			"#Railgun Ammunition", 		ItemRailGunAmmo.class),
-	DEBUG(112, false, 			"Magic Wand", 				ItemDebug.class),
-	WORLDEDIT(114, 115, true, 	"WorldEdit Tool", 			ItemWorldEdit.class),
 	BUCKET(104, 106, true, 		"#Bucket", 					ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"TNT Cannon Targeting Aid", ItemTarget.class),
 	IOGOGGLES(1, true, 			"I/O Goggles", 				ItemIOGoggles.class),

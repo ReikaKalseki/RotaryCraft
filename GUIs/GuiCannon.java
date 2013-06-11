@@ -24,16 +24,18 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
+import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
+import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.ContainerTNTCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Containers.ContainerCannon;
 
-public class GuiTNTCannon extends GuiPowerOnlyMachine
+public class GuiCannon extends GuiPowerOnlyMachine
 {
-	private TileEntityTNTCannon tnt;
+	private TileEntityLaunchCannon tnt;
 	private GuiTextField input;
 	private GuiTextField input2;
 	private GuiTextField input3;
@@ -52,10 +54,10 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 
 	EntityPlayer player;
 
-	public GuiTNTCannon(EntityPlayer p5ep, TileEntityTNTCannon TNTCannon)
+	public GuiCannon(EntityPlayer p5ep, TileEntityLaunchCannon Cannon)
 	{
-		super(new ContainerTNTCannon(p5ep, TNTCannon), TNTCannon);
-		tnt = TNTCannon;
+		super(new ContainerCannon(p5ep, Cannon), Cannon);
+		tnt = Cannon;
 		ySize = 236;
 		phi = tnt.phi;
 		theta = tnt.theta;
@@ -123,6 +125,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
+			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
 			if (targetMode) {
 				outputStream.writeInt(1);
@@ -192,7 +195,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 			else
 				phid = 0;
 			input.deleteFromCursor(-1);
-			this.sendPacket(12);
+			this.sendPacket(EnumPackets.CANNON.getMinValue());
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input2.getText())) {
@@ -201,7 +204,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 			else
 				thetad = 0;
 			input2.deleteFromCursor(-1);
-			this.sendPacket(13);
+			this.sendPacket(EnumPackets.CANNON.getMinValue()+1);
 			valid2 = false;
 		}
 		if (!input3.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input3.getText())) {
@@ -210,7 +213,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 			else
 				velocity = 0;
 			input3.deleteFromCursor(-1);
-			this.sendPacket(14);
+			this.sendPacket(EnumPackets.CANNON.getMinValue()+2);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2 && !valid3)
@@ -226,7 +229,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 		if (valid1) {
 			if (targetMode) {
 				target[0] = Integer.parseInt(input.getText());
-				this.sendPacket(12);
+				this.sendPacket(EnumPackets.CANNON.getMinValue());
 			}
 			else {
 				phid = Integer.parseInt(input.getText());
@@ -234,13 +237,13 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 					phid -= 360;
 				}
 				if (phid >= 0)
-					this.sendPacket(12);
+					this.sendPacket(EnumPackets.CANNON.getMinValue());
 			}
 		}
 		if (valid2) {
 			if (targetMode) {
 				target[1] = Integer.parseInt(input2.getText());
-				this.sendPacket(13);
+				this.sendPacket(EnumPackets.CANNON.getMinValue()+1);
 			}
 			else {
 				thetad = Integer.parseInt(input2.getText());
@@ -248,13 +251,13 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 					thetad = 90;
 				}
 				if (thetad >= 0)
-					this.sendPacket(13);
+					this.sendPacket(EnumPackets.CANNON.getMinValue()+1);
 			}
 		}
 		if (valid3) {
 			if (targetMode) {
 				target[2] = Integer.parseInt(input3.getText());
-				this.sendPacket(14);
+				this.sendPacket(EnumPackets.CANNON.getMinValue()+2);
 			}
 			else {
 				velocity = Integer.parseInt(input3.getText());
@@ -262,7 +265,7 @@ public class GuiTNTCannon extends GuiPowerOnlyMachine
 					velocity = 0;
 				}
 				if (velocity >= 0)
-					this.sendPacket(14);
+					this.sendPacket(EnumPackets.CANNON.getMinValue()+2);
 			}
 		}
 		if (targetMode)

@@ -22,6 +22,7 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -169,6 +170,16 @@ public class ItemScrewdriver extends ItemRotaryTool
 					clicked.targetMode = false;
 				else
 					clicked.targetMode = true;
+				return true;
+			}
+		}
+		if (m == MachineRegistry.BUCKETFILLER) {
+			TileEntityBucketFiller clicked = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z);
+			if (clicked != null) {
+				if (clicked.filling)
+					clicked.filling = false;
+				else
+					clicked.filling = true;
 				return true;
 			}
 		}

@@ -16,6 +16,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityBat;
@@ -1425,7 +1427,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private void launchEntities(World world, int x, int y, int z) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(4, 4, 4);
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
 		List<Entity> inbox = world.getEntitiesWithinAABB(Entity.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			Entity e = inbox.get(i);
@@ -1433,11 +1435,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			double dy = e.posY-y-0.5;
 			double dz = e.posZ-z-0.5;
 			double dd = ReikaMathLibrary.py3d(dx, dy, dz);
-			e.motionX = 2*dx/dd;
-			e.motionY = 2*dy/dd;
-			e.motionZ = 2*dz/dd;
+			e.motionX += 2*dx/dd;
+			e.motionY += 2*dy/dd;
+			e.motionZ += 2*dz/dd;
 			if (!world.isRemote)
 				e.velocityChanged = true;
+			if (e instanceof EntityPainting || e instanceof EntityItemFrame)
+				e.attackEntityFrom(DamageSource.generic, 10);
 		}
 	}
 

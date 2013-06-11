@@ -23,6 +23,7 @@ import cpw.mods.fml.common.network.Player;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnumPackets;
+import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
@@ -38,7 +39,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
@@ -52,7 +52,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityPlayerDetector detector;
 	private TileEntityHeater heater;
 	private TileEntityAdvancedGear adv;
-	private TileEntityTNTCannon cannon;
+	private TileEntityLaunchCannon cannon;
 	private TileEntitySonicWeapon sonic;
 	private TileEntityForceField force;
 	private TileEntityScaleableChest chest;
@@ -208,7 +208,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 			case CANNON: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				cannon = (TileEntityTNTCannon)world.getBlockTileEntity(x, y, z);
+				cannon = (TileEntityLaunchCannon)world.getBlockTileEntity(x, y, z);
 				if (data[0] == 0) {
 					if (control == 12) {
 						cannon.phi = data[1];

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -64,74 +65,42 @@ public class TileEntityFlooder extends TileEntityPiping {
 		}
 	}
 
+	private void getFromPipe(TileEntityPipe tile) {
+		if (tile != null) {
+			if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
+				liquidID = tile.liquidID;
+				oldLevel = tile.liquidLevel;
+				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
+				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
+			}
+		}
+	}
+
 	@Override
 	public void draw(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-				}
-			}
+			this.getFromPipe(tile);
 		}
 		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-				}
-			}
+			this.getFromPipe(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-				}
-			}
+			this.getFromPipe(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-				}
-			}
+			this.getFromPipe(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.fluidPressure, tile.fluidPressure));
-				}
-			}
+			this.getFromPipe(tile);
 		}
 		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null) {
-				if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
-				}
-			}
+			this.getFromPipe(tile);
 		}
 	}
 

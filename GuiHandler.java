@@ -25,10 +25,12 @@ import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCCTV;
 import Reika.RotaryCraft.Containers.ContainerCVT;
+import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
@@ -50,7 +52,6 @@ import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.Containers.ContainerSteam;
-import Reika.RotaryCraft.Containers.ContainerTNTCannon;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.GUIs.GuiAerosolizer;
@@ -60,6 +61,7 @@ import Reika.RotaryCraft.GUIs.GuiBorer;
 import Reika.RotaryCraft.GUIs.GuiCCTV;
 import Reika.RotaryCraft.GUIs.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.GuiCVT;
+import Reika.RotaryCraft.GUIs.GuiCannon;
 import Reika.RotaryCraft.GUIs.GuiCoil;
 import Reika.RotaryCraft.GUIs.GuiCompactor;
 import Reika.RotaryCraft.GUIs.GuiEthanol;
@@ -90,7 +92,6 @@ import Reika.RotaryCraft.GUIs.GuiSonic;
 import Reika.RotaryCraft.GUIs.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.GuiSplitter;
 import Reika.RotaryCraft.GUIs.GuiSteam;
-import Reika.RotaryCraft.GUIs.GuiTNTCannon;
 import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
@@ -126,7 +127,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
@@ -207,8 +207,8 @@ public class GuiHandler implements IGuiHandler {
 			else
 				return new ContainerCVT(player, (TileEntityAdvancedGear) te);
 		}
-		if (te instanceof TileEntityTNTCannon) {
-			return new ContainerTNTCannon(player, (TileEntityTNTCannon) te);
+		if (te instanceof TileEntityLaunchCannon) {
+			return new ContainerCannon(player, (TileEntityLaunchCannon) te);
 		}
 		if (te instanceof TileEntityBlastFurnace) {
 			return new ContainerBlastFurnace(player, (TileEntityBlastFurnace) te);
@@ -340,8 +340,8 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityMobRadar) {
 			return new GuiMobRadar(player, (TileEntityMobRadar) te);
 		}
-		if (te instanceof TileEntityTNTCannon) {
-			return new GuiTNTCannon(player, (TileEntityTNTCannon) te);
+		if (te instanceof TileEntityLaunchCannon) {
+			return new GuiCannon(player, (TileEntityLaunchCannon) te);
 		}
 		if (te instanceof TileEntityBlastFurnace) {
 			return new GuiBlastFurnace(player, (TileEntityBlastFurnace) te);

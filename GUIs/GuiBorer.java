@@ -26,6 +26,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
 import Reika.DragonAPI.ImagedGuiButton;
+import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
@@ -145,6 +146,7 @@ public class GuiBorer extends GuiMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
+			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
 			if (a == 1) {
 				if (drops)

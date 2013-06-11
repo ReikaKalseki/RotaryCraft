@@ -91,7 +91,9 @@ public enum HandbookRegistry {
 	CONTAIN(MachineRegistry.CONTAINMENT),
 	CCTVSCREEN(MachineRegistry.SCREEN),
 	CCTV(MachineRegistry.CCTV),
-	PURIFIER(MachineRegistry.PURIFIER);
+	PURIFIER(MachineRegistry.PURIFIER),
+	BUCKET(MachineRegistry.BUCKETFILLER),
+	BLOCKCANNON(MachineRegistry.BLOCKCANNON);
 
 	private MachineRegistry machine;
 	private int offset;

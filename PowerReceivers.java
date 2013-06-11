@@ -60,7 +60,7 @@ public enum PowerReceivers {
 	LASERGUN(8388608),
 	ITEMCANNON(128, 1, 32768),
 	FRICTION(256, 1, 16384),
-	BLOCKCANNON(),
+	BLOCKCANNON(65536),
 	BUCKETFILLER(1, 512, 8192);
 
 	private int minT;
