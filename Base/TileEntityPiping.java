@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -39,42 +38,42 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 	public boolean isConnectionValidForIDAndSide(EnumLook look) {
 		MachineRegistry m = null; TileEntity tile = null;
 		switch(look) {
-			case DOWN:
-				m = MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord);
-				tile = worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
-				break;
-			case MINX:
-				m = MachineRegistry.getMachine(worldObj, xCoord-1, yCoord, zCoord);
-				tile = worldObj.getBlockTileEntity(xCoord-1, yCoord, zCoord);
-				break;
-			case MINZ:
-				m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord-1);
-				tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord-1);
-				break;
-			case PLUSX:
-				m = MachineRegistry.getMachine(worldObj, xCoord+1, yCoord, zCoord);
-				tile = worldObj.getBlockTileEntity(xCoord+1, yCoord, zCoord);
-				break;
-			case PLUSZ:
-				m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord+1);
-				tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord+1);
-				break;
-			case UP:
-				m = MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord);
-				tile = worldObj.getBlockTileEntity(xCoord, yCoord+1, zCoord);
-				break;
+		case DOWN:
+			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord);
+			tile = worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+			break;
+		case MINX:
+			m = MachineRegistry.getMachine(worldObj, xCoord-1, yCoord, zCoord);
+			tile = worldObj.getBlockTileEntity(xCoord-1, yCoord, zCoord);
+			break;
+		case MINZ:
+			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord-1);
+			tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord-1);
+			break;
+		case PLUSX:
+			m = MachineRegistry.getMachine(worldObj, xCoord+1, yCoord, zCoord);
+			tile = worldObj.getBlockTileEntity(xCoord+1, yCoord, zCoord);
+			break;
+		case PLUSZ:
+			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord+1);
+			tile = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord+1);
+			break;
+		case UP:
+			m = MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord);
+			tile = worldObj.getBlockTileEntity(xCoord, yCoord+1, zCoord);
+			break;
 		}
 		switch(this.getMachine()) {
-			case PIPE:
-				return this.pipeConnect(m, tile, look);
-			case HOSE:
-				return this.hoseConnect(m, tile, look);
-			case FUELLINE:
-				return this.fuelLineConnect(m, tile, look);
-			case SPILLER:
-				return this.spillerConnect(m, tile, look);
-			default:
-				return false;
+		case PIPE:
+			return this.pipeConnect(m, tile, look);
+		case HOSE:
+			return this.hoseConnect(m, tile, look);
+		case FUELLINE:
+			return this.fuelLineConnect(m, tile, look);
+		case SPILLER:
+			return this.spillerConnect(m, tile, look);
+		default:
+			return false;
 		}
 	}
 
@@ -121,6 +120,22 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return true;
 		if (m == MachineRegistry.BUCKETFILLER && look != EnumLook.DOWN && look != EnumLook.UP)
 			return true;
+		if (m == MachineRegistry.ENGINE) {
+			if (((TileEntityEngine)tile).type.isWaterPiped()) {
+				switch(look) {
+				case PLUSX:
+					return ((RotaryCraftTileEntity)tile).getBlockMetadata() == 1;
+				case PLUSZ:
+					return ((RotaryCraftTileEntity)tile).getBlockMetadata() == 3;
+				case MINX:
+					return ((RotaryCraftTileEntity)tile).getBlockMetadata() == 0;
+				case MINZ:
+					return ((RotaryCraftTileEntity)tile).getBlockMetadata() == 2;
+				default:
+					return false;
+				}
+			}
+		}
 		return false;
 	}
 
