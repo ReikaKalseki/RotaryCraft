@@ -11,9 +11,9 @@ package Reika.RotaryCraft.Blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 
 public class BlockMMachine extends BlockModelledMultiTE {

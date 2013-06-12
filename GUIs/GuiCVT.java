@@ -18,9 +18,9 @@ import org.lwjgl.input.Mouse;
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;
+import Reika.RotaryCraft.Registry.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 
 public class GuiCVT extends GuiNonPoweredMachine

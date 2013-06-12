@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.RotaryCraft.PowerReceivers;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class GuiBasicStorage extends GuiMachine {
 

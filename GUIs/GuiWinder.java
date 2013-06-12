@@ -15,8 +15,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
+import Reika.RotaryCraft.Registry.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class GuiWinder extends GuiOneSlotInv

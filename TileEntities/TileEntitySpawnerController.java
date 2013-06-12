@@ -21,11 +21,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelSpawner;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController {
 	public static final int FALLOFF = 128; // rad/s per spawn tick

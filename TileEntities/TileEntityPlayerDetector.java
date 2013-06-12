@@ -17,12 +17,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelDetector;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 	public static final int FALLOFF = 1024; // 1kW per meter range

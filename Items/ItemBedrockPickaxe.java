@@ -29,9 +29,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 

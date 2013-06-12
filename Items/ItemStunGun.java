@@ -25,8 +25,8 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class ItemStunGun extends ItemChargedTool {
 

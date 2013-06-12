@@ -13,8 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.Auxiliary.EnumLook;
+import Reika.RotaryCraft.Registry.EnumLook;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity {

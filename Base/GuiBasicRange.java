@@ -18,8 +18,8 @@ import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import Reika.RotaryCraft.Registry.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 

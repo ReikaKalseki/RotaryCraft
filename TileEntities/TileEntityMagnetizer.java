@@ -16,11 +16,11 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelMagnetizer;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver implements OneSlotMachine {
 

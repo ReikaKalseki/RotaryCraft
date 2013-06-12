@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.SoundRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;

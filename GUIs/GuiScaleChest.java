@@ -22,9 +22,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
+import Reika.RotaryCraft.Registry.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 
 @SideOnly(Side.CLIENT)

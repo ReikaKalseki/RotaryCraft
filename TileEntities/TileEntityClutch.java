@@ -12,11 +12,11 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Models.ModelClutch;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityClutch extends TileEntity1DTransmitter {
 

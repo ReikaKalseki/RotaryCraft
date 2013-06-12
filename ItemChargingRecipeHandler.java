@@ -16,9 +16,12 @@ import cpw.mods.fml.common.ICraftingHandler;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
-import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemChargingRecipeHandler implements ICraftingHandler {
 

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Registry;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import cpw.mods.fml.relauncher.Side;
 
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public enum SoundRegistry {
 

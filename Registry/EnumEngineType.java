@@ -7,12 +7,12 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import Reika.RotaryCraft.ItemRegistry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum EnumEngineType {
 	DC(256, 4),

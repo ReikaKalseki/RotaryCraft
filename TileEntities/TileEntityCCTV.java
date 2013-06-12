@@ -22,11 +22,11 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInventory {
 

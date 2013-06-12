@@ -16,11 +16,11 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWinder;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWinder extends TileEntityInventoriedPowerReceiver implements OneSlotMachine {
 

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Registry;
 
 import java.util.HashMap;
 
@@ -19,10 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -183,8 +184,8 @@ public enum MachineRegistry {
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
 	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
 	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction"),
-	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17),
-	BUCKETFILLER(		"Bucket Filler",			BlockMIMachine.class,		TileEntityBucketFiller.class,		18);
+	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
+	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11);
 
 
 	private String name;
@@ -431,6 +432,8 @@ public enum MachineRegistry {
 			return 0.875F;
 		if (this == LANDMINE)
 			return 0.4375F;
+		if (this == BLOCKCANNON)
+			return 0.9375F;
 		return 1;
 	}
 

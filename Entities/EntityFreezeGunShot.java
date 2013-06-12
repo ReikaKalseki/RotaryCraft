@@ -23,7 +23,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.MachineRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class EntityFreezeGunShot extends EntityFireball {
 

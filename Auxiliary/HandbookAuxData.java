@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Registry.HandbookRegistry;
 
 public final class HandbookAuxData {
 	/** One GuiHandbook.SECOND in nanoGuiHandbook.SECONDs. */

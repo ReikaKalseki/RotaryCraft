@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 public class TabRotaryCraft extends CreativeTabs {

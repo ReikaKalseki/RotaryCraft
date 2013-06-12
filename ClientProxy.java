@@ -33,6 +33,8 @@ import Reika.RotaryCraft.Entities.RenderFallingBlock;
 import Reika.RotaryCraft.Entities.RenderFreezeGunShot;
 import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy

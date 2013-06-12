@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Registry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +18,9 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;

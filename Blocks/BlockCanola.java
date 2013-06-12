@@ -25,8 +25,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockCanola extends BlockBasic {
 

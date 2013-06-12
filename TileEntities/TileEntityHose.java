@@ -13,8 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityHose extends TileEntityPiping {
 

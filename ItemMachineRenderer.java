@@ -18,12 +18,14 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
+import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
+import Reika.RotaryCraft.TileEntities.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
@@ -317,6 +319,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case FRICTION:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFurnaceHeater(), a, -0.1D, b, 0.0F);
+				break;
+			case BLOCKCANNON:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBlockCannon(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

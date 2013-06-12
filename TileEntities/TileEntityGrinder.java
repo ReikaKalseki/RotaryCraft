@@ -16,14 +16,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelGrinder;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 {

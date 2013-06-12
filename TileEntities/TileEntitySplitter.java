@@ -16,11 +16,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelSplitter;
 import Reika.RotaryCraft.Models.ModelSplitter2;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySplitter extends TileEntityIOMachine implements GuiController {
 

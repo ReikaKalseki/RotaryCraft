@@ -19,10 +19,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelScreen;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 

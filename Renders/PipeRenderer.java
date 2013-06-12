@@ -19,11 +19,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.Auxiliary.EnumLook;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Registry.EnumLook;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.TileEntityHose;

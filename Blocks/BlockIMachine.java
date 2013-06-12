@@ -11,8 +11,8 @@ package Reika.RotaryCraft.Blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockIMachine extends BlockBasicMultiTE {
 
@@ -53,5 +53,10 @@ public class BlockIMachine extends BlockBasicMultiTE {
 		for (int i = 0; i < 6; i++)
 			icons[p][i] = par1IconRegister.registerIcon("RotaryCraft:steel");
 		icons[p][1] = par1IconRegister.registerIcon("RotaryCraft:purifier");
+		p = MachineRegistry.BUCKETFILLER.getMachineMetadata();
+		for (int i = 0; i < 6; i++)
+			icons[p][i] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller");
+		icons[p][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
+		icons[p][1] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
 	}
 }

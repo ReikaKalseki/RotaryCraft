@@ -21,7 +21,9 @@ import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Models.ModelCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
 public class RenderCannon extends RotaryTERenderer
@@ -32,7 +34,7 @@ public class RenderCannon extends RotaryTERenderer
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityTNTCannonAt(TileEntityTNTCannon tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityLaunchCannonAt(TileEntityLaunchCannon tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -44,7 +46,10 @@ public class RenderCannon extends RotaryTERenderer
 		ModelCannon var14;
 		var14 = CannonModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cannontex.png");
+		if (tile instanceof TileEntityTNTCannon)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/tntcannontex.png");
+		if (tile instanceof TileEntityBlockCannon)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/blockcannontex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -68,14 +73,15 @@ public class RenderCannon extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityTNTCannonAt((TileEntityTNTCannon)tile, par2, par4, par6, par8);
+			this.renderTileEntityLaunchCannonAt((TileEntityLaunchCannon)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderMarker((TileEntityTNTCannon)tile, par2, par4, par6);
+			if (((TileEntityLaunchCannon)tile).targetMode)
+				this.renderMarker((TileEntityLaunchCannon)tile, par2, par4, par6);
 		}
 	}
 
-	private void renderMarker(TileEntityTNTCannon tile, double par2, double par4, double par6) {
+	private void renderMarker(TileEntityLaunchCannon tile, double par2, double par4, double par6) {
 		ReikaRenderHelper.prepareGeoDraw(true);
 		Tessellator v5 = new Tessellator();
 		double dx = tile.target[0]-tile.xCoord;
@@ -189,6 +195,10 @@ public class RenderCannon extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "cannontex.png";
+		if (te instanceof TileEntityTNTCannon)
+			return "tntcannontex.png";
+		if (te instanceof TileEntityBlockCannon)
+			return "blockcannontex.png";
+		return "";
 	}
 }

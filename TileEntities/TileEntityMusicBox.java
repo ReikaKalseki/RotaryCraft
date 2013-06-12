@@ -29,12 +29,12 @@ import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.DemoMusic;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 

@@ -17,15 +17,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Models.ModelCannon;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
@@ -36,7 +36,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
+		return new ModelCannon();
 	}
 
 	@Override

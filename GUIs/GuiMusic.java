@@ -21,8 +21,8 @@ import Reika.DragonAPI.IO.ReikaMIDIReader;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumPackets;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Registry.EnumPackets;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 
 public class GuiMusic extends GuiNonPoweredMachine

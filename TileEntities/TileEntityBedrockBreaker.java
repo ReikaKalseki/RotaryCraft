@@ -14,12 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 	private int harvestx;

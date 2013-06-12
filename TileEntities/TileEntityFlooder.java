@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends TileEntityPiping {
 	//Make pick random coord in 16-block radius, find top block (solid or source block), ++y, then add liquid

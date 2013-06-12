@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -21,6 +20,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelLamp;
 import Reika.RotaryCraft.Models.ModelVLamp;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
 

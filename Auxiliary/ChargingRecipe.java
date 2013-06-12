@@ -15,7 +15,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.ItemRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ChargingRecipe implements IRecipe {
 

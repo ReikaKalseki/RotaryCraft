@@ -15,9 +15,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import Reika.DragonAPI.Libraries.ReikaStringParser;
-import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;

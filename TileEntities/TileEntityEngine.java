@@ -38,12 +38,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.RotaryAchievements;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.SoundRegistry;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -59,6 +54,11 @@ import Reika.RotaryCraft.Models.ModelMicroTurbine;
 import Reika.RotaryCraft.Models.ModelPerformance;
 import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
+import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE {
 	/** s/e *//*

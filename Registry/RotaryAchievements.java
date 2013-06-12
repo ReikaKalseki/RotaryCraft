@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -16,9 +16,9 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
-import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
 

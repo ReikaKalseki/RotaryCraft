@@ -18,12 +18,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.SoundRegistry;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityProjector extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 

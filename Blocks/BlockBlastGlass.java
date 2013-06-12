@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 

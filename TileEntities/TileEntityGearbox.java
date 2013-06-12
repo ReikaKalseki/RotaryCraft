@@ -17,9 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
@@ -28,6 +26,8 @@ import Reika.RotaryCraft.Models.ModelGearbox;
 import Reika.RotaryCraft.Models.ModelGearbox16;
 import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
+import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory {
 

@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.MachineRegistry;
-import Reika.RotaryCraft.PowerReceivers;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;

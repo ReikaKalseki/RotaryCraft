@@ -14,8 +14,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockMIMachine extends BlockModelledMultiTE {
 

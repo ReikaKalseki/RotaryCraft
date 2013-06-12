@@ -23,10 +23,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
 public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver {

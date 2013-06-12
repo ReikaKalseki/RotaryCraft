@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Registry;
 
 import java.util.List;
 
@@ -15,9 +15,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.ImagedGuiButton;
-import Reika.RotaryCraft.ItemRegistry;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;

@@ -24,8 +24,8 @@ import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public class ItemMulti extends ItemBasic implements IndexedItemSprites {

@@ -21,9 +21,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnumEngineType;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public class BlockEngine extends BlockModelledMachine {

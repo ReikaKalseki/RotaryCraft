@@ -29,8 +29,8 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryAchievements;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemGravelGun extends ItemChargedTool {
 
@@ -79,7 +79,7 @@ public class ItemGravelGun extends ItemChargedTool {
 						world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
 						world.spawnEntityInWorld(ei);
 					}
-					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getDamage(is));
+					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
 					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0))
 						ep.triggerAchievement(RotaryAchievements.GRAVELGUN.get());
 					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
@@ -110,13 +110,13 @@ public class ItemGravelGun extends ItemChargedTool {
 			if (!world.isRemote)
 				world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
 			world.spawnEntityInWorld(ei);
-			ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getDamage(is));
+			ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
 			ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 			//ent.setRevengeTarget(ep);
 		}
 	}
 
-	private int getDamage(ItemStack is) {
+	private int getAttackDamage(ItemStack is) {
 		if (is == null)
 			return 0;
 		double pow = 2+ReikaMathLibrary.intpow(is.getItemDamage()/2, 6);

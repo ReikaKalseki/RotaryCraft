@@ -28,12 +28,12 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
-import Reika.RotaryCraft.MachineRegistry;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelSonicWeapon;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 

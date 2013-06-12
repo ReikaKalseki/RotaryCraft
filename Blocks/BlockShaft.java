@@ -26,16 +26,16 @@ import net.minecraftforge.common.ForgeDirection;
 
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.ItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.EnumMaterials;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 
 public class BlockShaft extends BlockModelledMachine {
