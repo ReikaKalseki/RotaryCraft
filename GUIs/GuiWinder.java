@@ -30,7 +30,7 @@ public class GuiWinder extends GuiOneSlotInv
 
 	public GuiWinder(EntityPlayer p5ep, TileEntityWinder te)
 	{
-		super(new OneSlotContainer(p5ep, te), te);
+		super(p5ep, new OneSlotContainer(p5ep, te), te);
 		Winder = te;
 		xSize = 176;
 		ySize = 166;

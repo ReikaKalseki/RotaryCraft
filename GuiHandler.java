@@ -281,7 +281,7 @@ public class GuiHandler implements IGuiHandler {
 				case GAS:
 					return new GuiEthanol(player, (TileEntityEngine) te);
 				case AC:
-					return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
+					return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 				case SPORT:
 					return new GuiPerformance(player, (TileEntityEngine) te);
 				case MICRO:
@@ -387,7 +387,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (te instanceof OneSlotMachine) {
-			return new GuiOneSlotInv(new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
+			return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 		}
 		if (te instanceof IInventory)
 			return new GuiBasicStorage(player, (RotaryCraftTileEntity)te);

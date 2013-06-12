@@ -9,17 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 
 public class GuiOneSlotInv extends GuiMachine {
 
 	protected IInventory iinv;
-	public GuiOneSlotInv(Container par1Container, RotaryCraftTileEntity te) {
+	public GuiOneSlotInv(EntityPlayer pl, Container par1Container, RotaryCraftTileEntity te) {
 		super(par1Container, te);
 		iinv = (IInventory)te;
 		xSize = 176;
 		ySize = 166;
+		ep = pl;
 	}
 
 	@Override

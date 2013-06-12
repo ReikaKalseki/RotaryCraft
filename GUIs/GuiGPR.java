@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityGPR;
@@ -19,7 +20,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 
 	private TileEntityGPR gpr;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	
+
 	int x;
 	int y;
 	public static final int UNIT = 2;
@@ -28,7 +29,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	{
 		super(new CoreContainer(p5ep, GPR), GPR);
 		gpr = GPR;
-		ySize = 240;
+		ySize = 215;
 		ep = p5ep;
 	}
 

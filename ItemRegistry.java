@@ -69,7 +69,7 @@ public enum ItemRegistry {
 	NVH(48, true, 				"Night Vision Helmet", 		ItemNightVisionHelmet.class),
 	HANDCRAFT(33, false, 		"Handheld Crafting Tool", 	ItemHandheldCrafting.class),
 	RAILGUN(113, true, 			"#Railgun Ammunition", 		ItemRailGunAmmo.class),
-	BUCKET(104, 106, true, 		"#Bucket", 					ItemFuelLubeBucket.class),
+	BUCKET(104, 106, true, 		"#Buckets", 				ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"TNT Cannon Targeting Aid", ItemTarget.class),
 	IOGOGGLES(1, true, 			"I/O Goggles", 				ItemIOGoggles.class),
 	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class);

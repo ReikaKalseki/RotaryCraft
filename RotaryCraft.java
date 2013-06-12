@@ -36,6 +36,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 import Reika.DragonAPI.LanguageArray;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
+import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -159,6 +160,7 @@ public class RotaryCraft {
 		AchievementDescriptions.loadDesc();
 		RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
+		HandbookAuxData.loadNames();
 		//DemoMusic.addTracks();
 
 		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});

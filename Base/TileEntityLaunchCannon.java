@@ -28,7 +28,7 @@ public abstract class TileEntityLaunchCannon extends TileEntityInventoriedPowerR
 
 	@Override
 	public final int getSizeInventory() {
-		return 18;
+		return inventory.length;
 	}
 
 	@Override

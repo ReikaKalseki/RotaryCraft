@@ -127,7 +127,7 @@ public class GuiBorer extends GuiMachine
 				packetID = 100;
 			this.sendPacket(0);
 		}
-		if (button.id >= 50) {
+		if (button.id >= 50 && button.id < 24000) {
 			int rows = (button.id-50)/7;
 			int cols = (button.id-50)-rows*7;
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", button.id, rows, cols));
