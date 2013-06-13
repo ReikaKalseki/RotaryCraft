@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 
 public abstract class BlockModelledMachine extends BlockBasicMachine {
 
-	protected BlockModelledMachine(int par1, Material par3Material) {
+	public BlockModelledMachine(int par1, Material par3Material) {
 		super(par1, par3Material);
 		//this.blockIndexInTexture = 2;
 	}

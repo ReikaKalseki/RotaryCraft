@@ -52,7 +52,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
 	public Icon[][] icons = new Icon[16][6];
 
-	protected BlockBasicMachine(int ID, Material par3Material) {
+	public BlockBasicMachine(int ID, Material par3Material) {
 		super(ID, par3Material);
 		this.setHardness(4F);
 		this.setResistance(15F);

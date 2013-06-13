@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Blocks.BlockMMachine;
 import Reika.RotaryCraft.Blocks.BlockMachine;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
+import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
@@ -85,6 +86,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
+import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.TileEntityMonitor;
@@ -103,6 +105,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
+import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
@@ -185,7 +188,9 @@ public enum MachineRegistry {
 	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
 	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction"),
 	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
-	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11);
+	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
+	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0, "RenderMirror"),
+	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1, "RenderSolar");
 
 
 	private String name;

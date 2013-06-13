@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-
 import Reika.DragonAPI.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
@@ -33,6 +32,7 @@ import Reika.RotaryCraft.Blocks.BlockMMachine;
 import Reika.RotaryCraft.Blocks.BlockMachine;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
+import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 
 public enum BlockRegistry {
@@ -52,13 +52,14 @@ public enum BlockRegistry {
 	PIPING(BlockPiping.class),
 	SHAFT(BlockShaft.class),
 	TRANS(BlockTrans.class),
-	MODELINV2(BlockMIMachine.class);
+	MODELINV2(BlockMIMachine.class),
+	SOLAR(BlockSolar.class);
 
 	private Class block;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2"
+		"Transmission", "MI-Machines 2", "Solar Receiver"
 	};
 
 	private BlockRegistry(Class cl) {
@@ -105,22 +106,22 @@ public enum BlockRegistry {
 			return (instance.setUnlocalizedName(this.getUnlocName()));
 		}
 		catch (NoSuchMethodException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" does not have the specified constructor!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" does not have the specified constructor! Check visibility!");
 		}
 		catch (SecurityException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw security exception!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw security exception!");
 		}
 		catch (InstantiationException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" did not allow instantiation!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" did not allow instantiation!");
 		}
 		catch (IllegalAccessException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw illegal access exception! (Nonpublic constructor)");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw illegal access exception! (Nonpublic constructor)");
 		}
 		catch (IllegalArgumentException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" was given invalid parameters!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" was given invalid parameters!");
 		}
 		catch (InvocationTargetException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().toString()+" threw invocation target exception! Check Block ID conflicts!");
+			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw invocation target exception! Check Block ID conflicts!");
 		}
 	}
 

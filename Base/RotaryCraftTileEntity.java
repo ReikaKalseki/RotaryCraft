@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,21 +58,7 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 
 	public final TextureFetcher getRenderer() {
 		if (this.getMachine().hasRender())
-			try {
-				return (TextureFetcher)(Class.forName(this.getMachine().getRenderer()).newInstance());
-			}
-		catch (InstantiationException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Tried to call nonexistent render!");
-		}
-		catch (IllegalAccessException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Tried to call illegal render!");
-		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new RuntimeException("No class found for Renderer!");
-		}
+			return RotaryRenderList.getRenderForMachine(this.getMachine());
 		else
 			return null;
 	}

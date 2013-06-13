@@ -9,18 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemWorldEdit extends ItemBasic {
@@ -43,14 +39,11 @@ public class ItemWorldEdit extends ItemBasic {
 			is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
 			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
 		}
-		MovingObjectPosition mov = ReikaPlayerAPI.getLookedAtBlock(5);
-		if (mov == null)
-			return false;
-		List msgs = Minecraft.getMinecraft().ingameGUI.getChatGUI().getSentMessages();
+		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
+		String msg = RotaryCraft.chatLogger.getLastMessageFromPlayer(ep);
 		int id = 0;
 		int meta = 0;
-		if (msgs.size() > 0) {
-			String msg = (String)msgs.get(msgs.size()-1);
+		if (msg != null) {
 			msg = msg.trim();
 			String[] data = msg.split(":");
 			String[] data2 = new String[2];

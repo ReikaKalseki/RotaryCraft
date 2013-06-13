@@ -19,17 +19,17 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelRailGun;
-import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
+import Reika.RotaryCraft.Models.ModelMirror;
+import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 
-public class RenderRailGun extends RotaryTERenderer {
+public class RenderMirror extends RotaryTERenderer {
 
-	private ModelRailGun railgunModel = new ModelRailGun();
+	private ModelMirror mirrorModel = new ModelMirror();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityRailGunAt(TileEntityRailGun tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityMirrorAt(TileEntityMirror tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -38,9 +38,9 @@ public class RenderRailGun extends RotaryTERenderer {
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelRailGun var14;
-		var14 = railgunModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/railguntex.png");
+		ModelMirror var14;
+		var14 = mirrorModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/mirrortex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -74,13 +74,13 @@ public class RenderRailGun extends RotaryTERenderer {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityRailGunAt((TileEntityRailGun)tile, par2, par4, par6, par8);
+			this.renderTileEntityMirrorAt((TileEntityMirror)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "railguntex.png";
+		return "mirrortex.png";
 	}
 }

@@ -9,19 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.BlockSheetTexRenderer;
 import Reika.DragonAPI.ItemSpriteSheetRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Auxiliary.SoundLoader;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
@@ -35,6 +29,11 @@ import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
@@ -77,21 +76,7 @@ public class ClientProxy extends CommonProxy
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (m.hasRender()) {
-				try {
-					ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), (TileEntitySpecialRenderer)Class.forName(m.getRenderer()).newInstance());
-				}
-				catch (InstantiationException e) {
-					e.printStackTrace();
-					throw new RuntimeException("Tried to call nonexistent render "+m.getRenderer()+"!");
-				}
-				catch (IllegalAccessException e) {
-					e.printStackTrace();
-					throw new RuntimeException("Tried to call illegal render "+m.getRenderer()+"!");
-				}
-				catch (ClassNotFoundException e) {
-					e.printStackTrace();
-					throw new RuntimeException("No class found for Renderer "+m.getRenderer()+"!");
-				}
+				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), RotaryRenderList.instantiateRenderer(m));
 			}
 		}
 

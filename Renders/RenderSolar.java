@@ -19,17 +19,18 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelRailGun;
-import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
+import Reika.RotaryCraft.Models.ModelForce;
+import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 
-public class RenderRailGun extends RotaryTERenderer {
+public class RenderSolar extends RotaryTERenderer
+{
 
-	private ModelRailGun railgunModel = new ModelRailGun();
+	private ModelForce SolarModel = new ModelForce();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityRailGunAt(TileEntityRailGun tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntitySolarAt(TileEntitySolar tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -37,10 +38,10 @@ public class RenderRailGun extends RotaryTERenderer {
 			var9 = 0;
 		else
 			var9 = tile.getBlockMetadata();
+		ModelForce var14;
+		var14 = SolarModel;
 
-		ModelRailGun var14;
-		var14 = railgunModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/railguntex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/solartex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -48,21 +49,11 @@ public class RenderRailGun extends RotaryTERenderer {
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		int var11 = 1;	 //used to rotate the model about metadata
-		int var12 = 0;
-		if (tile.isInWorld()) {
-			if (tile.getBlockMetadata() == 1) {
-				var11 = -1;
-				var12 = 2;
-				GL11.glFrontFace(GL11.GL_CW);
-			}
-		}
-		GL11.glTranslated(0, var12, 0);
-		GL11.glScaled(1, var11, 1);
-		var14.renderAll(null, -tile.phi, -tile.theta*var11);
-		GL11.glScaled(1, var11, 1);
-		GL11.glTranslated(0, -var12, 0);
-		GL11.glFrontFace(GL11.GL_CCW);
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		float var13;
+
+		var14.renderAll(null, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -74,13 +65,13 @@ public class RenderRailGun extends RotaryTERenderer {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityRailGunAt((TileEntityRailGun)tile, par2, par4, par6, par8);
+			this.renderTileEntitySolarAt((TileEntitySolar)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "railguntex.png";
+		return "solartex.png";
 	}
 }
