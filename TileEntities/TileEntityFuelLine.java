@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -23,8 +22,10 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		//ReikaJavaLibrary.pConsole(fuel+" @ "+x);
 		this.draw(world, x, y, z);
 		this.transfer(world, x, y, z);
+		this.transferFromFiller(world, x, y, z);
 		if (fuel < 0)
 			fuel = 0;
 	}
@@ -71,11 +72,40 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		}
 	}
 
+	public void transferFromFiller(World world, int x, int y, int z) {
+		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.BUCKETFILLER) {
+			TileEntityBucketFiller tile = (TileEntityBucketFiller)world.getBlockTileEntity(x+1, y, z);
+			this.fromFiller(tile);
+		}
+		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.BUCKETFILLER) {
+			TileEntityBucketFiller tile = (TileEntityBucketFiller)world.getBlockTileEntity(x-1, y, z);
+			this.fromFiller(tile);
+		}
+		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.BUCKETFILLER) {
+			TileEntityBucketFiller tile = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z+1);
+			this.fromFiller(tile);
+		}
+		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.BUCKETFILLER) {
+			TileEntityBucketFiller tile = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z-1);
+			this.fromFiller(tile);
+		}
+	}
+
 	private void interLine(TileEntityFuelLine tile) {
 		if (tile != null) {
 			if (tile.fuel > fuel) {
 				oldfuel = tile.fuel;
-				tile.fuel = ReikaMathLibrary.extrema(tile.fuel-(tile.fuel-fuel), 0, "max");
+				tile.fuel = ReikaMathLibrary.extrema(tile.fuel-(tile.fuel-fuel)/4, 0, "max");
+				fuel = ReikaMathLibrary.extrema(fuel+(oldfuel-fuel)/4, 0, "max");
+			}
+		}
+	}
+
+	private void fromFiller(TileEntityBucketFiller tile) {
+		if (tile != null) {
+			if (tile.fuelLevel > fuel) {
+				oldfuel = tile.fuelLevel;
+				tile.fuelLevel = ReikaMathLibrary.extrema(tile.fuelLevel-(tile.fuelLevel-fuel), 0, "max");
 				fuel = ReikaMathLibrary.extrema(fuel+(oldfuel-fuel), 0, "max");
 			}
 		}

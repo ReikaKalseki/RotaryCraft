@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -91,6 +90,11 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		//-------TEST CODE----------
 		//EntityItem ent = new EntityItem(world, x, y+1, z, star);
 		//world.spawnEntityInWorld(ent);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 	private boolean consumeChance() {
@@ -229,23 +233,23 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		int slot = -1;
 		int id = -1;
 		switch (shape) {
-			case 0:
-				id = Item.fireballCharge.itemID;
-				break;
-			case 1:
-				id = Item.goldNugget.itemID;
-				break;
-			case 2:
-				id = Item.feather.itemID;
-				break;
-			case 3:
-				id = Item.skull.itemID;
-				break;
+		case 0:
+			id = Item.fireballCharge.itemID;
+			break;
+		case 1:
+			id = Item.goldNugget.itemID;
+			break;
+		case 2:
+			id = Item.feather.itemID;
+			break;
+		case 3:
+			id = Item.skull.itemID;
+			break;
 		}
 		if (id != -1 && this.consumeChance())
 			ReikaInventoryHelper.findAndDecrStack(id, -1, inventory);
 		//else
-		//return 0;
+			//return 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		return shape+1;
 	}
@@ -284,20 +288,20 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 			inputitems[3] = glowstone;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		switch(shape) {
-			case 1:
-				inputitems[4] = new ItemStack(Item.fireballCharge.itemID, 1, 0);
-				break;
-			case 2:
-				inputitems[4] = new ItemStack(Item.goldNugget.itemID, 1, 0);
-				break;
-			case 3:
-				inputitems[4] = new ItemStack(Item.feather.itemID, 1, 0);
-				break;
-			case 4:
-				inputitems[4] = new ItemStack(Item.skull.itemID, 1, 0);
-				break;
-			default:
-				inputitems[4] = null;
+		case 1:
+			inputitems[4] = new ItemStack(Item.fireballCharge.itemID, 1, 0);
+			break;
+		case 2:
+			inputitems[4] = new ItemStack(Item.goldNugget.itemID, 1, 0);
+			break;
+		case 3:
+			inputitems[4] = new ItemStack(Item.feather.itemID, 1, 0);
+			break;
+		case 4:
+			inputitems[4] = new ItemStack(Item.skull.itemID, 1, 0);
+			break;
+		default:
+			inputitems[4] = null;
 		}
 		/*
 		for (int k = 0; k < inputitems.length; k++) {

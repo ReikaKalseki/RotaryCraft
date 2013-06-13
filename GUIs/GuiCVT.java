@@ -27,6 +27,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 {
 	private TileEntityAdvancedGear cvt;
 	public int ratio;
+	private boolean reduction;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
@@ -45,6 +46,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		ratio = cvt.ratio;
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
+		reduction = ratio < 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
 	}
 
@@ -80,6 +82,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		ratio = -ratio;
+		reduction = ratio < 0;
 		if (button.id == 0)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
 
@@ -104,6 +107,8 @@ public class GuiCVT extends GuiNonPoweredMachine
 			return;
 		}
 		ratio = Integer.parseInt(input.getText());
+		if (reduction)
+			ratio = -ratio;
 		if (ratio != 0)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
 	}

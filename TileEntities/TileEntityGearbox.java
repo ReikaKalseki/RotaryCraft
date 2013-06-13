@@ -56,10 +56,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					return;
 				}
 				if (favorbent) {
-					torque = spl.torque/ratio;
+					torque = spl.torque/sratio*ratio;
 				}
 				else {
-					torque = (int)(spl.torque*((sratio-1D)/(ratio)));
+					torque = ratio*(int)(spl.torque*((sratio-1D)/(sratio)));
 				}
 			}
 			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
@@ -69,10 +69,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((sratio-1D)*(ratio)));
+					torque = ratio*(int)(spl.torque*((sratio-1D)/(sratio)));
 				}
 				else {
-					torque = spl.torque*ratio;
+					torque = spl.torque/sratio*ratio;
 				}
 			}
 			else //We are not one of its write-to blocks
@@ -99,10 +99,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((sratio-1D)/(ratio)));
+					torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 				}
 				else {
-					torque = spl.torque/ratio;
+					torque = spl.torque/sratio/ratio;
 				}
 			}
 			else //We are not one of its write-to blocks

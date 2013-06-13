@@ -415,7 +415,6 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 					TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
 					if (devicein.getBlockMetadata() >= 8) {
 						this.readFromSplitter(devicein);
-						return;
 					}
 					else if (devicein.writex == x && devicein.writez == z) {
 						torquein = devicein.torque;
@@ -445,7 +444,6 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 					TileEntitySplitter devicein2 = (TileEntitySplitter)world.getBlockTileEntity(readx2, y, readz2);
 					if (devicein2.getBlockMetadata() >= 8) {
 						this.readFromSplitter(devicein2);
-						return;
 					}
 					else if (devicein2.writex == x && devicein2.writez == z) {
 						torquein2 = devicein2.torque;
@@ -584,7 +582,8 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein);
-					return;
+					torque = torquein;
+					omega = omegain;
 				}
 				else if (devicein.writex == x && devicein.writez == z) {
 					torque = devicein.torque;
@@ -644,7 +643,7 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	}
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
-		omega = spl.omega; //omega always constant
+		omegain = spl.omega; //omegain always constant
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
 			return;
@@ -655,27 +654,27 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 		}
 		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 			if (ratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
+				torquein = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
-				torque = spl.torque/ratio;
+				torquein = spl.torque/ratio;
 			}
 			else {
-				torque = (int)(spl.torque*((ratio-1D)/(ratio)));
+				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
 			}
 		}
 		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-			omega = spl.omega; //omega always constant
+			omegain = spl.omega; //omegain always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
+				torquein = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
-				torque = (int)(spl.torque*((ratio-1D)/(ratio)));
+				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
 			}
 			else {
-				torque = spl.torque/ratio;
+				torquein = spl.torque/ratio;
 			}
 		}
 		else //We are not one of its write-to blocks

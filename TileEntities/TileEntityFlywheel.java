@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -309,35 +308,38 @@ public class TileEntityFlywheel extends TileEntityIOMachine {
 	}
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
-		int ratio = spl.getRatioFromMode();
-		if (ratio == 0)
+		int sratio = spl.getRatioFromMode();
+		if (sratio == 0)
 			return;
 		boolean favorbent = false;
-		if (ratio < 0) {
+		if (sratio < 0) {
 			favorbent = true;
-			ratio = -ratio;
+			sratio = -sratio;
 		}
 		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-			omegain = spl.omega; //omega always constant
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, ratio));
-			if (ratio == 1) { //Even split, favorbent irrelevant
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", torquein, omegain));
+			omega = spl.omega; //omega always constant
+			if (sratio == 1) { //Even split, favorbent irrelevant
+				torque = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
+				torque = spl.torque/sratio;
 			}
 			else {
+				torque = (int)(spl.torque*((sratio-1D))/sratio);
 			}
 		}
 		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-			omegain = spl.omega; //omega always constant
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
-			if (ratio == 1) { //Even split, favorbent irrelevant
+			omega = spl.omega; //omega always constant
+			if (sratio == 1) { //Even split, favorbent irrelevant
+				torque = spl.torque/2;
 				return;
 			}
 			if (favorbent) {
+				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 			else {
+				torque = spl.torque/sratio;
 			}
 		}
 		else //We are not one of its write-to blocks

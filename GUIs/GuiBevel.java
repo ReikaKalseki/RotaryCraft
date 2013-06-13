@@ -85,102 +85,102 @@ public class GuiBevel extends GuiNonPoweredMachine
 	public void getDirectionFromIO() {
 		System.out.print(bevel.colorNames[in]+" to "+bevel.colorNames[out]+" -> data: ");
 		switch(in) {
-			case 0:
-				switch(out) {
-					case 2:
-						posn = 13;
-						break;
-					case 3:
-						posn = 15;
-						break;
-					case 4:
-						posn = 12;
-						break;
-					case 5:
-						posn = 14;
-						break;
-				}
-				break;
-			case 1:
-				switch(out) {
-					case 2:
-						posn = 21;
-						break;
-					case 3:
-						posn = 23;
-						break;
-					case 4:
-						posn = 20;
-						break;
-					case 5:
-						posn = 22;
-						break;
-				}
-				break;
+		case 0:
+			switch(out) {
 			case 2:
-				switch(out) {
-					case 0:
-						posn = 17;
-						break;
-					case 1:
-						posn = 9;
-						break;
-					case 4:
-						posn = 5;
-						break;
-					case 5:
-						posn = 1;
-						break;
-				}
+				posn = 13;
 				break;
 			case 3:
-				switch(out) {
-					case 0:
-						posn = 19;
-						break;
-					case 1:
-						posn = 11;
-						break;
-					case 4:
-						posn = 3;
-						break;
-					case 5:
-						posn = 7;
-						break;
-				}
+				posn = 15;
 				break;
 			case 4:
-				switch(out) {
-					case 0:
-						posn = 16;
-						break;
-					case 1:
-						posn = 8;
-						break;
-					case 2:
-						posn = 0;
-						break;
-					case 3:
-						posn = 4;
-						break;
-				}
+				posn = 12;
 				break;
 			case 5:
-				switch(out) {
-					case 0:
-						posn = 18;
-						break;
-					case 1:
-						posn = 10;
-						break;
-					case 2:
-						posn = 6;
-						break;
-					case 3:
-						posn = 2;
-						break;
-				}
+				posn = 14;
 				break;
+			}
+			break;
+		case 1:
+			switch(out) {
+			case 2:
+				posn = 21;
+				break;
+			case 3:
+				posn = 23;
+				break;
+			case 4:
+				posn = 20;
+				break;
+			case 5:
+				posn = 22;
+				break;
+			}
+			break;
+		case 2:
+			switch(out) {
+			case 0:
+				posn = 17;
+				break;
+			case 1:
+				posn = 9;
+				break;
+			case 4:
+				posn = 5;
+				break;
+			case 5:
+				posn = 1;
+				break;
+			}
+			break;
+		case 3:
+			switch(out) {
+			case 0:
+				posn = 19;
+				break;
+			case 1:
+				posn = 11;
+				break;
+			case 4:
+				posn = 3;
+				break;
+			case 5:
+				posn = 7;
+				break;
+			}
+			break;
+		case 4:
+			switch(out) {
+			case 0:
+				posn = 16;
+				break;
+			case 1:
+				posn = 8;
+				break;
+			case 2:
+				posn = 0;
+				break;
+			case 3:
+				posn = 4;
+				break;
+			}
+			break;
+		case 5:
+			switch(out) {
+			case 0:
+				posn = 18;
+				break;
+			case 1:
+				posn = 10;
+				break;
+			case 2:
+				posn = 6;
+				break;
+			case 3:
+				posn = 2;
+				break;
+			}
+			break;
 		}
 	}
 
@@ -201,7 +201,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 			in = button.id;
 			this.setValidStates();
 		}
-		else {
+		else if (button.id < 24000 ){
 			if (!isValid[button.id-6])
 				return;
 			out = button.id-6;

@@ -88,6 +88,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			TileEntityEngine te = (TileEntityEngine)tile;
 			return (te.type.isJetFueled());
 		}
+		if (m == MachineRegistry.BUCKETFILLER && look != EnumLook.DOWN && look != EnumLook.UP)
+			return true;
 		return false;
 	}
 
@@ -97,6 +99,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		if (m == MachineRegistry.GRINDER && look != EnumLook.DOWN)
 			return true;
 		if (m == MachineRegistry.GEARBOX && look != EnumLook.DOWN)
+			return true;
+		if (m == MachineRegistry.BUCKETFILLER && look != EnumLook.DOWN && look != EnumLook.UP)
 			return true;
 		return false;
 	}

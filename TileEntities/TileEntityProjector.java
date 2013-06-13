@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -41,6 +40,11 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	public boolean canProject(int x2, int y2, int z2) {
 
 		return true;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 	@Override
@@ -93,26 +97,26 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-			case 0:
-				readx = x+1;
-				readz = z;
-				ready = y;
-				break;
-			case 1:
-				readx = x-1;
-				readz = z;
-				ready = y;
-				break;
-			case 2:
-				readz = z-1;
-				readx = x;
-				ready = y;
-				break;
-			case 3:
-				readz = z+1;
-				readx = x;
-				ready = y;
-				break;
+		case 0:
+			readx = x+1;
+			readz = z;
+			ready = y;
+			break;
+		case 1:
+			readx = x-1;
+			readz = z;
+			ready = y;
+			break;
+		case 2:
+			readz = z-1;
+			readx = x;
+			ready = y;
+			break;
+		case 3:
+			readz = z+1;
+			readx = x;
+			ready = y;
+			break;
 		}
 	}
 
@@ -140,28 +144,28 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	public int getRange() {
 		int x; int z;
 		switch(this.getBlockMetadata()) {
-			case 0:
-				x = xCoord-1;
-				while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
-					x--;
-				return x-xCoord+1;
-			case 1:
-				x = xCoord+1;
-				while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
-					x++;
-				return -(x-xCoord);
-			case 2:
-				z = zCoord+1;
-				while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
-					z++;
-				return -(z-zCoord);
-			case 3:
-				z = zCoord-1;
-				while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
-					z--;
-				return z-zCoord+1;
-			default:
-				return 0;
+		case 0:
+			x = xCoord-1;
+			while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+				x--;
+			return x-xCoord+1;
+		case 1:
+			x = xCoord+1;
+			while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+				x++;
+			return -(x-xCoord);
+		case 2:
+			z = zCoord+1;
+			while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+				z++;
+			return -(z-zCoord);
+		case 3:
+			z = zCoord-1;
+			while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+				z--;
+			return z-zCoord+1;
+		default:
+			return 0;
 		}
 	}
 
@@ -172,37 +176,37 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		int z = zCoord;
 		int a = 0; int b = 0;
 		switch(this.getBlockMetadata()) {
-			case 0:
-				x += r-1;
-				a = 1;
-				break;
-			case 1:
-				x -= r;
-				a = 1;
-				break;
-			case 2:
-				z -= r;
-				b = 1;
-				break;
-			case 3:
-				z += r-1;
-				b = 1;
-				break;
+		case 0:
+			x += r-1;
+			a = 1;
+			break;
+		case 1:
+			x -= r;
+			a = 1;
+			break;
+		case 2:
+			z -= r;
+			b = 1;
+			break;
+		case 3:
+			z += r-1;
+			b = 1;
+			break;
 		}
 		int x2 = x; int z2 = z;
 		switch(this.getBlockMetadata()) {
-			case 0:
-				x2++;
-				break;
-			case 1:
-				x2--;
-				break;
-			case 2:
-				z2--;
-				break;
-			case 3:
-				z2++;
-				break;
+		case 0:
+			x2++;
+			break;
+		case 1:
+			x2--;
+			break;
+		case 2:
+			z2--;
+			break;
+		case 3:
+			z2++;
+			break;
 		}
 		World world = worldObj;
 		for (int k = 0; k <= 4; k++) {

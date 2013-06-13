@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 
 public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
@@ -23,11 +22,6 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 
 	public void closeChest() {
 
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
 	}
 
 	/**

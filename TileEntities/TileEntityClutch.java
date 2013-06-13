@@ -20,7 +20,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityClutch extends TileEntity1DTransmitter {
 
-	//FIX THIS;
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -40,7 +39,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 				torque = spl.torque/sratio;
 			}
 			else {
-				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
+				torque = (int)(spl.torque*((sratio-1D))/sratio);
 			}
 		}
 		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend

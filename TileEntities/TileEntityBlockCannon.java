@@ -45,6 +45,11 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
+	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.BLOCKCANNON.ordinal();
 	}

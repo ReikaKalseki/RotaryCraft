@@ -25,9 +25,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
@@ -37,6 +34,8 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelAerosolizer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
 
@@ -64,6 +63,11 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 				empty = false;
 		}
 		idle = empty;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 	@Override

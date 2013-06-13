@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -50,6 +49,11 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 	@Override
@@ -143,25 +147,25 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		int slot = -1;
 		int slot2 = -1;
 		switch(temp) {
-			case 300:
-				slot = ReikaInventoryHelper.locateInInventory(Block.planks.blockID, inv);
-				break;
-			case 400:
-				slot = ReikaInventoryHelper.locateInInventory(Block.wood.blockID, inv);
-				break;
-			case 600:
-				slot = ReikaInventoryHelper.locateInInventory(Item.coal.itemID, inv);
-				break;
-			case 800:
-				slot = ReikaInventoryHelper.locateInInventory(Item.blazePowder.itemID, inv);
-				break;
-			case 1200:
-				slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
-				break;
-			case 2500:
-				slot = ReikaInventoryHelper.locateInInventory(Item.ingotIron.itemID, inv);
-				slot2 = ReikaInventoryHelper.locateInInventory(ItemStacks.aluminumpowder.itemID, inv);
-				break;
+		case 300:
+			slot = ReikaInventoryHelper.locateInInventory(Block.planks.blockID, inv);
+			break;
+		case 400:
+			slot = ReikaInventoryHelper.locateInInventory(Block.wood.blockID, inv);
+			break;
+		case 600:
+			slot = ReikaInventoryHelper.locateInInventory(Item.coal.itemID, inv);
+			break;
+		case 800:
+			slot = ReikaInventoryHelper.locateInInventory(Item.blazePowder.itemID, inv);
+			break;
+		case 1200:
+			slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
+			break;
+		case 2500:
+			slot = ReikaInventoryHelper.locateInInventory(Item.ingotIron.itemID, inv);
+			slot2 = ReikaInventoryHelper.locateInInventory(ItemStacks.aluminumpowder.itemID, inv);
+			break;
 		}
 		ReikaInventoryHelper.decrStack(slot, inv);
 		if (slot2 > -1)
@@ -190,11 +194,11 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 			return 800;
 		if (ReikaInventoryHelper.checkForItem(Item.coal.itemID, inv))
 			return 600; //really 580
-		if (ReikaInventoryHelper.checkForItem(Block.wood.blockID, inv))
-			return 400;
-		if (ReikaInventoryHelper.checkForItem(Block.planks.blockID, inv))
-			return 300;
-		return 0;
+			if (ReikaInventoryHelper.checkForItem(Block.wood.blockID, inv))
+				return 400;
+			if (ReikaInventoryHelper.checkForItem(Block.planks.blockID, inv))
+				return 300;
+			return 0;
 	}
 
 	private boolean hasValidItems() {

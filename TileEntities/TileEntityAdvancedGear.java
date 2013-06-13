@@ -41,7 +41,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public ItemStack[] belts = new ItemStack[31];
 
 
-	//FIX THIS;
+	//-ve ratio is torque mode for cvt
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -51,38 +51,82 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-			omega = spl.omega; //omega always constant - UNLESS WORM
-			if (worm)
-				omega *= ((100-4*ReikaMathLibrary.logbase(omegain, 2)+28)/100);
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
+		if (worm || (!coil && ratio < 0)) {
+			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+				omega = (int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = (int)(spl.torque/2*this.getEffectiveRatio());
+					return;
+				}
+				if (favorbent) {
+					torque = (int)(spl.torque/sratio*this.getEffectiveRatio());
+				}
+				else {
+					torque = (int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+				}
+			}
+			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+				omega = (int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = (int)(spl.torque/2*this.getEffectiveRatio());
+					return;
+				}
+				if (favorbent) {
+					torque = (int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+				}
+				else {
+					torque = (int)(spl.torque/sratio*this.getEffectiveRatio());
+				}
+			}
+			else //We are not one of its write-to blocks
 				return;
-			}
-			if (favorbent) {
-				torque = spl.torque/sratio;
-			}
-			else {
-				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
-			}
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-			omega = spl.omega; //omega always constant - UNLESS WORM
-			if (worm)
-				omega *= ((100-4*ReikaMathLibrary.logbase(omegain, 2)+28)/100);
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
+		else {
+			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+				omega = (int)(spl.omega*this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = (int)(spl.torque/2/this.getEffectiveRatio());
+					return;
+				}
+				if (favorbent) {
+					torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
+				}
+				else {
+					torque = (int)((spl.torque*((sratio-1D))/sratio)/(this.getEffectiveRatio()));
+				}
+			}
+			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+				omega = (int)(spl.omega*this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				if (sratio == 1) { //Even split, favorbent irrelevant
+					torque = (int)(spl.torque/2/this.getEffectiveRatio());
+					return;
+				}
+				if (favorbent) {
+					torque = (int)(spl.torque*((sratio-1D)/(sratio)));
+				}
+				else {
+					torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
+				}
+			}
+			else //We are not one of its write-to blocks
 				return;
-			}
-			if (favorbent) {
-				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
-			}
-			else {
-				torque = spl.torque/sratio;
-			}
 		}
-		else //We are not one of its write-to blocks
-			return;
+	}
+
+	private double getEffectiveRatio() {
+		if (coil)
+			return 1;
+		if (worm)
+			return WORMRATIO;
+		if (ratio < 0)
+			return -ratio;
+		return ratio;
+	}
+
+	private double getPowerLossFraction(int speed) {
+		if (worm)
+			return (100-4*ReikaMathLibrary.logbase(speed, 2)+28)/100;
+		return 1;
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer var1) {
@@ -294,7 +338,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 
 		if (worm) {
-			omega = (int)((((omegain / WORMRATIO)*(100-4*ReikaMathLibrary.logbase(omegain, 2)+28)))/100);
+			omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
 			if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
 				torque = torquein * WORMRATIO;
 			else {
