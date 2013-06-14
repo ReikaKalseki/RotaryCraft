@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemWorldEdit extends ItemBasic {
@@ -40,7 +39,7 @@ public class ItemWorldEdit extends ItemBasic {
 			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
 		}
 		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
-		String msg = RotaryCraft.chatLogger.getLastMessageFromPlayer(ep);
+		String msg = "0";
 		int id = 0;
 		int meta = 0;
 		if (msg != null) {

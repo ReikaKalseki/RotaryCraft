@@ -19,7 +19,6 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.ChatLogger;
 import Reika.DragonAPI.LanguageArray;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -126,8 +125,6 @@ public class RotaryCraft {
 	public static Item[] basicItems = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
-	
-	public static final ChatLogger chatLogger = new ChatLogger();
 
 	public static Entity arrow;
 	public static Entity fallblock;
@@ -159,7 +156,6 @@ public class RotaryCraft {
 		RotaryNames.addNames();
 		RotaryRecipes.addRecipes();
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-		NetworkRegistry.instance().registerChatListener(chatLogger);
 		RotaryRegistration.addTileEntities();
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();

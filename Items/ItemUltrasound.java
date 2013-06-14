@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
@@ -41,15 +40,8 @@ public class ItemUltrasound extends ItemChargedTool {
 		boolean liq = false;
 		boolean caveready = false;
 		for (float i = 0; i <= 5; i += 0.2) {
-			double[] xyz = ReikaVectorHelper.getPlayerLookCoords(ep, i);
-			int x = (int)xyz[0];
-			int y = (int)xyz[1];
-			int z = (int)xyz[2];
-			if (x < 0)
-				x--;
-			if (z < 0)
-				z--;
-			int id = world.getBlockId(x, y, z);
+			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
+			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 			if (ReikaBlockHelper.isOre(id) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");

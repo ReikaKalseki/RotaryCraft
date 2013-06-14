@@ -53,7 +53,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+		this.adjustAim(world, x, y, z, meta);
 	}
 
 	@Override
@@ -73,7 +73,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	}
 
 	private void adjustAim(World world, int x, int y, int z, int meta) {
-
+		float sun = world.getSunBrightness(0);
+		long time = world.getWorldTime()%24000;
+		phi = 90+180*time/12000F;
 	}
 
 }

@@ -50,6 +50,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
+import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.TileEntityMonitor;
@@ -322,6 +323,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case BLOCKCANNON:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBlockCannon(), a, -0.1D, b, 0.0F);
+				break;
+			case MIRROR:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMirror(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

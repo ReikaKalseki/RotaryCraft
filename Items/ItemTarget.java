@@ -14,8 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 
@@ -27,16 +26,25 @@ public class ItemTarget extends ItemBasic {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		MovingObjectPosition mov = ReikaPlayerAPI.getLookedAtBlock(512);
+		MovingObjectPosition mov = null;//= ReikaPlayerAPI.getLookedAtBlock(512);
+		for (float i = 0; i <= 512; i += 0.5) {
+			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
+			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			if (id != 0) {
+				mov = new MovingObjectPosition(xyz[0], xyz[1], xyz[2], 0, ep.getLookVec());
+				break;
+			}
+		}
 		//ReikaChatHelper.write(mov);
 		if (mov != null) {
 			int x = mov.blockX;
 			int y = mov.blockY;
 			int z = mov.blockZ;
 			//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
-			for (int i = -8; i <= 8; i++) {
-				for (int j = -8; j <= 8; j++) {
-					for (int k = -8; k <= 8; k++) {
+			int range = 16;
+			for (int i = -range; i <= range; i++) {
+				for (int j = -range; j <= range; j++) {
+					for (int k = -range; k <= range; k++) {
 						TileEntity te = world.getBlockTileEntity((int)ep.posX+i, (int)ep.posY+j, (int)ep.posZ+k);
 						if (te instanceof TileEntityTNTCannon) {
 							TileEntityTNTCannon tc = (TileEntityTNTCannon)te;
