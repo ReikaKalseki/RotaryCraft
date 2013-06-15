@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
@@ -184,7 +185,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			}
 		}
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
-			ep.openGui(RotaryCraft.instance, 9, world, x, y, z);
+			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}
 		return false;

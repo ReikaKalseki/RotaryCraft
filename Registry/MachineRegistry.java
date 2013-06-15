@@ -803,4 +803,32 @@ public enum MachineRegistry {
 			return true;
 		return false;
 	}
+
+	public boolean hasSubdivisions() {
+		if (this == ENGINE)
+			return true;
+		if (this == GEARBOX)
+			return true;
+		if (this == SHAFT)
+			return true;
+		if (this == ADVANCEDGEARS)
+			return true;
+		if (this == FLYWHEEL)
+			return true;
+		return false;
+	}
+
+	public String getManufacturerName() {
+		return this.getManufacturer().getName();
+	}
+
+	public String getMachineDescription() {
+		return this.getManufacturer().getPartDesc();
+	}
+
+	public Manufacturers getManufacturer() {
+		if (Manufacturers.hasSubMakers(this))
+			return Manufacturers.getSpecificMaker(this, 0);
+		return Manufacturers.getMaker(this);
+	}
 }

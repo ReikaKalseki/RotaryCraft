@@ -12,9 +12,9 @@ package Reika.RotaryCraft.Items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 
 public class ItemHandBook extends ItemRotaryTool {
 
@@ -25,7 +25,7 @@ public class ItemHandBook extends ItemRotaryTool {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer ep)
 	{
-		ep.openGui(RotaryCraft.instance, 11, world, 0, 0, 0);
+		ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOK.ordinal(), world, 0, 0, 0);
 		return itemstack;
 	}
 }

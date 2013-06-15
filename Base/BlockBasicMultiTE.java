@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Registry.EnumLook;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
@@ -174,7 +175,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			}
 		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
-			ep.openGui(RotaryCraft.instance, 0, world, x, y, z);
+			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}
 		if (te instanceof TileEntityScreen) {

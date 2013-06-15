@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -20,6 +23,7 @@ import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.LanguageArray;
+import Reika.DragonAPI.Interfaces.DragonAPIMod;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -70,7 +74,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
 
-public class RotaryCraft {
+public class RotaryCraft implements DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
 	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
@@ -81,14 +85,7 @@ public class RotaryCraft {
 	public static EnumArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", EnumArmorMaterial.DIAMOND.getDurability(0), dmgs, EnumArmorMaterial.GOLD.getEnchantability());
 	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
-	/*
-	public static Item debug;
-	public static Item worldedit;
 
-	public static Item screwdriver;
-	public static Item meter;
-	public static Item infobook;
-	 */
 	public static Block decoblock;
 	public static Block blastglass;
 	public static Block obsidianglass;
@@ -221,6 +218,31 @@ public class RotaryCraft {
 
 	public String getVersion() {
 		return "RotaryCraft RC v1.0";
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "RotaryCraft Beta";
+	}
+
+	@Override
+	public String getModAuthorName() {
+		return "Reika";
+	}
+
+	@Override
+	public URL getDocumentationSite() throws MalformedURLException {
+		return new URL("http://www.minecraftforum.net/topic/1685078-152forgetechrotarycraft-machines-power-automation/");
+	}
+
+	@Override
+	public boolean hasWiki() {
+		return true;
+	}
+
+	@Override
+	public URL getWiki() throws MalformedURLException {
+		return new URL("http://rotary-craft.wikia.com/wiki/Rotary_Craft_Wiki");
 	}
 
 }

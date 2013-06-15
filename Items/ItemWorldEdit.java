@@ -16,7 +16,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 
 public class ItemWorldEdit extends ItemBasic {
 
@@ -39,42 +42,20 @@ public class ItemWorldEdit extends ItemBasic {
 			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
 		}
 		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
-		String msg = "0";
-		int id = 0;
-		int meta = 0;
-		if (msg != null) {
-			msg = msg.trim();
-			String[] data = msg.split(":");
-			String[] data2 = new String[2];
-			if (data.length == 1) {
-				data2 = new String[2];
-				data2[0] = data[0];
-				data2[1] = "0";
-			}
-			else {
-				data2 = data;
-			}
-			if (data2[0].matches("^[0-9 ]+$") && data2[1].matches("^[0-9 ]+$")) {
-				id = Integer.parseInt(data2[0]);
-				meta = Integer.parseInt(data2[1]);
-				if (id != 0) {
-					if (id >= Block.blocksList.length || Block.blocksList[id] == null || Block.blocksList[id].getLocalizedName() == "") {
-						ReikaChatHelper.write("Block "+id+" does not exist!");
-						return false;
-					}
-				}
-			}
-			else {
-				ReikaChatHelper.write("\""+msg+"\" is an invalid Block ID or metadata!");
-				this.reset(is, ep);
+		if (!WorldEditHelper.hasPlayer(ep)) {
+			ReikaChatHelper.write("Player "+ep.getEntityName()+" has no chosen block!");
+			return false;
+		}
+		int id = WorldEditHelper.getCommandedID(ep);
+		int meta = WorldEditHelper.getCommandedMetadata(ep);
+
+		if (id != 0) {
+			if (id >= Block.blocksList.length || Block.blocksList[id] == null || Block.blocksList[id].getLocalizedName() == "") {
+				ReikaChatHelper.write("Block "+id+" does not exist!");
 				return false;
 			}
 		}
-		else {
-			ReikaChatHelper.write("No ID messages present!");
-			this.reset(is, ep);
-			return false;
-		}
+
 		if (ep.isSneaking()) {
 			is.stackTagCompound.setInteger("ex", mov.blockX);
 			is.stackTagCompound.setInteger("ey", mov.blockY);
@@ -137,5 +118,11 @@ public class ItemWorldEdit extends ItemBasic {
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
 		return 114+is.getItemDamage();
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
+		ep.openGui(RotaryCraft.instance, GuiRegistry.WORLDEDIT.ordinal(), world, 0, 0, 0);
+		return is;
 	}
 }

@@ -18,17 +18,17 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiCannon;
 import Reika.RotaryCraft.GUIs.GuiCoil;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiMachine extends GuiContainer {
@@ -60,7 +60,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void actionPerformed(GuiButton b) {
 		if (b.id == 24000 || b.id == 24001) {
-			ep.openGui(RotaryCraft.instance, 12, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+			ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 		}
 	}
 

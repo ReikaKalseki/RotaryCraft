@@ -24,6 +24,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
@@ -64,12 +65,12 @@ public class RotaryAux {
 		if (m == MachineRegistry.SCREEN)
 			return !ep.isSneaking();
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			Object GUI = GuiHandler.instance.getClientGuiElement(9, ep, world, x, y, z);
+			Object GUI = GuiHandler.instance.getClientGuiElement(GuiRegistry.MACHINE.ordinal(), ep, world, x, y, z);
 			if (GUI != null)
 				return true;
 		}
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			Object GUI = GuiHandler.instance.getServerGuiElement(9, ep, world, x, y, z);
+			Object GUI = GuiHandler.instance.getServerGuiElement(GuiRegistry.MACHINE.ordinal(), ep, world, x, y, z);
 			if (GUI != null)
 				return true;
 		}

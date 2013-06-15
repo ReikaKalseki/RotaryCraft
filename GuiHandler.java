@@ -13,8 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
-
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
@@ -53,6 +51,7 @@ import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.Containers.ContainerSteam;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
+import Reika.RotaryCraft.Containers.ContainerWorldEdit;
 import Reika.RotaryCraft.GUIs.GuiAerosolizer;
 import Reika.RotaryCraft.GUIs.GuiBevel;
 import Reika.RotaryCraft.GUIs.GuiBlastFurnace;
@@ -94,6 +93,8 @@ import Reika.RotaryCraft.GUIs.GuiSteam;
 import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
+import Reika.RotaryCraft.GUIs.GuiWorldEdit;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -131,6 +132,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -138,12 +140,13 @@ public class GuiHandler implements IGuiHandler {
 	//returns an instance of the Container you made earlier
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if (id == 10)
+		GuiRegistry gr = GuiRegistry.getEntry(id);
+		if (!gr.hasContainer())
+			return null;
+		if (gr == GuiRegistry.HANDCRAFT)
 			return new ContainerHandCraft(player, world);
-		if (id == 11)
-			return null;
-		if (id == 12)
-			return null;
+		if (gr == GuiRegistry.WORLDEDIT)
+			return new ContainerWorldEdit(player, world);
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (!(tile instanceof RotaryCraftTileEntity))
 			return null;
@@ -162,19 +165,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).type) {
-				case STEAM:
-					return new ContainerSteam(player, (TileEntityEngine) te);
-				case GAS:
-					return new ContainerEthanol(player, (TileEntityEngine) te);
-				case AC:
-					return new OneSlotContainer(player, te);
-				case SPORT:
-					return new ContainerPerformance(player, (TileEntityEngine) te);
-				case MICRO:
-				case JET:
-					return new ContainerJet(player, (TileEntityEngine)te);
-				default:
-					return null;
+			case STEAM:
+				return new ContainerSteam(player, (TileEntityEngine) te);
+			case GAS:
+				return new ContainerEthanol(player, (TileEntityEngine) te);
+			case AC:
+				return new OneSlotContainer(player, te);
+			case SPORT:
+				return new ContainerPerformance(player, (TileEntityEngine) te);
+			case MICRO:
+			case JET:
+				return new ContainerJet(player, (TileEntityEngine)te);
+			default:
+				return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {
@@ -251,15 +254,18 @@ public class GuiHandler implements IGuiHandler {
 	//returns an instance of the Gui you made earlier
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		GuiRegistry gr = GuiRegistry.getEntry(id);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (id == 10)
+		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
-		if (id == 11)
+		if (gr == GuiRegistry.HANDBOOK)
 			return new GuiHandbook(player, world);
-		if (id == 12) {
+		if (gr == GuiRegistry.HANDBOOKPAGE) {
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 			return new GuiHandbookPage(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));
 		}
+		if (gr == GuiRegistry.WORLDEDIT)
+			return new GuiWorldEdit(player, world);
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}
@@ -277,19 +283,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).type) {
-				case STEAM:
-					return new GuiSteam(player, (TileEntityEngine) te);
-				case GAS:
-					return new GuiEthanol(player, (TileEntityEngine) te);
-				case AC:
-					return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
-				case SPORT:
-					return new GuiPerformance(player, (TileEntityEngine) te);
-				case MICRO:
-				case JET:
-					return new GuiJet(player, (TileEntityEngine) te);
-				default:
-					return null;
+			case STEAM:
+				return new GuiSteam(player, (TileEntityEngine) te);
+			case GAS:
+				return new GuiEthanol(player, (TileEntityEngine) te);
+			case AC:
+				return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
+			case SPORT:
+				return new GuiPerformance(player, (TileEntityEngine) te);
+			case MICRO:
+			case JET:
+				return new GuiJet(player, (TileEntityEngine) te);
+			default:
+				return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {
