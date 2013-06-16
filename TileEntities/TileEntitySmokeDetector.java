@@ -10,11 +10,9 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -107,10 +105,6 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 		if (battery[0].getItemDamage() > 8)
 			return false;
 		return true;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer ep) {
-		return (ReikaMathLibrary.py3d(ep.posX-xCoord, ep.posY-yCoord, ep.posZ-zCoord) <= 8);
 	}
 
 	@Override

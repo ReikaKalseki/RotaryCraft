@@ -16,9 +16,7 @@ import net.minecraft.world.World;
 public class GuiHandbookPage extends GuiHandbook {
 
 	public GuiHandbookPage(EntityPlayer p5ep, World world, int sc, int pg) {
-		super(p5ep, world);
-		screen = (byte)sc;
-		page = (byte)pg;
+		super(p5ep, world, sc, pg);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemMulti;
+import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -81,6 +82,7 @@ public class ItemPipePlacer extends ItemMulti {
 				break;
 			}
 			world.setBlock(x, y, z, BlockRegistry.PIPING.getBlockID(), m.getMachineMetadata(), 3);
+			((RotaryCraftTileEntity)(world.getBlockTileEntity(x, y, z))).placer = ep.getEntityName();
 		}
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", world.getBlockMetadata(x, y, z)));
 		return true;

@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -50,12 +49,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			return setDelay;
 		else
 			return this.getMinDelay();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		double dist = ReikaMathLibrary.py3d(xCoord-var1.posX, yCoord-var1.posY, zCoord-var1.posZ);
-		return (dist <= 8) && (power >= MINPOWER || true);
 	}
 
 	@Override

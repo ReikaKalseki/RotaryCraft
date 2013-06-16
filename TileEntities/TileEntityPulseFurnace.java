@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -27,6 +26,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPulseFurnace;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE {
@@ -369,49 +369,49 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 				return 780;
 		}
 		switch (id) {
-			case 49:
-				return 800; //obsidian melting
-			case 265:
-				return 900;	//steelmaking
-			case 145:	//anvil (31 iron)
-			case 154: //hopper (5 iron)
-			case 256:
-			case 257:
-			case 258:
-			case 267:
-			case 292:
-			case 306:
-			case 307:
-			case 308:
-			case 309:
-			case 325:
-			case 326:
-			case 327:
-			case 328:
-			case 330:
-			case 335:
-			case 380:
-			case 302:
-			case 303:
-			case 304:
-			case 305:
-			case 259:
-			case 66:
-			case 28:
-			case 101:
-			case 157:	//activator rails (6 iron)
-				return 780;	//iron /2
-			case 283:
-			case 284:
-			case 285:
-			case 286:
-			case 294:
-			case 314:
-			case 315:
-			case 316:
-			case 317:
-			case 27:
-				return 530;	//gold /2
+		case 49:
+			return 800; //obsidian melting
+		case 265:
+			return 900;	//steelmaking
+		case 145:	//anvil (31 iron)
+		case 154: //hopper (5 iron)
+		case 256:
+		case 257:
+		case 258:
+		case 267:
+		case 292:
+		case 306:
+		case 307:
+		case 308:
+		case 309:
+		case 325:
+		case 326:
+		case 327:
+		case 328:
+		case 330:
+		case 335:
+		case 380:
+		case 302:
+		case 303:
+		case 304:
+		case 305:
+		case 259:
+		case 66:
+		case 28:
+		case 101:
+		case 157:	//activator rails (6 iron)
+			return 780;	//iron /2
+		case 283:
+		case 284:
+		case 285:
+		case 286:
+		case 294:
+		case 314:
+		case 315:
+		case 316:
+		case 317:
+		case 27:
+			return 530;	//gold /2
 
 		}
 		return -1;
@@ -540,6 +540,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		ReikaInventoryHelper.addOrSetStack(i.itemID, 1, i.getItemDamage(), inv, 2);
 		if (inv[0].stackSize <= 0)
 			inv[0] = null;
+		this.getPlacer().triggerAchievement(RotaryAchievements.RECYCLE.get());
 	}
 
 	private ItemStack getCraftedScrapIngot() {

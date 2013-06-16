@@ -258,12 +258,6 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-
-		return false;
-	}
-
-	@Override
 	public void openChest() {
 	}
 

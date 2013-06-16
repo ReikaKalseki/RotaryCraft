@@ -113,6 +113,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public int backx;
 	public int backz;
 
+	private int chickenCount = 0;
+
 	/** Used in steam and performance engines */
 	public int waterLevel;
 
@@ -247,10 +249,11 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer ep) {
 		if (!type.hasGui())
 			return false;
-		return (ReikaMathLibrary.py3d(ep.posX-xCoord, ep.posY-yCoord, ep.posZ-zCoord) <= 8);
+		return super.isUseableByPlayer(ep);
 	}
 
 	public int getLiquidScaled(int par1)
@@ -568,7 +571,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (waterLevel <= 0)
 			return false;
 
-
+		this.getPlacer().triggerAchievement(RotaryAchievements.STEAMENGINE.get());
 		return true;
 	}
 
@@ -860,8 +863,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	private void checkJetFailure() {
 		if (isJetFailing)
 			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
-		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0)
+		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0) {
 			isJetFailing = true;
+			this.getPlacer().triggerAchievement(RotaryAchievements.JETFAIL.get());
+		}
 	}
 
 	/** Like BC obsidian pipe - suck in entities in a "funnel" in front of the engine, and deal damage (50 hearts).
@@ -985,6 +990,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 							caught.attackEntityFrom(DamageSource.generic, 1000);
 							if (caught instanceof EntityPlayer) {
 								((EntityPlayer)caught).triggerAchievement(RotaryAchievements.SUCKEDINTOJET.get());
+							}
+							if (caught instanceof EntityChicken) {
+								chickenCount++;
+								if (chickenCount >= 50) {
+									this.getPlacer().triggerAchievement(RotaryAchievements.JETCHICKEN.get());
+								}
 							}
 						}
 						//ReikaChatHelper.writeInt(FOD);
@@ -1190,6 +1201,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		NBT.setInteger("additive", additives);
 		NBT.setBoolean("choke", isChoking);
 		NBT.setBoolean("jetfail", isJetFailing);
+		NBT.setInteger("chickens", chickenCount);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -1221,6 +1233,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		additives = NBT.getInteger("additive");
 		isChoking = NBT.getBoolean("choke");
 		isJetFailing = NBT.getBoolean("jetfail");
+		chickenCount = NBT.getInteger("chickens");
 
 		type = EnumEngineType.setType(NBT.getInteger("type"));
 		FOD = NBT.getInteger("FOD");

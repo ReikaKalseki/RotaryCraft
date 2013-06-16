@@ -11,14 +11,12 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -287,11 +285,6 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		double dist = ReikaMathLibrary.py3d(xCoord-var1.posX, yCoord-var1.posY, zCoord-var1.posZ);
-		return (dist <= 8);
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -83,6 +82,7 @@ public final class ItemStacks {
 	public static final ItemStack lim = new ItemStack(RotaryCraft.heatcraft, 1, 4);
 	public static final ItemStack prop = new ItemStack(RotaryCraft.heatcraft, 1, 5);
 	public static final ItemStack hub = new ItemStack(RotaryCraft.heatcraft, 1, 6);
+	public static final ItemStack mirror = new ItemStack(RotaryCraft.heatcraft, 1, 7);
 
 	public static final ItemStack impeller = new ItemStack(RotaryCraft.enginecraft, 1, 0);
 	public static final ItemStack compressor = new ItemStack(RotaryCraft.enginecraft, 1, 1);

@@ -116,6 +116,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return true;
 		if (m == MachineRegistry.EXTRACTOR)
 			return true;
+		if (m == MachineRegistry.SOLARTOWER)
+			return true;
 		if (m == MachineRegistry.OBSIDIAN && look != EnumLook.DOWN)
 			return true;
 		if (m == MachineRegistry.PUMP && look != EnumLook.UP && look != EnumLook.DOWN)

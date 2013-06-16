@@ -20,11 +20,13 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiCannon;
 import Reika.RotaryCraft.GUIs.GuiCoil;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import cpw.mods.fml.relauncher.Side;
@@ -60,7 +62,10 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void actionPerformed(GuiButton b) {
 		if (b.id == 24000 || b.id == 24001) {
-			ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getID(), ep.inventory.mainInventory))
+				ep.openGui(RotaryCraft.instance, GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+			else
+				ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 		}
 	}
 

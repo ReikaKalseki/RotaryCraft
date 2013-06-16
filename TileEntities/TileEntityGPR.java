@@ -48,7 +48,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
         if (this.power < MINPOWER)
         	return false;*/
 
-		return par1EntityPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
+		return super.isUseableByPlayer(par1EntityPlayer);
 	}
 
 	public double getSpongy(World world, int x, int y, int z) {

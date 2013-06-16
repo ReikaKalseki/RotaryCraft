@@ -21,6 +21,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
@@ -38,6 +39,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class ItemMeter extends ItemRotaryTool
@@ -82,7 +84,7 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString("Pipe contains no liquid.");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("Pipe contains %d m^3 of liquid %d, with pressure %d kPa.", clicked.liquidLevel, clicked.liquidID, clicked.fluidPressure));
+			ReikaChatHelper.writeString(String.format("Pipe contains %d m^3 of %s, with pressure %d kPa.", clicked.liquidLevel, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase(), clicked.fluidPressure));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
@@ -156,8 +158,18 @@ public class ItemMeter extends ItemRotaryTool
 					return false;
 				if (ep.isSneaking() && clicked.power > clicked.MINPOWER) {
 					double ratio = 100*clicked.getSpongy(world, x, y-1, z);
-					ReikaChatHelper.writeString(String.format("The ground is %.3f percent caves here.", ratio));
+					ReikaChatHelper.writeString(String.format("The ground is %.3f%s caves here.", ratio, "%%"));
 				}
+				return true;
+			}
+			if (m == MachineRegistry.SOLARTOWER) {
+				TileEntitySolar clicked = (TileEntitySolar)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				TileEntitySolar top = (TileEntitySolar)world.getBlockTileEntity(x, clicked.getTopOfTower(), z);
+				TileEntitySolar bottom = (TileEntitySolar)world.getBlockTileEntity(x, clicked.getBottomOfTower(), z);
+				ReikaChatHelper.writeString(String.format("Solar plant contains %d mirrors and %d active tower pieces.", top.getArraySize(), bottom.getTowerHeight()));
+				ReikaChatHelper.writeString(String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
 				return true;
 			}
 			if (m == MachineRegistry.WINDER) {

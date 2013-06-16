@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -131,11 +130,11 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer ep) {
-		if (!this.isStandard8mReach(ep, this))
-			return false;
 		if (numchanges > 0)
 			return false;
-		return (power >= MINPOWER);
+		if (power < MINPOWER)
+			return false;
+		return super.isUseableByPlayer(ep);
 	}
 
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -216,26 +215,26 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-			case 0:
-				readx = xCoord+1;
-				readz = zCoord;
-				ready = yCoord;
-				break;
-			case 1:
-				readx = xCoord-1;
-				readz = zCoord;
-				ready = yCoord;
-				break;
-			case 3:
-				readz = zCoord+1;
-				readx = xCoord;
-				ready = yCoord;
-				break;
-			case 2:
-				readz = zCoord-1;
-				readx = xCoord;
-				ready = yCoord;
-				break;
+		case 0:
+			readx = xCoord+1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 1:
+			readx = xCoord-1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 3:
+			readz = zCoord+1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		case 2:
+			readz = zCoord-1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
 		}
 	}
 

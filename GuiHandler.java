@@ -259,7 +259,11 @@ public class GuiHandler implements IGuiHandler {
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
 		if (gr == GuiRegistry.HANDBOOK)
-			return new GuiHandbook(player, world);
+			return new GuiHandbook(player, world, 0, 0);
+		if (gr == GuiRegistry.LOADEDHANDBOOK) {
+			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+			return new GuiHandbook(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));
+		}
 		if (gr == GuiRegistry.HANDBOOKPAGE) {
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 			return new GuiHandbookPage(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));

@@ -68,6 +68,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		adv.setBlockMetadata(4*is.getItemDamage()+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+		adv.placer = ep.getEntityName();
 		return true;
 	}
 	@Override

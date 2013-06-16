@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
@@ -727,11 +726,6 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (time == 0)
 			return 1;
 		return time;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		double dist = ReikaMathLibrary.py3d(xCoord+0.5-var1.posX, yCoord+0.5-var1.posY, zCoord+0.5-var1.posZ);
-		return (dist <= 8);
 	}
 
 	@Override

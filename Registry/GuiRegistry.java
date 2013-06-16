@@ -15,7 +15,8 @@ public enum GuiRegistry {
 	HANDCRAFT(),
 	HANDBOOK(),
 	HANDBOOKPAGE(),
-	WORLDEDIT();
+	WORLDEDIT(),
+	LOADEDHANDBOOK();
 
 	private static final GuiRegistry[] guiList = GuiRegistry.values();
 

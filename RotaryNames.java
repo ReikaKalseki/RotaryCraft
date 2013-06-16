@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class RotaryNames {
@@ -77,7 +77,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] heatPartNames = {
-		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub"
+		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror"
 	};
 
 	public static final String[] gearUnitNames = {

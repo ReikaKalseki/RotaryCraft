@@ -130,11 +130,11 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return 1;
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
 		if (worm)
 			return false;
-		double dist = ReikaMathLibrary.py3d(xCoord-var1.posX, yCoord-var1.posY, zCoord-var1.posZ);
-		return (dist <= 8);
+		return super.isUseableByPlayer(var1);
 	}
 
 	@Override

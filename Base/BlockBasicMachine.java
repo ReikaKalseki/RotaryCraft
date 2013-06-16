@@ -184,7 +184,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				}
 			}
 		}
-		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
+		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isUseableByPlayer(ep)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}

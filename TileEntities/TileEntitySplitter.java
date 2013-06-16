@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -63,10 +62,6 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 		default:
 			return 9999999; //will know something is wrong
 		}
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer ep) {
-		return (ReikaMathLibrary.py3d(ep.posX-xCoord, ep.posY-yCoord, ep.posZ-zCoord) <= 8);
 	}
 
 	/**

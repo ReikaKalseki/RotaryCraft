@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
-
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
@@ -31,7 +30,7 @@ public enum RotaryAchievements {
 	RECYCLE("Green", 						-2, -5, MachineRegistry.PULSEJET.getCraftedProduct(), null, false),
 	MAKEJET("Jet Engine", 					-2, -6, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal()), null, true),
 	MAKERAILGUN("Overkill", 				-2, -7, MachineRegistry.RAILGUN.getCraftedProduct(), null, true),
-	SUCKEDINTOJET("Pulverized", 			-2, -8, Item.rottenFlesh, MAKEJET.ordinal(), false),
+	SUCKEDINTOJET("This Really Sucks", 		-2, -8, Item.rottenFlesh, MAKEJET.ordinal(), false),
 	BEDROCKBREAKER("Unbreakable?", 			-3, 0, MachineRegistry.BEDROCKBREAKER.getCraftedProduct(), MAKESTEEL.ordinal(), false), //break bedrock with
 	STEAMENGINE("Steam", 					-3, -1, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.STEAM.ordinal()), MAKESTEEL.ordinal(), false), //turn on
 	STEELSHAFT("Engaged", 					-3, -2, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal()), MAKESTEEL.ordinal(), false), //make

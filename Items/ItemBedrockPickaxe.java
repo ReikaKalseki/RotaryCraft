@@ -13,6 +13,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -22,16 +24,18 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import Reika.DragonAPI.ReikaModelledBreakFX;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 
@@ -70,26 +74,26 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-		world.setBlock(x, y, z, 0);/*
-    	if (world.isRemote) {
-    		for (int i = 0; i < 16; i++) {
-	    		ReikaModelledBreakFX e = new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), 0.4*itemRand.nextDouble(), -0.2+0.4*itemRand.nextDouble(), Block.silverfish, meta, 0, Minecraft.getMinecraft().renderEngine, "/terrain.png", 0, 0);
-	    		world.spawnEntityInWorld(e);
-    		}
-    	}*/
+		world.setBlock(x, y, z, 0);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			Icon ico = new RenderBlocks().getBlockIcon(Block.silverfish);
+			for (int i = 0; i < 16; i++) {
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -1+itemRand.nextDouble()*2, 2, -1+itemRand.nextDouble()*2, Block.silverfish, 0, world.getBlockMetadata(x, y, z), Minecraft.getMinecraft().renderEngine, "/terrain.png", ico.getInterpolatedU(0), ico.getInterpolatedV(0)));
+			}
+		}
 		ItemStack drop;
 		switch(meta) {
-			case 0:
-				drop = new ItemStack(Block.stone);
-				break;
-			case 1:
-				drop = new ItemStack(Block.cobblestone);
-				break;
-			case 2:
-				drop = new ItemStack(Block.stoneBrick);
-				break;
-			default:
-				drop = null;
+		case 0:
+			drop = new ItemStack(Block.stone);
+			break;
+		case 1:
+			drop = new ItemStack(Block.cobblestone);
+			break;
+		case 2:
+			drop = new ItemStack(Block.stoneBrick);
+			break;
+		default:
+			drop = null;
 		}
 		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
 		EntitySilverfish si = new EntitySilverfish(world);

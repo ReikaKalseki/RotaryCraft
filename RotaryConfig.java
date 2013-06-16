@@ -11,10 +11,9 @@ package Reika.RotaryCraft;
 
 import java.util.HashMap;
 
+import net.minecraftforge.common.Configuration;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-
-import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class RotaryConfig {
@@ -82,6 +81,7 @@ public class RotaryConfig {
 	public static boolean craftableBedrock;
 	public static boolean oreDict;
 	public static boolean consoleMsg;
+	public static boolean lockMachines;
 	public static int maxlamprange;
 	public static int maxheatrayrange;
 	public static int maxbridgerange;
@@ -174,6 +174,7 @@ public class RotaryConfig {
 		craftableBedrock = 	config.get("Control Setup", "Allow Craftable Bedrock", true).getBoolean(true);
 		oreDict = 			config.get("Control Setup", "Ore Dictionary Interchangeability", true).getBoolean(true);
 		consoleMsg =		config.get("Control Setup", "Console Loading Info", true).getBoolean(true);
+		lockMachines = 		config.get("Control Setup", "Owner-Only Machine Use", false).getBoolean(false);
 		//SIUnits = 			config.getOrCreateBooleanProperty("SI Metric Units", "Control Setup", true).getBoolean(true);
 		maxlamprange = 		config.get("Control Setup", "Max Floodlight Range", 128).getInt();
 		maxheatrayrange = 	config.get("Control Setup", "Max Heat Ray Range", 128).getInt();

@@ -16,7 +16,6 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesCompactor

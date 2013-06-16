@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -20,10 +21,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.RegistrationException;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -830,5 +833,42 @@ public enum MachineRegistry {
 		if (Manufacturers.hasSubMakers(this))
 			return Manufacturers.getSpecificMaker(this, 0);
 		return Manufacturers.getMaker(this);
+	}
+
+	public boolean canBeBroken() {
+		if (this == MIRROR)
+			return true;
+		if (this == SHAFT)
+			return true;
+		if (this == FLYWHEEL)
+			return true;
+		if (this == ENGINE)
+			return true;
+		return false;
+	}
+
+	public boolean isBroken(RotaryCraftTileEntity tile) {
+		if (!this.canBeBroken())
+			return false;
+		if (this == SHAFT)
+			return ((TileEntityShaft)tile).failed;
+		if (this == FLYWHEEL)
+			return ((TileEntityFlywheel)tile).failed;
+		if (this == ENGINE)
+			return (((TileEntityEngine)tile).FOD >= 8);
+		if (this == MIRROR)
+			return ((TileEntityMirror)tile).broken;
+		return false;
+	}
+
+	public List<ItemStack> getBrokenProducts() {
+		if (this == MIRROR) {
+			ItemStack[] is = {
+					ReikaItemHelper.getSizedItemStack(ItemStacks.basepanel, 2),
+					ReikaItemHelper.getSizedItemStack(ItemStacks.pcb, 1)
+			};
+			return ReikaJavaLibrary.makeListFromArray(is);
+		}
+		return null;
 	}
 }

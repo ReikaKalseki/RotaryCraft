@@ -25,7 +25,6 @@ import net.minecraft.network.packet.Packet63WorldParticles;
 import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;

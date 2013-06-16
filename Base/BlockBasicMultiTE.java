@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -33,9 +34,11 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Registry.EnumLook;
@@ -45,6 +48,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
@@ -161,7 +165,20 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
 				return false;
-		}/*
+		}
+		if (te instanceof TileEntityMirror) {
+			TileEntityMirror tm = (TileEntityMirror)te;
+			if (tm.broken) {
+				if (ReikaItemHelper.matchStacks(is, ItemStacks.mirror)) {
+					tm.repair(world, x, y, z);
+					if (!ep.capabilities.isCreativeMode) {
+						ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize-1, is.getItemDamage()));
+					}
+					return true;
+				}
+			}
+		}
+		/*
 		if (te instanceof TileEntityMusicBox) {
 			TileEntityMusicBox mb = (TileEntityMusicBox)te;
 			if (is != null && is.itemID == RotaryCraft.disk.itemID) {
@@ -174,7 +191,7 @@ public abstract class BlockBasicMultiTE extends Block {
 				return true;
 			}
 		}*/
-		if (te != null && RotaryAux.hasGui(world, x, y, z, ep)) {
+		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isUseableByPlayer(ep)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}
@@ -264,11 +281,16 @@ public abstract class BlockBasicMultiTE extends Block {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
 			ItemStack is = m.getCraftedProduct();
+			List li;
 			if (m.isEnchantable()) {
 				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
 				is = ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
-			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
+			if (m.isBroken((RotaryCraftTileEntity)te))
+				li = m.getBrokenProducts();
+			else
+				li = ReikaJavaLibrary.makeListFrom(is);
+			ReikaItemHelper.dropItems(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), li);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

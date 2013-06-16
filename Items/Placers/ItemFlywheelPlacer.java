@@ -73,6 +73,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 			fly.setBlockMetadata(meta+1);
 		else
 			fly.setBlockMetadata(meta-1);
+		fly.placer = ep.getEntityName();
 		return true;
 	}
 

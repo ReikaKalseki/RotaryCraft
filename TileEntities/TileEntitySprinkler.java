@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -21,6 +20,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelSprinkler;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect {
@@ -86,8 +86,9 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	}
 
 	public void hydrate(World world, int x, int y, int z, int meta) {
+		if (this.getRange() > 0)
+			this.getPlacer().triggerAchievement(RotaryAchievements.SPRINKLER.get());
 		this.spawnParticles(world, x, y, z);
-
 		int ytop = y-1;
 		int range = this.getRange();
 		for (int i = -range; i <= range; i++) {

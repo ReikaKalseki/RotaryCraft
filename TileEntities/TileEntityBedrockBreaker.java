@@ -20,6 +20,7 @@ import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 	private int harvestx;
@@ -217,6 +218,7 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 						itementity.motionY = 0.1+0.2*par5Random.nextFloat()+0.25*par5Random.nextFloat()*par5Random.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
 					itementity.velocityChanged = true;
 					world.spawnEntityInWorld(itementity);
+					this.getPlacer().triggerAchievement(RotaryAchievements.BEDROCKBREAKER.get());
 				}
 			}
 		}

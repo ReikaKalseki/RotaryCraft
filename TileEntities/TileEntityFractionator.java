@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 
@@ -99,6 +100,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 	}
 
 	public void make() {
+		this.getPlacer().triggerAchievement(RotaryAchievements.JETFUEL.get());
 		for (int i = 0; i < ingredients.length; i++) {
 			boolean consume = (par5Random.nextInt(16) == 0);
 			if (consume)

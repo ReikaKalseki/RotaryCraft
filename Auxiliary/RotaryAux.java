@@ -36,8 +36,8 @@ public class RotaryAux {
 
 	public static int blockModel;
 
-	public static final String items1png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/GUI/items.png";
-	public static final String items2png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/GUI/items2.png";
+	public static final String items1png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/items.png";
+	public static final String items2png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/items2.png";
 	public static final String terrainpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Terrain/textures.png";
 	public static final String tileentdir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/TileEntityTex/";
 	public static final String mididir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/MIDIs/";

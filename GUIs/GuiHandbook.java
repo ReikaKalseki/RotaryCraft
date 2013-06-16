@@ -12,7 +12,6 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -74,7 +73,7 @@ public class GuiHandbook extends GuiScreen
 	public static final int MAXPAGE = 24;
 
 	@SuppressWarnings("unused")
-	public GuiHandbook(EntityPlayer p5ep, World world)
+	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
 	{
 		//super();
 		player = p5ep;
@@ -84,6 +83,9 @@ public class GuiHandbook extends GuiScreen
 		}
 		staticwidth = xSize;
 		staticheight = ySize;
+
+		screen = (byte)s;
+		page = (byte)p;
 	}
 
 	@Override
@@ -161,30 +163,30 @@ public class GuiHandbook extends GuiScreen
 		}
 		if (screen >= TOCSTART && screen < INFOSTART) {
 			switch(button.id) {
-				case 0:
-					screen = INFOSTART;
-					break;
-				case 1:
-					screen = ENGINESTART;
-					break;
-				case 2:
-					screen = TRANSSTART;
-					break;
-				case 3:
-					screen = MACHINESTART;
-					break;
-				case 4:
-					screen = TOOLSTART;
-					break;
-				case 5:
-					screen = CRAFTSTART;
-					break;
-				case 6:
-					screen = RESOURCESTART;
-					break;
-				case 7:
-					screen = MISCSTART;
-					break;
+			case 0:
+				screen = INFOSTART;
+				break;
+			case 1:
+				screen = ENGINESTART;
+				break;
+			case 2:
+				screen = TRANSSTART;
+				break;
+			case 3:
+				screen = MACHINESTART;
+				break;
+			case 4:
+				screen = TOOLSTART;
+				break;
+			case 5:
+				screen = CRAFTSTART;
+				break;
+			case 6:
+				screen = RESOURCESTART;
+				break;
+			case 7:
+				screen = MISCSTART;
+				break;
 			}
 			this.initGui();
 			page = 0;
@@ -213,7 +215,7 @@ public class GuiHandbook extends GuiScreen
 		int lastx = mx;
 		int lasty = my;
 		mc.thePlayer.closeScreen();
-		ModLoader.openGUI(player, new GuiHandbook(player, worldObj));
+		//ModLoader.openGUI(player, new GuiHandbook(player, worldObj));
 		Mouse.setCursorPosition(lastx, lasty);
 	}
 
@@ -285,36 +287,36 @@ public class GuiHandbook extends GuiScreen
 		bcg = this.getGuiLayout();
 
 		switch(bcg) {
-			case 0:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookgui.png";
-				break;
-			case 1:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png";
-				break;
-			case 2:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguic.png";
-				break;
-			case 3:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguid.png";
-				break;
-			case 4:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguie.png";
-				break;
-			case 5:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguif.png";
-				break;
-			case 6:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguig.png";
-				break;
-			case 7:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguih.png";
-				break;
-			case 8:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguij.png";
-				break;
-			default:
-				var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
-				break;
+		case 0:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookgui.png";
+			break;
+		case 1:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png";
+			break;
+		case 2:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguic.png";
+			break;
+		case 3:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguid.png";
+			break;
+		case 4:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguie.png";
+			break;
+		case 5:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguif.png";
+			break;
+		case 6:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguig.png";
+			break;
+		case 7:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguih.png";
+			break;
+		case 8:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguij.png";
+			break;
+		default:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
+			break;
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(var4);

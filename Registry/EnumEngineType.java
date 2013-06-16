@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum EnumEngineType {

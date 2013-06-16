@@ -40,7 +40,10 @@ public class ClientProxy extends CommonProxy
 {
 	//public static final int BlockSheetTexRenderID = RenderingRegistry.getNextAvailableRenderId();
 
-	public static final ItemSpriteSheetRenderer[] items = {new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/items.png", RotaryAux.items1png), new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/items2.png", RotaryAux.items2png)};
+	public static final ItemSpriteSheetRenderer[] items = {
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items.png", RotaryAux.items1png),
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items2.png", RotaryAux.items2png)
+	};
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png", RotaryAux.terrainpng);
 

@@ -19,9 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
@@ -30,6 +27,8 @@ import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEnginePlacer extends ItemBlockPlacer {
 
@@ -76,6 +75,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 				eng.type = EnumEngineType.setType(is.getItemDamage());
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				eng.placer = ep.getEntityName();
 			}
 		}
 		return true;
@@ -145,18 +145,18 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 						a = 1;
 					int c = 0; int d = 0;
 					switch (m) {
-						case 0:
-							c = 1;
-							break;
-						case 1:
-							c = -1;
-							break;
-						case 2:
-							d = 1;
-							break;
-						case 3:
-							d = -1;
-							break;
+					case 0:
+						c = 1;
+						break;
+					case 1:
+						c = -1;
+						break;
+					case 2:
+						d = 1;
+						break;
+					case 3:
+						d = -1;
+						break;
 					}
 					int id = world.getBlockId(x+a*i+c, y+j, z+b*i+d);
 					if (!ReikaWorldHelper.softBlocks(id))

@@ -117,7 +117,6 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 		else {
 			omega = torque = 0;
 		}
-		this.writePowerToConsole();
 	}
 
 	@Override

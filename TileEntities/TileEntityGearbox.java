@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,6 +29,7 @@ import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory {
 
@@ -112,15 +112,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		}
 	}
 
-	/**
-	 * Do not make give this method the name canInteractWith because it clashes with Container
-	 */
-	public boolean isUseableByPlayer(EntityPlayer ep) {
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-			return false;
-		return ReikaMathLibrary.py3d(xCoord+0.5-ep.posX, yCoord+0.5-ep.posY, zCoord+0.5-ep.posZ) <= 8;
-	}
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -152,16 +143,21 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				switch(type) {
 				case WOOD:
 					damage += 6;	//2x original steel
+					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
 					break;
 				case STONE:
 					damage += 3;	//== original steel
+					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
 					break;
 				case STEEL:
 					damage++;		//1/3 original steel
+					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
 					break;
 				case DIAMOND:
-					if (par5Random.nextInt(3) == 0)
+					if (par5Random.nextInt(3) == 0) {
 						damage++;
+						this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
+					}
 					break;
 				case BEDROCK:
 					break;

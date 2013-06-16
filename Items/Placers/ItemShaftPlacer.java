@@ -22,8 +22,8 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -80,6 +80,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		}
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
+		sha.placer = ep.getEntityName();
 		return true;
 	}
 

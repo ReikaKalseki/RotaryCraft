@@ -51,6 +51,10 @@ public enum LiquidRegistry {
 		throw new RegistrationException(RotaryCraft.instance, "Unregistered liquid ID "+id+" and metadata "+meta+"!");
 	}
 
+	public boolean hasBlock() {
+		return this == WATER || this == LAVA;
+	}
+
 	public int getLiquidBlockID() {
 		if (this == WATER)
 			return 9;
@@ -80,5 +84,11 @@ public enum LiquidRegistry {
 				return true;
 		}
 		return false;
+	}
+
+	public String getName() {
+		String name = this.name();
+		String truename = name.charAt(0)+name.substring(1).toLowerCase();
+		return truename;
 	}
 }

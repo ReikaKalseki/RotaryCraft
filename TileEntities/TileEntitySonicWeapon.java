@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,9 +26,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -95,6 +96,18 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (setvolume > this.getMaxVolume())
 			setvolume = this.getMaxVolume();
 		this.applyEffects(world, x, y, z);
+	}
+
+	public void applyEffects(World world, int x, int y, int z) {
+		this.testKill(world, x, y, z);
+		this.breakBrick(world, x, y, z);
+		this.testLung(world, x, y, z);
+		this.testEye(world, x, y, z);
+		this.testBrain(world, x, y, z);
+		this.killSilverfish(world, x, y, z);
+	}
+
+	private void killSilverfish(World world, int x, int y, int z) {
 		if (this.getVolume() < SILVERFISHKILL)
 			return;
 		int range = (int)(6D*this.getVolume()/SILVERFISHKILL);
@@ -110,27 +123,20 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 				//ReikaJavaLibrary.pConsole("Killed at "+bx+", "+by+", "+bz);
 				int metadata = world.getBlockMetadata(bx, by, bz);
 				switch(metadata) {
-					case 0:
-						world.setBlock(bx, by, bz, Block.stone.blockID);
+				case 0:
+					world.setBlock(bx, by, bz, Block.stone.blockID);
 					break;
-					case 1:
-						world.setBlock(bx, by, bz, Block.cobblestone.blockID);
+				case 1:
+					world.setBlock(bx, by, bz, Block.cobblestone.blockID);
 					break;
-					case 2:
-						world.setBlock(bx, by, bz, Block.stoneBrick.blockID);
+				case 2:
+					world.setBlock(bx, by, bz, Block.stoneBrick.blockID);
 					break;
 				}
 				world.playSoundEffect(bx+0.5, by+0.5, bz+0.5, "mob.silverfish.kill", 1, 1);
+				ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.5F, z+0.5F, new EntitySilverfish(world).experienceValue);
 			}
 		}
-	}
-
-	public void applyEffects(World world, int x, int y, int z) {
-		this.testKill(world, x, y, z);
-		this.breakBrick(world, x, y, z);
-		this.testLung(world, x, y, z);
-		this.testEye(world, x, y, z);
-		this.testBrain(world, x, y, z);
 	}
 
 	public void testEye(World world, int x, int y, int z) {

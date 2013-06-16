@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController {
 
@@ -265,6 +266,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public void dig(World world, int x, int y, int z, int metadata) {
+		if (step == 1)
+			this.getPlacer().triggerAchievement(RotaryAchievements.BORER.get());
 		this.support(world, x, y, z, metadata);
 		int a = 0;
 		if (metadata > 1)

@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -44,6 +45,8 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 	protected int pseudometa = 0;
 
 	public int[] paint = {-1, -1, -1};
+
+	public String placer;
 
 	@Override
 	public final boolean canUpdate() {
@@ -222,6 +225,8 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 		NBT.setFloat("phi", phi);
 		NBT.setInteger("tick", tickcount);
 		NBT.setInteger("meta", pseudometa);
+		if (placer != null && !placer.isEmpty())
+			NBT.setString("place", placer);
 	}
 
 	/**
@@ -234,6 +239,7 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 		phi = NBT.getFloat("phi");
 		tickcount = NBT.getInteger("tick");
 		pseudometa = NBT.getInteger("meta");
+		placer = NBT.getString("place");
 	}
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
@@ -256,4 +262,17 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 	}
 
 	public abstract int getRedstoneOverride();
+
+	public EntityPlayer getPlacer() {
+		return worldObj.getPlayerEntityByName(placer);
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		if (RotaryConfig.lockMachines && !var1.getEntityName().equals(placer)) {
+			ReikaChatHelper.write("This "+this.getName()+" is locked and can only be used by "+placer+"!");
+			return false;
+		}
+		double dist = ReikaMathLibrary.py3d(xCoord+0.5-var1.posX, yCoord+0.5-var1.posY, zCoord+0.5-var1.posZ);
+		return (dist <= 8) && worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this;
+	}
 }

@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -25,12 +24,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity {
 
 	public static final int CAPACITY = 2400;
 	public static final int FUELID = -120;
-
-
-
-	public boolean isUseableByPlayer(EntityPlayer ep) {
-		return (ReikaMathLibrary.py3d(ep.posX-xCoord, ep.posY-yCoord, ep.posZ-zCoord) <= 8);
-	}
 
 	public int getLiquidScaled(int par1)
 	{

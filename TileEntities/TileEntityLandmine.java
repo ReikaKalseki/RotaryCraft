@@ -26,7 +26,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -234,11 +233,6 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return this.isStandard8mReach(entityplayer, this);
-	}
-
-	@Override
 	public void openChest() {
 		if (inv[0] == null)
 			return;
@@ -254,20 +248,20 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
 		switch (i) {
-			case 0:
-				return is.itemID == ItemRegistry.SPRING.getID();
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				return is.itemID == Item.gunpowder.itemID;
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				return this.isModifier(is);
-			default:
-				return false;
+		case 0:
+			return is.itemID == ItemRegistry.SPRING.getID();
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			return is.itemID == Item.gunpowder.itemID;
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			return this.isModifier(is);
+		default:
+			return false;
 		}
 	}
 

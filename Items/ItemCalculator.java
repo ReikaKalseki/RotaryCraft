@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
-
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.GUIs.GuiCalculator;
 

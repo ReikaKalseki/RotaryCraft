@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.awt.Color;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -30,19 +29,6 @@ public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiC
 
 	public static final Color[] colors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] colorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
-
-	/**
-	 * Do not make give this method the name canInteractWith because it clashes with Container
-	 */
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-	{
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-		{
-			return false;
-		}
-
-		return par1EntityPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
-	}
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();

@@ -9,13 +9,27 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBlockMachine {
 
@@ -58,7 +72,23 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (broken)
+			return;
 		this.adjustAim(world, x, y, z, meta);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
+			List in = world.getEntitiesWithinAABB(Entity.class, above);
+			for (int i = 0; i < in.size(); i++) {
+				Entity e = (Entity)in.get(i);
+				double m = ReikaEntityHelper.getEntityMass(e);
+				//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
+				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
+					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this);
+					e.attackEntityFrom(DamageSource.cactus, 1);
+				}
+			}
+		}
+		//this.repair(world, x, y, z);
 	}
 
 	@Override
@@ -71,13 +101,41 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		return 0;
 	}
 
-	public int getLightLevel() {
+	public float getLightLevel() {
+		if (broken)
+			return 0;
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
 		float sun = worldObj.getSunBrightness(0);
-		if (sun > 0)
+		if (sun > 0.21) {
 			return (int)(15*sun);
-		return 4;
+		}
+		int moon = worldObj.getMoonPhase();
+		float phase;
+		switch(moon) {
+		case 0:
+			phase = 1;
+			break;
+		case 1:
+		case 7:
+			phase = 0.8F;
+			break;
+		case 2:
+		case 6:
+			phase = 0.5F;
+			break;
+		case 3:
+		case 5:
+			phase = 0.2F;
+			break;
+		case 4:
+			phase = 0.05F;
+			break;
+		default:
+			phase = 0;
+		}
+		//ReikaJavaLibrary.pConsole(phase);
+		return 15*0.2F*phase;
 	}
 
 	private void adjustAim(World world, int x, int y, int z, int meta) {
@@ -164,7 +222,10 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 
 	public void breakMirror(World world, int x, int y, int z) {
 		broken = true;
-		//spawn particles
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlockVariable(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
+		}
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 1, 1);
 	}
 
 	public void repair(World world, int x, int y, int z) {

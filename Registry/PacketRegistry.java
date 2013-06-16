@@ -31,7 +31,8 @@ public enum PacketRegistry {
 	WINDER(30),
 	PROJECTOR(31),
 	CONTAINMENT(32),
-	ITEMCANNON(33, 35);
+	ITEMCANNON(33, 35),
+	MIRROR(36);
 
 	private int min;
 	private int max;
@@ -72,6 +73,8 @@ public enum PacketRegistry {
 		if (this == WINDER)
 			return 0;
 		if (this == PROJECTOR)
+			return 0;
+		if (this == MIRROR)
 			return 0;
 		return 1;
 	}

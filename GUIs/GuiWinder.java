@@ -11,7 +11,6 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
