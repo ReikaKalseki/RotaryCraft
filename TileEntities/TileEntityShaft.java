@@ -601,6 +601,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				omegain = devicein.omega;
 			}
 		}
+		if (m == MachineRegistry.SOLARTOWER) {
+			TileEntitySolar devicein = (TileEntitySolar)world.getBlockTileEntity(readx, ready, readz);
+			if (devicein.writex == x && devicein.writez == z) {
+				torquein = devicein.torque;
+				omegain = devicein.omega;
+			}
+		}
 		if (m == MachineRegistry.DYNAMOMETER) {
 			TileEntityMonitor devicein = (TileEntityMonitor)world.getBlockTileEntity(readx, ready, readz);
 			if (devicein.writex == x && devicein.writez == z) {

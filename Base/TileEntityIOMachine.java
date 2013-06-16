@@ -83,6 +83,13 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		NBT.setInteger("rx4", readx4);
 		NBT.setInteger("ry4", ready4);
 		NBT.setInteger("rz4", readz4);
+
+		NBT.setInteger("wx", writex);
+		NBT.setInteger("wy", writey);
+		NBT.setInteger("wz", writez);
+		NBT.setInteger("wx2", writex2);
+		NBT.setInteger("wy2", writey2);
+		NBT.setInteger("wz2", writez2);
 	}
 
 	/**
@@ -107,6 +114,13 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		readx4 = NBT.getInteger("rx4");
 		ready4 = NBT.getInteger("ry4");
 		readz4 = NBT.getInteger("rz4");
+
+		writex = NBT.getInteger("wx");
+		writey = NBT.getInteger("wy");
+		writez = NBT.getInteger("wz");
+		writex2 = NBT.getInteger("wx2");
+		writey2 = NBT.getInteger("wy2");
+		writez2 = NBT.getInteger("wz2");
 
 		if (torque < 0)
 		{

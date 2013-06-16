@@ -66,8 +66,9 @@ public class RenderSolar extends RotaryTERenderer
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntitySolarAt((TileEntitySolar)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+		}
 	}
 
 	@Override

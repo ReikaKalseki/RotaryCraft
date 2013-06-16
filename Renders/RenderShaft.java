@@ -69,42 +69,42 @@ public class RenderShaft extends RotaryTERenderer implements MultiModel
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
 			if (!tile.isInWorld()) {
 				switch(itemMetadata) {
-					case 1:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
-						break;
-					case 2:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexs.png");
-						break;
-					case 3:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-						break;
-					case 4:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexd.png");
-						break;
-					case 5:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexb.png");
-						break;
+				case 1:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
+					break;
+				case 2:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexs.png");
+					break;
+				case 3:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
+					break;
+				case 4:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexd.png");
+					break;
+				case 5:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexb.png");
+					break;
 				}
 			}
 			else {
 				if (tile.type == null)
 					return;
 				switch(tile.type) {
-					case WOOD:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
-						break;
-					case STONE:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexs.png");
-						break;
-					case STEEL:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-						break;
-					case DIAMOND:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexd.png");
-						break;
-					case BEDROCK:
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexb.png");
-						break;
+				case WOOD:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
+					break;
+				case STONE:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexs.png");
+					break;
+				case STEEL:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
+					break;
+				case DIAMOND:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexd.png");
+					break;
+				case BEDROCK:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexb.png");
+					break;
 				}
 			}
 
@@ -123,18 +123,18 @@ public class RenderShaft extends RotaryTERenderer implements MultiModel
 				meta = tile.getBlockMetadata();
 
 				switch(meta) {
-					case 0:
-						var11 = 0;
-						break;
-					case 1:
-						var11 = 180;
-						break;
-					case 2:
-						var11 = 90;
-						break;
-					case 3:
-						var11 = 270;
-						break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
 				}
 				GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 			}
@@ -149,30 +149,33 @@ public class RenderShaft extends RotaryTERenderer implements MultiModel
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
+			int dir = 1;
+			if (meta == 5)
+				dir = -1;
 			if (meta <= 3)
 				var14.renderAll(ReikaJavaLibrary.makeListFrom(failed), -tile.phi);
 			else if (meta <= 5) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
-				var15.renderAll(ReikaJavaLibrary.makeListFrom(failed), -tile.phi);
+				var15.renderAll(ReikaJavaLibrary.makeListFrom(failed), -tile.phi*dir);
 			}
 			else {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/crosstex.png"); // has own tex
 				switch(tile.getBlockMetadata()) {
-					case 0:
-						var16.renderAll(null, -tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
-						break;
-					case 6:
-						var16.renderAll(null, -tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
-						break;
-					case 7:
-						var16.renderAll(null, tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
-						break;
-					case 8:
-						var16.renderAll(null, tile.crossphi2, tile.crossphi1); //4-way symmetry, really, so no need to change direction
-						break;
-					case 9:
-						var16.renderAll(null, -tile.crossphi2, tile.crossphi1); //4-way symmetry, really, so no need to change direction
-						break;
+				case 0:
+					var16.renderAll(null, -tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
+					break;
+				case 6:
+					var16.renderAll(null, -tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
+					break;
+				case 7:
+					var16.renderAll(null, tile.crossphi2, -tile.crossphi1); //4-way symmetry, really, so no need to change direction
+					break;
+				case 8:
+					var16.renderAll(null, tile.crossphi2, tile.crossphi1); //4-way symmetry, really, so no need to change direction
+					break;
+				case 9:
+					var16.renderAll(null, -tile.crossphi2, tile.crossphi1); //4-way symmetry, really, so no need to change direction
+					break;
 				}
 			}
 
@@ -210,23 +213,23 @@ public class RenderShaft extends RotaryTERenderer implements MultiModel
 		TileEntityShaft tile = (TileEntityShaft)te;
 		if (!tile.isInWorld()) {
 			switch(itemMetadata) {
-				case 1:
-					name = "shafttexw.png";
-					break;
-				case 2:
-					name = "shafttexs.png";
-					break;
-				case 3:
-					name = "shafttex.png";
-					break;
-				case 4:
-					name = "shafttexd.png";
-					break;
-				case 5:
-					name = "shafttexb.png";
-					break;
-				default:
-					name = "crosstex.png";
+			case 1:
+				name = "shafttexw.png";
+				break;
+			case 2:
+				name = "shafttexs.png";
+				break;
+			case 3:
+				name = "shafttex.png";
+				break;
+			case 4:
+				name = "shafttexd.png";
+				break;
+			case 5:
+				name = "shafttexb.png";
+				break;
+			default:
+				name = "crosstex.png";
 			}
 		}
 		else {
@@ -239,23 +242,23 @@ public class RenderShaft extends RotaryTERenderer implements MultiModel
 				p = "";
 			//ReikaJavaLibrary.pConsole(tile.type);
 			switch(tile.type) {
-				case WOOD:
-					name = p+"shafttexw.png";
-					break;
-				case STONE:
-					name = p+"shafttexs.png";
-					break;
-				case STEEL:
-					name = p+"shafttex.png";
-					break;
-				case DIAMOND:
-					name = p+"shafttexd.png";
-					break;
-				case BEDROCK:
-					name = p+"shafttexb.png";
-					break;
-				default:
-					name = p+"crosstex.png";
+			case WOOD:
+				name = p+"shafttexw.png";
+				break;
+			case STONE:
+				name = p+"shafttexs.png";
+				break;
+			case STEEL:
+				name = p+"shafttex.png";
+				break;
+			case DIAMOND:
+				name = p+"shafttexd.png";
+				break;
+			case BEDROCK:
+				name = p+"shafttexb.png";
+				break;
+			default:
+				name = p+"crosstex.png";
 			}
 		}
 		return name;

@@ -91,7 +91,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		long time = world.getWorldTime()%12000;
 
 		//float sunphi = 90+180*time/12000F; //rises in +90 sets in 270 (+x, -x)
-		float movespeed = 2.5F;
+		float movespeed = 0.5F;
 
 		float targetphi = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc[0], y-targetloc[1], z-targetloc[2])[2];
 		float targettheta = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc[0], y-targetloc[1], z-targetloc[2])[1];
