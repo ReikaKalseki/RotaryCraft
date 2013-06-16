@@ -142,28 +142,7 @@ public class ModelMirror extends RotaryModelBase
 	@Override
 	public void renderAll(List li, float phi)
 	{
-		Shape1.render(f5);
-
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(phi, 0, 1, 0);
-		GL11.glTranslated(0, -1, 0);
-		Shape3.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape5a.render(f5);
-		Shape5b.render(f5);
-		Shape5c.render(f5);
-		Shape5d.render(f5);
-		Shape3a.render(f5);
-		Shape3b.render(f5);
-		Shape3c.render(f5);
-		Shape3d.render(f5);
-		Shape3as.render(f5);
-		Shape5af.render(f5);
-		Shape5as.render(f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 0, 1, 0);
-		GL11.glTranslated(0, -1, 0);
+		this.renderAll(li, phi, 0);
 	}
 
 	@Override
@@ -174,7 +153,47 @@ public class ModelMirror extends RotaryModelBase
 
 	public void renderAll(List li, float phi, float theta)
 	{
-		this.renderAll(li, phi);
+		Shape1.render(f5);
+
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(phi, 0, 1, 0);
+		GL11.glTranslated(0, -1, 0);
+		Shape3.render(f5);
+		Shape4.render(f5);
+
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(theta, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+		Shape5.render(f5);
+		Shape5b.render(f5);
+		Shape5c.render(f5);
+		Shape5d.render(f5);
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(-theta, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+
+		Shape3a.render(f5);
+		Shape3b.render(f5);
+		Shape3c.render(f5);
+		Shape3d.render(f5);
+		Shape3as.render(f5);
+
+		double sc = 1-0.725*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-theta));
+		double d = 1.5;
+		GL11.glTranslated(0, d, 0);
+		GL11.glScaled(1, sc, 1);
+		GL11.glTranslated(0, -d, 0);
+		Shape5a.render(f5);
+		Shape5af.render(f5);
+		Shape5as.render(f5);
+		GL11.glTranslated(0, d, 0);
+		GL11.glScaled(1, 1D/sc, 1);
+		GL11.glTranslated(0, -d, 0);
+
+
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(-phi, 0, 1, 0);
+		GL11.glTranslated(0, -1, 0);
 	}
 
 }

@@ -19,13 +19,13 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelForce;
+import Reika.RotaryCraft.Models.ModelSolar;
 import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 
 public class RenderSolar extends RotaryTERenderer
 {
 
-	private ModelForce SolarModel = new ModelForce();
+	private ModelSolar SolarModel = new ModelSolar();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -38,7 +38,7 @@ public class RenderSolar extends RotaryTERenderer
 			var9 = 0;
 		else
 			var9 = tile.getBlockMetadata();
-		ModelForce var14;
+		ModelSolar var14;
 		var14 = SolarModel;
 
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/solartex.png");

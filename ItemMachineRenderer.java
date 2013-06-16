@@ -66,6 +66,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
+import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
@@ -326,6 +327,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case MIRROR:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMirror(), a, -0.1D, b, 0.0F);
+				break;
+			case SOLARTOWER:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySolar(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

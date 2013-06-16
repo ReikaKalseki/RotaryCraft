@@ -50,19 +50,14 @@ public class RenderMirror extends RotaryTERenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 1;	 //used to rotate the model about metadata
 		int var12 = 0;
-		if (tile.isInWorld()) {
-			if (tile.getBlockMetadata() == 1) {
-				var11 = -1;
-				var12 = 2;
-				GL11.glFrontFace(GL11.GL_CW);
-			}
+		if (!tile.isInWorld()) {
+			GL11.glRotatef(-90, 0, 1, 0);
 		}
 		GL11.glTranslated(0, var12, 0);
 		GL11.glScaled(1, var11, 1);
 		var14.renderAll(null, -tile.phi, -tile.theta*var11);
 		GL11.glScaled(1, var11, 1);
 		GL11.glTranslated(0, -var12, 0);
-		GL11.glFrontFace(GL11.GL_CCW);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

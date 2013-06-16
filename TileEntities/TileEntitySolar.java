@@ -10,12 +10,16 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.world.World;
+import Reika.DragonAPI.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine {
+
+	private BlockArray solarBlocks = new BlockArray();
 
 	@Override
 	public boolean canProvidePower() {
@@ -40,6 +44,22 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		if (world.getBlockId(x, y+1, z) != 0)
+			return;
+		if (MachineRegistry.getMachine(world, x, y-1, z) != this.getMachine())
+			return;
+		if (solarBlocks.isEmpty()) {
+			solarBlocks.recursiveFill(world, x, y, z, this.getTileEntityBlockID());
+			ReikaJavaLibrary.pConsole(y);
+			while (solarBlocks.getSize() > 0) {
+				int[] xyz = solarBlocks.getNextAndMoveOn();
+				MachineRegistry m = MachineRegistry.getMachine(world, xyz[0], xyz[1], xyz[2]);
+				if (m == MachineRegistry.MIRROR) {
+					TileEntityMirror te = (TileEntityMirror)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+					te.targetloc = new int[]{x,y,z};
+				}
+			}
+		}
 	}
 
 	@Override
