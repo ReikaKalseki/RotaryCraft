@@ -153,6 +153,7 @@ public class ModelMirror extends RotaryModelBase
 
 	public void renderAll(List li, float phi, float theta)
 	{
+		boolean broken = (Boolean)li.get(0);
 		Shape1.render(f5);
 
 		GL11.glTranslated(0, 1, 0);
@@ -161,16 +162,18 @@ public class ModelMirror extends RotaryModelBase
 		Shape3.render(f5);
 		Shape4.render(f5);
 
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(theta, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
-		Shape5.render(f5);
-		Shape5b.render(f5);
-		Shape5c.render(f5);
-		Shape5d.render(f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-theta, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+		if (!broken) {
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(theta, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
+			Shape5.render(f5);
+			Shape5b.render(f5);
+			Shape5c.render(f5);
+			Shape5d.render(f5);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(-theta, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
+		}
 
 		Shape3a.render(f5);
 		Shape3b.render(f5);

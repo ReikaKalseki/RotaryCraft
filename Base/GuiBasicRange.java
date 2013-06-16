@@ -19,7 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 
@@ -75,17 +75,17 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 			range = 0;
 			input.deleteFromCursor(-1);
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.FORCE.getMinValue(), pwr, ep, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.getMinValue(), pwr, ep, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0) {
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.FORCE.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.FORCE.getMinValue(), pwr, ep, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CONTAINMENT.getMinValue(), pwr, ep, range);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.getMinValue(), pwr, ep, range);
 		}
 	}
 

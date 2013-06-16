@@ -16,7 +16,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-public enum EnumLiquids {
+public enum LiquidRegistry {
 
 	WATER(Item.bucketWater.itemID),
 	LAVA(Item.bucketLava.itemID),
@@ -24,17 +24,17 @@ public enum EnumLiquids {
 	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage());
 	//ETHANOL(ItemStacks.ethanolbucket.itemID, ItemStacks.ethanolbucket.getItemDamage());
 
-	public static final EnumLiquids[] liquidList = EnumLiquids.values();
+	public static final LiquidRegistry[] liquidList = LiquidRegistry.values();
 
 	private int liquidID;
 	private int liquidMeta;
 
-	private EnumLiquids(int id) {
+	private LiquidRegistry(int id) {
 		liquidID = id;
 		liquidMeta = -1;
 	}
 
-	private EnumLiquids(int id, int meta) {
+	private LiquidRegistry(int id, int meta) {
 		liquidID = id;
 		liquidMeta = meta;
 	}
@@ -43,7 +43,7 @@ public enum EnumLiquids {
 		return liquidMeta > -1;
 	}
 
-	public static EnumLiquids getLiquidFromIDAndMetadata(int id, int meta) {
+	public static LiquidRegistry getLiquidFromIDAndMetadata(int id, int meta) {
 		for (int i = 0; i < liquidList.length; i++) {
 			if (liquidList[i].liquidID == id && (!liquidList[i].isMetadata() || liquidList[i].liquidMeta == meta))
 				return liquidList[i];
@@ -59,7 +59,7 @@ public enum EnumLiquids {
 		throw new RegistrationException(RotaryCraft.instance, "Liquid "+this+" is not registered to have a block form and yet was called!");
 	}
 
-	public static EnumLiquids getLiquidFromBlock(int block) {
+	public static LiquidRegistry getLiquidFromBlock(int block) {
 		for (int i = 0; i < liquidList.length; i++) {
 			if (liquidList[i].getLiquidBlockID() == block)
 				return liquidList[i];
@@ -67,7 +67,7 @@ public enum EnumLiquids {
 		throw new RegistrationException(RotaryCraft.instance, "Unregistered liquid for block "+block+"!");
 	}
 
-	public static boolean hasLiquid(EnumLiquids liq, ItemStack[] inv) {
+	public static boolean hasLiquid(LiquidRegistry liq, ItemStack[] inv) {
 		if (liq.isMetadata())
 			return ReikaInventoryHelper.checkForItemStack(liq.liquidID, liq.liquidMeta, inv);
 		else

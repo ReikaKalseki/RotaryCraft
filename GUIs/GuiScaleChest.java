@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 
 @SideOnly(Side.CLIENT)
@@ -88,7 +88,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			page--;
 		if (page == oldpage)
 			return;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CHEST.getMinValue(), scale, ep, page);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CHEST.getMinValue(), scale, ep, page);
 		//player.closeScreen();
 		//this.refresh();
 		//this.setValues();

@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -55,7 +56,7 @@ public class RenderMirror extends RotaryTERenderer {
 		}
 		GL11.glTranslated(0, var12, 0);
 		GL11.glScaled(1, var11, 1);
-		var14.renderAll(null, -tile.phi, -tile.theta*var11);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.broken), -tile.phi, -tile.theta*var11);
 		GL11.glScaled(1, var11, 1);
 		GL11.glTranslated(0, -var12, 0);
 

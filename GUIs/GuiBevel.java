@@ -19,7 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 
 public class GuiBevel extends GuiNonPoweredMachine
@@ -208,7 +208,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		}
 		this.getDirectionFromIO();
 		this.initGui();
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.BEVEL.getMinValue(), bevel, ep, posn);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BEVEL.getMinValue(), bevel, ep, posn);
 	}
 
 	@Override

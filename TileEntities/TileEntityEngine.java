@@ -32,7 +32,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -40,6 +39,7 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -60,7 +60,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE {
+public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider {
 	/** s/e *//*
 	public long power = 0;
 	public int torque = 0;
@@ -280,67 +280,67 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	private void consumeFuel(World world, int x, int y, int z, int meta) {
 		switch(type) {
-			case GAS:
-				if (fuelslot[0] != null && ethanols < FUELCAP) {
-					if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
-						ReikaInventoryHelper.decrStack(0, fuelslot);
-						ethanols++;
-					}
+		case GAS:
+			if (fuelslot[0] != null && ethanols < FUELCAP) {
+				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
+					ReikaInventoryHelper.decrStack(0, fuelslot);
+					ethanols++;
 				}
-				if (fueltick >= 1200) {	//every 60s
-					fueltick = 0;
-					if (ethanols > 0)
-						ethanols--;
+			}
+			if (fueltick >= 1200) {	//every 60s
+				fueltick = 0;
+				if (ethanols > 0)
+					ethanols--;
+			}
+			break;
+		case SPORT:
+			if (fuelslot[0] != null && ethanols < FUELCAP) {
+				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
+					ReikaInventoryHelper.decrStack(0, fuelslot);
+					ethanols++;
 				}
-				break;
-			case SPORT:
-				if (fuelslot[0] != null && ethanols < FUELCAP) {
-					if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
-						ReikaInventoryHelper.decrStack(0, fuelslot);
-						ethanols++;
-					}
+			}
+			if (fuelslot [1] != null && additives < FUELCAP) { //additives
+				int id = fuelslot[1].itemID;
+				if (id == Item.blazePowder.itemID || id == Item.redstone.itemID || id == Item.gunpowder.itemID) {
+					ReikaInventoryHelper.decrStack(1, fuelslot);
+					if (id == Item.redstone.itemID)
+						additives += 1;
+					if (id == Item.gunpowder.itemID)
+						additives += 2;
+					if (id == Item.blazePowder.itemID)
+						additives += 4;
 				}
-				if (fuelslot [1] != null && additives < FUELCAP) { //additives
-					int id = fuelslot[1].itemID;
-					if (id == Item.blazePowder.itemID || id == Item.redstone.itemID || id == Item.gunpowder.itemID) {
-						ReikaInventoryHelper.decrStack(1, fuelslot);
-						if (id == Item.redstone.itemID)
-							additives += 1;
-						if (id == Item.gunpowder.itemID)
-							additives += 2;
-						if (id == Item.blazePowder.itemID)
-							additives += 4;
-					}
-				}
-				if (fueltick >= 600) {	//every 30s
-					fueltick = 0;
-					if (ethanols > 0)
-						ethanols--;
-					if (par5Random.nextInt(6) == 0) //one in 6 times -> about every 3 min
-						if (additives > 0)
-							additives--;
-				}
-				break;
-			case MICRO:
-				if (jetfuels < FUELCAP)
-					this.drawFuel(world, x, y, z, meta);
-				if (fueltick >= 450) { //90 min full tank
-					fueltick = 0;
-					if (jetfuels > 0)
-						jetfuels--;
-				}
-				break;
-			case JET:
-				if (jetfuels < FUELCAP)
-					this.drawFuel(world, x, y, z, meta);
-				if (fueltick >= 225) { //45 min full tank
-					fueltick = 0;
-					if (jetfuels > 0)
-						jetfuels--;
-				}
-				break;
-			default:
-				break;
+			}
+			if (fueltick >= 600) {	//every 30s
+				fueltick = 0;
+				if (ethanols > 0)
+					ethanols--;
+				if (par5Random.nextInt(6) == 0) //one in 6 times -> about every 3 min
+					if (additives > 0)
+						additives--;
+			}
+			break;
+		case MICRO:
+			if (jetfuels < FUELCAP)
+				this.drawFuel(world, x, y, z, meta);
+			if (fueltick >= 450) { //90 min full tank
+				fueltick = 0;
+				if (jetfuels > 0)
+					jetfuels--;
+			}
+			break;
+		case JET:
+			if (jetfuels < FUELCAP)
+				this.drawFuel(world, x, y, z, meta);
+			if (fueltick >= 225) { //45 min full tank
+				fueltick = 0;
+				if (jetfuels > 0)
+					jetfuels--;
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -348,24 +348,24 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (this.isDrowned(world, x, y, z))
 			return false;
 		switch (type) {
-			case DC:
-				return (world.isBlockIndirectlyGettingPowered(x, y, z));
-			case WIND:
-				return this.windCheck(world, x, y, z, this.getBlockMetadata());
-			case STEAM:
-				return this.steamCheck(world, x, y, z);
-			case GAS:
-				return this.combustionCheck(world, x, y, z, false);
-			case AC:
-				return this.acPower(world, x, y, z);
-			case SPORT:
-				return this.combustionCheck(world, x, y, z, true);
-			case HYDRO:
-				return this.hydroCheck(world, x, y, z, this.getBlockMetadata());
-			case MICRO:
-				return this.jetCheck(world, x, y, z);
-			case JET:
-				return this.jetCheck(world, x, y, z);
+		case DC:
+			return (world.isBlockIndirectlyGettingPowered(x, y, z));
+		case WIND:
+			return this.windCheck(world, x, y, z, this.getBlockMetadata());
+		case STEAM:
+			return this.steamCheck(world, x, y, z);
+		case GAS:
+			return this.combustionCheck(world, x, y, z, false);
+		case AC:
+			return this.acPower(world, x, y, z);
+		case SPORT:
+			return this.combustionCheck(world, x, y, z, true);
+		case HYDRO:
+			return this.hydroCheck(world, x, y, z, this.getBlockMetadata());
+		case MICRO:
+			return this.jetCheck(world, x, y, z);
+		case JET:
+			return this.jetCheck(world, x, y, z);
 		}
 		return false;
 	}
@@ -393,18 +393,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	private int[] getWaterColumnPos() {
 		int[] pos = {xCoord, zCoord};
 		switch(this.getBlockMetadata()) {
-			case 0:
-				pos[1] += -1;
-				break;
-			case 1:
-				pos[1] += 1;
-				break;
-			case 2:
-				pos[0] += 1;
-				break;
-			case 3:
-				pos[0] += -1;
-				break;
+		case 0:
+			pos[1] += -1;
+			break;
+		case 1:
+			pos[1] += 1;
+			break;
+		case 2:
+			pos[0] += 1;
+			break;
+		case 3:
+			pos[0] += -1;
+			break;
 		}
 		return pos;
 	}
@@ -443,18 +443,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		else
 			a = 1;
 		switch (meta) {
-			case 0:
-				c = 1;
-				break;
-			case 1:
-				c = -1;
-				break;
-			case 2:
-				d = 1;
-				break;
-			case 3:
-				d = -1;
-				break;
+		case 0:
+			c = 1;
+			break;
+		case 1:
+			c = -1;
+			break;
+		case 2:
+			d = 1;
+			break;
+		case 3:
+			d = -1;
+			break;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord+c, yCoord, zCoord+d, xCoord+1+c, yCoord+1, zCoord+1+d).expand(a, 1, b);
 		List in = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
@@ -472,18 +472,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		else
 			a = 1;
 		switch (meta) {
-			case 0:
-				c = 1;
-				break;
-			case 1:
-				c = -1;
-				break;
-			case 2:
-				d = 1;
-				break;
-			case 3:
-				d = -1;
-				break;
+		case 0:
+			c = 1;
+			break;
+		case 1:
+			c = -1;
+			break;
+		case 2:
+			d = 1;
+			break;
+		case 3:
+			d = -1;
+			break;
 		}
 		for (int i = 1; i < 16; i++) {
 			int id = world.getBlockId(x+c*i, y, z+d*i);
@@ -590,17 +590,17 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 
 		switch(type) {
-			case STEAM:
-				if (biome == BiomeGenBase.hell)
-					Tamb = 101;	//boils water, so 101C
-				if (world.getBlockId(x, y-1, z) == Block.fire.blockID)
-					temperature++;
-				if (world.getBlockId(x, y-1, z) == Block.fire.blockID && biome == BiomeGenBase.hell)
-					temperature++; //Nether has 50% hotter fire
-				if (world.getBlockMaterial(x, y-1, z) == Material.lava)
-					temperature += 2;
-				if (Tamb < 0 && world.getBlockId(x, y-1, z) == Block.fire.blockID)
-					Tamb += 30;/*
+		case STEAM:
+			if (biome == BiomeGenBase.hell)
+				Tamb = 101;	//boils water, so 101C
+			if (world.getBlockId(x, y-1, z) == Block.fire.blockID)
+				temperature++;
+			if (world.getBlockId(x, y-1, z) == Block.fire.blockID && biome == BiomeGenBase.hell)
+				temperature++; //Nether has 50% hotter fire
+			if (world.getBlockMaterial(x, y-1, z) == Material.lava)
+				temperature += 2;
+			if (Tamb < 0 && world.getBlockId(x, y-1, z) == Block.fire.blockID)
+				Tamb += 30;/*
 	    	if (this.temperature > Tamb+80)
 	    		this.temperature -= (this.temperature-Tamb)/80;
 	    	else if (this.temperature > Tamb+30)
@@ -609,17 +609,17 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	    		this.temperature -= (this.temperature-Tamb/5);
 	    	else if (this.temperature > Tamb)
 	    		this.temperature -= (this.temperature-Tamb);*/
-				if (temperature < Tamb)
-					temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
-				if (world.getBlockId(x, y-1, z) != Block.fire.blockID && world.getBlockMaterial(x, y-1, z) != Material.lava && temperature > Tamb)
-					temperature--;
-				if (temperature > Tamb) {
-					temperature -= (temperature-Tamb)/96;
-				}
-				if (temperature > MAXTEMP)
-					this.overheat(world, x, y, z);
-				break;
-			case SPORT:/*
+			if (temperature < Tamb)
+				temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			if (world.getBlockId(x, y-1, z) != Block.fire.blockID && world.getBlockMaterial(x, y-1, z) != Material.lava && temperature > Tamb)
+				temperature--;
+			if (temperature > Tamb) {
+				temperature -= (temperature-Tamb)/96;
+			}
+			if (temperature > MAXTEMP)
+				this.overheat(world, x, y, z);
+			break;
+		case SPORT:/*
 	    	if (this.temperature > Tamb+80)
 	    		this.temperature -= (this.temperature-Tamb)/160;
 	    	else if (this.temperature > Tamb+30)
@@ -628,39 +628,39 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	    		this.temperature -= (this.temperature-Tamb)/10;
 	    	else if (this.temperature > Tamb)
 	    		this.temperature -= (this.temperature-Tamb)/2;*/
-				if (temperature < Tamb)
-					temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
-				if (omega > 0 && torque > 0) { //If engine is on
-					temperature += 1;
-					if (waterLevel > 0 && temperature > Tamb) {
-						waterLevel--;
-						temperature--;
-					}
-					if (temperature > MAXTEMP/2) {
-						if (par5Random.nextInt(10) == 0) {
-							world.spawnParticle("smoke", xCoord+0.5, yCoord+0.5, zCoord+0.5, 0, 0, 0);
-							world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
-						}
-					}
-					if (temperature > MAXTEMP/1.1) {
-						if (par5Random.nextInt(5) == 0) {
-							world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
-						}
-						world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+0.5, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+1, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0, 0, 0, 0);
-						world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+1, 0, 0, 0);
+			if (temperature < Tamb)
+				temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			if (omega > 0 && torque > 0) { //If engine is on
+				temperature += 1;
+				if (waterLevel > 0 && temperature > Tamb) {
+					waterLevel--;
+					temperature--;
+				}
+				if (temperature > MAXTEMP/2) {
+					if (par5Random.nextInt(10) == 0) {
+						world.spawnParticle("smoke", xCoord+0.5, yCoord+0.5, zCoord+0.5, 0, 0, 0);
+						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 					}
 				}
-				if (temperature > MAXTEMP) {
-					this.overheat(world, x, y, z);
+				if (temperature > MAXTEMP/1.1) {
+					if (par5Random.nextInt(5) == 0) {
+						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
+					}
+					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+0.5, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+1, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0, 0, 0, 0);
+					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+1, 0, 0, 0);
 				}
-				break;
-			default:
-				break;
+			}
+			if (temperature > MAXTEMP) {
+				this.overheat(world, x, y, z);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -720,18 +720,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public float getChokedFraction(World world, int x, int y, int z, int meta) {
 		int[] pos = {x, z};
 		switch(meta) {
-			case 0:
-				pos[0] += 1;
-				break;
-			case 1:
-				pos[0] += -1;
-				break;
-			case 2:
-				pos[1] += 1;
-				break;
-			case 3:
-				pos[1] += -1;
-				break;
+		case 0:
+			pos[0] += 1;
+			break;
+		case 1:
+			pos[0] += -1;
+			break;
+		case 2:
+			pos[1] += 1;
+			break;
+		case 3:
+			pos[1] += -1;
+			break;
 		}
 		int id = world.getBlockId(pos[0], y, pos[1]);
 		int dmg = world.getBlockMetadata(pos[0], y, pos[1]);
@@ -776,77 +776,77 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			return;
 		}
 		switch (type) {
-			case STEAM:
-				MAXTEMP = 150;
-				break;
-			case SPORT:
-				MAXTEMP = 1000;
-				break;
-			default:
-				break;
+		case STEAM:
+			MAXTEMP = 150;
+			break;
+		case SPORT:
+			MAXTEMP = 1000;
+			break;
+		default:
+			break;
 		}
 		if (this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
 			switch (type) {
-				case DC:
-					omega = EnumEngineType.DC.getSpeed();
-					torque = EnumEngineType.DC.getTorque();
-					break;
-				case WIND:
-					omega = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
-					torque = EnumEngineType.WIND.getTorque();
-					if (omega == 0)
-						torque = 0;
-					if (omega > 0)
-						this.dealBladeDamage();
-					break;
-				case STEAM:
-					omega = EnumEngineType.STEAM.getSpeed();
-					torque = EnumEngineType.STEAM.getTorque();
-					break;
-				case GAS:
+			case DC:
+				omega = EnumEngineType.DC.getSpeed();
+				torque = EnumEngineType.DC.getTorque();
+				break;
+			case WIND:
+				omega = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				torque = EnumEngineType.WIND.getTorque();
+				if (omega == 0)
+					torque = 0;
+				if (omega > 0)
+					this.dealBladeDamage();
+				break;
+			case STEAM:
+				omega = EnumEngineType.STEAM.getSpeed();
+				torque = EnumEngineType.STEAM.getTorque();
+				break;
+			case GAS:
+				omega = EnumEngineType.GAS.getSpeed();
+				torque = EnumEngineType.GAS.getTorque();
+				break;
+			case AC:
+				omega = EnumEngineType.AC.getSpeed();
+				torque = EnumEngineType.AC.getTorque();
+				break;
+			case SPORT:
+				if (!starvedengine) {
+					omega = EnumEngineType.SPORT.getSpeed();
+					torque = EnumEngineType.SPORT.getTorque();
+				}
+				else {
 					omega = EnumEngineType.GAS.getSpeed();
 					torque = EnumEngineType.GAS.getTorque();
-					break;
-				case AC:
-					omega = EnumEngineType.AC.getSpeed();
-					torque = EnumEngineType.AC.getTorque();
-					break;
-				case SPORT:
-					if (!starvedengine) {
-						omega = EnumEngineType.SPORT.getSpeed();
-						torque = EnumEngineType.SPORT.getTorque();
+				}
+				break;
+			case HYDRO:
+				omega = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false));
+				if (omega > 0)
+					this.dealPanelDamage();
+				break;
+			case MICRO:
+				omega = EnumEngineType.MICRO.getSpeed();
+				torque = EnumEngineType.MICRO.getTorque();
+				break;
+			case JET:
+				this.checkJetFailure();
+				omega = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
+				if (omega == 0)
+					torque = 0;
+				if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
+					TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+					if (te != null) {
+						if (!te.enabled)
+							return;
 					}
-					else {
-						omega = EnumEngineType.GAS.getSpeed();
-						torque = EnumEngineType.GAS.getTorque();
-					}
-					break;
-				case HYDRO:
-					omega = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
-					torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false));
-					if (omega > 0)
-						this.dealPanelDamage();
-					break;
-				case MICRO:
-					omega = EnumEngineType.MICRO.getSpeed();
-					torque = EnumEngineType.MICRO.getTorque();
-					break;
-				case JET:
-					this.checkJetFailure();
-					omega = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
-					torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
-					if (omega == 0)
-						torque = 0;
-					if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
-						TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
-						if (te != null) {
-							if (!te.enabled)
-								return;
-						}
-					}
-					if (omega > 0)
-						this.ingest();
-					break;
+				}
+				if (omega > 0)
+					this.ingest();
+				break;
 			}
 		}
 		else {
@@ -1003,54 +1003,54 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		int maxz = 0;
 
 		switch (meta) {
-			case 0:
-				minx = xCoord+1+step;
-				maxx = xCoord+1+step+1;
-				miny = yCoord-step;
-				maxy = yCoord+step+1;
-				minz = zCoord-step;
-				maxz = zCoord+step+1;
-				dumpx = xCoord-1;
-				dumpz = zCoord;
-				dumpvx = -1;
-				dumpvz = 0;
-				break;
-			case 1:
-				minx = xCoord-1-step;
-				maxx = xCoord-1-step+1;
-				miny = yCoord-step;
-				maxy = yCoord+step+1;
-				minz = zCoord-step;
-				maxz = zCoord+step+1;
-				dumpx = xCoord+1;
-				dumpz = zCoord;
-				dumpvx = 1;
-				dumpvz = 0;
-				break;
-			case 2:
-				minz = zCoord+1+step;
-				maxz = zCoord+1+step+1;
-				miny = yCoord-step;
-				maxy = yCoord+step+1;
-				minx = xCoord-step;
-				maxx = xCoord+step+1;
-				dumpx = xCoord;
-				dumpz = zCoord-1;
-				dumpvx = 0;
-				dumpvz = -1;
-				break;
-			case 3:
-				minz = zCoord-1-step;
-				maxz = zCoord-1-step+1;
-				miny = yCoord-step;
-				maxy = yCoord+step+1;
-				minx = xCoord-step;
-				maxx = xCoord+step+1;
-				dumpx = xCoord;
-				dumpz = zCoord+1;
-				dumpvx = 0;
-				dumpvz = 1;
-				break;
+		case 0:
+			minx = xCoord+1+step;
+			maxx = xCoord+1+step+1;
+			miny = yCoord-step;
+			maxy = yCoord+step+1;
+			minz = zCoord-step;
+			maxz = zCoord+step+1;
+			dumpx = xCoord-1;
+			dumpz = zCoord;
+			dumpvx = -1;
+			dumpvz = 0;
+			break;
+		case 1:
+			minx = xCoord-1-step;
+			maxx = xCoord-1-step+1;
+			miny = yCoord-step;
+			maxy = yCoord+step+1;
+			minz = zCoord-step;
+			maxz = zCoord+step+1;
+			dumpx = xCoord+1;
+			dumpz = zCoord;
+			dumpvx = 1;
+			dumpvz = 0;
+			break;
+		case 2:
+			minz = zCoord+1+step;
+			maxz = zCoord+1+step+1;
+			miny = yCoord-step;
+			maxy = yCoord+step+1;
+			minx = xCoord-step;
+			maxx = xCoord+step+1;
+			dumpx = xCoord;
+			dumpz = zCoord-1;
+			dumpvx = 0;
+			dumpvz = -1;
+			break;
+		case 3:
+			minz = zCoord-1-step;
+			maxz = zCoord-1-step+1;
+			miny = yCoord-step;
+			maxy = yCoord+step+1;
+			minx = xCoord-step;
+			maxx = xCoord+step+1;
+			dumpx = xCoord;
+			dumpz = zCoord+1;
+			dumpvx = 0;
+			dumpvz = 1;
+			break;
 		}
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d \t %d \t %d \t %d \t %d \t %d", minx, miny, minz, maxx, maxy, maxz));
 		/*ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, miny, minz, 20);
@@ -1146,30 +1146,30 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-			case 0:
-				writex = xCoord-1;
-				writez = zCoord;
-				backx = xCoord+1;
-				backz = zCoord;
-				break;
-			case 1:
-				writez = zCoord;
-				writex = xCoord+1;
-				backx = xCoord-1;
-				backz = zCoord;
-				break;
-			case 2:
-				writez = zCoord-1;
-				writex = xCoord;
-				backx = xCoord;
-				backz = zCoord+1;
-				break;
-			case 3:	//works
-				writez = zCoord+1;
-				writex = xCoord;
-				backx = xCoord;
-				backz = zCoord-1;
-				break;
+		case 0:
+			writex = xCoord-1;
+			writez = zCoord;
+			backx = xCoord+1;
+			backz = zCoord;
+			break;
+		case 1:
+			writez = zCoord;
+			writex = xCoord+1;
+			backx = xCoord-1;
+			backz = zCoord;
+			break;
+		case 2:
+			writez = zCoord-1;
+			writex = xCoord;
+			backx = xCoord;
+			backz = zCoord+1;
+			break;
+		case 3:	//works
+			writez = zCoord+1;
+			writex = xCoord;
+			backx = xCoord;
+			backz = zCoord-1;
+			break;
 		}
 		writey = yCoord;
 	}
@@ -1250,13 +1250,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (!type.isValidFuel(is))
 			return false;
 		switch(type) {
-			case GAS:
-			case AC:
-				return true;
-			case SPORT:
-				return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getID()) || (i == 1 && type.isAdditive(is));
-			default:
-				return false;
+		case GAS:
+		case AC:
+			return true;
+		case SPORT:
+			return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getID()) || (i == 1 && type.isAdditive(is));
+		default:
+			return false;
 		}
 	}
 
@@ -1275,26 +1275,26 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (type == null)
 			type = EnumEngineType.DC;
 		switch(type) {
-			case DC:
-				return new ModelDC();
-			case WIND:
-				return new ModelWind();
-			case STEAM:
-				return new ModelSteam();
-			case GAS:
-				return new ModelCombustion();
-			case AC:
-				return new ModelAC();
-			case SPORT:
-				return new ModelPerformance();
-			case HYDRO:
-				return new ModelHydro();
-			case MICRO:
-				return new ModelMicroTurbine();
-			case JET:
-				return new ModelJet();
-			default:
-				return null;
+		case DC:
+			return new ModelDC();
+		case WIND:
+			return new ModelWind();
+		case STEAM:
+			return new ModelSteam();
+		case GAS:
+			return new ModelCombustion();
+		case AC:
+			return new ModelAC();
+		case SPORT:
+			return new ModelPerformance();
+		case HYDRO:
+			return new ModelHydro();
+		case MICRO:
+			return new ModelMicroTurbine();
+		case JET:
+			return new ModelJet();
+		default:
+			return null;
 		}
 	}
 
@@ -1413,16 +1413,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	private AxisAlignedBB getFlameZone() {
 		switch(this.getBlockMetadata()) {
-			case 0: //-x
-				return AxisAlignedBB.getAABBPool().getAABB(xCoord-6, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
-			case 1: //+x
-				return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+7, yCoord+1, zCoord+1);
-			case 2: //-z
-				return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord-6, xCoord+1, yCoord+1, zCoord+1);
-			case 3: //+z
-				return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+7);
-			default:
-				return null;
+		case 0: //-x
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord-6, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
+		case 1: //+x
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+7, yCoord+1, zCoord+1);
+		case 2: //-z
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord-6, xCoord+1, yCoord+1, zCoord+1);
+		case 3: //+z
+			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+7);
+		default:
+			return null;
 		}
 	}
 

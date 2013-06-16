@@ -21,7 +21,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 
 public class GuiSpawnerController extends GuiPowerOnlyMachine
@@ -89,7 +89,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			dat = -1;
 		else
 			dat = timer;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 					dat = -1;
 				else
 					dat = timer;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
 				return;
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
@@ -121,7 +121,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			else
 				dat = timer;
 			if (timer >= 0)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
 		}
 	}
 

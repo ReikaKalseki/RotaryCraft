@@ -10,8 +10,9 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 
-public abstract class TileEntity1DTransmitter extends TileEntityIOMachine {
+public abstract class TileEntity1DTransmitter extends TileEntityIOMachine implements SimpleProvider {
 
 	public int ratio;
 

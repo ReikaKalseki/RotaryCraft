@@ -28,7 +28,7 @@ import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 
 public class GuiItemCannon extends GuiPowerOnlyMachine
@@ -146,19 +146,19 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		if (!input.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input.getText())) {
 			target[0] = 0;
 			input.deleteFromCursor(-1);
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue());
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue());
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input2.getText())) {
 			target[1] = 0;
 			input2.deleteFromCursor(-1);
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue()+1);
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+1);
 			valid2 = false;
 		}
 		if (!input3.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input3.getText())) {
 			target[2] = 0;
 			input3.deleteFromCursor(-1);
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue()+2);
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+2);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2 && !valid3)
@@ -171,15 +171,15 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 			valid3 = false;
 		if (valid1) {
 			target[0] = Integer.parseInt(input.getText());
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue());
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue());
 		}
 		if (valid2) {
 			target[1] = Integer.parseInt(input2.getText());
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue()+1);
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+1);
 		}
 		if (valid3) {
 			target[2] = Integer.parseInt(input3.getText());
-			this.sendPacket(EnumPackets.ITEMCANNON.getMinValue()+2);
+			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+2);
 		}
 	}
 

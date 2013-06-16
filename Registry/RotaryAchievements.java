@@ -34,9 +34,9 @@ public enum RotaryAchievements {
 	SUCKEDINTOJET("Pulverized", 			-2, -8, Item.rottenFlesh, MAKEJET.ordinal(), false),
 	BEDROCKBREAKER("Unbreakable?", 			-3, 0, MachineRegistry.BEDROCKBREAKER.getCraftedProduct(), MAKESTEEL.ordinal(), false), //break bedrock with
 	STEAMENGINE("Steam", 					-3, -1, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.STEAM.ordinal()), MAKESTEEL.ordinal(), false), //turn on
-	STEELSHAFT("Engaged", 					-3, -2, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.STEEL.ordinal()), MAKESTEEL.ordinal(), false), //make
+	STEELSHAFT("Engaged", 					-3, -2, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal()), MAKESTEEL.ordinal(), false), //make
 	CVT("Adaptability", 					-3, -3, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1), STEELSHAFT.ordinal(), false), //make
-	BEDROCKSHAFT("Unbreakable",  			-3, -4, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.BEDROCK.ordinal()), STEELSHAFT.ordinal(), false), //make
+	BEDROCKSHAFT("Unbreakable",  			-3, -4, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal()), STEELSHAFT.ordinal(), false), //make
 	BEDROCKTOOLS("Durability",  			-3, -5, ItemRegistry.BEDPICK.getStackOf(), BEDROCKBREAKER.ordinal(), false), //make
 	JETFUEL("Liquid Power",  				-3, -6, MachineRegistry.FRACTIONATOR.getCraftedProduct(), null, false), //make
 	JETCHICKEN("Doing It Wrong",  			-3, -7, Item.feather, MAKEJET.ordinal(), false), //suck 50 chickens into jet engine

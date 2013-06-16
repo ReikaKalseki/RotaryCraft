@@ -12,18 +12,15 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
-import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
@@ -84,36 +81,36 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 	public void getIOSidesDefault(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-			case 0:
-				readx = xCoord+1;
-				readz = zCoord;
-				ready = yCoord;
-				break;
-			case 1:
-				readx = xCoord-1;
-				readz = zCoord;
-				ready = yCoord;
-				break;
-			case 2:
-				readz = zCoord+1;
-				readx = xCoord;
-				ready = yCoord;
-				break;
-			case 3:
-				readz = zCoord-1;
-				readx = xCoord;
-				ready = yCoord;
-				break;
-			case 4:	//moving up
-				readx = xCoord;
-				readz = zCoord;
-				ready = yCoord-1;
-				break;
-			case 5:	//moving down
-				readx = xCoord;
-				readz = zCoord;
-				ready = yCoord+1;
-				break;
+		case 0:
+			readx = xCoord+1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 1:
+			readx = xCoord-1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 2:
+			readz = zCoord+1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		case 3:
+			readz = zCoord-1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		case 4:	//moving up
+			readx = xCoord;
+			readz = zCoord;
+			ready = yCoord-1;
+			break;
+		case 5:	//moving down
+			readx = xCoord;
+			readz = zCoord;
+			ready = yCoord+1;
+			break;
 		}
 	}
 
@@ -197,22 +194,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te instanceof TileEntityEngine) {
+			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (te instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (te instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (m == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx, ready, readz);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord && devicein.writez == zCoord)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx, ready, readz);
@@ -263,22 +246,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te instanceof TileEntityEngine) {
+			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (te instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (te instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (m == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx2, ready2, readz2);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord && devicein.writez == zCoord)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx2, yCoord, readz2);
@@ -339,22 +308,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te1 instanceof TileEntityEngine) {
+			if (te1 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (te1 instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (te1 instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
-			}
-			if (id1 == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx, ready, readz);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord+stepx && devicein.writez == zCoord+stepz)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (id1 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx, ready, readz);
@@ -390,22 +345,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te2 instanceof TileEntityEngine) {
+			if (te2 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (te2 instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (te2 instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx2, ready2, readz2);
-			}
-			if (id2 == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx2, ready2, readz2);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord+stepx && devicein.writez == zCoord+stepz)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (id2 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx2, ready2, readz2);
@@ -440,22 +381,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te3 instanceof TileEntityEngine) {
+			if (te3 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx3, ready3, readz3);
-			}
-			if (te3 instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx3, ready3, readz3);
-			}
-			if (te3 instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx3, ready3, readz3);
-			}
-			if (id3 == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx3, ready3, readz3);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord+stepx && devicein.writez == zCoord+stepz)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (id3 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx3, ready3, readz3);
@@ -490,22 +417,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (te4 instanceof TileEntityEngine) {
+			if (te4 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx4, ready4, readz4);
-			}
-			if (te4 instanceof TileEntity1DTransmitter) {
-				this.copyStandardPower(worldObj, readx4, ready4, readz4);
-			}
-			if (te4 instanceof TileEntityFlywheel) {
-				this.copyStandardPower(worldObj, readx4, ready4, readz4);
-			}
-			if (id4 == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)worldObj.getBlockTileEntity(readx4, ready4, readz4);
-				if (!devicein.winding)
-					if ((devicein.writex == xCoord+stepx && devicein.writez == zCoord+stepz)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
 			}
 			if (id4 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx4, ready4, readz4);
@@ -662,20 +575,20 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				return false;
 			int time;
 			switch (stage) {
-				case 1:
-					time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
-					return (ticks >= time);
-				case 2:
-					time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
-					return (ticks >= time);
-				case 3:
-					time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-					return (ticks >= time);
-				case 4:
-					time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-					return (ticks >= time);
-				default:
-					return false;
+			case 1:
+				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
+				return (ticks >= time);
+			case 2:
+				time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
+				return (ticks >= time);
+			case 3:
+				time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+				return (ticks >= time);
+			case 4:
+				time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+				return (ticks >= time);
+			default:
+				return false;
 			}
 		}
 		if (m == MachineRegistry.COMPACTOR) {
@@ -765,18 +678,18 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			switch (stage) {
-				case 1:
-					time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omegap, 2)));
-					break;
-				case 2:
-					time = (800-(int)(40*ReikaMathLibrary.logbase(omegap, 2)))/2;
-					break;
-				case 3:
-					time = 600-(int)(30*ReikaMathLibrary.logbase(omegap, 2));
-					break;
-				case 4:
-					time = 1200-(int)(80*ReikaMathLibrary.logbase(omegap, 2));
-					break;
+			case 1:
+				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omegap, 2)));
+				break;
+			case 2:
+				time = (800-(int)(40*ReikaMathLibrary.logbase(omegap, 2)))/2;
+				break;
+			case 3:
+				time = 600-(int)(30*ReikaMathLibrary.logbase(omegap, 2));
+				break;
+			case 4:
+				time = 1200-(int)(80*ReikaMathLibrary.logbase(omegap, 2));
+				break;
 			}
 		}
 		if (m == MachineRegistry.COMPACTOR) {

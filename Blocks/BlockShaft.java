@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemScrewdriver;
-import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 
@@ -59,7 +59,7 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (ts == null)
 			return 0;
-		if (ts.type != EnumMaterials.WOOD)
+		if (ts.type != MaterialRegistry.WOOD)
 			return 0;
 		return 60;
 	}
@@ -70,7 +70,7 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (sha == null)
 			return 0;
-		EnumMaterials type = sha.type;
+		MaterialRegistry type = sha.type;
 		switch(type) {
 			case WOOD:
 				return 3F;
@@ -160,7 +160,7 @@ public class BlockShaft extends BlockModelledMachine {
 			return;
 		TileEntityShaft t = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (t != null) {
-			t.type = EnumMaterials.STEEL;
+			t.type = MaterialRegistry.STEEL;
 		}
 	}
 
@@ -264,22 +264,22 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (ts == null)
 			return false;
-		EnumMaterials type = ts.type;
-		if (type == EnumMaterials.WOOD)
+		MaterialRegistry type = ts.type;
+		if (type == MaterialRegistry.WOOD)
 			return true;
 		ItemStack stack = player.inventory.getCurrentItem();
 		if (stack == null)
 			return false;
 		if (stack.getItem() instanceof ItemPickaxe) {
-			if (type == EnumMaterials.STONE)
+			if (type == MaterialRegistry.STONE)
 				return true;
 			if (stack.itemID == Item.pickaxeWood.itemID)
 				return false;
-			if (type == EnumMaterials.STEEL)
+			if (type == MaterialRegistry.STEEL)
 				return true;
 			if (stack.itemID == Item.pickaxeStone.itemID)
 				return false;
-			if (type == EnumMaterials.DIAMOND)
+			if (type == MaterialRegistry.DIAMOND)
 				return true;
 			if (stack.itemID == Item.pickaxeIron.itemID)
 				return false;

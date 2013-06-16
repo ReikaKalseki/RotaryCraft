@@ -20,7 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 
 public class GuiCVT extends GuiNonPoweredMachine
@@ -84,7 +84,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		ratio = -ratio;
 		reduction = ratio < 0;
 		if (button.id == 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
 
 		super.updateScreen();
 		x = Mouse.getX();
@@ -103,14 +103,14 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			ratio = 1;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
 			return;
 		}
 		ratio = Integer.parseInt(input.getText());
 		if (reduction)
 			ratio = -ratio;
 		if (ratio != 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.CVT.getMinValue(), cvt, ep, ratio);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
 	}
 
 	/**

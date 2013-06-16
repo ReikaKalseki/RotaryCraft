@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Registry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 
-public enum EnumPackets {
+public enum PacketRegistry {
 
 	BORER(0, 3),
 	BEVEL(4),
@@ -36,13 +36,13 @@ public enum EnumPackets {
 	private int min;
 	private int max;
 
-	private EnumPackets(int l, int h)
+	private PacketRegistry(int l, int h)
 	{
 		min = l;
 		max = h;
 	}
 
-	private EnumPackets(int id)
+	private PacketRegistry(int id)
 	{
 		min = id;
 		max = id;
@@ -80,8 +80,8 @@ public enum EnumPackets {
 		return (max == min);
 	}
 
-	public static EnumPackets getEnum(int index) {
-		for (EnumPackets e : EnumPackets.values()) {
+	public static PacketRegistry getEnum(int index) {
+		for (PacketRegistry e : PacketRegistry.values()) {
 			if (ReikaMathLibrary.isValueInsideBoundsIncl(e.getMinValue(), e.getMaxValue(), index))
 				return e;
 		}

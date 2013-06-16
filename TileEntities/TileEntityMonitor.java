@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Models.ModelMonitor;
@@ -96,26 +97,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					omegain = devicein.omega;
 				}
 			}
-			if (m == MachineRegistry.ENGINE) {
-				TileEntityEngine devicein = (TileEntityEngine)world.getBlockTileEntity(readx, y, readz);
-				if ((devicein.writex == x && devicein.writez == z)) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.ADVANCEDGEARS) {
-				TileEntityAdvancedGear devicein = (TileEntityAdvancedGear)world.getBlockTileEntity(readx, y, readz);
-				if ((devicein.writex == x && devicein.writez == z)) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.WINDER) {
-				TileEntityWinder devicein = (TileEntityWinder)world.getBlockTileEntity(readx, y, readz);
-				if ((devicein.writex == x && devicein.writez == z)) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
+			if (te instanceof SimpleProvider) {
+				this.copyStandardPower(worldObj, readx, ready, readz);
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
@@ -128,47 +111,13 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					omegain = devicein.omega;
 				}
 			}
-			if (m == MachineRegistry.CLUTCH) {
-				TileEntityClutch devicein = (TileEntityClutch)world.getBlockTileEntity(readx, y, readz);
-				if (devicein.writex == x && devicein.writez == z) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.FLYWHEEL) {
-				TileEntityFlywheel devicein = (TileEntityFlywheel)world.getBlockTileEntity(readx, y, readz);
-				if (devicein.writex == x && devicein.writez == z) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.DYNAMOMETER) {
-				TileEntityMonitor devicein = (TileEntityMonitor)world.getBlockTileEntity(readx, y, readz);
-				if (devicein.writex == x && devicein.writez == z) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.GEARBOX) {
-				TileEntityGearbox devicein = (TileEntityGearbox)world.getBlockTileEntity(readx, y, readz);
-				if (devicein.writex == x && devicein.writez == z) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
-			if (m == MachineRegistry.BEVELGEARS) {
-				TileEntityGearBevel devicein = (TileEntityGearBevel)world.getBlockTileEntity(readx, y, readz);
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
-					torquein = devicein.torque;
-					omegain = devicein.omega;
-				}
-			}
 			omega = omegain;
 			torque = torquein;
 		}
 		else {
 			omega = torque = 0;
 		}
+		this.writePowerToConsole();
 	}
 
 	@Override

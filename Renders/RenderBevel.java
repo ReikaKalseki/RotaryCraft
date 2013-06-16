@@ -132,7 +132,6 @@ public class RenderBevel extends RotaryTERenderer
 				case 13:
 					var11 = 90; var12 = 90; var13 = 0;
 					GL11.glTranslatef(-1F, 1F, -0F);
-					dir = -1;
 					break;
 				case 14:
 					var11 = 180; var12 = 90; var13 = 0;

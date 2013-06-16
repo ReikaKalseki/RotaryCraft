@@ -19,7 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 
 public class GuiPlayerDetector extends GuiNonPoweredMachine
@@ -75,12 +75,12 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.DETECTOR.getMinValue(), playerdetector, ep, range);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.DETECTOR.getMinValue(), playerdetector, ep, range);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
 	}
 
 	/**

@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
@@ -137,7 +137,7 @@ public class ItemScrewdriver extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
-			EnumMaterials type = ts.type;
+			MaterialRegistry type = ts.type;
 			if (damage < 5)
 				ts.setBlockMetadata(damage+1);
 			if (damage == 5)

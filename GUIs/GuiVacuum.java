@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
 @SideOnly(Side.CLIENT)
@@ -61,7 +61,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id == 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.VACUUM.getMinValue(), vac, ep);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.VACUUM.getMinValue(), vac, ep);
 	}
 
 	/**

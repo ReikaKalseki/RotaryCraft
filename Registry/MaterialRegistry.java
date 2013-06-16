@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 
-public enum EnumMaterials {
+public enum MaterialRegistry {
 
 	WOOD(ReikaEngLibrary.Ewood, ReikaEngLibrary.Gwood, ReikaEngLibrary.Twood, ReikaEngLibrary.Swood, ReikaEngLibrary.rhowood),
 	STONE(ReikaEngLibrary.Estone, ReikaEngLibrary.Gstone, ReikaEngLibrary.Tstone, ReikaEngLibrary.Sstone, ReikaEngLibrary.rhorock),
@@ -25,7 +25,7 @@ public enum EnumMaterials {
 	private double shear;
 	private double rho;
 
-	private EnumMaterials(double E, double G, double TS, double S, double den) {
+	private MaterialRegistry(double E, double G, double TS, double S, double den) {
 		Emod = E;
 		Smod = G;
 		tensile = TS;
@@ -33,7 +33,7 @@ public enum EnumMaterials {
 		rho = den;
 	}
 
-	public static EnumMaterials setType(int type) {
+	public static MaterialRegistry setType(int type) {
 		switch(type) {
 		case 0:
 			return WOOD;
@@ -70,10 +70,14 @@ public enum EnumMaterials {
 	}
 
 	public boolean isDamageableGear() {
-		return (this == STEEL || this == STONE || this == WOOD);
+		return !this.isInfiniteStrength();
 	}
 
 	public boolean isInfiniteStrength() {
 		return (this == BEDROCK);
+	}
+
+	public boolean consumesLubricant() {
+		return this == WOOD || this == STONE || this == STEEL;
 	}
 }

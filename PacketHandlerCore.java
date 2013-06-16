@@ -23,7 +23,7 @@ import cpw.mods.fml.common.network.Player;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
@@ -65,7 +65,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityScreen screen;
 	private TileEntityItemCannon icannon;
 
-	protected EnumPackets pack;
+	protected PacketRegistry pack;
 	protected PacketTypes packetType;
 
 	@Override
@@ -92,7 +92,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				return;
 			}
 			control = inputStream.readInt();
-			pack = EnumPackets.getEnum(control);
+			pack = PacketRegistry.getEnum(control);
 			len = pack.getNumberDataInts();
 			data = new int[len];
 			readinglong = pack.isLongPacket();

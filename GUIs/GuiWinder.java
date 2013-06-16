@@ -16,7 +16,7 @@ import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class GuiWinder extends GuiOneSlotInv
@@ -54,7 +54,7 @@ public class GuiWinder extends GuiOneSlotInv
 		super.actionPerformed(button);
 		if (button.id != 0)
 			return;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.WINDER.getMinValue(), Winder, ep);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.WINDER.getMinValue(), Winder, ep);
 		input = !input;
 		this.initGui();
 	}

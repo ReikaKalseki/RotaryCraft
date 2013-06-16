@@ -11,17 +11,20 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.world.World;
 import Reika.DragonAPI.BlockArray;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine {
+public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider {
 
 	private BlockArray solarBlocks = new BlockArray();
-	private int numberMirrors;
+	private int numberMirrors = 0;
+
+	private int waterLevel = 0;
+	private float lightMultiplier = 0;
 
 	@Override
 	public boolean canProvidePower() {
@@ -48,22 +51,13 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		if (world.getBlockId(x, y-1, z) == 0 || MachineRegistry.getMachine(world, x, y-1, z) != this.getMachine()) {
-			ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
-			writex = x;
-			writez = z;
-			writey = y-1;
-			//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
-			omega = 1024;
-			torque = 2*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1);
-			if (this.getArraySize() <= 0) {
-				omega = 0;
-				torque = 0;
-			}
-			power = omega*torque;
+			//ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
+			this.generatePower(world, x, y, z);
 		}
 		if (world.getBlockId(x, y+1, z) != 0)
 			return;
 		if (solarBlocks.isEmpty()) {
+			lightMultiplier = 0;
 			solarBlocks.recursiveFill(world, x, y, z, this.getTileEntityBlockID());
 			numberMirrors = solarBlocks.getSize();
 			while (solarBlocks.getSize() > 0) {
@@ -72,10 +66,28 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 				if (m == MachineRegistry.MIRROR) {
 					TileEntityMirror te = (TileEntityMirror)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
 					te.targetloc = new int[]{x,y,z};
+					int light = te.getLightLevel();
+					lightMultiplier += light;
 				}
 				else numberMirrors--;
 			}
+			lightMultiplier /= 15F;
+			lightMultiplier /= numberMirrors;
 		}
+	}
+
+	private void generatePower(World world, int x, int y, int z) {
+		writex = x;
+		writez = z;
+		writey = y-1;
+		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
+		omega = 1024;
+		torque = 2*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1);
+		if (this.getArraySize() <= 0) {
+			omega = 0;
+			torque = 0;
+		}
+		power = omega*torque;
 	}
 
 	private int getTowerHeight() {
@@ -109,6 +121,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	private int getArraySize() {
 		return ((TileEntitySolar)worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(worldObj, xCoord, yCoord, zCoord), zCoord)).numberMirrors;
+	}
+
+	private float getArrayOverallBrightness() {
+		return ((TileEntitySolar)worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(worldObj, xCoord, yCoord, zCoord), zCoord)).lightMultiplier;
 	}
 
 	public int getTopOfTower(World world, int x, int y, int z) {

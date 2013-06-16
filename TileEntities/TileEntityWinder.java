@@ -13,16 +13,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWinder extends TileEntityInventoriedPowerReceiver implements OneSlotMachine {
+public class TileEntityWinder extends TileEntityInventoriedPowerReceiver implements OneSlotMachine, SimpleProvider {
 
 	public ItemStack[] inslot = new ItemStack[1];
 
@@ -200,7 +200,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean canProvidePower() {
-		return true;
+		return !winding;
 	}
 
 	@Override

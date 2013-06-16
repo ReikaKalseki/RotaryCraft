@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 
 public class GuiSonic extends GuiPowerOnlyMachine
@@ -109,14 +109,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			freq = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMinValue(), sonic, ep, freq);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMinValue(), sonic, ep, freq);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			dB = 0;
 			this.getVolFromdB();
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMaxValue(), sonic, ep, vol);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMaxValue(), sonic, ep, vol);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -126,13 +126,13 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (valid1) {
 			freq = Long.parseLong(input.getText());
 			if (freq >= 0)
-				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMinValue(), sonic, ep, freq);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMinValue(), sonic, ep, freq);
 		}
 		if (valid2) {
 			dB = Integer.parseInt(input2.getText());
 			if (dB >= 0) {
 				this.getVolFromdB();
-				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, EnumPackets.SONIC.getMaxValue(), sonic, ep, vol);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMaxValue(), sonic, ep, vol);
 			}
 		}
 	}

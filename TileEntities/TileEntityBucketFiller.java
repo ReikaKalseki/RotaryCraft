@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Registry.EnumLiquids;
+import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
@@ -205,7 +205,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		if (filling)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return EnumLiquids.isLiquidItem(is);
+		return LiquidRegistry.isLiquidItem(is);
 	}
 
 	@Override
@@ -393,7 +393,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		if (filling)
-			return j == 0 && EnumLiquids.isLiquidItem(itemstack);
+			return j == 0 && LiquidRegistry.isLiquidItem(itemstack);
 		return j == 0 && itemstack.itemID == Item.bucketEmpty.itemID;
 	}
 

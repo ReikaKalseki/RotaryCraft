@@ -32,7 +32,7 @@ import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemScrewdriver;
-import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 
@@ -58,7 +58,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox tg = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (tg == null)
 			return 0;
-		if (tg.type != EnumMaterials.WOOD)
+		if (tg.type != MaterialRegistry.WOOD)
 			return 0;
 		return 60;
 	}
@@ -69,7 +69,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx == null)
 			return 0;
-		EnumMaterials type = gbx.type;
+		MaterialRegistry type = gbx.type;
 		switch(type) {
 			case WOOD:
 				return 5F;
@@ -112,22 +112,22 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx == null)
 			return false;
-		EnumMaterials type = gbx.type;
-		if (type == EnumMaterials.WOOD)
+		MaterialRegistry type = gbx.type;
+		if (type == MaterialRegistry.WOOD)
 			return true;
 		ItemStack stack = player.inventory.getCurrentItem();
 		if (stack == null)
 			return false;
 		if (stack.getItem() instanceof ItemPickaxe) {
-			if (type == EnumMaterials.STONE)
+			if (type == MaterialRegistry.STONE)
 				return true;
 			if (stack.itemID == Item.pickaxeWood.itemID)
 				return false;
-			if (type == EnumMaterials.STEEL)
+			if (type == MaterialRegistry.STEEL)
 				return true;
 			if (stack.itemID == Item.pickaxeStone.itemID)
 				return false;
-			if (type == EnumMaterials.DIAMOND)
+			if (type == MaterialRegistry.DIAMOND)
 				return true;
 			if (stack.itemID == Item.pickaxeIron.itemID)
 				return false;

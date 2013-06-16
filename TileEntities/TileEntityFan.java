@@ -19,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -360,54 +359,54 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int maxz = 0;
 
 		switch (meta) {
-			case 0:
-				minx = xCoord-step-1;
-				maxx = xCoord;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minz = zCoord;
-				maxz = zCoord+1;
-				break;
-			case 1:
-				minx = xCoord+1;
-				maxx = xCoord+step+1;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minz = zCoord;
-				maxz = zCoord+1;
-				break;
-			case 2:
-				maxz = zCoord+step+1;
-				minz = zCoord+1;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 3:
-				maxz = zCoord;
-				minz = zCoord-step-1;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 4:
-				minz = zCoord;
-				maxz = zCoord+1;
-				miny = yCoord+1;
-				maxy = yCoord+step+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 5:
-				minz = zCoord;
-				maxz = zCoord+1;
-				maxy = yCoord;
-				miny = yCoord-step;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
+		case 0:
+			minx = xCoord-step-1;
+			maxx = xCoord;
+			miny = yCoord;
+			maxy = yCoord+1;
+			minz = zCoord;
+			maxz = zCoord+1;
+			break;
+		case 1:
+			minx = xCoord+1;
+			maxx = xCoord+step+1;
+			miny = yCoord;
+			maxy = yCoord+1;
+			minz = zCoord;
+			maxz = zCoord+1;
+			break;
+		case 2:
+			maxz = zCoord+step+1;
+			minz = zCoord+1;
+			miny = yCoord;
+			maxy = yCoord+1;
+			minx = xCoord;
+			maxx = xCoord+1;
+			break;
+		case 3:
+			maxz = zCoord;
+			minz = zCoord-step-1;
+			miny = yCoord;
+			maxy = yCoord+1;
+			minx = xCoord;
+			maxx = xCoord+1;
+			break;
+		case 4:
+			minz = zCoord;
+			maxz = zCoord+1;
+			miny = yCoord+1;
+			maxy = yCoord+step+1;
+			minx = xCoord;
+			maxx = xCoord+1;
+			break;
+		case 5:
+			minz = zCoord;
+			maxz = zCoord+1;
+			maxy = yCoord;
+			miny = yCoord-step;
+			minx = xCoord;
+			maxx = xCoord+1;
+			break;
 		}
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.0, 0.0, 0.0);
 	}

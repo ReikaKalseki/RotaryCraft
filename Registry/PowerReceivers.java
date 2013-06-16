@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-
-
 public enum PowerReceivers {
 
 	AEROSOLIZER(65536),

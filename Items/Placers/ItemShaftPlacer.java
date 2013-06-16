@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import cpw.mods.fml.relauncher.Side;
@@ -66,7 +66,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.SHAFT.getBlockID());
 				TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 				if (sha != null) {
-					sha.type = EnumMaterials.STEEL;
+					sha.type = MaterialRegistry.STEEL;
 					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				}
 				return true;
@@ -75,7 +75,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 			if (sha != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				sha.type = EnumMaterials.setType(is.getItemDamage());
+				sha.type = MaterialRegistry.setType(is.getItemDamage());
 			}
 		}
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);

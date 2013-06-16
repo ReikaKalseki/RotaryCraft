@@ -18,7 +18,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.EnumEngineType;
-import Reika.RotaryCraft.Registry.EnumMaterials;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -69,16 +69,16 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 			player.triggerAchievement(RotaryAchievements.MAKERAILGUN.get());
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal())))
 			player.triggerAchievement(RotaryAchievements.MAKEJET.get());
-		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.STEEL.ordinal())))
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal())))
 			player.triggerAchievement(RotaryAchievements.STEELSHAFT.get());
-		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, EnumMaterials.BEDROCK.ordinal())))
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal())))
 			player.triggerAchievement(RotaryAchievements.BEDROCKSHAFT.get());
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1)))
 			player.triggerAchievement(RotaryAchievements.CVT.get());
 		if (ItemRegistry.isRegistered(item) && ItemRegistry.getEntry(item).isBedrockTool())
 			player.triggerAchievement(RotaryAchievements.BEDROCKTOOLS.get());
 		for (int i = 0; i < 4; i++) {
-			if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.gbxitems.itemID, 1, EnumMaterials.DIAMOND.ordinal()+i*5)))
+			if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.gbxitems.itemID, 1, MaterialRegistry.DIAMOND.ordinal()+i*5)))
 				player.triggerAchievement(RotaryAchievements.DIAMONDGEARS.get());
 		}
 	}

@@ -15,10 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
@@ -26,8 +28,8 @@ import Reika.RotaryCraft.Models.ModelGearbox;
 import Reika.RotaryCraft.Models.ModelGearbox16;
 import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
-import Reika.RotaryCraft.Registry.EnumMaterials;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory {
 
@@ -37,7 +39,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public static final int MAXLUBE = 24000;
 	public ItemStack[] inv = new ItemStack[1];
 
-	public EnumMaterials type;
+	public MaterialRegistry type;
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
@@ -123,7 +125,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		if (type == null)
-			type = EnumMaterials.STEEL;
+			type = MaterialRegistry.STEEL;
 		tickcount++;
 		power = omega*torque;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
@@ -157,9 +159,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				case STEEL:
 					damage++;		//1/3 original steel
 					break;
-				case BEDROCK:
-					break;
 				case DIAMOND:
+					if (par5Random.nextInt(3) == 0)
+						damage++;
+					break;
+				case BEDROCK:
 					break;
 				default:
 					break;
@@ -170,7 +174,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
 			}
-			else {
+			else if (type.consumesLubricant()) {
 				if (lubricant > 0 && omega > 0)
 					lubricant = ReikaMathLibrary.extrema((int)(lubricant-ReikaMathLibrary.logbase(omega, 2)), lubricant, "min");
 			}
@@ -268,6 +272,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		this.getRatio();
 		omegain = torquein = 0;
 		ready = y;
+		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, y, readz);
@@ -280,12 +285,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				omegain = devicein.omega;
 			}
 		}
-		if (m == MachineRegistry.ENGINE) {
-			TileEntityEngine devicein = (TileEntityEngine)world.getBlockTileEntity(readx, y, readz);
-			if ((devicein.writex == x && devicein.writez == z)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
+		if (te instanceof SimpleProvider) {
+			this.copyStandardPower(worldObj, readx, ready, readz);
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
@@ -294,55 +295,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				return;
 			}
 			else if (devicein.writex == x && devicein.writez == z) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.CLUTCH) {
-			TileEntityClutch devicein = (TileEntityClutch)world.getBlockTileEntity(readx, y, readz);
-			if (devicein.writex == x && devicein.writez == z) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.ADVANCEDGEARS) {
-			TileEntityAdvancedGear devicein = (TileEntityAdvancedGear)world.getBlockTileEntity(readx, y, readz);
-			if ((devicein.writex == x && devicein.writez == z)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.WINDER) {
-			TileEntityWinder devicein = (TileEntityWinder)world.getBlockTileEntity(readx, y, readz);
-			if ((devicein.writex == x && devicein.writez == z)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.DYNAMOMETER) {
-			TileEntityMonitor devicein = (TileEntityMonitor)world.getBlockTileEntity(readx, y, readz);
-			if (devicein.writex == x && devicein.writez == z) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.FLYWHEEL) {
-			TileEntityFlywheel devicein = (TileEntityFlywheel)world.getBlockTileEntity(readx, y, readz);
-			if (devicein.writex == x && devicein.writez == z) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.GEARBOX) {
-			TileEntityGearbox devicein = (TileEntityGearbox)world.getBlockTileEntity(readx, y, readz);
-			if (devicein.writex == x && devicein.writez == z) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (m == MachineRegistry.BEVELGEARS) {
-			TileEntityGearBevel devicein = (TileEntityGearBevel)world.getBlockTileEntity(readx, y, readz);
-			if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
 				torquein = devicein.torque;
 				omegain = devicein.omega;
 			}
@@ -413,7 +365,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
 		lubricant = NBT.getInteger("lube");
-		type = EnumMaterials.setType(NBT.getInteger("type"));
+		type = MaterialRegistry.setType(NBT.getInteger("type"));
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
 

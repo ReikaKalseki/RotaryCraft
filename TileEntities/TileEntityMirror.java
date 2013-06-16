@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
@@ -21,6 +22,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	//2.3 kW/m^2 (392MW/170000) -> 2kW/block; sunlight is 15 kW per m^2, so thus efficiency of 13%
 
 	public float theta;
+	public boolean broken;
 
 	public int[] targetloc = {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
@@ -69,10 +71,13 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		return 0;
 	}
 
-	private int getLightLevel(World world, int x, int y, int z) {
-		if (!world.canBlockSeeTheSky(x, y, z))
+	public int getLightLevel() {
+		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
-		return (int)(15*world.getSunBrightness(0));
+		float sun = worldObj.getSunBrightness(0);
+		if (sun > 0)
+			return (int)(15*sun);
+		return 4;
 	}
 
 	private void adjustAim(World world, int x, int y, int z, int meta) {
@@ -155,6 +160,35 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 			theta += movespeed;
 		if (theta > finaltheta)
 			theta -= movespeed;
+	}
+
+	public void breakMirror(World world, int x, int y, int z) {
+		broken = true;
+		//spawn particles
+	}
+
+	public void repair(World world, int x, int y, int z) {
+		broken = false;
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setBoolean("broke", broken);
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		broken = NBT.getBoolean("broke");
 	}
 
 }

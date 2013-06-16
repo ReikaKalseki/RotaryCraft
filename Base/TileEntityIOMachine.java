@@ -189,4 +189,12 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			return (TileEntityIOMachine)te;
 		return null;
 	}
+
+	protected void writePowerToConsole() {
+		ReikaJavaLibrary.pConsole(String.format("Torque: %d Nm;   Omega: %d rad/s;   Power: %.3fkW", torque, omega, power/1000D));
+	}
+
+	protected void writePowerToChat() {
+		ReikaChatHelper.write(String.format("Torque: %d Nm;   Omega: %d rad/s;   Power: %.3fkW", torque, omega, power/1000D));
+	}
 }

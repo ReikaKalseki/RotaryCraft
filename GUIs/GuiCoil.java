@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Registry.EnumPackets;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 
 public class GuiCoil extends GuiNonPoweredMachine
@@ -89,13 +89,13 @@ public class GuiCoil extends GuiNonPoweredMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			omega = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.COIL.getMinValue(), coil, ep, omega);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, ep, omega);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			torque = 0;
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.COIL.getMaxValue(), coil, ep, torque);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, ep, torque);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -107,7 +107,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (omega >= 0) {
 				if (omega > RotaryConfig.omegalimit)
 					omega = RotaryConfig.omegalimit;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.COIL.getMinValue(), coil, ep, omega);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, ep, omega);
 			}
 		}
 		if (valid2) {
@@ -115,7 +115,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (torque >= 0) {
 				if (torque > RotaryConfig.torquelimit)
 					torque = RotaryConfig.torquelimit;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, EnumPackets.COIL.getMaxValue(), coil, ep, torque);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, ep, torque);
 			}
 		}
 	}
