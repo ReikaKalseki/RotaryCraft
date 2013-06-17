@@ -33,16 +33,18 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
 
 public class EntityRailGunShot extends EntityFireball {
 
 	private int power;
+	private TileEntityRailGun gun;
 
 	public EntityRailGunShot(World world) {
 		super(world);
 	}
 
-	public EntityRailGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pw) {
+	public EntityRailGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pw, TileEntityRailGun r) {
 		super(world, x, y, z, 0, 0, 0);
 		//this.extinguish();
 		//this.shootingEntity = null;
@@ -50,6 +52,7 @@ public class EntityRailGunShot extends EntityFireball {
 		if (!world.isRemote)
 			velocityChanged = true;
 		power = pw;
+		gun = r;
 	}
 
 	@Override
@@ -283,7 +286,7 @@ public class EntityRailGunShot extends EntityFireball {
 								if (el instanceof EntityDragon) {
 									((EntityDragon) el).attackEntityFromPart(((EntityDragon) el).dragonPartHead, DamageSource.setExplosionSource(new Explosion(worldObj, this, x, y, z, 20)), this.getAttackDamage());
 									if (el.isDead || el.getHealth() <= 0) {
-
+										gun.getPlacer().triggerAchievement(RotaryAchievements.RAILDRAGON.get());
 									}
 								}
 								else

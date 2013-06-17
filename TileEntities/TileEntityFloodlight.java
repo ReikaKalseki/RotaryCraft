@@ -13,19 +13,19 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelLamp;
 import Reika.RotaryCraft.Models.ModelVLamp;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
 
-	public int distancelimit = RotaryConfig.maxlamprange;
+	public int distancelimit = ConfigRegistry.FLOODLIGHTRANGE.getValue();
 	public int lightlevel;
 	public boolean beammode = false;
 
@@ -126,7 +126,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	@Override
 	public int getRange() {
-		return RotaryConfig.maxlamprange;
+		return distancelimit;
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	@Override
 	public int getMaxRange() {
-		return RotaryConfig.maxlamprange;
+		return distancelimit;
 	}
 
 	@Override

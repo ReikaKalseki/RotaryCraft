@@ -26,9 +26,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockGravity;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -229,7 +229,7 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 			return false;
 		if (par5Random.nextInt(4) > 0)
 			return false;
-		if (RotaryConfig.alwaysGravLeaves)
+		if (ConfigRegistry.JUNGLECUTTER.getState())
 			return true;
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int meta = world.getBlockMetadata(x, y, z);

@@ -9,10 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.io.File;
 import java.util.HashMap;
 
 import net.minecraftforge.common.Configuration;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -20,35 +23,11 @@ public class RotaryConfig {
 
 	//Configuration, used for save and load data
 	public static Configuration config;
-	/*
-	public static int debugitemid;
-	public static int worldeditid;
-	public static int screwdriverid;
-	public static int meterid;
 
-	public static int yeastid;
-	public static int ethanolid;
-	public static int canolaseedid;
-	public static int windid;
-	public static int ultraid;
-	public static int motionid;
-	public static int vacid;
-	public static int gravelgunid;
-	public static int stunid;
-	public static int fireballid;
-	public static int bedpickid;
-	public static int bedaxeid;
-	public static int bedshovid;
-	public static int calcid;
-	public static int nvgid;
-	public static int nvhid;
-	public static int handcraftid;
-	public static int railammoid;
-	public static int fuelbucketid;
-	public static int targetid;
-	public static int slidesid;
-	public static int iogogglesid;
-	public static int diskid;*/
+	/** Change this to cause auto-deletion of users' config files to load new copies */
+	private static final int CURRENT_CONFIG_ID = 0;
+	private static int readID;
+	private static File configFile;
 
 	public static int modextractsid;
 
@@ -70,33 +49,6 @@ public class RotaryConfig {
 	public static int flywheelitemsid;
 	public static int advgearitemsid;
 
-	//public static int infobookid;
-
-	public static boolean playsounds;
-	public static boolean renderores;
-	public static boolean SIUnits;
-	public static boolean alwaysGravLeaves;
-	public static boolean gravtree;
-	public static boolean renderforcefield;
-	public static boolean craftableBedrock;
-	public static boolean oreDict;
-	public static boolean consoleMsg;
-	public static boolean lockMachines;
-	public static int maxlamprange;
-	public static int maxheatrayrange;
-	public static int maxbridgerange;
-	public static int maxfanrange;
-	public static int maxaerorange;
-	public static int maxvacuumrange;
-	public static int spawnerlimit;
-	public static int maxdetectorrange;
-	public static int maxbreederrange;
-	public static int maxbaitrange;
-	public static int maxbaitmobs;
-	public static int maxsonicrange;
-	public static int maxforcerange;
-	public static int cavefinderrange;
-
 	public static int beamblockid;
 	public static int gravlogid;
 	public static int gravleavesid;
@@ -111,6 +63,7 @@ public class RotaryConfig {
 
 	public static int[] machineids = new int[BlockRegistry.blockList.length];
 	public static int[] itemids = new int[ItemRegistry.itemList.length];
+	public static Object[] controls = new Object[ConfigRegistry.optionList.length];
 
 	private static HashMap<String,Integer> id = new HashMap<String,Integer>();
 
@@ -123,7 +76,7 @@ public class RotaryConfig {
 
 	//Initialization of the config
 	// Args: String mod used to name the config file to mods name
-	public static void initProps(String mod, FMLPreInitializationEvent event){
+	public static void initProps(String mod, FMLPreInitializationEvent event) {
 
 		//creating a folder for the mod in the folder config within the .minecraft folder
 		//File file = new File(Minecraft.getMinecraftDir() + "/config/" + mod);
@@ -131,10 +84,19 @@ public class RotaryConfig {
 		//getting the config file
 
 		//allocate the file to the config
-		config = new Configuration(event.getSuggestedConfigurationFile());
+		configFile = event.getSuggestedConfigurationFile();
+		config = new Configuration(configFile);
 
 		//load data
 		config.load();
+
+		if (checkReset(config)) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Config File Format Changed. Resetting...");
+			resetConfigFile();
+			initProps(mod, event);
+			return;
+		}
+
 		/********************************/
 		machineplacerid = 	config.getItem("ItemBlock IDs", "Machine Items", 30616).getInt();
 		heatcraftid = 		config.getItem("Crafting Item IDs", "Heat Ray Crafting Items", 30628).getInt();
@@ -166,30 +128,13 @@ public class RotaryConfig {
 		blastglassid = 		config.getBlock("Extra Block IDs", "Blast Glass", 459).getInt();
 		beamblockid = 		config.getBlock("Extra Block IDs", "Beam Block", 460).getInt();
 
-		playsounds = 		config.get("Control Setup", "Engine Running Sounds", true).getBoolean(true);
-		renderores = 		config.get("Control Setup", "GPR Renders Ores", false).getBoolean(false);
-		gravtree = 			config.get("Control Setup", "Woodcutter Falling Trees", true).getBoolean(true);
-		alwaysGravLeaves = 	config.get("Control Setup", "Unlimited Jungle Tree Felling", false).getBoolean(false);
-		renderforcefield = 	config.get("Control Setup", "Show Force Fields", true).getBoolean(true);
-		craftableBedrock = 	config.get("Control Setup", "Allow Craftable Bedrock", true).getBoolean(true);
-		oreDict = 			config.get("Control Setup", "Ore Dictionary Interchangeability", true).getBoolean(true);
-		consoleMsg =		config.get("Control Setup", "Console Loading Info", true).getBoolean(true);
-		lockMachines = 		config.get("Control Setup", "Owner-Only Machine Use", false).getBoolean(false);
-		//SIUnits = 			config.getOrCreateBooleanProperty("SI Metric Units", "Control Setup", true).getBoolean(true);
-		maxlamprange = 		config.get("Control Setup", "Max Floodlight Range", 128).getInt();
-		maxheatrayrange = 	config.get("Control Setup", "Max Heat Ray Range", 128).getInt();
-		maxbridgerange = 	config.get("Control Setup", "Max Bridge Range", 128).getInt();
-		maxfanrange = 		config.get("Control Setup", "Max Fan Range", 128).getInt();
-		maxaerorange = 		config.get("Control Setup", "Max Aerosolizer Range", 128).getInt();
-		maxvacuumrange = 	config.get("Control Setup", "Max Vacuum Range", 128).getInt();
-		maxsonicrange = 	config.get("Control Setup", "Max Sonic Weapon Range", 128).getInt();
-		maxforcerange = 	config.get("Control Setup", "Max Force Field Range", 128).getInt();
-		spawnerlimit = 		config.get("Control Setup", "Spawner Mob Limit", 128).getInt();
-		maxdetectorrange = 	config.get("Control Setup", "Player Detector Range", 128).getInt();
-		maxbreederrange = 	config.get("Control Setup", "Breeder Range", 128).getInt();
-		maxbaitrange = 		config.get("Control Setup", "Bait Box Range", 128).getInt();
-		maxbaitmobs = 		config.get("Control Setup", "Max Bait Box Mob Count", 256).getInt();
-		cavefinderrange = 	config.get("Control Setup", "Cave Finder FOV", 16).getInt();
+		for (int i = 0; i < ConfigRegistry.optionList.length; i++) {
+			String label = ConfigRegistry.optionList[i].getLabel();
+			if (ConfigRegistry.optionList[i].isBoolean())
+				controls[i] = ConfigRegistry.optionList[i].setState(config);
+			if (ConfigRegistry.optionList[i].isNumeric())
+				controls[i] = ConfigRegistry.optionList[i].setValue(config);
+		}
 
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			String name = BlockRegistry.blockList[i].getBlockVariableName();
@@ -204,6 +149,16 @@ public class RotaryConfig {
 		/*******************************/
 		//save the data
 		config.save();
+	}
+
+	private static boolean checkReset(Configuration config) {
+		readID = config.get("Control", "Config ID - Edit to have your config auto-deleted", CURRENT_CONFIG_ID).getInt();
+		//ReikaJavaLibrary.pConsole("ReadID: "+readID);
+		return readID != CURRENT_CONFIG_ID;
+	}
+
+	private static void resetConfigFile() {
+		configFile.delete();
 	}
 
 }

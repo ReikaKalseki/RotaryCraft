@@ -18,8 +18,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockBeam extends BlockBasic {
 
@@ -101,7 +101,7 @@ public class BlockBeam extends BlockBasic {
     		boolean nz = true;*/
 			int i = 1;
 			//(px || py || pz || nx || ny || nz) &&
-			while (i <= RotaryConfig.maxlamprange) {
+			while (i <= ConfigRegistry.FLOODLIGHTRANGE.getValue()) {
 				//if (px)
 				world.notifyBlocksOfNeighborChange(x + i, y, z, 0);
 				//if (nx)

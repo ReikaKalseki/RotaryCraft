@@ -23,37 +23,37 @@ import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
 
 public enum RotaryAchievements {
 
-	MAKESTEEL("Steelmaker", 				-2, -1, ItemStacks.steelingot, AchievementList.acquireIron, false),
-	MAKEYEAST("Fermenter", 					-2, -2, MachineRegistry.FERMENTER.getCraftedProduct(), null, false),
-	EXTRACTOR("Processor", 					-2, -3, MachineRegistry.EXTRACTOR.getCraftedProduct(), null, false),
-	BORER("Getting Bored", 					-2, -4, MachineRegistry.BORER.getCraftedProduct(), null, false),
-	RECYCLE("Green", 						-2, -5, MachineRegistry.PULSEJET.getCraftedProduct(), null, false),
-	MAKEJET("Jet Engine", 					-2, -6, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal()), null, true),
-	MAKERAILGUN("Overkill", 				-2, -7, MachineRegistry.RAILGUN.getCraftedProduct(), null, true),
-	SUCKEDINTOJET("This Really Sucks", 		-2, -8, Item.rottenFlesh, MAKEJET.ordinal(), false),
-	BEDROCKBREAKER("Unbreakable?", 			-3, 0, MachineRegistry.BEDROCKBREAKER.getCraftedProduct(), MAKESTEEL.ordinal(), false), //break bedrock with
-	STEAMENGINE("Steam", 					-3, -1, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.STEAM.ordinal()), MAKESTEEL.ordinal(), false), //turn on
-	STEELSHAFT("Engaged", 					-3, -2, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal()), MAKESTEEL.ordinal(), false), //make
-	CVT("Adaptability", 					-3, -3, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1), STEELSHAFT.ordinal(), false), //make
-	BEDROCKSHAFT("Unbreakable",  			-3, -4, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal()), STEELSHAFT.ordinal(), false), //make
-	BEDROCKTOOLS("Durability",  			-3, -5, ItemRegistry.BEDPICK.getStackOf(), BEDROCKBREAKER.ordinal(), false), //make
-	JETFUEL("Liquid Power",  				-3, -6, MachineRegistry.FRACTIONATOR.getCraftedProduct(), null, false), //make
-	JETCHICKEN("Doing It Wrong",  			-3, -7, Item.feather, MAKEJET.ordinal(), false), //suck 50 chickens into jet engine
-	JETFAIL("...Oops",  					-3, -8, Block.tnt, MAKEJET.ordinal(), false), //cause violent failure
-	LIGHTFALL("Oh nooooo",  				-4, 0, MachineRegistry.LIGHTBRIDGE.getCraftedProduct(), null, false), //light bridge turns off, drops you to death
-	SPRINKLER("Green Thumb",  				-4, -1, MachineRegistry.SPRINKLER.getCraftedProduct(), null, false), //turn on
-	FLOODLIGHT("Illuminating",  			-4, -2, MachineRegistry.FLOODLIGHT.getCraftedProduct(), null, false), //turn on at Light 15
-	DAMAGEGEARS("Grind My Gears", 			-4, -3, ItemStacks.scrap, null, false),
-	DIAMONDGEARS("Crystal",  				-4, -4, new ItemStack(RotaryCraft.gbxitems.itemID, 1, RotaryNames.gearboxItemNames.length-2), DAMAGEGEARS.ordinal(), false), //make
-	MRADS32("Overspeed",  					-4, -5, Item.sugar, null, true), //transmit power at 32Mrad/s
-	GIGAWATT("Overpowered",  				-4, -6, Block.blockRedstone, null, true), //transmit 1GW of power in one shaft w/o breaking
-	TNTCANNON("Sharpshooter", 				-4, -7, MachineRegistry.TNTCANNON.getCraftedProduct(), null, true), //hit mob at >= 100 blocks with TNT cannon
-	RAILDRAGON("Blown Out of the Sky", 		-4, -8, Block.dragonEgg, MAKERAILGUN.ordinal(), true), //kill dragon with railgun
-	RAILKILLED("Too Close For Comfort", 	-5, 0, new ItemStack(Item.skull.itemID, 1, 0), MAKERAILGUN.ordinal(), false), //kill self with railgun
-	GRAVELGUN("Sniped",  					-5, -1, ItemRegistry.GRAVELGUN.getStackOf(), null, false), //one hit kill with
-	LANDMINE("Watch Your Step", 			-5, -2, MachineRegistry.LANDMINE.getCraftedProduct(), null, false), //step on
-	GPRENDPORTAL("Who Needs Ender Eyes?", 	-5, -3, Block.endPortalFrame, null, false), //gpr thru end portal
-	NETHERHEATRAY("Boom Miner", 			-5, -4, MachineRegistry.HEATRAY.getCraftedProduct(), null, true); //dig 500m with heat ray in nether
+	MAKESTEEL("Steelmaker", 				2, -1, ItemStacks.steelingot, AchievementList.acquireIron, false),
+	MAKEYEAST("Fermenter", 					2, 2, MachineRegistry.FERMENTER.getCraftedProduct(), null, false),
+	EXTRACTOR("Processor", 					2, 1, MachineRegistry.EXTRACTOR.getCraftedProduct(), null, false),
+	BORER("Getting Bored", 					2, 0, MachineRegistry.BORER.getCraftedProduct(), null, false),
+	RECYCLE("Green", 						2, -1, MachineRegistry.PULSEJET.getCraftedProduct(), null, false),
+	MAKEJET("Jet Engine", 					2, -6, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal()), null, true),
+	MAKERAILGUN("Overkill", 				2, -7, MachineRegistry.RAILGUN.getCraftedProduct(), null, true),
+	SUCKEDINTOJET("This Really Sucks", 		2, -8, Item.rottenFlesh, MAKEJET.ordinal(), false),
+	BEDROCKBREAKER("Unbreakable?", 			1, 0, MachineRegistry.BEDROCKBREAKER.getCraftedProduct(), MAKESTEEL.ordinal(), false), //break bedrock with
+	STEAMENGINE("Steam", 					1, -1, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.STEAM.ordinal()), MAKESTEEL.ordinal(), false), //turn on
+	STEELSHAFT("Engaged", 					1, 2, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal()), MAKESTEEL.ordinal(), false), //make
+	CVT("Adaptability", 					1, 1, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1), STEELSHAFT.ordinal(), false), //make
+	BEDROCKSHAFT("Unbreakable",  			1, 0, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal()), STEELSHAFT.ordinal(), false), //make
+	BEDROCKTOOLS("Durability",  			1, -1, ItemRegistry.BEDPICK.getStackOf(), BEDROCKBREAKER.ordinal(), false), //make
+	JETFUEL("Liquid Power",  				1, -6, MachineRegistry.FRACTIONATOR.getCraftedProduct(), null, false), //make
+	JETCHICKEN("Doing It Wrong",  			1, -7, Item.feather, MAKEJET.ordinal(), false), //suck 50 chickens into jet engine
+	JETFAIL("...Oops",  					1, -8, Block.tnt, MAKEJET.ordinal(), false), //cause violent failure
+	LIGHTFALL("Oh nooooo",  				0, 0, MachineRegistry.LIGHTBRIDGE.getCraftedProduct(), null, false), //light bridge turns off, drops you to death
+	SPRINKLER("Green Thumb",  				0, -1, MachineRegistry.SPRINKLER.getCraftedProduct(), null, false), //turn on
+	FLOODLIGHT("Illuminating",  			0, 2, MachineRegistry.FLOODLIGHT.getCraftedProduct(), null, false), //turn on at Light 15
+	DAMAGEGEARS("Grind My Gears", 			0, 1, ItemStacks.scrap, null, false),
+	DIAMONDGEARS("Crystal",  				0, 0, new ItemStack(RotaryCraft.gbxitems.itemID, 1, RotaryNames.gearboxItemNames.length-2), DAMAGEGEARS.ordinal(), false), //make
+	MRADS32("Overspeed",  					0, -1, Item.sugar, null, true), //transmit power at 32Mrad/s
+	GIGAWATT("Overpowered",  				0, -6, Block.blockRedstone, null, true), //transmit 1GW of power in one shaft w/o breaking
+	TNTCANNON("Sharpshooter", 				0, -7, MachineRegistry.TNTCANNON.getCraftedProduct(), null, true), //hit mob at >= 100 blocks with TNT cannon
+	RAILDRAGON("Blown Out of the Sky", 		0, -8, Block.dragonEgg, MAKERAILGUN.ordinal(), true), //kill dragon with railgun
+	RAILKILLED("Too Close For Comfort", 	-1, 0, new ItemStack(Item.skull.itemID, 1, 0), MAKERAILGUN.ordinal(), false), //kill self with railgun
+	GRAVELGUN("Sniped",  					-1, -1, ItemRegistry.GRAVELGUN.getStackOf(), null, false), //one hit kill with
+	LANDMINE("Watch Your Step", 			-1, 2, MachineRegistry.LANDMINE.getCraftedProduct(), null, false), //step on
+	GPRENDPORTAL("Who Needs Ender Eyes?", 	-1, 1, Block.endPortalFrame, null, false), //gpr thru end portal
+	NETHERHEATRAY("Boom Miner", 			-1, 0, MachineRegistry.HEATRAY.getCraftedProduct(), null, true); //dig 500m with heat ray in nether
 
 	private int id;
 	private String label;

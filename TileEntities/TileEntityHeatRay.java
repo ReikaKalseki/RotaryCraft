@@ -19,13 +19,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelHRay;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEffect {
 
@@ -70,7 +71,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				if (inzone.get(i) instanceof Entity) {
 					Entity caught = (Entity)inzone.get(i);
 					if (!(caught instanceof EntityItem)) //Do not burn drops
-						caught.setFire(2+(int)(4*power/MINPOWER));	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
+						caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
 					if (caught instanceof EntityTNTPrimed)
 						world.spawnParticle("lava", caught.posX+par5Random.nextFloat(), caught.posY+par5Random.nextFloat(), caught.posZ+par5Random.nextFloat(), 0, 0, 0);
 				}
@@ -78,8 +79,15 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 	}
 
+	public int getBurnTime() {
+		return 2+(int)(4*power/MINPOWER);
+	}
+
 	public int getRange() {
-		return (8+(int)(power-MINPOWER)/FALLOFF);
+		int r = (8+(int)(power-MINPOWER)/FALLOFF);
+		if (r > this.getMaxRange())
+			return this.getMaxRange();
+		return r;
 	}
 
 	public AxisAlignedBB getBurnZone(int meta, int step) {
@@ -193,6 +201,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
     	}*/
 		if (id == Block.netherrack.blockID && tickcount >= 6) {
 			world.newExplosion(null, x+step*xstep+0.5, y+step*ystep+0.5, z+step*zstep+0.5, 3F, true, true);
+			if (step >= 500)
+				this.getPlacer().triggerAchievement(RotaryAchievements.NETHERHEATRAY.get());
 			step = maxdist;
 			value = true;
 		}
@@ -280,7 +290,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 	@Override
 	public int getMaxRange() {
-		return RotaryConfig.maxheatrayrange;
+		return ConfigRegistry.HEATRAYRANGE.getValue();
 	}
 
 	@Override

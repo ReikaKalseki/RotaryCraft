@@ -22,18 +22,18 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelFan;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
-	public int distancelimit = RotaryConfig.maxfanrange;
+	public int distancelimit = ConfigRegistry.FANRANGE.getValue();
 
 	public static final long MAXPOWER = 2097152;
 	/** Rate of conversion - one power++ = 1/falloff ++ light levels */

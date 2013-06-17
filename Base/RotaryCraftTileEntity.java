@@ -28,8 +28,8 @@ import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -155,13 +155,13 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 	public final void updateEntity() {
 		if (shutDown)
 			return;
-		//this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.updateTileEntity();
 		this.updateEntity(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
 	}
 
 	private void updateTileEntity() {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		rmb = this.getTEModel(worldObj, xCoord, yCoord, zCoord);
 		this.animateWithTick(worldObj, xCoord, yCoord, zCoord);
 	}
@@ -268,7 +268,7 @@ public abstract class RotaryCraftTileEntity extends TileEntity implements Render
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		if (RotaryConfig.lockMachines && !var1.getEntityName().equals(placer)) {
+		if (ConfigRegistry.LOCKMACHINES.getState() && !var1.getEntityName().equals(placer)) {
 			ReikaChatHelper.write("This "+this.getName()+" is locked and can only be used by "+placer+"!");
 			return false;
 		}

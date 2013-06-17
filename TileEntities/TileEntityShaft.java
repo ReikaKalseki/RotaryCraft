@@ -28,6 +28,7 @@ import Reika.RotaryCraft.Models.ModelShaft;
 import Reika.RotaryCraft.Models.ModelShaftV;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityShaft extends TileEntity1DTransmitter {
 	public int[] readtorque = new int[2];
@@ -265,7 +266,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return;
 		}
 		this.testFailure();
-		power = omega*torque;
 		int id = world.getBlockId(x, y, z);
 
 		this.getIOSides(world, x, y, z, meta);
@@ -470,6 +470,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 		omega = omegain / ratio;
 		torque = torquein * ratio;
+		power = omega*torque;
+
+		if (omega >= 32000000) {
+			this.getPlacer().triggerAchievement(RotaryAchievements.MRADS32.get());
+		}
+		if (power >= 1000000000)
+			this.getPlacer().triggerAchievement(RotaryAchievements.GIGAWATT.get());
 	}
 
 	/**

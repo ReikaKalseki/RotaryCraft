@@ -20,10 +20,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelSpawner;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController {
@@ -129,7 +129,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		String mobname = lgc.getEntityNameToSpawn();
 		Entity ent = EntityList.createEntityByName(mobname, world);
 		int num = this.getNumberSpawns(world, x, y, z, ent);
-		return (num < RotaryConfig.spawnerlimit);
+		return (num < ConfigRegistry.SPAWNERLIMIT.getValue());
 	}
 
 	/** Fetches from real spawner! */

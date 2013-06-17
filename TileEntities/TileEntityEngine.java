@@ -37,7 +37,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -54,6 +53,7 @@ import Reika.RotaryCraft.Models.ModelMicroTurbine;
 import Reika.RotaryCraft.Models.ModelPerformance;
 import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -987,15 +987,15 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 								FOD++;
 							if (FOD > 8)
 								FOD = 8;
-							caught.attackEntityFrom(DamageSource.generic, 1000);
-							if (caught instanceof EntityPlayer) {
-								((EntityPlayer)caught).triggerAchievement(RotaryAchievements.SUCKEDINTOJET.get());
-							}
-							if (caught instanceof EntityChicken) {
+							if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
 								chickenCount++;
 								if (chickenCount >= 50) {
 									this.getPlacer().triggerAchievement(RotaryAchievements.JETCHICKEN.get());
 								}
+							}
+							caught.attackEntityFrom(DamageSource.generic, 1000);
+							if (caught instanceof EntityPlayer) {
+								((EntityPlayer)caught).triggerAchievement(RotaryAchievements.SUCKEDINTOJET.get());
 							}
 						}
 						//ReikaChatHelper.writeInt(FOD);
@@ -1077,7 +1077,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+par5Random.nextFloat(), 1F);
 			world.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 		}
-		if (!RotaryConfig.playsounds)
+		if (!ConfigRegistry.ENGINESOUNDS.getState())
 			return;
 		if (soundtick < type.getSoundLength(FOD) && soundtick < 2000)
 			return;

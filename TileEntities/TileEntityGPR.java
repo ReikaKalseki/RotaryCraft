@@ -16,11 +16,12 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
@@ -97,7 +98,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	private void idToColor(int[] bounds, int y) {
 		for (int j = bounds[0]; j <= bounds[1]; j++) {
 			for (int i = 0; i < y; i++) {
-				colors[i][j] = ReikaWorldHelper.blockColors(ids[i][j], RotaryConfig.renderores);
+				colors[i][j] = ReikaWorldHelper.blockColors(ids[i][j], ConfigRegistry.GPRORES.getState());
 			}
 		}
 	}
@@ -114,6 +115,8 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 				for (int i = 0; i < y; i++) {
 					ids[i][j] = world.getBlockId(x+j-bounds[0]-diff, y-i-1, z);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
+					if (ids[i][j] == Block.endPortal.blockID)
+						this.getPlacer().triggerAchievement(RotaryAchievements.GPRENDPORTAL.get());
 				}
 			}
 		}
@@ -122,6 +125,8 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 				for (int i = 0; i < y; i++) {
 					ids[i][j] = world.getBlockId(x, y-i-1, z+j-bounds[0]-diff);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
+					if (ids[i][j] == Block.endPortal.blockID)
+						this.getPlacer().triggerAchievement(RotaryAchievements.GPRENDPORTAL.get());
 				}
 			}
 		}

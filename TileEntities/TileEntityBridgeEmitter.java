@@ -12,19 +12,19 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelBridge;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements RangedEffect {
 
 	private int animtick = 0;
 
-	public int distancelimit = RotaryConfig.maxbridgerange;
+	public static final int distancelimit = ConfigRegistry.BRIDGERANGE.getValue();
 
 	/** Minimum power required to turn on */
 	//public static final long MINPOWER = 90000000; //90MW is about the energy from the sun from a 16-acre farm -> think Portal 2
@@ -134,7 +134,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 
 	@Override
 	public int getRange() {
-		return RotaryConfig.maxbridgerange;
+		return distancelimit;
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 
 	@Override
 	public int getMaxRange() {
-		return RotaryConfig.maxbridgerange;
+		return distancelimit;
 	}
 
 	@Override

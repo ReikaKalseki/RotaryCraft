@@ -22,11 +22,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelForce;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityContainment extends TileEntityPowerReceiver implements RangedEffect, GuiController {
@@ -147,8 +147,8 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 
 	public int getMaxRange() {
 		int range = (int)((power)/MINPOWER*FALLOFF);
-		if (range > RotaryConfig.maxforcerange)
-			return RotaryConfig.maxforcerange;
+		if (range > ConfigRegistry.FORCERANGE.getValue())
+			return ConfigRegistry.FORCERANGE.getValue();
 		return range;
 	}
 

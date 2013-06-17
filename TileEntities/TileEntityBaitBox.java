@@ -37,11 +37,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBaitBox;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
@@ -87,11 +87,11 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	private int maxMobs() { //Omega + config file
-		return RotaryConfig.maxbaitmobs;
+		return ConfigRegistry.BAITMOBS.getValue();
 	}
 
 	public int getMaxRange() {
-		return RotaryConfig.maxbaitrange;
+		return ConfigRegistry.BAITMOBS.getValue();
 	}
 
 	private void silverfishStone(World world, int x, int y, int z) {

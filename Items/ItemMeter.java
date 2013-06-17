@@ -15,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -226,7 +225,7 @@ public class ItemMeter extends ItemRotaryTool
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("Heat Ray Receiving %.3f W @ %d rad/s.", power, omega));
 				if (power >= clicked.MINPOWER)
-					ReikaChatHelper.writeString(String.format("Range %dm, dealing %ds of burn damage.", ReikaMathLibrary.extrema(8+(int)(power-clicked.MINPOWER)/clicked.FALLOFF, RotaryConfig.maxheatrayrange, "absmin"), 2+(int)(4*power/clicked.MINPOWER)));
+					ReikaChatHelper.writeString(String.format("Range %dm, dealing %ds of burn damage.", clicked.getRange(), clicked.getBurnTime()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					ReikaChatHelper.writeString("Insufficient Power!");

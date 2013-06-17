@@ -20,11 +20,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWoodcutter extends TileEntityPowerReceiver {
@@ -54,7 +54,10 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 
 		if (this.operationComplete(tickcount, 0)) {
 			tickcount = 0;
-			if (RotaryConfig.gravtree) {
+			if (ConfigRegistry.INSTACUT.getState()) {
+				this.instantHarvest(world, x, y, z, meta, editx, edity, editz);
+			}
+			else {
 				for (int i = 0; i < 3; i++) {
 					int editx2 = editx; int editz2 = editz;
 					this.harvest(world, x, y, z, meta, editx2, y, editz2, (i == 0));
@@ -84,9 +87,6 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 				edity = y+1;
 				editz = z;
 				this.harvest(world, x, y, z, meta, editx, edity, editz, false); //Top harvesting
-			}
-			else {
-				this.instantHarvest(world, x, y, z, meta, editx, edity, editz);
 			}
 		}
 	}

@@ -13,11 +13,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelCave;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -83,7 +83,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	}
 
 	public int getRange() {
-		return RotaryConfig.cavefinderrange;
+		return ConfigRegistry.CAVEFINDERRANGE.getValue();
 	}
 
 	public int getSourceX() {

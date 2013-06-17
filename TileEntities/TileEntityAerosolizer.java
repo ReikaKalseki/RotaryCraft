@@ -28,18 +28,18 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelAerosolizer;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
 
-	public static final int MAXRANGE = RotaryConfig.maxaerorange;
+	public static final int MAXRANGE = ConfigRegistry.AERORANGE.getValue();
 	public static final int CAPACITY = 64;
 
 	public int potionLevel[] = new int[9];
@@ -398,7 +398,7 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 
 	@Override
 	public int getMaxRange() {
-		return RotaryConfig.maxaerorange;
+		return MAXRANGE;
 	}
 
 	@Override

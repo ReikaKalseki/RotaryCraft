@@ -19,6 +19,7 @@ import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Items.Placers.ItemBlockGravLeaves;
 import Reika.RotaryCraft.Items.Placers.ItemBlockGravLog;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
@@ -76,7 +77,7 @@ public class RotaryRegistration {
 	public static void instantiateMachines() {
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			RotaryCraft.machineBlocks[i] = BlockRegistry.blockList[i].createInstance();
-			if (RotaryConfig.consoleMsg)
+			if (ConfigRegistry.LOGLOADING.getState())
 				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+RotaryCraft.machineBlocks[i].getClass().getSimpleName()+" (slot "+i+")");
 		}
 	}
@@ -84,7 +85,7 @@ public class RotaryRegistration {
 	public static void instantiateItems() {
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			RotaryCraft.basicItems[i] = ItemRegistry.itemList[i].createInstance();
-			if (RotaryConfig.consoleMsg)
+			if (ConfigRegistry.LOGLOADING.getState())
 				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Item "+ItemRegistry.itemList[i].getBasicName()+" with ID "+ItemRegistry.itemList[i].getID()+" to Item Variable "+RotaryCraft.basicItems[i].getClass().getSimpleName()+" (slot "+i+")");
 		}
 	}

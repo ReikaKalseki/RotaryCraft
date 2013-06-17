@@ -117,7 +117,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		double dz = v[2]/dd;
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this.getPowerLevel()));
+			world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this.getPowerLevel(), this));
 		}
 	}
 

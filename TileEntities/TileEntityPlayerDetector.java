@@ -17,11 +17,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelDetector;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements GuiController, RangedEffect {
@@ -112,8 +112,8 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 
 	public int getRange() {
 		int range = (int)(power/FALLOFF);
-		if (range > RotaryConfig.maxdetectorrange)
-			range = RotaryConfig.maxdetectorrange;
+		if (range > ConfigRegistry.DETECTORRANGE.getValue())
+			range = ConfigRegistry.DETECTORRANGE.getValue();
 		if (range > selectedrange)
 			return selectedrange;
 		return range;
@@ -121,8 +121,8 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 
 	public int getMaxRange() {
 		int range = (int)(power/FALLOFF);
-		if (range > RotaryConfig.maxdetectorrange)
-			range = RotaryConfig.maxdetectorrange;
+		if (range > ConfigRegistry.DETECTORRANGE.getValue())
+			range = ConfigRegistry.DETECTORRANGE.getValue();
 		return range;
 	}
 

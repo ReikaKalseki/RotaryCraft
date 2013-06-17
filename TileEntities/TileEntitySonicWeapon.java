@@ -29,11 +29,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelSonicWeapon;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements GuiController, RangedEffect {
@@ -276,8 +276,8 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (this != null)
 			return 16;
 		int overpower = (int)(power-MINPOWER)/FALLOFF;
-		if (overpower > RotaryConfig.maxsonicrange)
-			return RotaryConfig.maxsonicrange;
+		if (overpower > ConfigRegistry.SONICRANGE.getValue())
+			return ConfigRegistry.SONICRANGE.getValue();
 		return overpower;
 	}
 
@@ -339,7 +339,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 
 	@Override
 	public int getMaxRange() {
-		return RotaryConfig.maxsonicrange;
+		return ConfigRegistry.SONICRANGE.getValue();
 	}
 
 	@Override

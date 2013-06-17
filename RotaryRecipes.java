@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -437,7 +438,7 @@ public class RotaryRecipes {
 	}
 
 	public static void addMisc() {
-		if (RotaryConfig.craftableBedrock)
+		if (ConfigRegistry.CRAFTABLEBEDROCK.getState())
 			GameRegistry.addRecipe(new ItemStack(Block.bedrock.blockID, 1, 0), new Object[]{
 				"DDD", "DDD", "DDD", 'D', ItemStacks.bedrockdust});
 

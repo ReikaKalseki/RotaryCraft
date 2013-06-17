@@ -18,11 +18,11 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelForce;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 
 public class RenderContainment extends RotaryTERenderer
@@ -86,7 +86,7 @@ public class RenderContainment extends RotaryTERenderer
 			this.renderTileEntityContainmentAt((TileEntityContainment)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
-		if (RotaryConfig.renderforcefield && ((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (ConfigRegistry.RENDERFORCEFIELD.getState() && ((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			this.renderField(((TileEntityContainment)tile), par2+0.5, par4+0.5, par6+0.5);
 	}
 

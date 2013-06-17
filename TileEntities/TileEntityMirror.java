@@ -88,7 +88,6 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 				}
 			}
 		}
-		//this.repair(world, x, y, z);
 	}
 
 	@Override
