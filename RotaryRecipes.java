@@ -227,6 +227,14 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(MachineRegistry.PURIFIER.getCraftedProduct(), new Object[]{
 			"sbs", "prp", "sps", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'r', Item.redstone, 'b', Block.fenceIron});
+
+		GameRegistry.addRecipe(MachineRegistry.MIRROR.getCraftedProduct(), new Object[]{
+			"GGG", "III", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'I', Item.ingotIron, 'G', Block.glass});
+		GameRegistry.addRecipe(MachineRegistry.MIRROR.getCraftedProduct(), new Object[]{
+			"   ", " m ", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'm', ItemStacks.mirror});
+
+		GameRegistry.addRecipe(MachineRegistry.SOLARTOWER.getCraftedProduct(), new Object[]{
+			"pPp", "iPi", "pPp", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'i', ReikaItemHelper.inksac});
 	}
 
 	public static void addCraftItems() {
@@ -259,6 +267,8 @@ public class RotaryRecipes {
 				" S ", " I ", " P ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.hub, new Object[]{
 				"  B", " C ", "G  ", 'G', ItemStacks.steelgear, 'B', ItemStacks.bearing, 'C', ItemStacks.shaftcore});
+		GameRegistry.addRecipe(ItemStacks.mirror, new Object[]{
+				"   ", "GGG", "III", 'G', Block.glass, 'I', Item.ingotIron});
 
 		GameRegistry.addRecipe(ItemStacks.bedingot, new Object[]{
 				" B ", "BSB", " B ", 'S', ItemStacks.steelingot, 'B', ItemStacks.bedrockdust});

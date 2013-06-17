@@ -25,11 +25,12 @@ public class RotaryConfig {
 	public static Configuration config;
 
 	/** Change this to cause auto-deletion of users' config files to load new copies */
-	private static final int CURRENT_CONFIG_ID = 0;
+	private static final int CURRENT_CONFIG_ID = 1;
 	private static int readID;
 	private static File configFile;
 
 	public static int modextractsid;
+	public static int achievementbase;
 
 	public static int heatcraftid;
 	public static int enginecraftid;
@@ -115,6 +116,8 @@ public class RotaryConfig {
 		advgearitemsid = 	config.getItem("ItemBlock IDs", "Advanced Gear Items", 30642).getInt();
 		flywheelitemsid = 	config.getItem("ItemBlock IDs", "Flywheel Items", 30643).getInt();
 		modextractsid = 	config.getItem("Resource Item IDs", "Mod Ore Extractor Items", 30644).getInt();
+
+		achievementbase = 	config.get("Extra IDs", "Achievement Base ID", 24000).getInt();
 
 		decoblockid = 		config.getBlock("Extra Block IDs", "Deco Block", 450).getInt();
 		bedrocksliceid = 	config.getBlock("Extra Block IDs", "Bedrock Slice", 451).getInt();
