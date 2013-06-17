@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
@@ -70,7 +69,7 @@ public enum RotaryAchievements {
 	public static final RotaryAchievements[] list = RotaryAchievements.values();
 
 	private RotaryAchievements(String l, int xc, int yc, ItemStack tag, Achievement p, boolean s) {
-		id = RotaryConfig.achievementbase+this.ordinal();
+		id = ExtraConfigIDs.ACHIEVEMENT.getValue()+this.ordinal();
 		l = label;
 		x = xc;
 		y = yc;
@@ -97,7 +96,7 @@ public enum RotaryAchievements {
 	}
 
 	private RotaryAchievements(String l, int xc, int yc, ItemStack tag, int p, boolean s) {
-		id = RotaryConfig.achievementbase+this.ordinal();
+		id = ExtraConfigIDs.ACHIEVEMENT.getValue()+this.ordinal();
 		l = label;
 		x = xc;
 		y = yc;

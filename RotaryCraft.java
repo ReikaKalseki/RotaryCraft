@@ -52,6 +52,7 @@ import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemPipePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.Mod;
@@ -181,39 +182,39 @@ public class RotaryCraft implements DragonAPIMod {
 	private static void setupClassFiles() {
 		RotaryRegistration.instantiateItems();
 
-		shaftcraft = new ItemMulti(RotaryConfig.shaftcraftid, 0).setUnlocalizedName("shaftcraft");
-		enginecraft = new ItemMulti(RotaryConfig.enginecraftid, 1).setUnlocalizedName("enginecraft");
-		heatcraft = new ItemMulti(RotaryConfig.heatcraftid, 2).setUnlocalizedName("heatcraft");
-		borecraft = new ItemMulti(RotaryConfig.borecraftid, 3).setUnlocalizedName("borecraft");
-		extracts = new ItemMulti(RotaryConfig.extractsid, 4).setUnlocalizedName("extracts");
-		compacts = new ItemMulti(RotaryConfig.compactsid, 6).setUnlocalizedName("compacts");
-		engineitems = new ItemEnginePlacer(RotaryConfig.engineitemsid).setUnlocalizedName("engines");
-		powders = new ItemMulti(RotaryConfig.powderid, 8).setUnlocalizedName("powder");
-		spawner = new ItemSpawner(RotaryConfig.spawnerid).setUnlocalizedName("spawner");
-		pipeplacer = new ItemPipePlacer(RotaryConfig.pipeplacerid).setUnlocalizedName("pipeplacer");
-		shaftitems = new ItemShaftPlacer(RotaryConfig.shaftitemsid).setUnlocalizedName("shafts");
-		gbxitems = new ItemGearPlacer(RotaryConfig.gbxitemsid).setUnlocalizedName("gbxs");
-		gearunits = new ItemMulti(RotaryConfig.gearunitsid, 23).setUnlocalizedName("gearunits");
-		machineplacer = new ItemMachinePlacer(RotaryConfig.machineplacerid).setUnlocalizedName("machineplacer");
-		advgearitems = new ItemAdvGearPlacer(RotaryConfig.advgearitemsid).setUnlocalizedName("advgearitem");
-		flywheelitems = new ItemFlywheelPlacer(RotaryConfig.flywheelitemsid).setUnlocalizedName("flywheelitem");
+		shaftcraft = new ItemMulti(ExtraConfigIDs.SHAFTCRAFT.getValue(), 0).setUnlocalizedName("shaftcraft");
+		enginecraft = new ItemMulti(ExtraConfigIDs.ENGINECRAFT.getValue(), 1).setUnlocalizedName("enginecraft");
+		heatcraft = new ItemMulti(ExtraConfigIDs.HEATCRAFT.getValue(), 2).setUnlocalizedName("heatcraft");
+		borecraft = new ItemMulti(ExtraConfigIDs.BORECRAFT.getValue(), 3).setUnlocalizedName("borecraft");
+		extracts = new ItemMulti(ExtraConfigIDs.EXTRACTS.getValue(), 4).setUnlocalizedName("extracts");
+		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
+		engineitems = new ItemEnginePlacer(ExtraConfigIDs.ENGINEITEMS.getValue()).setUnlocalizedName("engines");
+		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 8).setUnlocalizedName("powder");
+		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner");
+		pipeplacer = new ItemPipePlacer(ExtraConfigIDs.PIPEITEMS.getValue()).setUnlocalizedName("pipeplacer");
+		shaftitems = new ItemShaftPlacer(ExtraConfigIDs.SHAFTITEMS.getValue()).setUnlocalizedName("shafts");
+		gbxitems = new ItemGearPlacer(ExtraConfigIDs.GEARBOXITEMS.getValue()).setUnlocalizedName("gbxs");
+		gearunits = new ItemMulti(ExtraConfigIDs.GEARUNITS.getValue(), 23).setUnlocalizedName("gearunits");
+		machineplacer = new ItemMachinePlacer(ExtraConfigIDs.MACHINEPLACER.getValue()).setUnlocalizedName("machineplacer");
+		advgearitems = new ItemAdvGearPlacer(ExtraConfigIDs.ADVGEARITEMS.getValue()).setUnlocalizedName("advgearitem");
+		flywheelitems = new ItemFlywheelPlacer(ExtraConfigIDs.FLYWHEELITEMS.getValue()).setUnlocalizedName("flywheelitem");
 
-		modextracts = new ItemModOre(RotaryConfig.modextractsid).setUnlocalizedName("modextracts");
+		modextracts = new ItemModOre(ExtraConfigIDs.MODEXTRACTS.getValue()).setUnlocalizedName("modextracts");
 
-		decoblock = new BlockDeco(RotaryConfig.decoblockid);
-		blastglass = new BlockBlastGlass(RotaryConfig.blastpaneid).setUnlocalizedName("BlastGlassPane");
-		obsidianglass = new BlockObsidianGlass(RotaryConfig.blastglassid).setUnlocalizedName("BlastGlass");
-		canola = new BlockCanola(RotaryConfig.canolaid).setUnlocalizedName("Canola");
+		decoblock = new BlockDeco(ExtraConfigIDs.DECOBLOCKS.getValue());
+		blastglass = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");
+		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
+		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");
 
 		RotaryRegistration.instantiateMachines();
 
-		miningpipe = new BlockMiningPipe(RotaryConfig.miningpipeid).setUnlocalizedName("MiningPipe");
-		gravlog = new BlockGravLog(RotaryConfig.gravlogid).setUnlocalizedName("GravLog");
-		gravleaves = new BlockGravLeaves(RotaryConfig.gravleavesid).setUnlocalizedName("GravLeaves");
-		lightblock = new BlockLightblock(RotaryConfig.lightblockid).setUnlocalizedName("LightBlock");
-		beamblock = new BlockBeam(RotaryConfig.beamblockid).setUnlocalizedName("BeamBlock");
-		lightbridge = new BlockLightBridge(RotaryConfig.lightbridgeid).setUnlocalizedName("Bridge");
-		bedrockslice = new BlockBedrockSlice(RotaryConfig.bedrocksliceid).setUnlocalizedName("BedrockSlice");
+		miningpipe = new BlockMiningPipe(ExtraConfigIDs.MININGPIPE.getValue()).setUnlocalizedName("MiningPipe");
+		gravlog = new BlockGravLog(ExtraConfigIDs.GRAVLOG.getValue()).setUnlocalizedName("GravLog");
+		gravleaves = new BlockGravLeaves(ExtraConfigIDs.GRAVLEAVES.getValue()).setUnlocalizedName("GravLeaves");
+		lightblock = new BlockLightblock(ExtraConfigIDs.LIGHTBLOCK.getValue()).setUnlocalizedName("LightBlock");
+		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
+		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
+		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
 	}
 
 	public String getVersion() {

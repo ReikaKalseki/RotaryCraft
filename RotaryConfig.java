@@ -10,12 +10,15 @@
 package Reika.RotaryCraft;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 import net.minecraftforge.common.Configuration;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -29,41 +32,9 @@ public class RotaryConfig {
 	private static int readID;
 	private static File configFile;
 
-	public static int modextractsid;
-	public static int achievementbase;
-
-	public static int heatcraftid;
-	public static int enginecraftid;
-	public static int borecraftid;
-	public static int shaftcraftid;
-	public static int extractsid;
-	public static int compactsid;
-	public static int engineitemsid;
-	public static int powderid;
-	public static int spawnerid;
-	public static int pipeplacerid;
-	public static int smokeplacerid;
-	public static int shaftitemsid;
-	public static int gbxitemsid;
-	public static int gearunitsid;
-	public static int machineplacerid;
-	public static int flywheelitemsid;
-	public static int advgearitemsid;
-
-	public static int beamblockid;
-	public static int gravlogid;
-	public static int gravleavesid;
-	public static int decoblockid;
-	public static int bedrocksliceid;
-	public static int lightblockid;
-	public static int canolaid;
-	public static int lightbridgeid;
-	public static int miningpipeid;
-	public static int blastpaneid;
-	public static int blastglassid;
-
 	public static int[] machineids = new int[BlockRegistry.blockList.length];
 	public static int[] itemids = new int[ItemRegistry.itemList.length];
+	public static int[] extraids = new int[ExtraConfigIDs.idList.length];
 	public static Object[] controls = new Object[ConfigRegistry.optionList.length];
 
 	private static HashMap<String,Integer> id = new HashMap<String,Integer>();
@@ -98,38 +69,9 @@ public class RotaryConfig {
 			return;
 		}
 
-		/********************************/
-		machineplacerid = 	config.getItem("ItemBlock IDs", "Machine Items", 30616).getInt();
-		heatcraftid = 		config.getItem("Crafting Item IDs", "Heat Ray Crafting Items", 30628).getInt();
-		enginecraftid = 	config.getItem("Crafting Item IDs", "Engine Crafting Items", 30629).getInt();
-		borecraftid = 		config.getItem("Crafting Item IDs", "Borer Crafting Items", 30630).getInt();
-		shaftcraftid = 		config.getItem("Crafting Item IDs", "Shaft Crafting Items", 30631).getInt();
-		extractsid = 		config.getItem("Resource Item IDs", "Extractor Items", 30632).getInt();
-		compactsid = 		config.getItem("Resource Item IDs", "Compactor Items", 30633).getInt();
-		engineitemsid = 	config.getItem("ItemBlock IDs", "Engine Items", 30634).getInt();
-		powderid = 			config.getItem("Resource Item IDs", "Powders", 30635).getInt();
-		spawnerid = 		config.getItem("ItemBlock IDs", "Spawner", 30636).getInt();
-		pipeplacerid = 		config.getItem("ItemBlock IDs", "Pipe Items", 30637).getInt();
-		shaftitemsid = 		config.getItem("ItemBlock IDs", "Shaft Items", 30639).getInt();
-		gbxitemsid = 		config.getItem("ItemBlock IDs", "Gearbox Items", 30640).getInt();
-		gearunitsid = 		config.getItem("Crafting Item IDs", "Gear Units", 30641).getInt();
-		advgearitemsid = 	config.getItem("ItemBlock IDs", "Advanced Gear Items", 30642).getInt();
-		flywheelitemsid = 	config.getItem("ItemBlock IDs", "Flywheel Items", 30643).getInt();
-		modextractsid = 	config.getItem("Resource Item IDs", "Mod Ore Extractor Items", 30644).getInt();
-
-		achievementbase = 	config.get("Extra IDs", "Achievement Base ID", 24000).getInt();
-
-		decoblockid = 		config.getBlock("Extra Block IDs", "Deco Block", 450).getInt();
-		bedrocksliceid = 	config.getBlock("Extra Block IDs", "Bedrock Slice", 451).getInt();
-		gravlogid = 		config.getBlock("Extra Block IDs", "Tree Log", 452).getInt();
-		gravleavesid = 		config.getBlock("Extra Block IDs", "Tree Leaves", 453).getInt();
-		lightblockid = 		config.getBlock("Extra Block IDs", "LightBlock", 454).getInt();
-		canolaid = 			config.getBlock("Extra Block IDs", "Canola", 455).getInt();
-		miningpipeid = 		config.getBlock("Extra Block IDs", "Mining Pipe", 456).getInt();
-		lightbridgeid = 	config.getBlock("Extra Block IDs", "Light Bridge", 457).getInt();
-		blastpaneid = 		config.getBlock("Extra Block IDs", "Blast Glass Pane", 458).getInt();
-		blastglassid = 		config.getBlock("Extra Block IDs", "Blast Glass", 459).getInt();
-		beamblockid = 		config.getBlock("Extra Block IDs", "Beam Block", 460).getInt();
+		for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
+			extraids[i] = ExtraConfigIDs.idList[i].getValueFromConfig(config);
+		}
 
 		for (int i = 0; i < ConfigRegistry.optionList.length; i++) {
 			String label = ConfigRegistry.optionList[i].getLabel();
@@ -161,6 +103,52 @@ public class RotaryConfig {
 	}
 
 	private static void resetConfigFile() {
+		String path = configFile.getAbsolutePath().substring(0, configFile.getAbsolutePath().length()-4)+"_Old_ID_Backup.txt";
+		File backup = new File(path);
+		if (backup.exists())
+			backup.delete();
+		try {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Writing Backup File to "+path);
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Use this to restore custom IDs if necessary.");
+			backup.createNewFile();
+			if (!backup.exists())
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not create backup file at "+path+"!");
+			PrintWriter p = new PrintWriter(backup);
+			for (int i = 0; i < ConfigRegistry.optionList.length; i++) {
+				String label = ConfigRegistry.optionList[i].getLabel();
+				if (ConfigRegistry.optionList[i].isBoolean())
+					controls[i] = ConfigRegistry.optionList[i].setState(config);
+				if (ConfigRegistry.optionList[i].isNumeric())
+					controls[i] = ConfigRegistry.optionList[i].setValue(config);
+				p.println(label+": "+String.valueOf(controls[i]));
+			}
+
+			for (int i = 0; i < BlockRegistry.blockList.length; i++) {
+				String name = BlockRegistry.blockList[i].getBlockVariableName();
+				machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
+				p.println(name+": "+String.valueOf(machineids[i]));
+			}
+
+			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+				String name = ItemRegistry.itemList[i].getBasicName();
+				itemids[i] = config.get("Item IDs", name, 30500+i).getInt();
+				p.println(name+": "+String.valueOf(itemids[i]));
+			}
+
+			for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
+				String name = ExtraConfigIDs.idList[i].getName();
+				String cat = ExtraConfigIDs.idList[i].getCategory();
+				int def = ExtraConfigIDs.idList[i].getDefault();
+				extraids[i] = config.get(cat, name, def).getInt();
+				p.println(name+": "+String.valueOf(extraids[i]));
+			}
+
+			p.close();
+		}
+		catch (IOException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not create backup file due to IOException!");
+			e.printStackTrace();
+		}
 		configFile.delete();
 	}
 
