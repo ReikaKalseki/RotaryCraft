@@ -175,7 +175,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (time < 6000)
 			bool = (targetphi > 270);
 		else
-			bool = targetphi < 9000;
+			bool = true;
 		//ReikaJavaLibrary.pConsole(targetphi+" clamped to "+this.clampPhi(targetphi, time)+"  :  "+bool);
 		if (bool)
 			targetphi = this.clampPhi(targetphi, time);

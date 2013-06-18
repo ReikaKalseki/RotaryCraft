@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -70,7 +69,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		for (int i = 0; i < inrange.size(); i++) {
 			EntityLiving ent = (EntityLiving)inrange.get(i);
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
-			if (ReikaEntityHelper.isHostile(ent)) {
+			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
 					if (!ent.isDead && ent.getHealth() > 0) {
 						double dy = -(ent.posY-y);
@@ -293,6 +292,11 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	@Override
 	public int getRedstoneOverride() {
 		return this.getMaxThrust();
+	}
+
+	@Override
+	protected boolean isValidTarget(EntityLiving ent) {
+		return this.isMobOrUnlistedPlayer(ent);
 	}
 
 }

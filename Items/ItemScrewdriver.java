@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -46,50 +47,21 @@ public class ItemScrewdriver extends ItemRotaryTool
 		for (int i = 0; i < maxdamage.length; i++)
 			maxdamage[i] = -1;
 
-		maxdamage[Block.pistonBase.blockID] = 5; //piston has 6 states
-		maxdamage[Block.pistonStickyBase.blockID] = 5; //stickypiston
-		maxdamage[Block.dispenser.blockID] = 3; //dispenser, 4 states
-		maxdamage[Block.furnaceIdle.blockID] = 3; //furnace
-		maxdamage[Block.stairsWoodOak.blockID] = 7; //wood stairs
-		maxdamage[Block.stairsCobblestone.blockID] = 7; //cobble stairs
-		maxdamage[Block.stairsBrick.blockID] = 7; //brick stairs
-		maxdamage[Block.stairsStoneBrick.blockID] = 7; //stonebrick stairs
-		maxdamage[Block.stairsSandStone.blockID] = 7; //sandstone stairs
+		maxdamage[Block.pistonBase.blockID] = 5;
+		maxdamage[Block.pistonStickyBase.blockID] = 5;
+		maxdamage[Block.dispenser.blockID] = 5;
+		maxdamage[Block.furnaceIdle.blockID] = 3;
+		maxdamage[Block.stairsWoodOak.blockID] = 7;
+		maxdamage[Block.stairsCobblestone.blockID] = 7;
+		maxdamage[Block.stairsBrick.blockID] = 7;
+		maxdamage[Block.stairsStoneBrick.blockID] = 7;
+		maxdamage[Block.stairsSandStone.blockID] = 7;
 		maxdamage[Block.stairsWoodSpruce.blockID] = 7;
 		maxdamage[Block.stairsWoodBirch.blockID] = 7;
 		maxdamage[Block.stairsWoodJungle.blockID] = 7;
 		maxdamage[Block.stairsNetherBrick.blockID] = 7;
 		maxdamage[Block.stairsNetherQuartz.blockID] = 7;
-		maxdamage[Block.dropper.blockID] = 3; //dropper
-		/*
-		maxdamage[MachineRegistry.ENGINE] = 3; //engine
-		maxdamage[MachineRegistry.BEDROCKBREAKER] = 5; //bedrockbreaker
-		maxdamage[MachineRegistry.SHAFT] = 9; //shaft has 6+4 cross
-		maxdamage[MachineRegistry.GEARBOX] = 3; //gearboxes
-		maxdamage[MachineRegistry.BEVELGEARS] = 23;	//23 tile entity states
-		maxdamage[MachineRegistry.SPLITTER] = 15;	// 8 split and 8 merge states
-		maxdamage[MachineRegistry.FLYWHEEL] = 15;
-		maxdamage[MachineRegistry.CLUTCH] = 3;
-		maxdamage[MachineRegistry.DYNAMOMETER] = 3;
-		maxdamage[MachineRegistry.FLOODLIGHT] = 5;
-		maxdamage[MachineRegistry.LIGHTBRIDGE] = 3;
-		maxdamage[MachineRegistry.FERMENTER] = 3;
-		maxdamage[MachineRegistry.GRINDER] = 3;
-		maxdamage[MachineRegistry.COMPACTOR] = 3;
-		maxdamage[MachineRegistry.PULSEJET] = 3;
-		maxdamage[MachineRegistry.EXTRACTOR] = 3;
-		maxdamage[MachineRegistry.HEATRAY] = 3;
-		maxdamage[MachineRegistry.WOODCUTTER] = 3;
-		maxdamage[MachineRegistry.PUMP] = 3;
-		maxdamage[MachineRegistry.PILEDRIVER] = 1;
-		maxdamage[MachineRegistry.BORER] = 3;
-		maxdamage[MachineRegistry.FAN] = 5;
-		maxdamage[MachineRegistry.WINDER] = 3;
-		maxdamage[MachineRegistry.PROJECTOR] = 3;
-		maxdamage[MachineRegistry.ADVANCEDGEARS] = 3;
-		maxdamage[MachineRegistry.BLASTFURNACE] = 3;
-		maxdamage[MachineRegistry.RAILGUN] = 1;
-		maxdamage[MachineRegistry.FREEZEGUN] = 1;*/
+		maxdamage[Block.dropper.blockID] = 3;
 	}
 
 	@Override
@@ -158,6 +130,18 @@ public class ItemScrewdriver extends ItemRotaryTool
 					else
 						clicked.beammode = true;
 					clicked.lightsOut(world, x, y, z);
+					return true;
+				}
+			}
+		}
+		if (m.isCannon()) {
+			if (ep.isSneaking()) {
+				TileEntityAimedCannon clicked = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
+				if (clicked != null) {
+					if (clicked.targetPlayers)
+						clicked.targetPlayers = false;
+					else
+						clicked.targetPlayers = true;
 					return true;
 				}
 			}
@@ -274,30 +258,30 @@ public class ItemScrewdriver extends ItemRotaryTool
 		if (dir >= 8 && dir <= 15)
 			return dir-4;
 		switch (dir) {
-			case 4:
-				return 3;
-			case 5:
-				return 0;
-			case 6:
-				return 1;
-			case 7:
-				return 2;
-			case 16:
-				return 8;
-			case 17:
-				return 9;
-			case 18:
-				return 10;
-			case 19:
-				return 11;
-			case 20:
-				return 4;
-			case 21:
-				return 5;
-			case 22:
-				return 6;
-			case 23:
-				return 7;
+		case 4:
+			return 3;
+		case 5:
+			return 0;
+		case 6:
+			return 1;
+		case 7:
+			return 2;
+		case 16:
+			return 8;
+		case 17:
+			return 9;
+		case 18:
+			return 10;
+		case 19:
+			return 11;
+		case 20:
+			return 4;
+		case 21:
+			return 5;
+		case 22:
+			return 6;
+		case 23:
+			return 7;
 		}
 		return 0;
 	}

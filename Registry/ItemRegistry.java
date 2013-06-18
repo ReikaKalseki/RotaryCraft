@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.ItemBedrockPickaxe;
 import Reika.RotaryCraft.Items.ItemBedrockShovel;
+import Reika.RotaryCraft.Items.ItemCannonKey;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDebug;
@@ -74,7 +75,8 @@ public enum ItemRegistry {
 	BUCKET(104, 106, true, 		"#Buckets", 				ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"TNT Cannon Targeting Aid", ItemTarget.class),
 	IOGOGGLES(1, true, 			"I/O Goggles", 				ItemIOGoggles.class),
-	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class);
+	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class),
+	KEY(4, false,				"Cannon Key",				ItemCannonKey.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -318,6 +320,8 @@ public enum ItemRegistry {
 		if (this == METER)
 			return true;
 		if (this == SCREWDRIVER)
+			return true;
+		if (this == KEY)
 			return true;
 		return false;
 	}

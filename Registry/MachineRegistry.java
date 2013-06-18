@@ -29,6 +29,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
@@ -729,13 +730,7 @@ public enum MachineRegistry {
 	}
 
 	public boolean isCannon() {
-		if (this == RAILGUN)
-			return true;
-		if (this == FREEZEGUN)
-			return true;
-		if (this == LASERGUN)
-			return true;
-		return false;
+		return TileEntityAimedCannon.class.isAssignableFrom(te);
 	}
 
 	public boolean hasModel() {

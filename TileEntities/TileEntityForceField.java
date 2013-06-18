@@ -147,6 +147,10 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 						world.spawnParticle("flame", x-0.2+0.4*par5Random.nextFloat(), y-0.2+0.4*par5Random.nextFloat(), z-0.2+0.4*par5Random.nextFloat(), 0, 0, 0);
 					world.playAuxSFX(1008, (int)x, (int)y, (int)z, 1);
 				}
+				if (((EntityFireball)threat).shootingEntity instanceof EntityPlayer) {
+					if (!world.isRemote)
+						world.createExplosion(null, x, y, z, 2F, true);
+				}
 				threat.setDead();
 				tickcount = 0;
 			}

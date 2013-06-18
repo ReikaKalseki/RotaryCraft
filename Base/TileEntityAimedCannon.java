@@ -9,15 +9,27 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 
 public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect {
+
+	private List<String> safePlayers = new ArrayList<String>();
+
+	public boolean targetPlayers = true;
+	private int numSafePlayers = 0;
 
 	public float theta;
 	protected double[] target = new double[4];
@@ -44,6 +56,12 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	public boolean isInvNameLocalized() {
 		return false;
+	}
+
+	protected void printSafeList() {
+		for (int i = 0; i < safePlayers.size(); i++) {
+			ReikaJavaLibrary.pConsole("Safe_Player_"+String.valueOf(i)+":   "+safePlayers.get(i));
+		}
 	}
 
 	@Override
@@ -127,6 +145,10 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		super.writeToNBT(NBT);
 		NBT.setFloat("theta", theta);
 		NBT.setInteger("direction", dir);
+		NBT.setInteger("numsafe", numSafePlayers);
+		for (int i = 0; i < safePlayers.size(); i++) {
+			NBT.setString("Safe_Player_"+String.valueOf(i), safePlayers.get(i));
+		}
 	}
 
 	/**
@@ -138,11 +160,42 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		super.readFromNBT(NBT);
 		theta = NBT.getFloat("theta");
 		dir = NBT.getInteger("direction");
+
+		safePlayers = new ArrayList<String>();
+		numSafePlayers = NBT.getInteger("numsafe");
+		for (int i = 0; i < numSafePlayers; i++) {
+			safePlayers.add(NBT.getString("Safe_Player_"+String.valueOf(i)));
+		}
 	}
 
 	@Override
 	public final AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+	}
+
+	protected abstract boolean isValidTarget(EntityLiving ent);
+
+	protected final boolean isMobOrUnlistedPlayer(EntityLiving ent) {
+		return (ReikaEntityHelper.isHostile(ent) || (targetPlayers && ent instanceof EntityPlayer && !this.playerIsSafe(((EntityPlayer)ent).getEntityName())));
+	}
+
+	public void addPlayerToWhiteList(String name) {
+		ReikaChatHelper.write(name+" added to "+placer+"'s whitelist for the\n"+this.getName()+" at "+xCoord+", "+yCoord+", "+zCoord+".");
+		if (name.equals(placer)) {
+			ReikaChatHelper.write("Note: "+name+" is the owner;");
+			ReikaChatHelper.write("They did not need to tell the "+this.getName()+" to not target them.");
+		}
+		safePlayers.add(name);
+		numSafePlayers++;
+	}
+
+	public void removePlayerFromWhiteList(String name) {
+		safePlayers.remove(name);
+		ReikaChatHelper.write(name+" removed from "+placer+"'s "+this.getName()+" whitelist.");
+	}
+
+	public boolean playerIsSafe(String name) {
+		return safePlayers.contains(name);
 	}
 
 }
