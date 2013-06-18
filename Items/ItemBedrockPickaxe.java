@@ -67,6 +67,7 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
 	{
 		World world = ep.worldObj;

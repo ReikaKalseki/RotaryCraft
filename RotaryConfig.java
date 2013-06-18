@@ -103,7 +103,7 @@ public class RotaryConfig {
 	}
 
 	private static void resetConfigFile() {
-		String path = configFile.getAbsolutePath().substring(0, configFile.getAbsolutePath().length()-4)+"_Old_ID_Backup.txt";
+		String path = configFile.getAbsolutePath().substring(0, configFile.getAbsolutePath().length()-4)+"_Old_Config_Backup.txt";
 		File backup = new File(path);
 		if (backup.exists())
 			backup.delete();
@@ -114,6 +114,8 @@ public class RotaryConfig {
 			if (!backup.exists())
 				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not create backup file at "+path+"!");
 			PrintWriter p = new PrintWriter(backup);
+			p.println("#####----------THESE ARE ALL THE OLD CONFIG SETTINGS YOU WERE USING----------#####");
+			p.println("#####---IF THEY DIFFER FROM THE DEFAULTS, YOU MUST RE-EDIT THE CONFIG FILE---#####");
 			for (int i = 0; i < ConfigRegistry.optionList.length; i++) {
 				String label = ConfigRegistry.optionList[i].getLabel();
 				if (ConfigRegistry.optionList[i].isBoolean())

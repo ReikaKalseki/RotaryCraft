@@ -137,7 +137,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		return 15*0.2F*phase;
 	}
 
-	private void adjustAim(World world, int x, int y, int z, int meta) {
+	private void adjustAim(World world, int x, int y, int z, int meta) {/*
 		if (phi >= 360)
 			phi -= 360;
 		if (phi < 0)
@@ -145,14 +145,23 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (theta >= 360)
 			theta -= 360;
 		if (theta < 0)
-			theta += 360;
+			theta += 360;*/
 
 		if (targetloc[0] == targetloc[1] && targetloc[0] == targetloc[2] && targetloc[0] == Integer.MIN_VALUE)
 			return;
+		float finalphi;
+		float finaltheta;
 
-		long time = world.getWorldTime()%12000;
+		int time = (int)(world.getWorldTime()%12000);
+		float sunphi = (float)(90*Math.cos(Math.toRadians(time*90D/6000D)));
+		sunphi = 90;
+		float suntheta = 0.5F*(float)(90*Math.sin(Math.toRadians(time*90D/6000D)));
+		if (time >= 6000) {
+			sunphi = (float)(-90*Math.cos(Math.toRadians((time-6000)*90D/6000D)));
+			sunphi = -90;
+		}
 
-		//float sunphi = 90+180*time/12000F; //rises in +90 sets in 270 (+x, -x)
+		//rises in +90 sets in 270 (+x, -x)
 		float movespeed = 0.5F;
 
 		float targetphi = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc[0], y-targetloc[1], z-targetloc[2])[2];
@@ -161,52 +170,40 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		targettheta = Math.abs(targettheta)-90;
 		targettheta *= 0.5;
 
-		float suntheta = (time/6000F)*60;
-		float sunphi = 0;
-		if (time >= 6000)
-			sunphi = 270;
+		sunphi = this.clampPhi(sunphi, time);
+		boolean bool;
+		if (time < 6000)
+			bool = (targetphi > 270);
 		else
-			sunphi = 90;
+			bool = targetphi < 9000;
+		//ReikaJavaLibrary.pConsole(targetphi+" clamped to "+this.clampPhi(targetphi, time)+"  :  "+bool);
+		if (bool)
+			targetphi = this.clampPhi(targetphi, time);
 
-		float finalphi = 0;
-		float finaltheta = 0;
-
-		//ReikaJavaLibrary.pConsole(String.format("SUN: %.3f  TARGET: %.3f  FINAL: %.3f", sunphi, targetphi, finalphi));
-
-		//ReikaJavaLibrary.pConsole(Arrays.toString(targetloc)+" @ "+x+", "+y+", "+z);
-		//sunphi = targetphi;
-
-		/*
 		if (time >= 6000) {
-			suntheta = Math.abs(120-suntheta);
-		}*/
-
-		finalphi = targetphi - Math.abs(sunphi-targetphi)/2;
-
-		finaltheta = Math.abs(suntheta - targettheta)/2;
-
-		if (finalphi - phi > 180)
-			finalphi -= 360;
-		int a = 1;
-		if (a == 1) {
-			finalphi = targetphi;
-			finaltheta = targettheta;
+			finalphi = sunphi - (sunphi-targetphi)/2F;
 		}
-		if (a == 2) {
-			finalphi = sunphi;
-			finaltheta = suntheta;
+		else {
+			finalphi = sunphi + (targetphi-sunphi)/2F; //These are mathematically equivalent...
+		}
+		float sunangle = (float)Math.cos(Math.toRadians(time*90D/6000D));
+		if (time >= 6000) {
+			sunangle = (float)(1-Math.cos(Math.toRadians((time-6000)*90D/6000D)));
 		}
 
-		//ReikaJavaLibrary.pConsole(String.format("SUN: %.3f  TARGET: %.3f  FINAL: %.3f", suntheta, targettheta, finaltheta));
+		finalphi = (finalphi*sunangle + (1-sunangle)*targetphi);
 
-		if (finalphi >= 360)
-			finalphi -= 360;
-		if (finalphi < 0)
-			finalphi += 360;
-		if (finaltheta >= 360)
-			finaltheta -= 360;
-		if (finaltheta < 0)
-			finaltheta += 360;
+		finalphi = this.clampPhi(finalphi, time);
+
+		finaltheta = targettheta + (suntheta - targettheta)/2F;
+
+		//ReikaJavaLibrary.pConsole(targetphi);
+		if (!(targetphi >= 0 && targetphi <= 90) && time >= 6000) {
+			finalphi = -sunphi - (sunphi-targetphi)/2F;
+			finalphi = (finalphi*sunangle + (1-sunangle)*targetphi);
+		}
+
+		//ReikaJavaLibrary.pConsole(String.format("TIME: %d     SUN: %.3f    TARGET: %.3f     FINAL: %.3f", time, sunphi, targetphi, finalphi));
 
 		if (phi < finalphi)
 			phi += movespeed;
@@ -239,6 +236,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	{
 		super.writeToNBT(NBT);
 		NBT.setBoolean("broke", broken);
+		NBT.setIntArray("target", targetloc);
 	}
 
 	/**
@@ -249,6 +247,24 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	{
 		super.readFromNBT(NBT);
 		broken = NBT.getBoolean("broke");
+		targetloc = NBT.getIntArray("target");
+	}
+
+	private float clampPhi(float phi, int time) {
+		boolean afternoon = time >= 6000;
+		if (afternoon) {
+			if (phi >= 360)
+				phi -= 360;
+			if (phi < -360)
+				phi += 360;
+		}
+		else {
+			if (phi > 180)
+				phi -= 360;
+			if (phi <= -180)
+				phi += 360;
+		}
+		return phi;
 	}
 
 }

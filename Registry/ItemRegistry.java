@@ -180,6 +180,7 @@ public enum ItemRegistry {
 	}
 
 	public Constructor getConstructor() {
+		ReikaJavaLibrary.pConsole(this);
 		try {
 			if (this.isArmor())
 				return itemClass.getConstructor(int.class, int.class, int.class); // ID, Armor render, Sprite index
