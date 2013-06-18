@@ -44,12 +44,14 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
@@ -161,12 +163,55 @@ public abstract class BlockBasicMultiTE extends Block {
 			}
 			return false;
 		}
-		if (te instanceof TileEntityScaleableChest) {
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tr = (TileEntityReservoir)te;
+			if (!tr.isUseableByPlayer(ep))
+				return false;
+			if (is != null) {
+				if (LiquidRegistry.isLiquidItem(is)) {
+					LiquidRegistry liq = LiquidRegistry.getLiquidFromIDAndMetadata(is.itemID, 0);
+					if (liq.hasBlock()) {
+						int size = is.stackSize;
+						if (tr.liquidLevel+size <= tr.CAPACITY) {
+							if (tr.liquidID == -1) {
+								tr.liquidID = liq.getLiquidBlockID();
+								tr.liquidLevel += size;
+								if (!ep.capabilities.isCreativeMode)
+									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+								return true;
+							}
+							else if (tr.liquidID == liq.getLiquidBlockID()) {
+								tr.liquidLevel += size;
+								if (!ep.capabilities.isCreativeMode)
+									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+								return true;
+							}
+						}
+					}
+				}
+				else if (is.itemID == Item.bucketEmpty.itemID) {
+					int size = is.stackSize;
+					if (tr.liquidLevel >= size) {
+						LiquidRegistry liq = LiquidRegistry.getLiquidFromBlock(tr.liquidID);
+						ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(liq.getHeldItemFor(), size));
+						return true;
+					}
+				}
+				else if (is.itemID == Item.glassBottle.itemID) {
+					int size = is.stackSize;
+					if (tr.liquidID == LiquidRegistry.WATER.getLiquidBlockID()) {
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.potion.itemID, size, 0));
+						return true;
+					}
+				}
+			}
+		}
+		if (m == MachineRegistry.SCALECHEST) {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
 				return false;
 		}
-		if (te instanceof TileEntityMirror) {
+		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;
 			if (tm.broken) {
 				if (ReikaItemHelper.matchStacks(is, ItemStacks.mirror)) {
@@ -195,14 +240,14 @@ public abstract class BlockBasicMultiTE extends Block {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}
-		if (te instanceof TileEntityScreen) {
+		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
 				;//tc.activate(ep);
 				return true;
 			}
 		}
-		if (te instanceof TileEntityCaveFinder) {
+		if (m == MachineRegistry.CAVESCANNER) {
 			TileEntityCaveFinder tc = (TileEntityCaveFinder)te;
 			EnumLook dir = EnumLook.getLookDir(ep, true);
 			int mov = tc.getRange()/4;

@@ -121,6 +121,8 @@ public enum HandbookRegistry {
 	CCTVSCREEN(MachineRegistry.SCREEN),
 	CCTV(MachineRegistry.CCTV),
 	PURIFIER(MachineRegistry.PURIFIER),
+	FURNACEHEATER(MachineRegistry.FRICTION),
+	LANDMINE(MachineRegistry.LANDMINE),
 	BUCKET(MachineRegistry.BUCKETFILLER),
 	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
 	//---------------------TOOLS--------------------//

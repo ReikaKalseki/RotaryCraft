@@ -113,6 +113,8 @@ public final class RotaryDescriptions {
 		{},
 		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
 		{},
+		{},
+		{},
 		{}
 	};
 
@@ -168,6 +170,8 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{TileEntityPurifier.SMELTTEMP},
+		{},
+		{},
 		{},
 		{}
 	};

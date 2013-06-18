@@ -20,7 +20,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 
 	private TileEntityReservoir Reservoir;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	
+
 	int x;
 	int y;
 
@@ -54,7 +54,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		int i4 = 0;
 		if (!water)
 			i4 = 8;
-		this.drawTexturedModalRect(j +xSize/2-4, ySize/2+k-13-i2, 176+i4, 0, 8, i2);
+		this.drawTexturedModalRect(j +xSize/2-4, ySize/2+k-13-i2+35, 176+i4, 0, 8, i2);
 	}
 
 	@Override

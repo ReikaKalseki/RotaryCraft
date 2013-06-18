@@ -79,6 +79,8 @@ public enum LiquidRegistry {
 	}
 
 	public static boolean isLiquidItem(ItemStack is) {
+		if (is == null)
+			return false;
 		for (int i = 0; i < liquidList.length; i++) {
 			if (liquidList[i].liquidID == is.itemID && (!liquidList[i].isMetadata() || liquidList[i].liquidMeta == is.getItemDamage()))
 				return true;
@@ -90,5 +92,9 @@ public enum LiquidRegistry {
 		String name = this.name();
 		String truename = name.charAt(0)+name.substring(1).toLowerCase();
 		return truename;
+	}
+
+	public ItemStack getHeldItemFor() {
+		return new ItemStack(liquidID, 1, liquidMeta);
 	}
 }
