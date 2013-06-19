@@ -17,8 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemCannonKey extends ItemBasic {
@@ -54,24 +56,30 @@ public class ItemCannonKey extends ItemBasic {
 			return false;
 		if (!m.isCannon())
 			return false;
-		if (!is.hasTagCompound())
-			return false;
-		if (!is.stackTagCompound.hasKey("owner"))
-			return false;
 		TileEntityAimedCannon can = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
-		String owner = is.stackTagCompound.getString("owner");
-		if (!owner.equals(can.placer)) {
-			ReikaChatHelper.write("The key is for "+owner+"'s machines, but this machine is owned by "+can.placer+"!");
-			return false;
+		if (ep.getEntityName() == can.placer || ep.isSneaking()) {
+			ep.openGui(RotaryCraft.instance, GuiRegistry.SAFEPLAYERS.ordinal(), world, x, y, z);
+			return true;
 		}
-		String name = ep.getEntityName();
-		if (can.playerIsSafe(name)) {
-			ReikaChatHelper.write(name+" is already on the whitelist!");
-			return false;
+		else {
+			if (!is.hasTagCompound())
+				return false;
+			if (!is.stackTagCompound.hasKey("owner"))
+				return false;
+			String owner = is.stackTagCompound.getString("owner");
+			if (!owner.equals(can.placer)) {
+				ReikaChatHelper.write("The key is for "+owner+"'s machines, but this machine is owned by "+can.placer+"!");
+				return false;
+			}
+			String name = ep.getEntityName();
+			if (can.playerIsSafe(name)) {
+				ReikaChatHelper.write(name+" is already on the whitelist!");
+				return false;
+			}
+			can.addPlayerToWhiteList(name);
+			if (!ep.capabilities.isCreativeMode)
+				ep.setCurrentItemOrArmor(0, null);
 		}
-		can.addPlayerToWhiteList(name);
-		if (!ep.capabilities.isCreativeMode)
-			ep.setCurrentItemOrArmor(0, null);
 		return true;
 	}
 

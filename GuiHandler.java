@@ -22,6 +22,7 @@ import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
@@ -85,6 +86,7 @@ import Reika.RotaryCraft.GUIs.GuiProjector;
 import Reika.RotaryCraft.GUIs.GuiPulseFurnace;
 import Reika.RotaryCraft.GUIs.GuiPurifier;
 import Reika.RotaryCraft.GUIs.GuiReservoir;
+import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.GuiSonic;
 import Reika.RotaryCraft.GUIs.GuiSpawnerController;
@@ -270,6 +272,8 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (gr == GuiRegistry.WORLDEDIT)
 			return new GuiWorldEdit(player, world);
+		if (gr == GuiRegistry.SAFEPLAYERS)
+			return new GuiSafePlayerList(player, (TileEntityAimedCannon)te);
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}

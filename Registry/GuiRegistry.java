@@ -16,7 +16,8 @@ public enum GuiRegistry {
 	HANDBOOK(),
 	HANDBOOKPAGE(),
 	WORLDEDIT(),
-	LOADEDHANDBOOK();
+	LOADEDHANDBOOK(),
+	SAFEPLAYERS();
 
 	private static final GuiRegistry[] guiList = GuiRegistry.values();
 

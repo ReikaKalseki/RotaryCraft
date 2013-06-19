@@ -278,7 +278,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	}
 
 	private float adjustPhiForClosestPath(float finalphi) {
-		ReikaJavaLibrary.pConsole(String.format("PHI: %.3f    TARGET: %.3f", phi, finalphi));
+		//ReikaJavaLibrary.pConsole(String.format("PHI: %.3f    TARGET: %.3f", phi, finalphi));
 		if (!ReikaMathLibrary.isSameSign(finalphi, phi)) {
 			if (finalphi < -180) {
 				finalphi += 360;

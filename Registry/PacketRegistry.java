@@ -32,7 +32,8 @@ public enum PacketRegistry {
 	PROJECTOR(31),
 	CONTAINMENT(32),
 	ITEMCANNON(33, 35),
-	MIRROR(36);
+	MIRROR(36),
+	SAFEPLAYER(37);
 
 	private int min;
 	private int max;

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
@@ -23,6 +24,8 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -60,12 +63,18 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	protected void printSafeList() {
 		for (int i = 0; i < safePlayers.size(); i++) {
-			ReikaJavaLibrary.pConsole("Safe_Player_"+String.valueOf(i)+":   "+safePlayers.get(i));
+			String player = safePlayers.get(i);
+			if (player == null)
+				player = "NULL PLAYER IN SLOT "+i;
+			else if (player.isEmpty())
+				player = "EMPTY STRING PLAYER IN SLOT "+i;
+			ReikaJavaLibrary.pConsole("Side "+FMLCommonHandler.instance().getEffectiveSide()+": Safe Player "+(i+1)+" of "+safePlayers.size()+": "+player);
 		}
 	}
 
 	@Override
 	public void updateTileEntity() {
+		//this.printSafeList();
 		super.updateTileEntity();
 		tickcount++;
 		switch(this.getBlockMetadata()) {
@@ -185,17 +194,27 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 			ReikaChatHelper.write("Note: "+name+" is the owner;");
 			ReikaChatHelper.write("They did not need to tell the "+this.getName()+" to not target them.");
 		}
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
+			return;
 		safePlayers.add(name);
 		numSafePlayers++;
 	}
 
 	public void removePlayerFromWhiteList(String name) {
-		safePlayers.remove(name);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			safePlayers.remove(name);
+			numSafePlayers--;
+		}
+		safePlayers.removeAll(Arrays.asList("", null));
 		ReikaChatHelper.write(name+" removed from "+placer+"'s "+this.getName()+" whitelist.");
 	}
 
 	public boolean playerIsSafe(String name) {
 		return safePlayers.contains(name);
+	}
+
+	public List<String> getCopyOfSafePlayerList() {
+		return ReikaJavaLibrary.copyList(safePlayers);
 	}
 
 }
