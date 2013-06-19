@@ -36,7 +36,9 @@ public class EntityFreezeGunShot extends EntityFireball {
 
 	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pwr, List fr) {
 		super(world, x, y, z, 0, 0, 0);
-		this.setVelocity(vx, vy, vz);
+		motionX = vx;
+		motionY = vy;
+		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
 		power = pwr;

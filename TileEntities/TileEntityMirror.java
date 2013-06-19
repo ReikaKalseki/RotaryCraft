@@ -19,6 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
@@ -147,6 +148,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (theta < 0)
 			theta += 360;*/
 
+		if (targetloc == null || targetloc.length == 0)
+			return;
 		if (targetloc[0] == targetloc[1] && targetloc[0] == targetloc[2] && targetloc[0] == Integer.MIN_VALUE)
 			return;
 		float finalphi;
@@ -204,6 +207,13 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		}
 
 		//ReikaJavaLibrary.pConsole(String.format("TIME: %d     SUN: %.3f    TARGET: %.3f     FINAL: %.3f", time, sunphi, targetphi, finalphi));
+
+		finalphi = this.adjustPhiForClosestPath(finalphi);
+		if (Math.abs(sunphi - targetphi) == 180) {
+			//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
+			finalphi = targetphi;
+			finaltheta = (float)ReikaMathLibrary.extremad(60-suntheta, finaltheta, "max");
+		}
 
 		if (phi < finalphi)
 			phi += movespeed;
@@ -265,6 +275,22 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 				phi += 360;
 		}
 		return phi;
+	}
+
+	private float adjustPhiForClosestPath(float finalphi) {
+		ReikaJavaLibrary.pConsole(String.format("PHI: %.3f    TARGET: %.3f", phi, finalphi));
+		if (!ReikaMathLibrary.isSameSign(finalphi, phi)) {
+			if (finalphi < -180) {
+				finalphi += 360;
+			}
+			if (finalphi > 180) {
+				finalphi -= 360;
+			}
+			if (finalphi < 0 && finalphi < -90) {
+				finalphi += 360;
+			}
+		}
+		return finalphi;
 	}
 
 }

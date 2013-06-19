@@ -27,13 +27,14 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInventory {
 
 	public boolean cameraIsMoved = false;
 	private double[] playerCam = new double[5];
 	private double[] cameraPos = new double[5];
-	private Minecraft mc = Minecraft.getMinecraft();
 	public String owner;
 	public EntityPlayer clicked;
 	public float theta;
@@ -146,6 +147,9 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	}
 
 	private void setPlayerCam() {
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
+			return;
+		Minecraft mc = Minecraft.getMinecraft();
 		EntityLiving e = mc.renderViewEntity;
 		if (e == null)
 			return;
@@ -170,6 +174,9 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 
 	/** Actually moves the ingame camera to the preset coords */
 	private void alignCameras(boolean toPlayer) {
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
+			return;
+		Minecraft mc = Minecraft.getMinecraft();
 		EntityLiving e = mc.renderViewEntity;
 		if (toPlayer) {
 			e.posX = playerCam[0];

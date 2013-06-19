@@ -100,7 +100,9 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	private void fireBlock(ItemStack is, World world, int x, int y, int z) {
 		EntityFallingSand e = new EntityFallingSand(world, x+0.5, y+1+0.5, z+0.5, is.itemID, is.getItemDamage());
 		double[] vel = ReikaPhysicsHelper.polarToCartesian(velocity, theta, phi);
-		e.setVelocity(vel[0], vel[1], vel[2]);
+		e.motionX = vel[0];
+		e.motionY = vel[1];
+		e.motionZ = vel[2];
 		//e.shouldDropItem = false;
 		e.fallTime = -10000;
 		if (!world.isRemote)

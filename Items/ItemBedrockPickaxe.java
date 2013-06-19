@@ -67,7 +67,6 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
 	{
 		World world = ep.worldObj;
@@ -77,10 +76,7 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 		world.setBlock(x, y, z, 0);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			Icon ico = new RenderBlocks().getBlockIcon(Block.silverfish);
-			for (int i = 0; i < 16; i++) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -1+itemRand.nextDouble()*2, 2, -1+itemRand.nextDouble()*2, Block.silverfish, 0, world.getBlockMetadata(x, y, z), Minecraft.getMinecraft().renderEngine, "/terrain.png", ico.getInterpolatedU(0), ico.getInterpolatedV(0)));
-			}
+			this.spawnDropParticles(world, x, y, z);
 		}
 		ItemStack drop;
 		switch(meta) {
@@ -105,6 +101,14 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
 		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnDropParticles(World world, int x, int y, int z) {
+		Icon ico = new RenderBlocks().getBlockIcon(Block.silverfish);
+		for (int i = 0; i < 16; i++) {
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -1+itemRand.nextDouble()*2, 2, -1+itemRand.nextDouble()*2, Block.silverfish, 0, world.getBlockMetadata(x, y, z), Minecraft.getMinecraft().renderEngine, "/terrain.png", ico.getInterpolatedU(0), ico.getInterpolatedV(0)));
+		}
 	}
 
 	@Override

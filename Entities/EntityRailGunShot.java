@@ -46,9 +46,9 @@ public class EntityRailGunShot extends EntityFireball {
 
 	public EntityRailGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pw, TileEntityRailGun r) {
 		super(world, x, y, z, 0, 0, 0);
-		//this.extinguish();
-		//this.shootingEntity = null;
-		this.setVelocity(vx, vy, vz);
+		motionX = vx;
+		motionY = vy;
+		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
 		power = pw;

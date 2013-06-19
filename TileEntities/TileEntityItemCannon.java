@@ -105,7 +105,9 @@ public class TileEntityItemCannon extends TileEntityInventoriedPowerReceiver {
 		double dy = target[1]-y;
 		double dz = target[2]-z;
 		double dd = ReikaMathLibrary.py3d(dx, dy, dz);
-		ei.setVelocity(dx/dd*v, dy/dd*v, dz/dd*v);
+		ei.motionX = dx/dd*v;
+		ei.motionY = dy/dd*v;
+		ei.motionZ = dz/dd*v;
 		ei.delayBeforeCanPickup = 10;
 		ei.lifespan = 5;
 		if (!world.isRemote)

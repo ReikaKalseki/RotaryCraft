@@ -83,7 +83,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 	}
 
 	public void getDirectionFromIO() {
-		System.out.print(bevel.colorNames[in]+" to "+bevel.colorNames[out]+" -> data: ");
+		//System.out.print(bevel.colorNames[in]+" to "+bevel.colorNames[out]+" -> data: ");
 		switch(in) {
 		case 0:
 			switch(out) {

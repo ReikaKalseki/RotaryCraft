@@ -74,7 +74,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		}
 		int spread = this.getRange();
 		int yspread = this.getRange()/2;
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 3; i++) {
 			int fx = x-spread+par5Random.nextInt(spread*2+1);
 			int fz = z-spread+par5Random.nextInt(spread*2+1);
 			int fy = y-yspread+par5Random.nextInt(yspread+1);
@@ -100,6 +100,8 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 			world.spawnParticle("flame", dx, dy+1, dz, 0, 0, 0);
 			world.spawnParticle("smoke", dx, dy+1, dz, 0, 0, 0);
 		}
+		if (world.isRemote)
+			return;
 		ReikaWorldHelper.temperatureEnvironment(world, fx, fy, fz, temperature);
 	}
 
@@ -194,11 +196,11 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 			return 800;
 		if (ReikaInventoryHelper.checkForItem(Item.coal.itemID, inv))
 			return 600; //really 580
-			if (ReikaInventoryHelper.checkForItem(Block.wood.blockID, inv))
-				return 400;
-			if (ReikaInventoryHelper.checkForItem(Block.planks.blockID, inv))
-				return 300;
-			return 0;
+		if (ReikaInventoryHelper.checkForItem(Block.wood.blockID, inv))
+			return 400;
+		if (ReikaInventoryHelper.checkForItem(Block.planks.blockID, inv))
+			return 300;
+		return 0;
 	}
 
 	private boolean hasValidItems() {
