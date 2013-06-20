@@ -18,8 +18,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.PixelRenderer;
 import Reika.DragonAPI.IO.ReikaPNGLoader;
+import Reika.DragonAPI.Instantiable.PixelRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;

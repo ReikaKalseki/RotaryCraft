@@ -21,9 +21,9 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.ImagedGuiButton;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;

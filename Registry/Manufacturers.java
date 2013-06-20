@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.RegistrationException;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.RotaryCraft.RotaryCraft;
 
 public enum Manufacturers {

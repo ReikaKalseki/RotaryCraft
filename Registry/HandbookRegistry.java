@@ -13,7 +13,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.tileentity.TileEntity;
-import Reika.DragonAPI.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;

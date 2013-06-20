@@ -68,7 +68,7 @@ public class GuiSafePlayerList extends GuiScreen {
 		}
 
 		buttonList.add(new GuiButton(1000000, j+dx+width+6, 11+k, 20, 20, "^"));
-		buttonList.add(new GuiButton(1000001, j+dx+width+6, 11+k+colsize*20-5, 20, 20, "V"));
+		buttonList.add(new GuiButton(1000001, j+dx+width+6, 11+k+colsize*20-5, 20, 20, "v"));
 	}
 
 	/**

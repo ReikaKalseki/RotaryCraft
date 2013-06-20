@@ -22,7 +22,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.LanguageArray;
+import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Interfaces.DragonAPIMod;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;

@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraftforge.common.Configuration;
-import Reika.DragonAPI.RegistrationException;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
