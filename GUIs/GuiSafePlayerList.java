@@ -14,6 +14,11 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
@@ -21,17 +26,24 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiSafePlayerList extends GuiScreen {
 
-	private int xSize = 400;
-	private int ySize = 210;
+	private int xSize = 226;
+	private int ySize = 204;
 
 	private String playerName;
 
 	private String activePlayer;
 
+	private int listOffset = 0;
+
 	private TileEntityAimedCannon te;
 	private List<String> playerList;
 
 	private EntityPlayer ep;
+
+	private long buttontime;
+	protected int buttontimer = 0;
+
+	private static final int colsize = 8;
 
 	public GuiSafePlayerList(EntityPlayer e, TileEntityAimedCannon tile) {
 		ep = e;
@@ -47,14 +59,16 @@ public class GuiSafePlayerList extends GuiScreen {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int colsize = 10;
-		int width = 80;
-		for (int i = 0; i < playerList.size(); i++) {
-			int dx = (i/colsize)*width;
-			int dy = (i%colsize)*20;
-			//ReikaJavaLibrary.pConsole("Loading Player "+(i+1)+" of "+playerList.size()+" = "+playerList.get(i));
+		int width = 180;
+
+		int dx = 10;//xSize/2-width/2;//(i/colsize)*width;
+		for (int i = listOffset; i < ReikaMathLibrary.extrema(playerList.size(), listOffset+colsize, "absmin"); i++) {
+			int dy = 12+((i-listOffset)%colsize)*22;
 			buttonList.add(new GuiButton(i, j+dx, k+dy, width, 20, playerList.get(i)));
 		}
+
+		buttonList.add(new GuiButton(1000000, j+dx+width+6, 11+k, 20, 20, "^"));
+		buttonList.add(new GuiButton(1000001, j+dx+width+6, 11+k+colsize*20-5, 20, 20, "V"));
 	}
 
 	/**
@@ -67,6 +81,21 @@ public class GuiSafePlayerList extends GuiScreen {
 
 	@Override
 	public void actionPerformed(GuiButton button) {
+		if (buttontimer > 0)
+			return;
+		buttontimer = 20;
+		if (button.id >= 1000000) {
+			if (button.id == 1000000) {
+				if (listOffset > 0)
+					listOffset --;
+			}
+			else {
+				if (listOffset < playerList.size()-colsize)
+					listOffset++;
+			}
+			this.initGui();
+			return;
+		}
 		activePlayer = playerList.get(button.id);
 		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.getMinValue(), activePlayer, te);
 		playerList.remove(button.id);
@@ -76,7 +105,22 @@ public class GuiSafePlayerList extends GuiScreen {
 	@Override
 	public void drawScreen(int x, int y, float f)
 	{
+		if (System.nanoTime()-buttontime > 100000000) {
+			buttontime = System.nanoTime();
+			buttontimer = 0;
+		}
+		String title = te.placer+"'s "+te.getName()+" Whitelist";
 
+		String var4 = "/Reika/RotaryCraft/Textures/GUI/safeplayergui.png";
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		mc.renderEngine.bindTexture(var4);
+
+		int posX = (width - xSize) / 2;
+		int posY = (height - ySize) / 2 - 8;
+
+		this.drawTexturedModalRect(posX, posY, 0, 0, xSize, ySize);
+
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, title, posX+xSize/2, posY+6, 4210752);
 		super.drawScreen(x, y, f);
 	}
 

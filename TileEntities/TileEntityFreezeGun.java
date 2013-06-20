@@ -211,7 +211,7 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 		double dz = v[2]/dd;
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			EntityFreezeGunShot snow = new EntityFreezeGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], 0, frozen);
+			EntityFreezeGunShot snow = new EntityFreezeGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], frozen);
 			world.spawnEntityInWorld(snow);
 		}
 	}

@@ -57,7 +57,7 @@ public class ItemCannonKey extends ItemBasic {
 		if (!m.isCannon())
 			return false;
 		TileEntityAimedCannon can = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
-		if (ep.getEntityName() == can.placer || ep.isSneaking()) {
+		if (ep.getEntityName() == can.placer) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.SAFEPLAYERS.ordinal(), world, x, y, z);
 			return true;
 		}

@@ -40,9 +40,9 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelAC;
 import Reika.RotaryCraft.Models.ModelCombustion;
@@ -888,7 +888,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 						if (caughtpl.capabilities.isCreativeMode)
 							immune = true;
 					}
-					if (inzone.get(i) instanceof EntityRailGunShot)
+					if (inzone.get(i) instanceof EntityTurretShot)
 						immune = true;
 					Entity caught = (Entity)inzone.get(i);
 					if (!immune){// && ReikaWorldHelper.canBlockSee(worldObj, xCoord, yCoord, zCoord, caught.posX, caught.posY, caught.posZ, 8)) {

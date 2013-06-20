@@ -15,7 +15,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -23,25 +22,24 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class EntityFreezeGunShot extends EntityFireball {
+public class EntityFreezeGunShot extends EntityTurretShot {
 
-	private int power;
 	private List frozen;
 
 	public EntityFreezeGunShot(World world) {
 		super(world);
 	}
 
-	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pwr, List fr) {
+	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, List fr) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
-		power = pwr;
 		frozen = fr;
 	}
 
@@ -73,18 +71,7 @@ public class EntityFreezeGunShot extends EntityFireball {
 			if (ent instanceof EntityLiving) {
 				el = (EntityLiving)ent;
 				//ReikaChatHelper.writeEntity(world, el);
-				if (el instanceof EntityDragon) {
-					el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 27));
-					el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -29));
-				}
-				else if (el instanceof EntityWither) {
-					el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 27));
-					el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -29));
-				}
-				else {
-					el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 7));
-					el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -9));
-				}
+				this.applyAttackEffectsToEntity(world, el);
 				if (el != null) {
 					if (frozen != null)
 						frozen.add(el);
@@ -96,6 +83,22 @@ public class EntityFreezeGunShot extends EntityFireball {
 
 		this.setDead();
 		//ent.attackEntityFrom(DamageSource.outOfWorld, el.getHealth()*(1+el.getTotalArmorValue()));
+	}
+
+	@Override
+	protected void applyAttackEffectsToEntity(World world, EntityLiving el) {
+		if (el instanceof EntityDragon) {
+			el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 27));
+			el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -29));
+		}
+		else if (el instanceof EntityWither) {
+			el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 27));
+			el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -29));
+		}
+		else {
+			el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 7));
+			el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -9));
+		}
 	}
 
 	@Override
@@ -111,8 +114,6 @@ public class EntityFreezeGunShot extends EntityFireball {
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
 			this.onImpact(null);
-			if (power < 15)
-				this.setDead();
 			return;
 		}
 		//ReikaChatHelper.write(this.ticksExisted);
@@ -163,14 +164,7 @@ public class EntityFreezeGunShot extends EntityFireball {
 	}
 
 	@Override
-	public boolean canRenderOnFire() {
-		return false;
+	public int getAttackDamage() {
+		return 0;
 	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox()
-	{
-		return AxisAlignedBB.getBoundingBox(posX+0.4, posY+0.4, posZ+0.4, posX+0.6, posY+0.6, posZ+0.6);
-	}
-
 }
