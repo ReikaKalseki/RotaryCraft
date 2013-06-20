@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -57,7 +58,13 @@ public class ItemCannonKey extends ItemBasic {
 		if (!m.isCannon())
 			return false;
 		TileEntityAimedCannon can = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
-		if (ep.getEntityName() == can.placer) {
+		String name = ep.getEntityName();
+		if (ConfigRegistry.DEBUGMODE.getState()) {
+			ReikaChatHelper.write("Key is held by "+name+"; machine was placed by "+can.placer);
+			ReikaChatHelper.write("name.equals(placer): "+name.equals(can.placer));
+			ReikaChatHelper.write("name.compareTo(placer): "+name.compareTo(can.placer));
+		}
+		if (name.equals(can.placer)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.SAFEPLAYERS.ordinal(), world, x, y, z);
 			return true;
 		}
@@ -67,11 +74,15 @@ public class ItemCannonKey extends ItemBasic {
 			if (!is.stackTagCompound.hasKey("owner"))
 				return false;
 			String owner = is.stackTagCompound.getString("owner");
+			if (ConfigRegistry.DEBUGMODE.getState()) {
+				ReikaChatHelper.write("Key is made by "+owner+"; machine was placed by "+can.placer);
+				ReikaChatHelper.write("owner.equals(placer): "+owner.equals(can.placer));
+				ReikaChatHelper.write("owner.compareTo(placer): "+owner.compareTo(can.placer));
+			}
 			if (!owner.equals(can.placer)) {
 				ReikaChatHelper.write("The key is for "+owner+"'s machines, but this machine is owned by "+can.placer+"!");
 				return false;
 			}
-			String name = ep.getEntityName();
 			if (can.playerIsSafe(name)) {
 				ReikaChatHelper.write(name+" is already on the whitelist!");
 				return false;

@@ -40,7 +40,8 @@ public enum ConfigRegistry {
 	BREEDERRANGE("Breeder Range", 128),
 	BAITRANGE("Bait Box Range", 128),
 	BAITMOBS("Max Bait Box Mob Count", 256),
-	CAVEFINDERRANGE("Cave Scanner FOV", 16);
+	CAVEFINDERRANGE("Cave Scanner FOV", 16),
+	DEBUGMODE("Debug Mode", false);
 
 	private String label;
 	private boolean defaultState;
