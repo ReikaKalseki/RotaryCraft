@@ -84,7 +84,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 				double m = ReikaEntityHelper.getEntityMass(e);
 				//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
 				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
-					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this);
+					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this);
 					e.attackEntityFrom(DamageSource.cactus, 1);
 				}
 			}

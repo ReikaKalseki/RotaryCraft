@@ -53,7 +53,7 @@ public class GuiWinder extends GuiOneSlotInv
 		super.actionPerformed(button);
 		if (button.id != 0)
 			return;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.WINDER.getMinValue(), Winder, ep);
+		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDER.getMinValue(), Winder);
 		input = !input;
 		this.initGui();
 	}

@@ -21,18 +21,19 @@ import java.util.Calendar;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet63WorldParticles;
 import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.DemoMusic;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
@@ -153,29 +154,31 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				pit = "";
 			if (activeVoice != 0) {
 				//worldObj.spawnParticle("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
-				Packet63WorldParticles p = new Packet63WorldParticles();
+				//Packet63WorldParticles p = new Packet63WorldParticles();
 				//("note", xCoord+0.5, yCoord+1.2, zCoord+0.5, activeNote/24D, 0.0D, 0.0D);
 			}
 			switch(activeVoice) {
-				case 1:
-					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-					break;
-				case 2:
-					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-					break;
-				case 3:
-					SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
-					break;
-				case 4:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
-					break;
-				case 5:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
-					break;
-				case 6:
-					worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
-					break;
+			case 1:
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				break;
+			case 2:
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				break;
+			case 3:
+				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				break;
+			case 4:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);
+				break;
+			case 5:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.snare", volume, pitch);
+				break;
+			case 6:
+				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.hat", volume, pitch);
+				break;
 			}
+			if (activeVoice != 0)
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
 		}
 	}
 
@@ -227,16 +230,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public int getCurrentNoteType() {
 		switch(currentNoteLength) {
-			case 3:
-				return 4;
-			case 6:
-				return 3;
-			case 12:
-				return 2;
-			case 24:
-				return 1;
-			case 48:
-				return 0;
+		case 3:
+			return 4;
+		case 6:
+			return 3;
+		case 12:
+			return 2;
+		case 24:
+			return 1;
+		case 48:
+			return 0;
 		}
 		return -1;
 	}
@@ -459,16 +462,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public static int getNoteLengthFromValue(int val) {
 		switch(val) {
-			case 4:
-				return 3;
-			case 3:
-				return 6;
-			case 2:
-				return 12;
-			case 1:
-				return 24;
-			case 0:
-				return 48;
+		case 4:
+			return 3;
+		case 3:
+			return 6;
+		case 2:
+			return 12;
+		case 1:
+			return 24;
+		case 0:
+			return 48;
 		}
 		return 0;
 	}

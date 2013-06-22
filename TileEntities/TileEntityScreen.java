@@ -70,7 +70,8 @@ public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 		if (!this.isValidCamera(cameraPos))
 			return;
 		TileEntityCCTV te = (TileEntityCCTV)worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]);
-		te.moveCameraToLook(ep);
+		//te.moveCameraToLook(ep);
+		te.movePlayerToCamera(ep);
 	}
 
 	private boolean isValidCamera(int[] cameraPos) {

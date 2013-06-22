@@ -33,7 +33,9 @@ public enum PacketRegistry {
 	CONTAINMENT(32),
 	ITEMCANNON(33, 35),
 	MIRROR(36),
-	SAFEPLAYER(37);
+	SAFEPLAYER(37),
+	ENGINEBACKFIRE(38),
+	MUSICPARTICLE(39);
 
 	private int min;
 	private int max;
@@ -69,14 +71,6 @@ public enum PacketRegistry {
 			return 4;
 		if (this == CANNON)
 			return 2;
-		if (this == VACUUM)
-			return 0;
-		if (this == WINDER)
-			return 0;
-		if (this == PROJECTOR)
-			return 0;
-		if (this == MIRROR)
-			return 0;
 		return 1;
 	}
 

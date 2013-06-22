@@ -12,6 +12,7 @@ package Reika.RotaryCraft;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -27,6 +28,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityHeater;
@@ -68,6 +70,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityItemCannon icannon;
 	private TileEntityMirror mirror;
 	private TileEntityAimedCannon aimed;
+	private TileEntityEngine engine;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -113,6 +116,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				}
 				else
 					longdata = inputStream.readLong();
+				break;
+			case UPDATE:
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
 				break;
 			}
 			x = inputStream.readInt();
@@ -365,6 +372,15 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		case SAFEPLAYER:
 			aimed = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
 			aimed.removePlayerFromWhiteList(stringdata);
+			break;
+		case ENGINEBACKFIRE:
+			engine = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+			engine.backFire(world, x, y, z);
+			break;
+		case MUSICPARTICLE:
+			Random rand = new Random();
+			music = (TileEntityMusicBox)world.getBlockTileEntity(x, y, z);
+			world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
 			break;
 		}
 	}

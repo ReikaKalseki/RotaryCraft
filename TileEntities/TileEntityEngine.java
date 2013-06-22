@@ -35,8 +35,10 @@ import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -57,6 +59,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -1372,37 +1375,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 		if (jetfuels < FUELCAP/12 && par5Random.nextInt(10) == 0) {
-			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
-			for (int i = 0; i < 32; i++) {
-				String part;
-				if (i%2 == 0)
-					part = "flame";
-				else
-					part = "smoke";
-				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
-			}
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 		}
 		if (jetfuels < FUELCAP/4 && par5Random.nextInt(20) == 0) {
-			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
-			for (int i = 0; i < 32; i++) {
-				String part;
-				if (i%2 == 0)
-					part = "flame";
-				else
-					part = "smoke";
-				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
-			}
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 		}
 		else if (par5Random.nextInt(40) == 0) {
-			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
-			for (int i = 0; i < 32; i++) {
-				String part;
-				if (i%2 == 0)
-					part = "flame";
-				else
-					part = "smoke";
-				world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
-			}
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 		}
 		if (par5Random.nextInt(2) == 0)
 			temperature++;
@@ -1421,6 +1400,20 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				for (int m = 0; m < 6; m++)
 					world.newExplosion(null, x-4+par5Random.nextInt(5), y-4+par5Random.nextInt(5), z-4+par5Random.nextInt(5), 4F+par5Random.nextFloat(), true, true);
 			}
+		}
+	}
+
+	public void backFire(World world, int x, int y, int z) {
+		double vx = (x-backx)/2D;
+		double vz = (z-backz)/2D;
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
+		for (int i = 0; i < 32; i++) {
+			String part;
+			if (i%2 == 0)
+				part = "flame";
+			else
+				part = "smoke";
+			world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
 		}
 	}
 

@@ -55,6 +55,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.FingerprintWarning;
 import cpw.mods.fml.common.Mod.Init;
@@ -177,6 +178,9 @@ public class RotaryCraft implements DragonAPIMod {
 	public void myNewPostLoadMethod(FMLPostInitializationEvent evt)
 	{
 		//LoadAux.texMsg();
+		if (Loader.isModLoaded("OptiFine")) {
+			;//throw new ModIncompatibilityException(instance, "Optifine", "Optifine breaks rendering of many RotaryCraft items and features. Remove it if possible for full RotaryCraft functionality.");
+		}
 	}
 
 	private static void setupClassFiles() {
@@ -215,10 +219,6 @@ public class RotaryCraft implements DragonAPIMod {
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
 		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
-	}
-
-	public String getVersion() {
-		return "RotaryCraft RC v1.0";
 	}
 
 	@Override

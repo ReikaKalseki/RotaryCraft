@@ -77,10 +77,16 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 			inv[0] = is;
 			tickcount2 = 0;
 		}
+
+		//EntityPlayer ep = world.getClosestPlayer(x, y, z, -1);
+		//ReikaJavaLibrary.pConsole(String.format("%f,  %f, %f", ep.posX, ep.posY, ep.posZ)+" on "+FMLCommonHandler.instance().getEffectiveSide());
+
+
+		EntityPlayer e = world.getPlayerEntityByName(owner);
 		on = true;
 		if (cameraIsMoved) {
-			this.moveCameraToLook(clicked);
-			EntityPlayer e = world.getPlayerEntityByName(owner);
+			//this.moveCameraToLook(clicked);
+			this.movePlayerToCamera(e);
 			tickcount++;
 		}
 		//ReikaJavaLibrary.pConsole("X: "+e.posX+"  Y: "+e.posY+"  Z: "+e.posZ+"  Y: "+e.rotationYaw+"  P: "+e.rotationPitch);
@@ -89,7 +95,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		double[] dd = ReikaPhysicsHelper.polarToCartesian(1, theta, phi);
 		//ReikaJavaLibrary.pConsole(dd[0]+"  "+dd[1]+"  "+dd[2]);
 
-		this.setLook(x+0.5+dd[2], y+0.25-dd[1], z+0.40625+dd[0], -phi, theta);
+		//this.setLook(x+0.5+dd[2], y+0.25-dd[1], z+0.40625+dd[0], -phi, theta);
 		if (tickcount < 20)
 			;//return;
 		if (!cameraIsMoved)
@@ -97,7 +103,8 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == ItemRegistry.SPRING.getID() && inv[0].getItemDamage() > 0)
 			return;
 		tickcount = 0;
-		this.moveCameraToPlayer();
+		this.movePlayerBack(e);
+		//this.moveCameraToPlayer();
 	}
 
 	private void setColors() {
@@ -341,7 +348,43 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		return 0;
 	}
 
-	private void movePlayerToCamera() {
+	public void movePlayerToCamera(EntityPlayer ep) {
+		if (ep == null)
+			return;
+		cameraIsMoved = true;
+		double[] dd = ReikaPhysicsHelper.polarToCartesian(1, theta, phi);
+		double dx = 0.5+dd[2];
+		double dy = 0.25-dd[1]-ep.getEyeHeight();
+		double dz = 0.40625+dd[0];
+		playerCam[0] = ep.posX;
+		playerCam[1] = ep.posY;
+		playerCam[2] = ep.posZ;
+		playerCam[3] = ep.rotationYaw;
+		playerCam[4] = ep.rotationPitch;
 
+		ep.posX = xCoord+dx;
+		ep.posY = yCoord+dy;
+		ep.posZ = zCoord+dz;
+		ep.rotationYaw = -phi;
+		ep.rotationPitch = theta;
+
+		owner = ep.getEntityName();
+
+		ep.capabilities.allowEdit = false;
+		//ep.setGameType(EnumGameType.ADVENTURE);
+		ep.capabilities.disableDamage = true;
+
+		//ReikaJavaLibrary.pConsole(String.format("%f,  %f, %f", ep.posX, ep.posY, ep.posZ)+" on "+FMLCommonHandler.instance().getEffectiveSide());
+
+		//ReikaChatHelper.writeCoords(ep.worldObj, ep.posX, ep.posY, ep.posZ);
+	}
+
+	private void movePlayerBack(EntityPlayer ep) {
+		cameraIsMoved = false;
+		ep.posX = playerCam[0];
+		ep.posY = playerCam[1];
+		ep.posZ = playerCam[2];
+		ep.rotationYaw = (float) playerCam[3];
+		ep.rotationPitch = (float) playerCam[4];
 	}
 }

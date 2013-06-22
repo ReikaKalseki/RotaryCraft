@@ -243,7 +243,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
-				tc.activate(ep);
+				//tc.activate(ep);
 				return true;
 			}
 		}
