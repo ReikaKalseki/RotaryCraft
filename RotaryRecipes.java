@@ -269,6 +269,8 @@ public class RotaryRecipes {
 				"  B", " C ", "G  ", 'G', ItemStacks.steelgear, 'B', ItemStacks.bearing, 'C', ItemStacks.shaftcore});
 		GameRegistry.addRecipe(ItemStacks.mirror, new Object[]{
 				"   ", "GGG", "III", 'G', Block.glass, 'I', Item.ingotIron});
+		GameRegistry.addRecipe(ItemStacks.railhead, new Object[]{
+				"LLL", "LPL", "LLL", 'P', ItemStacks.basepanel, 'L', ItemStacks.lim});
 
 		GameRegistry.addRecipe(ItemStacks.bedingot, new Object[]{
 				" B ", "BSB", " B ", 'S', ItemStacks.steelingot, 'B', ItemStacks.bedrockdust});

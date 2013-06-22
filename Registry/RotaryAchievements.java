@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
@@ -70,7 +71,7 @@ public enum RotaryAchievements {
 
 	private RotaryAchievements(String l, int xc, int yc, ItemStack tag, Achievement p, boolean s) {
 		id = ExtraConfigIDs.ACHIEVEMENT.getValue()+this.ordinal();
-		l = label;
+		label = l;
 		x = xc;
 		y = yc;
 		icon = tag;
@@ -97,7 +98,7 @@ public enum RotaryAchievements {
 
 	private RotaryAchievements(String l, int xc, int yc, ItemStack tag, int p, boolean s) {
 		id = ExtraConfigIDs.ACHIEVEMENT.getValue()+this.ordinal();
-		l = label;
+		label = l;
 		x = xc;
 		y = yc;
 		icon = tag;
@@ -118,9 +119,12 @@ public enum RotaryAchievements {
 				parent = list[i].getSelfReference();
 			else
 				parent = list[i].parent;
-			RotaryCraft.achievements[i] = new Achievement(list[i].id, list[i].name(), list[i].x, list[i].y, list[i].icon, list[i].parent).registerAchievement();
+			RotaryCraft.achievements[i] = new Achievement(list[i].id, list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent).registerAchievement();
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();
+			if (ConfigRegistry.LOGLOADING.getState()) {
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Registering achievement "+list[i].name()+" with ingame name \""+list[i].getName()+"\".");
+			}
 		}
 		AchievementPage.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));
 	}

@@ -79,152 +79,152 @@ public class ItemScrewdriver extends ItemRotaryTool
 			world.markBlockForUpdate(x, y, z);
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		if (m == MachineRegistry.ENGINE) {
-			TileEntityEngine clicked = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
-			int dmg = damage;
-			while (damage > 3)
-				damage -= 4;
-			if (damage == 3)
-				clicked.setBlockMetadata(dmg-3);
-			else
-				clicked.setBlockMetadata(dmg+1);
-			return true;
-		}
-		if (m == MachineRegistry.FLYWHEEL) {
-			TileEntityFlywheel clicked = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
-			if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
-				clicked.setBlockMetadata(damage+1);
-			else
-				clicked.setBlockMetadata(damage-3);
-			return true;
-		}
-		if (m == MachineRegistry.ADVANCEDGEARS) {
-			TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
-			if (damage != 3 && damage != 7 && damage != 11)
-				clicked.setBlockMetadata(damage+1);
-			else
-				clicked.setBlockMetadata(damage-3);
-			return true;
-		}
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
-			MaterialRegistry type = ts.type;
-			if (damage < 5)
-				ts.setBlockMetadata(damage+1);
-			if (damage == 5)
-				ts.setBlockMetadata(0);
-			if (damage > 5 && damage < 9)
-				ts.setBlockMetadata(damage+1);
-			if (damage == 9)
-				ts.setBlockMetadata(6);
-			TileEntityShaft ts1 = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
-			ts1.type = type;
-			return true;
-		}
-		if (m == MachineRegistry.FLOODLIGHT) {
-			if (ep.isSneaking()) {
-				TileEntityFloodlight clicked = (TileEntityFloodlight)world.getBlockTileEntity(x, y, z);
-				if (clicked != null) {
-					if (clicked.beammode)
-						clicked.beammode = false;
-					else
-						clicked.beammode = true;
-					clicked.lightsOut(world, x, y, z);
-					return true;
-				}
-			}
-		}
-		if (m.isCannon()) {
-			if (ep.isSneaking()) {
-				TileEntityAimedCannon clicked = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
-				if (clicked != null) {
-					if (clicked.targetPlayers)
-						clicked.targetPlayers = false;
-					else
-						clicked.targetPlayers = true;
-					return true;
-				}
-			}
-		}
-		if (m == MachineRegistry.TNTCANNON) {
-			TileEntityTNTCannon clicked = (TileEntityTNTCannon)world.getBlockTileEntity(x, y, z);
-			if (clicked != null) {
-				if (clicked.targetMode)
-					clicked.targetMode = false;
+		if (m != null) {
+			if (m == MachineRegistry.ENGINE) {
+				TileEntityEngine clicked = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+				int dmg = damage;
+				while (damage > 3)
+					damage -= 4;
+				if (damage == 3)
+					clicked.setBlockMetadata(dmg-3);
 				else
-					clicked.targetMode = true;
+					clicked.setBlockMetadata(dmg+1);
 				return true;
 			}
-		}
-		if (m == MachineRegistry.BUCKETFILLER) {
-			TileEntityBucketFiller clicked = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z);
-			if (clicked != null) {
-				if (clicked.filling)
-					clicked.filling = false;
-				else
-					clicked.filling = true;
-				return true;
-			}
-		}
-		if (m == MachineRegistry.GPR) {
-			TileEntityGPR clicked = (TileEntityGPR)world.getBlockTileEntity(x, y, z);
-			if (clicked != null) {
-				if (clicked.xdir)
-					clicked.xdir = false;
-				else
-					clicked.xdir = true;
-				return true;
-			}
-		}
-		if (m == MachineRegistry.CCTV) {
-			TileEntityCCTV clicked = (TileEntityCCTV)world.getBlockTileEntity(x, y, z);
-			if (ep.isSneaking()) {
-				clicked.theta -= 5;
-
-			}
-			else {
-				clicked.phi += 5;
-			}
-			return true;
-		}
-		if (m == MachineRegistry.GEARBOX) {
-			if (ep.isSneaking()) {
-				TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
-				if (clicked.reduction)
-					clicked.reduction = false;
-				else
-					clicked.reduction = true;
-
-			}
-			else {
-				TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+			if (m == MachineRegistry.FLYWHEEL) {
+				TileEntityFlywheel clicked = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
 				if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
 					clicked.setBlockMetadata(damage+1);
 				else
 					clicked.setBlockMetadata(damage-3);
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", world.getBlockMetadata(x, y, z)));
+				return true;
 			}
-			return true;
-		}
-		if (m == MachineRegistry.SPLITTER && (!ep.isSneaking())) {
-			TileEntitySplitter clicked = (TileEntitySplitter)teb;
-			if (damage < 7 || (damage < 15 && damage > 7))
-				clicked.setBlockMetadata(damage+1);
-			if (damage == 7)
-				clicked.setBlockMetadata(0);
-			if (damage == 15)
-				clicked.setBlockMetadata(8);
-			return true;
-		}
-		if (m == MachineRegistry.SPLITTER && (ep.isSneaking())) {	// Toggle in/out
-			TileEntitySplitter clicked = (TileEntitySplitter)teb;
-			if (damage < 8)
-				clicked.setBlockMetadata(damage+8);
-			else
-				clicked.setBlockMetadata(damage-8);
-			return true;
-		}
-		if (m != null) {
+			if (m == MachineRegistry.ADVANCEDGEARS) {
+				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+				if (damage != 3 && damage != 7 && damage != 11)
+					clicked.setBlockMetadata(damage+1);
+				else
+					clicked.setBlockMetadata(damage-3);
+				return true;
+			}
+			if (m == MachineRegistry.SHAFT) {
+				TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+				MaterialRegistry type = ts.type;
+				if (damage < 5)
+					ts.setBlockMetadata(damage+1);
+				if (damage == 5)
+					ts.setBlockMetadata(0);
+				if (damage > 5 && damage < 9)
+					ts.setBlockMetadata(damage+1);
+				if (damage == 9)
+					ts.setBlockMetadata(6);
+				TileEntityShaft ts1 = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+				ts1.type = type;
+				return true;
+			}
+			if (m == MachineRegistry.FLOODLIGHT) {
+				if (ep.isSneaking()) {
+					TileEntityFloodlight clicked = (TileEntityFloodlight)world.getBlockTileEntity(x, y, z);
+					if (clicked != null) {
+						if (clicked.beammode)
+							clicked.beammode = false;
+						else
+							clicked.beammode = true;
+						clicked.lightsOut(world, x, y, z);
+						return true;
+					}
+				}
+			}
+			if (m.isCannon()) {
+				if (ep.isSneaking()) {
+					TileEntityAimedCannon clicked = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
+					if (clicked != null) {
+						if (clicked.targetPlayers)
+							clicked.targetPlayers = false;
+						else
+							clicked.targetPlayers = true;
+						return true;
+					}
+				}
+			}
+			if (m == MachineRegistry.TNTCANNON) {
+				TileEntityTNTCannon clicked = (TileEntityTNTCannon)world.getBlockTileEntity(x, y, z);
+				if (clicked != null) {
+					if (clicked.targetMode)
+						clicked.targetMode = false;
+					else
+						clicked.targetMode = true;
+					return true;
+				}
+			}
+			if (m == MachineRegistry.BUCKETFILLER) {
+				TileEntityBucketFiller clicked = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z);
+				if (clicked != null) {
+					if (clicked.filling)
+						clicked.filling = false;
+					else
+						clicked.filling = true;
+					return true;
+				}
+			}
+			if (m == MachineRegistry.GPR) {
+				TileEntityGPR clicked = (TileEntityGPR)world.getBlockTileEntity(x, y, z);
+				if (clicked != null) {
+					if (clicked.xdir)
+						clicked.xdir = false;
+					else
+						clicked.xdir = true;
+					return true;
+				}
+			}
+			if (m == MachineRegistry.CCTV) {
+				TileEntityCCTV clicked = (TileEntityCCTV)world.getBlockTileEntity(x, y, z);
+				if (ep.isSneaking()) {
+					clicked.theta -= 5;
+
+				}
+				else {
+					clicked.phi += 5;
+				}
+				return true;
+			}
+			if (m == MachineRegistry.GEARBOX) {
+				if (ep.isSneaking()) {
+					TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+					if (clicked.reduction)
+						clicked.reduction = false;
+					else
+						clicked.reduction = true;
+
+				}
+				else {
+					TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+					if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
+						clicked.setBlockMetadata(damage+1);
+					else
+						clicked.setBlockMetadata(damage-3);
+					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", world.getBlockMetadata(x, y, z)));
+				}
+				return true;
+			}
+			if (m == MachineRegistry.SPLITTER && (!ep.isSneaking())) {
+				TileEntitySplitter clicked = (TileEntitySplitter)teb;
+				if (damage < 7 || (damage < 15 && damage > 7))
+					clicked.setBlockMetadata(damage+1);
+				if (damage == 7)
+					clicked.setBlockMetadata(0);
+				if (damage == 15)
+					clicked.setBlockMetadata(8);
+				return true;
+			}
+			if (m == MachineRegistry.SPLITTER && (ep.isSneaking())) {	// Toggle in/out
+				TileEntitySplitter clicked = (TileEntitySplitter)teb;
+				if (damage < 8)
+					clicked.setBlockMetadata(damage+8);
+				else
+					clicked.setBlockMetadata(damage-8);
+				return true;
+			}
 			int max = m.getNumberDirections()-1;
 			if (m.hasModel()) {
 				RotaryCraftTileEntity t = (RotaryCraftTileEntity)teb;

@@ -83,6 +83,10 @@ public final class ItemStacks {
 	public static final ItemStack prop = new ItemStack(RotaryCraft.heatcraft, 1, 5);
 	public static final ItemStack hub = new ItemStack(RotaryCraft.heatcraft, 1, 6);
 	public static final ItemStack mirror = new ItemStack(RotaryCraft.heatcraft, 1, 7);
+	public static final ItemStack generator = new ItemStack(RotaryCraft.heatcraft, 1, 8);
+	public static final ItemStack railhead = new ItemStack(RotaryCraft.heatcraft, 1, 9);
+	public static final ItemStack railbase = new ItemStack(RotaryCraft.heatcraft, 1, 10);
+	public static final ItemStack railaim = new ItemStack(RotaryCraft.heatcraft, 1, 11);
 
 	public static final ItemStack impeller = new ItemStack(RotaryCraft.enginecraft, 1, 0);
 	public static final ItemStack compressor = new ItemStack(RotaryCraft.enginecraft, 1, 1);

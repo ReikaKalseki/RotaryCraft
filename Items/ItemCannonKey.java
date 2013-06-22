@@ -91,6 +91,7 @@ public class ItemCannonKey extends ItemBasic {
 			if (!ep.capabilities.isCreativeMode)
 				ep.setCurrentItemOrArmor(0, null);
 		}
+
 		return true;
 	}
 

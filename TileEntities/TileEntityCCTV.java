@@ -340,4 +340,8 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	private void movePlayerToCamera() {
+
+	}
 }

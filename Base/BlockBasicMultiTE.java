@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -31,7 +32,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ForgeHooks;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -243,7 +243,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
-				;//tc.activate(ep);
+				tc.activate(ep);
 				return true;
 			}
 		}
@@ -300,14 +300,49 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	@Override
-	public boolean canHarvestBlock(EntityPlayer player, int meta)
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
-		return ForgeHooks.canHarvestBlock(this, player, meta);
+		if (this.canHarvest(world, player, x, y, z));
+		this.harvestBlock(world, player, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		ItemStack eitem = ep.inventory.getCurrentItem();
+		if (eitem == null)
+			return false;
+		if (!(eitem.getItem() instanceof ItemPickaxe))
+			return false;
+		if (eitem.itemID == Item.pickaxeWood.itemID)
+			return false;
+		return !ep.capabilities.isCreativeMode;
 	}
 
 	@Override
-	public final void breakBlock(World world, int x, int y, int z, int par5, int par6)
+	public final void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta)
 	{
+		if (!this.canHarvest(world, ep, x, y, z))
+			return;
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m != null) {
+			ItemStack is = m.getCraftedProduct();
+			List li;
+			if (m.isEnchantable()) {
+				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
+				is = ReikaEnchantmentHelper.applyEnchantments(is, map);
+			}
+			if (m.isBroken((RotaryCraftTileEntity)te))
+				li = m.getBrokenProducts();
+			else
+				li = ReikaJavaLibrary.makeListFrom(is);
+			ReikaItemHelper.dropItems(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), li);
+		}
+		super.harvestBlock(world, ep, x, y, z, meta);
+	}
+
+	@Override
+	public final void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory)
 			RotaryAux.dropInventory(world, x, y, z);
@@ -322,20 +357,6 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityMusicBox) {
 			((TileEntityMusicBox)te).deleteFiles(x, y, z);
-		}
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		if (m != null) {
-			ItemStack is = m.getCraftedProduct();
-			List li;
-			if (m.isEnchantable()) {
-				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
-				is = ReikaEnchantmentHelper.applyEnchantments(is, map);
-			}
-			if (m.isBroken((RotaryCraftTileEntity)te))
-				li = m.getBrokenProducts();
-			else
-				li = ReikaJavaLibrary.makeListFrom(is);
-			ReikaItemHelper.dropItems(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), li);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

@@ -73,6 +73,8 @@ public class RenderRailGun extends RotaryTERenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
+		if (tile == null)
+			return;
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityRailGunAt((TileEntityRailGun)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)

@@ -18,7 +18,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class RotaryNames {
 
 	public static final String[] engineNames = {
-		"DC Electric Engine", "Wind Turbine", "Steam Engine", "Gasoline Engine", "AC Electric Engine", "Performance Engine", "Hydrokinetic Engine", "Microturbine", "Gas Turbine"
+		"DC Electric Engine", "Wind Turbine", "Steam Engine", "Gasoline Engine", "AC Electric Engine", "Performance Engine",
+		"Hydrokinetic Engine", "Microturbine", "Gas Turbine"
 	};
 
 	public static final String[] gearboxNames = {
@@ -77,7 +78,8 @@ public class RotaryNames {
 	};
 
 	public static final String[] heatPartNames = {
-		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror"
+		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror",
+		"Generator", "Railgun Accelerator", "Turret Mount", "Railgun Aiming Unit"
 	};
 
 	public static final String[] gearUnitNames = {
@@ -97,7 +99,8 @@ public class RotaryNames {
 	};
 
 	public static final String[] powderNames = {
-		"Netherrack Dust", "Tar Sand", "Sludge", "Sawdust", "Bedrock Dust", "Salt", "Ammonium Nitrate" , "Silver Iodide", "Aluminum Powder"
+		"Netherrack Dust", "Tar Sand", "Sludge", "Sawdust", "Bedrock Dust", "Salt", "Ammonium Nitrate" , "Silver Iodide",
+		"Aluminum Powder"
 	};
 
 	public static final String[] extractNames = {
@@ -125,9 +128,9 @@ public class RotaryNames {
 
 	public static final String[] modOreNames = {
 		"Lead", "Copper", "Silver", "Titanium", "Tungsten", "Galena", "Tin", "Platinum", "Nickel", "Iridium", "Aluminum", "Sulfur",
-		"Cobalt", "Uranium", "Saltpeter", "Bauxite", "Ruby", "Sapphire", "Nikolite", "Cinnabar", "Green Sapphire", "Amethyst", "Black Diamond",
-		"Sitrine", "Cubic Zirconia", "Fuschia", "Jet" ,"Olivine", "Opal", "Smoky Quartz", "Sun", "Topaz", "Turquoise", "White Alabaster",
-		"Ardite", "Amber", "Pyrite", "Sphalerite", "Sodalite", "Sheldonite", "Certus Quartz"
+		"Cobalt", "Uranium", "Saltpeter", "Bauxite", "Ruby", "Sapphire", "Nikolite", "Cinnabar", "Green Sapphire", "Amethyst",
+		"Black Diamond", "Sitrine", "Cubic Zirconia", "Fuschia", "Jet" ,"Olivine", "Opal", "Smoky Quartz", "Sun", "Topaz", "Turquoise",
+		"White Alabaster", "Ardite", "Amber", "Pyrite", "Sphalerite", "Sodalite", "Sheldonite", "Certus Quartz"
 	};
 
 	public static void addNames() {
