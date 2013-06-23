@@ -197,7 +197,7 @@ public enum MachineRegistry {
 	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
 	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0, "RenderMirror"),
 	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1, "RenderSolar"),
-	SPYCAM(				"Spy Camera",				BlockMIMachine.class,		TileEntitySpyCam.class,				18),
+	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18),
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3);
 
 

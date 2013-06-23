@@ -126,6 +126,7 @@ public enum HandbookRegistry {
 	BUCKET(MachineRegistry.BUCKETFILLER),
 	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
 	SPYCAM(MachineRegistry.SPYCAM),
+	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
 	SPRING(ItemRegistry.SPRING),

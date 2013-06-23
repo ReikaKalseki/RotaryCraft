@@ -14,7 +14,6 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-
 public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 
 	@Override

@@ -176,8 +176,7 @@ public class RotaryCraft implements DragonAPIMod {
 	}
 
 	@PostInit // Like the modsLoaded thing from ModLoader
-	public void postload(FMLPostInitializationEvent evt)
-	{
+	public void postload(FMLPostInitializationEvent evt) {
 		//LoadAux.texMsg();
 		if (Loader.isModLoaded("OptiFine")) {
 			;//throw new ModIncompatibilityException(instance, "Optifine", "Optifine breaks rendering of many RotaryCraft items and features. Remove it if possible for full RotaryCraft functionality.");

@@ -65,12 +65,12 @@ public class GuiHandbook extends GuiScreen
 	public static final int ENGINESTART = 3;
 	public static final int TRANSSTART = 5;
 	public static final int MACHINESTART = 7;
-	public static final int TOOLSTART = 14;
-	public static final int CRAFTSTART = 16;
-	public static final int RESOURCESTART = 22;
+	public static final int TOOLSTART = 15;
+	public static final int CRAFTSTART = 17;
+	public static final int RESOURCESTART = 23;
 	public static final int MISCSTART = 2;
 
-	public static final int MAXPAGE = 24;
+	public static final int MAXPAGE = 25;
 
 	@SuppressWarnings("unused")
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)

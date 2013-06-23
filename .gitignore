@@ -91,6 +91,7 @@ build/
 *.pidb
 *.log
 *.scc
+*.info
 
 # Visual C++ cache files
 ipch/
