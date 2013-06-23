@@ -17,7 +17,8 @@ public enum GuiRegistry {
 	HANDBOOKPAGE(),
 	WORLDEDIT(),
 	LOADEDHANDBOOK(),
-	SAFEPLAYERS();
+	SAFEPLAYERS(),
+	SPYCAM;
 
 	private static final GuiRegistry[] guiList = GuiRegistry.values();
 

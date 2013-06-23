@@ -205,12 +205,6 @@ public class ItemMachineRenderer implements IItemRenderer {
 			case RESERVOIR:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityReservoir(), a, -0.1D, b, 0.0F);
 				break;
-			case SHAFT:
-				if (item.getItemDamage() == 6)
-					TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -10000F);
-				else
-					TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
-				break;
 			case FRACTIONATOR:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFractionator(), a, 0.0D, b, 0.0F);
 				break;

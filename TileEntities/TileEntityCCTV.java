@@ -12,17 +12,14 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.RemoteControlMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -30,7 +27,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInventory {
+public class TileEntityCCTV extends RemoteControlMachine {
 
 	public boolean cameraIsMoved = false;
 	private double[] playerCam = new double[5];
@@ -39,11 +36,6 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	public EntityPlayer clicked;
 	public float theta;
 	public static final boolean ISCAMERAMODE = true;
-	private boolean on = false;
-	private int tickcount2 = 0;
-	public int[] colors = new int[3];
-
-	public ItemStack[] inv = new ItemStack[4];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -105,19 +97,6 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		tickcount = 0;
 		this.movePlayerBack(e);
 		//this.moveCameraToPlayer();
-	}
-
-	private void setColors() {
-		for (int i = 0; i < 3; i++) {
-			if (inv[i+1] == null)
-				colors[i] = -1;
-			else if (inv[i+1].itemID != Item.dyePowder.itemID)
-				colors[i] = -1;
-			else
-				colors[i] = inv[i+1].getItemDamage();
-			if (colors[i] == -1)
-				on = false;
-		}
 	}
 
 	@Override
@@ -207,106 +186,12 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return 4;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize == 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {
-	}
-
-	@Override
-	public void closeChest() {
-	}
-
-	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
-		if (i == 0)
-			return is.itemID == ItemRegistry.SPRING.getID();
-		return is.itemID == Item.dyePowder.itemID;
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 		theta = NBT.getFloat("thetad");
 		owner = NBT.getString("sowner");
 		cameraIsMoved = NBT.getBoolean("moved");
-		colors = NBT.getIntArray("color");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	/**
@@ -321,26 +206,11 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 			NBT.setString("sowner", owner);
 		NBT.setFloat("thetad", theta);
 		NBT.setBoolean("moved", cameraIsMoved);
-		NBT.setIntArray("color", colors);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -348,7 +218,7 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		return 0;
 	}
 
-	public void movePlayerToCamera(EntityPlayer ep) {
+	private void movePlayerToCamera(EntityPlayer ep) {
 		if (ep == null)
 			return;
 		cameraIsMoved = true;
@@ -386,5 +256,10 @@ public class TileEntityCCTV extends RotaryCraftTileEntity implements ISidedInven
 		ep.posZ = playerCam[2];
 		ep.rotationYaw = (float) playerCam[3];
 		ep.rotationPitch = (float) playerCam[4];
+	}
+
+	@Override
+	public void activate(World world, EntityPlayer ep, int x, int y, int z) {
+		this.movePlayerToCamera(ep);
 	}
 }

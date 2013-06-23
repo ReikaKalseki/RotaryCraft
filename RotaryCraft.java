@@ -22,6 +22,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Interfaces.DragonAPIMod;
 import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
@@ -141,7 +142,7 @@ public class RotaryCraft implements DragonAPIMod {
 	}
 
 	@PreInit
-	public void loadConfig(FMLPreInitializationEvent evt) {
+	public void preload(FMLPreInitializationEvent evt) {
 		RotaryConfig.initProps("RotaryCraft", evt);
 		proxy.registerSounds();
 	}
@@ -175,7 +176,7 @@ public class RotaryCraft implements DragonAPIMod {
 	}
 
 	@PostInit // Like the modsLoaded thing from ModLoader
-	public void myNewPostLoadMethod(FMLPostInitializationEvent evt)
+	public void postload(FMLPostInitializationEvent evt)
 	{
 		//LoadAux.texMsg();
 		if (Loader.isModLoaded("OptiFine")) {
@@ -232,8 +233,13 @@ public class RotaryCraft implements DragonAPIMod {
 	}
 
 	@Override
-	public URL getDocumentationSite() throws MalformedURLException {
-		return new URL("http://www.minecraftforum.net/topic/1685078-152forgetechrotarycraft-machines-power-automation/");
+	public URL getDocumentationSite() {
+		try {
+			return new URL("http://www.minecraftforum.net/topic/1685078-152forgetechrotarycraft-machines-power-automation/");
+		}
+		catch (MalformedURLException e) {
+			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
+		}
 	}
 
 	@Override
@@ -242,8 +248,13 @@ public class RotaryCraft implements DragonAPIMod {
 	}
 
 	@Override
-	public URL getWiki() throws MalformedURLException {
-		return new URL("http://rotary-craft.wikia.com/wiki/Rotary_Craft_Wiki");
+	public URL getWiki() {
+		try {
+			return new URL("http://rotary-craft.wikia.com/wiki/Rotary_Craft_Wiki");
+		}
+		catch (MalformedURLException e) {
+			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
+		}
 	}
 
 }

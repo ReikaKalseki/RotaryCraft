@@ -176,7 +176,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			if (!MachineRegistry.machineList[i].hasCustomPlacerItem()) {
+			if (!MachineRegistry.machineList[i].hasCustomPlacerItem() && MachineRegistry.machineList[i].isAvailableInCreativeInventory()) {
 				ItemStack item = new ItemStack(par1, 1, i);
 				par3List.add(item);
 			}

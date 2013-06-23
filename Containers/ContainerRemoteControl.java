@@ -12,11 +12,11 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
+import Reika.RotaryCraft.Base.RemoteControlMachine;
 
-public class ContainerCCTV extends CoreContainer {
+public class ContainerRemoteControl extends CoreContainer {
 
-	public ContainerCCTV(EntityPlayer player, TileEntityCCTV te) {
+	public ContainerRemoteControl(EntityPlayer player, RemoteControlMachine te) {
 		super(player, te);
 
 		this.addSlotToContainer(new Slot(te, 0, 80, 17));

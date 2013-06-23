@@ -11,28 +11,29 @@ package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 
 public enum Manufacturers {
 
-	BEDROCKBREAKER("", ""),
-	DCENGINE("", ""),
-	WINDENGINE("", ""),
-	STEAMENGINE("", ""),
-	GASENGINE("", ""),
-	ACENGINE("", ""),
-	PERFENGINE("", ""),
-	HYDROENGINE("", ""),
-	MICROENGINE("", ""),
-	JETENGINE("", "");
+	BEDROCKBREAKER(""),
+	DCENGINE(""),
+	WINDENGINE(""),
+	STEAMENGINE(""),
+	GASENGINE(""),
+	ACENGINE(""),
+	PERFENGINE(""),
+	HYDROENGINE(""),
+	MICROENGINE(""),
+	JETENGINE("");
 
 	public static final Manufacturers[] list = Manufacturers.values();
 
 	private String makerName;
 	private String desc;
 
-	private Manufacturers(String n, String d) {
+	private Manufacturers(String n) {
 		makerName = n;
-		desc = d;
+		desc = RotaryDescriptions.getPartDesc(this.ordinal());
 	}
 
 	public static boolean hasSubMakers(MachineRegistry m) {

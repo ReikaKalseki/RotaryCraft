@@ -21,12 +21,12 @@ import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
+import Reika.RotaryCraft.Base.RemoteControlMachine;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
-import Reika.RotaryCraft.Containers.ContainerCCTV;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
@@ -46,6 +46,7 @@ import Reika.RotaryCraft.Containers.ContainerPerformance;
 import Reika.RotaryCraft.Containers.ContainerProjector;
 import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
 import Reika.RotaryCraft.Containers.ContainerPurifier;
+import Reika.RotaryCraft.Containers.ContainerRemoteControl;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.ContainerScreen;
@@ -57,7 +58,6 @@ import Reika.RotaryCraft.GUIs.GuiAerosolizer;
 import Reika.RotaryCraft.GUIs.GuiBevel;
 import Reika.RotaryCraft.GUIs.GuiBlastFurnace;
 import Reika.RotaryCraft.GUIs.GuiBorer;
-import Reika.RotaryCraft.GUIs.GuiCCTV;
 import Reika.RotaryCraft.GUIs.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.GuiCVT;
 import Reika.RotaryCraft.GUIs.GuiCannon;
@@ -85,12 +85,14 @@ import Reika.RotaryCraft.GUIs.GuiPlayerDetector;
 import Reika.RotaryCraft.GUIs.GuiProjector;
 import Reika.RotaryCraft.GUIs.GuiPulseFurnace;
 import Reika.RotaryCraft.GUIs.GuiPurifier;
+import Reika.RotaryCraft.GUIs.GuiRemoteControl;
 import Reika.RotaryCraft.GUIs.GuiReservoir;
 import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.GuiSonic;
 import Reika.RotaryCraft.GUIs.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.GuiSplitter;
+import Reika.RotaryCraft.GUIs.GuiSpyCam;
 import Reika.RotaryCraft.GUIs.GuiSteam;
 import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
@@ -103,7 +105,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -131,6 +132,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
@@ -228,8 +230,8 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityScreen) {
 			return new ContainerScreen(player, (TileEntityScreen)te);
 		}
-		if (te instanceof TileEntityCCTV) {
-			return new ContainerCCTV(player, (TileEntityCCTV)te);
+		if (te instanceof RemoteControlMachine) {
+			return new ContainerRemoteControl(player, (RemoteControlMachine)te);
 		}
 		if (te instanceof TileEntityPurifier) {
 			return new ContainerPurifier(player, (TileEntityPurifier)te);
@@ -274,6 +276,8 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiWorldEdit(player, world);
 		if (gr == GuiRegistry.SAFEPLAYERS)
 			return new GuiSafePlayerList(player, (TileEntityAimedCannon)te);
+		if (gr == GuiRegistry.SPYCAM)
+			return new GuiSpyCam(player, (TileEntitySpyCam)te);
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}
@@ -385,8 +389,8 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityScreen) {
 			return new GuiCCTVScreen(player, (TileEntityScreen)te);
 		}
-		if (te instanceof TileEntityCCTV) {
-			return new GuiCCTV(player, (TileEntityCCTV)te);
+		if (te instanceof RemoteControlMachine) {
+			return new GuiRemoteControl(player, (RemoteControlMachine)te);
 		}
 		if (te instanceof TileEntityPurifier) {
 			return new GuiPurifier(player, (TileEntityPurifier)te);
@@ -399,6 +403,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new GuiLandmine(player, (TileEntityLandmine)te);
+		}
+		if (te instanceof TileEntitySpyCam) {
+			return new GuiSpyCam(player, (TileEntitySpyCam)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

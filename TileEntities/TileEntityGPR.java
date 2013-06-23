@@ -36,19 +36,11 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	private int oldmeta = 0;
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-	{
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)	{
 		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-		{
 			return false;
-		}
-
 		if (yCoord > 96)
 			return false;
-		/*
-        if (this.power < MINPOWER)
-        	return false;*/
-
 		return super.isUseableByPlayer(par1EntityPlayer);
 	}
 

@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.RemoteControlMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelScreen;
@@ -69,15 +70,15 @@ public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 		int[] cameraPos = this.getCameraFromColors(worldObj);
 		if (!this.isValidCamera(cameraPos))
 			return;
-		TileEntityCCTV te = (TileEntityCCTV)worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]);
+		RemoteControlMachine te = (RemoteControlMachine)worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]);
 		//te.moveCameraToLook(ep);
-		te.movePlayerToCamera(ep);
+		te.activate(worldObj, ep, cameraPos[0], cameraPos[1], cameraPos[2]);
 	}
 
 	private boolean isValidCamera(int[] cameraPos) {
 		if (cameraPos[0] == xCoord && cameraPos[1] == yCoord && cameraPos[2] == zCoord)
 			return false;
-		return (worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]) instanceof TileEntityCCTV);
+		return (worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]) instanceof RemoteControlMachine);
 	}
 
 	private boolean canRun() {
@@ -110,8 +111,8 @@ public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 				for (int k = -range; k <= range; k++) {
 					TileEntity te = world.getBlockTileEntity(xCoord+i, yCoord+j, zCoord+k);
 					if (te != null) {
-						if (te instanceof TileEntityCCTV) {
-							TileEntityCCTV cc = (TileEntityCCTV)te;
+						if (te instanceof RemoteControlMachine) {
+							RemoteControlMachine cc = (RemoteControlMachine)te;
 							int[] camcolor = {cc.colors[0], cc.colors[1], cc.colors[2]};
 							if (camcolor[0] == colors[0] && camcolor[1] == colors[1] && camcolor[2] == colors[2]) {
 								cameras.put(colors, new int[]{cc.xCoord, cc.yCoord, cc.zCoord});

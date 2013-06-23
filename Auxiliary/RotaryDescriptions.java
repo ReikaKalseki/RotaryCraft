@@ -60,6 +60,8 @@ public final class RotaryDescriptions {
 	private static ArrayList<String[]> category = new ArrayList<String[]>();
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
+	private static final ArrayList<String> partDescs = new ArrayList<String>();
+
 	public static Object[][] machineNotes = {
 		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque()},
 		{PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed()},
@@ -115,7 +117,8 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{},
-		{}
+		{},
+		{},
 	};
 
 	public static Object[][] machineData = {
@@ -173,7 +176,8 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{},
-		{}
+		{},
+		{},
 	};
 
 	public static void loadData() {
@@ -424,6 +428,30 @@ public final class RotaryDescriptions {
 			while((line = p.readLine()) != null) {
 				if (!line.isEmpty())
 					info.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	public static String getPartDesc(int i) {
+		if (partDescs.size() == 0)
+			fillPartDescs();
+		return partDescs.get(i);
+	}
+
+	private static void fillPartDescs() {
+		String path = "Resources/ManufacturerDescs.txt";
+		InputStream in = RotaryCraft.class.getResourceAsStream(path);
+		try {
+			BufferedReader p = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while((line = p.readLine()) != null) {
+				if (!line.isEmpty())
+					partDescs.add(line);
 			}
 			p.close();
 		}

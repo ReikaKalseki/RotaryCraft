@@ -11,13 +11,13 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.ContainerCCTV;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
+import Reika.RotaryCraft.Base.RemoteControlMachine;
+import Reika.RotaryCraft.Containers.ContainerRemoteControl;
 
-public class GuiCCTV extends GuiNonPoweredMachine {
+public class GuiRemoteControl extends GuiNonPoweredMachine {
 
-	public GuiCCTV(EntityPlayer p5ep, TileEntityCCTV te) {
-		super(new ContainerCCTV(p5ep, te), te);
+	public GuiRemoteControl(EntityPlayer p5ep, RemoteControlMachine te) {
+		super(new ContainerRemoteControl(p5ep, te), te);
 		ep = p5ep;
 	}
 

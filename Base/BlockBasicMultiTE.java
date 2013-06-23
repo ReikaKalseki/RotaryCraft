@@ -193,6 +193,7 @@ public abstract class BlockBasicMultiTE extends Block {
 					int size = is.stackSize;
 					if (tr.liquidLevel >= size) {
 						LiquidRegistry liq = LiquidRegistry.getLiquidFromBlock(tr.liquidID);
+						tr.liquidLevel -= size;
 						ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(liq.getHeldItemFor(), size));
 						return true;
 					}
@@ -243,7 +244,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
-				//tc.activate(ep);
+				tc.activate(ep);
 				return true;
 			}
 		}

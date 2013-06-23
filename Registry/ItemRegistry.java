@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Exception.IDConflictException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -206,16 +207,20 @@ public enum ItemRegistry {
 			return (instance.setUnlocalizedName(this.getUnlocName()));
 		}
 		catch (InstantiationException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.toString()+" did not allow instantiation!");
+			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" did not allow instantiation!");
 		}
 		catch (IllegalAccessException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.toString()+" threw illegal access exception! (Nonpublic constructor)");
+			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" threw illegal access exception! (Nonpublic constructor)");
 		}
 		catch (IllegalArgumentException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.toString()+" was given invalid parameters!");
+			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" was given invalid parameters!");
 		}
 		catch (InvocationTargetException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.toString()+" threw invocation target exception! Check Item ID conflicts!");
+			Throwable t = e.getCause();
+			if (t instanceof IllegalArgumentException)
+				throw new IDConflictException(RotaryCraft.instance, t);
+			else
+				throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" threw invocation target exception!");
 		}
 	}
 

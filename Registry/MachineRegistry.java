@@ -107,6 +107,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
+import Reika.RotaryCraft.TileEntities.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySolar;
@@ -114,6 +115,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
+import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
@@ -194,7 +196,9 @@ public enum MachineRegistry {
 	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
 	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
 	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0, "RenderMirror"),
-	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1, "RenderSolar");
+	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1, "RenderSolar"),
+	SPYCAM(				"Spy Camera",				BlockMIMachine.class,		TileEntitySpyCam.class,				18),
+	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3);
 
 
 	private String name;
@@ -865,5 +869,17 @@ public enum MachineRegistry {
 			return ReikaJavaLibrary.makeListFromArray(is);
 		}
 		return null;
+	}
+
+	public boolean isAvailableInCreativeInventory() {
+		if (this.isDummiedOut())
+			return false;
+		return true;
+	}
+
+	public boolean isDummiedOut() {
+		if (this == CCTV)
+			return true;
+		return false;
 	}
 }

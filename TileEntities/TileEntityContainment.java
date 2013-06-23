@@ -18,6 +18,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -63,6 +64,7 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, this.getRangedBox());
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLiving e = (EntityLiving)inbox.get(i);
+			e.attackEntityFrom(DamageSource.cactus, 0); //to prevent some despawns
 			if (ReikaEntityHelper.isHostile(e) && !(e instanceof EntityDragon || e instanceof EntityWither)) {
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;

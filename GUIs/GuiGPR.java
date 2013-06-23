@@ -18,14 +18,12 @@ public class GuiGPR extends GuiPowerOnlyMachine
 {
 
 	private TileEntityGPR gpr;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
 	int y;
 	public static final int UNIT = 2;
 
-	public GuiGPR(EntityPlayer p5ep, TileEntityGPR GPR)
-	{
+	public GuiGPR(EntityPlayer p5ep, TileEntityGPR GPR) {
 		super(new CoreContainer(p5ep, GPR), GPR);
 		gpr = GPR;
 		ySize = 215;
@@ -36,8 +34,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-	{
+	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
 		int j = (width - xSize) / 2;

@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import Reika.DragonAPI.Exception.IDConflictException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
@@ -121,7 +122,11 @@ public enum BlockRegistry {
 			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" was given invalid parameters!");
 		}
 		catch (InvocationTargetException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw invocation target exception! Check Block ID conflicts!");
+			Throwable t = e.getCause();
+			if (t instanceof IllegalArgumentException)
+				throw new IDConflictException(RotaryCraft.instance, t);
+			else
+				throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw invocation target exception!");
 		}
 	}
 

@@ -222,8 +222,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.SCREEN.getCraftedProduct(), new Object[]{
 			"sss", "mcs", "ppp", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'm', ItemStacks.screen, 'c', ItemStacks.pcb});
 
-		GameRegistry.addRecipe(MachineRegistry.CCTV.getCraftedProduct(), new Object[]{
-			" g ", "brs", " p ", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'b', Block.thinGlass, 'r', Item.redstone, 'g', Item.ingotGold});
+		//GameRegistry.addRecipe(MachineRegistry.CCTV.getCraftedProduct(), new Object[]{
+		//	" g ", "brs", " p ", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'b', Block.thinGlass, 'r', Item.redstone, 'g', Item.ingotGold});
 
 		GameRegistry.addRecipe(MachineRegistry.PURIFIER.getCraftedProduct(), new Object[]{
 			"sbs", "prp", "sps", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'r', Item.redstone, 'b', Block.fenceIron});

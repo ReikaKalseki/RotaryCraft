@@ -167,25 +167,25 @@ public class GuiHandbook extends GuiScreen
 				screen = INFOSTART;
 				break;
 			case 1:
-				screen = ENGINESTART;
+				screen = MISCSTART;
 				break;
 			case 2:
-				screen = TRANSSTART;
+				screen = ENGINESTART;
 				break;
 			case 3:
-				screen = MACHINESTART;
+				screen = TRANSSTART;
 				break;
 			case 4:
-				screen = TOOLSTART;
+				screen = MACHINESTART;
 				break;
 			case 5:
-				screen = CRAFTSTART;
+				screen = TOOLSTART;
 				break;
 			case 6:
-				screen = RESOURCESTART;
+				screen = CRAFTSTART;
 				break;
 			case 7:
-				screen = MISCSTART;
+				screen = RESOURCESTART;
 				break;
 			}
 			this.initGui();
