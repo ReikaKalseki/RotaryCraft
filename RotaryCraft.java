@@ -22,6 +22,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Interfaces.DragonAPIMod;
@@ -179,7 +180,8 @@ public class RotaryCraft implements DragonAPIMod {
 	public void postload(FMLPostInitializationEvent evt) {
 		//LoadAux.texMsg();
 		if (Loader.isModLoaded("OptiFine")) {
-			;//throw new ModIncompatibilityException(instance, "Optifine", "Optifine breaks rendering of many RotaryCraft items and features. Remove it if possible for full RotaryCraft functionality.");
+			String msg = "Optifine breaks rendering of many RotaryCraft items and features.\nRemove it if possible for full RotaryCraft functionality.";
+			throw new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 	}
 

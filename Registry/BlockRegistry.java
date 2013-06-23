@@ -124,7 +124,7 @@ public enum BlockRegistry {
 		catch (InvocationTargetException e) {
 			Throwable t = e.getCause();
 			if (t instanceof IllegalArgumentException)
-				throw new IDConflictException(RotaryCraft.instance, t);
+				throw new IDConflictException(RotaryCraft.instance, t.getMessage());
 			else
 				throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw invocation target exception!");
 		}

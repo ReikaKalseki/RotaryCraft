@@ -218,7 +218,7 @@ public enum ItemRegistry {
 		catch (InvocationTargetException e) {
 			Throwable t = e.getCause();
 			if (t instanceof IllegalArgumentException)
-				throw new IDConflictException(RotaryCraft.instance, t);
+				throw new IDConflictException(RotaryCraft.instance, t.getMessage());
 			else
 				throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" threw invocation target exception!");
 		}
