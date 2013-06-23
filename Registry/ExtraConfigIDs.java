@@ -34,7 +34,7 @@ public enum ExtraConfigIDs {
 	FLYWHEELITEMS("ItemBlock IDs", "Flywheel Items", 30643, Item.class),
 	MODEXTRACTS("Resource Item IDs", "Mod Ore Extractor Items", 30644, Item.class),
 
-	ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
+	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 
 	DECOBLOCKS("Extra Block IDs", "Deco Block", 450, Block.class),
 	BEDROCKSLICE("Extra Block IDs", "Bedrock Slice", 451, Block.class),

@@ -26,7 +26,7 @@ import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Interfaces.DragonAPIMod;
-import Reika.RotaryCraft.Auxiliary.AchievementDescriptions;
+import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -144,7 +144,7 @@ public class RotaryCraft implements DragonAPIMod {
 
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
-		RotaryConfig.initProps("RotaryCraft", evt);
+		RotaryConfig.initProps(evt);
 		proxy.registerSounds();
 	}
 
@@ -160,7 +160,7 @@ public class RotaryCraft implements DragonAPIMod {
 		RotaryRegistration.addTileEntities();
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
-		AchievementDescriptions.loadDesc();
+		AchievementAuxiliary.loadDesc();
 		RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
 		HandbookAuxData.loadNames();

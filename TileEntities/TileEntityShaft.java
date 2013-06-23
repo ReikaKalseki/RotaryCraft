@@ -265,9 +265,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			power = 0;
 			return;
 		}
-		this.testFailure();
-		int id = world.getBlockId(x, y, z);
-
+		//this.testFailure();
 		this.getIOSides(world, x, y, z, meta);
 		this.transferPower(world, x, y, z, meta);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
@@ -472,10 +470,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		torque = torquein * ratio;
 		power = omega*torque;
 
-		if (omega >= 32000000) {
+		this.testFailure();
+		if (omega >= 32000000 && !failed) {
 			this.getPlacer().triggerAchievement(RotaryAchievements.MRADS32.get());
 		}
-		if (power >= 1000000000)
+		if (power >= 1000000000 && !failed)
 			this.getPlacer().triggerAchievement(RotaryAchievements.GIGAWATT.get());
 	}
 
