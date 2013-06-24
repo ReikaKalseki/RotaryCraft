@@ -318,6 +318,9 @@ public class EntityRailGunShot extends EntityTurretShot {
 			if (el.isDead || el.getHealth() <= 0)
 				((EntityPlayer) el).triggerAchievement(RotaryAchievements.RAILKILLED.get());
 		}
+		el.motionX = motionX*power/15F;
+		el.motionY = motionY*power/15F;
+		el.motionZ = motionZ*power/15F;
 	}
 
 }

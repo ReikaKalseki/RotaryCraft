@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -100,7 +101,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
-		if (world.getBlockId(xread, yread, zread) != 0 && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, world.getBlockId(xread, yread, zread))) {
+		if (world.getBlockId(xread, yread, zread) != 0 && !(world.getBlockMaterial(xread, yread, zread) == Material.water || world.getBlockMaterial(xread, yread, zread) == Material.lava)) {
 			reqpow += (int)(DIGPOWER*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread));
 			if (ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread))) > mintorque)
 				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));

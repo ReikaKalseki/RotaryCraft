@@ -16,13 +16,14 @@ import java.net.URL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.SoundList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public enum SoundRegistry {
+public enum SoundRegistry implements SoundList {
 
 	ELECTRIC("elecengine"),
 	WIND("windengine"),

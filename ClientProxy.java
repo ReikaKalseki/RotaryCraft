@@ -14,9 +14,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.DragonAPI.Instantiable.SoundLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
-import Reika.RotaryCraft.Auxiliary.SoundLoader;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
@@ -29,6 +29,7 @@ import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -50,7 +51,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerSounds() {
 		//RotarySounds.addSounds();
-		MinecraftForge.EVENT_BUS.register(new SoundLoader());
+		MinecraftForge.EVENT_BUS.register(new SoundLoader(RotaryCraft.instance, SoundRegistry.soundList));
 	}
 
 	@Override
