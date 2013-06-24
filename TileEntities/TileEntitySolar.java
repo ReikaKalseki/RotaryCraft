@@ -32,6 +32,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	private int waterLevel = 0;
 	private float lightMultiplier = 0;
 
+	public static final int GENOMEGA = 1024;
+
 	@Override
 	public boolean canProvidePower() {
 		//return this.isMultiBlock(worldObj, xCoord, yCoord, zCoord) && this.getMultiBlockPosition(worldObj, xCoord, yCoord, zCoord)[1] == 0;
@@ -157,7 +159,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		writez = z;
 		writey = y-1;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
-		omega = 1024;
+		omega = GENOMEGA;
 		torque = (int)(2*this.getArrayOverallBrightness()*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1));
 		if (this.getArraySize() <= 0 || torque == 0 || waterLevel <= 0) {
 			omega = 0;

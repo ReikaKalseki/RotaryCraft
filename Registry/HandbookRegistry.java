@@ -54,6 +54,7 @@ public enum HandbookRegistry {
 	HYDROENGINE(MachineRegistry.ENGINE, EnumEngineType.HYDRO.ordinal()),
 	MICROTURB(MachineRegistry.ENGINE, EnumEngineType.MICRO.ordinal()),
 	JETENGINE(MachineRegistry.ENGINE, EnumEngineType.JET.ordinal()),
+	SOLAR(MachineRegistry.SOLARTOWER),
 
 	//---------------------TRANSMISSION--------------------//
 	TRANSDESC("Power Transfer", GuiHandbook.TRANSSTART),
@@ -121,11 +122,14 @@ public enum HandbookRegistry {
 	CCTVSCREEN(MachineRegistry.SCREEN),
 	CCTV(MachineRegistry.CCTV),
 	PURIFIER(MachineRegistry.PURIFIER),
+	LASERGUN(MachineRegistry.LASERGUN),
+	ITEMCANNON(MachineRegistry.ITEMCANNON),
 	FURNACEHEATER(MachineRegistry.FRICTION),
 	LANDMINE(MachineRegistry.LANDMINE),
-	BUCKET(MachineRegistry.BUCKETFILLER),
+	BUCKETFILLER(MachineRegistry.BUCKETFILLER),
 	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
 	SPYCAM(MachineRegistry.SPYCAM),
+	MIRROR(MachineRegistry.MIRROR),
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
@@ -188,6 +192,11 @@ public enum HandbookRegistry {
 	OTHERGEARUNIT(),
 	INDUCTION(),
 	TENSCOIL(),
+	MIRRORITEM(),
+	GENERATOR(),
+	RAILHEAD(),
+	TURRETBASE(),
+	TURRETAIM(),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", GuiHandbook.RESOURCESTART),
 	NETHERDUST(),
@@ -422,8 +431,12 @@ public enum HandbookRegistry {
 	public String getTitle() {
 		if (isParent)
 			return title;
-		if (this.getParent() == ENGINEDESC)
-			return RotaryNames.engineNames[offset];
+		if (this.getParent() == ENGINEDESC) {
+			if (this == SOLAR)
+				return MachineRegistry.SOLARTOWER.getName();
+			else
+				return RotaryNames.engineNames[offset];
+		}
 		if (this.getParent() == MACHINEDESC)
 			return machine.getName();
 		if (machine == MachineRegistry.ADVANCEDGEARS)

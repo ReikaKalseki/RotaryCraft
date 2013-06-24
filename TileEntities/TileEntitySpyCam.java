@@ -111,7 +111,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 				int id = world.getBlockId(x+i, topy, z+j);
 				topBlocks[(i+range)][j+range] = ReikaWorldHelper.blockColors(id, ConfigRegistry.GPRORES.getState());
 				if (world.getBlockId(x+i, y, z+j) != 0) {
-					topBlocks[(i+range)][j+range] = 0;
+					//topBlocks[(i+range)][j+range] = 0;
 				}
 			}
 		}

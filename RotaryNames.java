@@ -79,7 +79,7 @@ public class RotaryNames {
 
 	public static final String[] heatPartNames = {
 		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror",
-		"Generator", "Railgun Accelerator", "Turret Mount", "Railgun Aiming Unit"
+		"Generator", "Railgun Accelerator", "Turret Base", "Turret Aiming Unit"
 	};
 
 	public static final String[] gearUnitNames = {

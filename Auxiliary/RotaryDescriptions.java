@@ -40,6 +40,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityPurifier;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
+import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
@@ -114,8 +115,12 @@ public final class RotaryDescriptions {
 		{PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque()},
 		{},
 		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
+		{PowerReceivers.LASERGUN.getMinPower()},
+		{PowerReceivers.ITEMCANNON.getMinPower(), PowerReceivers.ITEMCANNON.getMinTorque()},
+		{PowerReceivers.FRICTION.getMinPower(), PowerReceivers.FRICTION.getMinTorque()},
 		{},
-		{},
+		{PowerReceivers.BUCKETFILLER.getMinPower(), PowerReceivers.BUCKETFILLER.getMinSpeed()},
+		{PowerReceivers.BLOCKCANNON.getMinPower()},
 		{},
 		{},
 		{},
@@ -173,6 +178,10 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{TileEntityPurifier.SMELTTEMP},
+		{},
+		{},
+		{},
+		{},
 		{},
 		{},
 		{},
@@ -265,15 +274,23 @@ public final class RotaryDescriptions {
 		String path2 = "Resources/EngineNotes.txt";
 		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
+		int i = 0;
 		try {
 			BufferedReader p = new BufferedReader(new InputStreamReader(in));
 			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
 			String line = null;
-			int i = 0;
 			while((line = p.readLine()) != null) {
 				String line2 = p2.readLine();
 				if (!line.isEmpty()) {
-					Object[] args = {EnumEngineType.engineList[i].getTorque(), EnumEngineType.engineList[i].getSpeed(), EnumEngineType.engineList[i].getPowerForDisplay()};
+					Object[] args = new Object[3];
+					if (i < EnumEngineType.engineList.length) {
+						args[0] = EnumEngineType.engineList[i].getTorque();
+						args[1] = EnumEngineType.engineList[i].getSpeed();
+						args[2] = EnumEngineType.engineList[i].getPowerForDisplay();
+					}
+					else {
+						args[0] = TileEntitySolar.GENOMEGA;
+					}
 					engines.add(new String[]{String.format(line, args), String.format(line2.replaceAll("\\\\n", "\n"), args)});
 					i++;
 				}
@@ -283,7 +300,7 @@ public final class RotaryDescriptions {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage()+" from "+e.getClass());
+			throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
 		}
 	}
 
@@ -292,11 +309,11 @@ public final class RotaryDescriptions {
 		String path2 = "Resources/MachineNotes.txt";
 		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
+		int i = 0;
 		try {
 			BufferedReader p = new BufferedReader(new InputStreamReader(in));
 			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
 			String line = null;
-			int i = 0;
 			while((line = p.readLine()) != null) {
 				String line2 = p2.readLine();
 				if (!line.isEmpty()) {
@@ -309,7 +326,7 @@ public final class RotaryDescriptions {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
 		}
 	}
 
@@ -318,11 +335,11 @@ public final class RotaryDescriptions {
 		String path2 = "Resources/ToolNotes.txt";
 		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
+		int i = 0;
 		try {
 			BufferedReader p = new BufferedReader(new InputStreamReader(in));
 			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
 			String line = null;
-			int i = 0;
 			while((line = p.readLine()) != null) {
 				String line2 = p2.readLine();
 				if (!line.isEmpty()) {
@@ -335,7 +352,7 @@ public final class RotaryDescriptions {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e.getMessage()+" on loading line "+i);
 		}
 	}
 
@@ -344,11 +361,11 @@ public final class RotaryDescriptions {
 		String path2 = "Resources/TransNotes.txt";
 		InputStream in = RotaryCraft.class.getResourceAsStream(path);
 		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
+		int i = 0;
 		try {
 			BufferedReader p = new BufferedReader(new InputStreamReader(in));
 			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
 			String line = null;
-			int i = 0;
 			while((line = p.readLine()) != null) {
 				String line2 = p2.readLine();
 				if (!line.isEmpty()) {
@@ -361,7 +378,7 @@ public final class RotaryDescriptions {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e.getMessage()+" on loading line "+i);
 		}
 	}
 

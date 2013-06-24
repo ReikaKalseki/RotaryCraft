@@ -86,6 +86,13 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 198, 1, false, page1);
 		}
 		break;
+		case SOLAR: {
+			int[] icons = {0, 100, 0, 121, 100, 121, 0, 100, 0};
+			String[] tex = {GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons2, GuiHandbook.icons1,
+					GuiHandbook.icons2, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons2};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 89, 1, false, tex);
+		}
+		break;
 
 		case SHAFT: {
 			if (System.nanoTime()-GuiHandbook.time > GuiHandbook.SECOND) {
@@ -333,8 +340,10 @@ public final class HandbookAuxData {
 		}
 		break;
 		case TNT: {
-			int[] icons = {1, -1, 53, 0, 52, 0, -1, 0, 106};
-			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 34, 1, false, i1o2);
+			int[] icons = {1, 119, 53, 0, 52, 0, 0, 17, 106};
+			String[] tex = {GuiHandbook.icons1, GuiHandbook.icons2, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons1,
+					GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons1, GuiHandbook.icons2};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 34, 1, false, tex);
 		}
 		break;
 		case SONIC: {
@@ -368,7 +377,7 @@ public final class HandbookAuxData {
 		}
 		break;
 		case RAILGUN: {
-			int[] icons = {37, 37, 1, 37, 37, 5, 1, 5, 0};
+			int[] icons = {-1, 42, -1, -1, 44, -1, -1, 43, -1};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 158, 1, false, page1);
 		}
 		break;
@@ -439,6 +448,60 @@ public final class HandbookAuxData {
 		case PURIFIER: {
 			int[] icons = {1, 65, 1, 0, 75, 0, 1, 0, 1};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 45, 1, false, i1o2);
+		}
+		break;
+		case LASERGUN: {
+			int[] icons = {35, 33, 32, 44, 34, 5, -1, 43, -1};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 46, 1, false, i1o2);
+		}
+		break;
+		case ITEMCANNON: {
+			int[] icons = {1, -1, 53, 0, 5, 0, 0, 17, 106};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 47, 1, false, i1o2);
+		}
+		break;
+		case BLOCKCANNON: {
+			int[] icons = {1, -1, 53, 0, 52, 0, 0, 17, 106};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 86, 1, false, i1o2);
+		}
+		break;
+		case FURNACEHEATER: {
+			int[] icons = {1, -1, -1, 1, 2, 2, 1, 0, 0};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 85, 1, false, i1o2);
+		}
+		break;
+		case LANDMINE: {
+			int[] icons = {-1, 120, -1, 75, 74, 75, 1, 31, 1};
+			String[] tex = {GuiHandbook.icons1,GuiHandbook.icons2,GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons1,
+					GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons1,GuiHandbook.icons2};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 84, 1, false, tex);
+		}
+		break;
+		case BUCKETFILLER: {
+			int[] icons = {1, 100, 1, 100, 106, 100, 1, 100, 1};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 87, 1, false, i1o2);
+		}
+		break;
+		case SPYCAM: {
+			int[] icons = {1, 52, 1, 0, 75, 0, 1, 84, 1};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 90, 1, false, i1o2);
+		}
+		break;
+		case MIRROR: {/*
+			if (System.nanoTime()-GuiHandbook.time > GuiHandbook.SECOND) {
+				GuiHandbook.i++;
+				GuiHandbook.time = System.nanoTime();
+				if (GuiHandbook.i > 1)
+					GuiHandbook.i = 0;
+			}
+			if (GuiHandbook.i == 0) {
+				int[] icons = {70, 70, 70, 73, 4, 73, 0, 52, 0};
+				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 88, 1, false, i1o2);
+			}
+			if (GuiHandbook.i == 1)*/ {
+				int[] icons = {-1, 40, -1, -1, 4, -1, 0, 52, 0};
+				ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 88, 1, false, i1o2);
+			}
 		}
 		break;
 
@@ -926,6 +989,31 @@ public final class HandbookAuxData {
 			String[] tex = {GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons1,
 					GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2,GuiHandbook.icons2, GuiHandbook.icons1};
 			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 60, 1, false, tex);
+		}
+		break;
+		case MIRRORITEM: {
+			int[] icons = {-1, -1, -1, 70, 70, 70, 73, 73, 73};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 40, 1, false, page1);
+		}
+		break;
+		case GENERATOR: {
+			int[] icons = {-1, -1, 24, -1, 2, -1, 24, -1, -1};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 41, 1, false, page1);
+		}
+		break;
+		case RAILHEAD: {
+			int[] icons = {37, 37, 37, 37, 34, 37, 37, 37, 37};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 42, 1, false, page1);
+		}
+		break;
+		case TURRETBASE: {
+			int[] icons = {-1, -1, -1, -1, 4, -1, 0, 5, 0};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 43, 1, false, page1);
+		}
+		break;
+		case TURRETAIM: {
+			int[] icons = {1, 77, 1, 52, 50, 52, 1, 41, 1};
+			ReikaGuiAPI.instance.drawRecipe(f, 72+dx, 18+dy, icons, 162+dx, 32+dy, 44, 1, false, page1);
 		}
 		break;
 

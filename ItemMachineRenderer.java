@@ -71,6 +71,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
+import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
@@ -324,6 +325,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case SOLARTOWER:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySolar(), a, -0.1D, b, 0.0F);
+				break;
+			case SPYCAM:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySpyCam(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

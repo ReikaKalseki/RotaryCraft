@@ -195,9 +195,9 @@ public enum MachineRegistry {
 	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction"),
 	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
 	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
-	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0, "RenderMirror"),
-	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1, "RenderSolar"),
-	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18),
+	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0,	"RenderMirror"),
+	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
+	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3);
 
 
@@ -362,6 +362,8 @@ public enum MachineRegistry {
 			return 0.4375F;
 		if (this == SMOKEDETECTOR)
 			return 0.875F;
+		if (this == SPYCAM)
+			return 0.375F;
 		if (this == CCTV && tile.getBlockMetadata() == 1)
 			return 0.5F-0.5F*(float)Math.sin(Math.toRadians(((TileEntityCCTV)tile).theta));
 		return 0;
@@ -864,7 +866,8 @@ public enum MachineRegistry {
 		if (this == MIRROR) {
 			ItemStack[] is = {
 					ReikaItemHelper.getSizedItemStack(ItemStacks.basepanel, 2),
-					ReikaItemHelper.getSizedItemStack(ItemStacks.pcb, 1)
+					ReikaItemHelper.getSizedItemStack(ItemStacks.pcb, 1),
+					ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, 1),
 			};
 			return ReikaJavaLibrary.makeListFromArray(is);
 		}
@@ -879,6 +882,8 @@ public enum MachineRegistry {
 
 	public boolean isDummiedOut() {
 		if (this == CCTV)
+			return true;
+		if (this == CHUNKLOADER)
 			return true;
 		return false;
 	}
