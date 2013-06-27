@@ -202,7 +202,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (id == Block.netherrack.blockID && tickcount >= 6) {
 			world.newExplosion(null, x+step*xstep+0.5, y+step*ystep+0.5, z+step*zstep+0.5, 3F, true, true);
 			if (step >= 500)
-				this.getPlacer().triggerAchievement(RotaryAchievements.NETHERHEATRAY.get());
+				RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
 			step = maxdist;
 			value = true;
 		}

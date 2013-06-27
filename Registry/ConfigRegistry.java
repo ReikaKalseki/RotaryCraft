@@ -42,12 +42,13 @@ public enum ConfigRegistry {
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
-	ACHIEVEMENTS("Enable Achievements", true);
+	ACHIEVEMENTS("Enable Achievements", false, false);
 
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
 	private Class type;
+	private boolean isLocked;
 
 	public static final ConfigRegistry[] optionList = ConfigRegistry.values();
 
@@ -55,6 +56,13 @@ public enum ConfigRegistry {
 		label = l;
 		defaultState = d;
 		type = boolean.class;
+	}
+
+	private ConfigRegistry(String l, boolean d, boolean lock) {
+		label = l;
+		defaultState = d;
+		type = boolean.class;
+		isLocked = true;
 	}
 
 	private ConfigRegistry(String l, int d) {
@@ -92,6 +100,8 @@ public enum ConfigRegistry {
 	}
 
 	public boolean getState() {
+		if (isLocked)
+			return defaultState;
 		return (Boolean)RotaryConfig.controls[this.ordinal()];
 	}
 

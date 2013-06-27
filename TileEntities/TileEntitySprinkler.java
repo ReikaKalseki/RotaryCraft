@@ -87,7 +87,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 
 	public void hydrate(World world, int x, int y, int z, int meta) {
 		if (this.getRange() > 0)
-			this.getPlacer().triggerAchievement(RotaryAchievements.SPRINKLER.get());
+			RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
 		this.spawnParticles(world, x, y, z);
 		int ytop = y-1;
 		int range = this.getRange();

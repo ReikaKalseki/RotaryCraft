@@ -540,7 +540,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		ReikaInventoryHelper.addOrSetStack(i.itemID, 1, i.getItemDamage(), inv, 2);
 		if (inv[0].stackSize <= 0)
 			inv[0] = null;
-		this.getPlacer().triggerAchievement(RotaryAchievements.RECYCLE.get());
+		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
 	}
 
 	private ItemStack getCraftedScrapIngot() {

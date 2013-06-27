@@ -574,7 +574,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (waterLevel <= 0)
 			return false;
 
-		this.getPlacer().triggerAchievement(RotaryAchievements.STEAMENGINE.get());
+		RotaryAchievements.STEAMENGINE.triggerAchievement(this.getPlacer());
 		return true;
 	}
 
@@ -868,7 +868,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
 		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0) {
 			isJetFailing = true;
-			this.getPlacer().triggerAchievement(RotaryAchievements.JETFAIL.get());
+			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
 		}
 	}
 
@@ -993,12 +993,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 							if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
 								chickenCount++;
 								if (chickenCount >= 50) {
-									this.getPlacer().triggerAchievement(RotaryAchievements.JETCHICKEN.get());
+									RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
 								}
 							}
 							caught.attackEntityFrom(DamageSource.generic, 1000);
 							if (caught instanceof EntityPlayer) {
-								((EntityPlayer)caught).triggerAchievement(RotaryAchievements.SUCKEDINTOJET.get());
+								RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
 							}
 						}
 						//ReikaChatHelper.writeInt(FOD);

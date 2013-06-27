@@ -100,7 +100,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 	}
 
 	public void make() {
-		this.getPlacer().triggerAchievement(RotaryAchievements.JETFUEL.get());
+		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
 		for (int i = 0; i < ingredients.length; i++) {
 			boolean consume = (par5Random.nextInt(16) == 0);
 			if (consume)

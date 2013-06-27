@@ -143,20 +143,20 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				switch(type) {
 				case WOOD:
 					damage += 6;	//2x original steel
-					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
+					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					break;
 				case STONE:
 					damage += 3;	//== original steel
-					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
+					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					break;
 				case STEEL:
 					damage++;		//1/3 original steel
-					this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
+					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					break;
 				case DIAMOND:
 					if (par5Random.nextInt(3) == 0) {
 						damage++;
-						this.getPlacer().triggerAchievement(RotaryAchievements.DAMAGEGEARS.get());
+						RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					}
 					break;
 				case BEDROCK:

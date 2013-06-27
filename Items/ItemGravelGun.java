@@ -80,7 +80,7 @@ public class ItemGravelGun extends ItemChargedTool {
 					}
 					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
 					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0))
-						ep.triggerAchievement(RotaryAchievements.GRAVELGUN.get());
+						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 					//ent.setRevengeTarget(ep);
 				}

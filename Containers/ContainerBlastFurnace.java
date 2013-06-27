@@ -51,7 +51,7 @@ public class ContainerBlastFurnace extends CoreContainer
 	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer ep) {
 		ItemStack is = super.slotClick(par1, par2, par3, ep);
 		if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is))
-			ep.triggerAchievement(RotaryAchievements.MAKESTEEL.get());
+			RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
 		return is;
 	}
 }

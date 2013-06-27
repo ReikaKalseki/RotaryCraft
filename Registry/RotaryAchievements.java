@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
@@ -89,10 +90,13 @@ public enum RotaryAchievements {
 	}
 
 	public Achievement get() {
-		if (ConfigRegistry.ACHIEVEMENTS.getState())
-			return RotaryCraft.achievements[this.ordinal()];
-		else
-			return null;
+		return RotaryCraft.achievements[this.ordinal()];
+	}
+
+	public void triggerAchievement(EntityPlayer ep) {
+		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+			ep.triggerAchievement(this.get());
+		}
 	}
 
 	public static void registerAcheivements() {

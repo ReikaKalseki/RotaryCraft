@@ -71,20 +71,20 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 
 	private void checkAchievements(EntityPlayer player, ItemStack item) {
 		if (ReikaItemHelper.matchStacks(item, MachineRegistry.RAILGUN.getCraftedProduct()))
-			player.triggerAchievement(RotaryAchievements.MAKERAILGUN.get());
+			RotaryAchievements.MAKERAILGUN.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal())))
-			player.triggerAchievement(RotaryAchievements.MAKEJET.get());
+			RotaryAchievements.MAKEJET.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal())))
-			player.triggerAchievement(RotaryAchievements.STEELSHAFT.get());
+			RotaryAchievements.STEELSHAFT.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal())))
-			player.triggerAchievement(RotaryAchievements.BEDROCKSHAFT.get());
+			RotaryAchievements.BEDROCKSHAFT.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1)))
-			player.triggerAchievement(RotaryAchievements.CVT.get());
+			RotaryAchievements.CVT.triggerAchievement(player);
 		if (ItemRegistry.isRegistered(item) && ItemRegistry.getEntry(item).isBedrockTool())
-			player.triggerAchievement(RotaryAchievements.BEDROCKTOOLS.get());
+			RotaryAchievements.BEDROCKTOOLS.triggerAchievement(player);
 		for (int i = 0; i < 4; i++) {
 			if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.gbxitems.itemID, 1, MaterialRegistry.DIAMOND.ordinal()+i*5)))
-				player.triggerAchievement(RotaryAchievements.DIAMONDGEARS.get());
+				RotaryAchievements.DIAMONDGEARS.triggerAchievement(player);
 		}
 	}
 

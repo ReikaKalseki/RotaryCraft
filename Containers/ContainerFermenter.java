@@ -76,7 +76,7 @@ public class ContainerFermenter extends CoreContainer
 	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer ep) {
 		ItemStack is = super.slotClick(par1, par2, par3, ep);
 		if (ReikaItemHelper.matchStacks(ItemRegistry.YEAST.getStackOf(), is))
-			ep.triggerAchievement(RotaryAchievements.MAKEYEAST.get());
+			RotaryAchievements.MAKEYEAST.triggerAchievement(ep);
 		return is;
 	}
 }

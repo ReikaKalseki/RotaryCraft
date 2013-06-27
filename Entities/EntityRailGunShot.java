@@ -309,14 +309,14 @@ public class EntityRailGunShot extends EntityTurretShot {
 		if (el instanceof EntityDragon) {
 			((EntityDragon) el).attackEntityFromPart(((EntityDragon) el).dragonPartHead, DamageSource.setExplosionSource(new Explosion(worldObj, this, x, y, z, 20)), this.getAttackDamage());
 			if (el.isDead || el.getHealth() <= 0) {
-				gun.getPlacer().triggerAchievement(RotaryAchievements.RAILDRAGON.get());
+				RotaryAchievements.RAILDRAGON.triggerAchievement(gun.getPlacer());
 			}
 		}
 		else
 			el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
 		if (el instanceof EntityPlayer) {
 			if (el.isDead || el.getHealth() <= 0)
-				((EntityPlayer) el).triggerAchievement(RotaryAchievements.RAILKILLED.get());
+				RotaryAchievements.RAILKILLED.triggerAchievement((EntityPlayer) el);
 		}
 		el.motionX = motionX*power/15F;
 		el.motionY = motionY*power/15F;

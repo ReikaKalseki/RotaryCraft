@@ -218,7 +218,7 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 						itementity.motionY = 0.1+0.2*par5Random.nextFloat()+0.25*par5Random.nextFloat()*par5Random.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
 					itementity.velocityChanged = true;
 					world.spawnEntityInWorld(itementity);
-					this.getPlacer().triggerAchievement(RotaryAchievements.BEDROCKBREAKER.get());
+					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 				}
 			}
 		}

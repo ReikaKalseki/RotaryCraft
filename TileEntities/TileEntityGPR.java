@@ -108,9 +108,9 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 					ids[i][j] = world.getBlockId(x+j-bounds[0]-diff, y-i-1, z);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
 					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
-						this.getPlacer().triggerAchievement(RotaryAchievements.GPRENDPORTAL.get());
+						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
 					if (ids[i][j] == Block.mobSpawner.blockID)
-						this.getPlacer().triggerAchievement(RotaryAchievements.GPRSPAWNER.get());
+						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
 				}
 			}
 		}
@@ -120,9 +120,9 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 					ids[i][j] = world.getBlockId(x, y-i-1, z+j-bounds[0]-diff);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
 					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
-						this.getPlacer().triggerAchievement(RotaryAchievements.GPRENDPORTAL.get());
+						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
 					if (ids[i][j] == Block.mobSpawner.blockID)
-						this.getPlacer().triggerAchievement(RotaryAchievements.GPRSPAWNER.get());
+						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
 				}
 			}
 		}

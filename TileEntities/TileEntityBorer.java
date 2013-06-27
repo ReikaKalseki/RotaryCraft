@@ -268,7 +268,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public void dig(World world, int x, int y, int z, int metadata) {
 		if (step == 1)
-			this.getPlacer().triggerAchievement(RotaryAchievements.BORER.get());
+			RotaryAchievements.BORER.triggerAchievement(this.getPlacer());
 		this.support(world, x, y, z, metadata);
 		int a = 0;
 		if (metadata > 1)

@@ -117,7 +117,7 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 				if (((EntityPlayer)e).capabilities.isCreativeMode)
 					invuln = true;
 				else
-					((EntityPlayer) e).triggerAchievement(RotaryAchievements.LANDMINE.get());
+					RotaryAchievements.LANDMINE.triggerAchievement((EntityPlayer) e);
 			}
 			if (!invuln) {
 				e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);

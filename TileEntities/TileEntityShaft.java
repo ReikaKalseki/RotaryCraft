@@ -472,10 +472,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 		this.testFailure();
 		if (omega >= 32000000 && !failed) {
-			this.getPlacer().triggerAchievement(RotaryAchievements.MRADS32.get());
+			RotaryAchievements.MRADS32.triggerAchievement(this.getPlacer());
 		}
 		if (power >= 1000000000 && !failed)
-			this.getPlacer().triggerAchievement(RotaryAchievements.GIGAWATT.get());
+			RotaryAchievements.GIGAWATT.triggerAchievement(this.getPlacer());
 	}
 
 	/**
