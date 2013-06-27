@@ -22,10 +22,10 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
-import Reika.DragonAPI.Interfaces.DragonAPIMod;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -54,6 +54,7 @@ import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemPipePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -80,7 +81,7 @@ import cpw.mods.fml.relauncher.Side;
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
 
-public class RotaryCraft implements DragonAPIMod {
+public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
 	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
@@ -144,12 +145,14 @@ public class RotaryCraft implements DragonAPIMod {
 		//throw new RuntimeException("This is an illegitimate copy of RotaryCraft! You must download the mod from the forum thread!");
 	}
 
+	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
 		RotaryConfig.initProps(evt);
 		proxy.registerSounds();
 	}
 
+	@Override
 	@Init
 	public void load(FMLInitializationEvent event) {
 		proxy.addArmorRenders();
@@ -163,7 +166,7 @@ public class RotaryCraft implements DragonAPIMod {
 		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
 		AchievementAuxiliary.loadDesc();
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ConfigRegistry.ACHIEVEMENTS.getState())
 			RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
 		HandbookAuxData.loadNames();
@@ -179,6 +182,7 @@ public class RotaryCraft implements DragonAPIMod {
 		MinecraftForge.addGrassSeed(new ItemStack(ItemRegistry.CANOLA.getID(), 1, 0), 2);
 	}
 
+	@Override
 	@PostInit // Like the modsLoaded thing from ModLoader
 	public void postload(FMLPostInitializationEvent evt) {
 		//LoadAux.texMsg();
@@ -260,5 +264,4 @@ public class RotaryCraft implements DragonAPIMod {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
 		}
 	}
-
 }

@@ -89,7 +89,10 @@ public enum RotaryAchievements {
 	}
 
 	public Achievement get() {
-		return RotaryCraft.achievements[this.ordinal()];
+		if (ConfigRegistry.ACHIEVEMENTS.getState())
+			return RotaryCraft.achievements[this.ordinal()];
+		else
+			return null;
 	}
 
 	public static void registerAcheivements() {
@@ -102,8 +105,9 @@ public enum RotaryAchievements {
 				parent = list[i].parent;
 			list[i].icon = AchievementAuxiliary.icons[i];
 			RotaryCraft.achievements[i] = new Achievement(RotaryConfig.achievementIDs[i], list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent);
-			if (StatList.getOneShotStat(RotaryCraft.achievements[i].statId) != null)
-				throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another.\nCheck the config file and change them.");
+			int id = RotaryCraft.achievements[i].statId;
+			if (StatList.getOneShotStat(id) != null)
+				throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another at ID "+id+" (trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");
 			RotaryCraft.achievements[i].registerAchievement();
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();

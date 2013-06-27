@@ -64,6 +64,12 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 			if (!player.inventory.addItemStackToInventory(newspring))
 				ReikaItemHelper.dropItem(player.worldObj, player.posX, player.posY, player.posZ, newspring);
 		}
+		this.checkAchievements(player, item);
+	}
+
+
+
+	private void checkAchievements(EntityPlayer player, ItemStack item) {
 		if (ReikaItemHelper.matchStacks(item, MachineRegistry.RAILGUN.getCraftedProduct()))
 			player.triggerAchievement(RotaryAchievements.MAKERAILGUN.get());
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal())))

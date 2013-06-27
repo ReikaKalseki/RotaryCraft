@@ -9,13 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Exception.IDConflictException;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
@@ -49,7 +46,7 @@ import Reika.RotaryCraft.Items.ItemUltrasound;
 import Reika.RotaryCraft.Items.ItemVacuum;
 import Reika.RotaryCraft.Items.ItemWorldEdit;
 
-public enum ItemRegistry {
+public enum ItemRegistry implements RegistrationList {
 
 	SCREWDRIVER(0, false, 		"Screwdriver", 				ItemScrewdriver.class),
 	METER(16, false, 			"Angular Transducer", 		ItemMeter.class),
@@ -126,6 +123,20 @@ public enum ItemRegistry {
 
 	public static final ItemRegistry[] itemList = ItemRegistry.values();
 
+
+	public Class[] getConstructorParamTypes() {
+		if (this.isArmor())
+			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
+		return new Class[]{int.class, int.class}; // ID, Sprite index
+	}
+
+	public Object[] getConstructorParams() {
+		if (this.isArmor())
+			return new Object[]{RotaryConfig.itemids[this.ordinal()], this.getTextureIndex(), this.getArmorRender()};
+		else
+			return new Object[]{RotaryConfig.itemids[this.ordinal()], this.getTextureIndex()};
+	}
+
 	public int getTextureIndex() {
 		return index;
 	}
@@ -182,49 +193,7 @@ public enum ItemRegistry {
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
 
-	public Constructor getConstructor() {
-		try {
-			if (this.isArmor())
-				return itemClass.getConstructor(int.class, int.class, int.class); // ID, Armor render, Sprite index
-			return itemClass.getConstructor(int.class, int.class); // ID, Sprite index
-		}
-		catch (NoSuchMethodException e) {
-			throw new RegistrationException(RotaryCraft.instance, "Item Class "+itemClass.toString()+" does not have the specified constructor!");
-		}
-		catch (SecurityException e) {
-			throw new RegistrationException(RotaryCraft.instance, "Item Class "+itemClass.toString()+" threw security exception!");
-		}
-	}
-
-	public Item createInstance() {
-		Constructor c = this.getConstructor();
-		Item instance;
-		try {
-			if (this.isArmor())
-				instance = (Item)(c.newInstance(RotaryConfig.itemids[this.ordinal()], this.getTextureIndex(), this.getArmorRender()));
-			else
-				instance = (Item)(c.newInstance(RotaryConfig.itemids[this.ordinal()], this.getTextureIndex()));
-			return (instance.setUnlocalizedName(this.getUnlocName()));
-		}
-		catch (InstantiationException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" did not allow instantiation!");
-		}
-		catch (IllegalAccessException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" threw illegal access exception! (Nonpublic constructor)");
-		}
-		catch (IllegalArgumentException e) {
-			throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" was given invalid parameters!");
-		}
-		catch (InvocationTargetException e) {
-			Throwable t = e.getCause();
-			if (t instanceof IllegalArgumentException)
-				throw new IDConflictException(RotaryCraft.instance, t.getMessage());
-			else
-				throw new RegistrationException(RotaryCraft.instance, itemClass.getSimpleName()+" threw invocation target exception!");
-		}
-	}
-
-	private int getArmorRender() {
+	public int getArmorRender() {
 		if (!this.isArmor())
 			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is not an armor yet was called for its render!");
 		if (this == IOGOGGLES)
@@ -236,12 +205,16 @@ public enum ItemRegistry {
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
 	}
 
-	private String getUnlocName() {
+	public String getUnlocalizedName() {
 		return ReikaJavaLibrary.stripSpaces(name).toLowerCase();
 	}
 
 	public int getID() {
-		return this.getItemInstance().itemID;
+		return RotaryConfig.itemids[this.ordinal()];
+	}
+
+	public int getShiftedID() {
+		return RotaryConfig.itemids[this.ordinal()]+256;
 	}
 
 	public Item getItemInstance() {
@@ -328,5 +301,10 @@ public enum ItemRegistry {
 		if (this == KEY)
 			return true;
 		return false;
+	}
+
+	@Override
+	public Class getObjectClass() {
+		return itemClass;
 	}
 }

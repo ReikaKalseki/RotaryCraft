@@ -41,7 +41,8 @@ public enum ConfigRegistry {
 	BAITRANGE("Bait Box Range", 128),
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
-	DEBUGMODE("Debug Mode", false);
+	DEBUGMODE("Debug Mode", false),
+	ACHIEVEMENTS("Enable Achievements", true);
 
 	private String label;
 	private boolean defaultState;

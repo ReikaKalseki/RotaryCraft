@@ -9,13 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import Reika.DragonAPI.Exception.IDConflictException;
-import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -36,7 +32,7 @@ import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 
-public enum BlockRegistry {
+public enum BlockRegistry implements RegistrationList {
 
 	ADVANCEDGEAR(BlockAdvGear.class),
 	DIR(BlockDMachine.class),
@@ -100,38 +96,8 @@ public enum BlockRegistry {
 		return RotaryCraft.machineBlocks[this.ordinal()];
 	}
 
-	public Block createInstance() {
-		try {
-			Constructor c = this.getBlockClass().getConstructor(int.class, Material.class);
-			Block instance = (Block)(c.newInstance(RotaryConfig.machineids[this.ordinal()], this.getBlockMaterial()));
-			return (instance.setUnlocalizedName(this.getUnlocName()));
-		}
-		catch (NoSuchMethodException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" does not have the specified constructor! Check visibility!");
-		}
-		catch (SecurityException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw security exception!");
-		}
-		catch (InstantiationException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" did not allow instantiation!");
-		}
-		catch (IllegalAccessException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw illegal access exception! (Nonpublic constructor)");
-		}
-		catch (IllegalArgumentException e) {
-			throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" was given invalid parameters!");
-		}
-		catch (InvocationTargetException e) {
-			Throwable t = e.getCause();
-			if (t instanceof IllegalArgumentException)
-				throw new IDConflictException(RotaryCraft.instance, t.getMessage());
-			else
-				throw new RegistrationException(RotaryCraft.instance, this.getBlockClass().getSimpleName()+" threw invocation target exception!");
-		}
-	}
-
-	public String getUnlocName() {
-		return ReikaJavaLibrary.stripSpaces(this.getBlockClass().toString());
+	public String getUnlocalizedName() {
+		return ReikaJavaLibrary.stripSpaces(this.getObjectClass().toString());
 	}
 
 	public String getBlockVariableName() {
@@ -150,16 +116,38 @@ public enum BlockRegistry {
 		return Material.iron;
 	}
 
-	public Class getBlockClass() {
+	public Class getObjectClass() {
 		return block;
 	}
 
 	public int getBlockID() {
-		return RotaryCraft.machineBlocks[this.ordinal()].blockID;
+		return RotaryConfig.machineids[this.ordinal()];
 	}
 
-	public String getName() {
-		return this.getBlockVariableName();
+	public String getBasicName() {
+		return "TECHNICAL BLOCK "+this.getBlockVariableName();
 	}
 
+	public Class[] getConstructorParamTypes() {
+		return new Class[]{int.class, Material.class};
+	}
+
+	public Object[] getConstructorParams() {
+		return new Object[]{RotaryConfig.machineids[this.ordinal()], this.getBlockMaterial()};
+	}
+
+	@Override
+	public String getMultiValuedName(int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean hasMultiValuedName() {
+		return false;
+	}
+
+	@Override
+	public int getNumberMetadatas() {
+		return 1;
+	}
 }

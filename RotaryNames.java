@@ -10,7 +10,6 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -209,11 +208,11 @@ public class RotaryNames {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.machineplacer, 1, i), MachineRegistry.machineList[i].getName());
 		}
-
+		/*
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			LanguageRegistry.addName(BlockRegistry.blockList[i].getBlockVariable(), "TECHNICAL BLOCK "+BlockRegistry.blockList[i].getName());
-		}
-
+			LanguageRegistry.addName(BlockRegistry.blockList[i].getBlockVariable(), "TECHNICAL BLOCK "+BlockRegistry.blockList[i].getName(0));
+		}*/
+		/*
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry r = ItemRegistry.itemList[i];
 			if (r.hasMultiValuedName()) {
@@ -224,6 +223,6 @@ public class RotaryNames {
 			}
 			else
 				LanguageRegistry.addName(r.getItemInstance(), r.getBasicName());
-		}
+		}*/
 	}
 }

@@ -181,17 +181,17 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					String mob = lgc.getEntityNameToSpawn();
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%s", mob));
 					int dmg = -1;
-					if (mob == "Zombie")
+					if (mob.equals("Zombie"))
 						dmg = 0;
-					if (mob == "Spider")
+					if (mob.equals("Spider"))
 						dmg = 1;
-					if (mob == "CaveSpider")
+					if (mob.equals("CaveSpider"))
 						dmg = 2;
-					if (mob == "Skeleton")
+					if (mob.equals("Skeleton"))
 						dmg = 3;
-					if (mob == "Silverfish")
+					if (mob.equals("Silverfish"))
 						dmg = 4;
-					if (mob == "Blaze")
+					if (mob.equals("Blaze"))
 						dmg = 5;
 
 					if (dmg == -1)

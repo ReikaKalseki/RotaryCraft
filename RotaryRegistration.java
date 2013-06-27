@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
@@ -22,10 +22,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
-import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
-import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
-import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -47,16 +43,16 @@ public class RotaryRegistration {
 		GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
 		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
-
+		/*
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			String regname = BlockRegistry.blockList[i].getName().toLowerCase().replaceAll("\\s","");
+			String regname = BlockRegistry.blockList[i].getName(0).toLowerCase().replaceAll("\\s","");
 			GameRegistry.registerBlock(BlockRegistry.blockList[i].getBlockVariable(), regname);
-		}
-
+		}*/
+		/*
 		GameRegistry.registerTileEntity(TileEntityAerosolizer.class, "RCaero");
 		GameRegistry.registerTileEntity(TileEntityAutoBreeder.class, "RCbreeder");
 		GameRegistry.registerTileEntity(TileEntityBaitBox.class, "RCbait");
-		GameRegistry.registerTileEntity(TileEntityCaveFinder.class, "RCcave");
+		GameRegistry.registerTileEntity(TileEntityCaveFinder.class, "RCcave");*/
 	}
 
 	public static void addTileEntities() {
@@ -75,18 +71,10 @@ public class RotaryRegistration {
 	}
 
 	public static void instantiateMachines() {
-		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			RotaryCraft.machineBlocks[i] = BlockRegistry.blockList[i].createInstance();
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Block "+BlockRegistry.blockList[i].getName()+" with ID "+BlockRegistry.blockList[i].getBlockID()+" to Block Variable "+RotaryCraft.machineBlocks[i].getClass().getSimpleName()+" (slot "+i+")");
-		}
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, ConfigRegistry.LOGLOADING.getState());
 	}
 
 	public static void instantiateItems() {
-		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-			RotaryCraft.basicItems[i] = ItemRegistry.itemList[i].createInstance();
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Instantiating Item "+ItemRegistry.itemList[i].getBasicName()+" with ID "+ItemRegistry.itemList[i].getID()+" to Item Variable "+RotaryCraft.basicItems[i].getClass().getSimpleName()+" (slot "+i+")");
-		}
+		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, ConfigRegistry.LOGLOADING.getState());
 	}
 }
