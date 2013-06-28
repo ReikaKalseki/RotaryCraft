@@ -179,7 +179,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
-		MinecraftForge.addGrassSeed(new ItemStack(ItemRegistry.CANOLA.getID(), 1, 0), 2);
+		MinecraftForge.addGrassSeed(new ItemStack(ItemRegistry.CANOLA.getShiftedID(), 1, 0), 2);
 	}
 
 	@Override

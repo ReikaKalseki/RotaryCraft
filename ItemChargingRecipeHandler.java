@@ -28,7 +28,7 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 		for (int i = 0; i < ic.getSizeInventory(); i++) {
 			ItemStack is = ic.getStackInSlot(i);
 			if (is != null) {
-				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getID())
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID())
 					return true;
 			}
 		}
@@ -39,7 +39,7 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 		for (int i = 0; i < ic.getSizeInventory(); i++) {
 			ItemStack is = ic.getStackInSlot(i);
 			if (is != null) {
-				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getID())
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID())
 					return ic.getStackInSlot(i).itemID;
 			}
 		}
@@ -48,18 +48,18 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item,	IInventory ii) {
-		boolean hasSpring = ReikaInventoryHelper.hasItem(ItemRegistry.SPRING.getID(), ii);
+		boolean hasSpring = ReikaInventoryHelper.hasItem(ItemRegistry.SPRING.getShiftedID(), ii);
 		boolean hasTool = this.checkHasTool(ii);
 		boolean onlyThose = ReikaInventoryHelper.hasNEmptyStacks(ii, 7);
 
 		if (hasSpring && hasTool && onlyThose) {
 			int toolid = this.getTool(ii);
 			int toolslot = ReikaInventoryHelper.locateIDInInventory(toolid, ii);
-			int springslot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.SPRING.getID(), ii);
+			int springslot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.SPRING.getShiftedID(), ii);
 			int toolmeta = ii.getStackInSlot(toolslot).getItemDamage();
 			int springmeta = ii.getStackInSlot(springslot).getItemDamage();
 			//ItemStack newtool = new ItemStack(toolid, 1, springmeta);
-			ItemStack newspring = new ItemStack(ItemRegistry.SPRING.getID(), 1, toolmeta);
+			ItemStack newspring = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, toolmeta);
 			item.setItemDamage(springmeta);
 			if (!player.inventory.addItemStackToInventory(newspring))
 				ReikaItemHelper.dropItem(player.worldObj, player.posX, player.posY, player.posZ, newspring);

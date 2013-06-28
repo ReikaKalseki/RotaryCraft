@@ -26,7 +26,7 @@ public class ChargingRecipe implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting ic, World world) {
-		if (ReikaInventoryHelper.checkForItem(ic, output.itemID, -1) && ReikaInventoryHelper.checkForItem(ic, ItemRegistry.SPRING.getID(), -1))
+		if (ReikaInventoryHelper.checkForItem(ic, output.itemID, -1) && ReikaInventoryHelper.checkForItem(ic, ItemRegistry.SPRING.getShiftedID(), -1))
 			return true;
 		return false;
 	}

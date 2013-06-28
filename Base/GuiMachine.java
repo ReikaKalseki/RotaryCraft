@@ -63,7 +63,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void actionPerformed(GuiButton b) {
 		if (b.id == 24000 || b.id == 24001) {
-			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getID(), ep.inventory.mainInventory))
+			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getShiftedID(), ep.inventory.mainInventory))
 				ep.openGui(RotaryCraft.instance, GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 			else
 				ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);

@@ -235,10 +235,10 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return false;
 		}
 
-		if (inventory[0].itemID == ItemRegistry.CANOLA.getID() && inventory[0].getItemDamage() == 0) {
+		if (inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID() && inventory[0].getItemDamage() == 0) {
 			return (lubricant < MAXLUBE);
 		}
-		if (inventory[0].itemID == ItemRegistry.CANOLA.getID() && inventory[0].getItemDamage() == 1) {
+		if (inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID() && inventory[0].getItemDamage() == 1) {
 			return (lubricant < MAXLUBE-9);
 		}
 
@@ -282,7 +282,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 		{
 			return;
 		}
-		if (inventory[0] != null && inventory[0].itemID == ItemRegistry.CANOLA.getID()) {
+		if (inventory[0] != null && inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID()) {
 			int num = 1;
 			if (inventory[0].getItemDamage() == 1)
 				num = 9;

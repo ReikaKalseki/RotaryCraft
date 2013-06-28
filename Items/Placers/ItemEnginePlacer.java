@@ -83,7 +83,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 
 	@Override
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep,	World world, int x, int y, int z) {
-		if (is.getItemDamage() == EnumEngineType.HYDRO.getID()) {
+		if (is.getItemDamage() == EnumEngineType.HYDRO.ordinal()) {
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					int a = 0; int b = 0;
@@ -103,7 +103,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				}
 			}
 		}
-		if (is.getItemDamage() == EnumEngineType.WIND.getID()) {
+		if (is.getItemDamage() == EnumEngineType.WIND.ordinal()) {
 			if (world.getBlockId(x, y+1, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y+1, z);
 				if (te.type == EnumEngineType.WIND)

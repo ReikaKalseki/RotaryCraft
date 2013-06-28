@@ -33,13 +33,13 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	public ItemStack[] ammo = new ItemStack[54];
 
 	public int getPowerLevel() {
-		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getID(), ammo);
+		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getShiftedID(), ammo);
 		return meta;
 	}
 
 	@Override
 	public boolean hasAmmo() {
-		return ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getID(), ammo);
+		return ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getShiftedID(), ammo);
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
 		int maxmeta = this.getMaxThrust();
-		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getID(), ammo, maxmeta);
-		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getID(), m, ammo);
+		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getShiftedID(), ammo, maxmeta);
+		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getShiftedID(), m, ammo);
 		ReikaInventoryHelper.decrStack(slot, ammo);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
@@ -276,7 +276,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.RAILGUN.getID();
+		return is.itemID == ItemRegistry.RAILGUN.getShiftedID();
 	}
 
 	@Override

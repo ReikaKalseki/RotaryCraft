@@ -67,9 +67,9 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		if (slots[0].itemID == Item.sugar.itemID) {
 			if (slots[1].itemID == Item.bucketWater.itemID)
 				if(slots[2].itemID == Block.dirt.blockID)
-					return new ItemStack(ItemRegistry.YEAST.getID(), 1, 0);
+					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
-		if (slots[0].itemID == ItemRegistry.YEAST.getID()) {
+		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
 			if (this.getPlantValue(slots[1]) > 0)
 				if (slots[2].itemID == Item.bucketWater.itemID)
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
@@ -105,7 +105,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		boolean fermenting = true;
 		if (this.getRecipe() == null)
 			return -1F;
-		if (this.getRecipe().itemID == ItemRegistry.YEAST.getID())
+		if (this.getRecipe().itemID == ItemRegistry.YEAST.getShiftedID())
 			fermenting = false;
 		if (temperature < MINUSEFULTEMP)
 			return 1F/(MINUSEFULTEMP-temperature);
@@ -140,7 +140,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			idle = true;
 			return;
 		}
-		if (product.itemID != ItemRegistry.YEAST.getID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
+		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
 			return;
 		if (slots[3] != null) {
 			if (product.itemID != slots[3].itemID) {
@@ -174,7 +174,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		if (product == null) {
 			return false;
 		}
-		if (product.itemID != ItemRegistry.YEAST.getID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
+		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
 			return false;
 		if (slots[3] != null) {
 			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
@@ -188,11 +188,11 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	private void make(ItemStack product) {
-		if (product.itemID == ItemRegistry.YEAST.getID()) {
+		if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(this.getMultiplyRate()));
 			if (slots[3] == null)
-				slots[3] = new ItemStack(ItemRegistry.YEAST.getID(), 1, 0);
-			else if (slots[3].itemID == ItemRegistry.YEAST.getID()) {
+				slots[3] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
+			else if (slots[3].itemID == ItemRegistry.YEAST.getShiftedID()) {
 				if (slots[3].stackSize < slots[3].getMaxStackSize())
 					slots[3].stackSize++;
 				else
@@ -260,7 +260,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	public void testYeastKill() {
 		if (temperature < MAXTEMP)
 			return;
-		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getID(), slots);
+		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getShiftedID(), slots);
 		if (slot != -1) {
 			ReikaInventoryHelper.decrStack(slot, slots);
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "random.fizz", 0.8F, 0.8F);
@@ -452,7 +452,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		if (i == 3)
 			return false;
 		if (i == 0)
-			return (is.itemID == ItemRegistry.YEAST.getID() || is.itemID == Item.sugar.itemID);
+			return (is.itemID == ItemRegistry.YEAST.getShiftedID() || is.itemID == Item.sugar.itemID);
 		if (i == 1)
 			return (is.itemID == Item.bucketWater.itemID || this.getPlantValue(is) > 0);
 		if (i == 2)

@@ -121,7 +121,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		EntityPlayer ep = te.worldObj.getPlayerEntityByName(te.owner);
 		if (ep == null)
 			return;
-		if (!ReikaInventoryHelper.checkForItem(ItemRegistry.MOTION.getID(), ep.inventory.mainInventory))
+		if (!ReikaInventoryHelper.checkForItem(ItemRegistry.MOTION.getShiftedID(), ep.inventory.mainInventory))
 			return;
 		if (mc.thePlayer.getEntityName() != ep.getEntityName())
 			return;

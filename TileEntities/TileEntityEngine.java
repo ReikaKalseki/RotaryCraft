@@ -288,7 +288,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		switch(type) {
 		case GAS:
 			if (fuelslot[0] != null && ethanols < FUELCAP) {
-				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
+				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
 					ethanols++;
 				}
@@ -301,7 +301,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			break;
 		case SPORT:
 			if (fuelslot[0] != null && ethanols < FUELCAP) {
-				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getID()) {
+				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
 					ethanols++;
 				}
@@ -939,7 +939,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 								item.motionZ = dumpvz*1.5D;
 								if (!worldObj.isRemote)
 									caught.velocityChanged = true;
-								if (is.itemID == ItemRegistry.SCREWDRIVER.getID()) {
+								if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
 									caught.setDead();
 									isJetFailing = true;
 								}
@@ -1196,7 +1196,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("FOD", FOD);
-		NBT.setInteger("type", type.getID());
+		NBT.setInteger("type", type.ordinal());
 		NBT.setInteger("temperature", temperature);
 		NBT.setInteger("water", waterLevel);
 		NBT.setInteger("ethanol", ethanols);
@@ -1270,7 +1270,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		case AC:
 			return true;
 		case SPORT:
-			return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getID()) || (i == 1 && type.isAdditive(is));
+			return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getShiftedID()) || (i == 1 && type.isAdditive(is));
 		default:
 			return false;
 		}

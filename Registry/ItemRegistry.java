@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.RegistrationList;
@@ -147,7 +148,7 @@ public enum ItemRegistry implements RegistrationList {
 
 	public static boolean isRegistered(int id) {
 		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getID() == id)
+			if (itemList[i].getShiftedID() == id)
 				return true;
 		}
 		return false;
@@ -155,7 +156,7 @@ public enum ItemRegistry implements RegistrationList {
 
 	public static ItemRegistry getEntryByID(int id) {
 		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getID() == id)
+			if (itemList[i].getShiftedID() == id)
 				return itemList[i];
 		}
 		throw new RegistrationException(RotaryCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
@@ -208,10 +209,10 @@ public enum ItemRegistry implements RegistrationList {
 	public String getUnlocalizedName() {
 		return ReikaJavaLibrary.stripSpaces(name).toLowerCase();
 	}
-
+	/*
 	public int getID() {
 		return RotaryConfig.itemids[this.ordinal()];
-	}
+	}*/
 
 	public int getShiftedID() {
 		return RotaryConfig.itemids[this.ordinal()]+256;
@@ -276,11 +277,11 @@ public enum ItemRegistry implements RegistrationList {
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
-		return new ItemStack(this.getID(), amt, 0);
+		return new ItemStack(this.getShiftedID(), amt, 0);
 	}
 
 	public ItemStack getCraftedMetadataProduct(int amt, int meta) {
-		return new ItemStack(this.getID(), amt, meta);
+		return new ItemStack(this.getShiftedID(), amt, meta);
 	}
 
 	public ItemStack getStackOf() {
@@ -306,5 +307,15 @@ public enum ItemRegistry implements RegistrationList {
 	@Override
 	public Class getObjectClass() {
 		return itemClass;
+	}
+
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
+
+	@Override
+	public boolean hasItemBlock() {
+		return false;
 	}
 }

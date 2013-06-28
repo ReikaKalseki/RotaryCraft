@@ -51,7 +51,7 @@ public class BlockCanola extends BlockBasic {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ItemRegistry.CANOLA.getID(), 1, 0);
+		return new ItemStack(ItemRegistry.CANOLA.getShiftedID(), 1, 0);
 	}
 
 	@Override

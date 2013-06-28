@@ -104,7 +104,7 @@ public class RenderWinder extends RotaryTERenderer
 			// if (tile.getBlockMetadata() < 4)
 
 
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItem(ItemRegistry.SPRING.getID(), tile.inslot)), -tile.phi);
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItem(ItemRegistry.SPRING.getShiftedID(), tile.inslot)), -tile.phi);
 			// else
 			//var15.renderAll();
 

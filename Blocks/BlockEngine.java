@@ -162,7 +162,7 @@ public class BlockEngine extends BlockModelledMachine {
 					world.spawnEntityInWorld(item);
 			}
 			else {
-				int metat = eng.type.getID();
+				int metat = eng.type.ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;

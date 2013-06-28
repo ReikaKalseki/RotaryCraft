@@ -249,7 +249,7 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	public boolean isStackValidForSlot(int i, ItemStack is) {
 		switch (i) {
 		case 0:
-			return is.itemID == ItemRegistry.SPRING.getID();
+			return is.itemID == ItemRegistry.SPRING.getShiftedID();
 		case 1:
 		case 2:
 		case 3:
@@ -310,13 +310,13 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (inv[0] == null)
 			return;
-		if (inv[0].itemID != ItemRegistry.SPRING.getID())
+		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID())
 			return;
 		tickcount++;
 		if (inv[0].getItemDamage() > 0) {
 			int dmg = inv[0].getItemDamage();
 			if (tickcount > 120) {
-				ItemStack is = new ItemStack(ItemRegistry.SPRING.getID(), 1, dmg-1);
+				ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
 				inv[0] = is;
 				tickcount = 0;
 			}

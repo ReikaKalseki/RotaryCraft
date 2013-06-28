@@ -91,7 +91,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return 0.01F;
 		int mult = 1;
 		if (ep.inventory.getCurrentItem() != null) {
-			if (ep.inventory.getCurrentItem().itemID == ItemRegistry.BEDPICK.getID())
+			if (ep.inventory.getCurrentItem().itemID == ItemRegistry.BEDPICK.getShiftedID())
 				mult = 2;
 		}
 		if (this.canHarvest(world, ep, x, y, z))

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemBlock;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
@@ -149,5 +150,15 @@ public enum BlockRegistry implements RegistrationList {
 	@Override
 	public int getNumberMetadatas() {
 		return 1;
+	}
+
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
+
+	@Override
+	public boolean hasItemBlock() {
+		return false;
 	}
 }

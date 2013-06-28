@@ -80,7 +80,7 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 		ItemStack item = ep.inventory.getCurrentItem();
 		if (item == null)
 			return false;
-		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != ItemRegistry.BEDPICK.getID())
+		if (item.itemID != Item.pickaxeDiamond.itemID && item.itemID != ItemRegistry.BEDPICK.getShiftedID())
 			return false;
 		return true;
 	}

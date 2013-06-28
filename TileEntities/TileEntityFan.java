@@ -277,7 +277,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			itemsize = 1+par5Random.nextInt(4);
 		}
 		if (id == RotaryCraft.canola.blockID && world.getBlockMetadata(x, y, z) == 9) {
-			itemid = ItemRegistry.CANOLA.getID();
+			itemid = ItemRegistry.CANOLA.getShiftedID();
 			itemmeta = 0;
 			itemsize = 1+par5Random.nextInt(6)+par5Random.nextInt(3);
 		}

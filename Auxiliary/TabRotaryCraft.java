@@ -8,12 +8,14 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 public class TabRotaryCraft extends CreativeTabs {
 
 	public TabRotaryCraft(int position, String tabID) {
@@ -22,14 +24,12 @@ public class TabRotaryCraft extends CreativeTabs {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ItemStack getIconItemStack() //The item it displays for your tab
-	{
-		return new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.getID());
+	public ItemStack getIconItemStack() {
+		return new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal());
 	}
 
 	@Override
-	public String getTranslatedTabLabel()
-	{
+	public String getTranslatedTabLabel() {
 		return "RotaryCraft"; //The name of the tab ingame
 	}
 }

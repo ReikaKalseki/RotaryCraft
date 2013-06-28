@@ -85,7 +85,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	public void handleData(Packet250CustomPayload packet, World world) {
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 		int control = Integer.MIN_VALUE;
-		boolean drops;
 		int len;
 		int[] data = new int[0];
 		long longdata = 0;

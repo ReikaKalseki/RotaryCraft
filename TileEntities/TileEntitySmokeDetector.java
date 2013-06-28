@@ -83,7 +83,7 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 	public boolean checkValidCoil() {
 		if (battery[0] == null)
 			return false;
-		if (battery[0].itemID != ItemRegistry.SPRING.getID())
+		if (battery[0].itemID != ItemRegistry.SPRING.getShiftedID())
 			return false;
 		return true;
 	}

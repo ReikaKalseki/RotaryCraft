@@ -48,7 +48,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			}
 			return;
 		}
-		if (inslot[0].itemID != ItemRegistry.SPRING.getID()) {
+		if (inslot[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
 			if (!winding) {
 				torque = 0;
 				omega = 0;
@@ -62,7 +62,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			tickcount = 0;
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
 				return;
-			inslot[0] = new ItemStack(ItemRegistry.SPRING.getID(), 1, inslot[0].getItemDamage()+1);
+			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()+1);
 			if (par5Random.nextInt((65536-inslot[0].getItemDamage())) == 0) {
 				inslot[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
@@ -78,7 +78,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			if (tickcount < 20)
 				return;
 			tickcount = 0;
-			inslot[0] = new ItemStack(ItemRegistry.SPRING.getID(), 1, inslot[0].getItemDamage()-1);
+			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()-1);
 			omega = UNWINDSPEED;
 			torque = UNWINDTORQUE;
 			power = omega;
@@ -210,14 +210,14 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.SPRING.getID();
+		return is.itemID == ItemRegistry.SPRING.getShiftedID();
 	}
 
 	@Override
 	public int getRedstoneOverride() {
 		if (inslot[0] == null)
 			return 15;
-		if (inslot[0].itemID != ItemRegistry.SPRING.getID())
+		if (inslot[0].itemID != ItemRegistry.SPRING.getShiftedID())
 			return 15;
 		if (inslot[0].getItemDamage() >= torque && winding)
 			return 15;

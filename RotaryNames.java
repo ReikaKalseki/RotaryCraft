@@ -217,7 +217,7 @@ public class RotaryNames {
 			ItemRegistry r = ItemRegistry.itemList[i];
 			if (r.hasMultiValuedName()) {
 				for (int j = 0; j < r.getNumberMetadatas(); j++) {
-					ItemStack is = new ItemStack(r.getID(), 1, j);
+					ItemStack is = new ItemStack(r.getShiftedID(), 1, j);
 					LanguageRegistry.addName(is, r.getMultiValuedName(j));
 				}
 			}

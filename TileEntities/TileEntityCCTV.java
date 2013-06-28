@@ -54,7 +54,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 			on = false;
 			return;
 		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getID()) {
+		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
 			on = false;
 			return;
 		}
@@ -65,7 +65,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 		tickcount2++;
 		int dmg = inv[0].getItemDamage();
 		if (tickcount2 > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getID(), 1, dmg-1);
+			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
 			inv[0] = is;
 			tickcount2 = 0;
 		}
@@ -92,7 +92,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 			;//return;
 		if (!cameraIsMoved)
 			return;
-		if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == ItemRegistry.SPRING.getID() && inv[0].getItemDamage() > 0)
+		if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].itemID == ItemRegistry.SPRING.getShiftedID() && inv[0].getItemDamage() > 0)
 			return;
 		tickcount = 0;
 		this.movePlayerBack(e);

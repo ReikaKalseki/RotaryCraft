@@ -603,23 +603,23 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(4), new Object[]{ //Bedrock shaft unit
 			"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft});
 
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.DC.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.DC.ordinal()), new Object[]{
 			"SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.WIND.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.WIND.ordinal()), new Object[]{
 			"SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.STEAM.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.STEAM.ordinal()), new Object[]{
 			"SSS", "CIs", "PGP", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', Item.ingotGold, 'C', ItemStacks.condenser});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.GAS.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.GAS.ordinal()), new Object[]{
 			"CgC", "SGs", "PIP", 'g', Item.ingotGold, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'C', ItemStacks.cylinder});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.AC.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.AC.ordinal()), new Object[]{
 			"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.SPORT.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.SPORT.ordinal()), new Object[]{
 			"CrC", "SGs", "PIP", 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.HYDRO.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.HYDRO.ordinal()), new Object[]{
 			"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.MICRO.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.MICRO.ordinal()), new Object[]{
 			"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.JET.getID()), new Object[]{
+		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.JET.ordinal()), new Object[]{
 			"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{ //Hose

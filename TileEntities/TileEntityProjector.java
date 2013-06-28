@@ -78,7 +78,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 			emptySlide = false;
 			channel = -1;
 		}
-		if (slides[0].itemID != ItemRegistry.SLIDE.getID()) {
+		if (slides[0].itemID != ItemRegistry.SLIDE.getShiftedID()) {
 			emptySlide = true;
 			return;
 		}
@@ -252,7 +252,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.SLIDE.getID();
+		return is.itemID == ItemRegistry.SLIDE.getShiftedID();
 	}
 
 	@Override

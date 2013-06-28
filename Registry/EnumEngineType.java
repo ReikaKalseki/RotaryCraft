@@ -191,9 +191,9 @@ public enum EnumEngineType {
 
 	public boolean isValidFuel(ItemStack is) {
 		if (this == GAS)
-			return is.itemID == ItemRegistry.ETHANOL.getID();
+			return is.itemID == ItemRegistry.ETHANOL.getShiftedID();
 		if (this == SPORT)
-			return is.itemID == ItemRegistry.ETHANOL.getID() || this.isAdditive(is);
+			return is.itemID == ItemRegistry.ETHANOL.getShiftedID() || this.isAdditive(is);
 		if (this == AC)
 			return is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage();
 		return false;

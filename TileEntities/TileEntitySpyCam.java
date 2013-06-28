@@ -61,7 +61,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 			on = false;
 			return;
 		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getID()) {
+		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
 			on = false;
 			return;
 		}
@@ -73,7 +73,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		tickcount2++;
 		int dmg = inv[0].getItemDamage();
 		if (tickcount2 > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getID(), 1, dmg-1);
+			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
 			inv[0] = is;
 			tickcount2 = 0;
 		}
