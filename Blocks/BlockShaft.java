@@ -71,14 +71,14 @@ public class BlockShaft extends BlockModelledMachine {
 			return 0;
 		MaterialRegistry type = sha.type;
 		switch(type) {
-			case WOOD:
-				return 3F;
-			case STONE:
-				return 8F;
-			case STEEL:
-			case DIAMOND:
-			case BEDROCK:
-				return 15F;
+		case WOOD:
+			return 3F;
+		case STONE:
+			return 8F;
+		case STEEL:
+		case DIAMOND:
+		case BEDROCK:
+			return 15F;
 		}
 		return 0;
 	}
@@ -118,25 +118,27 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft tile = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (tile != null) {
 			ItemStack fix;
+			if (tile.type == null)
+				return false;
 			switch(tile.type) {
-				case WOOD:
-					fix = new ItemStack(Item.stick);
-					break;
-				case STONE:
-					fix = ItemStacks.stonerod;
-					break;
-				case STEEL:
-					fix = ItemStacks.shaftitem;
-					break;
-				case DIAMOND:
-					fix = ItemStacks.diamondshaft;
-					break;
-				case BEDROCK:
-					fix = ItemStacks.bedrockshaft;
-					break;
-				default:
-					fix = new ItemStack(Block.stone);
-					break;
+			case WOOD:
+				fix = new ItemStack(Item.stick);
+				break;
+			case STONE:
+				fix = ItemStacks.stonerod;
+				break;
+			case STEEL:
+				fix = ItemStacks.shaftitem;
+				break;
+			case DIAMOND:
+				fix = ItemStacks.diamondshaft;
+				break;
+			case BEDROCK:
+				fix = ItemStacks.bedrockshaft;
+				break;
+			default:
+				fix = new ItemStack(Block.stone);
+				break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
 				tile.repair();
@@ -172,21 +174,21 @@ public class BlockShaft extends BlockModelledMachine {
 			if (sha.failed) {
 				ItemStack todrop = null;
 				switch(sha.type) {
-					case WOOD:
-						todrop = new ItemStack(Block.planks.blockID, 5, 0);
-						break;
-					case STONE:
-						todrop = new ItemStack(ReikaItemHelper.cobbleSlab.itemID, 5, ReikaItemHelper.cobbleSlab.getItemDamage());
-						break;
-					case STEEL:
-						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-						break;
-					case DIAMOND:
-						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-						break;
-					case BEDROCK:
-						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-						break;
+				case WOOD:
+					todrop = new ItemStack(Block.planks.blockID, 5, 0);
+					break;
+				case STONE:
+					todrop = new ItemStack(ReikaItemHelper.cobbleSlab.itemID, 5, ReikaItemHelper.cobbleSlab.getItemDamage());
+					break;
+				case STEEL:
+					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+					break;
+				case DIAMOND:
+					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+					break;
+				case BEDROCK:
+					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+					break;
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
@@ -232,18 +234,18 @@ public class BlockShaft extends BlockModelledMachine {
 			while (i < 0)
 				i += 4;
 			switch (i) {
-				case 0:
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+0);
-					break;
-				case 1:
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+3);
-					break;
-				case 2:
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+2);
-					break;
-				case 3:
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+1);
-					break;
+			case 0:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+0);
+				break;
+			case 1:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+3);
+				break;
+			case 2:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+2);
+				break;
+			case 3:
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+1);
+				break;
 			}
 		}
 		else { //Looking up/down

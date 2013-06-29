@@ -42,7 +42,7 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	private int index;
 
 	public ItemBedrockPickaxe(int ID, int tex) {
-		super(ID, EnumToolMaterial.GOLD);
+		super(ID, EnumToolMaterial.EMERALD);
 		this.setIndex(tex);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;

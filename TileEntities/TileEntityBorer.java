@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
@@ -23,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
@@ -204,7 +204,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					return;
 				}
 			}
-			int metaread = world.getBlockMetadata(xread, yread, zread);
+			int metaread = world.getBlockMetadata(xread, yread, zread);/*
 			int dropid = Block.blocksList[id].idDropped(id, par5Random, this.getEnchantment(Enchantment.fortune));
 			int dropmeta = Block.blocksList[id].damageDropped(metaread);
 			int dropsize = Block.blocksList[id].quantityDropped(par5Random);
@@ -220,6 +220,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					else {
 						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 					}
+				}
+			}*/
+			if (this.getEnchantment(Enchantment.silkTouch) > 0) {
+				ItemStack is = new ItemStack(id, 1, metaread);
+				if (!this.chestCheck(world, x, y, z, is)) {
+					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+				}
+				return;
+			}
+			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, xread, yread, zread, metaread, this.getEnchantment(Enchantment.fortune));
+			for (int i = 0; i < items.size(); i++) {
+				ItemStack is = items.get(i);
+				if (!this.chestCheck(world, x, y, z, is)) {
+					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}
 			}
 		}

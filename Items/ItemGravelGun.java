@@ -79,7 +79,7 @@ public class ItemGravelGun extends ItemChargedTool {
 						world.spawnEntityInWorld(ei);
 					}
 					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
-					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0))
+					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 100)
 						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 					//ent.setRevengeTarget(ep);
