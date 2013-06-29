@@ -17,7 +17,6 @@ import net.minecraft.stats.StatList;
 import net.minecraftforge.common.AchievementPage;
 import Reika.DragonAPI.Exception.IDConflictException;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
@@ -108,7 +107,7 @@ public enum RotaryAchievements {
 			else
 				parent = list[i].parent;
 			list[i].icon = AchievementAuxiliary.icons[i];
-			RotaryCraft.achievements[i] = new Achievement(RotaryConfig.achievementIDs[i], list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent);
+			RotaryCraft.achievements[i] = new Achievement(RotaryCraft.config.achievementIDs[i], list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent);
 			int id = RotaryCraft.achievements[i].statId;
 			if (StatList.getOneShotStat(id) != null)
 				throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another at ID "+id+" (trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");

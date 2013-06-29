@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -31,6 +33,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class RotaryRecipes {
 
 	public static void addRecipes() {
+		OreDictionary.initVanillaEntries();
 		addMachines();
 		addCraftItems();
 		addItemBlocks();
@@ -154,8 +157,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.PULSEJET.getCraftedProduct(), new Object[]{
 			"OCD", "PcO", "BBB", 'B', ItemStacks.basepanel, 'O', Block.obsidian, 'C', ItemStacks.compressor, 'D', ItemStacks.diffuser, 'c', ItemStacks.combustor, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
-		GameRegistry.addRecipe(MachineRegistry.EXTRACTOR.getCraftedProduct(), new Object[]{
-			"SWS", "siD", "PIN", 'D', ItemStacks.drill, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.shaftitem, 's', Block.stone, 'i', ItemStacks.impeller, 'N', Block.netherrack, 'W', "woodPlank"});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(MachineRegistry.EXTRACTOR.getCraftedProduct(), new Object[]{
+			"SWS", "siD", "PIN", 'D', ItemStacks.drill, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.shaftitem, 's', Block.stone, 'i', ItemStacks.impeller, 'N', Block.netherrack, 'W', ExpandedOreRecipe.getWoodList()}));
 
 		GameRegistry.addRecipe(MachineRegistry.LIGHTBRIDGE.getCraftedProduct(), new Object[]{
 			"GgG", "BgS", "BBD", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Item.diamond, 'G', Item.ingotGold, 'g', Block.glass});
@@ -407,8 +410,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.wormgear, new Object[]{
 				"S  ", " G ", "  S", 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear});
 
-		GameRegistry.addRecipe(ItemStacks.woodgear, new Object[]{
-				" W ", "WWW", " W ", 'W', "woodPlank"});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemStacks.woodgear, new Object[]{
+				" W ", "WWW", " W ", 'W', ExpandedOreRecipe.getWoodList()}));
 		GameRegistry.addRecipe(new ItemStack(ItemStacks.stonegear.itemID, 2, ItemStacks.stonegear.getItemDamage()), new Object[]{
 			" W ", "WWW", " W ", 'W', Block.stone});
 		GameRegistry.addRecipe(new ItemStack(ItemStacks.diamondgear.itemID, 8, ItemStacks.diamondgear.getItemDamage()), new Object[]{
@@ -416,8 +419,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(new ItemStack(ItemStacks.bedrockgear.itemID, 8, ItemStacks.bedrockgear.getItemDamage()), new Object[]{
 			"bWb", "WWW", "bWb", 'b', ItemStacks.bedrockdust, 'W', ItemStacks.steelingot});
 
-		GameRegistry.addRecipe(ItemStacks.flywheelcore, new Object[]{
-				"WWW", "WGW", "WWW", 'W', "woodPlank", 'G', ItemStacks.steelgear});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemStacks.flywheelcore, new Object[]{
+				"WWW", "WGW", "WWW", 'W', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.steelgear}));
 		GameRegistry.addRecipe(ItemStacks.flywheelcore2, new Object[]{
 				"WWW", "WGW", "WWW", 'W', Block.stone, 'G', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.flywheelcore3, new Object[]{
@@ -436,12 +439,12 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemRegistry.TARGET.getCraftedProduct(1), new Object[]{
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
-		GameRegistry.addRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
-			"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', "woodPlank"});
-		GameRegistry.addRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
-			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', "woodPlank"});
-		GameRegistry.addRecipe(ItemRegistry.METER.getCraftedProduct(1), new Object[]{
-			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', "woodPlank"});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
+			"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
+			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', ExpandedOreRecipe.getWoodList()}));
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.METER.getCraftedProduct(1), new Object[]{
+			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
 		GameRegistry.addRecipe(ItemRegistry.HANDBOOK.getCraftedProduct(1), new Object[]{
 			"RSR", "PPP", "PPP", 'R', Item.redstone, 'S', Item.ingotIron, 'P', Item.paper});
 
@@ -506,7 +509,8 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.basepanel);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45), ItemStacks.mount);
 
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), Block.rail, Block.rail, Block.rail, Block.rail, Block.rail, Block.rail, Block.rail, Block.rail);
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
+			"rrr", "rrr", "rr ", 'r', Block.rail});
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), Block.fenceIron, Block.fenceIron, Block.fenceIron, Block.fenceIron, Block.fenceIron, Block.fenceIron, Block.fenceIron, Block.fenceIron);
 
 		GameRegistry.addRecipe(ItemStacks.steelblock, new Object[]{
@@ -528,12 +532,12 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", "   ", 's', ItemStacks.steelingot});
 
-		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 1), new Object[]{
-			"p  ", " s ", "  p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(0), 'p', "woodPlank"});
-		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 2), new Object[]{
-			"p p", " s ", "p p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(1), 'p', "woodPlank"});
-		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 3), new Object[]{
-			"ppp", "psp", "ppp", 's', ItemRegistry.RAILGUN.getStackOfMetadata(2), 'p', "woodPlank"});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 1), new Object[]{
+			"p  ", " s ", "  p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(0), 'p', ExpandedOreRecipe.getWoodList()}));
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 2), new Object[]{
+			"p p", " s ", "p p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(1), 'p', ExpandedOreRecipe.getWoodList()}));
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 3), new Object[]{
+			"ppp", "psp", "ppp", 's', ItemRegistry.RAILGUN.getStackOfMetadata(2), 'p', ExpandedOreRecipe.getWoodList()}));
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 4), new Object[]{
 			"p  ", " s ", "  p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(3), 'p', Block.stone});
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 5), new Object[]{
@@ -593,8 +597,8 @@ public class RotaryRecipes {
 	}
 
 	private static void addItemBlocks() {
-		GameRegistry.addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{ //Wood shaft unit
-			"   ", "BSB", "BBB", 'B', "woodPlank", 'S', Item.stick});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{ //Wood shaft unit
+			"   ", "BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', Item.stick}));
 		GameRegistry.addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(1), new Object[]{ //Stone shaft unit
 			"   ", "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod});
 		GameRegistry.addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(2), new Object[]{ //Steel shaft unit
@@ -623,8 +627,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.JET.ordinal()), new Object[]{
 			"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{ //Hose
-			"W W", "W W", "W W", 'W', "woodPlank"});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{ //Hose
+			"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.pipe, 16), new Object[]{ //Pipe
 			"S S", "S S", "S S", 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.fuelline, 16), new Object[]{ //Fuel Line
@@ -632,17 +636,17 @@ public class RotaryRecipes {
 
 		ItemStack gear;
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(0));
-		GameRegistry.addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', "woodPlank", 'G', ItemStacks.wood2x});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(gear, new Object[]{
+				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood2x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(5));
-		GameRegistry.addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', "woodPlank", 'G', ItemStacks.wood4x});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(gear, new Object[]{
+				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood4x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(10));
-		GameRegistry.addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', "woodPlank", 'G', ItemStacks.wood8x});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(gear, new Object[]{
+				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood8x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(15));
-		GameRegistry.addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', "woodPlank", 'G', ItemStacks.wood16x});
+		GameRegistry.addRecipe(new ExpandedOreRecipe(gear, new Object[]{
+				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood16x}));
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(1));
 		GameRegistry.addRecipe(gear, new Object[]{

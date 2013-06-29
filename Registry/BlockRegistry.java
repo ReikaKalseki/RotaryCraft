@@ -12,9 +12,9 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 
-public enum BlockRegistry implements RegistrationList {
+public enum BlockRegistry implements RegistrationList, IDRegistry {
 
 	ADVANCEDGEAR(BlockAdvGear.class),
 	DIR(BlockDMachine.class),
@@ -122,7 +122,7 @@ public enum BlockRegistry implements RegistrationList {
 	}
 
 	public int getBlockID() {
-		return RotaryConfig.machineids[this.ordinal()];
+		return RotaryCraft.config.getBlockID(this.ordinal());
 	}
 
 	public String getBasicName() {
@@ -134,7 +134,7 @@ public enum BlockRegistry implements RegistrationList {
 	}
 
 	public Object[] getConstructorParams() {
-		return new Object[]{RotaryConfig.machineids[this.ordinal()], this.getBlockMaterial()};
+		return new Object[]{RotaryCraft.config.getBlockID(this.ordinal()), this.getBlockMaterial()};
 	}
 
 	@Override
@@ -160,5 +160,30 @@ public enum BlockRegistry implements RegistrationList {
 	@Override
 	public boolean hasItemBlock() {
 		return false;
+	}
+
+	@Override
+	public String getConfigName() {
+		return this.getBlockVariableName();
+	}
+
+	@Override
+	public int getDefaultID() {
+		return 490+this.ordinal();
+	}
+
+	@Override
+	public boolean isBlock() {
+		return true;
+	}
+
+	@Override
+	public boolean isItem() {
+		return false;
+	}
+
+	@Override
+	public String getCategory() {
+		return "Machine Blocks";
 	}
 }

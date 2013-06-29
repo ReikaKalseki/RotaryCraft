@@ -134,7 +134,9 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Entity fallblock;
 
 	@Instance("RotaryCraft")
-	public static RotaryCraft instance;
+	public static RotaryCraft instance = new RotaryCraft();
+
+	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, BlockRegistry.blockList, ItemRegistry.itemList, ExtraConfigIDs.idList, 0);
 
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -148,7 +150,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
-		RotaryConfig.initProps(evt);
+		config.initProps(evt);
 		proxy.registerSounds();
 	}
 

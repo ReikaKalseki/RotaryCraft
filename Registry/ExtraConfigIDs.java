@@ -11,10 +11,10 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.Configuration;
-import Reika.RotaryCraft.RotaryConfig;
+import Reika.DragonAPI.Interfaces.IDRegistry;
+import Reika.RotaryCraft.RotaryCraft;
 
-public enum ExtraConfigIDs {
+public enum ExtraConfigIDs implements IDRegistry {
 
 	MACHINEPLACER("ItemBlock IDs", "Machine Items", 30616, Item.class),
 	HEATCRAFT("Crafting Item IDs", "Heat Ray Crafting Items", 30628, Item.class),
@@ -70,7 +70,7 @@ public enum ExtraConfigIDs {
 		return category;
 	}
 
-	public int getDefault() {
+	public int getDefaultID() {
 		return defaultID;
 	}
 
@@ -82,16 +82,12 @@ public enum ExtraConfigIDs {
 		return type == Item.class;
 	}
 
-	public int getValueFromConfig(Configuration config) {
-		if (this.isBlock())
-			return config.getBlock(category, name, defaultID).getInt();
-		if (this.isItem())
-			return config.getItem(category, name, defaultID).getInt();
-		return config.get(category, name, defaultID).getInt();
-	}
-
 	public int getValue() {
-		return RotaryConfig.extraids[this.ordinal()];
+		return RotaryCraft.config.getOtherID(this.ordinal());
 	}
 
+	@Override
+	public String getConfigName() {
+		return this.getName();
+	}
 }

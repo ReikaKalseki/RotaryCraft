@@ -11,11 +11,10 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraftforge.common.Configuration;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry {
+public enum ConfigRegistry implements Reika.DragonAPI.Interfaces.ConfigRegistry {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", false),
@@ -102,11 +101,11 @@ public enum ConfigRegistry {
 	public boolean getState() {
 		if (isLocked)
 			return defaultState;
-		return (Boolean)RotaryConfig.controls[this.ordinal()];
+		return (Boolean)RotaryCraft.config.getControl(this.ordinal());
 	}
 
 	public int getValue() {
-		return (Integer)RotaryConfig.controls[this.ordinal()];
+		return (Integer)RotaryCraft.config.getControl(this.ordinal());
 	}
 
 }

@@ -54,7 +54,7 @@ public class TileEntityFlooder extends TileEntityPiping {
 				this.spill2(world, x, y, z);
 				tickcount = 0;
 			}*/
-		else if (tickcount > 1 && liquidLevel > 0) {
+		else if (tickcount > 1 && liquidLevel > 0 && !blocks.isEmpty()) {
 			tickcount = 0;
 			int[] coord = blocks.getNextAndMoveOn();
 			world.setBlock(coord[0], coord[1], coord[2], liquidID);

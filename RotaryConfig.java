@@ -13,7 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import net.minecraftforge.common.Configuration;
+import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Instantiable.ControlledConfig;
+import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -22,21 +24,13 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class RotaryConfig {
+public class RotaryConfig extends ControlledConfig {
 
-	//Configuration, used for save and load data
-	public static Configuration config;
+	public RotaryConfig(DragonAPIMod mod, Reika.DragonAPI.Interfaces.ConfigRegistry[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
+		super(mod, option, blocks, items, id, cfg);
+	}
 
-	/** Change this to cause auto-deletion of users' config files to load new copies */
-	private static final int CURRENT_CONFIG_ID = 1;
-	private static int readID;
-	private static File configFile;
-
-	public static int[] machineids = new int[BlockRegistry.blockList.length];
-	public static int[] itemids = new int[ItemRegistry.itemList.length];
-	public static int[] extraids = new int[ExtraConfigIDs.idList.length];
-	public static Object[] controls = new Object[ConfigRegistry.optionList.length];
-	public static int[] achievementIDs = new int[RotaryAchievements.list.length]; //
+	public int[] achievementIDs = new int[RotaryAchievements.list.length]; //
 
 	/** Non-config-file control data used by the machines */
 
@@ -47,44 +41,12 @@ public class RotaryConfig {
 
 	//Initialization of the config
 	// Args: String mod used to name the config file to mods name
-	public static void initProps(FMLPreInitializationEvent event) {
+	@Override
+	public void initProps(FMLPreInitializationEvent event) {
 
-		//allocate the file to the config
-		configFile = event.getSuggestedConfigurationFile();
-		config = new Configuration(configFile);
+		super.initProps(event);
 
-		//load data
 		config.load();
-
-		if (checkReset(config)) {
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Config File Format Changed. Resetting...");
-			resetConfigFile();
-			initProps(event);
-			return;
-		}
-
-		for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
-			extraids[i] = ExtraConfigIDs.idList[i].getValueFromConfig(config);
-		}
-
-		for (int i = 0; i < ConfigRegistry.optionList.length; i++) {
-			String label = ConfigRegistry.optionList[i].getLabel();
-			if (ConfigRegistry.optionList[i].isBoolean())
-				controls[i] = ConfigRegistry.optionList[i].setState(config);
-			if (ConfigRegistry.optionList[i].isNumeric())
-				controls[i] = ConfigRegistry.optionList[i].setValue(config);
-		}
-
-		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			String name = BlockRegistry.blockList[i].getBlockVariableName();
-			machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
-		}
-
-		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-			String name = ItemRegistry.itemList[i].getBasicName();
-			itemids[i] = config.get("Item IDs", name, 30500+i).getInt();
-		}
-
 		for (int i = 0; i < RotaryAchievements.list.length; i++) {
 			String name = RotaryAchievements.list[i].name();
 			achievementIDs[i] = config.get("Achievement IDs", name, 24000+i).getInt();
@@ -95,23 +57,18 @@ public class RotaryConfig {
 		config.save();
 	}
 
-	private static boolean checkReset(Configuration config) {
-		readID = config.get("Control", "Config ID - Edit to have your config auto-deleted", CURRENT_CONFIG_ID).getInt();
-		//ReikaJavaLibrary.pConsole("ReadID: "+readID);
-		return readID != CURRENT_CONFIG_ID;
-	}
-
-	private static void resetConfigFile() {
-		String path = configFile.getAbsolutePath().substring(0, configFile.getAbsolutePath().length()-4)+"_Old_Config_Backup.txt";
+	@Override
+	protected void resetConfigFile() {
+		String path = this.getConfigPath()+"_Old_Config_Backup.txt";
 		File backup = new File(path);
 		if (backup.exists())
 			backup.delete();
 		try {
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Writing Backup File to "+path);
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Use this to restore custom IDs if necessary.");
+			ReikaJavaLibrary.pConsole(configMod.getDisplayName().toUpperCase()+": Writing Backup File to "+path);
+			ReikaJavaLibrary.pConsole(configMod.getDisplayName().toUpperCase()+": Use this to restore custom IDs if necessary.");
 			backup.createNewFile();
 			if (!backup.exists())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not create backup file at "+path+"!");
+				ReikaJavaLibrary.pConsole(configMod.getDisplayName().toUpperCase()+": Could not create backup file at "+path+"!");
 			else {
 				PrintWriter p = new PrintWriter(backup);
 				p.println("#####----------THESE ARE ALL THE OLD CONFIG SETTINGS YOU WERE USING----------#####");
@@ -127,14 +84,14 @@ public class RotaryConfig {
 
 				for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 					String name = BlockRegistry.blockList[i].getBlockVariableName();
-					machineids[i] = config.get("Machine Block IDs", name, 490+i).getInt();
-					p.println(name+": "+String.valueOf(machineids[i]));
+					blockIDs[i] = config.get("Machine Block IDs", name, 490+i).getInt();
+					p.println(name+": "+String.valueOf(blockIDs[i]));
 				}
 
 				for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 					String name = ItemRegistry.itemList[i].getBasicName();
-					itemids[i] = config.get("Item IDs", name, 30500+i).getInt();
-					p.println(name+": "+String.valueOf(itemids[i]));
+					itemIDs[i] = config.get("Item IDs", name, 30500+i).getInt();
+					p.println(name+": "+String.valueOf(itemIDs[i]));
 				}
 
 				for (int i = 0; i < RotaryAchievements.list.length; i++) {
@@ -146,16 +103,16 @@ public class RotaryConfig {
 				for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
 					String name = ExtraConfigIDs.idList[i].getName();
 					String cat = ExtraConfigIDs.idList[i].getCategory();
-					int def = ExtraConfigIDs.idList[i].getDefault();
-					extraids[i] = config.get(cat, name, def).getInt();
-					p.println(name+": "+String.valueOf(extraids[i]));
+					int def = ExtraConfigIDs.idList[i].getDefaultID();
+					otherIDs[i] = config.get(cat, name, def).getInt();
+					p.println(name+": "+String.valueOf(otherIDs[i]));
 				}
 
 				p.close();
 			}
 		}
 		catch (IOException e) {
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not create backup file due to IOException!");
+			ReikaJavaLibrary.pConsole(configMod.getDisplayName().toUpperCase()+": Could not create backup file due to IOException!");
 			e.printStackTrace();
 		}
 		configFile.delete();

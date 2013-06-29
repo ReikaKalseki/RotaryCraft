@@ -56,29 +56,29 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return false;
 		int id = 0;
 		switch (metadata) {
-			case 0:
-				id = world.getBlockId(x+1, y, z);
-				readx = x+1;
-				readz = z;
-				break;
-			case 1:
-				id = world.getBlockId(x-1, y, z);
-				readx = x-1;
-				readz = z;
-				break;
-			case 2:
-				id = world.getBlockId(x, y, z+1);
-				readx = x;
-				readz = z+1;
-				break;
-			case 3:
-				id = world.getBlockId(x, y, z-1);
-				readx = x;
-				readz = z-1;
-				break;
-			default:
-				id = 0;
-				break;
+		case 0:
+			id = world.getBlockId(x+1, y, z);
+			readx = x+1;
+			readz = z;
+			break;
+		case 1:
+			id = world.getBlockId(x-1, y, z);
+			readx = x-1;
+			readz = z;
+			break;
+		case 2:
+			id = world.getBlockId(x, y, z+1);
+			readx = x;
+			readz = z+1;
+			break;
+		case 3:
+			id = world.getBlockId(x, y, z-1);
+			readx = x;
+			readz = z-1;
+			break;
+		default:
+			id = 0;
+			break;
 		}
 		ready = yCoord;
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready+3, readz, 4);
@@ -350,7 +350,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 			return false;
 		if (slot == 2)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return RecipesGrinder.smelting().getSmeltingResult(is.itemID) != null;
+		return RecipesGrinder.smelting().getSmeltingResult(is.itemID) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
 	}
 
 	@Override

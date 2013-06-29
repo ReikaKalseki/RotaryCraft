@@ -18,16 +18,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class ItemCannonKey extends ItemBasic {
+public class ItemCannonKey extends ItemRotaryTool {
 
 	public ItemCannonKey(int ID, int tex) {
-		super(ID, tex, 1);
+		super(ID, tex);
 	}
 
 	@Override
