@@ -45,7 +45,7 @@ public class RecipesExtractor
 		this.addSmelting(Block.oreLapis.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 4), 0F);
 		this.addSmelting(Block.oreDiamond.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 5), 0F);
 		this.addSmelting(Block.oreEmerald.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 6), 0F);
-		//addSmelting(Block.oreNether.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 7), 0.7F);
+		this.addSmelting(Block.oreNetherQuartz.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 7), 0.7F);
 	}
 
 	/** Adds a smelting recipe. */

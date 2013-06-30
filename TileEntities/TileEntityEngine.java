@@ -62,6 +62,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider {
 	/** s/e *//*
@@ -520,18 +522,20 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public boolean isDrowned(World world, int x, int y, int z) {
 		if (!type.isAirBreathing())
 			return false;
-		if (world.getBlockMaterial(x-1, y, z) != Material.water && world.getBlockMaterial(x-1, y, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y, z-1) != Material.water && world.getBlockMaterial(x, y, z-1) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x+1, y, z) != Material.water && world.getBlockMaterial(x+1, y, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y+1, z) != Material.water && world.getBlockMaterial(x, y+1, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y, z+1) != Material.water && world.getBlockMaterial(x, y, z+1) != Material.lava)
-			return false;
+		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1) {
+			if (world.getBlockMaterial(x-1, y, z) != Material.water && world.getBlockMaterial(x-1, y, z) != Material.lava)
+				return false;
+			if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
+				return false;
+			if (world.getBlockMaterial(x, y, z-1) != Material.water && world.getBlockMaterial(x, y, z-1) != Material.lava)
+				return false;
+			if (world.getBlockMaterial(x+1, y, z) != Material.water && world.getBlockMaterial(x+1, y, z) != Material.lava)
+				return false;
+			if (world.getBlockMaterial(x, y+1, z) != Material.water && world.getBlockMaterial(x, y+1, z) != Material.lava)
+				return false;
+			if (world.getBlockMaterial(x, y, z+1) != Material.water && world.getBlockMaterial(x, y, z+1) != Material.lava)
+				return false;
+		}
 		return true;
 	}
 
@@ -1374,14 +1378,19 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			ReikaWorldHelper.temperatureEnvironment(world, x+dx*i, y, z+dz*i, 800);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
-		if (jetfuels < FUELCAP/12 && par5Random.nextInt(10) == 0) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
-		}
-		if (jetfuels < FUELCAP/4 && par5Random.nextInt(20) == 0) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
-		}
-		else if (par5Random.nextInt(40) == 0) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			if (jetfuels < FUELCAP/12 && par5Random.nextInt(10) == 0) {
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				this.backFire(world, x, y, z);
+			}
+			if (jetfuels < FUELCAP/4 && par5Random.nextInt(20) == 0) {
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				this.backFire(world, x, y, z);
+			}
+			else if (par5Random.nextInt(40) == 0) {
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				this.backFire(world, x, y, z);
+			}
 		}
 		if (par5Random.nextInt(2) == 0)
 			temperature++;
@@ -1449,9 +1458,5 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			if (e instanceof EntityPainting || e instanceof EntityItemFrame)
 				e.attackEntityFrom(DamageSource.generic, 10);
 		}
-	}
-
-	private void backfire() {
-
 	}
 }
