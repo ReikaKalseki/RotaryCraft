@@ -63,6 +63,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
@@ -198,7 +199,8 @@ public enum MachineRegistry {
 	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0,	"RenderMirror"),
 	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
 	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
-	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3);
+	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
+	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			8);
 
 
 	private String name;

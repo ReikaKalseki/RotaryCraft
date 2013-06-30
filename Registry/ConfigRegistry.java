@@ -11,10 +11,11 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraftforge.common.Configuration;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry implements Reika.DragonAPI.Interfaces.ConfigRegistry {
+public enum ConfigRegistry implements ConfigList {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", false),

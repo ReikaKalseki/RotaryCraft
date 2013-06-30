@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
+import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -26,7 +27,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class RotaryConfig extends ControlledConfig {
 
-	public RotaryConfig(DragonAPIMod mod, Reika.DragonAPI.Interfaces.ConfigRegistry[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
+	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
 		super(mod, option, blocks, items, id, cfg);
 	}
 
