@@ -10,7 +10,6 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

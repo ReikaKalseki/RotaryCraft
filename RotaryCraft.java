@@ -190,7 +190,7 @@ public class RotaryCraft extends DragonAPIMod {
 		//LoadAux.texMsg();
 		if (Loader.isModLoaded("OptiFine")) {
 			String msg = "Optifine breaks rendering of many RotaryCraft items and features.\nRemove it if possible for full RotaryCraft functionality.";
-			throw new ModIncompatibilityException(instance, "Optifine", msg, false);
+			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 	}
 
@@ -234,7 +234,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public String getDisplayName() {
-		return "RotaryCraft Beta";
+		return "RotaryCraft";
 	}
 
 	@Override
