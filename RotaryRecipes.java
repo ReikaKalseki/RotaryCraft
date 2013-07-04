@@ -20,6 +20,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ChargingRecipe;
@@ -277,7 +278,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
 				"SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Item.redstone});
 		GameRegistry.addRecipe(ItemStacks.radiator, new Object[]{
-				"GGG", "PPP", "SSS", 'I', Item.ingotGold, 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
+				"GGG", "PPP", "SSS", 'G', Item.ingotGold, 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.condenser, new Object[]{
 				"SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 		GameRegistry.addRecipe(ItemStacks.goldcoil, new Object[]{
@@ -527,7 +528,7 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.lonsda, 9), ItemStacks.lonsblock);
 
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
-		GameRegistry.addShapelessRecipe(ItemStacks.silveriodide, ItemStacks.salt, ItemStacks.silveringot);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", "   ", 's', ItemStacks.steelingot});
@@ -619,7 +620,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.AC.ordinal()), new Object[]{
 			"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
 		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.SPORT.ordinal()), new Object[]{
-			"CrC", "SGs", "PIP", 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
+			"CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
 		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.HYDRO.ordinal()), new Object[]{
 			"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
 		GameRegistry.addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.MICRO.ordinal()), new Object[]{

@@ -42,7 +42,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	@Override
 	public int idDropped(int id, Random r, int fortune) {
-		return RotaryCraft.pipeplacer.itemID;
+		return 0*RotaryCraft.pipeplacer.itemID;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 	@Override
 	public int quantityDropped(Random par1Random)
 	{
-		return 1;
+		return 0;
 	}
 
 	@Override

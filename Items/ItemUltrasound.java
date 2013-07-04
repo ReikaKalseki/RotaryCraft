@@ -27,7 +27,7 @@ public class ItemUltrasound extends ItemChargedTool {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		if (is.getItemDamage() <= 0) {
+		if (is.getItemDamage() <= 1) {
 			ReikaChatHelper.clearChat(); //clr
 			this.noCharge();
 			return is;

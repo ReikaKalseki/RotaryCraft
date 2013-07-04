@@ -223,4 +223,10 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			return 15;
 		return 0;
 	}
+
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 1;
+	}
 }

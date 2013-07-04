@@ -58,6 +58,8 @@ public class ItemChargingRecipeHandler implements ICraftingHandler {
 			int springslot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.SPRING.getShiftedID(), ii);
 			int toolmeta = ii.getStackInSlot(toolslot).getItemDamage();
 			int springmeta = ii.getStackInSlot(springslot).getItemDamage();
+			if (springmeta <= 0)
+				return;
 			//ItemStack newtool = new ItemStack(toolid, 1, springmeta);
 			ItemStack newspring = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, toolmeta);
 			item.setItemDamage(springmeta);

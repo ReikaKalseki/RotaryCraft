@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.ModOreList;
 
 public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 {
@@ -53,7 +54,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		return i == 7 || i == 8;
 	}
 
-	public int getSmeltNumber(int num) {
+	private int getSmeltNumber(int num) {
 		if (num == 63)
 			return 1;
 		return (1+par5Random.nextInt(2));
@@ -220,18 +221,18 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		int j = i+1;
 		int time = -1;
 		switch (j) {
-			case 1:
-				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
-				break;
-			case 2:
-				time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
-				break;
-			case 3:
-				time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-				break;
-			case 4:
-				time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-				break;
+		case 1:
+			time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
+			break;
+		case 2:
+			time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
+			break;
+		case 3:
+			time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+			break;
+		case 4:
+			time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+			break;
 		}
 		if (time == -1)
 			return 0;
@@ -274,6 +275,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 					if (this.operationComplete(extractorCookTime[i], i+1)) {
 						extractorCookTime[i] = 0;
+						this.processModOre();
 						this.smeltItem(i);
 						flag1 = true;
 					}
@@ -374,14 +376,37 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		}
 	}
 
-	private boolean isValidModOre() {
-		return false;
+	private boolean isValidModOre(ItemStack is) {
+		return ModOreList.isModOreIngredient(is) || ModOreList.isModOre(is);
 	}
 
-	private void processModOre(ItemStack is) {
-		if (is == null || is.itemID != RotaryCraft.modextracts.itemID)
-			return;
-
+	private void processModOre() {
+		for (int i = 0; i < 4; i++) {
+			if (this.isValidModOre(inv[i])) {
+				int targetsize = 0;
+				if (inv[i+4] != null)
+					targetsize = inv[i+4].stackSize;
+				ModOreList m = ModOreList.getEntryFromDamage(inv[i]);
+				if (ModOreList.isModOre(inv[i]) && i == 0) {
+					ItemStack is = ModOreList.getEntryFromDamage(inv[i]).getDustProduct();
+					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+				}
+				else if (ModOreList.isModOreIngredient(inv[i])) {
+					if (m.isDust(inv[i].getItemDamage()) && i == 1) {
+						ItemStack is = ModOreList.getEntryFromDamage(inv[i]).getSlurryProduct();
+						ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					}
+					if (m.isSlurry(inv[i].getItemDamage()) && i == 2) {
+						ItemStack is = ModOreList.getEntryFromDamage(inv[i]).getSolutionProduct();
+						ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					}
+					if (m.isSolution(inv[i].getItemDamage()) && i == 3) {
+						ItemStack is = ModOreList.getEntryFromDamage(inv[i]).getFlakeProduct();
+						ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -406,7 +431,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return ReikaBlockHelper.isOre(is.itemID) && slot == 0;
+		return (ReikaBlockHelper.isOre(is.itemID) || this.isValidModOre(is)) && slot == 0;
 	}
 
 	@Override

@@ -129,7 +129,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep)
 	{
-		if (is.getItemDamage() <= 0) {
+		if (is.getItemDamage() <= 1) {
 			this.noCharge();
 			return is;
 		}

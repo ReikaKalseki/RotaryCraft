@@ -277,6 +277,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
+		if (this.isCharged())
+			return this.getCraftedMetadataProduct(amt, 1);
 		return new ItemStack(this.getShiftedID(), amt, 0);
 	}
 

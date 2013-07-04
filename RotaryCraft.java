@@ -17,18 +17,15 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
@@ -114,6 +111,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item flywheelitems;
 	public static Item advgearitems;
 	public static Item modextracts;
+	public static Item modingots;
 
 	public static Block canola;
 	public static Block miningpipe;
@@ -129,8 +127,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item[] basicItems = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
-
-	public static Entity arrow;
 	public static Entity fallblock;
 
 	@Instance("RotaryCraft")
@@ -162,7 +158,6 @@ public class RotaryCraft extends DragonAPIMod {
 		proxy.registerRenderers();
 		RotaryRegistration.addBlocks();
 		RotaryNames.addNames();
-		RotaryRecipes.addRecipes();
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
 		RotaryChests.addToChests();
@@ -176,12 +171,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});
 
-		OreDictionary.registerOre("HSLA", ItemStacks.steelingot);
-		ItemStacks.registerSteels();
+		RotaryRecipes.addRecipes();
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
-		MinecraftForge.addGrassSeed(new ItemStack(ItemRegistry.CANOLA.getShiftedID(), 1, 0), 2);
+		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
 	}
 
 	@Override

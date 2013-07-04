@@ -37,7 +37,7 @@ public class ItemStunGun extends ItemChargedTool {
 		if (ep.isSneaking()) {
 			return is;
 		}
-		if (is.getItemDamage() <= 0) {
+		if (is.getItemDamage() <= 1) {
 			this.noCharge();
 			return is;
 		}
