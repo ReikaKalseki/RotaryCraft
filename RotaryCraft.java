@@ -186,6 +186,8 @@ public class RotaryCraft extends DragonAPIMod {
 			String msg = "Optifine breaks rendering of many RotaryCraft items and features.\nRemove it if possible for full RotaryCraft functionality.";
 			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
+
+		if ()
 	}
 
 	private static void setupClassFiles() {
@@ -209,6 +211,7 @@ public class RotaryCraft extends DragonAPIMod {
 		flywheelitems = new ItemFlywheelPlacer(ExtraConfigIDs.FLYWHEELITEMS.getValue()).setUnlocalizedName("flywheelitem");
 
 		modextracts = new ItemModOre(ExtraConfigIDs.MODEXTRACTS.getValue()).setUnlocalizedName("modextracts");
+		modingots = new ItemModOre(ExtraConfigIDs.MODINGOTS.getValue()).setUnlocalizedName("modingots");
 
 		decoblock = new BlockDeco(ExtraConfigIDs.DECOBLOCKS.getValue());
 		blastglass = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");

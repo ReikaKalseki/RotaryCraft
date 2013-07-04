@@ -23,7 +23,7 @@ public enum ConfigRegistry implements ConfigList {
 	JUNGLECUTTER("Unlimited Jungle Tree Felling", false),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
-	OREDICT("Ore Dictionary Interchangeability", true),
+	//OREDICT("Ore Dictionary Interchangeability", true),
 	LOGLOADING("Console Loading Info", true),
 	LOCKMACHINES("Owner-Only Machine Use", false),
 	//SIUNITS("SI Metric Units", true),

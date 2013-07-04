@@ -13,22 +13,19 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Registry.ModOreList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemModOre extends ItemBasic implements IndexedItemSprites {
+public class ItemModOre extends ItemBasic {
 
 	public ItemModOre(int ID) {
-		super(ID, 0); //Returns super constructor: par1 is ID
-		////setItemName("shaftcraft"); //Sets the incode name of the item, make sure it doesn't clash with other items, weird stuff happens
+		super(ID, 0);
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;
-		//this.setIconCoord(0, 0);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 	}
 
@@ -36,7 +33,7 @@ public class ItemModOre extends ItemBasic implements IndexedItemSprites {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
-		for (int i = 0; i < RotaryNames.modOreNames.length; i++) {
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
 		}
 	}
@@ -50,7 +47,7 @@ public class ItemModOre extends ItemBasic implements IndexedItemSprites {
 	public String getUnlocalizedName(ItemStack is)
 	{
 		int d = is.getItemDamage();
-		return super.getUnlocalizedName() + "." + RotaryNames.modOreNames[d];
+		return super.getUnlocalizedName() + "." + d;
 	}
 
 	public static String getTextureFile() {

@@ -43,7 +43,10 @@ public class ClientProxy extends CommonProxy
 
 	public static final ItemSpriteSheetRenderer[] items = {
 		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items.png", RotaryAux.items1png),
-		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items2.png", RotaryAux.items2png)
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items2.png", RotaryAux.items2png),
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/items3.png", RotaryAux.items3png),
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/modextracts.png", RotaryAux.modexpng),
+		new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/Items/modingots.png", RotaryAux.modingotpng),
 	};
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png", RotaryAux.terrainpng);
@@ -113,6 +116,9 @@ public class ClientProxy extends CommonProxy
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getShiftedID()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
 			MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemList[i].getShiftedID(), items[ItemRegistry.itemList[i].getTextureSheet()]);
 		}
+
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modextracts.itemID, items[3]);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modingots.itemID, items[4]);
 	}
 
 	// Override any other methods that need to be handled differently client side.

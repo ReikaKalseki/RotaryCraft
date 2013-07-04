@@ -29,12 +29,14 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.ModOreList;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
 
 	public static void addRecipes() {
 		OreDictionary.initVanillaEntries();
+		RotaryRegistration.loadOreDictionary();
 		addMachines();
 		addCraftItems();
 		addItemBlocks();
@@ -728,6 +730,8 @@ public class RotaryRecipes {
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 30, new ItemStack(Item.emerald.itemID, 1, 0), 1F);
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 31, new ItemStack(Item.netherQuartz.itemID, 1, 0), 1F);
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 32, new ItemStack(ItemStacks.silveringot.itemID, 1, ItemStacks.silveringot.getItemDamage()), 1F);
+
+		ModOreList.addSmelting();
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

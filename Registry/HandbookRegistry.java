@@ -131,6 +131,7 @@ public enum HandbookRegistry {
 	SPYCAM(MachineRegistry.SPYCAM),
 	MIRROR(MachineRegistry.MIRROR),
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
+	COOLINGFIN(MachineRegistry.COOLINGFIN),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
 	SPRING(ItemRegistry.SPRING),
