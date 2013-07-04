@@ -24,6 +24,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
+import Reika.RotaryCraft.API.IntegrityChecker;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -187,7 +188,7 @@ public class RotaryCraft extends DragonAPIMod {
 			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 
-		if ()
+		IntegrityChecker.checkForTampering();
 	}
 
 	private static void setupClassFiles() {

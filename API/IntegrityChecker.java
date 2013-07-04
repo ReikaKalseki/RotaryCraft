@@ -14,23 +14,30 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Exception.TamperingException;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ModOreList;
 
-public class IntegrityChecker {
+public final class IntegrityChecker {
 
 	private static final ArrayList<String> hostileMods = new ArrayList<String>();
 
-	public static boolean isRCTamperedWith() {
-		return false;
+	public static void checkForTampering() {
+		//checks
+
+		punishTamperers();
 	}
 
-	public static void punishTamperer() {
+	private static void punishTamperers() {
 		for (int i = 0; i < hostileMods.size(); i++) {
 			String culprit = hostileMods.get(i);
 			if (culprit == null)
 				return;
 			if (culprit.equalsIgnoreCase("gregtech")) { //If you tamper with my mod, Greg...
 				destroyTechtree();
+			}
+			else {
+				new TamperingException(RotaryCraft.instance, culprit);
 			}
 		}
 	}
@@ -57,6 +64,26 @@ public class IntegrityChecker {
 				OreDictionary.registerOre(name2[j], Item.stick);
 				OreDictionary.registerOre(name2[j], Item.seeds);
 			}
+		}
+
+		final ArrayList<String> ores = new ArrayList<String>();
+		ores.add("oreCoal");
+		ores.add("oreLapis");
+		ores.add("oreIron");
+		ores.add("oreRedstone");
+		ores.add("oreGold");
+		ores.add("oreDiamond");
+		ores.add("oreEmerald");
+		ores.add("oreNetherQuartz");
+
+		for (int i = 0; i < ores.size(); i++) {
+			OreDictionary.registerOre(ores.get(i), Block.dirt);
+			OreDictionary.registerOre(ores.get(i), Block.cobblestone);
+			OreDictionary.registerOre(ores.get(i), Block.planks);
+			OreDictionary.registerOre(ores.get(i), Block.gravel);
+			OreDictionary.registerOre(ores.get(i), Item.coal);
+			OreDictionary.registerOre(ores.get(i), Item.stick);
+			OreDictionary.registerOre(ores.get(i), Item.seeds);
 		}
 	}
 
