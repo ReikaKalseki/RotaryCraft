@@ -13,9 +13,9 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
-import Reika.RotaryCraft.Registry.ModOreList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,15 +26,19 @@ public class ItemModOre extends ItemBasic {
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(RotaryCraft.tabModOres);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(int ID, CreativeTabs tab, List list) //Adds the metadata blocks to the creative inventory
 	{
-		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ItemStack item = new ItemStack(par1, 1, i);
+		int num = ModOreList.oreList.length;
+		if (ID == RotaryCraft.modextracts.itemID)
+			num *= 4;
+		for (int i = 0; i < num; i++) {
+			ItemStack item = new ItemStack(ID, 1, i);
+			list.add(item);
 		}
 	}
 
@@ -50,12 +54,10 @@ public class ItemModOre extends ItemBasic {
 		return super.getUnlocalizedName() + "." + d;
 	}
 
-	public static String getTextureFile() {
-		return "/Reika/RotaryCraft/Textures/GUI/items.png"; //return the block texture where the block texture is saved in
-	}
-
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
+		if (item.itemID == RotaryCraft.modingots.itemID)
+			return item.getItemDamage()*4+3;
 		return item.getItemDamage();
 	}
 

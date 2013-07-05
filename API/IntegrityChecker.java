@@ -14,16 +14,17 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Exception.TamperingException;
+import Reika.DragonAPI.Libraries.ReikaOreHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.ModOreList;
 
-public final class IntegrityChecker {
+public abstract class IntegrityChecker {
 
 	private static final ArrayList<String> hostileMods = new ArrayList<String>();
 
 	public static void checkForTampering() {
-		//checks
+		//checks which add to hostileMods
 
 		punishTamperers();
 	}
@@ -37,7 +38,7 @@ public final class IntegrityChecker {
 				destroyTechtree();
 			}
 			else {
-				new TamperingException(RotaryCraft.instance, culprit);
+				throw new TamperingException(RotaryCraft.instance, culprit);
 			}
 		}
 	}
@@ -66,24 +67,22 @@ public final class IntegrityChecker {
 			}
 		}
 
-		final ArrayList<String> ores = new ArrayList<String>();
-		ores.add("oreCoal");
-		ores.add("oreLapis");
-		ores.add("oreIron");
-		ores.add("oreRedstone");
-		ores.add("oreGold");
-		ores.add("oreDiamond");
-		ores.add("oreEmerald");
-		ores.add("oreNetherQuartz");
+		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Block.dirt);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Block.cobblestone);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Block.planks);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Block.gravel);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Item.coal);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Item.stick);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getOreDictName(), Item.seeds);
 
-		for (int i = 0; i < ores.size(); i++) {
-			OreDictionary.registerOre(ores.get(i), Block.dirt);
-			OreDictionary.registerOre(ores.get(i), Block.cobblestone);
-			OreDictionary.registerOre(ores.get(i), Block.planks);
-			OreDictionary.registerOre(ores.get(i), Block.gravel);
-			OreDictionary.registerOre(ores.get(i), Item.coal);
-			OreDictionary.registerOre(ores.get(i), Item.stick);
-			OreDictionary.registerOre(ores.get(i), Item.seeds);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Block.dirt);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Block.cobblestone);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Block.planks);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Block.gravel);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Item.coal);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Item.stick);
+			OreDictionary.registerOre(ReikaOreHelper.oreList[i].getDropOreDictName(), Item.seeds);
 		}
 	}
 

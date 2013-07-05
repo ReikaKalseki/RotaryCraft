@@ -42,7 +42,8 @@ public class ItemUltrasound extends ItemChargedTool {
 		for (float i = 0; i <= 5; i += 0.2) {
 			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
 			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (ReikaBlockHelper.isOre(id) && !ores) {
+			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			if (ReikaBlockHelper.isOre(id, meta) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");
 			}
@@ -69,10 +70,5 @@ public class ItemUltrasound extends ItemChargedTool {
 			}
 		}
 		return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
-	}
-
-
-	public static String getTextureFile() {
-		return "/Reika/RotaryCraft/Textures/Terrain/textures.png"; //return the block texture where the block texture is saved in
 	}
 }

@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 
 public class SlotExtractor1 extends Slot {
 
@@ -33,13 +33,7 @@ public class SlotExtractor1 extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack is)
 	{
-		int id = is.itemID;
-		boolean ore = false;
-		if (id == Block.oreCoal.blockID || id == Block.oreIron.blockID || id == Block.oreGold.blockID || id == Block.oreRedstone.blockID ||
-				id == Block.oreLapis.blockID || id == Block.oreDiamond.blockID || id == Block.oreEmerald.blockID )//|| id == Block.oreNether.blockID)
-			ore = true;
-
-		return ore;
+		return ReikaBlockHelper.isOre(is);
 	}
 
 	/**

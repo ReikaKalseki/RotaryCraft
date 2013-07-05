@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -123,13 +124,13 @@ public class RotaryNames {
 	public static final String[] pipeNames = {
 		"Lubricant Hose", "Liquid Pipe", "Fuel Line", "Liquid Spiller"
 	};
-
+	/*
 	public static final String[] modOreNames = {
 		"Lead", "Copper", "Silver", "Titanium", "Tungsten", "Galena", "Tin", "Platinum", "Nickel", "Iridium", "Aluminum", "Sulfur",
 		"Cobalt", "Uranium", "Saltpeter", "Bauxite", "Ruby", "Sapphire", "Nikolite", "Cinnabar", "Green Sapphire", "Amethyst",
 		"Black Diamond", "Sitrine", "Cubic Zirconia", "Fuschia", "Jet" ,"Olivine", "Opal", "Smoky Quartz", "Sun", "Topaz", "Turquoise",
 		"White Alabaster", "Ardite", "Amber", "Pyrite", "Sphalerite", "Sodalite", "Sheldonite", "Certus Quartz"
-	};
+	};*/
 
 	public static void addNames() {
 
@@ -167,8 +168,12 @@ public class RotaryNames {
 		for (int i = 0; i < extractNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), extractNames[i]);
 		}
-		for (int i = 0; i < modOreNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, i), modOreNames[i]);
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), ModOreList.oreList[i].getName()+" Dust");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].getName()+" Slurry");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].getName()+" Solution");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), ModOreList.oreList[i].getName()+" Flakes");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].getName()+" Ingot");
 		}
 		for (int i = 0; i < compactNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), compactNames[i]);

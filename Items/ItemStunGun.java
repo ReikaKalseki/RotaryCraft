@@ -78,10 +78,11 @@ public class ItemStunGun extends ItemChargedTool {
 		//ReikaChatHelper.write(mov);
 		//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
 		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
 		if (id != 0 && (id < 8 || id > 11) && (id == Block.web.blockID || id == Block.mushroomRed.blockID ||
 				id == Block.gravel.blockID ||  id == Block.silverfish.blockID  || id == Block.mushroomBrown.blockID ||
 				id == Block.waterlily.blockID || id == Block.flowerPot.blockID ||
-				ReikaBlockHelper.isOre(id) || (ReikaWorldHelper.softBlocks(id) && id != Block.snow.blockID))) {
+				ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(id) && id != Block.snow.blockID))) {
 			for (int k = 0; k < 64; k++)
 				world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 			ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);

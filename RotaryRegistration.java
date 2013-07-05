@@ -11,6 +11,7 @@ package Reika.RotaryCraft;
 
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
@@ -24,7 +25,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.ModOreList;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -84,7 +84,8 @@ public class RotaryRegistration {
 	public static void loadOreDictionary() {
 		OreDictionary.registerOre("HSLA", ItemStacks.steelingot);
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
-		ModOreList.registerRCIngots();
+		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumpowder);
+		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
 	}
 }

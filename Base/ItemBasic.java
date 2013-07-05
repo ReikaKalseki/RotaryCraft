@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -40,12 +39,6 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 		hasSubtypes = true;
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.setIndex(tex);
-	}
-
-	public final void addCreativeItems(ArrayList list) {}
-
-	public static String getTextureFile() {
-		return "/Reika/RotaryCraft/Textures/Terrain/textures.png"; //return the block texture where the block texture is saved in
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {

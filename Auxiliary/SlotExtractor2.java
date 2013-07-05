@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class SlotExtractor2 extends Slot {
@@ -33,7 +34,7 @@ public class SlotExtractor2 extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack is)
 	{
-		return (is.itemID == RotaryCraft.extracts.itemID && is.getItemDamage() < 8);
+		return (is.itemID == RotaryCraft.extracts.itemID && is.getItemDamage() < 8) || (ExtractorModOres.isModOreIngredient(is) && ExtractorModOres.isDust(ModOreList.getEntryFromDamage(is.getItemDamage()/4), is.getItemDamage()));
 	}
 
 	/**

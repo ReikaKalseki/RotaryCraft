@@ -209,10 +209,6 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		return super.getUnlocalizedName();
 	}
 
-	public static String getTextureFile() {
-		return "/Reika/RotaryCraft/Textures/GUI/items.png"; //return the block texture where the block texture is saved in
-	}
-
 	public int getType() {
 		return type;
 	}
