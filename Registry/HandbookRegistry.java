@@ -132,6 +132,7 @@ public enum HandbookRegistry {
 	MIRROR(MachineRegistry.MIRROR),
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	COOLINGFIN(MachineRegistry.COOLINGFIN),
+	WORKTABLE(MachineRegistry.WORKTABLE),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
 	SPRING(ItemRegistry.SPRING),

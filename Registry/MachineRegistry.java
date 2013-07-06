@@ -122,6 +122,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWoodcutter;
+import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
 public enum MachineRegistry {
@@ -200,7 +201,8 @@ public enum MachineRegistry {
 	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
 	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
-	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			8);
+	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			8),
+	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12);
 
 
 	private String name;

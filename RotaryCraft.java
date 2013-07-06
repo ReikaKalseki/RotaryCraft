@@ -190,7 +190,8 @@ public class RotaryCraft extends DragonAPIMod {
 			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 
-		IntegrityChecker.checkForTampering();
+		if (!this.isDeObfEnvironment())
+			IntegrityChecker.checkForTampering();
 	}
 
 	private static void setupClassFiles() {

@@ -14,7 +14,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class ExtractorModOres {
@@ -32,7 +31,7 @@ public class ExtractorModOres {
 
 	public static void addSmelting() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ReikaJavaLibrary.pConsole("Adding smelting for "+new ItemStack(RotaryCraft.modextracts.itemID, 1, getFlakesIndex(ModOreList.oreList[i]))+" to "+ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()));
+			//ReikaJavaLibrary.pConsole("Adding smelting for "+new ItemStack(RotaryCraft.modextracts.itemID, 1, getFlakesIndex(ModOreList.oreList[i]))+" to "+ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()));
 			FurnaceRecipes.smelting().addSmelting(RotaryCraft.modextracts.itemID, getFlakesIndex(ModOreList.oreList[i]), ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()), 0.7F);
 		}
 	}
@@ -49,6 +48,17 @@ public class ExtractorModOres {
 		if (ModOreList.isModOre(is))
 			return -1;
 		return is.getItemDamage()%4;
+	}
+
+	public static int getIndexOffsetForIngot(ItemStack is) {
+		ModOreList ore = ModOreList.getEntryFromDamage(is.getItemDamage());
+		if (ore.isIngotType())
+			return 3;
+		if (ore.isDustType())
+			return 1;
+		if (ore.isGemType())
+			return 2;
+		return 0;
 	}
 
 	public static int getDustIndex(ModOreList ore) {

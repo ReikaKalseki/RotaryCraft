@@ -46,7 +46,7 @@ public class ItemMotionTracker extends ItemChargedTool {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		if (is.getItemDamage() <= 1) {
+		if (is.getItemDamage() <= 0) {
 			this.noCharge();
 			return is;
 		}

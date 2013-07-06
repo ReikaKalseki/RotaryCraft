@@ -10,19 +10,20 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
 
 public class GuiWorktable extends GuiNonPoweredMachine {
 
-	public GuiWorktable(EntityPlayer pl, TileEntityWorktable te) {
-		super(new ContainerWorktable(pl, te.worldObj, te), te);
+	public GuiWorktable(EntityPlayer pl, TileEntityWorktable te, World world) {
+		super(new ContainerWorktable(pl, te, world), te);
 		ep = pl;
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return null;
+		return "worktablegui";
 	}
 }

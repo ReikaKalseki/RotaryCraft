@@ -173,7 +173,7 @@ public class RotaryNames {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].getName()+" Slurry");
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].getName()+" Solution");
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), ModOreList.oreList[i].getName()+" Flakes");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].getName()+" Ingot");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].getName()+" "+ModOreList.oreList[i].getTypeName());
 		}
 		for (int i = 0; i < compactNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), compactNames[i]);

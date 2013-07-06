@@ -15,6 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,7 +58,7 @@ public class ItemModOre extends ItemBasic {
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		if (item.itemID == RotaryCraft.modingots.itemID)
-			return item.getItemDamage()*4+3;
+			return item.getItemDamage()*4+ExtractorModOres.getIndexOffsetForIngot(item);
 		return item.getItemDamage();
 	}
 

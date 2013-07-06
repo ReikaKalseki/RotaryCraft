@@ -15,7 +15,7 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaColorAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 
@@ -68,7 +68,7 @@ public class GuiSpyCam extends GuiNonPoweredMachine
 				float br = 1-(cam.yCoord - cam.getHeightAt(i, j))/(float)cam.yCoord*1.25F;
 				if (br < 0)
 					br = 0;
-				this.drawRect(a+17+max-(UNIT*j), b+19+UNIT*i, a+17+max-(UNIT+UNIT*j), b+19+UNIT*i+UNIT, ReikaGuiAPI.instance.getColorWithBrightnessMultiplier(cam.getTopBlockAt(i, j), br));
+				this.drawRect(a+17+max-(UNIT*j), b+19+UNIT*i, a+17+max-(UNIT+UNIT*j), b+19+UNIT*i+UNIT, ReikaColorAPI.getColorWithBrightnessMultiplier(cam.getTopBlockAt(i, j), br));
 			}
 		}
 		for (int i = cam.getBounds()[0]; i <= cam.getBounds()[1]; i++) {

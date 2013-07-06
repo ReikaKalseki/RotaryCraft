@@ -140,7 +140,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 
-	public static GuiHandler instance = new GuiHandler();
+	public static final GuiHandler instance = new GuiHandler();
 	//returns an instance of the Container you made earlier
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -240,7 +240,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerItemCannon(player, (TileEntityItemCannon)te);
 		}
 		if (te instanceof TileEntityWorktable) {
-			return new ContainerWorktable(player, world, (TileEntityWorktable)te);
+			return new ContainerWorktable(player, (TileEntityWorktable)te, world);
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new ContainerLandmine(player, te);
@@ -399,7 +399,7 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiItemCannon(player, (TileEntityItemCannon)te);
 		}
 		if (te instanceof TileEntityWorktable) {
-			return new GuiWorktable(player, (TileEntityWorktable)te);
+			return new GuiWorktable(player, (TileEntityWorktable)te, world);
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new GuiLandmine(player, (TileEntityLandmine)te);

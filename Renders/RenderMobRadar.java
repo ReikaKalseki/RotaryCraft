@@ -20,8 +20,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -144,7 +144,7 @@ public class RenderMobRadar extends RotaryTERenderer
 				v = 2;
 				v5.startDrawing(GL11.GL_LINE_LOOP);
 				int color = ReikaEntityHelper.mobToColor(ent);
-				int[] rgb = ReikaGuiAPI.HexToRGB(color);
+				int[] rgb = ReikaColorAPI.HexToRGB(color);
 				v5.setColorOpaque(rgb[0], rgb[1], rgb[2]);
 				v5.addVertex(par2+ent.posX-te.xCoord, par4+ent.posY-te.yCoord, par6+ent.posZ-te.zCoord);
 				v5.addVertex(par2+ent.posX-te.xCoord, par4+ent.posY+v-te.yCoord, par6+ent.posZ-te.zCoord);

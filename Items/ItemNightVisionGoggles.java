@@ -36,7 +36,7 @@ public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTex
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
-		if (is.getItemDamage() > 1) {
+		if (is.getItemDamage() > 0) {
 			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
 			if (itemRand.nextInt(40) == 0) {
 				ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));

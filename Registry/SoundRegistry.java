@@ -49,7 +49,8 @@ public enum SoundRegistry implements SoundList {
 	LOWPLING("plinglo"),
 	PLING("pling"),
 	HIPLING("plinghi"),
-	FRICTION("friction");
+	FRICTION("friction"),
+	CRAFT("craft");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
@@ -81,6 +82,10 @@ public enum SoundRegistry implements SoundList {
 
 	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {
 		playSound(s, world, x+0.5, y+0.5, z+0.5, vol, pitch);
+	}
+
+	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z) {
+		playSound(s, world, x+0.5, y+0.5, z+0.5, 1, 1);
 	}
 
 	public String getName() {

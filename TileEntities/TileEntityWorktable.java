@@ -9,15 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWorktable extends RotaryCraftTileEntity {
+public class TileEntityWorktable extends RotaryCraftTileEntity implements ISidedInventory {
+
+	private ItemStack[] inventory = new ItemStack[18];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-
+		this.chargeTools();
+		//ReikaJavaLibrary.pConsole(Arrays.toString(inventory));
 	}
 
 	@Override
@@ -32,8 +41,7 @@ public class TileEntityWorktable extends RotaryCraftTileEntity {
 
 	@Override
 	public int getMachineIndex() {
-		//return MachineRegistry.WORKTABLE.ordinal();
-		return 0;
+		return MachineRegistry.WORKTABLE.ordinal();
 	}
 
 	@Override
@@ -44,6 +52,88 @@ public class TileEntityWorktable extends RotaryCraftTileEntity {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	private void chargeTools() {
+		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getShiftedID(), inventory);
+		int toolid = this.getTool();
+		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inventory);
+		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
+			int toolmeta = inventory[toolslot].getItemDamage();
+			int coilmeta = inventory[coilslot].getItemDamage();
+			ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
+			ItemStack newcoil = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, toolmeta);
+			inventory[toolslot] = null;
+			inventory[coilslot] = null;
+			inventory[9] = newtool;
+			inventory[10] = newcoil;
+		}
+	}
+
+	private int getTool() {
+		for (int i = 0; i < 9; i++) {
+			ItemStack is = inventory[i];
+			if (is != null) {
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID())
+					return inventory[i].itemID;
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return inventory.length;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inventory[i];
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		return ReikaInventoryHelper.decrStackSize(this, i, j);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int i) {
+		return ReikaInventoryHelper.getStackInSlotOnClosing(this, i);
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inventory[i] = itemstack;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
+	public void openChest() {
+
+	}
+
+	@Override
+	public void closeChest() {
+
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return i < 9;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return i >= 9;
 	}
 
 }

@@ -10,122 +10,121 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
 
-public class ContainerWorktable extends Container
-{
-	/** The crafting matrix inventory (3x3). */
+public class ContainerWorktable extends CoreContainer {
+
+	private World world;
 	public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
 	public IInventory craftResult = new InventoryCraftResult();
-	private World worldObj;
+	private TileEntityWorktable tile;
+	private boolean noUpdate;
 
-	public ContainerWorktable(EntityPlayer player, World world, TileEntityWorktable te)
-	{
-		worldObj = world;
-		this.addSlotToContainer(new SlotCrafting(player, craftMatrix, craftResult, 0, 124, 35));
-		int var6;
-		int var7;
-		for (var6 = 0; var6 < 3; ++var6)
-			for (var7 = 0; var7 < 3; ++var7)
-				this.addSlotToContainer(new Slot(craftMatrix, var7 + var6 * 3, 30 + var7 * 18, 17 + var6 * 18));
-		for (var6 = 0; var6 < 3; ++var6)
-			for (var7 = 0; var7 < 9; ++var7)
-				this.addSlotToContainer(new Slot(player.inventory, var7 + var6 * 9 + 9, 8 + var7 * 18, 84 + var6 * 18));
-		for (var6 = 0; var6 < 9; ++var6)
-			this.addSlotToContainer(new Slot(player.inventory, var6, 8 + var6 * 18, 142));
+	public ContainerWorktable(EntityPlayer player, TileEntityWorktable te, World worldObj) {
+		super(player, te);
+		world = worldObj;
+		int dx = 0;
+		tile = te;
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this.addSlotToContainer(new Slot(te, i*3+j, dx+26+j*18, 17+i*18));
+			}
+		}
+		dx += 96-28+4;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this.addSlotToContainer(new Slot(te, 9+i*3+j, dx+26+j*18, 17+i*18));
+			}
+		}/*
+		dx = 0;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this.addSlotToContainer(new Slot(craftMatrix, i*3+j, dx+26+j*18, 17+i*18));
+			}
+		}*/
+
+		this.updateCraftMatrix();
+
+		this.addPlayerInventory(player);
 		this.onCraftMatrixChanged(craftMatrix);
 	}
 
-	@Override
-	public void onCraftMatrixChanged(IInventory par1IInventory) {
-		craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj));
-	}
-
-	@Override
-	public void onCraftGuiClosed(EntityPlayer par1EntityPlayer) {
-		super.onCraftGuiClosed(par1EntityPlayer);
-		if (!worldObj.isRemote) {
-			for (int var2 = 0; var2 < 9; ++var2) {
-				ItemStack var3 = craftMatrix.getStackInSlotOnClosing(var2);
-				if (var3 != null)
-					par1EntityPlayer.dropPlayerItem(var3);
-			}
+	private void updateCraftMatrix() {
+		for (int i = 0; i < 9; i++) {
+			ItemStack stack = tile.getStackInSlot(i);
+			noUpdate = true;
+			craftMatrix.setInventorySlotContents(i, stack);
 		}
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
-		return true;
+	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer ep) {
+		ItemStack is = super.slotClick(par1, par2, par3, ep);
+		this.updateCraftMatrix();
+		this.onCraftMatrixChanged(craftMatrix);
+		return is;
 	}
 
 	/**
-	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
+	 * Callback for when the crafting matrix is changed.
 	 */
-	 @Override
-	 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
-	 {
-		 ItemStack var3 = null;
-		 Slot var4 = (Slot)inventorySlots.get(par2);
+	@Override
+	public void onCraftMatrixChanged(IInventory par1IInventory)
+	{
+		if (noUpdate) {
+			noUpdate = false;
+			return;
+		}
+		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+		if (is == null)
+			return;
+		if (!world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
+			return;
+		ItemStack slot13 = tile.getStackInSlot(13);
+		if (slot13 != null) {
+			if (is.itemID != slot13.itemID)
+				return;
+			if (is.getItemDamage() != slot13.getItemDamage())
+				return;
+			if (slot13.stackSize >= slot13.getMaxStackSize())
+				return;
+		}
+		if (slot13 != null)
+			tile.setInventorySlotContents(13, new ItemStack(slot13.itemID, slot13.stackSize+is.stackSize, slot13.getItemDamage()));
+		else
+			tile.setInventorySlotContents(13, is);
+		for (int i = 0; i < 9; ++i) {
+			ItemStack item = tile.getStackInSlot(i);
+			if (item != null) {
+				//noUpdate = true;
+				if (item.stackSize == 1)
+					tile.setInventorySlotContents(i, null);
+				else
+					tile.setInventorySlotContents(i, new ItemStack(item.itemID, item.stackSize-1, item.getItemDamage()));
+			}
+		}
+		SoundRegistry.playSoundAtBlock(SoundRegistry.CRAFT, world, tile.xCoord, tile.yCoord, tile.zCoord);
+		this.updateCraftMatrix();
+	}
 
-		 if (var4 != null && var4.getHasStack())
-		 {
-			 ItemStack var5 = var4.getStack();
-			 var3 = var5.copy();
+	@Override
+	public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+	{
+		super.onCraftGuiClosed(par1EntityPlayer);/*
+		for (int i = 0; i < 9; i++) {
+			ItemStack is = craftMatrix.getStackInSlot(i);
+			tile.setInventorySlotContents(i, is);
+		}*/
+	}
 
-			 if (par2 == 0)
-			 {
-				 if (!this.mergeItemStack(var5, 10, 46, true))
-				 {
-					 return null;
-				 }
-
-				 var4.onSlotChange(var5, var3);
-			 }
-			 else if (par2 >= 10 && par2 < 37)
-			 {
-				 if (!this.mergeItemStack(var5, 37, 46, false))
-				 {
-					 return null;
-				 }
-			 }
-			 else if (par2 >= 37 && par2 < 46)
-			 {
-				 if (!this.mergeItemStack(var5, 10, 37, false))
-				 {
-					 return null;
-				 }
-			 }
-			 else if (!this.mergeItemStack(var5, 10, 46, false))
-			 {
-				 return null;
-			 }
-
-			 if (var5.stackSize == 0)
-			 {
-				 var4.putStack((ItemStack)null);
-			 }
-			 else
-			 {
-				 var4.onSlotChanged();
-			 }
-
-			 if (var5.stackSize == var3.stackSize)
-			 {
-				 return null;
-			 }
-
-			 var4.onPickupFromSlot(par1EntityPlayer, var5);
-		 }
-
-		 return var3;
-	 }
 }
