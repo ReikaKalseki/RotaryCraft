@@ -12,17 +12,20 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
+public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver {
 	private int harvestx;
 	private int harvesty;
 	private int harvestz;
@@ -30,6 +33,7 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 	private double dropx;
 	private double dropy;
 	private double dropz;
+	private ItemStack[] inv = new ItemStack[1];
 
 
 
@@ -210,18 +214,25 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
-					EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, new ItemStack(RotaryCraft.powders.itemID, 1, 4));
-					itementity.delayBeforeCanPickup = 0;
-					itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
-					itementity.motionZ = -0.025+0.05*par5Random.nextFloat();
-					if (meta != 5)
-						itementity.motionY = 0.1+0.2*par5Random.nextFloat()+0.25*par5Random.nextFloat()*par5Random.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
-					itementity.velocityChanged = true;
-					world.spawnEntityInWorld(itementity);
-					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
+					if (this.isInventoryFull())
+						this.dropItem(world, x, y, z, meta);
+					else
+						ReikaInventoryHelper.addOrSetStack(ItemStacks.bedrockdust, inv, 0);
 				}
 			}
 		}
+	}
+
+	private void dropItem(World world, int x, int y, int z, int meta) {
+		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, new ItemStack(RotaryCraft.powders.itemID, 1, 4));
+		itementity.delayBeforeCanPickup = 0;
+		itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
+		itementity.motionZ = -0.025+0.05*par5Random.nextFloat();
+		if (meta != 5)
+			itementity.motionY = 0.1+0.2*par5Random.nextFloat()+0.25*par5Random.nextFloat()*par5Random.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
+		itementity.velocityChanged = true;
+		world.spawnEntityInWorld(itementity);
+		RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 	}
 
 	@Override
@@ -259,5 +270,38 @@ public class TileEntityBedrockBreaker extends TileEntityPowerReceiver {
 		if (!this.getBlockInFront(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 1;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inv [i];
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inv[i] = itemstack;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack is) {
+		return false;
+	}
+
+	public boolean isInventoryFull() {
+		if (inv[0] == null)
+			return false;
+		if (!ReikaItemHelper.matchStacks(ItemStacks.bedrockdust, inv[0]))
+			return true;
+		return inv[0].stackSize >= inv[0].getMaxStackSize();
 	}
 }
