@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
@@ -201,11 +202,17 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	public int getArraySize() {
-		return ((TileEntitySolar)worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(), zCoord)).numberMirrors;
+		TileEntity tile = worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(), zCoord);
+		if (tile == null)
+			return 0;
+		return ((TileEntitySolar)tile).numberMirrors;
 	}
 
 	public float getArrayOverallBrightness() {
-		return ((TileEntitySolar)worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(), zCoord)).lightMultiplier;
+		TileEntity tile = worldObj.getBlockTileEntity(xCoord, this.getTopOfTower(), zCoord);
+		if (tile == null)
+			return 0;
+		return ((TileEntitySolar)tile).lightMultiplier;
 	}
 
 	public int getTopOfTower() {

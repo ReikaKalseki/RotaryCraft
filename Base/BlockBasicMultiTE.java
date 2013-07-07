@@ -47,6 +47,7 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -212,6 +213,11 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
 				return false;
+		}
+		if (m == MachineRegistry.BEDROCKBREAKER && !ep.isSneaking()) {
+			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
+			tb.dropItemFromInventory();
+			return true;
 		}
 		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;
