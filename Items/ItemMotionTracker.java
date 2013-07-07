@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
@@ -74,34 +75,34 @@ public class ItemMotionTracker extends ItemChargedTool {
 				for (int k = 0; k < infov.size(); k++) {
 					EntityLiving ent = (EntityLiving)infov.get(k);
 					double dist = ReikaMathLibrary.py3d(dx-ent.posX, dy-ent.posY-ent.getEyeHeight(), dz-ent.posZ);
-					String color;
+					EnumChatFormatting color;
 					String mobname = ent.getEntityName();
 					if (ent instanceof EntityMob || ent instanceof EntitySlime || ent instanceof EntityGhast)
-						color = "\u00A7c";
+						color = EnumChatFormatting.RED;
 					else if (ent instanceof EntityAnimal || ent instanceof EntityBat || ent instanceof EntitySquid)
-						color = "\u00A7a";
+						color = EnumChatFormatting.GREEN;
 					else
-						color = "\u00A7f";
+						color = EnumChatFormatting.WHITE;
 					if (ent instanceof EntityEnderman || ent instanceof EntityPigZombie)
-						color = "\u00A76";
+						color = EnumChatFormatting.YELLOW;
 					if (ent instanceof EntityDragon)
-						color = "\u00A75";
+						color = EnumChatFormatting.DARK_PURPLE;
 					if (ent instanceof EntityWither)
-						color = "\u00A78";
+						color = EnumChatFormatting.DARK_GRAY;
 					if (!(ent instanceof EntityPlayer) && (dist <= 24 || ent instanceof EntityWither || ent instanceof EntityDragon) && !(lastmobname == mobname && dist == lastdist)) {
-						ReikaChatHelper.write(String.format("%s", color)+mobname+"\u00A7f"+String.format(" %.2f", dist-1)+"m away.");
+						ReikaChatHelper.write(color+mobname+EnumChatFormatting.WHITE+String.format(" %.2f", dist-1)+"m away.");
 						if (ent instanceof EntityDragon) {
 							EntityDragon ed = (EntityDragon)ent;
 							if (ReikaMathLibrary.approxr(ed.targetX, ep.posX, 4))
 								if (ReikaMathLibrary.approxr(ed.targetY, ep.posY, 4))
 									if (ReikaMathLibrary.approxr(ed.targetZ, ep.posZ, 4))
-										ReikaChatHelper.write("\u00A74Dragon is Attacking!");
+										ReikaChatHelper.writeFormattedString(EnumChatFormatting.RED, "Dragon is Attacking!");
 						}
 						else if (ent instanceof EntityMob) {
 							EntityMob em = (EntityMob)ent;
 							PathEntity path = em.getNavigator().getPath();
 							if (em.getAttackTarget() == ep || em.getAITarget() == ep)
-								ReikaChatHelper.write("\u00A74Mob is Attacking!");
+								ReikaChatHelper.writeFormattedString(EnumChatFormatting.RED, "Mob is Attacking!");
 						}
 					}
 					/*double[] vel = ReikaPhysicsHelper.cartesianToPolar(ent.motionX, ent.motionY, ent.motionZ);

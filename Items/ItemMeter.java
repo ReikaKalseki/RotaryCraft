@@ -129,6 +129,19 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.type.isCooled() || clicked.isJetFailing) {
 					ReikaChatHelper.writeString(String.format("Temperature: %dC", clicked.temperature));
 				}
+				if (clicked.type.burnsFuel()) {
+					float time = clicked.getFuelDuration();
+					if (time < 60)
+						ReikaChatHelper.writeString(String.format("Engine has %d seconds of fuel in tank.", (int)time));
+					else if (time < 3600) {
+						time /= 60F;
+						ReikaChatHelper.writeString(String.format("Engine has %.2f minutes of fuel in tank.", time));
+					}
+					else {
+						time /= 3600F;
+						ReikaChatHelper.writeString(String.format("Engine has %.2f hours of fuel in tank.", time));
+					}
+				}
 				return true;
 			}
 			if (m == MachineRegistry.PLAYERDETECTOR) {

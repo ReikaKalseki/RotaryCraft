@@ -124,6 +124,8 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{},
+		{},
+		{},
 	};
 
 	public static Object[][] machineData = {
@@ -178,6 +180,8 @@ public final class RotaryDescriptions {
 		{},
 		{},
 		{TileEntityPurifier.SMELTTEMP},
+		{},
+		{},
 		{},
 		{},
 		{},

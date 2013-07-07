@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -124,6 +125,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public int waterLevel;
 
 	private boolean isChoking = false;
+
+	private boolean isOn;
 
 	public ItemStack[] fuelslot = new ItemStack[2];
 
@@ -287,18 +290,60 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private void consumeFuel(World world, int x, int y, int z, int meta) {
+		this.internalizeFuel(world, x, y, z, meta);
+
+		if (fueltick < type.getFuelUnitDuration()) {
+			return;
+		}
+		fueltick = 0;
+
 		switch(type) {
+		case STEAM:
+			if (waterLevel > 0 && temperature >= 100)
+				waterLevel--;
+			break;
+		case GAS:
+			if (ethanols > 0)
+				ethanols--;
+			break;
+		case SPORT:
+			if (ethanols > 0)
+				ethanols--;
+			if (par5Random.nextInt(6) == 0)
+				if (additives > 0)
+					additives--;
+			break;
+		case MICRO:
+			if (jetfuels > 0)
+				jetfuels--;
+			break;
+		case JET:
+			if (jetfuels > 0)
+				jetfuels--;
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void internalizeFuel(World world, int x, int y, int z, int meta) {
+		switch(type) {
+		case STEAM:
+			if (fuelslot[0] != null) {
+				if (fuelslot[0].itemID == Item.bucketWater.itemID && waterLevel <= CAPACITY) {
+					waterLevel += 4*fuelslot[0].stackSize;
+					if (waterLevel > CAPACITY)
+						waterLevel = CAPACITY;
+					fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, fuelslot[0].stackSize, 0);
+				}
+			}
+			break;
 		case GAS:
 			if (fuelslot[0] != null && ethanols < FUELCAP) {
 				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
 					ethanols++;
 				}
-			}
-			if (fueltick >= 1200) {	//every 60s
-				fueltick = 0;
-				if (ethanols > 0)
-					ethanols--;
 			}
 			break;
 		case SPORT:
@@ -320,32 +365,14 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 						additives += 4;
 				}
 			}
-			if (fueltick >= 600) {	//every 30s
-				fueltick = 0;
-				if (ethanols > 0)
-					ethanols--;
-				if (par5Random.nextInt(6) == 0) //one in 6 times -> about every 3 min
-					if (additives > 0)
-						additives--;
-			}
 			break;
 		case MICRO:
 			if (jetfuels < FUELCAP)
 				this.drawFuel(world, x, y, z, meta);
-			if (fueltick >= 450) { //90 min full tank
-				fueltick = 0;
-				if (jetfuels > 0)
-					jetfuels--;
-			}
 			break;
 		case JET:
 			if (jetfuels < FUELCAP)
 				this.drawFuel(world, x, y, z, meta);
-			if (fueltick >= 225) { //45 min full tank
-				fueltick = 0;
-				if (jetfuels > 0)
-					jetfuels--;
-			}
 			break;
 		default:
 			break;
@@ -556,20 +583,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private boolean steamCheck(World world, int x, int y, int z) {
-		if (fuelslot[0] != null) {
-			if (fuelslot[0].itemID == Item.bucketWater.itemID && waterLevel <= CAPACITY) {
-				waterLevel += 4*fuelslot[0].stackSize;
-				if (waterLevel > CAPACITY)
-					waterLevel = CAPACITY;
-				fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, fuelslot[0].stackSize, 0);
-			}
-		}
-
 		if (tickcount2 >= 20) {
 			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
-			if (temperature > 100 && par5Random.nextInt(1800) == 0) {
-				waterLevel--;
-			}
 			tickcount2 = 0;
 		}
 
@@ -697,11 +712,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			return false;
 		if (is.stackTagCompound.getInteger("magnet") <= 0)
 			return false;
-		if (par5Random.nextInt(1200) == 0) {
-			int m = is.stackTagCompound.getInteger("magnet");
-			m--;
-			is.stackTagCompound.setInteger("magnet", m);
-		}
 		boolean currentpower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		boolean ac = false;
 		lastpower5 = currentpower;
@@ -715,6 +725,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		lastpower3 = lastpower2;
 		lastpower2 = lastpower;
 		lastpower = currentpower;
+
+		if (fueltick >= type.getFuelUnitDuration() && ac) {
+			fueltick = 0;
+			int m = is.stackTagCompound.getInteger("magnet");
+			m--;
+			is.stackTagCompound.setInteger("magnet", m);
+		}
 
 		return (ac);
 	}
@@ -796,6 +813,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			break;
 		}
 		if (this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
+			isOn = true;
 			switch (type) {
 			case DC:
 				omega = EnumEngineType.DC.getSpeed();
@@ -804,8 +822,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			case WIND:
 				omega = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
 				torque = EnumEngineType.WIND.getTorque();
-				if (omega == 0)
+				if (omega == 0) {
+					isOn = false;
 					torque = 0;
+				}
 				if (omega > 0)
 					this.dealBladeDamage();
 				break;
@@ -834,6 +854,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			case HYDRO:
 				omega = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
 				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false));
+				if (omega == 0) {
+					isOn = false;
+					torque = 0;
+				}
 				if (omega > 0)
 					this.dealPanelDamage();
 				break;
@@ -845,8 +869,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				this.checkJetFailure();
 				omega = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
 				torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
-				if (omega == 0)
+				if (omega == 0) {
+					isOn = false;
 					torque = 0;
+				}
 				if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
 					TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
 					if (te != null) {
@@ -860,10 +886,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			}
 		}
 		else {
+			isOn = false;
 			omega = 0;
 			torque = 0;
 			if (soundtick == 0)
 				soundtick = 2000;
+			fueltick = 0;
 		}
 	}
 
@@ -1137,6 +1165,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 						}
 					}
 					soundtick = 2000;
+					fueltick = 0;
 					return;
 				}
 			}
@@ -1205,6 +1234,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		NBT.setInteger("water", waterLevel);
 		NBT.setInteger("ethanol", ethanols);
 		NBT.setInteger("jetfuel", jetfuels);
+		NBT.setInteger("fuelburn", fueltick);
 		NBT.setInteger("additive", additives);
 		NBT.setBoolean("choke", isChoking);
 		NBT.setBoolean("jetfail", isJetFailing);
@@ -1237,6 +1267,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		waterLevel = NBT.getInteger("water");
 		ethanols = NBT.getInteger("ethanol");
 		jetfuels = NBT.getInteger("jetfuel");
+		fueltick = NBT.getInteger("fuelburn");
 		additives = NBT.getInteger("additive");
 		isChoking = NBT.getBoolean("choke");
 		isJetFailing = NBT.getBoolean("jetfail");
@@ -1351,6 +1382,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				return 15*ethanols/FUELCAP;
 			if (type.isJetFueled())
 				return 15*jetfuels/FUELCAP;
+			else
+				return 15*waterLevel/FUELCAP;
 		}
 		return 0;
 	}
@@ -1458,5 +1491,44 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			if (e instanceof EntityPainting || e instanceof EntityItemFrame)
 				e.attackEntityFrom(DamageSource.generic, 10);
 		}
+	}
+
+	public int getFuelLevel() {
+		if (!type.burnsFuel())
+			return -1;
+		if (type.isEthanolFueled())
+			return ethanols;
+		if (type.isJetFueled())
+			return jetfuels;
+		return waterLevel;
+	}
+
+	public int getFuelCapacity() {
+		if (type.isEthanolFueled())
+			return FUELCAP;
+		if (type.isJetFueled())
+			return FUELCAP;
+		if (type == EnumEngineType.STEAM)
+			return CAPACITY;
+		return 0;
+	}
+
+	/** In seconds */
+	public int getFuelDuration() {
+		if (!type.burnsFuel())
+			return -1;
+		int fuel = this.getFuelLevel();
+		float burnprogress = 0;
+		if (fuel > 0)
+			burnprogress = 1F-(float)fueltick/type.getFuelUnitDuration()/fuel;
+		ReikaJavaLibrary.pConsoleSideOnly(fueltick, Side.SERVER);
+		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20;
+	}
+
+	/** In seconds */
+	public int getFullTankDuration() {
+		if (!type.burnsFuel())
+			return -1;
+		return this.getFuelCapacity()*type.getFuelUnitDuration()/20;
 	}
 }

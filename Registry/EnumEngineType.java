@@ -99,7 +99,7 @@ public enum EnumEngineType {
 	}
 
 	public boolean burnsFuel() {
-		return (this == GAS || this == SPORT || this == MICRO || this == JET);
+		return (this == STEAM || this == GAS || this == SPORT || this == MICRO || this == JET);
 	}
 
 	public static EnumEngineType setType(int type) {
@@ -203,5 +203,29 @@ public enum EnumEngineType {
 		if (this == SPORT)
 			return is.itemID == Item.redstone.itemID || is.itemID == Item.gunpowder.itemID || is.itemID == Item.blazePowder.itemID;
 		return false;
+	}
+
+	/** Returns ticks */
+	public int getFuelUnitDuration() {
+		switch(this) {
+		case STEAM:
+			return 1800;
+		case GAS:
+			return 1200;
+		case AC:
+			return 1200;
+		case SPORT:
+			return 600;
+		case MICRO:
+			return 450;
+		case JET:
+			return 225;
+		default:
+			return 0;
+		}
+	}
+	
+	public ItemStack getCraftedProduct() {
+		return MachineRegistry.ENGINE.getCraftedMetadataProduct(this.ordinal());
 	}
 }

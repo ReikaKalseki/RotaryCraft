@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 
 public class WorktableRecipes
 {
@@ -157,16 +158,16 @@ public class WorktableRecipes
 		recipes.add(new ShapelessRecipes(par1ItemStack, arraylist));
 	}
 
-	public ItemStack findMatchingRecipe(InventoryCrafting par1InventoryCrafting, World par2World)
+	public ItemStack findMatchingRecipe(InventoryCrafting ic, World par2World)
 	{
 		int i = 0;
 		ItemStack itemstack = null;
 		ItemStack itemstack1 = null;
 		int j;
 
-		for (j = 0; j < par1InventoryCrafting.getSizeInventory(); ++j)
+		for (j = 0; j < ic.getSizeInventory(); ++j)
 		{
-			ItemStack itemstack2 = par1InventoryCrafting.getStackInSlot(j);
+			ItemStack itemstack2 = ic.getStackInSlot(j);
 
 			if (itemstack2 != null)
 			{
@@ -205,9 +206,9 @@ public class WorktableRecipes
 			{
 				IRecipe irecipe = (IRecipe)recipes.get(j);
 
-				if (irecipe.matches(par1InventoryCrafting, par2World))
+				if (irecipe.matches(ic, par2World))
 				{
-					return irecipe.getCraftingResult(par1InventoryCrafting);
+					return irecipe.getCraftingResult(ic);
 				}
 			}
 
@@ -216,11 +217,12 @@ public class WorktableRecipes
 	}
 
 	/**
-	 * returns the List<> of all recipes
+	 * returns the List<> of all recipes in copy to disallow editing<br>
+	 * This one is for you, NEI.
 	 */
-	public List getRecipeList()
+	public List getRecipeListCopy()
 	{
-		return recipes;
+		return ReikaJavaLibrary.copyList(recipes);
 	}
 }
 
@@ -233,13 +235,13 @@ class RecipeSorter implements Comparator
 		worktableRecipes = par1WorktableRecipes;
 	}
 
-	public int compareRecipes(IRecipe par1IRecipe, IRecipe par2IRecipe)
+	public int compareRecipes(IRecipe ir, IRecipe ir2)
 	{
-		return par1IRecipe instanceof ShapelessRecipes && par2IRecipe instanceof ShapedRecipes ? 1 : (par2IRecipe instanceof ShapelessRecipes && par1IRecipe instanceof ShapedRecipes ? -1 : (par2IRecipe.getRecipeSize() < par1IRecipe.getRecipeSize() ? -1 : (par2IRecipe.getRecipeSize() > par1IRecipe.getRecipeSize() ? 1 : 0)));
+		return ir instanceof ShapelessRecipes && ir2 instanceof ShapedRecipes ? 1 : (ir2 instanceof ShapelessRecipes && ir instanceof ShapedRecipes ? -1 : (ir2.getRecipeSize() < ir.getRecipeSize() ? -1 : (ir2.getRecipeSize() > ir.getRecipeSize() ? 1 : 0)));
 	}
 
-	public int compare(Object par1Obj, Object par2Obj)
+	public int compare(Object obj1, Object obj2)
 	{
-		return this.compareRecipes((IRecipe)par1Obj, (IRecipe)par2Obj);
+		return this.compareRecipes((IRecipe)obj1, (IRecipe)obj2);
 	}
 }

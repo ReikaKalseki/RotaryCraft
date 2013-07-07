@@ -9,8 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import java.util.List;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -252,25 +255,78 @@ public class GuiHandbook extends GuiScreen
 		if (h == HandbookRegistry.SILVERINGOT)
 			return 2;
 		if (h == HandbookRegistry.BUCKETS) {
-			if (System.nanoTime()-time > SECOND*2) {
-				i++;
-				time = System.nanoTime();
-				if (i > 1)
-					i = 0;
-			}
-			return (byte)(7-i);
+			if ((System.nanoTime()/SECOND)%2 == 0)
+				return 6;
+			else
+				return 7;
 		}
 
 		return 0;
 	}
 
-	public void drawRecipes() {
+	private void drawRecipes() {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(icons1);
 
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2;
 		HandbookAuxData.drawPage(fontRenderer, screen, page, subpage, posX, posY);
+	}
+
+	private void drawTabIcons() {
+		int posX = (width - xSize) / 2;
+		int posY = (height - ySize) / 2;
+		List<HandbookRegistry> li = HandbookRegistry.getEntriesForScreen(screen);
+		for (int i = 0; i < li.size(); i++) {
+			HandbookRegistry h = li.get(i);
+			ReikaGuiAPI.instance.drawItemStack(new RenderItem(), fontRenderer, h.getTabIcon(), posX-17, posY-6+i*20);
+		}
+	}
+
+	private void drawGraphics() {
+		int posX = (width - xSize) / 2-2;
+		int posY = (height - ySize) / 2-8;
+
+		if (screen == INFOSTART && page == 0) {
+			int xc = posX+xSize/2; int yc = posY+43; int r = 35;
+			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
+			ReikaGuiAPI.instance.drawLine(xc, yc, xc+r, yc, 0);
+			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);/*
+    		for (float i = 0; i < 1; i += 0.1)
+    			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(i)*r), (int)(yc-Math.sin(i)*r), 0x000000);*/
+			String s = "One radian";
+			fontRenderer.drawString(s, xc+r+10, yc-4, 0x000000);
+		}
+
+		if (screen == INFOSTART && page == 1) {
+			int xc = posX+xSize/8; int yc = posY+45; int r = 5;
+			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
+			ReikaGuiAPI.instance.drawLine(xc, yc, xc+45, yc, 0x0000ff);
+			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+45, yc+20, 0xff0000);
+			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+50, yc+5, 0xff0000);
+			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+40, yc+5, 0xff0000);
+			fontRenderer.drawString("Distance", xc+4, yc-10, 0x0000ff);
+			fontRenderer.drawString("Force", xc+30, yc+20, 0xff0000);
+
+			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-2*r-2, yc, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-r, yc+r*2+2, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
+			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
+			fontRenderer.drawString("Torque", xc-24, yc+18, 0x8800ff);
+
+			r = 35; xc = posX+xSize/2+r+r/2; yc = posY+43;
+			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
+			double a = 57.3*System.nanoTime()/1000000000%360;
+			double b = 3*57.3*System.nanoTime()/1000000000%360;
+			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
+			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
+
+			fontRenderer.drawString("1 rad/s", xc+r-4, yc+18, 0xff0000);
+			fontRenderer.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
+		}
 	}
 
 	@Override
@@ -282,6 +338,7 @@ public class GuiHandbook extends GuiScreen
 			buttontimer = 0;
 		}
 		//drawDefaultBackground();
+
 		String var4;
 
 		bcg = this.getGuiLayout();
@@ -338,49 +395,10 @@ public class GuiHandbook extends GuiScreen
 			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
 		//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineNotes[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 
-
-		if (screen == INFOSTART && page == 0) {
-			int xc = posX+xSize/2; int yc = posY+43; int r = 35;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, xc+r, yc, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);/*
-    		for (float i = 0; i < 1; i += 0.1)
-    			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(i)*r), (int)(yc-Math.sin(i)*r), 0x000000);*/
-			String s = "One radian";
-			fontRenderer.drawString(s, xc+r+10, yc-4, 0x000000);
-		}
-
-		if (screen == INFOSTART && page == 1) {
-			int xc = posX+xSize/8; int yc = posY+45; int r = 5;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, xc+45, yc, 0x0000ff);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+45, yc+20, 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+50, yc+5, 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+40, yc+5, 0xff0000);
-			fontRenderer.drawString("Distance", xc+4, yc-10, 0x0000ff);
-			fontRenderer.drawString("Force", xc+30, yc+20, 0xff0000);
-
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-2*r-2, yc, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-r, yc+r*2+2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
-			fontRenderer.drawString("Torque", xc-24, yc+18, 0x8800ff);
-
-			r = 35; xc = posX+xSize/2+r+r/2; yc = posY+43;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			double a = 57.3*System.nanoTime()/1000000000%360;
-			double b = 3*57.3*System.nanoTime()/1000000000%360;
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
-
-			fontRenderer.drawString("1 rad/s", xc+r-4, yc+18, 0xff0000);
-			fontRenderer.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
-		}
-
+		this.drawGraphics();
 
 		super.drawScreen(x, y, f);
+
+		this.drawTabIcons();
 	}
 }

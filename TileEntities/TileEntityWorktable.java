@@ -11,6 +11,8 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -22,6 +24,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityWorktable extends RotaryCraftTileEntity implements ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[18];
+	public boolean craftable = false;
+	private ItemStack toCraft;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -113,7 +117,7 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 1;
+		return 64;
 	}
 
 	@Override
@@ -136,4 +140,59 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 		return i >= 9;
 	}
 
+	public ItemStack getToCraft() {
+		if (toCraft == null)
+			return null;
+		return toCraft.copy();
+	}
+
+	public void setToCraft(ItemStack is) {
+		if (is != null)
+			toCraft = is.copy();
+		else toCraft = null;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inventory.length; i++)
+		{
+			if (inventory[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inventory[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inventory = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inventory.length)
+			{
+				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
 }

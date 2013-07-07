@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PlantMaterials;
 
 public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver implements TemperatureTE
 {
@@ -43,13 +44,6 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	public int temperature;
 
 	public boolean idle = false;
-
-	//Add new system with yeast (ferment dirt with water and sugar to make) and water to make ethanol
-	//Also make temperature sensitive - requires warm but not hot (40 - 100C)
-	//If too hot will start consuming (killing) yeast; if too cool does nothing
-	//add two slots to gui - both below source item slot (move that up ~24px)
-	//do this for FULL, not beta release
-
 
 	private int temperaturetick = 0;
 
@@ -80,25 +74,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	private int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
-		int id = is.itemID;
-		int meta = is.getItemDamage();
-		if (id == Item.reed.itemID)
-			return 1;
-		if (id == Block.tallGrass.blockID)
-			return 2;
-		if (id == Block.leaves.blockID)
-			return 2;
-		if (id == Block.waterlily.blockID)
-			return 1;
-		if (id == Block.sapling.blockID)
-			return 1;
-		if (id == Block.plantRed.blockID)
-			return 1;
-		if (id == Block.plantYellow.blockID)
-			return 1;
-		if (id == Block.vine.blockID)
-			return 2;
-		return 0;
+		return PlantMaterials.getPlantEntry(is).getPlantValue();
 	}
 
 	private float getFermentRate() {
@@ -449,14 +425,18 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack is) {
+		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (i == 3)
 			return false;
-		if (i == 0)
-			return (is.itemID == ItemRegistry.YEAST.getShiftedID() || is.itemID == Item.sugar.itemID);
-		if (i == 1)
-			return (is.itemID == Item.bucketWater.itemID || this.getPlantValue(is) > 0);
-		if (i == 2)
-			return (is.itemID == Item.bucketWater.itemID || is.itemID == Block.dirt.blockID);
+		if (i == 0) {
+			return (is.itemID == ItemRegistry.YEAST.getShiftedID() && !red) || (is.itemID == Item.sugar.itemID && red);
+		}
+		if (i == 1) {
+			return (is.itemID == Item.bucketWater.itemID && !red) || (this.getPlantValue(is) > 0 && red);
+		}
+		if (i == 2) {
+			return (is.itemID == Item.bucketWater.itemID && !red) || (is.itemID == Block.dirt.blockID && red);
+		}
 		return false;
 	}
 

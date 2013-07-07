@@ -10,10 +10,12 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.CoreContainer;
@@ -43,7 +45,7 @@ public class ContainerWorktable extends CoreContainer {
 		dx += 96-28+4;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				this.addSlotToContainer(new Slot(te, 9+i*3+j, dx+26+j*18, 17+i*18));
+				this.addSlotToContainer(new SlotFurnace(player, te, 9+i*3+j, dx+26+j*18, 17+i*18));
 			}
 		}/*
 		dx = 0;
@@ -68,37 +70,23 @@ public class ContainerWorktable extends CoreContainer {
 	}
 
 	@Override
-	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer ep) {
-		ItemStack is = super.slotClick(par1, par2, par3, ep);
+	public ItemStack slotClick(int slot, int par2, int par3, EntityPlayer ep) {
+		ItemStack is = super.slotClick(slot, par2, par3, ep);
 		this.updateCraftMatrix();
 		this.onCraftMatrixChanged(craftMatrix);
+		InventoryPlayer ip = ep.inventory;
+		//ReikaJavaLibrary.pConsole(ip.getItemStack());
+		if (tile.craftable && slot == 13) {
+			this.craft();
+			ip.setItemStack(tile.getStackInSlot(13));
+			tile.setInventorySlotContents(13, null);
+		}
 		return is;
 	}
 
-	/**
-	 * Callback for when the crafting matrix is changed.
-	 */
-	@Override
-	public void onCraftMatrixChanged(IInventory par1IInventory)
-	{
-		if (noUpdate) {
-			noUpdate = false;
-			return;
-		}
+	private void craft() {
 		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
-		if (is == null)
-			return;
-		if (!world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
-			return;
 		ItemStack slot13 = tile.getStackInSlot(13);
-		if (slot13 != null) {
-			if (is.itemID != slot13.itemID)
-				return;
-			if (is.getItemDamage() != slot13.getItemDamage())
-				return;
-			if (slot13.stackSize >= slot13.getMaxStackSize())
-				return;
-		}
 		if (slot13 != null)
 			tile.setInventorySlotContents(13, new ItemStack(slot13.itemID, slot13.stackSize+is.stackSize, slot13.getItemDamage()));
 		else
@@ -115,6 +103,39 @@ public class ContainerWorktable extends CoreContainer {
 		}
 		SoundRegistry.playSoundAtBlock(SoundRegistry.CRAFT, world, tile.xCoord, tile.yCoord, tile.zCoord);
 		this.updateCraftMatrix();
+		tile.craftable = false;
+	}
+
+	/**
+	 * Callback for when the crafting matrix is changed.
+	 */
+	@Override
+	public void onCraftMatrixChanged(IInventory par1IInventory)
+	{
+		if (noUpdate) {
+			noUpdate = false;
+			return;
+		}
+		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+		if (is == null) {
+			tile.craftable = false;
+			tile.setToCraft(null);
+			return;
+		}
+		ItemStack slot13 = tile.getStackInSlot(13);
+		if (slot13 != null) {
+			if (is.itemID != slot13.itemID)
+				return;
+			if (is.getItemDamage() != slot13.getItemDamage())
+				return;
+			if (slot13.stackSize >= slot13.getMaxStackSize())
+				return;
+		}
+		tile.craftable = true;
+		tile.setToCraft(is);
+		if (!world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
+			return;
+		this.craft();
 	}
 
 	@Override

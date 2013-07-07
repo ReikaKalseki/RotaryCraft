@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -312,9 +313,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		ItemStack eitem = ep.inventory.getCurrentItem();
 		if (eitem == null)
 			return false;
-		if (!(eitem.getItem() instanceof ItemPickaxe))
+		if (!(eitem.getItem() instanceof ItemPickaxe || this instanceof BlockPiping))
 			return false;
-		if (eitem.itemID == Item.pickaxeWood.itemID)
+		if (eitem.itemID == Item.pickaxeWood.itemID || !(this instanceof BlockPiping))
 			return false;
 		return !ep.capabilities.isCreativeMode;
 	}

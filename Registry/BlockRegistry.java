@@ -105,15 +105,15 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 		return blockNames[this.ordinal()];
 	}
 
-	public Material getBlockMaterial() {
+	public Material getBlockMaterial() {/*
 		if (this.ordinal() == MachineRegistry.HOSE.getBlockVariableIndex())
-			return Material.ground;
+			return Material.;
 		if (this.ordinal() == MachineRegistry.PIPE.getBlockVariableIndex())
 			return Material.ground;
 		if (this.ordinal() == MachineRegistry.FUELLINE.getBlockVariableIndex())
 			return Material.ground;
 		if (this.ordinal() == MachineRegistry.SPILLER.getBlockVariableIndex())
-			return Material.ground;
+			return Material.ground;*/
 		return Material.iron;
 	}
 
