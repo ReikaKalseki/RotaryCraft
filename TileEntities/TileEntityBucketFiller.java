@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -203,9 +204,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		if (filling)
-			return is.itemID == Item.bucketEmpty.itemID;
-		return LiquidRegistry.isLiquidItem(is);
+		return LiquidRegistry.isLiquidItem(is) || is.itemID == Item.bucketEmpty.itemID;
 	}
 
 	@Override
@@ -252,32 +251,37 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 	}
 
 	private void emptyBuckets() {
+		ItemStack is = new ItemStack(Item.bucketEmpty);
 		int slot = ReikaInventoryHelper.locateInInventory(Item.bucketLava.itemID, inv);
 		if (slot != -1) {
 			lavaLevel++;
 			ReikaInventoryHelper.decrStack(slot, inv);
-			ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+			if (!ReikaInventoryHelper.addToIInv(is, this))
+				ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 		}
 		else {
 			slot = ReikaInventoryHelper.locateInInventory(Item.bucketWater.itemID, inv);
 			if (slot != -1) {
 				waterLevel++;
 				ReikaInventoryHelper.decrStack(slot, inv);
-				ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+				if (!ReikaInventoryHelper.addToIInv(is, this))
+					ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 			}
 			else {
 				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage(), inv);
 				if (slot != -1) {
 					lubeLevel += ItemFuelLubeBucket.value[0];
 					ReikaInventoryHelper.decrStack(slot, inv);
-					ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+					if (!ReikaInventoryHelper.addToIInv(is, this))
+						ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 				}
 				else {
 					slot = ReikaInventoryHelper.locateInInventory(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage(), inv);
 					if (slot != -1) {
 						fuelLevel += ItemFuelLubeBucket.value[1];
 						ReikaInventoryHelper.decrStack(slot, inv);
-						ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketEmpty), this);
+						if (!ReikaInventoryHelper.addToIInv(is, this))
+							ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 					}
 				}
 			}
@@ -303,8 +307,10 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 			//ReikaJavaLibrary.pConsole(inv);
 		}*/
 		if (waterLevel > 0) {
-			if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketWater), this))
+			if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketWater), this)) {
+				//ReikaJavaLibrary.pConsole(false);
 				return;
+			}
 			waterLevel--;
 			ReikaInventoryHelper.decrStack(slot, inv);
 		}

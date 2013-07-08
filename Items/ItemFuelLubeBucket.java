@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFuelLubeBucket extends ItemRotaryTool implements IndexedItemSprites {
 
-	public static final int[] value = {64,8,16}; //How many units in a bucket (64 lube, 8 jet fuel, 8 ethanol)
+	public static final int[] value = {64,8,16}; //How many units in a bucket (64 lube, 8 jet fuel, 16 ethanol)
 
 	public ItemFuelLubeBucket(int ID, int tex) {
 		super(ID, tex);

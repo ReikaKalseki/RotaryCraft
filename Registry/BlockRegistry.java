@@ -17,6 +17,7 @@ import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
+import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -51,13 +52,14 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	SHAFT(BlockShaft.class),
 	TRANS(BlockTrans.class),
 	MODELINV2(BlockMIMachine.class),
-	SOLAR(BlockSolar.class);
+	SOLAR(BlockSolar.class),
+	BCENGINE(BlockBCEngine.class);
 
 	private Class block;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface"
 	};
 
 	private BlockRegistry(Class cl) {

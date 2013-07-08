@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -45,52 +46,55 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 
 public enum MobBait {
 
-	CREEPER(EntityCreeper.class, Block.tnt.blockID, Block.obsidian.blockID),
-	ENDERMAN(EntityEnderman.class, Block.grass.blockID, Block.slowSand.blockID),
-	ZOMBIE(EntityZombie.class, Item.appleGold.itemID, 0, Item.potion.itemID, 8197), //instant health potion
-	SKELETON(EntitySkeleton.class, Item.saddle.itemID, Block.glowStone.blockID),
-	SPIDER(EntitySpider.class, ReikaItemHelper.cocoaBeans.itemID, ReikaItemHelper.cocoaBeans.getItemDamage(), Block.fence.blockID, -1),
-	SLIME(EntitySlime.class, Item.diamond.itemID, Block.ice.blockID),
-	BLAZE(EntityBlaze.class, Item.fireballCharge.itemID, Item.bucketWater.itemID),
-	PIGZOMBIE(EntityPigZombie.class, Item.appleRed.itemID, Item.blazeRod.itemID),
-	LAVASLIME(EntityMagmaCube.class, Item.blazePowder.itemID, Item.snowball.itemID),
-	GHAST(EntityGhast.class, Item.lightStoneDust.itemID, Item.bow.itemID),
-	SILVERFISH(EntitySilverfish.class, Block.stoneBrick.blockID, Item.pickaxeWood.itemID),
-	VILLAGER(EntityVillager.class, Item.emerald.itemID, Block.cactus.blockID),
-	IRONGOLEM(EntityIronGolem.class, ReikaItemHelper.redWool.itemID, ReikaItemHelper.redWool.getItemDamage(), Item.bucketLava.itemID, -1),
-	WITCH(EntityWitch.class, Item.netherStalkSeeds.itemID, Item.enderPearl.itemID),
-	SNOWGOLEM(EntitySnowman.class, Item.carrot.itemID, Block.torchWood.blockID),
-	BAT(EntityBat.class, Item.melon.itemID, Block.music.blockID),
-	COW(EntityCow.class, Item.wheat.itemID, Item.stick.itemID),
-	PIG(EntityPig.class, Item.carrot.itemID, Item.stick.itemID),
-	SHEEP(EntitySheep.class, Item.wheat.itemID, Item.stick.itemID),
-	CHICKEN(EntityChicken.class, Item.seeds.itemID, Item.stick.itemID),
-	OCELOT(EntityOcelot.class, Item.fishRaw.itemID, Item.stick.itemID),
-	WOLF(EntityWolf.class, Item.porkRaw.itemID, Block.gravel.blockID),
-	SQUID(EntitySquid.class, Item.ingotGold.itemID, Block.waterlily.blockID);
+	CREEPER(EntityCreeper.class, 50, Block.tnt.blockID, Block.obsidian.blockID),
+	ENDERMAN(EntityEnderman.class, 58, Block.grass.blockID, Block.slowSand.blockID),
+	ZOMBIE(EntityZombie.class, 54, Item.appleGold.itemID, 0, Item.potion.itemID, 8197), //instant health potion
+	SKELETON(EntitySkeleton.class, 51, Item.saddle.itemID, Block.glowStone.blockID),
+	SPIDER(EntitySpider.class, 52, ReikaItemHelper.cocoaBeans.itemID, ReikaItemHelper.cocoaBeans.getItemDamage(), Block.fence.blockID, -1),
+	SLIME(EntitySlime.class, 55, Item.diamond.itemID, Block.ice.blockID),
+	BLAZE(EntityBlaze.class, 61, Item.fireballCharge.itemID, Item.bucketWater.itemID),
+	PIGZOMBIE(EntityPigZombie.class, 57, Item.appleRed.itemID, Item.blazeRod.itemID),
+	LAVASLIME(EntityMagmaCube.class, 62, Item.blazePowder.itemID, Item.snowball.itemID),
+	GHAST(EntityGhast.class, 56, Item.lightStoneDust.itemID, Item.bow.itemID),
+	SILVERFISH(EntitySilverfish.class, 60, Block.stoneBrick.blockID, Item.pickaxeWood.itemID),
+	VILLAGER(EntityVillager.class, 120, Item.emerald.itemID, Block.cactus.blockID),
+	IRONGOLEM(EntityIronGolem.class, 99, ReikaItemHelper.redWool.itemID, ReikaItemHelper.redWool.getItemDamage(), Item.bucketLava.itemID, -1),
+	WITCH(EntityWitch.class, 66, Item.netherStalkSeeds.itemID, Item.enderPearl.itemID),
+	SNOWGOLEM(EntitySnowman.class, 97, Item.carrot.itemID, Block.torchWood.blockID),
+	BAT(EntityBat.class, 65, Item.melon.itemID, Block.music.blockID),
+	COW(EntityCow.class, 92, Item.wheat.itemID, Item.stick.itemID),
+	PIG(EntityPig.class, 90, Item.carrot.itemID, Item.stick.itemID),
+	SHEEP(EntitySheep.class, 91, Item.wheat.itemID, Item.stick.itemID),
+	CHICKEN(EntityChicken.class, 93, Item.seeds.itemID, Item.stick.itemID),
+	OCELOT(EntityOcelot.class, 98, Item.fishRaw.itemID, Item.stick.itemID),
+	WOLF(EntityWolf.class, 95, Item.porkRaw.itemID, Block.gravel.blockID),
+	SQUID(EntitySquid.class, 94, Item.ingotGold.itemID, Block.waterlily.blockID);
 
 	private Class entityClass;
 	private int attractorID;
 	private int attractorMetadata;
 	private int repellentID;
 	private int repellentMetadata;
+	private int entityID;
 
 	public static final MobBait[] baitList = MobBait.values();
 
-	private MobBait(Class<? extends EntityLiving> cl, int a, int r) {
+	private MobBait(Class<? extends EntityLiving> cl, int id, int a, int r) {
 		entityClass = cl;
 		attractorID = a;
 		repellentID = r;
 		attractorMetadata = -1;
 		repellentMetadata = -1;
+		entityID = id;
 	}
 
-	private MobBait(Class<? extends EntityLiving> cl, int a, int am, int r, int rm) {
+	private MobBait(Class<? extends EntityLiving> cl, int id, int a, int am, int r, int rm) {
 		entityClass = cl;
 		attractorID = a;
 		repellentID = r;
 		attractorMetadata = am;
 		repellentMetadata = rm;
+		entityID = id;
 	}
 
 	public static MobBait getEntryFromEntity(EntityLiving e) {
@@ -196,6 +200,24 @@ public enum MobBait {
 				return true;
 		}
 		return false;
+	}
+
+	public int getMobIconU() {
+		int UNIT = 4;
+		int v = 2*UNIT*(entityID/16);
+		int u = 2*UNIT*(entityID-(v/UNIT/2)*16);
+		return u;
+	}
+
+	public int getMobIconV() {
+		int UNIT = 4;
+		int v = 2*UNIT*(entityID/16);
+		int u = 2*UNIT*(entityID-(v/UNIT/2)*16);
+		return v;
+	}
+
+	public String getEntityName() {
+		return (String)EntityList.stringToClassMapping.get(entityClass);
 	}
 
 }

@@ -363,6 +363,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			if (control == 34) {
 				icannon.target[2] = data[0];
 			}
+			break;
 		}
 		case MIRROR:
 			mirror = (TileEntityMirror)world.getBlockTileEntity(x, y, z);

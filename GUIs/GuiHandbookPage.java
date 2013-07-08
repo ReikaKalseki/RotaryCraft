@@ -60,5 +60,4 @@ public class GuiHandbookPage extends GuiHandbook {
 		page = (byte)button.id;
 		subpage = 0;
 	}
-
 }

@@ -61,7 +61,9 @@ public enum PowerReceivers {
 	FRICTION(256, 1, 16384),
 	BLOCKCANNON(65536),
 	BUCKETFILLER(1, 512, 8192),
-	SELFDESTRUCT();
+	SELFDESTRUCT(),
+	COMPRESSOR(),
+	DISPLAY();
 
 	private int minT;
 	private int minS;

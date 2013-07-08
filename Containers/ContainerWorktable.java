@@ -101,7 +101,7 @@ public class ContainerWorktable extends CoreContainer {
 					tile.setInventorySlotContents(i, new ItemStack(item.itemID, item.stackSize-1, item.getItemDamage()));
 			}
 		}
-		SoundRegistry.playSoundAtBlock(SoundRegistry.CRAFT, world, tile.xCoord, tile.yCoord, tile.zCoord);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.CRAFT, world, tile.xCoord, tile.yCoord, tile.zCoord, 0.3F, 1.5F);
 		this.updateCraftMatrix();
 		tile.craftable = false;
 	}

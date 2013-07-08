@@ -40,6 +40,8 @@ public class RotaryConfig extends ControlledConfig {
 	public static final int omegalimit = (Integer.MAX_VALUE-1)/2;
 	public static final boolean debugmode = false;
 
+	public static final int WATTS_PER_MJ = 1000000;
+
 	//Initialization of the config
 	// Args: String mod used to name the config file to mods name
 	@Override

@@ -241,8 +241,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
-		//super.writeToNBT(NBT);
-		//NBT.setInteger("water", waterLevel);
+		super.writeToNBT(NBT);
+		NBT.setInteger("water", waterLevel);
 	}
 
 	/**
@@ -251,8 +251,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
-		//super.readFromNBT(NBT);
-		//waterLevel = NBT.getInteger("water");
+		super.readFromNBT(NBT);
+		waterLevel = NBT.getInteger("water");
 	}
 
 	public int getBottomOfTower() {

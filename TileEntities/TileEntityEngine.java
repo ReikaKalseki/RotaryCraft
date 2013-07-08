@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -538,12 +539,22 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private float getWindFactor(World world, int x, int y, int z, int meta) {
-		if (y < 62)
-			return 0;
-		float f = (y-62)/62F;
-		if (f > 1)
-			f = 1;
-		return f;
+		if (world.provider.terrainType == WorldType.FLAT) {
+			if (y < 4)
+				return 0;
+			float f = (y-4)/16F;
+			if (f > 1)
+				f = 1;
+			return f;
+		}
+		else {
+			if (y < 62)
+				return 0;
+			float f = (y-62)/62F;
+			if (f > 1)
+				f = 1;
+			return f;
+		}
 	}
 
 	public boolean isDrowned(World world, int x, int y, int z) {

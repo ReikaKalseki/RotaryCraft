@@ -139,6 +139,9 @@ public enum HandbookRegistry {
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	COOLINGFIN(MachineRegistry.COOLINGFIN),
 	WORKTABLE(MachineRegistry.WORKTABLE),
+	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
+	PNEUMATIC(MachineRegistry.PNEUENGINE),
+	DISPLAY(MachineRegistry.DISPLAY),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
 	SPRING(ItemRegistry.SPRING),
@@ -183,7 +186,7 @@ public enum HandbookRegistry {
 	HEATCORE(ItemStacks.bulb),
 	DRILL(ItemStacks.drill),
 	PRESSHEAD(ItemStacks.presshead),
-	FLYCORE(ItemStacks.flywheelcore),
+	FLYCORE(),
 	RADARITEM(ItemStacks.radar),
 	SONAR(ItemStacks.sonar),
 	PCB(ItemStacks.pcb),
@@ -225,7 +228,9 @@ public enum HandbookRegistry {
 	SILVERIODIDE(),
 	ALUMINUM(),
 	RAILGUNAMMO(),
-	SLIDES();
+	SLIDES(),
+	EXPLOSIVES(),
+	MINECART();
 
 	private MachineRegistry machine;
 	private ItemRegistry item;
@@ -544,6 +549,8 @@ public enum HandbookRegistry {
 			return false;
 		if (this == SCRAP)
 			return false;
+		if (this == CANOLA)
+			return false;
 		return true;
 	}
 
@@ -592,6 +599,14 @@ public enum HandbookRegistry {
 			if (machine.hasCustomPlacerItem())
 				return ReikaJavaLibrary.makeListFrom(machine.getCraftedMetadataProduct(0));
 			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
+		}
+		if (this == FLYCORE) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			li.add(ItemStacks.flywheelcore);
+			li.add(ItemStacks.flywheelcore2);
+			li.add(ItemStacks.flywheelcore3);
+			li.add(ItemStacks.flywheelcore4);
+			return li;
 		}
 		if (this == OTHERGEAR) {
 			List<ItemStack> li = new ArrayList<ItemStack>();
@@ -649,6 +664,10 @@ public enum HandbookRegistry {
 			return ReikaJavaLibrary.makeListFrom(ItemStacks.salt);
 		if (this == SILVERIODIDE)
 			return ReikaJavaLibrary.makeListFrom(ItemStacks.silveriodide);
+		if (this == EXPLOSIVES)
+			return ReikaJavaLibrary.makeListFrom(ItemRegistry.SHELL.getStackOf());
+		if (this == MINECART)
+			return ReikaJavaLibrary.makeListFrom(ItemRegistry.MINECART.getStackOf());
 		return ReikaJavaLibrary.makeListFrom(ItemStacks.basepanel);
 	}
 
@@ -747,6 +766,8 @@ public enum HandbookRegistry {
 			return ItemRegistry.RAILGUN.getStackOf();
 		if (this == SCRAP)
 			return ItemStacks.scrap;
+		if (this == CANOLA)
+			return ItemRegistry.CANOLA.getStackOf();
 		return null;
 	}
 

@@ -26,12 +26,15 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.API.TileEntityAirCompressor;
+import Reika.RotaryCraft.API.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
+import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -64,6 +67,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
+import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
@@ -194,15 +198,18 @@ public enum MachineRegistry {
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
 	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
-	FRICTION(			"Friction Heater",			BlockMMachine.class,		TileEntityFurnaceHeater.class,		12, "RenderFriction"),
+	FRICTION(			"Friction Heater",			BlockDMMachine.class,		TileEntityFurnaceHeater.class,		8, "RenderFriction"),
 	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
 	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
 	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0,	"RenderMirror"),
 	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
 	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
-	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			8),
-	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12);
+	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9),
+	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
+	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0),
+	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1),
+	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay");
 
 
 	private String name;

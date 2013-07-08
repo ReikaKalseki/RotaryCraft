@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Models.ModelRailGun;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -31,6 +32,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedInventory {
 
 	public ItemStack[] ammo = new ItemStack[54];
+	private boolean isExplosiveShell = false;
 
 	public int getPowerLevel() {
 		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getShiftedID(), ammo);
@@ -39,7 +41,14 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	@Override
 	public boolean hasAmmo() {
-		return ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getShiftedID(), ammo);
+		if (ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getShiftedID(), ammo)) {
+			isExplosiveShell = false;
+			return true;
+		}
+		else {
+			isExplosiveShell = true;
+			return ReikaInventoryHelper.checkForItem(ItemRegistry.SHELL.getShiftedID(), ammo);
+		}
 	}
 
 	@Override
@@ -98,9 +107,16 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
 		int maxmeta = this.getMaxThrust();
-		int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getShiftedID(), ammo, maxmeta);
-		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getShiftedID(), m, ammo);
-		ReikaInventoryHelper.decrStack(slot, ammo);
+		if (isExplosiveShell) {
+			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getShiftedID(), ammo, maxmeta);
+			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SHELL.getShiftedID(), m, ammo);
+			ReikaInventoryHelper.decrStack(slot, ammo);
+		}
+		else {
+			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getShiftedID(), ammo, maxmeta);
+			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getShiftedID(), m, ammo);
+			ReikaInventoryHelper.decrStack(slot, ammo);
+		}
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
 		v[1] = xyz[1]-yCoord;
@@ -116,7 +132,10 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		double dz = v[2]/dd;
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this.getPowerLevel(), this));
+			if (isExplosiveShell)
+				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this));
+			else
+				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this.getPowerLevel(), this));
 		}
 	}
 

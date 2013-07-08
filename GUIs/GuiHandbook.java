@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -26,6 +27,7 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
+import Reika.RotaryCraft.Registry.MobBait;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -68,12 +70,12 @@ public class GuiHandbook extends GuiScreen
 	public static final int ENGINESTART = 3;
 	public static final int TRANSSTART = 5;
 	public static final int MACHINESTART = 7;
-	public static final int TOOLSTART = 15;
-	public static final int CRAFTSTART = 17;
-	public static final int RESOURCESTART = 24;
+	public static final int TOOLSTART = 16;
+	public static final int CRAFTSTART = 18;
+	public static final int RESOURCESTART = 25;
 	public static final int MISCSTART = 2;
 
-	public static final int MAXPAGE = 26;
+	public static final int MAXPAGE = 27;
 
 	@SuppressWarnings("unused")
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
@@ -234,6 +236,8 @@ public class GuiHandbook extends GuiScreen
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		if (h.isPlainGui())
 			return 1;
+		if (h == HandbookRegistry.BAITBOX && subpage == 1)
+			return 9;
 		if (subpage == 1)
 			return 1;
 		if (h == HandbookRegistry.STEELINGOT)
@@ -287,7 +291,8 @@ public class GuiHandbook extends GuiScreen
 		int posX = (width - xSize) / 2-2;
 		int posY = (height - ySize) / 2-8;
 
-		if (screen == INFOSTART && page == 0) {
+		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+		if (h == HandbookRegistry.TERMS) {
 			int xc = posX+xSize/2; int yc = posY+43; int r = 35;
 			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
 			ReikaGuiAPI.instance.drawLine(xc, yc, xc+r, yc, 0);
@@ -298,7 +303,7 @@ public class GuiHandbook extends GuiScreen
 			fontRenderer.drawString(s, xc+r+10, yc-4, 0x000000);
 		}
 
-		if (screen == INFOSTART && page == 1) {
+		if (h == HandbookRegistry.PHYSICS) {
 			int xc = posX+xSize/8; int yc = posY+45; int r = 5;
 			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
 			ReikaGuiAPI.instance.drawLine(xc, yc, xc+45, yc, 0x0000ff);
@@ -326,6 +331,24 @@ public class GuiHandbook extends GuiScreen
 
 			fontRenderer.drawString("1 rad/s", xc+r-4, yc+18, 0xff0000);
 			fontRenderer.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
+		}
+		if (h == HandbookRegistry.BAITBOX && subpage == 1) {
+			RenderItem ri = new RenderItem();
+			int k = (int)((System.nanoTime()/2000000000)%MobBait.baitList.length);
+			MobBait b = MobBait.baitList[k];
+			int u = b.getMobIconU();
+			int v = b.getMobIconV();
+			ItemStack is1 = b.getAttractorItemStack();
+			ItemStack is2 = b.getRepellentItemStack();
+			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is1, posX+162, posY+27);
+			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is2, posX+162, posY+27+18);
+			String var4 = "/Reika/RotaryCraft/Textures/GUI/mobicons.png";
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			mc.renderEngine.bindTexture(var4);
+			int UNIT = 4;
+			this.drawTexturedModalRect(posX+88-UNIT/2, posY+41-UNIT/2, u, v, UNIT*2, UNIT*2);
+			fontRenderer.drawString("Attractor", posX+110, posY+30, 0);
+			fontRenderer.drawString("Repellent", posX+110, posY+48, 0);
 		}
 	}
 
@@ -371,6 +394,9 @@ public class GuiHandbook extends GuiScreen
 		case 8:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguij.png";
 			break;
+		case 9:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguik.png";
+			break;
 		default:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
 			break;
@@ -399,6 +425,7 @@ public class GuiHandbook extends GuiScreen
 
 		super.drawScreen(x, y, f);
 
-		this.drawTabIcons();
+		if (!(this instanceof GuiHandbookPage))
+			this.drawTabIcons();
 	}
 }

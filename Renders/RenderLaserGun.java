@@ -40,39 +40,36 @@ public class RenderLaserGun extends RotaryTERenderer {
 		else
 			var9 = tile.getBlockMetadata();
 
-		if (true)
-		{
-			ModelLaserGun var14;
-			var14 = railgunModel;
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/lasertex.png");
+		ModelLaserGun var14;
+		var14 = railgunModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/lasertex.png");
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 1;	 //used to rotate the model about metadata
-			int var12 = 0;
-			if (tile.isInWorld()) {
-				if (tile.getBlockMetadata() == 1) {
-					var11 = -1;
-					var12 = 2;
-					GL11.glFrontFace(GL11.GL_CW);
-				}
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 1;	 //used to rotate the model about metadata
+		int var12 = 0;
+		if (tile.isInWorld()) {
+			if (tile.getBlockMetadata() == 1) {
+				var11 = -1;
+				var12 = 2;
+				GL11.glFrontFace(GL11.GL_CW);
 			}
-			GL11.glTranslated(0, var12, 0);
-			GL11.glScaled(1, var11, 1);
-			var14.renderAll(null, -tile.phi, -tile.theta*var11);
-			GL11.glScaled(1, var11, 1);
-			GL11.glTranslated(0, -var12, 0);
-			GL11.glFrontFace(GL11.GL_CCW);
-
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		}
+		GL11.glTranslated(0, var12, 0);
+		GL11.glScaled(1, var11, 1);
+		var14.renderAll(null, -tile.phi, -tile.theta*var11);
+		GL11.glScaled(1, var11, 1);
+		GL11.glTranslated(0, -var12, 0);
+		GL11.glFrontFace(GL11.GL_CCW);
+
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

@@ -79,12 +79,12 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				if (te.getClass().getField("temperature") != null) {
 					te.getClass().getField("temperature").setInt(te, Tb);
 				}
-			}catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
+			} catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
 			try {
 				if (te.getClass().getField("pressure") != null) {
 					te.getClass().getField("pressure").setInt(te, 101);
 				}
-			}catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
+			} catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
 		}
 
 		if (te instanceof EnchantableMachine) {

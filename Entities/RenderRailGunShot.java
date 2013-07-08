@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.RotaryCraft.Base.EntityTurretShot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,10 +30,7 @@ public class RenderRailGunShot extends Render
 		shadowOpaque = 0.75F;
 	}
 
-	/**
-	 * Renders the XP Orb.
-	 */
-	public void renderTheRailGunShot(EntityRailGunShot par1EntityRailGunShot, double par2, double par4, double par6, float par8, float par9)
+	public void renderTheRailGunShot(EntityTurretShot par1EntityTurretShot, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
@@ -41,7 +39,7 @@ public class RenderRailGunShot extends Render
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		int var19 = par1EntityRailGunShot.getBrightnessForRender(par9);
+		int var19 = par1EntityTurretShot.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
 		int var21 = var19 / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var20 / 1.0F, var21 / 1.0F);
@@ -77,7 +75,6 @@ public class RenderRailGunShot extends Render
 	@Override
 	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
 	{
-		//ReikaChatHelper.write("Rendering.");
-		this.renderTheRailGunShot((EntityRailGunShot)par1Entity, par2, par4, par6, par8, par9);
+		this.renderTheRailGunShot((EntityTurretShot)par1Entity, par2, par4, par6, par8, par9);
 	}
 }

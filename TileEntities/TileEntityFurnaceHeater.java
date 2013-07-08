@@ -110,7 +110,11 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.currentItemBurnTime = this.getBurnTimeFromTemperature();
 		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
 		this.smeltCalculation();
+		smeltTime++;
 		tile.furnaceCookTime = smeltTime;
+		//ReikaJavaLibrary.pConsole(smeltTime+" , "+tile.furnaceCookTime);
+		if (smeltTime >= 200)
+			smeltTime = 0;
 		soundtick++;
 		if (soundtick > 49) {
 			SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 1);
@@ -135,6 +139,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	private void smeltCalculation() {
 		int factor = this.getSpeedFactorFromTemperature();
+		smeltTime *= factor;
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {
@@ -177,8 +182,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	private int getSpeedFactorFromTemperature() {
 		if (temperature < 800)
-			return 0;
-		return (temperature-800)/100;
+			return 1;
+		return 1+(int)((temperature-800)/100F);
 	}
 
 	@Override

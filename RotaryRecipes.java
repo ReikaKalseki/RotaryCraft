@@ -126,7 +126,7 @@ public class RotaryRecipes {
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BORER.getCraftedProduct(), new Object[]{
 			"SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPRINKLER.getCraftedProduct(), new Object[]{
+		WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(MachineRegistry.SPRINKLER.getCraftedProduct(), 4), new Object[]{
 			" s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'i', ItemStacks.impeller});
 
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPAWNERCONTROLLER.getCraftedProduct(), new Object[]{
@@ -560,6 +560,12 @@ public class RotaryRecipes {
 			"p p", " s ", "p p", 's', ItemRegistry.RAILGUN.getStackOfMetadata(13), 'p', ItemStacks.bedingot});
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedMetadataProduct(1, 15), new Object[]{
 			"ppp", "psp", "ppp", 's', ItemRegistry.RAILGUN.getStackOfMetadata(14), 'p', ItemStacks.bedingot});
+
+		GameRegistry.addRecipe(ItemRegistry.MINECART.getCraftedProduct(1), new Object[]{
+			"g", "m", 'g', EnumEngineType.GAS.getCraftedProduct(), 'm', new ItemStack(Item.minecartEmpty)});
+
+		GameRegistry.addRecipe(ItemRegistry.SHELL.getCraftedProduct(16), new Object[]{
+			" s ", "sns", " s ", 's', ItemStacks.steelingot, 'n', ItemStacks.nitrate});
 
 		addSlideRecipes();
 	}

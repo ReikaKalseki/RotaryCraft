@@ -29,6 +29,7 @@ import Reika.RotaryCraft.Items.ItemCannonKey;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDebug;
+import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemGravelGun;
@@ -75,7 +76,9 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	TARGET(98, false, 			"TNT Cannon Targeting Aid", ItemTarget.class),
 	IOGOGGLES(1, true, 			"I/O Goggles", 				ItemIOGoggles.class),
 	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class),
-	KEY(4, false,				"Cannon Key",				ItemCannonKey.class);
+	KEY(4, false,				"Cannon Key",				ItemCannonKey.class),
+	SHELL(5, false,				"Explosive Shell",			ItemBasic.class),
+	MINECART(6, false,			"Ethanol Minecart",			ItemEthanolMinecart.class);
 
 	private int index;
 	private boolean hasSubtypes;

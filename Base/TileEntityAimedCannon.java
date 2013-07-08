@@ -210,7 +210,13 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	}
 
 	public boolean playerIsSafe(String name) {
-		return safePlayers.contains(name);
+		if (name == null)
+			return true;
+		if (this.getPlacer() == null)
+			return safePlayers.contains(name);
+		if (safePlayers == null)
+			return name.equals(this.getPlacer().getEntityName());
+		return safePlayers.contains(name) || name.equals(this.getPlacer().getEntityName());
 	}
 
 	public List<String> getCopyOfSafePlayerList() {

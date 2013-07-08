@@ -28,6 +28,8 @@ import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
@@ -125,7 +127,13 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(PacketTypes.DATA.ordinal());
-			outputStream.writeInt(a);
+			int b = 0;
+			if (tile instanceof TileEntityTNTCannon)
+				b = a+PacketRegistry.CANNON.getMinValue();
+			if (tile instanceof TileEntityItemCannon)
+				b = a+PacketRegistry.ITEMCANNON.getMinValue();
+			ReikaJavaLibrary.pConsole("Sending packet number "+b+" Type "+PacketRegistry.getEnum(b));
+			outputStream.writeInt(b);
 			if (targetMode) {
 				outputStream.writeInt(1);
 				if (a == 12)
@@ -194,7 +202,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				phid = 0;
 			input.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.CANNON.getMinValue());
+			this.sendPacket(0);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input2.getText())) {
@@ -203,7 +211,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				thetad = 0;
 			input2.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.CANNON.getMinValue()+1);
+			this.sendPacket(1);
 			valid2 = false;
 		}
 		if (!input3.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input3.getText())) {
@@ -212,7 +220,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				velocity = 0;
 			input3.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.CANNON.getMinValue()+2);
+			this.sendPacket(2);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2 && !valid3)
@@ -228,7 +236,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		if (valid1) {
 			if (targetMode) {
 				target[0] = Integer.parseInt(input.getText());
-				this.sendPacket(PacketRegistry.CANNON.getMinValue());
+				this.sendPacket(0);
 			}
 			else {
 				phid = Integer.parseInt(input.getText());
@@ -236,13 +244,13 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					phid -= 360;
 				}
 				if (phid >= 0)
-					this.sendPacket(PacketRegistry.CANNON.getMinValue());
+					this.sendPacket(0);
 			}
 		}
 		if (valid2) {
 			if (targetMode) {
 				target[1] = Integer.parseInt(input2.getText());
-				this.sendPacket(PacketRegistry.CANNON.getMinValue()+1);
+				this.sendPacket(1);
 			}
 			else {
 				thetad = Integer.parseInt(input2.getText());
@@ -250,13 +258,13 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					thetad = 90;
 				}
 				if (thetad >= 0)
-					this.sendPacket(PacketRegistry.CANNON.getMinValue()+1);
+					this.sendPacket(1);
 			}
 		}
 		if (valid3) {
 			if (targetMode) {
 				target[2] = Integer.parseInt(input3.getText());
-				this.sendPacket(PacketRegistry.CANNON.getMinValue()+2);
+				this.sendPacket(2);
 			}
 			else {
 				velocity = Integer.parseInt(input3.getText());
@@ -264,7 +272,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					velocity = 0;
 				}
 				if (velocity >= 0)
-					this.sendPacket(PacketRegistry.CANNON.getMinValue()+2);
+					this.sendPacket(2);
 			}
 		}
 		if (targetMode)
