@@ -719,6 +719,12 @@ public enum MachineRegistry {
 			return true;
 		if (this == FRICTION)
 			return true;
+		if (this == COMPRESSOR)
+			return true;
+		if (this == PNEUENGINE)
+			return true;
+		if (this == DISPLAY)
+			return true;
 		return false;
 	}
 
@@ -730,6 +736,8 @@ public enum MachineRegistry {
 		if (this == FLOODLIGHT)
 			return true;
 		if (this == FAN)
+			return true;
+		if (this == COOLINGFIN)
 			return true;
 		return false;
 	}

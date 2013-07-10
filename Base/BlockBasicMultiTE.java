@@ -32,6 +32,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -50,6 +51,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
@@ -219,6 +221,11 @@ public abstract class BlockBasicMultiTE extends Block {
 			tb.dropItemFromInventory();
 			return true;
 		}
+		if (m == MachineRegistry.DISPLAY && ReikaDyeHelper.isDyeItem(is)) {
+			TileEntityDisplay td = (TileEntityDisplay)te;
+			td.setColor(ReikaDyeHelper.getColorFromItem(is));
+			return true;
+		}
 		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;
 			if (tm.broken) {
@@ -321,7 +328,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			return false;
 		if (!(eitem.getItem() instanceof ItemPickaxe || this instanceof BlockPiping))
 			return false;
-		if (eitem.itemID == Item.pickaxeWood.itemID || !(this instanceof BlockPiping))
+		if (eitem.itemID == Item.pickaxeWood.itemID && !(this instanceof BlockPiping))
 			return false;
 		return !ep.capabilities.isCreativeMode;
 	}

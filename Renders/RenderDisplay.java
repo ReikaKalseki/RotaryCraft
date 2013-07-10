@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Renders;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -18,6 +19,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -79,8 +81,119 @@ public class RenderDisplay extends RotaryTERenderer {
 			this.renderTileEntityDisplayAt((TileEntityDisplay)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderText((TileEntityDisplay)tile, par2, par4, par6);
+			if (((TileEntityDisplay)tile).hasSpace()) {
+				int dir = 0;
+				int dx = 0;
+				int dz = 0;
+				switch(tile.getBlockMetadata()) {
+				case 0:
+					dir = 270;
+					dx = 1;
+					break;
+				case 1:
+					dir = 90;
+					dz = 1;
+					break;
+				case 2:
+					dir = 180;
+					dz = 1;
+					dx = 1;
+					break;
+				case 3:
+					dir = 0;
+					break;
+				}
+				GL11.glPushMatrix();
+				GL11.glTranslated(par2, par4, par6);
+				GL11.glTranslated(dx, 0, dz);
+				GL11.glRotatef(dir, 0, 1, 0);
+				this.renderScreen((TileEntityDisplay)tile, par2, par4, par6);
+				this.renderText((TileEntityDisplay)tile, par2, par4, par6);
+				GL11.glRotatef(-dir, 0, 1, 0);
+				GL11.glTranslated(-dx, 0, -dz);
+				GL11.glPopMatrix();
+			}
 		}
+	}
+
+	private void renderScreen(TileEntityDisplay tile, double par2, double par4,	double par6) {
+		if (tile == null)
+			return;
+		GL11.glTranslated(0, 0, 0.495);
+		ReikaRenderHelper.prepareGeoDraw(true);
+		Tessellator v5 = new Tessellator();
+		int r = tile.getRed();
+		int g = tile.getGreen();
+		int b = tile.getBlue();
+		int br = tile.getBorderRed();
+		int bg = tile.getBorderGreen();
+		int bb = tile.getBorderBlue();
+		v5.startDrawingQuads();
+		v5.setColorRGBA(r, g, b, 96);
+		v5.addVertex(-2, 4, 0);
+		v5.addVertex(3, 4, 0);
+		v5.addVertex(3, 1, 0);
+		v5.addVertex(-2, 1, 0);
+		v5.draw();
+
+		double dd = 0.03125;
+		double dx = dd;
+		double dy = dd;
+		double dz = 0;
+
+		GL11.glTranslated(0, 0, 0.0005);
+
+		v5.startDrawingQuads();
+		v5.setColorRGBA(br, bg, bb, 255);
+		v5.addVertex(-2, 4, 0);
+		v5.addVertex(3, 4, 0);
+		v5.addVertex(3, 4-dy, 0);
+		v5.addVertex(-2, 4-dy, 0);
+		v5.draw();
+
+		v5.startDrawingQuads();
+		v5.setColorRGBA(br, bg, bb, 255);
+		v5.addVertex(-2, 1, 0);
+		v5.addVertex(3, 1, 0);
+		v5.addVertex(3, 1+dy, 0);
+		v5.addVertex(-2, 1+dy, 0);
+		v5.draw();
+
+		v5.startDrawingQuads();
+		v5.setColorRGBA(br, bg, bb, 255);
+		v5.addVertex(3, 4, 0);
+		v5.addVertex(3, 1, 0);
+		v5.addVertex(3-dx, 1, 0);
+		v5.addVertex(3-dx, 4, 0);
+		v5.draw();
+
+		v5.startDrawingQuads();
+		v5.setColorRGBA(br, bg, bb, 255);
+		v5.addVertex(-2, 4, 0);
+		v5.addVertex(-2, 1, 0);
+		v5.addVertex(-2+dx, 1, 0);
+		v5.addVertex(-2+dx, 4, 0);
+		v5.draw();
+
+
+		v5.startDrawing(GL11.GL_LINES);
+		v5.setColorRGBA(br, bg, bb, 32);
+		float vspacing = 0.0625F;
+		float hspacing = 0.25F;
+		for (float k = 1+vspacing; k < 4; k += vspacing) {
+			v5.addVertex(-2, k, 0);
+			v5.addVertex(3, k, 0);
+		}
+		for (float k = -2+hspacing; k < 3; k += hspacing) {
+			v5.addVertex(k, 4, 0);
+			v5.addVertex(k, 1, 0);
+		}
+		v5.draw();
+
+		GL11.glTranslated(0, 0, -0.0005);
+
+		ReikaRenderHelper.exitGeoDraw();
+		GL11.glTranslated(0, 0, -0.495);
 	}
 
 	private void renderText(TileEntityDisplay tile, double par2, double par4, double par6) {
@@ -88,28 +201,32 @@ public class RenderDisplay extends RotaryTERenderer {
 			return;
 		if (!tile.hasList())
 			return;
+		FontRenderer f = this.getFontRenderer();
 		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(false);
 		GL11.glPushMatrix();
 		GL11.glScaled(1, -1, 1);
-		GL11.glTranslated(par2, par4, par6);
-		FontRenderer f = this.getFontRenderer();
-		float var10 = 0.6666667F*1.2F;
-		GL11.glScalef(var10, -var10, -var10);
-		int var11 = (int)(0.016666668F * var10);
-		float var112 = 0.016666668F * var10;
-		GL11.glTranslatef(0.0F, 0.5F * var10, 0.07F * var10);
-		GL11.glScalef(var112, -var112, var112);
-		//GL11.glNormal3f(0.0F, 0.0F, -1.0F * var11);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDepthMask(false);
-		GL11.glTranslatef(5, -48, -55);
-		String var15;
-		int len = ReikaMathLibrary.extrema(tile.getMessageLength(), tile.displayHeight, "min");
-		for (int i = tile.getScrollPos(); i < len; i++) {
+		double sc = 0.02;
+		GL11.glScaled(sc, sc, sc);
+		GL11.glTranslated(0, -50, 25);
+		GL11.glTranslated(0, -tile.displayHeight*tile.lineHeight, 0);
+		int dd = 100-tile.charWidth/4;
+		int dx = -dd;
+		int dz = 0;
+		GL11.glTranslated(dx, 0, dz);
+
+		float scroll = tile.getScrollPos();
+		int linescroll = tile.getRoundedScroll();
+		int len = ReikaMathLibrary.extrema(tile.getMessageLength()-1, tile.displayHeight+linescroll-1, "min");
+		for (int i = linescroll; i < len+1; i++) {
 			//ReikaJavaLibrary.pConsole("Printing line "+i+" of "+tile.getMessageLength()+": "+tile.getMessageLine(i));
-			f.drawString(tile.getMessageLine(i), 0, 200+i*12, 0xffffff);
+			f.drawString(tile.getMessageLine(i), 0, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+			GL11.glTranslated(0, 0, -0.2875);
+			f.drawString(tile.getMessageLine(i), 0, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+			GL11.glTranslated(0, 0, 0.2875);
 		}
 		GL11.glPopMatrix();
+		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 

@@ -28,6 +28,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
@@ -71,6 +72,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityMirror mirror;
 	private TileEntityAimedCannon aimed;
 	private TileEntityEngine engine;
+	private TileEntityDisplay display;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -381,6 +383,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			Random rand = new Random();
 			music = (TileEntityMusicBox)world.getBlockTileEntity(x, y, z);
 			world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
+			break;
+		case DISPLAY:
+			display = (TileEntityDisplay)world.getBlockTileEntity(x, y, z);
+			display.setFullMessage(stringdata);
 			break;
 		}
 	}

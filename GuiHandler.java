@@ -17,6 +17,7 @@ import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
@@ -101,12 +102,14 @@ import Reika.RotaryCraft.GUIs.GuiWorldEdit;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.TileEntityFermenter;
@@ -406,6 +409,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntitySpyCam) {
 			return new GuiSpyCam(player, (TileEntitySpyCam)te);
+		}
+		if (te instanceof TileEntityDisplay) {
+			return new GuiStringBuilder(player, te.worldObj, te.xCoord, te.yCoord, te.zCoord, RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue());
 		}
 
 		if (te instanceof OneSlotMachine) {
