@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
@@ -27,11 +28,12 @@ import Reika.RotaryCraft.Models.ModelGearbox;
 import Reika.RotaryCraft.Models.ModelGearbox16;
 import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 	public int lubricant;
@@ -512,5 +514,15 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	@Override
 	public int getRedstoneOverride() {
 		return 15*lubricant/MAXLUBE;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side != EnumLook.DOWN;
 	}
 }

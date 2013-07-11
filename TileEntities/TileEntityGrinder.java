@@ -16,16 +16,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelGrinder;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
-{
+public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+
 	private ItemStack inventory[];
 
 	/** The number of ticks that the current item has been cooking for */
@@ -358,5 +360,15 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver
 		if (!this.canSmelt())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side != EnumLook.DOWN;
 	}
 }

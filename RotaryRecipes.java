@@ -312,7 +312,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.mixer, new Object[]{
 				" S ", "SIS", " S ", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller});
 		GameRegistry.addRecipe(ItemStacks.saw, new Object[]{
-				"S S", " C ", "S S", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor});
+				"S S", " C ", "S S", 'S', ItemStacks.steelingot, 'C', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.pcb, new Object[]{
 				"PGP", "RER", "GPG", 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'R', Item.redstone, 'E', Item.enderPearl});
 		GameRegistry.addRecipe(ItemStacks.sonar, new Object[]{

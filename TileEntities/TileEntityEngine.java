@@ -42,6 +42,7 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.EntityTurretShot;
@@ -59,6 +60,7 @@ import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -67,7 +69,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider {
+public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider, PipeConnector {
 	/** s/e *//*
 	public long power = 0;
 	public int torque = 0;
@@ -1541,5 +1543,31 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (!type.burnsFuel())
 			return -1;
 		return this.getFuelCapacity()*type.getFuelUnitDuration()/20;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		if (type.isJetFueled())
+			return p == MachineRegistry.FUELLINE && side == EnumLook.UP;
+		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {
+			switch(side) {
+			case PLUSX:
+				return this.getBlockMetadata() == 1;
+			case PLUSZ:
+				return this.getBlockMetadata() == 3;
+			case MINX:
+				return this.getBlockMetadata() == 0;
+			case MINZ:
+				return this.getBlockMetadata() == 2;
+			default:
+				return false;
+			}
+		}
+		return false;
 	}
 }

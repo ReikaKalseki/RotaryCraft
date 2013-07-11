@@ -11,6 +11,8 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.liquids.LiquidDictionary;
+import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -18,8 +20,8 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum LiquidRegistry {
 
-	WATER(Item.bucketWater.itemID),
-	LAVA(Item.bucketLava.itemID),
+	WATER(Item.bucketWater.itemID, LiquidDictionary.getCanonicalLiquid("Water")),
+	LAVA(Item.bucketLava.itemID, LiquidDictionary.getCanonicalLiquid("Lava")),
 	LUBRICANT(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage()),
 	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage());
 	//ETHANOL(ItemStacks.ethanolbucket.itemID, ItemStacks.ethanolbucket.getItemDamage());
@@ -28,10 +30,12 @@ public enum LiquidRegistry {
 
 	private int liquidID;
 	private int liquidMeta;
+	private LiquidStack forgeLiquid;
 
-	private LiquidRegistry(int id) {
+	private LiquidRegistry(int id, LiquidStack liq) {
 		liquidID = id;
 		liquidMeta = -1;
+		forgeLiquid = liq;
 	}
 
 	private LiquidRegistry(int id, int meta) {
@@ -96,5 +100,23 @@ public enum LiquidRegistry {
 
 	public ItemStack getHeldItemFor() {
 		return new ItemStack(liquidID, 1, liquidMeta);
+	}
+
+	public int convertLiquidToForge(int blocks) {
+		return forgeLiquid.amount*blocks;
+	}
+
+	public int convertLiquidToRotary(int forgeliq) {
+		return forgeliq/forgeLiquid.amount;
+	}
+
+	public int getWorldBlockID() {
+		if (!this.hasForgeLiquid())
+			throw new RegistrationException(RotaryCraft.instance, this+" has no world block for its liquid!");
+		return forgeLiquid.itemID;
+	}
+
+	private boolean hasForgeLiquid() {
+		return forgeLiquid != null;
 	}
 }

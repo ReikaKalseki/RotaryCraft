@@ -20,12 +20,14 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider {
+public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector {
 
 	private BlockArray solarBlocks = new BlockArray();
 	private int numberMirrors = 0;
@@ -261,6 +263,16 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			y--;
 		}
 		return y+1;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return true;
 	}
 
 }

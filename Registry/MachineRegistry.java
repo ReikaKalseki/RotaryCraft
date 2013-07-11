@@ -28,6 +28,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.API.TileEntityAirCompressor;
 import Reika.RotaryCraft.API.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.API.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -207,8 +208,9 @@ public enum MachineRegistry {
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9),
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
-	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0),
-	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1),
+	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, APIRegistry.BUILDCRAFT),
+	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, APIRegistry.BUILDCRAFT),
+	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, APIRegistry.BUILDCRAFT),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay");
 
 
@@ -220,6 +222,7 @@ public enum MachineRegistry {
 	private boolean hasRender = false;
 	private String renderClass;
 	private int rollover;
+	private APIRegistry requirement;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -234,17 +237,20 @@ public enum MachineRegistry {
 		//this.updateMappingRegistry();
 	}
 
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, APIRegistry a) {
+		this(n, b, tile, m);
+		requirement = a;
+	}
+
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r) {
-		name = n;
-		blockClass = b;
-		meta = m;
-		te = tile;
-		if (meta > 15)
-			//throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
-			rollover = m/16;
-		//this.updateMappingRegistry();
+		this(n, b, tile, m);
 		hasRender = true;
 		renderClass = r;
+	}
+
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, APIRegistry a) {
+		this(n, b, tile, m, r);
+		requirement = a;
 	}
 
 	private void updateMappingRegistry() {
@@ -905,5 +911,21 @@ public enum MachineRegistry {
 		if (this == CHUNKLOADER)
 			return true;
 		return false;
+	}
+
+	public boolean hasPrerequisite() {
+		return requirement != null;
+	}
+
+	public APIRegistry getPrerequisite() {
+		if (!this.hasPrerequisite())
+			throw new RegistrationException(RotaryCraft.instance, name+" has no prerequisites and yet was called for them!");
+		return requirement;
+	}
+
+	public boolean preReqSatisfied() {
+		if (!this.hasPrerequisite())
+			return true;
+		return this.getPrerequisite().conditionsMet();
 	}
 }

@@ -20,13 +20,15 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
+public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector
 {
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -464,5 +466,15 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver
 		if (!this.canSmelt(0) && !this.canSmelt(1) && !this.canSmelt(2) && !this.canSmelt(3))
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return !side.isTopOrBottom();
 	}
 }

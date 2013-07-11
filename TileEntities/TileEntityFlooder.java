@@ -16,6 +16,7 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends TileEntityPiping {
@@ -141,5 +142,15 @@ public class TileEntityFlooder extends TileEntityPiping {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return true;
 	}
 }

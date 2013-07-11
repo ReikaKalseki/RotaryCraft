@@ -15,15 +15,17 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelSprinkler;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect {
+public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect, PipeConnector {
 
 	public static final int CAPACITY = 16;
 
@@ -244,4 +246,13 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		return 0;
 	}
 
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side == EnumLook.DOWN;
+	}
 }

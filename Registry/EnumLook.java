@@ -71,4 +71,16 @@ public enum EnumLook {
 			return 0;
 		}
 	}
+
+	public boolean isTopOrBottom() {
+		return this == UP || this == DOWN;
+	}
+
+	public boolean isXDir() {
+		return this == PLUSX || this == MINX;
+	}
+
+	public boolean isZDir() {
+		return this == PLUSZ || this == MINZ;
+	}
 }

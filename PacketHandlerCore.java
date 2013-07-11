@@ -377,7 +377,8 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 		case ENGINEBACKFIRE:
 			engine = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
-			engine.backFire(world, x, y, z);
+			if (engine != null)
+				engine.backFire(world, x, y, z);
 			break;
 		case MUSICPARTICLE:
 			Random rand = new Random();

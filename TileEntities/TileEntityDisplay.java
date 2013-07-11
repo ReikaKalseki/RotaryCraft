@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.ArrayList;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
@@ -210,5 +211,46 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 		}
 		else
 			message.add(str);
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setIntArray("color", rgb);
+		NBT.setIntArray("Bcolor", Brgb);
+		/*
+		if (!message.isEmpty()) {
+			for (int i = 0; i < message.size(); i++) {
+				String str = message.get(i);
+				if (str != null && !str.isEmpty()) {
+					NBT.setString("msg"+i, str);
+				}
+			}
+		}*/
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		rgb = NBT.getIntArray("color");
+		Brgb = NBT.getIntArray("Bcolor");
+
+		//message = new ArrayList<String>();
+	}
+
+	public void readFromFile() {
+
+	}
+
+	public void saveToFile() {
+
 	}
 }

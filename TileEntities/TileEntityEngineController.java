@@ -12,11 +12,13 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityEngineController extends RotaryCraftTileEntity {
+public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector {
 	public boolean enabled = true;
 
 	public int fuelLevel = 0;
@@ -152,5 +154,15 @@ public class TileEntityEngineController extends RotaryCraftTileEntity {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return true;
 	}
 }

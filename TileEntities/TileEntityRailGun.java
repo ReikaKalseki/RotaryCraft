@@ -105,7 +105,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	@Override
 	public void fire(World world, double[] xyz) {
-		double speed = 1;
+		double speed = 6;
 		int maxmeta = this.getMaxThrust();
 		if (isExplosiveShell) {
 			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getShiftedID(), ammo, maxmeta);
@@ -133,9 +133,9 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
 			if (isExplosiveShell)
-				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this));
+				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this));
 			else
-				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this.getPowerLevel(), this));
+				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this.getPowerLevel(), this));
 		}
 	}
 

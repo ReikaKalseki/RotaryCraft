@@ -267,4 +267,14 @@ public class RotaryCraft extends DragonAPIMod {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
 		}
 	}
+
+	@Override
+	public boolean hasVersion() {
+		return true;
+	}
+
+	@Override
+	public String getVersionName() {
+		return "Beta V0.44";
+	}
 }

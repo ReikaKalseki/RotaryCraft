@@ -18,13 +18,15 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
+public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver implements PipeConnector {
 
 	public ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
@@ -401,6 +403,16 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver {
 		if (filling)
 			return j == 0 && LiquidRegistry.isLiquidItem(itemstack);
 		return j == 0 && itemstack.itemID == Item.bucketEmpty.itemID;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE || m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return !side.isTopOrBottom();
 	}
 
 }

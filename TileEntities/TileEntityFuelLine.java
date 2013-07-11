@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFuelLine extends TileEntityPiping {
@@ -131,9 +132,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		fuel = NBT.getInteger("fuel");
 
 		if (fuel < 0)
-		{
 			fuel = 0;
-		}
 	}
 
 	@Override
@@ -144,5 +143,15 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return true;
 	}
 }

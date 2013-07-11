@@ -20,16 +20,18 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPulseFurnace;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector {
 	private ItemStack inv[];
 
 	/** The number of ticks that the current item has been cooking for */
@@ -93,14 +95,6 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
 				}
 			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FUELLINE) {
 				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y-1, z);
 				if (tile != null && tile.fuel > 0) {
@@ -141,14 +135,6 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 			}
 			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
 				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
@@ -598,5 +584,15 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		if (!this.canSmelt())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side != EnumLook.DOWN;
 	}
 }

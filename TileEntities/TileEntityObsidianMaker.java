@@ -17,13 +17,15 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelObsidian;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector {
 
 	public int waterLevel;
 	public int lavaLevel;
@@ -373,5 +375,15 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		if (waterLevel <= 0)
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return !side.isTopOrBottom();
 	}
 }

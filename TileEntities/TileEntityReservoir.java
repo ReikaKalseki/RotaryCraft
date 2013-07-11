@@ -12,12 +12,14 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelReservoir;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityReservoir extends RotaryCraftTileEntity {
+public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector {
 
 	public int liquidID = -1;
 	public int liquidLevel;
@@ -53,15 +55,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity {
 			}
 			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-					liquidID = tile.liquidID;
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
 				if (tile != null && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
 					liquidID = tile.liquidID;
 					oldLevel = tile.liquidLevel;
@@ -145,5 +138,15 @@ public class TileEntityReservoir extends RotaryCraftTileEntity {
 	@Override
 	public int getRedstoneOverride() {
 		return 15*liquidLevel/CAPACITY;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side != EnumLook.DOWN;
 	}
 }

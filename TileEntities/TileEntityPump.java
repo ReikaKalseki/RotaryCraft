@@ -21,13 +21,15 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelPump;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPump extends TileEntityPowerReceiver {
+public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector {
 
 	public int liquidID = -1;
 	public int liquidLevel;
@@ -276,5 +278,15 @@ public class TileEntityPump extends TileEntityPowerReceiver {
 	@Override
 	public int getRedstoneOverride() {
 		return 15*liquidPressure/1000;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return !side.isTopOrBottom();
 	}
 }

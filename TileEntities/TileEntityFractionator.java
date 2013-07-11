@@ -17,15 +17,17 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
+import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
+public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver implements PipeConnector {
 
 	public int fuel;
 	public int mixTime;
@@ -260,5 +262,15 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver {
 		if (!this.getAllIngredients())
 			return 15;
 		return 15*fuel/CAPACITY;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		return side == EnumLook.DOWN;
 	}
 }
