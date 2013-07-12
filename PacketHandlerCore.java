@@ -387,7 +387,12 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 		case DISPLAY:
 			display = (TileEntityDisplay)world.getBlockTileEntity(x, y, z);
-			display.setFullMessage(stringdata);
+			if (control == 40)
+				display.setFullMessage(stringdata);
+			if (control == 41)
+				display.saveToFile();
+			if (control == 42)
+				display.readFromFile();
 			break;
 		}
 	}

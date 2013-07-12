@@ -9,12 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -240,6 +247,7 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
+		//ReikaJavaLibrary.pConsole(Arrays.toString(NBT.getIntArray("Bcolor")));
 		rgb = NBT.getIntArray("color");
 		Brgb = NBT.getIntArray("Bcolor");
 
@@ -247,10 +255,54 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 	}
 
 	public void readFromFile() {
-
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		//ReikaJavaLibrary.pConsole(musicFile);
+		String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
+		try {
+			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(save.getPath()+"\\RotaryCraft\\"+name)));
+			message = new ArrayList<String>();
+			String line = null;
+			while((line = p.readLine()) != null) {
+				message.add(line);
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
+		}
 	}
 
 	public void saveToFile() {
+		try {
+			File save = DimensionManager.getCurrentSaveRootDirectory();
+			String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
+			File dir = new File(save.getPath()+"\\RotaryCraft\\");
+			if (!dir.exists())
+				dir.mkdir();
+			File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
+			if (f.exists())
+				f.delete();
+			PrintWriter p = new PrintWriter(f);
+			f.createNewFile();
+			for (int i = 0; i < message.size(); i++) {
+				String str = message.get(i);
+				p.append(str);
+			}
+			p.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
+		}
+	}
 
+	public void setColorToArgon() {
+		rgb[0] = ArRGB[0];
+		rgb[1] = ArRGB[1];
+		rgb[2] = ArRGB[2];
+		Brgb[0] = ArBRGB[0];
+		Brgb[1] = ArBRGB[1];
+		Brgb[2] = ArBRGB[2];
 	}
 }

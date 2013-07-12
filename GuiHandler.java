@@ -411,7 +411,7 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiSpyCam(player, (TileEntitySpyCam)te);
 		}
 		if (te instanceof TileEntityDisplay) {
-			return new GuiStringBuilder(player, te.worldObj, te.xCoord, te.yCoord, te.zCoord, RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue());
+			return new GuiStringBuilder(player, te.worldObj, te.xCoord, te.yCoord, te.zCoord, RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue(), TileEntityDisplay.displayWidth, TileEntityDisplay.displayHeight);
 		}
 
 		if (te instanceof OneSlotMachine) {

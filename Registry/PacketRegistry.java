@@ -36,7 +36,7 @@ public enum PacketRegistry {
 	SAFEPLAYER(37),
 	ENGINEBACKFIRE(38),
 	MUSICPARTICLE(39),
-	DISPLAY(40);
+	DISPLAY(40, 42);
 
 	private int min;
 	private int max;

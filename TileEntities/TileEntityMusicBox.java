@@ -371,10 +371,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		try {
 			File save = DimensionManager.getCurrentSaveRootDirectory();
 			String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-			File dir = new File(save.getPath()+"\\Music Box\\");
+			File dir = new File(save.getPath()+"\\RotaryCraft\\");
 			if (!dir.exists())
 				dir.mkdir();
-			File f = new File(save.getPath()+"\\Music Box\\"+name);
+			File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
 			if (f.exists())
 				f.delete();
 			PrintWriter p = new PrintWriter(f);
