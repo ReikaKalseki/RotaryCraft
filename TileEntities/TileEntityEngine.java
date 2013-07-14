@@ -986,6 +986,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 									caught.velocityChanged = true;
 								if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
 									caught.setDead();
+									FOD = 2;
 									isJetFailing = true;
 								}
 							}
@@ -1569,5 +1570,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			}
 		}
 		return false;
+	}
+
+	public void repairJet() {
+		FOD = 0;
+		isJetFailing = false;
+		temperature = ReikaWorldHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+	}
+
+	public void repairJetPartial() {
+		if (FOD > 0)
+			FOD--;
 	}
 }

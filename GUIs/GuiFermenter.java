@@ -14,8 +14,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityFermenter;
 
 public class GuiFermenter extends GuiMachine
@@ -27,6 +29,21 @@ public class GuiFermenter extends GuiMachine
 		super(new ContainerFermenter(p5ep, Fermenter), Fermenter);
 		ferm = Fermenter;
 		ep = p5ep;
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		super.drawGuiContainerForegroundLayer(a, b);
+		boolean red = ferm.worldObj.isBlockIndirectlyGettingPowered(ferm.xCoord, ferm.yCoord, ferm.zCoord);
+		if (red) {
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemStacks.sludge, 154, 6);
+		}
+		else {
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemRegistry.YEAST.getStackOf(), 154, 6);
+		}
+		fontRenderer.drawString("Target", 119, 10, 0);
+
 	}
 
 	/**

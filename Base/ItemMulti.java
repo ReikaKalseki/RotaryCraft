@@ -34,7 +34,6 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 
 	public ItemMulti(int ID, int par2type) {
 		super(ID, 0); //Returns super constructor: par1 is ID
-		////setItemName("shaftcraft"); //Sets the incode name of the item, make sure it doesn't clash with other items, weird stuff happens
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		type = par2type;
@@ -45,7 +44,6 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 
 	public ItemMulti(int ID, int par2type, int max) {
 		super(ID, 0); //Returns super constructor: par1 is ID
-		////setItemName("shaftcraft"); //Sets the incode name of the item, make sure it doesn't clash with other items, weird stuff happens
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		type = par2type;
@@ -158,7 +156,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 					item.setTagCompound(new NBTTagCompound());
 				item.stackTagCompound.setInteger("damage", 0);
 			}
-			if (type != 6 || (type == 6 && (i < 4 || i > 6)))
+			if (type != 6 || (type == 6 && (i < 5 || i > 6)))
 				par3List.add(item);
 			if (item.itemID == ItemStacks.shaftcore.itemID && item.getItemDamage() == ItemStacks.shaftcore.getItemDamage()) {
 				ItemStack mag = item.copy();

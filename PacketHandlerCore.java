@@ -84,7 +84,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 
 	public abstract void process(Packet250CustomPayload packet, EntityPlayer ep);
 
-	public void handleData(Packet250CustomPayload packet, World world) {
+	public void handleData(Packet250CustomPayload packet, World world, EntityPlayer ep) {
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 		int control = Integer.MIN_VALUE;
 		int len;
@@ -188,15 +188,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			splitter = (TileEntitySplitter)world.getBlockTileEntity(x, y, z);
 			if (control == 6) {
 				splitter.splitmode = data[0];
-			}/* NOT USED
-			if (control == 7) {
-				splitter.splitmode = -1;
-				int meta = world.getBlockMetadata(x, y, z);
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", meta));
-				if (meta >= 8)
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z, MachineRegistry.SPLITTER.getBlockID(), meta-8);
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", meta-8, world.getBlockMetadata(x, y, z)));
-			}*/
+			}
 		}
 		break;
 		case SPAWNER: {
@@ -393,6 +385,11 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				display.saveToFile();
 			if (control == 42)
 				display.readFromFile();
+			break;
+		case CHESTRELOAD:
+			//ep.closeScreen();
+			//ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
+			//ReikaJavaLibrary.pConsole("Opening gui for "+ep+" on "+FMLCommonHandler.instance().getEffectiveSide());
 			break;
 		}
 	}

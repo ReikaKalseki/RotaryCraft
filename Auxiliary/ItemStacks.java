@@ -35,6 +35,7 @@ public final class ItemStacks {
 
 	public static final ItemStack bedingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 3);
 	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);
+	public static final ItemStack aluminumingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 4);
 
 	public static final ItemStack basepanel = new ItemStack(RotaryCraft.shaftcraft, 1, 0);
 	public static final ItemStack steelingot = new ItemStack(RotaryCraft.shaftcraft, 1, 1);

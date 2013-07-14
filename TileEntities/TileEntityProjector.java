@@ -60,7 +60,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 		on = true;
 		if (tickcount >= DELAY) {
 			tickcount = 0;
-			this.cycleInv();
+			//this.cycleInv();
 		}
 		this.getChannelFromActiveSlide();
 		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))

@@ -260,22 +260,12 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		this.getLiq(world, x, y, z, meta);
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(canSmelt(i)));
 			if (!worldObj.isRemote) {
 				if (this.canSmelt(i)) {
-					flag1 = true;/*
-	                if (inv[i] != null) {
-	                    if (inv[i].getItem().func_46056_k())
-	                        inv[i] = new ItemStack(inv[i].getItem().setFull3D());
-	                    else
-	                        inv[i].stackSize--;
-	                    if (inv[i].stackSize == 0)
-	                        inv[i] = null;
-	                }*/
+					flag1 = true;
 				}
 				if (this.canSmelt(i)) {
 					extractorCookTime[i]++;
-					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 					if (this.operationComplete(extractorCookTime[i], i+1)) {
 						extractorCookTime[i] = 0;
 						if (!this.processModOre(i))
@@ -289,7 +279,6 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			if (flag1)
 				this.onInventoryChanged();
 		}
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(canSmelt(0))+"  "+String.valueOf(canSmelt(1))+"  "+String.valueOf(canSmelt(2))+"  "+String.valueOf(canSmelt(3)));
 	}
 
 	/**
@@ -297,17 +286,10 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	 */
 	private boolean canSmelt(int i)
 	{
-		//readPower();
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d  %d", this.power, this.torque, this.omega, i));
-
 		if (power < machine.getMinPower(i) || omega < machine.getMinSpeed(i) || torque < machine.getMinTorque(i))
 			return false;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("75");
 		if ((i == 1 || i == 2) && waterLevel < 1)
 			return false;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("45");
-
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage("DSFFD");
 
 		if (inv[i] == null)
 			return false;
@@ -407,26 +389,27 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				targetsize = inv[i+4].stackSize;
 			ModOreList m = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 			if (ModOreList.isModOre(inv[i]) && i == 0) {
-				ItemStack is = ExtractorModOres.getDustProduct(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4));
+				m = ModOreList.getModOreFromOre(inv[0]);
+				ItemStack is = ExtractorModOres.getDustProduct(m);
 				ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 				ReikaInventoryHelper.decrStack(i, inv);
 				return true;
 			}
 			else if (ExtractorModOres.isModOreIngredient(inv[i])) {
 				if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
-					ItemStack is = ExtractorModOres.getSlurryProduct(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4));
+					ItemStack is = ExtractorModOres.getSlurryProduct(m);
 					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					return true;
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
-					ItemStack is = ExtractorModOres.getSolutionProduct(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4));
+					ItemStack is = ExtractorModOres.getSolutionProduct(m);
 					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					return true;
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
-					ItemStack is = ExtractorModOres.getFlakeProduct(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4));
+					ItemStack is = ExtractorModOres.getFlakeProduct(m);
 					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					return true;

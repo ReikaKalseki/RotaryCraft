@@ -28,6 +28,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -36,6 +37,7 @@ import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemMeter;
 import Reika.RotaryCraft.Items.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -124,6 +126,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+		ItemStack is = ep.getCurrentEquippedItem();
 		if (ep.isSneaking() && !(te instanceof TileEntityCaveFinder))
 			return false;
 		if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver || ep.getCurrentEquippedItem().getItem() instanceof ItemMeter || ep.getCurrentEquippedItem().getItem() instanceof ItemDebug)) {
@@ -131,8 +134,24 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		}
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine tile = (TileEntityEngine)te;
-			if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().stackSize == 1) {
-				if (ep.getCurrentEquippedItem().itemID == Item.bucketEmpty.itemID) {
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
+				if (tile.type == EnumEngineType.JET && tile.FOD > 0) {
+					tile.repairJet();
+					if (!ep.capabilities.isCreativeMode)
+						--is.stackSize;
+					return true;
+				}
+			}
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
+				if (tile.type == EnumEngineType.JET && tile.FOD > 0) {
+					tile.repairJetPartial();
+					if (!ep.capabilities.isCreativeMode)
+						--is.stackSize;
+					return true;
+				}
+			}
+			if (is != null && is.stackSize == 1) {
+				if (is.itemID == Item.bucketEmpty.itemID) {
 					if (tile.type.isEthanolFueled()) {
 						if (tile.ethanols >= ItemFuelLubeBucket.value[2]) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket);
@@ -157,7 +176,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					}
 				}
 				if (tile.type.isJetFueled()) {
-					if (ep.getCurrentEquippedItem().itemID == ItemStacks.fuelbucket.itemID && ep.getCurrentEquippedItem().getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
+					if (is.itemID == ItemStacks.fuelbucket.itemID && is.getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
 						if (tile.jetfuels <= tile.FUELCAP-ItemFuelLubeBucket.value[1]) {
 							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 							tile.jetfuels += ItemFuelLubeBucket.value[1];
@@ -170,7 +189,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					}
 				}
 				if (tile.type.isEthanolFueled()) {
-					if (ep.getCurrentEquippedItem().itemID == ItemStacks.ethanolbucket.itemID && ep.getCurrentEquippedItem().getItemDamage() == ItemStacks.ethanolbucket.getItemDamage()) {
+					if (is.itemID == ItemStacks.ethanolbucket.itemID && is.getItemDamage() == ItemStacks.ethanolbucket.getItemDamage()) {
 						if (tile.ethanols <= tile.FUELCAP-ItemFuelLubeBucket.value[2]) {
 							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 							tile.ethanols += ItemFuelLubeBucket.value[1];

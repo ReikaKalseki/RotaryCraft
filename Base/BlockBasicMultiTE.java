@@ -59,6 +59,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public abstract class BlockBasicMultiTE extends Block {
 
@@ -258,6 +259,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isUseableByPlayer(ep)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
+			ReikaJavaLibrary.pConsole("Opening gui for "+ep+" on "+FMLCommonHandler.instance().getEffectiveSide());
 			return true;
 		}
 		if (m == MachineRegistry.SCREEN) {

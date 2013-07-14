@@ -58,8 +58,8 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		buttonList.add(new GuiButton(0, -7+j-20, k+16, 20, 20, "+"));
-		buttonList.add(new GuiButton(1, -7+j-20, k+36, 20, 20, "-"));
+		buttonList.add(new GuiButton(0, j+xSize-9, k+45, 40, 20, "Next"));
+		buttonList.add(new GuiButton(1, j+xSize-9, k+65, 40, 20, "Back"));
 	}
 
 	private void setValues() {
@@ -88,6 +88,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		if (page == oldpage)
 			return;
 		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CHEST.getMinValue(), scale, ep, page);
+		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CHESTRELOAD.getMinValue(), scale);
 		//player.closeScreen();
 		//this.refresh();
 		//this.setValues();
@@ -134,7 +135,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			diff = 0;
 		int color1 = 0xffeeeeee;
 		int color2 = 0xff939393;
-		int color3 = 0xffcacaca;
+		int color3 = 0xffc6c6c6;
 		ReikaGuiAPI.drawRect(var4, var5, var4+18*diff, var5+18, color3);
 		if (pagerows < scale.MAXROWS) {
 			var4 = 7;

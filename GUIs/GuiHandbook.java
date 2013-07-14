@@ -60,11 +60,6 @@ public class GuiHandbook extends GuiScreen
 	private static int staticwidth;
 	private static int staticheight;
 
-	public static final String icons1 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookicons.png";
-	public static final String icons2 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookicons2.png";
-	public static final String terrain = "/Reika/RotaryCraft/Textures/Terrain/textures.png";
-	public static final String vanillaitems = "/gui/items.png";
-
 	public static final int TOCSTART = 0;
 	public static final int INFOSTART = 1;
 	public static final int ENGINESTART = 3;
@@ -270,7 +265,6 @@ public class GuiHandbook extends GuiScreen
 
 	private void drawRecipes() {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(icons1);
 
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2;

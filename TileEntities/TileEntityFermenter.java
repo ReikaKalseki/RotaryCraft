@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -74,7 +75,10 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	private int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
-		return PlantMaterials.getPlantEntry(is).getPlantValue();
+		PlantMaterials plant = PlantMaterials.getPlantEntry(is);
+		if (plant == null)
+			return 0;
+		return plant.getPlantValue();
 	}
 
 	private float getFermentRate() {
@@ -116,8 +120,19 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			idle = true;
 			return;
 		}
-		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
+		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return;
+		boolean red = world.isBlockIndirectlyGettingPowered(x, y, z);
+		if (red) {
+			if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
+				//return;
+			}
+		}
+		else {
+			if (ReikaItemHelper.matchStacks(product, ItemStacks.sludge)) {
+				//return;
+			}
+		}
 		if (slots[3] != null) {
 			if (product.itemID != slots[3].itemID) {
 				fermenterCookTime = 0;
@@ -340,69 +355,6 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		return (temperature * par1) / MAXTEMP;
 	}
 
-	/**
-	 * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-	 * ticks and creates a new spawn inside its implementation.
-	 *//*
-    public void updateEntity()
-    {
-    	super.updateEntity();
-    	this.testIdle();
-        boolean flag1 = false;
-        tickcount++;
-
-        //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
-
-        if (!worldObj.isRemote)
-        {
-            if (canSmelt())
-            {
-                    flag1 = true;
-
-                    if (slots[1] != null)
-                    {
-                      //  if (slots[1].getItem().func_46056_k())
-                       // {
-                                slots[1] = new ItemStack(slots[1].getItem().setFull3D());
-                      //  }
-                      //  else
-                     //   {
-                                slots[1].stackSize--;
-                      //  }
-
-                        if (slots[1].stackSize == 0)
-                        {
-                                slots[1] = null;
-                        }
-                    }
-            }
-
-            if (canSmelt())
-            {
-                fermenterCookTime++;
-            	//ReikaChatHelper.writeInt(this.operationTime(0));
-            	//ReikaChatHelper.writeInt(fermenterCookTime);
-               // ReikaChatHelper.writeInt(omega);
-                //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-                if (this.operationComplete(fermenterCookTime, 0))
-                {
-                    fermenterCookTime = 0;
-                    smeltItem();
-                    flag1 = true;
-                }
-            }
-            else
-            {
-                fermenterCookTime = 0;
-            }
-        }
-
-        if (flag1)
-        {
-            onInventoryChanged();
-        }
-    }*/
-
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
@@ -428,14 +380,25 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (i == 3)
 			return false;
-		if (i == 0) {
-			return (is.itemID == ItemRegistry.YEAST.getShiftedID() && !red) || (is.itemID == Item.sugar.itemID && red);
+		if (red) {
+			switch(i) {
+			case 0:
+				return is.itemID == ItemRegistry.YEAST.getShiftedID();
+			case 1:
+				return this.getPlantValue(is) > 0;
+			case 2:
+				return is.itemID == Item.bucketWater.itemID;
+			}
 		}
-		if (i == 1) {
-			return (is.itemID == Item.bucketWater.itemID && !red) || (this.getPlantValue(is) > 0 && red);
-		}
-		if (i == 2) {
-			return (is.itemID == Item.bucketWater.itemID && !red) || (is.itemID == Block.dirt.blockID && red);
+		else {
+			switch(i) {
+			case 0:
+				return is.itemID == Item.sugar.itemID;
+			case 1:
+				return is.itemID == Item.bucketWater.itemID;
+			case 2:
+				return is.itemID == Block.dirt.blockID;
+			}
 		}
 		return false;
 	}

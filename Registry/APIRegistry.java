@@ -13,7 +13,8 @@ import cpw.mods.fml.common.Loader;
 
 public enum APIRegistry {
 
-	BUILDCRAFT(Loader.isModLoaded("BuildCraft"));
+	BUILDCRAFT(Loader.isModLoaded("BuildCraft")),
+	THAUMCRAFT(Loader.isModLoaded("ThaumCraft"));
 
 	private boolean condition;
 	private boolean preset = false;

@@ -18,7 +18,7 @@ public class ServerPackets extends PacketHandlerCore {
 	@Override
 	public void process(Packet250CustomPayload packet, EntityPlayer ep) {
 		World world = ep.worldObj;
-		this.handleData(packet, world);
+		this.handleData(packet, world, ep);
 	}
 
 }

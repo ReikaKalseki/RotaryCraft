@@ -114,7 +114,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] compactNames = {
-		"Anthracite", "Prismane", "Lonsdaleite", "Bedrock Ingot", "", "", "", "Silver Ingot"
+		"Anthracite", "Prismane", "Lonsdaleite", "Bedrock Ingot", "Aluminum Ingot", "", "", "Silver Ingot"
 	};
 
 	public static final String[] spawnerNames = {

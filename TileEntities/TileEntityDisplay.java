@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
@@ -203,21 +204,33 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 
 	public void setFullMessage(String str) {
 		this.clearMessage();
+		//ReikaJavaLibrary.pConsole(Arrays.toString(str.split(GuiStringBuilder.NEWLINE)));
 		if (str.length() > displayWidth) {
 			ArrayList<String> li = new ArrayList<String>();
 			while (str != null && str.length() > 0) {
 				if (str.length() <= displayWidth) {
-					message.add(str);
+					String[] s = str.split(GuiStringBuilder.NEWLINE);
+					for (int i = 0; i < s.length; i++)
+						message.add(s[i]);
 					return;
 				}
 				else {
-					message.add(str.substring(0, displayWidth));
+					String s1 = str.substring(0, displayWidth);
+					String[] sp1 = s1.split(GuiStringBuilder.NEWLINE);
+					for (int i = 0; i < sp1.length; i++)
+						message.add(sp1[i]);
 					str = str.substring(displayWidth+1);
+					String[] s2 = str.split(GuiStringBuilder.NEWLINE);
+					for (int i = 0; i < s2.length; i++)
+						message.add(s2[i]);
 				}
 			}
 		}
-		else
-			message.add(str);
+		else {
+			String[] s = str.split(GuiStringBuilder.NEWLINE);
+			for (int i = 0; i < s.length; i++)
+				message.add(s[i]);
+		}
 	}
 
 	/**
@@ -304,5 +317,15 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 		Brgb[0] = ArBRGB[0];
 		Brgb[1] = ArBRGB[1];
 		Brgb[2] = ArBRGB[2];
+	}
+
+	public String getMessageAsBigString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < message.size(); i++) {
+			sb.append(message.get(i));
+			if (i != message.size()-1)
+				sb.append(GuiStringBuilder.NEWLINE);
+		}
+		return sb.toString();
 	}
 }

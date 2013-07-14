@@ -25,6 +25,7 @@ import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.RotaryCraft.API.IntegrityChecker;
+import Reika.RotaryCraft.API.OreForcer;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -149,6 +150,8 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
+		this.checkAPI();
+
 		config.initProps(evt);
 		proxy.registerSounds();
 	}
@@ -192,6 +195,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (!this.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
+
+		OreForcer.registerModItemsToDictionary();
 	}
 
 	private static void setupClassFiles() {

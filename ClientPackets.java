@@ -22,7 +22,7 @@ public class ClientPackets extends PacketHandlerCore {
 	@Override
 	public void process(Packet250CustomPayload packet, EntityPlayer ep) {
 		World world = FMLClientHandler.instance().getClient().theWorld;
-		this.handleData(packet, world);
+		this.handleData(packet, world, ep);
 	}
 
 }

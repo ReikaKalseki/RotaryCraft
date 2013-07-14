@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeAchievementHandler;
@@ -511,6 +512,9 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
 			"rrr", "rrr", "rr ", 'r', Block.fenceIron});
 
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
+			"b", 'b', Item.bucketEmpty});
+
 		GameRegistry.addRecipe(ItemStacks.steelblock, new Object[]{
 				"BBB", "BBB", "BBB", 'B', ItemStacks.steelingot});
 
@@ -723,7 +727,8 @@ public class RotaryRecipes {
 	}
 
 	private static void addFurnace() {
-		FurnaceRecipes.smelting().addSmelting(RotaryCraft.powders.itemID, 2, ItemRegistry.ETHANOL.getStackOf(), 0.5F);
+		ReikaRecipeHelper.addSmelting(ItemStacks.aluminumpowder, ItemStacks.aluminumingot, 0.4F);
+		ReikaRecipeHelper.addSmelting(ItemStacks.sludge, ItemRegistry.ETHANOL.getStackOf(), 0.5F);
 
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 24, new ItemStack(Item.coal.itemID, 1, 0), 0.1F);
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 25, new ItemStack(Item.ingotIron.itemID, 1, 0), 0.7F);

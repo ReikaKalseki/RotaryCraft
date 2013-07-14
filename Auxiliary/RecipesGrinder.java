@@ -55,29 +55,27 @@ public class RecipesGrinder {
 		this.addSmelting(ItemStacks.anthrablock.itemID, new ItemStack(ItemStacks.anthracite.itemID, 1, ItemStacks.anthracite.getItemDamage()), 0.3F);
 		this.addSmelting(ItemStacks.lonsblock.itemID, new ItemStack(ItemStacks.lonsda.itemID, 1, ItemStacks.lonsda.getItemDamage()), 0.3F);
 
-		this.addSmelting(Block.wood.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F); //sawdust
-		this.addSmelting(Block.planks.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.music.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.jukebox.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.fence.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodOak.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodBirch.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodSpruce.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.stairsWoodJungle.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.chest.blockID, new ItemStack(RotaryCraft.powders.itemID, 32, 3), 0.3F);
-		this.addSmelting(Block.workbench.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F);
-		this.addSmelting(Block.ladder.blockID, new ItemStack(RotaryCraft.powders.itemID, 4, 3), 0.3F);
-		this.addSmelting(Block.pressurePlatePlanks.blockID, new ItemStack(RotaryCraft.powders.itemID, 8, 3), 0.3F);
-		this.addSmelting(Block.pressurePlateStone.blockID, new ItemStack(Block.cobblestone.blockID, 2, 3), 0.3F);
-		this.addSmelting(Item.bowlEmpty.itemID, new ItemStack(RotaryCraft.powders.itemID, 12, 3), 0.3F);
-		this.addSmelting(Item.doorWood.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.sign.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.doorWood.itemID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Item.stick.itemID, new ItemStack(RotaryCraft.powders.itemID, 2, 3), 0.3F);
-		this.addSmelting(Block.trapdoor.blockID, new ItemStack(RotaryCraft.powders.itemID, 24, 3), 0.3F);
-		this.addSmelting(Block.fenceGate.blockID, new ItemStack(RotaryCraft.powders.itemID, 16, 3), 0.3F);
-
-		//addSmelting(RotaryCraft.canolaseed.itemID, null, 0.7F);
+		this.addSmelting(Block.wood.blockID, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F); //sawdust
+		this.addSmelting(Block.planks.blockID, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.music.blockID, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.jukebox.blockID, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.fence.blockID, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.stairsWoodOak.blockID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.stairsWoodBirch.blockID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.stairsWoodSpruce.blockID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.stairsWoodJungle.blockID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.chest.blockID, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.workbench.blockID, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.ladder.blockID, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.pressurePlatePlanks.blockID, new ItemStack(ItemStacks.sawdust.itemID, 8, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.pressurePlateStone.blockID, new ItemStack(Block.cobblestone.blockID, 2, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Item.bowlEmpty.itemID, new ItemStack(ItemStacks.sawdust.itemID, 12, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Item.doorWood.itemID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Item.sign.itemID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Item.doorWood.itemID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Item.stick.itemID, new ItemStack(ItemStacks.sawdust.itemID, 2, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.trapdoor.blockID, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addSmelting(Block.fenceGate.blockID, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
 	}
 
 	/**
