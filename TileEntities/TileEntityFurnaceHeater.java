@@ -213,4 +213,19 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		temperature = NBT.getInteger("temp");
 	}
 
+	@Override
+	public void addTemperature(int temp) {
+
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+
+	}
+
 }

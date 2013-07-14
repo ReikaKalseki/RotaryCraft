@@ -99,7 +99,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return true;
 		if (pass == 0)
 			return true;
-		if (pass == 1 && (this.hasModelTransparency() || (MachineRegistry.machineList[this.getMachineIndex()].hasModel() && this instanceof TileEntityIOMachine)))
+		if (pass == 1 && (this.hasModelTransparency() || this.getMachine().renderInPass1()))
 			return true;
 		return false;
 	}
@@ -153,5 +153,10 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		}
 		double dist = ReikaMathLibrary.py3d(xCoord+0.5-var1.posX, yCoord+0.5-var1.posY, zCoord+0.5-var1.posZ);
 		return (dist <= 8) && worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this;
+	}
+
+	@Override
+	public String getTEName() {
+		return this.getName();
 	}
 }

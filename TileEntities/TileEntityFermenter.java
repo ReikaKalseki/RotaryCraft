@@ -414,4 +414,19 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			return 15;
 		return 0;
 	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+
+	}
 }

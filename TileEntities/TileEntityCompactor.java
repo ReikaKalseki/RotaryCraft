@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -29,7 +30,7 @@ import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelCompactor;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver implements TemperatureTE
+public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PressureTE
 {
 	private ItemStack compactorItemStacks[];
 
@@ -82,29 +83,29 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			return false;
 		int id = 0;
 		switch (metadata) {
-			case 0:
-				id = world.getBlockId(x+1, y, z);
-				readx = x+1;
-				readz = z;
-				break;
-			case 1:
-				id = world.getBlockId(x-1, y, z);
-				readx = x-1;
-				readz = z;
-				break;
-			case 2:
-				id = world.getBlockId(x, y, z+1);
-				readx = x;
-				readz = z+1;
-				break;
-			case 3:
-				id = world.getBlockId(x, y, z-1);
-				readx = x;
-				readz = z-1;
-				break;
-			default:
-				id = 0;
-				break;
+		case 0:
+			id = world.getBlockId(x+1, y, z);
+			readx = x+1;
+			readz = z;
+			break;
+		case 1:
+			id = world.getBlockId(x-1, y, z);
+			readx = x-1;
+			readz = z;
+			break;
+		case 2:
+			id = world.getBlockId(x, y, z+1);
+			readx = x;
+			readz = z+1;
+			break;
+		case 3:
+			id = world.getBlockId(x, y, z-1);
+			readx = x;
+			readz = z-1;
+			break;
+		default:
+			id = 0;
+			break;
 		}
 		ready = yCoord;
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, powinx, y, powinz, 4);
@@ -247,18 +248,18 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (item == Item.coal.itemID)
 			return 80;
 		switch(meta) {
-			case 0:
-				return 160;
-			case 1:
-				return 320;
-			case 2:
-				return 640;
-			default:
-				return -1;
+		case 0:
+			return 160;
+		case 1:
+			return 320;
+		case 2:
+			return 640;
+		default:
+			return -1;
 		}
 	}
 
-	public void updatePressure(World world, int x, int y, int z) {
+	public void updatePressure(World world, int x, int y, int z, int meta) {
 		int Pamb = 101;
 		if (world.getBiomeGenForCoords(x, z) == BiomeGenBase.hell)
 			Pamb = 20000;
@@ -289,8 +290,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		//	this.pressure *= 0.95; //Natural p loss
 
 		if (pressure > MAXPRESSURE) {
-			world.createExplosion(null, x, y, z, 4, true);
-			pressure = MAXPRESSURE;
+			this.overpressure(world, x, y, z);
 		}
 	}
 
@@ -359,7 +359,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPower(false, false);
-		this.updatePressure(world, x, y, z);
+		this.updatePressure(world, x, y, z, meta);
 		this.updateTemperature(world, x, y, z, meta);
 		this.testIdle();
 		boolean flag1 = false;
@@ -514,5 +514,31 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (!this.canSmelt())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void addPressure(int press) {
+		pressure += press;
+	}
+
+	@Override
+	public int getPressure() {
+		return pressure;
+	}
+
+	@Override
+	public void overpressure(World world, int x, int y, int z) {
+		world.createExplosion(null, x, y, z, 4, true);
+		pressure = MAXPRESSURE;
 	}
 }

@@ -445,4 +445,14 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 			return 15;
 		return 0;
 	}
+
+	@Override
+	public void addTemperature(int temp) {
+
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
 }

@@ -234,7 +234,7 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 		}
 	}
 
-	private void overheat(World world, int x, int y, int z) {
+	public void overheat(World world, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 7, false, 1F, false, true, 2F);
 	}
@@ -264,6 +264,16 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 		if (inv[6].stackSize >= ItemStacks.steelingot.getMaxStackSize())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
 	}
 
 }

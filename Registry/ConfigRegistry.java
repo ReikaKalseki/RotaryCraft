@@ -42,7 +42,8 @@ public enum ConfigRegistry implements ConfigList {
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
-	ACHIEVEMENTS("Enable Achievements", false, false);
+	ACHIEVEMENTS("Enable Achievements", false, false),
+	THAUMCRAFTORES("Register ThaumCraft ores to Ore Dictionary", true);
 
 	private String label;
 	private boolean defaultState;

@@ -338,7 +338,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 			world.spawnParticle("lava", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), 0, 0, 0);
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
 		if (temperature > MAXTEMP) {
-			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.5F, false, true, 12F);
+			this.overheat(world, x, y, z);
 		}
 
 	}
@@ -594,5 +594,19 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return side != EnumLook.DOWN;
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	public void overheat(World world, int x, int y, int z) {
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.5F, false, true, 12F);
 	}
 }

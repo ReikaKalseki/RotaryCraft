@@ -536,7 +536,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		File f = new File(save.getPath()+"\\Music Box\\"+name);
+		File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
 		if (f.exists())
 			f.delete();
 	}

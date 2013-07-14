@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
+import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
@@ -98,6 +99,10 @@ public class ItemScrewdriver extends ItemRotaryTool
 				else
 					clicked.setBlockMetadata(damage-3);
 				return true;
+			}
+			if (m == MachineRegistry.COOLINGFIN) {
+				TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
+				clicked.ticks = 512;
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);

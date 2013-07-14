@@ -14,11 +14,12 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Instantiable.ConfigReader;
 import Reika.RotaryCraft.Registry.APIRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public final class OreForcer {
 
 	public static void registerModItemsToDictionary() {
-		if (APIRegistry.THAUMCRAFT.conditionsMet())
+		if (APIRegistry.THAUMCRAFT.conditionsMet() && ConfigRegistry.THAUMCRAFTORES.getState())
 			registerThaumcraft();
 	}
 

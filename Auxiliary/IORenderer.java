@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
@@ -38,6 +39,10 @@ public abstract class IORenderer {
 	}
 
 	public static void renderIO(TileEntity teb, double p2, double p4, double p6) {
+		if (!(teb instanceof TileEntityIOMachine)) {
+			ReikaJavaLibrary.pConsole(teb+" is not a IOMachine!");
+			return;
+		}
 		par2 = p2;
 		par4 = p4;
 		par6 = p6;

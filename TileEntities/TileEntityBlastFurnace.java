@@ -403,4 +403,19 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 			return 15;
 		return 0;
 	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+
+	}
 }

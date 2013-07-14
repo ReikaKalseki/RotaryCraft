@@ -301,6 +301,8 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 			for (int i = 0; i < message.size(); i++) {
 				String str = message.get(i);
 				p.append(str);
+				if (i != message.size()-1)
+					p.append(GuiStringBuilder.NEWLINE);
 			}
 			p.close();
 		}
@@ -327,5 +329,14 @@ public class TileEntityDisplay extends TileEntityPowerReceiver implements GuiCon
 				sb.append(GuiStringBuilder.NEWLINE);
 		}
 		return sb.toString();
+	}
+
+	public void deleteFiles(int x, int y, int z) {
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		//ReikaJavaLibrary.pConsole(musicFile);
+		String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
+		File f = new File(save.getPath()+"\\RotaryCraft\\");
+		if (f.exists())
+			f.delete();
 	}
 }

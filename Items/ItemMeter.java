@@ -15,6 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.PressureTE;
+import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -25,6 +27,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
+import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
@@ -74,6 +77,10 @@ public class ItemMeter extends ItemRotaryTool
 			if (clicked.temperature < clicked.SMELTTEMP)
 				ReikaChatHelper.writeString("Insufficient Temperature!");
 			return true;
+		}
+		if (m == MachineRegistry.COOLINGFIN) {
+			TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
+			clicked.ticks = 512;
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
@@ -374,17 +381,6 @@ public class ItemMeter extends ItemRotaryTool
 				}
 			}
 
-			try {
-				if (tile.getClass().getField("temperature") != null) {
-					ReikaChatHelper.write("Temperature: "+tile.getClass().getDeclaredField("temperature").getInt(tile)+" C.");
-				}
-			}catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
-			try {
-				if (tile.getClass().getField("pressure") != null) {
-					ReikaChatHelper.write("Pressure: "+tile.getClass().getDeclaredField("pressure").getInt(tile)+" kPa.");
-				}
-			}catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
-
 			power = omega*torque;
 			if (power >= 1000000000) {
 				if (m == MachineRegistry.GEARBOX)
@@ -413,6 +409,13 @@ public class ItemMeter extends ItemRotaryTool
 			if (m == MachineRegistry.GEARBOX) {
 				ReikaChatHelper.writeString(String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, damage))), lube));
 			}
+		}
+
+		if (tile instanceof TemperatureTE) {
+			ReikaChatHelper.write("Temperature: "+((TemperatureTE)(tile)).getTemperature()+" C.");
+		}
+		if (tile instanceof PressureTE) {
+			ReikaChatHelper.write("Pressure: "+((PressureTE)(tile)).getPressure()+" kPa.");
 		}
 		//ReikaChatHelper.writeString(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
 		if (tile instanceof TileEntityPowerReceiver) {

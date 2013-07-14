@@ -11,16 +11,14 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.world.World;
 
-public interface TemperatureTE {
+public interface PressureTE {
 
-	public abstract void updateTemperature(World world, int x, int y, int z, int meta);
+	public abstract void updatePressure(World world, int x, int y, int z, int meta);
 
-	public abstract void addTemperature(int temp);
+	public abstract void addPressure(int press);
 
-	public abstract int getTemperature();
+	public abstract int getPressure();
 
-	public abstract int getThermalDamage();
-
-	public abstract void overheat(World world, int x, int y, int z);
+	public abstract void overpressure(World world, int x, int y, int z);
 
 }

@@ -35,7 +35,6 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
@@ -1535,7 +1534,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		float burnprogress = 0;
 		if (fuel > 0)
 			burnprogress = 1F-(float)fueltick/type.getFuelUnitDuration()/fuel;
-		ReikaJavaLibrary.pConsoleSideOnly(fueltick, Side.SERVER);
 		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20;
 	}
 
@@ -1581,5 +1579,15 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public void repairJetPartial() {
 		if (FOD > 0)
 			FOD--;
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
 	}
 }

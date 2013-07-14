@@ -48,7 +48,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -315,5 +315,20 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		if (!this.hasValidItems())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+
 	}
 }

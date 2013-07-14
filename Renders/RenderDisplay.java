@@ -23,12 +23,12 @@ import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelBlock;
+import Reika.RotaryCraft.Models.ModelDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 
 public class RenderDisplay extends RotaryTERenderer {
 
-	private ModelBlock displayModel = new ModelBlock();
+	private ModelDisplay displayModel = new ModelDisplay();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -42,7 +42,7 @@ public class RenderDisplay extends RotaryTERenderer {
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelBlock var14;
+		ModelDisplay var14;
 		var14 = displayModel;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/displaytex.png");
 
@@ -53,20 +53,23 @@ public class RenderDisplay extends RotaryTERenderer {
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 1;	 //used to rotate the model about metadata
-		int var12 = 0;
-		if (tile.isInWorld()) {
-			if (tile.getBlockMetadata() == 1) {
-				var11 = -1;
-				var12 = 2;
-				GL11.glFrontFace(GL11.GL_CW);
-			}
+		switch(var9) {
+		case 0:
+			var11 = 0;
+			break;
+		case 1:
+			var11 = 180;
+			break;
+		case 2:
+			var11 = 90;
+			break;
+		case 3:
+			var11 = 270;
+			break;
 		}
-		GL11.glTranslated(0, var12, 0);
-		GL11.glScaled(1, var11, 1);
+		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
 		var14.renderAll(null, -tile.phi);
 		GL11.glScaled(1, var11, 1);
-		GL11.glTranslated(0, -var12, 0);
-		GL11.glFrontFace(GL11.GL_CCW);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

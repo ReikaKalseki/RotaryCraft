@@ -21,6 +21,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
@@ -80,6 +81,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 					te.getClass().getField("temperature").setInt(te, Tb);
 				}
 			} catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
+		}
+		if (te instanceof PressureTE) {
 			try {
 				if (te.getClass().getField("pressure") != null) {
 					te.getClass().getField("pressure").setInt(te, 101);
@@ -108,6 +111,29 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m.isCannon())
 			return true;
+		if (m == MachineRegistry.COOLINGFIN) {
+			switch(side) {
+			case 0:
+				te.setBlockMetadata(1);
+				break;
+			case 1:
+				te.setBlockMetadata(0);
+				break;
+			case 2:
+				te.setBlockMetadata(4);
+				break;
+			case 3:
+				te.setBlockMetadata(2);
+				break;
+			case 4:
+				te.setBlockMetadata(5);
+				break;
+			case 5:
+				te.setBlockMetadata(3);
+				break;
+			}
+			return true;
+		}
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {
 			switch(RotaryAux.get4SidedMetadataFromPlayerLook(ep)) {
 			case 0:

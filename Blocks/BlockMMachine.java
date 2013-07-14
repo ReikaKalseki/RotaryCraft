@@ -40,6 +40,8 @@ public class BlockMMachine extends BlockModelledMultiTE {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.FORCEFIELD || m == MachineRegistry.CONTAINMENT)
 			return 15;
+		if (m == MachineRegistry.DISPLAY)
+			return 15;
 		return 0;
 	}
 }

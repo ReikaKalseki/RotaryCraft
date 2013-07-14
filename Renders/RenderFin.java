@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
@@ -17,23 +18,21 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Models.ModelFan;
-import Reika.RotaryCraft.TileEntities.TileEntityFan;
+import Reika.RotaryCraft.Models.ModelFin;
+import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
 
-public class RenderFan extends RotaryTERenderer
+public class RenderFin extends RotaryTERenderer
 {
 
-	private ModelFan FanModel = new ModelFan();
-	//private ModelFanV FanModelV = new ModelFanV();
+	private ModelFin FinModel = new ModelFin();
+	//private ModelFinV FinModelV = new ModelFinV();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityFanAt(TileEntityFan tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityCoolingFinAt(TileEntityCoolingFin tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -42,11 +41,11 @@ public class RenderFan extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelFan var14;
-		var14 = FanModel;
-		//ModelFanV var15;
-		//var14 = this.FanModelV;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fantex.png");
+		ModelFin var14;
+		var14 = FinModel;
+		//ModelFinV var15;
+		//var14 = this.FinModelV;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fintex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -66,26 +65,28 @@ public class RenderFan extends RotaryTERenderer
 				var11 = 180;
 				break;
 			case 2:
-				var11 = 270;
+				var11 = 0;
 				break;
 			case 3:
 				var11 = 90;
 				break;
 			case 4:
-				var11 = 270;
+				var11 = 180;
 				break;
 			case 5:
-				var11 = 90;
+				var11 = 270;
 				break;
 			}
 
-			if (tile.getBlockMetadata() <= 3)
-				GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
+			if (tile.getBlockMetadata() < 2) {
+				GL11.glRotatef(var11, 0, 0, 1);
+				if (tile.getBlockMetadata() == 1)
+					GL11.glTranslated(0, -2, 0);
+			}
 			else {
-				GL11.glRotatef(var11, 1F, 0F, 0.0F);
-				GL11.glTranslatef(0F, -1F, 1F);
-				if (tile.getBlockMetadata() == 5)
-					GL11.glTranslatef(0F, 0F, -2F);
+				GL11.glRotatef(90, 1, 0, 0);
+				GL11.glRotatef(var11, 0, 0, 1);
+				GL11.glTranslated(0, -1, -1);
 			}
 		}
 		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
@@ -109,15 +110,20 @@ public class RenderFan extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityFanAt((TileEntityFan)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			IORenderer.renderIO(tile, par2, par4, par6);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			ReikaAABBHelper.renderAABB(tile.worldObj, ((TileEntityFan)tile).getBlowZone(tile.getBlockMetadata(), ((TileEntityFan)tile).getRange()), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 0, 127, 255, true);
+			this.renderTileEntityCoolingFinAt((TileEntityCoolingFin)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			this.renderTarget((TileEntityCoolingFin)tile, par2, par4, par6);
+		}
+	}
+
+	private void renderTarget(TileEntityCoolingFin tile, double par2, double par4, double par6) {
+		int[] xyz = tile.getTarget();
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(xyz[0], xyz[1], xyz[2], xyz[0]+1, xyz[1]+1, xyz[2]+1).expand(0.03125, 0.03125, 0.03125);
+		ReikaAABBHelper.renderAABB(tile.worldObj, box, par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, tile.ticks, 0, 127, 255, true);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "fantex.png";
+		return "fintex.png";
 	}
 }

@@ -249,7 +249,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		if (id != -1 && this.consumeChance())
 			ReikaInventoryHelper.findAndDecrStack(id, -1, inventory);
 		//else
-			//return 0;
+		//return 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		return shape+1;
 	}

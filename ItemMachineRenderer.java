@@ -32,6 +32,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
+import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.TileEntityFan;
@@ -328,6 +330,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case SPYCAM:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySpyCam(), a, -0.1D, b, 0.0F);
+				break;
+			case DISPLAY:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityDisplay(), a, -0.1D, b, 0.0F);
+				break;
+			case COOLINGFIN:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCoolingFin(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

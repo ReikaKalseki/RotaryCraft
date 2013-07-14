@@ -386,4 +386,14 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return !side.isTopOrBottom();
 	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
 }
