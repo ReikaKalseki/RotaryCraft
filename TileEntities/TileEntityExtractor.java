@@ -17,6 +17,7 @@ import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -36,7 +37,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	public int[] extractorCookTime = new int[4];
 
 	public int waterLevel = 0;
-	public static final int CAPACITY = 16;
+	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
 
 	public boolean idle = false;
 
@@ -350,7 +351,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		inv[i].stackSize--;
 		if (par5Random.nextInt(8) == 0)
 			if (i == 1 || i == 2)
-				waterLevel--;
+				waterLevel -= 1000; //millis
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;/*
@@ -400,12 +401,16 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
 					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
+					if (par5Random.nextInt(8) == 0)
+						waterLevel -= RotaryConfig.MILLIBUCKET;
 					return true;
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
 					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
+					if (par5Random.nextInt(8) == 0)
+						waterLevel -= RotaryConfig.MILLIBUCKET;
 					return true;
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {

@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -171,7 +172,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		power = omega*torque;
 		if (par5Random.nextInt(20) == 0)
 			if (waterLevel > 0)
-				waterLevel--;
+				waterLevel -= RotaryConfig.MILLIBUCKET;
 	}
 
 	public int getTowerHeight() {

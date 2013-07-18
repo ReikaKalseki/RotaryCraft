@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -101,8 +102,8 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		int slot = this.getNonFullStack();
 		if (slot == -1)
 			return;
-		lavaLevel--;
-		waterLevel--;
+		lavaLevel -= RotaryConfig.MILLIBUCKET;
+		waterLevel -= RotaryConfig.MILLIBUCKET;
 		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inventory, slot);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*par5Random.nextFloat(), 0.7F+0.3F*par5Random.nextFloat());
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);

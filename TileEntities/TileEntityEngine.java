@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -75,7 +76,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public int omega = 0;*/
 
 	/** Water capacity */
-	public static final int CAPACITY = 600;
+	public static final int CAPACITY = 600*RotaryConfig.MILLIBUCKET;
 	public int MAXTEMP = 1000;
 
 	/** Fuel capacity */
@@ -302,7 +303,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		switch(type) {
 		case STEAM:
 			if (waterLevel > 0 && temperature >= 100)
-				waterLevel--;
+				waterLevel -= RotaryConfig.MILLIBUCKET;
 			break;
 		case GAS:
 			if (ethanols > 0)
@@ -670,7 +671,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			if (omega > 0 && torque > 0) { //If engine is on
 				temperature += 1;
 				if (waterLevel > 0 && temperature > Tamb) {
-					waterLevel--;
+					waterLevel -= RotaryConfig.MILLIBUCKET;
 					temperature--;
 				}
 				if (temperature > MAXTEMP/2) {

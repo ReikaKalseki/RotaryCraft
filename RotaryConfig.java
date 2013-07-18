@@ -41,6 +41,7 @@ public class RotaryConfig extends ControlledConfig {
 	public static final boolean debugmode = false;
 
 	public static final int WATTS_PER_MJ = 1000000;
+	public static final int MILLIBUCKET = 1000;
 
 	//Initialization of the config
 	// Args: String mod used to name the config file to mods name

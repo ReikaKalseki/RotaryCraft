@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -179,13 +180,13 @@ public abstract class BlockBasicMultiTE extends Block {
 						if (tr.liquidLevel+size <= tr.CAPACITY) {
 							if (tr.liquidID == -1) {
 								tr.liquidID = liq.getLiquidBlockID();
-								tr.liquidLevel += size;
+								tr.liquidLevel += size*RotaryConfig.MILLIBUCKET;
 								if (!ep.capabilities.isCreativeMode)
 									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
 								return true;
 							}
 							else if (tr.liquidID == liq.getLiquidBlockID()) {
-								tr.liquidLevel += size;
+								tr.liquidLevel += size*RotaryConfig.MILLIBUCKET;
 								if (!ep.capabilities.isCreativeMode)
 									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
 								return true;
@@ -197,7 +198,7 @@ public abstract class BlockBasicMultiTE extends Block {
 					int size = is.stackSize;
 					if (tr.liquidLevel >= size) {
 						LiquidRegistry liq = LiquidRegistry.getLiquidFromBlock(tr.liquidID);
-						tr.liquidLevel -= size;
+						tr.liquidLevel -= size*RotaryConfig.MILLIBUCKET;
 						ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(liq.getHeldItemFor(), size));
 						return true;
 					}

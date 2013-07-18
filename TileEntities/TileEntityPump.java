@@ -21,6 +21,7 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -41,7 +42,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public int damage = 0;
 
 
-	public final static int CAPACITY = 24;
+	public final static int CAPACITY = 24*RotaryConfig.MILLIBUCKET;
 
 	public int liquidPressure = 0;
 
@@ -160,7 +161,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
 			world.setBlock(loc[0], loc[1], loc[2], 0);
-		liquidLevel++;
+		liquidLevel += RotaryConfig.MILLIBUCKET;
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}
 

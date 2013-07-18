@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -27,7 +28,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect, PipeConnector {
 
-	public static final int CAPACITY = 16;
+	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
 
 	public int waterLevel = 0;
 	public int waterPressure = 0;
@@ -63,7 +64,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		if (waterLevel <= 0)
 			return;
 		if (tickcount > 300) {
-			waterLevel--;
+			waterLevel -= RotaryConfig.MILLIBUCKET;
 			tickcount = 0;
 		}
 		this.hydrate(world, x, y, z, meta);

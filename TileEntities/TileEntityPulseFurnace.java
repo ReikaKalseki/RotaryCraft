@@ -18,6 +18,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -310,7 +311,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 		if (waterLevel > 0) {
 			if (par5Random.nextInt(3) == 0)
-				waterLevel -= (temperature*2/MAXTEMP);
+				waterLevel -= (temperature*2/MAXTEMP)*RotaryConfig.MILLIBUCKET;
 			temperature -= temperature/64;
 			if (waterLevel <= 0)
 				waterLevel = 0;

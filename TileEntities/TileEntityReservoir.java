@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -24,7 +25,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public int liquidID = -1;
 	public int liquidLevel;
 
-	public static final int CAPACITY = 2400;
+	public static final int CAPACITY = 2400*RotaryConfig.MILLIBUCKET;
 	public static final int FUELID = -120;
 
 	public int getLiquidScaled(int par1)

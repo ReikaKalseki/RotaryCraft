@@ -52,7 +52,7 @@ public enum PlantMaterials {
 	public static PlantMaterials getPlantEntry(ItemStack is) {
 		if (is == null)
 			return null;
-		for (int i = 1; i < plantList.length; i++) {
+		for (int i = 0; i < plantList.length; i++) {
 			if (plantList[i].item.itemID == is.itemID)
 				return plantList[i];
 		}
