@@ -19,6 +19,7 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
@@ -78,6 +79,9 @@ public class ContainerWorktable extends CoreContainer {
 		//ReikaJavaLibrary.pConsole(ip.getItemStack());
 		if (tile.craftable && slot == 13) {
 			this.craft();
+			ItemStack drop = ip.getItemStack();
+			if (drop != null)
+				ReikaItemHelper.dropItem(ep.worldObj, ep.posX, ep.posY, ep.posZ, drop);
 			ip.setItemStack(tile.getStackInSlot(13));
 			tile.setInventorySlotContents(13, null);
 		}

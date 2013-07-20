@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RecipeAchievementHandler;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EnumEngineType;
@@ -45,8 +44,6 @@ public class RotaryRecipes {
 		addToolItems();
 		addMisc();
 		addFurnace();
-
-		GameRegistry.registerCraftingHandler(new RecipeAchievementHandler());
 	}
 
 	private static void addMachines() {
@@ -137,7 +134,7 @@ public class RotaryRecipes {
 			"LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', ItemStacks.radar, 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold});
 
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.OBSIDIAN.getCraftedProduct(), new Object[]{
-			"SpS", "PMP", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
+			"SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.HEATER.getCraftedProduct(), new Object[]{
 			"sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Block.fenceIron, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor});

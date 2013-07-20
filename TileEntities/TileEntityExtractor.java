@@ -296,22 +296,36 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			return false;
 		if (inv[i+4] != null && inv[i+4].stackSize >= inv[i+4].getMaxStackSize())
 			return false;
+		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 		switch (i) {
 		case 0:
-			if (ModOreList.isModOre(inv[i]))
-				return true;
+			if (ModOreList.isModOre(inv[i])) {
+				if (inv[i+4] == null)
+					return true;
+				ModOreList ore = ModOreList.getModOreFromOre(inv[i]);
+				return ExtractorModOres.isDust(ore, inv[i+4].getItemDamage());
+			}
 			break;
 		case 1:
-			if (ExtractorModOres.isDust(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4), inv[i].getItemDamage()))
-				return true;
+			if (ExtractorModOres.isDust(entry, inv[i].getItemDamage())) {
+				if (inv[i+4] == null)
+					return true;
+				return ExtractorModOres.isSlurry(entry, inv[i+4].getItemDamage());
+			}
 			break;
 		case 2:
-			if (ExtractorModOres.isSlurry(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4), inv[i].getItemDamage()))
-				return true;
+			if (ExtractorModOres.isSlurry(entry, inv[i].getItemDamage())) {
+				if (inv[i+4] == null)
+					return true;
+				return ExtractorModOres.isSolution(entry, inv[i+4].getItemDamage());
+			}
 			break;
 		case 3:
-			if (ExtractorModOres.isSolution(ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4), inv[i].getItemDamage()))
-				return true;
+			if (ExtractorModOres.isSolution(entry, inv[i].getItemDamage())) {
+				if (inv[i+4] == null)
+					return true;
+				return ExtractorModOres.isFlakes(entry, inv[i+4].getItemDamage());
+			}
 			break;
 		}
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
@@ -446,7 +460,18 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return (ReikaBlockHelper.isOre(is) || this.isValidModOre(is)) && slot == 0;
+		ModOreList entry = ModOreList.getEntryFromDamage(is.getItemDamage()/4);
+		switch (slot) {
+		case 0:
+			return ReikaBlockHelper.isOre(is);
+		case 1:
+			return ExtractorModOres.isDust(entry, is.getItemDamage()) || RecipesExtractor.isDust(is);
+		case 2:
+			return ExtractorModOres.isSlurry(entry, is.getItemDamage()) || RecipesExtractor.isSlurry(is);
+		case 3:
+			return ExtractorModOres.isSolution(entry, is.getItemDamage()) || RecipesExtractor.isSolution(is);
+		}
+		return false;
 	}
 
 	@Override

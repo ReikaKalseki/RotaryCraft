@@ -15,6 +15,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesExtractor
@@ -96,5 +97,29 @@ public class RecipesExtractor
 		if (ret != null)
 			return ret;
 		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+	}
+
+	public static boolean isDust(ItemStack is) {
+		if (is.itemID != RotaryCraft.extracts.itemID)
+			return false;
+		return is.getItemDamage() < 8;
+	}
+
+	public static boolean isSlurry(ItemStack is) {
+		if (is.itemID != RotaryCraft.extracts.itemID)
+			return false;
+		return is.getItemDamage() < 16 && is.getItemDamage() >= 8;
+	}
+
+	public static boolean isSolution(ItemStack is) {
+		if (is.itemID != RotaryCraft.extracts.itemID)
+			return false;
+		return is.getItemDamage() < 24 && is.getItemDamage() >= 16;
+	}
+
+	public static boolean isFlakes(ItemStack is) {
+		if (is.itemID != RotaryCraft.extracts.itemID)
+			return false;
+		return is.getItemDamage() < 32 && is.getItemDamage() >= 24 || ReikaItemHelper.matchStacks(is, ItemStacks.silverflakes);
 	}
 }

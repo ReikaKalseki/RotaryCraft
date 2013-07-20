@@ -188,8 +188,11 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	public void getRatio() {
-		if (ratio > this.getMaxRatio())
-			ratio = this.getMaxRatio();
+		int sign = 1;
+		if (ratio < 0)
+			sign = -1;
+		if (Math.abs(ratio) > this.getMaxRatio())
+			ratio = this.getMaxRatio()*sign;
 		if (ratio == 0)
 			ratio = 1;
 	}

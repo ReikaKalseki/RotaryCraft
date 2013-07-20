@@ -14,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -110,7 +109,7 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 		this.transferPower(world, x, y, z, meta);
 		//if (!this.worldObj.isRemote)
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", torquein, torquein2, this.torque));
-
+		/*
 		if (this.testForLoopCheat()) {
 			cheatCount++;
 			if (cheatCount > 20) {
@@ -126,7 +125,7 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 		if (cheatTick > 20) {
 			cheatTick = 0;
 			cheatCount = 0;
-		}
+		}*/
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

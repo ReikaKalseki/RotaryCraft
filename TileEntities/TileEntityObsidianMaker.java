@@ -34,13 +34,15 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 
 	public int temperature;
 
+	private int temptick = 0;
+
 	public float overred;
 	public float overgreen;
 	public float overblue;
 
 	public boolean idle = false;
 
-	public static final int CAPACITY = 320;
+	public static final int CAPACITY = 320*RotaryConfig.MILLIBUCKET;
 	public static final int MAXTEMP = 1000;
 
 	public ItemStack[] inventory = new ItemStack[9];
@@ -54,10 +56,14 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
+		temptick++;
 		this.getPowerBelow();
 		this.getWater(world, x, y, z, meta);
 		this.getLava(world, x, y, z, meta);
-		this.updateTemperature(world, x, y, z, meta);
+		if (temptick >= 20) {
+			this.updateTemperature(world, x, y, z, meta);
+			temptick = 0;
+		}
 		if (power < MINPOWER || omega < MINSPEED || waterLevel <= 0 || lavaLevel <= 0)
 			return;
 		this.testIdle();

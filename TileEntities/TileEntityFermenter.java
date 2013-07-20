@@ -194,7 +194,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 				return;
 			}
 			ReikaInventoryHelper.decrStack(0, slots);
-			if (par5Random.nextInt(2) == 0)
+			if (par5Random.nextInt(4) == 0)
 				ReikaInventoryHelper.decrStack(2, slots);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
