@@ -14,7 +14,10 @@ import cpw.mods.fml.common.Loader;
 public enum APIRegistry {
 
 	BUILDCRAFT(Loader.isModLoaded("BuildCraft")),
-	THAUMCRAFT(Loader.isModLoaded("ThaumCraft"));
+	THAUMCRAFT(Loader.isModLoaded("ThaumCraft")),
+	IC2(Loader.isModLoaded("IndustrialCraft")),
+	GREGTECH(Loader.isModLoaded("GregTech")),
+	FORESTRY(Loader.isModLoaded("Forestry"));
 
 	private boolean condition;
 	private boolean preset = false;

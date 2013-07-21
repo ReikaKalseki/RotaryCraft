@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -67,7 +68,7 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return;
 		super.getPower(doublesided, false);
-		power = omega * torque;
+		power = (long)omega * (long)torque;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 		return;
 	}
@@ -215,7 +216,7 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
 					if (this.isInventoryFull())
-						this.dropItem(world, x, y, z, meta, ItemStacks.bedrockdust);
+						this.dropItem(world, x, y, z, meta, ItemStacks.bedrockdust.copy());
 					else
 						ReikaInventoryHelper.addOrSetStack(ItemStacks.bedrockdust, inv, 0);
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
@@ -225,7 +226,8 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 	}
 
 	private void dropItem(World world, int x, int y, int z, int meta, ItemStack is) {
-		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, ItemStacks.bedrockdust);
+		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, ItemStacks.bedrockdust.copy());
+		ReikaJavaLibrary.pConsole(itementity.getEntityItem());
 		itementity.delayBeforeCanPickup = 0;
 		itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
 		itementity.motionZ = -0.025+0.05*par5Random.nextFloat();

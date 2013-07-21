@@ -61,7 +61,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta, false);
 		this.transferPower(world, x, y, z, meta);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));

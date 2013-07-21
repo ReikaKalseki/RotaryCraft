@@ -78,11 +78,15 @@ public class ContainerWorktable extends CoreContainer {
 		InventoryPlayer ip = ep.inventory;
 		//ReikaJavaLibrary.pConsole(ip.getItemStack());
 		if (tile.craftable && slot == 13) {
-			this.craft();
 			ItemStack drop = ip.getItemStack();
-			if (drop != null)
-				ReikaItemHelper.dropItem(ep.worldObj, ep.posX, ep.posY, ep.posZ, drop);
-			ip.setItemStack(tile.getStackInSlot(13));
+			ItemStack craft = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+			if (drop != null && (!ReikaItemHelper.matchStacks(drop, craft) || drop.stackSize+craft.stackSize > drop.getMaxStackSize()))
+				return is;
+			this.craft();
+			if (drop == null)
+				ip.setItemStack(tile.getStackInSlot(13));
+			else
+				drop.stackSize += tile.getStackInSlot(13).stackSize;
 			tile.setInventorySlotContents(13, null);
 		}
 		return is;
@@ -141,15 +145,4 @@ public class ContainerWorktable extends CoreContainer {
 			return;
 		this.craft();
 	}
-
-	@Override
-	public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
-	{
-		super.onCraftGuiClosed(par1EntityPlayer);/*
-		for (int i = 0; i < 9; i++) {
-			ItemStack is = craftMatrix.getStackInSlot(i);
-			tile.setInventorySlotContents(i, is);
-		}*/
-	}
-
 }

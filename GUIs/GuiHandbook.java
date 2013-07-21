@@ -407,7 +407,6 @@ public class GuiHandbook extends GuiScreen
 		int yo = 0;
 		fontRenderer.drawString(HandbookRegistry.getEntry(screen, page).getTitle(), posX+xo+6, posY+yo+6, 0x000000);
 		if (subpage == 0) {
-			this.drawRecipes();
 			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
 			//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineInfo[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
 		}
@@ -418,6 +417,9 @@ public class GuiHandbook extends GuiScreen
 		this.drawGraphics();
 
 		super.drawScreen(x, y, f);
+
+		if (subpage == 0)
+			this.drawRecipes();
 
 		if (!(this instanceof GuiHandbookPage))
 			this.drawTabIcons();

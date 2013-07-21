@@ -43,7 +43,7 @@ public enum ConfigRegistry implements ConfigList {
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
 	ACHIEVEMENTS("Enable Achievements", false, false),
-	THAUMCRAFTORES("Register ThaumCraft ores to Ore Dictionary", true);
+	MODORES("Force Inter-Mod Compatibility", true);
 
 	private String label;
 	private boolean defaultState;

@@ -196,7 +196,8 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!this.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
 
-		OreForcer.registerModItemsToDictionary();
+		if (ConfigRegistry.MODORES.getState())
+			OreForcer.registerModItemsToDictionary();
 	}
 
 	private static void setupClassFiles() {

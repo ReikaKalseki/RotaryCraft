@@ -169,6 +169,7 @@ public enum HandbookRegistry {
 	IMPELLER(ItemStacks.impeller),
 	COMPRESSOR(ItemStacks.compressor),
 	TURBINE(ItemStacks.turbine),
+	COMPOUND(ItemStacks.compoundturb),
 	DIFFUSER(ItemStacks.diffuser),
 	COMBUSTOR(ItemStacks.combustor),
 	RADIATOR(ItemStacks.radiator),

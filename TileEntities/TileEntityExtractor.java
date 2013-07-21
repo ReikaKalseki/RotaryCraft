@@ -20,13 +20,13 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.EnumLook;
+import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector
@@ -297,36 +297,38 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		if (inv[i+4] != null && inv[i+4].stackSize >= inv[i+4].getMaxStackSize())
 			return false;
 		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
-		switch (i) {
-		case 0:
-			if (ModOreList.isModOre(inv[i])) {
-				if (inv[i+4] == null)
-					return true;
-				ModOreList ore = ModOreList.getModOreFromOre(inv[i]);
-				return ExtractorModOres.isDust(ore, inv[i+4].getItemDamage());
+		if (inv[i].itemID == RotaryCraft.modextracts.itemID || ModOreList.isModOre(inv[i])) {
+			switch (i) {
+			case 0:
+				if (ModOreList.isModOre(inv[i])) {
+					if (inv[i+4] == null)
+						return true;
+					ModOreList ore = ModOreList.getModOreFromOre(inv[i]);
+					return ExtractorModOres.isDust(ore, inv[i+4].getItemDamage());
+				}
+				break;
+			case 1:
+				if (ExtractorModOres.isDust(entry, inv[i].getItemDamage())) {
+					if (inv[i+4] == null)
+						return true;
+					return ExtractorModOres.isSlurry(entry, inv[i+4].getItemDamage());
+				}
+				break;
+			case 2:
+				if (ExtractorModOres.isSlurry(entry, inv[i].getItemDamage())) {
+					if (inv[i+4] == null)
+						return true;
+					return ExtractorModOres.isSolution(entry, inv[i+4].getItemDamage());
+				}
+				break;
+			case 3:
+				if (ExtractorModOres.isSolution(entry, inv[i].getItemDamage())) {
+					if (inv[i+4] == null)
+						return true;
+					return ExtractorModOres.isFlakes(entry, inv[i+4].getItemDamage());
+				}
+				break;
 			}
-			break;
-		case 1:
-			if (ExtractorModOres.isDust(entry, inv[i].getItemDamage())) {
-				if (inv[i+4] == null)
-					return true;
-				return ExtractorModOres.isSlurry(entry, inv[i+4].getItemDamage());
-			}
-			break;
-		case 2:
-			if (ExtractorModOres.isSlurry(entry, inv[i].getItemDamage())) {
-				if (inv[i+4] == null)
-					return true;
-				return ExtractorModOres.isSolution(entry, inv[i+4].getItemDamage());
-			}
-			break;
-		case 3:
-			if (ExtractorModOres.isSolution(entry, inv[i].getItemDamage())) {
-				if (inv[i+4] == null)
-					return true;
-				return ExtractorModOres.isFlakes(entry, inv[i+4].getItemDamage());
-			}
-			break;
 		}
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
 		if (itemstack == null) {
@@ -379,18 +381,9 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	private void bonusItems(ItemStack is) {
-		if (is == null)
-			return;
-		if (is.itemID == RotaryCraft.extracts.itemID) {
-			if (is.getItemDamage() == ItemStacks.goldoresolution.getItemDamage()) {
-				if (par5Random.nextInt(8) == 0)
-					ReikaInventoryHelper.addOrSetStack(ItemStacks.silverflakes.itemID, 1, ItemStacks.silverflakes.getItemDamage(), inv, 8);
-			}
-			if (is.getItemDamage() == ItemStacks.ironoresolution.getItemDamage()) {
-				if (par5Random.nextInt(8) == 0)
-					ReikaInventoryHelper.addOrSetStack(ItemStacks.aluminumpowder.itemID, 1, ItemStacks.aluminumpowder.getItemDamage(), inv, 8);
-			}
-		}
+		ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
+		if (e != null)
+			e.addBonusToItemStack(inv[8]);
 	}
 
 	private boolean isValidModOre(ItemStack is) {
@@ -461,11 +454,14 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		ModOreList entry = ModOreList.getEntryFromDamage(is.getItemDamage()/4);
+		if (slot != 0 && is.itemID != RotaryCraft.extracts.itemID && is.itemID != RotaryCraft.modextracts.itemID)
+			return false;
 		switch (slot) {
 		case 0:
 			return ReikaBlockHelper.isOre(is);
 		case 1:
-			return ExtractorModOres.isDust(entry, is.getItemDamage()) || RecipesExtractor.isDust(is);
+			if (is.itemID != RotaryCraft.extracts.itemID && is.itemID != RotaryCraft.modextracts.itemID)
+				return ExtractorModOres.isDust(entry, is.getItemDamage()) || RecipesExtractor.isDust(is);
 		case 2:
 			return ExtractorModOres.isSlurry(entry, is.getItemDamage()) || RecipesExtractor.isSlurry(is);
 		case 3:

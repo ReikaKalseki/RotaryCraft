@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
@@ -28,6 +29,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.ReikaModelledBreakFX;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -59,6 +61,13 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		ItemStack item = new ItemStack(par1, 1, 0);
 		item.addEnchantment(Enchantment.silkTouch, 1);
 		par3List.add(item);
+	}
+
+	// To make un-unenchantable
+	@Override
+	public void onUpdate(ItemStack is, World world, Entity entity, int par4, boolean par5) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is))
+			is.addEnchantment(Enchantment.silkTouch, 1);
 	}
 
 	@Override

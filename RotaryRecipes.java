@@ -259,7 +259,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.compressor, new Object[]{
 				"SSS", "SGS", "SSS", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.turbine, new Object[]{
-				"SSS", "SGS", "SSS", 'S', ItemStacks.compressor, 'G', ItemStacks.steelgear});
+				"sss", "sGs", "sss", 's', ItemStacks.prop, 'G', ItemStacks.compressor});
 		GameRegistry.addRecipe(ItemStacks.diffuser, new Object[]{
 				" SS", "S  ", " SS", 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
@@ -272,6 +272,8 @@ public class RotaryRecipes {
 				"GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', Item.ingotGold});
 		GameRegistry.addRecipe(ItemStacks.cylinder, new Object[]{
 				"SSS", "S S", "SSS", 'S', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ItemStacks.compoundturb, new Object[]{
+				" S ", "SsS", " S ", 'S', ItemStacks.turbine, 's', ItemStacks.shaftcore});
 
 		GameRegistry.addRecipe(ItemStacks.shaftcore, new Object[]{
 				"  s", " S ", "s  ", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
@@ -647,7 +649,7 @@ public class RotaryRecipes {
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.MICRO.ordinal()), new Object[]{
 			"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.JET.ordinal()), new Object[]{
-			"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+			"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
 		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{ //Hose
 			"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));

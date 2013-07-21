@@ -16,6 +16,7 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraftforge.common.AchievementPage;
 import Reika.DragonAPI.Exception.IDConflictException;
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
@@ -92,7 +93,17 @@ public enum RotaryAchievements {
 		return RotaryCraft.achievements[this.ordinal()];
 	}
 
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 	public void triggerAchievement(EntityPlayer ep) {
+		if (ep == null) {
+			ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
+			ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
+			return;
+		}
 		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
 			ep.triggerAchievement(this.get());
 		}

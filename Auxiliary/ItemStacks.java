@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -88,6 +89,7 @@ public final class ItemStacks {
 	public static final ItemStack railhead = new ItemStack(RotaryCraft.heatcraft, 1, 9);
 	public static final ItemStack railbase = new ItemStack(RotaryCraft.heatcraft, 1, 10);
 	public static final ItemStack railaim = new ItemStack(RotaryCraft.heatcraft, 1, 11);
+	public static final ItemStack compoundturb = new ItemStack(RotaryCraft.heatcraft, 1, 12);
 
 	public static final ItemStack impeller = new ItemStack(RotaryCraft.enginecraft, 1, 0);
 	public static final ItemStack compressor = new ItemStack(RotaryCraft.enginecraft, 1, 1);
@@ -187,7 +189,7 @@ public final class ItemStacks {
 		//modsteel.addAll(OreDictionary.getOres("Steel"));
 	}
 
-	public static void registerModOres() {
-
+	public static ItemStack getModOreIngot(ModOreList ore) {
+		return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
 	}
 }

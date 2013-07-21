@@ -133,8 +133,4 @@ public abstract class GuiMachine extends GuiContainer {
 	public void drawHelpTab(int j, int k) {
 		fontRenderer.drawString("?", -10, ySize/2-4, 0xffffff);
 	}
-
-	public void callHelpAction(int j, int k) {
-
-	}
 }

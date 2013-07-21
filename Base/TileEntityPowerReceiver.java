@@ -442,7 +442,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		int[] powers = this.returnHighest(4);
 		torque = powers[1];
 		omega = powers[2];
-		power = torque*omega;
+		power = (long)torque*(long)omega;
 
 	}
 
@@ -523,7 +523,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 		omega = powers[0][i];
 		torque = ReikaArrayHelper.sumArray(powers[1]);
-		power = omega * torque;
+		power = (long)omega * (long)torque;
 	}
 
 	public boolean operationComplete(int ticks, int stage) {
