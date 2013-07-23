@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -261,22 +262,20 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		this.getLiq(world, x, y, z, meta);
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
-			if (!worldObj.isRemote) {
-				if (this.canSmelt(i)) {
+			if (this.canSmelt(i)) {
+				flag1 = true;
+			}
+			if (this.canSmelt(i)) {
+				extractorCookTime[i]++;
+				if (this.operationComplete(extractorCookTime[i], i+1)) {
+					extractorCookTime[i] = 0;
+					if (!this.processModOre(i))
+						this.smeltItem(i);
 					flag1 = true;
 				}
-				if (this.canSmelt(i)) {
-					extractorCookTime[i]++;
-					if (this.operationComplete(extractorCookTime[i], i+1)) {
-						extractorCookTime[i] = 0;
-						if (!this.processModOre(i))
-							this.smeltItem(i);
-						flag1 = true;
-					}
-				}
-				else
-					extractorCookTime[i] = 0;
 			}
+			else
+				extractorCookTime[i] = 0;
 			if (flag1)
 				this.onInventoryChanged();
 		}
@@ -355,19 +354,16 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			inv[i+4] = itemstack.copy();
 			inv[i+4].stackSize *= this.getSmeltNumber(0);
 		}
-		else if (inv[i+4].itemID == itemstack.itemID)
+		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
 			inv[i+4].stackSize += this.getSmeltNumber(inv[i+4].stackSize);
 
 		if (i == 3)
 			this.bonusItems(inv[i]);
 
-		// if (inv[i].getItem().func_46056_k())
-		//   inv[i] = new ItemStack(inv[i].getItem().setFull3D());
-		// else
 		inv[i].stackSize--;
 		if (par5Random.nextInt(8) == 0)
 			if (i == 1 || i == 2)
-				waterLevel -= 1000; //millis
+				waterLevel -= RotaryConfig.MILLIBUCKET; //millis
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;/*
@@ -383,7 +379,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	private void bonusItems(ItemStack is) {
 		ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
 		if (e != null)
-			e.addBonusToItemStack(inv[8]);
+			e.addBonusToItemStack(inv, 8);
 	}
 
 	private boolean isValidModOre(ItemStack is) {

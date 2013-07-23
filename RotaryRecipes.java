@@ -92,7 +92,7 @@ public class RotaryRecipes {
 			"BPB", "PIP", "BPB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel});
 
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.GRINDER.getCraftedProduct(), new Object[]{
-			"B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.gearunit, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw});
+			"B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw});
 
 		WorktableRecipes.getInstance().addRecipe(MachineRegistry.RESERVOIR.getCraftedProduct(), new Object[]{
 			"B B", "B B", "BBB", 'B', ItemStacks.basepanel});
@@ -273,7 +273,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.cylinder, new Object[]{
 				"SSS", "S S", "SSS", 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.compoundturb, new Object[]{
-				" S ", "SsS", " S ", 'S', ItemStacks.turbine, 's', ItemStacks.shaftcore});
+				"  S", " s ", "S  ", 'S', ItemStacks.turbine, 's', ItemStacks.shaftcore});
 
 		GameRegistry.addRecipe(ItemStacks.shaftcore, new Object[]{
 				"  s", " S ", "s  ", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});

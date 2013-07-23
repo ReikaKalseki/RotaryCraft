@@ -80,20 +80,24 @@ public enum ExtractorBonus {
 		return bonusItem.copy();
 	}
 
-	public void addBonusToItemStack(ItemStack is) {
-		if (this.getBonus() == null)
-			return;
-		if (is != null) {
-			if (!ReikaItemHelper.matchStacks(is, bonusItem))
-				return;
-		}
-		if (is.stackSize+this.getBonus().stackSize > is.getMaxStackSize())
+	public void addBonusToItemStack(ItemStack[] inv, int slot) {
+		ItemStack bonus = this.getBonus();
+		if (bonus == null)
 			return;
 		int chance = (int)(1F/probability);
 		Random r = new Random();
 		if (r.nextInt(chance) > 0)
 			return;
-		is.stackSize += this.getBonus().stackSize;
+		if (inv[slot] != null) {
+			if (!ReikaItemHelper.matchStacks(inv[slot], bonus))
+				return;
+			if (inv[slot].stackSize+bonus.stackSize > inv[slot].getMaxStackSize())
+				return;
+			inv[slot].stackSize += bonus.stackSize;
+		}
+		else {
+			inv[slot] = bonus;
+		}
 	}
 
 }

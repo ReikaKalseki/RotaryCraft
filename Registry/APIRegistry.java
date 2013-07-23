@@ -9,28 +9,48 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import cpw.mods.fml.common.Loader;
 
 public enum APIRegistry {
 
-	BUILDCRAFT(Loader.isModLoaded("BuildCraft")),
-	THAUMCRAFT(Loader.isModLoaded("ThaumCraft")),
-	IC2(Loader.isModLoaded("IndustrialCraft")),
-	GREGTECH(Loader.isModLoaded("GregTech")),
-	FORESTRY(Loader.isModLoaded("Forestry"));
+	BUILDCRAFT("Buildcraft"),
+	THAUMCRAFT("Thaumcraft"),
+	IC2("IndustrialCraft"),
+	GREGTECH("Gregtech"),
+	FORESTRY("Forestry");
 
 	private boolean condition;
 	private boolean preset = false;
+	private String modlabel;
+
+	public static final APIRegistry[] apiList = APIRegistry.values();
 
 	private APIRegistry(boolean c) {
 		condition = c;
 		preset = true;
+		if (c)
+			ReikaJavaLibrary.pConsole(this+" detected in the MC installation. Adjusting accordingly.");
+	}
+
+	private APIRegistry(String s) {
+		this(Loader.isModLoaded(s));
+		modlabel = s;
 	}
 
 	public boolean conditionsMet() {
 		if (preset)
 			return condition;
 		return false;
+	}
+
+	public String getModLabel() {
+		return modlabel;
+	}
+
+	@Override
+	public String toString() {
+		return this.getModLabel();
 	}
 
 }

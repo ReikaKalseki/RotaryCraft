@@ -76,6 +76,12 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		super.updateTileEntity();
 		this.getPowerBelow();
 		power = omega * torque;
+		if (inv[ingredients.length+1] != null && fuel >= ItemFuelLubeBucket.value[1]) {
+			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
+				inv[ingredients.length+1] = ItemStacks.fuelbucket;
+				fuel -= ItemFuelLubeBucket.value[1];
+			}
+		}
 		if (power < MINPOWER || omega < MINSPEED)
 			return;
 		this.testIdle();
@@ -93,12 +99,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		}
 		if (fuel < 0)
 			fuel = 0;
-		if (inv[ingredients.length+1] != null && fuel >= ItemFuelLubeBucket.value[1]) {
-			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
-				inv[ingredients.length+1] = ItemStacks.fuelbucket;
-				fuel -= ItemFuelLubeBucket.value[1];
-			}
-		}
 	}
 
 	public void make() {
