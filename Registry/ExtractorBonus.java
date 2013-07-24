@@ -13,6 +13,7 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
@@ -22,7 +23,7 @@ public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
-	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.125F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), APIRegistry.IC2),
+	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), APIRegistry.INDUSTRIALCRAFT),
 	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.ironoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.FERROUS), 0.25F),
 	SILVER(ExtractorModOres.getSolutionProduct(ModOreList.SILVER), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.01F, APIRegistry.GREGTECH);

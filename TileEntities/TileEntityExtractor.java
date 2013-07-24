@@ -59,9 +59,18 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		return i == 7 || i == 8;
 	}
 
-	private int getSmeltNumber(int num) {
+	private int getSmeltNumber(int num, ModOreList ore) {
 		if (num == 63)
 			return 1;
+		if (ore != null) {
+			if (ore.isNetherOres()) {
+				int r = par5Random.nextInt(4);
+				if (r == 0)
+					return 1;
+				else
+					return 2; //75% chance of doubling -> 1.75^4 = 9.3
+			}
+		}
 		return (1+par5Random.nextInt(2));
 	}
 
@@ -352,10 +361,10 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
 		if (inv[i+4] == null) {
 			inv[i+4] = itemstack.copy();
-			inv[i+4].stackSize *= this.getSmeltNumber(0);
+			inv[i+4].stackSize *= this.getSmeltNumber(0, null);
 		}
 		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
-			inv[i+4].stackSize += this.getSmeltNumber(inv[i+4].stackSize);
+			inv[i+4].stackSize += this.getSmeltNumber(inv[i+4].stackSize, null);
 
 		if (i == 3)
 			this.bonusItems(inv[i]);
@@ -395,14 +404,14 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			if (ModOreList.isModOre(inv[i]) && i == 0) {
 				m = ModOreList.getModOreFromOre(inv[0]);
 				ItemStack is = ExtractorModOres.getDustProduct(m);
-				ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+				ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
 				ReikaInventoryHelper.decrStack(i, inv);
 				return true;
 			}
 			else if (ExtractorModOres.isModOreIngredient(inv[i])) {
 				if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					if (par5Random.nextInt(8) == 0)
 						waterLevel -= RotaryConfig.MILLIBUCKET;
@@ -410,7 +419,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					if (par5Random.nextInt(8) == 0)
 						waterLevel -= RotaryConfig.MILLIBUCKET;
@@ -418,7 +427,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
 					ItemStack is = ExtractorModOres.getFlakeProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize), is.getItemDamage(), inv, i+4);
+					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
 					ReikaInventoryHelper.decrStack(i, inv);
 					return true;
 				}

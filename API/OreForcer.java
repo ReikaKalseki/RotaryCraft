@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.API;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -19,20 +18,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Auxiliary.ModOreList;
-import Reika.DragonAPI.Instantiable.ConfigReader;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.RotaryCraft.Registry.APIRegistry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
 
 	public static void registerModItemsToDictionary() {
+		//test();
 		for (int i = 0; i < APIRegistry.apiList.length; i++) {
 			if (APIRegistry.apiList[i].conditionsMet()) {
 				String mod = APIRegistry.apiList[i].getModLabel();
@@ -67,14 +65,66 @@ public final class OreForcer {
 		}
 	}
 
-	private static void force(String s) {
-		if (s.equals(APIRegistry.THAUMCRAFT.getModLabel()))
-			registerThaumcraft2();
-		if (s.equals(APIRegistry.FORESTRY.getModLabel()))
-			;//forceForestryOreDict();
+	private static void test() {
+		List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
+		ReikaJavaLibrary.pConsole("Loading "+li.size()+" recipes.");
+		ItemStack piston = new ItemStack(Block.pistonBase);
+		for (int i = 0; i < li.size(); i++) {
+			IRecipe ir = li.get(i);
+			if (ir instanceof ShapedRecipes) {
+				ShapedRecipes sr = (ShapedRecipes)ir;
+				ItemStack[] in = sr.recipeItems;
+				int num = in.length;
+				boolean[] has = new boolean[num];
+				for (int j = 0; j < num; j++) {
+					if (ReikaItemHelper.matchStacks(piston, in[j]))
+						has[j] = true;
+				}
+				if (ReikaArrayHelper.containsTrue(has))
+					ReikaJavaLibrary.pConsole(sr);
+			}
+		}
 	}
 
-	private static void registerThaumcraft2() {
+	private static void force(String s) {
+		ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forcing compatibility with "+s);
+		if (s.equals(APIRegistry.THAUMCRAFT.getModLabel())) {
+			registerThaumcraft();
+		}
+		if (s.equals(APIRegistry.FORESTRY.getModLabel()))
+			intercraftApatite();
+	}
+
+	private static void intercraftApatite() {
+		try {
+			Class forest = Class.forName("forestry.core.config.ForestryItem");
+			Field apa = forest.getField("apatite");
+			Item item = (Item)apa.get(null);
+			ItemStack apatite = new ItemStack(item.itemID, 1, 0);
+			GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: RotaryCraft apatite can now be crafted into Forestry apatite!");
+		}
+		catch (ClassNotFoundException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forestry Config class not found! Cannot read its items for compatibility forcing!");
+		}
+		catch (NoSuchFieldException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forestry config field not found! "+e.getMessage());
+		}
+		catch (SecurityException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read Forestry config (Security Exception)! Apatite not convertible!"+e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading Forestry config!");
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading Forestry config!");
+			e.printStackTrace();
+		}
+	}
+
+	private static void registerThaumcraft() {
 		try {
 			Class thaum = Class.forName("thaumcraft.common.Config");
 			Field ore = thaum.getField("blockCustomOre");
@@ -124,108 +174,43 @@ public final class OreForcer {
 			OreDictionary.registerOre(ModOreList.CINNABAR.getProductLabel(), dropCinnabar);
 			OreDictionary.registerOre(ModOreList.AMBER.getProductLabel(), dropAmber);
 
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft ores are being registered to Ore Dictionary!");
+
+			for (int i = 0; i < ModOreList.oreList.length; i++) {
+				if (ModOreList.oreList[i].isThaumcraft()) {
+					ModOreList.oreList[i].reloadOreList();
+					ReikaJavaLibrary.pConsole("ROTARYCRAFT: Registering "+ModOreList.oreList[i].getName());
+				}
+			}
+
+			ItemStack[] out = {dropCinnabar, dropAmber, shardAir, shardFire, shardWater, shardEarth, shardVis, shardDull};
+			int k = 0;
+			for (int i = 0; i < ModOreList.oreList.length; i++) {
+				if (ModOreList.oreList[i].isThaumcraft()) {
+					GameRegistry.addShapelessRecipe(out[k], ItemStacks.getModOreIngot(ModOreList.oreList[i]));
+					k++;
+					ReikaJavaLibrary.pConsole("ROTARYCRAFT: "+ModOreList.oreList[i].getName()+" can now be crafted with RotaryCraft equivalents!");
+				}
+			}
+
 		}
 		catch (ClassNotFoundException e) {
-			ReikaJavaLibrary.pConsole("Thaumcraft Config class not found! Cannot read its items for ore dictionary registration!");
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft Config class not found! Cannot read its items for ore dictionary registration!");
 		}
 		catch (NoSuchFieldException e) {
-			ReikaJavaLibrary.pConsole("Thaumcraft config field not found! "+e.getMessage());
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft config field not found! "+e.getMessage());
 		}
 		catch (SecurityException e) {
-			ReikaJavaLibrary.pConsole("Cannot read Thaumcraft config (Security Exception)! Ores not registered!"+e.getMessage());
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read Thaumcraft config (Security Exception)! Ores not registered!"+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IllegalArgumentException e) {
-			ReikaJavaLibrary.pConsole("Illegal argument for reading thaumcraft config!");
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading Thaumcraft config!");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			ReikaJavaLibrary.pConsole("Illegal access exception for reading thaumcraft config!");
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading Thaumcraft config!");
 			e.printStackTrace();
-		}
-	}
-
-	private static void registerThaumcraft() {
-		ModOreList[] ores = {ModOreList.CINNABAR, ModOreList.AMBER, ModOreList.INFUSEDAIR, ModOreList.INFUSEDFIRE, ModOreList.INFUSEDWATER,
-				ModOreList.INFUSEDEARTH, ModOreList.INFUSEDVIS, ModOreList.INFUSEDDULL};
-		int[] metas = {0, 7, 1, 2, 3, 4, 5, 6};
-		int[] imetas = {3, 6, 0, 1, 2, 3, 4, 5};
-
-		ConfigReader cfg = new ConfigReader("Thaumcraft");
-
-		int oreID = cfg.getConfigInt("block", "BlockCustomOre");
-		int shardID = cfg.getConfigInt("item", "ItemShard");
-		int dropID = cfg.getConfigInt("item", "ItemResource");
-
-		for (int i = 0; i < ores.length; i++) {
-			ItemStack oreblock = new ItemStack(oreID, 1, metas[i]);
-			String[] oname = ores[i].getOreDictNames();
-			String[] iname = ores[i].getOreDictIngots();
-			if (i >= 2) {
-				ItemStack shard = new ItemStack(shardID, 1, imetas[i]);
-				for (int j = 0; j < iname.length; j++)
-					OreDictionary.registerOre(iname[j], shard);
-			}
-			else {
-				ItemStack drop = new ItemStack(dropID, 1, imetas[i]);
-				for (int j = 0; j < iname.length; j++)
-					OreDictionary.registerOre(iname[j], drop);
-			}
-			for (int j = 0; j < oname.length; j++)
-				OreDictionary.registerOre(oname[j], oreblock);
-		}
-	}
-
-	private static void forceForestryOreDict() {
-		List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
-		List<IRecipe> add = new ArrayList<IRecipe>();
-		for (int i = 0; i < li.size(); i++) {
-			IRecipe ir = li.get(i);
-			if (ir != null && ir.getRecipeOutput() != null) {
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Overwriting recipe "+ir+" for "+ir.getRecipeOutput()+" to use OreDictionary (\""+ModOreList.APATITE.getProductLabel()+"\")");
-				ItemStack product = ir.getRecipeOutput().copy();
-				if (ir instanceof ShapedRecipes) {
-					ShapedRecipes sr = (ShapedRecipes)ir;
-					for (int k = 0; k < sr.recipeItems.length; k++) {
-						boolean[] over = new boolean[9];
-						if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres(ModOreList.APATITE.getProductLabel()), sr.recipeItems[k])) {
-							over[k] = true;
-						}
-						if (ReikaArrayHelper.containsTrue(over)) {
-							Object[] obj = new Object[12];
-							obj[0] = "012";
-							obj[1] = "345";
-							obj[2] = "678";
-							for (int b = 0; b < 9; b++) {
-								if (over[b])
-									obj[b+3] = ModOreList.APATITE.getProductLabel();
-								else
-									obj[b+3] = sr.recipeItems[b];
-							}
-							ShapedOreRecipe so = new ShapedOreRecipe(product, obj);
-						}
-					}
-				}
-				else if (ir instanceof ShapelessRecipes) {
-					ShapelessRecipes sr = (ShapelessRecipes)ir;
-					for (int k = 0; k < sr.recipeItems.size(); k++) {
-						boolean[] over = new boolean[sr.recipeItems.size()];
-						if (ReikaItemHelper.listContainsItemStack(OreDictionary.getOres(ModOreList.APATITE.getProductLabel()), (ItemStack)sr.recipeItems.get(k))) {
-							over[k] = true;
-						}
-						if (ReikaArrayHelper.containsTrue(over)) {
-							Object[] obj = new Object[sr.recipeItems.size()];
-							for (int b = 0; b < obj.length; b++) {
-								if (over[b])
-									obj[b] = ModOreList.APATITE.getProductLabel();
-								else
-									obj[b] = sr.recipeItems.get(b);
-							}
-							ShapelessOreRecipe so = new ShapelessOreRecipe(product, obj);
-						}
-					}
-				}
-			}
 		}
 	}
 
