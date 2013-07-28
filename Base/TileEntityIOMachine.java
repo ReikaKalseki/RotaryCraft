@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -129,7 +128,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		if (omega < 0)
 		{
 			omega = 0;
-		}
+		}/*
 
 		if (!superCalled && this.isInWorld()) {
 			superTick++;
@@ -138,7 +137,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 				ReikaJavaLibrary.pConsole("Super() not called for "+this.getName()+"! Contact Reika immediately!");
 				ReikaChatHelper.write("Super() not called for "+this.getName()+"! Contact Reika immediately!");
 			}
-		}
+		}*/
 	}
 
 	protected boolean isProvider(TileEntity te) {

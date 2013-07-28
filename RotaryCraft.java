@@ -13,19 +13,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.liquids.LiquidDictionary;
+import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
-import Reika.RotaryCraft.API.IntegrityChecker;
-import Reika.RotaryCraft.API.OreForcer;
+import Reika.DragonAPI.Instantiable.ThaumOreHandler;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -53,6 +58,8 @@ import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemPipePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
+import Reika.RotaryCraft.ModInterface.IntegrityChecker;
+import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
@@ -75,6 +82,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod( modid = "RotaryCraft", name="RotaryCraft", version="beta", certificateFingerprint = "@GET_FINGERPRINT@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
@@ -97,6 +105,12 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block decoblock;
 	public static Block blastglass;
 	public static Block obsidianglass;
+
+	public static Item jetFuel;
+	public static Item lubricant;
+
+	public static LiquidStack jetFuelStack;
+	public static LiquidStack lubeStack;
 
 	public static Item shaftcraft;
 	public static Item enginecraft;
@@ -138,6 +152,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, BlockRegistry.blockList, ItemRegistry.itemList, ExtraConfigIDs.idList, 0);
 
+	public static ThaumOreHandler thaumOre;
+
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
@@ -150,17 +166,20 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
+		MinecraftForge.EVENT_BUS.register(this);
+		
 		this.checkAPI();
 
 		config.initProps(evt);
 		proxy.registerSounds();
+		
+		this.setupClassFiles();
 	}
 
 	@Override
 	@Init
 	public void load(FMLInitializationEvent event) {
 		proxy.addArmorRenders();
-		this.setupClassFiles();
 		proxy.registerRenderers();
 		RotaryRegistration.addBlocks();
 		RotaryNames.addNames();
@@ -197,7 +216,7 @@ public class RotaryCraft extends DragonAPIMod {
 			IntegrityChecker.checkForTampering();
 
 		if (ConfigRegistry.MODORES.getState())
-			OreForcer.registerModItemsToDictionary();
+			OreForcer.forceCompatibility();
 	}
 
 	private static void setupClassFiles() {
@@ -237,6 +256,14 @@ public class RotaryCraft extends DragonAPIMod {
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
 		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
+		
+		RotaryRegistration.setupLiquids();
+	}
+
+	@ForgeSubscribe
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Post event) {
+		RotaryRegistration.setupLiquidIcons();
 	}
 
 	@Override
@@ -252,7 +279,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public URL getDocumentationSite() {
 		try {
-			return new URL("http://www.minecraftforum.net/topic/1685078-152forgetechrotarycraft-machines-power-automation/");
+			return new URL("http://www.minecraftforum.net/topic/1685078-");
 		}
 		catch (MalformedURLException e) {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
@@ -281,6 +308,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public String getVersionName() {
-		return "Beta V0.44";
+		return "Release 1";
 	}
 }

@@ -15,6 +15,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -54,7 +57,28 @@ public class BlockFlywheel extends BlockModelledMachine {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int a, int b) {
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	{
+		if (this.canHarvest(world, player, x, y, z));
+		this.harvestBlock(world, player, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		ItemStack eitem = ep.inventory.getCurrentItem();
+		if (eitem == null)
+			return false;
+		if (!(eitem.getItem() instanceof ItemPickaxe))
+			return false;
+		if (eitem.itemID == Item.pickaxeWood.itemID)
+			return false;
+		return !ep.capabilities.isCreativeMode;
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
+		if (!this.canHarvest(world, ep, x, y, z))
+			return;
 		TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
 		if (fly != null) {
 			if (fly.failed) {
@@ -65,15 +89,15 @@ public class BlockFlywheel extends BlockModelledMachine {
 					world.spawnEntityInWorld(item);
 			}
 			else {
-				int meta = fly.getBlockMetadata();
-				ItemStack todrop = new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta/4); //drop flywheel
+				int metadata = fly.getBlockMetadata();
+				ItemStack todrop = new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata/4); //drop flywheel
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)
 					world.spawnEntityInWorld(item);
 			}
 		}
-		super.breakBlock(world, x, y, z, a, b);
+		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override

@@ -34,6 +34,8 @@ public enum ExtraConfigIDs implements IDRegistry {
 	FLYWHEELITEMS("ItemBlock IDs", "Flywheel Items", 30643, Item.class),
 	MODEXTRACTS("Resource Item IDs", "Mod Ore Extractor Items", 30644, Item.class),
 	MODINGOTS("Resource Item IDs", "Mod Ore Ingots", 30645, Item.class),
+	JETFUEL("Resource Item IDs", "Jet Fuel ID", 30646, Item.class),
+	LUBE("Resource Item IDs", "Lubricant ID", 30647, Item.class),
 
 	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 

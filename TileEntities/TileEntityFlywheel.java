@@ -225,6 +225,8 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 			omega = (int)(omega*DECAY);
 			torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), torque, "min");
 		}
+		if (omega == 0)
+			torque = 0;
 	}
 
 	public int readFromCross(TileEntityShaft cross, boolean isTorque) {

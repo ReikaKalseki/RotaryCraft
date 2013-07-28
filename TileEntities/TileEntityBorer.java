@@ -204,24 +204,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					return;
 				}
 			}
-			int metaread = world.getBlockMetadata(xread, yread, zread);/*
-			int dropid = Block.blocksList[id].idDropped(id, par5Random, this.getEnchantment(Enchantment.fortune));
-			int dropmeta = Block.blocksList[id].damageDropped(metaread);
-			int dropsize = Block.blocksList[id].quantityDropped(par5Random);
-			if (this.getEnchantment(Enchantment.silkTouch) > 0 && ReikaBlockHelper.canSilkTouch(id, metaread)) {
-				dropid = id;
-				dropmeta = metaread;
-			}
-			ItemStack is = new ItemStack(dropid, dropsize, dropmeta);
-			if (dropid != 0) {
-				if (!this.chestCheck(world, x, y, z, is)) {
-					if (this.getEnchantment(Enchantment.silkTouch) <= 0)
-						Block.blocksList[id].dropBlockAsItem(world, x, y+1, z, metaread, this.getEnchantment(Enchantment.fortune));
-					else {
-						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
-					}
-				}
-			}*/
+			int metaread = world.getBlockMetadata(xread, yread, zread);
 			if (this.getEnchantment(Enchantment.silkTouch) > 0) {
 				ItemStack is = new ItemStack(id, 1, metaread);
 				if (!this.chestCheck(world, x, y, z, is)) {

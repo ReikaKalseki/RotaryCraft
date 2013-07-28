@@ -99,6 +99,8 @@ import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
+import Reika.RotaryCraft.ModInterface.GuiPressureBalancer;
+import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -412,6 +414,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDisplay) {
 			return new GuiStringBuilder(player, te.worldObj, te.xCoord, te.yCoord, te.zCoord, RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue(), TileEntityDisplay.displayWidth, TileEntityDisplay.displayHeight, ((TileEntityDisplay) te).getMessageAsBigString());
+		}
+		if (te instanceof TileEntityPressureBalancer) {
+			return new GuiPressureBalancer(player, (TileEntityPressureBalancer)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

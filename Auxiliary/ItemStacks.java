@@ -180,13 +180,7 @@ public final class ItemStacks {
 
 	public static void registerSteels() {
 		modsteel.addAll(OreDictionary.getOres("ingotSteel"));
-		//modsteel.addAll(OreDictionary.getOres("ingotsteel"));
-		//modsteel.addAll(OreDictionary.getOres("steelingot"));
 		modsteel.addAll(OreDictionary.getOres("steelIngot"));
-		//modsteel.addAll(OreDictionary.getOres("SteelIngot"));
-		//modsteel.addAll(OreDictionary.getOres("IngotSteel"));
-		//modsteel.addAll(OreDictionary.getOres("steel"));
-		//modsteel.addAll(OreDictionary.getOres("Steel"));
 	}
 
 	public static ItemStack getModOreIngot(ModOreList ore) {

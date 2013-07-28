@@ -27,9 +27,6 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.API.TileEntityAirCompressor;
-import Reika.RotaryCraft.API.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.API.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -53,6 +50,9 @@ import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
+import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
@@ -210,9 +210,9 @@ public enum MachineRegistry {
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9, "RenderFin"),
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
-	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, APIRegistry.BUILDCRAFT),
-	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, APIRegistry.BUILDCRAFT),
-	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, APIRegistry.BUILDCRAFT),
+	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", APIRegistry.BUILDCRAFTENERGY),
+	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
+	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay");
 
 
@@ -727,8 +727,6 @@ public enum MachineRegistry {
 			return true;
 		if (this == FRICTION)
 			return true;
-		if (this == COMPRESSOR)
-			return true;
 		if (this == PNEUENGINE)
 			return true;
 		if (this == DISPLAY)
@@ -746,6 +744,8 @@ public enum MachineRegistry {
 		if (this == FAN)
 			return true;
 		if (this == COOLINGFIN)
+			return true;
+		if (this == COMPRESSOR)
 			return true;
 		return false;
 	}
@@ -912,6 +912,8 @@ public enum MachineRegistry {
 			return true;
 		if (this == CHUNKLOADER)
 			return true;
+		if (this.hasPrerequisite() && !this.getPrerequisite().conditionsMet())
+			return true;
 		return false;
 	}
 
@@ -937,5 +939,9 @@ public enum MachineRegistry {
 		if (this == COOLINGFIN)
 			return true;
 		return false;
+	}
+
+	public boolean matches(MachineRegistry m) {
+		return this == m;
 	}
 }

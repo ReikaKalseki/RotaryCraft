@@ -39,100 +39,86 @@ public class RenderFlywheel extends RotaryTERenderer implements MultiModel
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
-
-			{
-				//((BlockFlywheelBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		ModelFlywheel var14;
+		var14 = FlywheelModel;
+		if (tile.isInWorld())
+		{
+			switch(tile.getBlockMetadata()/4) {
+			case 0:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
+				break;
+			case 1:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
+				break;
+			case 2:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
+				break;
+			case 3:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
+				break;
+			}
+		}
+		else {
+			switch(controlInt) {
+			case 0:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
+				break;
+			case 1:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
+				break;
+			case 2:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
+				break;
+			case 3:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
+				break;
 			}
 		}
 
-		if (true)
-		{
-			ModelFlywheel var14;
-			var14 = FlywheelModel;
-			if (tile.isInWorld())
-			{
-				switch(tile.getBlockMetadata()/4) {
-				case 0:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
-					break;
-				case 1:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
-					break;
-				case 2:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
-					break;
-				case 3:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
-					break;
-				}
-			}
-			else {
-				switch(controlInt) {
-				case 0:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
-					break;
-				case 1:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
-					break;
-				case 2:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
-					break;
-				case 3:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
-					break;
-				}
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		//GL11.glDisable(GL11.GL_LIGHTING);
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		if (tile.isInWorld()) {
+
+			switch(tile.getBlockMetadata()%4) {
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 0;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
 			}
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			//GL11.glDisable(GL11.GL_LIGHTING);
-			int var11 = 0;	 //used to rotate the model about metadata
+			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 
-			if (tile.isInWorld()) {
-
-				switch(tile.getBlockMetadata()%4) {
-				case 0:
-					var11 = 180;
-					break;
-				case 1:
-					var11 = 0;
-					break;
-				case 2:
-					var11 = 270;
-					break;
-				case 3:
-					var11 = 90;
-					break;
-				}
-
-				GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-
-			}
-			//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+		}
+		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.failed), -tile.phi);
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.failed), -tile.phi);
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

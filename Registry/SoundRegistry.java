@@ -50,7 +50,9 @@ public enum SoundRegistry implements SoundList {
 	PLING("pling"),
 	HIPLING("plinghi"),
 	FRICTION("friction"),
-	CRAFT("craft");
+	CRAFT("craft"),
+	AIRCOMP("aircomp"),
+	PNEUMATIC("pneu");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

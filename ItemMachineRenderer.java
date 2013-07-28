@@ -18,6 +18,8 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -336,6 +338,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case COOLINGFIN:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCoolingFin(), a, -0.1D, b, 0.0F);
+				break;
+			case COMPRESSOR:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAirCompressor(), a, -0.1D, b, 0.0F);
+				break;
+			case PNEUENGINE:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPneumaticEngine(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

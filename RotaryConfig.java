@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
@@ -40,8 +41,7 @@ public class RotaryConfig extends ControlledConfig {
 	public static final int omegalimit = (Integer.MAX_VALUE-1)/2;
 	public static final boolean debugmode = false;
 
-	public static final int WATTS_PER_MJ = 1000000;
-	public static final int MILLIBUCKET = 1000;
+	public static final int MILLIBUCKET = LiquidContainerRegistry.BUCKET_VOLUME;
 
 	//Initialization of the config
 	// Args: String mod used to name the config file to mods name

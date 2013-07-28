@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
@@ -31,7 +32,6 @@ public class ExtractorModOres {
 
 	public static void addSmelting() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			//ReikaJavaLibrary.pConsole("Adding smelting for "+new ItemStack(RotaryCraft.modextracts.itemID, 1, getFlakesIndex(ModOreList.oreList[i]))+" to "+ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()));
 			FurnaceRecipes.smelting().addSmelting(RotaryCraft.modextracts.itemID, getFlakesIndex(ModOreList.oreList[i]), ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()), 0.7F);
 		}
 	}
@@ -110,6 +110,35 @@ public class ExtractorModOres {
 	}
 
 	public static ItemStack getSmeltedIngot(ModOreList ore) {
-		return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
+		switch(ore) {
+		case NETHERCOAL:
+			return new ItemStack(Item.coal);
+		case NETHERCOPPER:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.COPPER.ordinal());
+		case NETHERDIAMOND:
+			return new ItemStack(Item.diamond);
+		case NETHEREMERALD:
+			return new ItemStack(Item.emerald);
+		case NETHERGOLD:
+			return new ItemStack(Item.ingotGold);
+		case NETHERIRON:
+			return new ItemStack(Item.ingotIron);
+		case NETHERLAPIS:
+			return ReikaItemHelper.lapisDye.copy();
+		case NETHERLEAD:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.LEAD.ordinal());
+		case NETHERNICKEL:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.FERROUS.ordinal());
+		case NETHERNIKOLITE:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.NIKOLITE.ordinal());
+		case NETHERREDSTONE:
+			return new ItemStack(Item.redstone);
+		case NETHERSILVER:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.SILVER.ordinal());
+		case NETHERTIN:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.TIN.ordinal());
+		default:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
+		}
 	}
 }

@@ -134,6 +134,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
+		if (m == MachineRegistry.BALANCER) {
+
+		}
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {
 			switch(RotaryAux.get4SidedMetadataFromPlayerLook(ep)) {
 			case 0:

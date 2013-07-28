@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -429,10 +430,20 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemRegistry.TARGET.getCraftedProduct(1), new Object[]{
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
-		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
-			"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
+		if (ReikaJavaLibrary.doesClassExist("mods.PamHarvestCraft.PamHarvestCraft")) {
+			if (ConfigRegistry.LOGLOADING.getState())
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: HarvestCraft found, not loading iron screwdriver recipe.");
+		}
+		else {
+			GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
+				"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
+			if (ConfigRegistry.LOGLOADING.getState())
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: HarvestCraft not found, loading iron screwdriver recipe.");
+		}
+
 		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
 			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', ExpandedOreRecipe.getWoodList()}));
+
 		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.METER.getCraftedProduct(1), new Object[]{
 			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
 		GameRegistry.addRecipe(ItemRegistry.HANDBOOK.getCraftedProduct(1), new Object[]{

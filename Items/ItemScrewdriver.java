@@ -33,9 +33,10 @@ import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import buildcraft.api.tools.IToolWrench;
 
 
-public class ItemScrewdriver extends ItemRotaryTool
+public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 {
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 
@@ -289,5 +290,15 @@ public class ItemScrewdriver extends ItemRotaryTool
 			return 7;
 		}
 		return 0;
+	}
+
+	@Override
+	public boolean canWrench(EntityPlayer player, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
+
 	}
 }
