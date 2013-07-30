@@ -26,12 +26,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -427,8 +428,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 					if (id == Block.mobSpawner.blockID) {
 						TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x+i, y, z+j);
 						if (spw != null) {
-							MobSpawnerBaseLogic lgc = spw.func_98049_a();
-							this.spawnSpawner(world, x+i, y, z+j, lgc.getEntityNameToSpawn());
+							this.spawnSpawner(world, x+i, y, z+j, spw);
 						}
 					}
 					if (world.getBlockId(x+i, y-1, z+j) == Block.netherrack.blockID) {
@@ -467,27 +467,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		return cleared;
 	}
 
-	//@SideOnly(Side.SERVER)
-	public void spawnSpawner(World world, int x, int y, int z, String mob) {
+	public void spawnSpawner(World world, int x, int y, int z, TileEntityMobSpawner spw) {
 		if (world.isRemote)
 			return;
-		int dmg = -1;
-		if (mob == "Zombie")
-			dmg = 0;
-		if (mob == "Spider")
-			dmg = 1;
-		if (mob == "CaveSpider")
-			dmg = 2;
-		if (mob == "Skeleton")
-			dmg = 3;
-		if (mob == "Silverfish")
-			dmg = 4;
-		if (mob == "Blaze")
-			dmg = 5;
-
-		if (dmg == -1)
-			return;
-		ItemStack is = new ItemStack(RotaryCraft.spawner.itemID, 1, dmg);
+		ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
+		ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 		EntityItem ent = new EntityItem(world, x, y, z, is);
 		world.spawnEntityInWorld(ent);
 	}

@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaOreHelper;
@@ -756,7 +757,7 @@ public enum HandbookRegistry {
 		if (this == GLASS)
 			return new ItemStack(RotaryCraft.obsidianglass);
 		if (this == SPAWNERS)
-			return new ItemStack(RotaryCraft.spawner.itemID, 1, 1);
+			return new ItemStack(DragonAPICore.getItem("spawner"));
 		if (this == YEAST)
 			return ItemStacks.sludge;
 		if (this == SALT)

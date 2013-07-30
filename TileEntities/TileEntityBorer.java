@@ -19,15 +19,16 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
@@ -177,26 +178,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (spw != null) {
 					if (world.isRemote)
 						return;
-					MobSpawnerBaseLogic lgc = spw.func_98049_a();
-					String mob = lgc.getEntityNameToSpawn();
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%s", mob));
-					int dmg = -1;
-					if (mob.equals("Zombie"))
-						dmg = 0;
-					if (mob.equals("Spider"))
-						dmg = 1;
-					if (mob.equals("CaveSpider"))
-						dmg = 2;
-					if (mob.equals("Skeleton"))
-						dmg = 3;
-					if (mob.equals("Silverfish"))
-						dmg = 4;
-					if (mob.equals("Blaze"))
-						dmg = 5;
-
-					if (dmg == -1)
-						return;
-					ItemStack is = new ItemStack(RotaryCraft.spawner.itemID, 1, dmg);
+					ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
+					ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 					EntityItem ent = new EntityItem(world, x, y, z, is);
 					ent.delayBeforeCanPickup = 10;
 					if (!this.chestCheck(world, x, y, z, is))

@@ -21,7 +21,6 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemLiquid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFallingBlock;
@@ -109,10 +108,11 @@ public class RotaryRegistration {
 	}
 
 	public static void setupLiquids() {
-		ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading Liquids");
+		if (ConfigRegistry.LOGLOADING.getState())
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading And Registering Liquids");
 		RotaryCraft.jetFuel = new ItemLiquid(ExtraConfigIDs.JETFUEL.getValue()).setUnlocalizedName("jetfuel");
 		RotaryCraft.lubricant = new ItemLiquid(ExtraConfigIDs.LUBE.getValue()).setUnlocalizedName("lubricant");
-		
+
 		LanguageRegistry.addName(RotaryCraft.jetFuel, "Jet Fuel");
 		LanguageRegistry.addName(RotaryCraft.lubricant, "Lubricant");
 
@@ -125,11 +125,12 @@ public class RotaryRegistration {
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Lubricant", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.LUBRICANT.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Jet Fuel", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.JETFUEL.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-	public static void setupLiquidIcons() {		
-		ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading Liquid Icons");
-		
+	public static void setupLiquidIcons() {
+		if (ConfigRegistry.LOGLOADING.getState())
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading Liquid Icons");
+
 		LiquidDictionary.getCanonicalLiquid("Jet Fuel").setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
 		LiquidDictionary.getCanonicalLiquid("Lubricant").setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));
 

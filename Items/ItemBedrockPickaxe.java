@@ -13,8 +13,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -25,16 +23,19 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.Instantiable.ReikaModelledBreakFX;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -79,25 +80,41 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	@Override
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
 	{
+		if (ep.capabilities.isCreativeMode)
+			return false;
 		World world = ep.worldObj;
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack block = new ItemStack(id, 1, meta);
-		if (APIRegistry.THAUMCRAFT.conditionsMet() && RotaryCraft.thaumOre.isThaumOre(block)) {
+		if (APIRegistry.THAUMCRAFT.conditionsMet() && RotaryCraft.thaumOre.isThaumOre(block) && ConfigRegistry.MODORES.getState()) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				this.spawnInfusedDropParticles(world, x, y, z);
+				ReikaRenderHelper.spawnInfusedDropParticles(world, x, y, z, RotaryCraft.thaumOre.oreID);
 			}
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;
+		}
+		if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Block.mobSpawner.blockID) {
+			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
+			if (ConfigRegistry.SPAWNERLEAK.getState())
+				ReikaSpawnerHelper.forceSpawn(spw, world, 12+itemRand.nextInt(25));
+			ItemStack item = new ItemStack(DragonAPICore.getItem("spawner"));
+			ReikaSpawnerHelper.addMobNBTToItem(item, spw);
+			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
+			//world.setBlock(x, y, z, 0);
+			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				;//ReikaRenderHelper.spawnDropParticles(world, x, y, z, Block.mobSpawner, meta);
+			}
+			return false;
 		}
 		if (id != Block.silverfish.blockID)
 			return false;
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 		world.setBlock(x, y, z, 0);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			this.spawnDropParticles(world, x, y, z);
+			ReikaRenderHelper.spawnDropParticles(world, x, y, z, Block.silverfish, meta);
 		}
 		ItemStack drop;
 		switch(meta) {
@@ -122,23 +139,6 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
 		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
 		return true;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void spawnInfusedDropParticles(World world, int x, int y, int z) {
-		Block ore = Block.blocksList[RotaryCraft.thaumOre.oreID];
-		Icon ico = new RenderBlocks().getBlockIcon(ore);
-		for (int i = 0; i < 16; i++) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -1+itemRand.nextDouble()*2, 2, -1+itemRand.nextDouble()*2, ore, world.getBlockMetadata(x, y, z), 0, Minecraft.getMinecraft().renderEngine, "/terrain.png", ico.getInterpolatedU(0), ico.getInterpolatedV(0)));
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void spawnDropParticles(World world, int x, int y, int z) {
-		Icon ico = new RenderBlocks().getBlockIcon(Block.silverfish);
-		for (int i = 0; i < 16; i++) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ReikaModelledBreakFX(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), -1+itemRand.nextDouble()*2, 2, -1+itemRand.nextDouble()*2, Block.silverfish, world.getBlockMetadata(x, y, z), 0, Minecraft.getMinecraft().renderEngine, "/terrain.png", ico.getInterpolatedU(0), ico.getInterpolatedV(0)));
-		}
 	}
 
 	@Override

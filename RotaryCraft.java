@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
@@ -23,14 +22,14 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Instantiable.ThaumOreHandler;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -50,7 +49,6 @@ import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Blocks.BlockObsidianGlass;
 import Reika.RotaryCraft.Items.ItemModOre;
-import Reika.RotaryCraft.Items.ItemSpawner;
 import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
@@ -120,7 +118,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item compacts;
 	public static Item engineitems;
 	public static Item powders;
-	public static Item spawner;
 	public static Item pipeplacer;
 	public static Item shaftitems;
 	public static Item gbxitems;
@@ -166,14 +163,18 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@PreInit
 	public void preload(FMLPreInitializationEvent evt) {
+
 		MinecraftForge.EVENT_BUS.register(this);
-		
+
 		this.checkAPI();
 
 		config.initProps(evt);
 		proxy.registerSounds();
-		
+
 		this.setupClassFiles();
+
+		DragonAPICore.addIDMapping("spawner", ExtraConfigIDs.SPAWNERS.getValue());
+		DragonAPICore.addItem(instance, ItemSpawner.class, "Monster Spawner", "spawner");
 	}
 
 	@Override
@@ -230,7 +231,7 @@ public class RotaryCraft extends DragonAPIMod {
 		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
 		engineitems = new ItemEnginePlacer(ExtraConfigIDs.ENGINEITEMS.getValue()).setUnlocalizedName("engines");
 		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 8).setUnlocalizedName("powder");
-		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner");
+
 		pipeplacer = new ItemPipePlacer(ExtraConfigIDs.PIPEITEMS.getValue()).setUnlocalizedName("pipeplacer");
 		shaftitems = new ItemShaftPlacer(ExtraConfigIDs.SHAFTITEMS.getValue()).setUnlocalizedName("shafts");
 		gbxitems = new ItemGearPlacer(ExtraConfigIDs.GEARBOXITEMS.getValue()).setUnlocalizedName("gbxs");
@@ -256,7 +257,7 @@ public class RotaryCraft extends DragonAPIMod {
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
 		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
-		
+
 		RotaryRegistration.setupLiquids();
 	}
 

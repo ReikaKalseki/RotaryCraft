@@ -131,7 +131,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 			j = RotaryNames.powderNames.length;
 			break;
 		case 9: //spawner
-			j = RotaryNames.spawnerNames.length;
+			j = 0;//RotaryNames.spawnerNames.length;
 			break;
 		case 10: //pipe items
 			j = RotaryNames.pipeNames.length;
@@ -194,7 +194,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		case 8:
 			return super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 		case 9:
-			return super.getUnlocalizedName() + "." + RotaryNames.spawnerNames[d];
+			return super.getUnlocalizedName();// + "." + RotaryNames.spawnerNames[d];
 		case 10:
 			return super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
 		case 11:
@@ -217,6 +217,8 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		int ty = type;
 		while (ty >= 16)
 			ty -= 16;
+		if (type == 9)
+			return 150;
 		if (item.getItemDamage() == ItemStacks.silverflakes.getItemDamage() && item.itemID == ItemStacks.silverflakes.itemID) {
 			ty++;
 			offset = -1;

@@ -14,8 +14,8 @@ import java.util.Random;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 

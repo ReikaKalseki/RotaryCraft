@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Exception.TamperingException;
 import Reika.DragonAPI.Libraries.ReikaOreHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class IntegrityChecker {

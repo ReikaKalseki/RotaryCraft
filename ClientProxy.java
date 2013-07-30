@@ -12,9 +12,11 @@ package Reika.RotaryCraft;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.SoundLoader;
+import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
@@ -69,6 +71,9 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityFreezeGunShot.class, new RenderFreezeGunShot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceBlock.class, new RenderIceBlock());
 
+		DragonAPICore.addRenderer("spawner", items[0]);
+		((ItemSpawner)DragonAPICore.getItem("spawner")).setIcon(150);
+
 		this.registerSpriteSheets();
 		this.registerBlockSheets();
 	}
@@ -107,7 +112,6 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.enginecraft.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.borecraft.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.heatcraft.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.spawner.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.powders.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.pipeplacer.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.compacts.itemID, items[0]);

@@ -10,7 +10,7 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Auxiliary.ModOreList;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -117,10 +117,6 @@ public class RotaryNames {
 		"Anthracite", "Prismane", "Lonsdaleite", "Bedrock Ingot", "Aluminum Ingot", "", "", "Silver Ingot"
 	};
 
-	public static final String[] spawnerNames = {
-		"Zombie Spawner", "Spider Spawner", "Cave Spider Spawner", "Skeleton Spawner", "Silverfish Spawner", "Blaze Spawner"
-	};
-
 	public static final String[] pipeNames = {
 		"Lubricant Hose", "Liquid Pipe", "Fuel Line", "Liquid Spiller"
 	};
@@ -184,11 +180,11 @@ public class RotaryNames {
 		for (int i = 0; i < powderNames.length; i++) {
 			ItemStack jetfuelstack = new ItemStack(RotaryCraft.powders, 1, i);
 			LanguageRegistry.addName(jetfuelstack, powderNames[jetfuelstack.getItemDamage()]);
-		}
+		}/*
 		for (int i = 0; i < spawnerNames.length; i++) {
 			ItemStack spawnerstack = new ItemStack(RotaryCraft.spawner, 1, i);
 			LanguageRegistry.addName(spawnerstack, spawnerNames[spawnerstack.getItemDamage()]);
-		}
+		}*/
 		for (int i = 0; i < pipeNames.length; i++) {
 			ItemStack pipestack = new ItemStack(RotaryCraft.pipeplacer, 1, i);
 			LanguageRegistry.addName(pipestack, pipeNames[pipestack.getItemDamage()]);

@@ -20,11 +20,11 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.Auxiliary.ModOreList;
 import Reika.DragonAPI.Instantiable.ThaumOreHandler;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -121,6 +121,18 @@ public final class OreForcer {
 		case MFFS:
 			intercraftForcicium();
 			break;
+		case REDPOWER:
+			break;
+		case BOP:
+			break;
+		case BXL:
+			break;
+		case NATURA:
+			break;
+		case TWILIGHT:
+			break;
+		case MINEFACTORY:
+			break;
 		}
 	}
 
@@ -128,7 +140,7 @@ public final class OreForcer {
 		try {
 			Class mf = Class.forName("mods.mffs.common.ModularForceFieldSystem");
 			Field item = mf.getField("MFFSitemForcicium");
-			ItemStack forc = (ItemStack)item.get(null);
+			ItemStack forc = new ItemStack((Item)item.get(null));
 			GameRegistry.addShapelessRecipe(forc, ItemStacks.getModOreIngot(ModOreList.MONAZIT));
 			if (ConfigRegistry.LOGLOADING.getState())
 				ReikaJavaLibrary.pConsole("ROTARYCRAFT: RotaryCraft monazit can now be crafted into MFFS forcicium!");

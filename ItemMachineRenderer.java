@@ -97,13 +97,11 @@ public class ItemMachineRenderer implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		//return MachineRegistry.machineList[item.getItemDamage()].hasModel();
 		return true;
 	}
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		//return MachineRegistry.machineList[item.getItemDamage()].hasModel();
 		return true;
 	}
 
