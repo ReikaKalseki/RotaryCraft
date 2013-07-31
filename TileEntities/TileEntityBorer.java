@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -173,8 +174,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public void dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (drops && id != 0) {
+			TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 			if (id == Block.mobSpawner.blockID) {
-				TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(xread, yread, zread);
+				TileEntityMobSpawner spw = (TileEntityMobSpawner)tile;
 				if (spw != null) {
 					if (world.isRemote)
 						return;
@@ -185,6 +187,15 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					if (!this.chestCheck(world, x, y, z, is))
 						world.spawnEntityInWorld(ent);
 					return;
+				}
+			}
+			if (tile instanceof IInventory) {
+				List<ItemStack> contents = ReikaInventoryHelper.getWholeInventory((IInventory)tile);
+				for (int i = 0; i < contents.size(); i++) {
+					ItemStack is = contents.get(i);
+					if (!this.chestCheck(world, x, y, z, is)) {
+						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+					}
 				}
 			}
 			int metaread = world.getBlockMetadata(xread, yread, zread);

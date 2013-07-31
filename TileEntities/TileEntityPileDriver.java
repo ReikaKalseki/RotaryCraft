@@ -144,49 +144,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 					dmg = Integer.MAX_VALUE;
 				el.attackEntityFrom(DamageSource.inWall, dmg); //will kill anything
 			}
-		}/*
-		List killed = world.getEntitiesWithinAABB(EntityPlayer.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntityPlayer ep = (EntityPlayer)killed.get(i);
-			if (ep != null) {
-				ep.attackEntityFrom(DamageSource.inWall, 20000);
-			}
 		}
-		killed = world.getEntitiesWithinAABB(EntityMob.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntityMob em = (EntityMob)killed.get(i);
-			if (em != null) {
-				em.attackEntityFrom(DamageSource.inWall, 20000);
-			}
-		}
-		killed = world.getEntitiesWithinAABB(EntityAnimal.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntityAnimal ea = (EntityAnimal)killed.get(i);
-			if (ea != null) {
-				ea.attackEntityFrom(DamageSource.inWall, 20000);
-			}
-		}
-		killed = world.getEntitiesWithinAABB(EntityVillager.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntityVillager ev = (EntityVillager)killed.get(i);
-			if (ev != null) {
-				ev.attackEntityFrom(DamageSource.inWall, 20000);
-			}
-		}
-		killed = world.getEntitiesWithinAABB(EntityWaterMob.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntityWaterMob ewm = (EntityWaterMob)killed.get(i);
-			if (ewm != null) {
-				ewm.attackEntityFrom(DamageSource.inWall, 20000);
-			}
-		}
-		killed = world.getEntitiesWithinAABB(EntitySlime.class, box);
-		for (int i = 0; i < killed.size(); i++) {
-			EntitySlime es = (EntitySlime)killed.get(i);
-			if (es != null) {
-				es.attackEntityFrom(DamageSource.inWall, 20000);
-			}
-		}*/
 	}
 
 	public void breakGlass(World world, int x, int y, int z) {

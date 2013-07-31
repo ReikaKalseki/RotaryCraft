@@ -163,7 +163,8 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
 			if (((EnchantableMachine)te).applyEnchants(is)) {
-				ep.setCurrentItemOrArmor(0, null);
+				if (!ep.capabilities.isCreativeMode)
+					ep.setCurrentItemOrArmor(0, null);
 				return true;
 			}
 			return false;
@@ -287,13 +288,14 @@ public abstract class BlockBasicMultiTE extends Block {
 			return null;
 		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
-		if (!m.hasCustomPlacerItem()) {
-			return new ItemStack(RotaryCraft.machineplacer.itemID, 1, m.ordinal());
+		TileEntity tile = world.getBlockTileEntity(target.blockX, target.blockY, target.blockZ);
+		ItemStack core = m.getCraftedProduct();
+		if (m.isEnchantable()) {
+			HashMap<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantments();
+			core = ReikaEnchantmentHelper.applyEnchantments(core, ench);
+			return core;
 		}
-		else if (m.isPipe()) {
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, m.getMachineMetadata());
-		}
-		return null;
+		return core;
 	}
 
 	@Override

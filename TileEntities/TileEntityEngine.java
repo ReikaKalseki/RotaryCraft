@@ -562,20 +562,20 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public boolean isDrowned(World world, int x, int y, int z) {
 		if (!type.isAirBreathing())
 			return false;
-		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1) {
-			if (world.getBlockMaterial(x-1, y, z) != Material.water && world.getBlockMaterial(x-1, y, z) != Material.lava)
-				return false;
-			if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
-				return false;
-			if (world.getBlockMaterial(x, y, z-1) != Material.water && world.getBlockMaterial(x, y, z-1) != Material.lava)
-				return false;
-			if (world.getBlockMaterial(x+1, y, z) != Material.water && world.getBlockMaterial(x+1, y, z) != Material.lava)
-				return false;
-			if (world.getBlockMaterial(x, y+1, z) != Material.water && world.getBlockMaterial(x, y+1, z) != Material.lava)
-				return false;
-			if (world.getBlockMaterial(x, y, z+1) != Material.water && world.getBlockMaterial(x, y, z+1) != Material.lava)
-				return false;
-		}
+		//if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1) {
+		if (world.getBlockMaterial(x-1, y, z) != Material.water && world.getBlockMaterial(x-1, y, z) != Material.lava)
+			return false;
+		if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
+			return false;
+		if (world.getBlockMaterial(x, y, z-1) != Material.water && world.getBlockMaterial(x, y, z-1) != Material.lava)
+			return false;
+		if (world.getBlockMaterial(x+1, y, z) != Material.water && world.getBlockMaterial(x+1, y, z) != Material.lava)
+			return false;
+		if (world.getBlockMaterial(x, y+1, z) != Material.water && world.getBlockMaterial(x, y+1, z) != Material.lava)
+			return false;
+		if (world.getBlockMaterial(x, y, z+1) != Material.water && world.getBlockMaterial(x, y, z+1) != Material.lava)
+			return false;
+		//}
 		return true;
 	}
 

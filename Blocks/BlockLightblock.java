@@ -18,7 +18,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.BlockBasic;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockLightblock extends BlockBasic {
 
@@ -68,7 +67,7 @@ public class BlockLightblock extends BlockBasic {
 		return world.getBlockMetadata(x, y, z);
 	}
 
-
+	/*
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int id)
 	{
@@ -80,7 +79,7 @@ public class BlockLightblock extends BlockBasic {
     		boolean pz = true;
     		boolean nx = true;
     		boolean ny = true;
-    		boolean nz = true;*/
+    		boolean nz = true;*//*
 			int i = 1;
 			//(px || py || pz || nx || ny || nz) &&
 			while (i <= ConfigRegistry.FLOODLIGHTRANGE.getValue()) {
@@ -106,7 +105,7 @@ public class BlockLightblock extends BlockBasic {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5) {
 		world.setBlockToAir(x, y, z);
-	}
+	}*/
 
 	/**
 	 * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)

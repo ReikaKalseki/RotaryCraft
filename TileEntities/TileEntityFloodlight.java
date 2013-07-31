@@ -9,9 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -31,6 +31,9 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	/** Used to detect if floodlight just turned off */
 	private boolean wentdark = false;
+
+	private BlockArray beam = new BlockArray();
+	private boolean markUpdate = true;
 
 	/** Rate of conversion - one power++ = 1/falloff ++ light levels */
 	public static final int FALLOFF = 1024; //1kW a light level right now
@@ -56,9 +59,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	@Override
 	public void makeBeam(World world, int x, int y, int z, int metadata) {
-		boolean blocked = false;
+		//boolean blocked = false;
 		int range = this.getRange();
-		if (power > MINPOWER) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
+		//1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
+		/*
 			wentdark = false;
 			for (int i = 1; (i < range || range == -1) && !blocked && !Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)] && (!beammode || y+ystep*i <= 125);i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightblock.blockID; i++) {
 				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
@@ -74,7 +78,32 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			}
 		}
 		else if (!wentdark)
-			this.lightsOut(world, x, y, z);
+			this.lightsOut(world, x, y, z);*/
+		if (markUpdate) {
+			beam.clear();
+			markUpdate = false;
+		}
+		if (beam.isEmpty())
+			beam.addLineOfClear(world, x, y, z, range, xstep, ystep, zstep);
+		//ReikaJavaLibrary.pConsole(beam);
+		int size = beam.getSize();
+		wentdark = false;
+		boolean pow = power >= MINPOWER;
+		if (!pow) {
+			wentdark = true;
+			markUpdate = true;
+		}
+		for (int i = 0; i < size; i++) {
+			int[] xyz = beam.getNthBlock(i);
+			if (pow) {
+				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, lightlevel, 3);
+			}
+			else {
+				if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == RotaryCraft.lightblock.blockID)
+					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+			}
+			world.markBlockForUpdate(xyz[0], xyz[1], xyz[2]);
+		}
 	}
 
 	public void lightsOut(World world, int x, int y, int z) {

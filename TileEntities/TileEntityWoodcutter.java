@@ -18,8 +18,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -41,6 +44,8 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 	public int stepx;
 	public int stepz;
 
+	private BlockArray tree = new BlockArray();
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -52,6 +57,41 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 
+		if (tree.isEmpty() && this.hasWood()) {
+			int woodId = world.getBlockId(editx, edity, editz);
+			int woodMeta = world.getBlockMetadata(editx, edity, editz);
+			tree.addTree(world, editx, edity, editz, woodId, woodMeta);
+		}
+		//ReikaJavaLibrary.pConsole(tree);
+		int size = tree.getSize();
+		for (int i = 0; i < size; i++) {
+			int[] xyz = tree.getNthBlock(i);
+			int dropid = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			if (ConfigRegistry.INSTACUT.getState()) {
+				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, new ItemStack(dropid, 1, dropmeta));
+			}
+			else {
+				if (xyz[0] == editx && xyz[1] == edity && xyz[2] == editz) {
+					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, new ItemStack(dropid, 1, dropmeta));
+				}
+				else {
+					EntityFallingSand e = new EntityFallingSand(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, dropid, dropmeta);
+					e.fallTime = -2000;
+					e.shouldDropItem = false;
+					if (!world.isRemote) {
+						world.spawnEntityInWorld(e);
+					}
+					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				}
+			}
+		}
+		tree.clear();
+		//ReikaJavaLibrary.pConsole(Arrays.toString(xyz)+" ("+i+" of "+(size-1)+") on side "+FMLCommonHandler.instance().getEffectiveSide());
+		//ReikaJavaLibrary.pConsole(e);
+		/*
 		if (this.operationComplete(tickcount, 0)) {
 			tickcount = 0;
 			if (ConfigRegistry.INSTACUT.getState()) {
@@ -88,7 +128,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 				editz = z;
 				this.harvest(world, x, y, z, meta, editx, edity, editz, false); //Top harvesting
 			}
-		}
+		}*/
 	}
 
 	public void instantHarvest(World world, int x, int y, int z, int meta, int editx2, int edity2, int editz2) {
@@ -437,7 +477,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 	private boolean hasWood() {
 		if (worldObj.getBlockId(editx, edity, editz) == Block.wood.blockID)
 			return true;
-		if (worldObj.getBlockId(editx, edity, editz) == RotaryCraft.gravlog.blockID)
+		if (ModWoodList.isModWood(new ItemStack(worldObj.getBlockId(editx, edity, editz), 1, worldObj.getBlockMetadata(editx, edity, editz))))
 			return true;
 		return false;
 	}
