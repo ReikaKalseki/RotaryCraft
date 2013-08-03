@@ -83,6 +83,8 @@ public class RotaryConfig extends ControlledConfig {
 						controls[i] = ConfigRegistry.optionList[i].setState(config);
 					if (ConfigRegistry.optionList[i].isNumeric())
 						controls[i] = ConfigRegistry.optionList[i].setValue(config);
+					if (ConfigRegistry.optionList[i].isDecimal())
+						controls[i] = ConfigRegistry.optionList[i].setDecimal(config);
 					p.println(label+": "+String.valueOf(controls[i]));
 				}
 

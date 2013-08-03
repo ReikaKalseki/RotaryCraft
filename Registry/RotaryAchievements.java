@@ -99,12 +99,13 @@ public enum RotaryAchievements {
 	}
 
 	public void triggerAchievement(EntityPlayer ep) {
+		if (!ConfigRegistry.ACHIEVEMENTS.getState())
+			return;
 		if (ep == null) {
 			ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
 			ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
-			return;
 		}
-		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+		else {
 			ep.triggerAchievement(this.get());
 		}
 	}
@@ -125,9 +126,7 @@ public enum RotaryAchievements {
 			RotaryCraft.achievements[i].registerAchievement();
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();
-			if (ConfigRegistry.LOGLOADING.getState()) {
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Registering achievement "+list[i].name()+" with ID "+RotaryCraft.achievements[i].statId+" and ingame name \""+list[i].getName()+"\" (slot "+i+").");
-			}
+			RotaryCraft.logger.log("ROTARYCRAFT: Registering achievement "+list[i].name()+" with ID "+RotaryCraft.achievements[i].statId+" and ingame name \""+list[i].getName()+"\" (slot "+i+").");
 		}
 		AchievementPage.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));
 	}

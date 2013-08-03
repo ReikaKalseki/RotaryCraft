@@ -28,7 +28,6 @@ import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockGravity;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -229,8 +228,8 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 			return false;
 		if (par5Random.nextInt(4) > 0)
 			return false;
-		if (ConfigRegistry.JUNGLECUTTER.getState())
-			return true;
+		//if (ConfigRegistry.JUNGLECUTTER.getState())
+		//	return true;
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		if ((biome == BiomeGenBase.jungle || biome == BiomeGenBase.jungleHills) && (meta == 3 || meta == 7 || meta == 11 /*|| meta == 0 || meta == 4 || meta == 8*/) && y > 64) // If jungle biome, jungle/oak leaves, and on the surface

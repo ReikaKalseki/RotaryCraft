@@ -7,8 +7,8 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.API;
+package Reika.RotaryCraft.TileEntities;
 
-public class MachineInteracter { //for things like getMachine, isMachine...
+public class TileEntityUpDigger {
 
 }

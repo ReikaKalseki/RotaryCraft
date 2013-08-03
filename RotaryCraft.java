@@ -28,7 +28,9 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
-import Reika.DragonAPI.Instantiable.ThaumOreHandler;
+import Reika.DragonAPI.Instantiable.ModLogger;
+import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -150,6 +152,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, BlockRegistry.blockList, ItemRegistry.itemList, ExtraConfigIDs.idList, 0);
 
 	public static ThaumOreHandler thaumOre;
+	public static DartOreHandler dartOre;
+	public static ModLogger logger;
 
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
@@ -170,6 +174,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		config.initProps(evt);
 		proxy.registerSounds();
+
+		logger = new ModLogger(ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState());
 
 		this.setupClassFiles();
 

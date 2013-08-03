@@ -60,25 +60,26 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		if (tree.isEmpty() && this.hasWood()) {
 			int woodId = world.getBlockId(editx, edity, editz);
 			int woodMeta = world.getBlockMetadata(editx, edity, editz);
-			tree.addTree(world, editx, edity, editz, woodId, woodMeta);
+			tree.addGenerousTree(world, editx, edity, editz, 5);
 		}
 		//ReikaJavaLibrary.pConsole(tree);
 		int size = tree.getSize();
 		for (int i = 0; i < size; i++) {
 			int[] xyz = tree.getNthBlock(i);
-			int dropid = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			int drop = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 			int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Block dropBlock = Block.blocksList[drop];
 			if (ConfigRegistry.INSTACUT.getState()) {
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
-				ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, new ItemStack(dropid, 1, dropmeta));
+				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 			}
 			else {
 				if (xyz[0] == editx && xyz[1] == edity && xyz[2] == editz) {
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
-					ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, new ItemStack(dropid, 1, dropmeta));
+					ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				}
 				else {
-					EntityFallingSand e = new EntityFallingSand(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, dropid, dropmeta);
+					EntityFallingSand e = new EntityFallingSand(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, drop, dropmeta);
 					e.fallTime = -2000;
 					e.shouldDropItem = false;
 					if (!world.isRemote) {

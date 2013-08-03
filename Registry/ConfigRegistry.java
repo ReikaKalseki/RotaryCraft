@@ -20,13 +20,14 @@ public enum ConfigRegistry implements ConfigList {
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", false),
 	INSTACUT("Instant Woodcutter", false),
-	JUNGLECUTTER("Unlimited Jungle Tree Felling", false),
+	//JUNGLECUTTER("Unlimited Jungle Tree Felling", false),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
 	//OREDICT("Ore Dictionary Interchangeability", true),
 	LOGLOADING("Console Loading Info", true),
 	LOCKMACHINES("Owner-Only Machine Use", false),
 	//SIUNITS("SI Metric Units", true),
+	MACHINEVOLUME("Machine Volume Multiplier", 1.0F),
 	FLOODLIGHTRANGE("Max Floodlight Range", 128),
 	HEATRAYRANGE("Max Heat Ray Range", 128),
 	BRIDGERANGE("Max Bridge Range", 128),
@@ -50,6 +51,7 @@ public enum ConfigRegistry implements ConfigList {
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
+	private float defaultFloat;
 	private Class type;
 	private boolean isLocked;
 
@@ -74,12 +76,22 @@ public enum ConfigRegistry implements ConfigList {
 		type = int.class;
 	}
 
+	private ConfigRegistry(String l, float d) {
+		label = l;
+		defaultFloat = d;
+		type = float.class;
+	}
+
 	public boolean isBoolean() {
 		return type == boolean.class;
 	}
 
 	public boolean isNumeric() {
 		return type == int.class;
+	}
+
+	public boolean isDecimal() {
+		return type == float.class;
 	}
 
 	public Class getPropertyType() {
@@ -90,6 +102,12 @@ public enum ConfigRegistry implements ConfigList {
 		if (!this.isNumeric())
 			throw new RegistrationException(RotaryCraft.instance, "Config Property \""+this.getLabel()+"\" is not numerical!");
 		return config.get("Control Setup", this.getLabel(), defaultValue).getInt();
+	}
+
+	public float setDecimal(Configuration config) {
+		if (!this.isDecimal())
+			throw new RegistrationException(RotaryCraft.instance, "Config Property \""+this.getLabel()+"\" is not decimal!");
+		return (float)config.get("Control Setup", this.getLabel(), defaultFloat).getDouble(defaultFloat);
 	}
 
 	public String getLabel() {
@@ -110,6 +128,10 @@ public enum ConfigRegistry implements ConfigList {
 
 	public int getValue() {
 		return (Integer)RotaryCraft.config.getControl(this.ordinal());
+	}
+
+	public float getFloat() {
+		return (Float)RotaryCraft.config.getControl(this.ordinal());
 	}
 
 }

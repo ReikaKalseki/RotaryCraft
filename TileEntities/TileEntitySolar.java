@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -25,7 +26,6 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector {
@@ -139,7 +139,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			return;
 		if (solarBlocks.isEmpty()) {
 			lightMultiplier = 0;
-			solarBlocks.recursiveFill(world, x, y, z, this.getTileEntityBlockID());
+			solarBlocks.recursiveAdd(world, x, y, z, this.getTileEntityBlockID());
 			numberMirrors = solarBlocks.getSize();
 			while (solarBlocks.getSize() > 0) {
 				int[] xyz = solarBlocks.getNextAndMoveOn();

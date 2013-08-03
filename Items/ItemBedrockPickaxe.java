@@ -86,11 +86,20 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack block = new ItemStack(id, 1, meta);
-		if (APIRegistry.THAUMCRAFT.conditionsMet() && RotaryCraft.thaumOre.isThaumOre(block) && ConfigRegistry.MODORES.getState()) {
+		if (APIRegistry.THAUMCRAFT.conditionsMet() && RotaryCraft.thaumOre.isThaumOre(block) && ConfigRegistry.MODORES.getState() && RotaryCraft.thaumOre.isShardOre(block)) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnInfusedDropParticles(world, x, y, z, RotaryCraft.thaumOre.oreID);
+				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, RotaryCraft.thaumOre.oreID);
+			}
+			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
+			return true;
+		}
+		if (APIRegistry.DARTCRAFT.conditionsMet() && RotaryCraft.dartOre.isDartOre(block) && ConfigRegistry.MODORES.getState()) {
+			world.setBlock(x, y, z, 0);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, RotaryCraft.dartOre.oreID);
 			}
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;

@@ -20,14 +20,14 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.Instantiable.ThaumOreHandler;
 import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
@@ -41,13 +41,11 @@ public final class OreForcer {
 					force(APIRegistry.apiList[i]);
 				}
 				catch (NullPointerException e) {
-					if (ConfigRegistry.LOGLOADING.getState())
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
+					RotaryCraft.logger.log("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
 					e.printStackTrace();
 				}
 				catch (ClassCastException e) {
-					if (ConfigRegistry.LOGLOADING.getState())
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
+					RotaryCraft.logger.log("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
 					e.printStackTrace();
 				}/*
 				catch (IOException e) {
@@ -56,18 +54,15 @@ public final class OreForcer {
 					e.printStackTrace();
 				}*/
 				catch (ArrayIndexOutOfBoundsException e) {
-					if (ConfigRegistry.LOGLOADING.getState())
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
+					RotaryCraft.logger.log("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
 					e.printStackTrace();
 				}
 				catch (IndexOutOfBoundsException e) {
-					if (ConfigRegistry.LOGLOADING.getState())
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
+					RotaryCraft.logger.log("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
 					e.printStackTrace();
 				}
 				catch (IllegalArgumentException e) {
-					if (ConfigRegistry.LOGLOADING.getState())
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
+					RotaryCraft.logger.log("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
 					e.printStackTrace();
 				}
 			}
@@ -96,8 +91,7 @@ public final class OreForcer {
 	}
 
 	private static void force(APIRegistry api) {
-		if (ConfigRegistry.LOGLOADING.getState())
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forcing compatibility with "+api.getModLabel());
+		RotaryCraft.logger.log("ROTARYCRAFT: Forcing compatibility with "+api.getModLabel());
 		switch(api) {
 		case APPLIEDENERGISTICS:
 			intercraftQuartz();
@@ -133,6 +127,43 @@ public final class OreForcer {
 			break;
 		case MINEFACTORY:
 			break;
+		case DARTCRAFT:
+			registerDart();
+			break;
+		}
+	}
+
+	private static void registerDart() {
+		try {
+			Class block = Class.forName("bluedart.block.DartBlock");
+			Class item = Class.forName("bluedart.item.DartItem");
+			Field ore = block.getField("powerOre");
+			Field force = item.getField("gemForce");
+			Block powerOre = (Block)ore.get(null);
+			ItemStack gem = new ItemStack((Item)force.get(null));
+			GameRegistry.addShapelessRecipe(gem, ItemStacks.getModOreIngot(ModOreList.FORCE));
+			RotaryCraft.logger.log("ROTARYCRAFT: RotaryCraft force gems can now be crafted into DartCraft force gems!");
+			OreDictionary.registerOre(ModOreList.FORCE.getOreDictNames()[0], powerOre);
+			RotaryCraft.logger.log("ROTARYCRAFT: Power ore registered to ore dictionary!");
+			RotaryCraft.dartOre = new DartOreHandler(powerOre.blockID);
+		}
+		catch (ClassNotFoundException e) {
+			RotaryCraft.logger.log("ROTARYCRAFT: DartCraft Item class not found! Cannot read its items for compatibility forcing!");
+		}
+		catch (NoSuchFieldException e) {
+			RotaryCraft.logger.log("ROTARYCRAFT: DartCraft item field not found! "+e.getMessage());
+		}
+		catch (SecurityException e) {
+			RotaryCraft.logger.log("ROTARYCRAFT: Cannot read DartCraft items (Security Exception)! Force not convertible!"+e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e) {
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal argument for reading DartCraft items!");
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal access exception for reading DartCraft items!");
+			e.printStackTrace();
 		}
 	}
 
@@ -142,30 +173,24 @@ public final class OreForcer {
 			Field item = mf.getField("MFFSitemForcicium");
 			ItemStack forc = new ItemStack((Item)item.get(null));
 			GameRegistry.addShapelessRecipe(forc, ItemStacks.getModOreIngot(ModOreList.MONAZIT));
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: RotaryCraft monazit can now be crafted into MFFS forcicium!");
+			RotaryCraft.logger.log("ROTARYCRAFT: RotaryCraft monazit can now be crafted into MFFS forcicium!");
 		}
 		catch (ClassNotFoundException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: MFFS Item class not found! Cannot read its items for compatibility forcing!");
+			RotaryCraft.logger.log("ROTARYCRAFT: MFFS Item class not found! Cannot read its items for compatibility forcing!");
 		}
 		catch (NoSuchFieldException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: MFFS item field not found! "+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: MFFS item field not found! "+e.getMessage());
 		}
 		catch (SecurityException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read MFFS items (Security Exception)! Monazit not convertible!"+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Cannot read MFFS items (Security Exception)! Monazit not convertible!"+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IllegalArgumentException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading MFFS items!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal argument for reading MFFS items!");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading MFFS items!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal access exception for reading MFFS items!");
 			e.printStackTrace();
 		}
 	}
@@ -176,30 +201,24 @@ public final class OreForcer {
 			Field item = ae.getField("matQuartz");
 			ItemStack quartz = (ItemStack)item.get(null);
 			GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
+			RotaryCraft.logger.log("ROTARYCRAFT: RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
 		}
 		catch (ClassNotFoundException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: AppliedEnergistics Item class not found! Cannot read its items for compatibility forcing!");
+			RotaryCraft.logger.log("ROTARYCRAFT: AppliedEnergistics Item class not found! Cannot read its items for compatibility forcing!");
 		}
 		catch (NoSuchFieldException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: AppliedEnergistics item field not found! "+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: AppliedEnergistics item field not found! "+e.getMessage());
 		}
 		catch (SecurityException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read AppliedEnergistics items (Security Exception)! Certus Quartz not convertible!"+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Cannot read AppliedEnergistics items (Security Exception)! Certus Quartz not convertible!"+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IllegalArgumentException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading AppliedEnergistics items!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal argument for reading AppliedEnergistics items!");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading AppliedEnergistics items!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal access exception for reading AppliedEnergistics items!");
 			e.printStackTrace();
 		}
 	}
@@ -211,30 +230,24 @@ public final class OreForcer {
 			Item item = (Item)apa.get(null);
 			ItemStack apatite = new ItemStack(item.itemID, 1, 0);
 			GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: RotaryCraft apatite can now be crafted into Forestry apatite!");
+			RotaryCraft.logger.log("ROTARYCRAFT: RotaryCraft apatite can now be crafted into Forestry apatite!");
 		}
 		catch (ClassNotFoundException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forestry Config class not found! Cannot read its items for compatibility forcing!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Forestry Config class not found! Cannot read its items for compatibility forcing!");
 		}
 		catch (NoSuchFieldException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Forestry config field not found! "+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Forestry config field not found! "+e.getMessage());
 		}
 		catch (SecurityException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read Forestry config (Security Exception)! Apatite not convertible!"+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Cannot read Forestry config (Security Exception)! Apatite not convertible!"+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IllegalArgumentException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading Forestry config!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal argument for reading Forestry config!");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading Forestry config!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal access exception for reading Forestry config!");
 			e.printStackTrace();
 		}
 	}
@@ -252,8 +265,7 @@ public final class OreForcer {
 
 			RotaryCraft.thaumOre = new ThaumOreHandler(oreBlock.blockID, oreItem.itemID, oreShard.itemID);
 
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft ores are being registered to Ore Dictionary!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Thaumcraft ores are being registered to Ore Dictionary!");
 
 			for (int i = 0; i < ModOreList.oreList.length; i++) {
 				ModOreList o = ModOreList.oreList[i];
@@ -262,34 +274,27 @@ public final class OreForcer {
 					OreDictionary.registerOre(o.getProductLabel(), RotaryCraft.thaumOre.getItem(o));
 					o.reloadOreList();
 					GameRegistry.addShapelessRecipe(RotaryCraft.thaumOre.getItem(o), ItemStacks.getModOreIngot(o));
-					if (ConfigRegistry.LOGLOADING.getState()) {
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: Registering "+o.getName());
-						ReikaJavaLibrary.pConsole("ROTARYCRAFT: "+o.getName()+" can now be crafted with RotaryCraft equivalents!");
-					}
+					RotaryCraft.logger.log("ROTARYCRAFT: Registering "+o.getName());
+					RotaryCraft.logger.log("ROTARYCRAFT: "+o.getName()+" can now be crafted with RotaryCraft equivalents!");
 				}
 			}
 		}
 		catch (ClassNotFoundException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft Config class not found! Cannot read its items for ore dictionary registration!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Thaumcraft Config class not found! Cannot read its items for ore dictionary registration!");
 		}
 		catch (NoSuchFieldException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Thaumcraft config field not found! "+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Thaumcraft config field not found! "+e.getMessage());
 		}
 		catch (SecurityException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Cannot read Thaumcraft config (Security Exception)! Ores not registered!"+e.getMessage());
+			RotaryCraft.logger.log("ROTARYCRAFT: Cannot read Thaumcraft config (Security Exception)! Ores not registered!"+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IllegalArgumentException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal argument for reading Thaumcraft config!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal argument for reading Thaumcraft config!");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Illegal access exception for reading Thaumcraft config!");
+			RotaryCraft.logger.log("ROTARYCRAFT: Illegal access exception for reading Thaumcraft config!");
 			e.printStackTrace();
 		}
 	}

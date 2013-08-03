@@ -74,6 +74,8 @@ public class ItemStunGun extends ItemChargedTool {
 			return false;
 		if (world.isRemote)
 			return false;
+		if (is.getItemDamage() < 8192)
+			return false;
 		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
 		//ReikaChatHelper.write(mov);
 		//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);

@@ -48,210 +48,148 @@ public class RotaryRecipes {
 	}
 
 	private static void addMachines() {
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.COMPACTOR.getCraftedProduct(), new Object[]{
-			"SPS", "PGP", "#P#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'P', ItemStacks.presshead, 'G', ItemStacks.gearunit16});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FAN.getCraftedProduct(), new Object[]{
-			"SSS", "SIS", "#G#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'G', ItemStacks.gearunit});
+		MachineRegistry.COMPACTOR.addCrafting(new Object[]{"SPS", "PGP", "#P#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'P', ItemStacks.presshead, 'G', ItemStacks.gearunit16});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.AEROSOLIZER.getCraftedProduct(), new Object[]{
-			"BRB", "RIR", "BRB", 'B', ItemStacks.basepanel, 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'I', ItemStacks.impeller});
+		MachineRegistry.FAN.addCrafting(new Object[]{"SSS", "SIS", "#G#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'G', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.HEATRAY.getCraftedProduct(), new Object[]{
-			"OOO", "BLb", "#P#", '#', ItemStacks.basepanel, 'B', ItemStacks.bulb, 'b', ItemStacks.barrel, 'P', ItemStacks.power, 'L', ItemStacks.lens, 'O', Block.obsidian});
+		MachineRegistry.AEROSOLIZER.addCrafting(new Object[]{"BRB", "RIR", "BRB", 'B', ItemStacks.basepanel, 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'I', ItemStacks.impeller});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FLOODLIGHT.getCraftedProduct(), new Object[]{
-			"ISO", "Ggd", "I#O", '#', ItemStacks.basepanel, 'I', Item.ingotIron, 'd', Item.ingotGold, 'S', ItemStacks.steelingot, 'G', Block.glass, 'g', Block.glowStone, 'O', Block.obsidian});
+		MachineRegistry.HEATRAY.addCrafting(new Object[]{"OOO", "BLb", "#P#", '#', ItemStacks.basepanel, 'B', ItemStacks.bulb, 'b', ItemStacks.barrel, 'P', ItemStacks.power, 'L', ItemStacks.lens, 'O', Block.obsidian});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(RotaryNames.shaftItemNames.length-1), new Object[]{
-			" S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem}); //Shaft cross
+		MachineRegistry.FLOODLIGHT.addCrafting(new Object[]{"ISO", "Ggd", "I#O", '#', ItemStacks.basepanel, 'I', Item.ingotIron, 'd', Item.ingotGold, 'S', ItemStacks.steelingot, 'G', Block.glass, 'g', Block.glowStone, 'O', Block.obsidian});
 
+		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.shaftItemNames.length-1, new Object[]{" S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem}); //Shaft cross
 
-		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), new Object[]{
-			"SSS", "SrS", "SSS", 'r', Item.redstone, 'S', Block.stoneBrick});
+		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), new Object[]{"SSS", "SrS", "SSS", 'r', Item.redstone, 'S', Block.stoneBrick});
 
-		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), new Object[]{
-			" C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab});
+		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), new Object[]{" C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BEVELGEARS.getCraftedProduct(), new Object[]{
-			"ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit});
+		MachineRegistry.BEVELGEARS.addCrafting(new Object[]{"ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPLITTER.getCraftedProduct(), new Object[]{
-			"ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit});
+		MachineRegistry.SPLITTER.addCrafting(new Object[]{"ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.CLUTCH.getCraftedProduct(), new Object[]{
-			"S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.CLUTCH.getCraftedProduct(), new Object[]{
-			"S", "R", 'S', new ItemStack(RotaryCraft.shaftitems, 1, 2), 'R', Item.redstone});
+		MachineRegistry.CLUTCH.addCrafting(new Object[]{"S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone});
+		MachineRegistry.CLUTCH.addCrafting(new Object[]{"S", "R", 'S', MachineRegistry.SHAFT.getCraftedMetadataProduct(2), 'R', Item.redstone});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.DYNAMOMETER.getCraftedProduct(), new Object[]{
-			" S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl});
+		MachineRegistry.DYNAMOMETER.addCrafting(new Object[]{" S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BEDROCKBREAKER.getCraftedProduct(), new Object[]{
-			"BDO", "BSO", "BDO", 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel});
+		MachineRegistry.BEDROCKBREAKER.addCrafting(new Object[]{"BDO", "BSO", "BDO", 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FERMENTER.getCraftedProduct(), new Object[]{
-			"BPB", "PIP", "BPB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel});
+		MachineRegistry.FERMENTER.addCrafting(new Object[]{"BPB", "PIP", "BPB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.GRINDER.getCraftedProduct(), new Object[]{
-			"B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw});
+		MachineRegistry.GRINDER.addCrafting(new Object[]{"B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.RESERVOIR.getCraftedProduct(), new Object[]{
-			"B B", "B B", "BBB", 'B', ItemStacks.basepanel});
+		MachineRegistry.RESERVOIR.addCrafting(new Object[]{"B B", "B B", "BBB", 'B', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FIREWORK.getCraftedProduct(), new Object[]{
-			"BEB", "BDB", "BRB", 'B', ItemStacks.basepanel, 'R', Item.redstone, 'E', Item.eyeOfEnder, 'D', Block.dispenser});
+		MachineRegistry.FIREWORK.addCrafting(new Object[]{"BEB", "BDB", "BRB", 'B', ItemStacks.basepanel, 'R', Item.redstone, 'E', Item.eyeOfEnder, 'D', Block.dispenser});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.AUTOBREEDER.getCraftedProduct(), new Object[]{
-			"B B", "BBB", 'B', ItemStacks.basepanel});
+		MachineRegistry.AUTOBREEDER.addCrafting(new Object[]{"B B", "BBB", 'B', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FRACTIONATOR.getCraftedProduct(), new Object[]{
-			"GFG", "GIG", "GPG", 'P', ItemStacks.basepanel, 'I', ItemStacks.mixer, 'G', Item.ingotGold, 'F', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2)});
+		MachineRegistry.FRACTIONATOR.addCrafting(new Object[]{"GFG", "GIG", "GPG", 'P', ItemStacks.basepanel, 'I', ItemStacks.mixer, 'G', Item.ingotGold, 'F', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2)});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BAITBOX.getCraftedProduct(), new Object[]{
-			"BBB", "BAB", "BBB", 'B', Block.fenceIron, 'A', MachineRegistry.AUTOBREEDER.getCraftedProduct()});
+		MachineRegistry.BAITBOX.addCrafting(new Object[]{"BBB", "BAB", "BBB", 'B', Block.fenceIron, 'A', MachineRegistry.AUTOBREEDER.getCraftedProduct()});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.WINDER.getCraftedProduct(), new Object[]{
-			" ss", " hg", "ppp", 'h', ItemStacks.shaftitem, 's', ItemStacks.steelingot, 'g', ItemStacks.gearunit, 'p', ItemStacks.basepanel});
+		MachineRegistry.WINDER.addCrafting(new Object[]{" ss", " hg", "ppp", 'h', ItemStacks.shaftitem, 's', ItemStacks.steelingot, 'g', ItemStacks.gearunit, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ECU.getCraftedProduct(), new Object[]{
-			"IPI", "ICI", "IRI", 'I', ItemStacks.steelingot, 'P', ItemStacks.power, 'C', ItemStacks.pcb, 'R', Item.redstone});
+		MachineRegistry.ECU.addCrafting(new Object[]{"IPI", "ICI", "IRI", 'I', ItemStacks.steelingot, 'P', ItemStacks.power, 'C', ItemStacks.pcb, 'R', Item.redstone});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.WOODCUTTER.getCraftedProduct(), new Object[]{
-			"IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit});
+		MachineRegistry.WOODCUTTER.addCrafting(new Object[]{"IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.VACUUM.getCraftedProduct(), new Object[]{
-			"SIS", "ICI", "SIS", 'C', Block.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller});
+		MachineRegistry.VACUUM.addCrafting(new Object[]{"SIS", "ICI", "SIS", 'C', Block.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BORER.getCraftedProduct(), new Object[]{
-			"SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb});
+		MachineRegistry.BORER.addCrafting(new Object[]{"SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(MachineRegistry.SPRINKLER.getCraftedProduct(), 4), new Object[]{
-			" s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'i', ItemStacks.impeller});
+		MachineRegistry.SPRINKLER.addSizedCrafting(4, new Object[]{" s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'i', ItemStacks.impeller});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPAWNERCONTROLLER.getCraftedProduct(), new Object[]{
-			"PCP", "OGO", "g g", 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'g', Block.glowStone, 'C', ItemStacks.pcb});
+		MachineRegistry.SPAWNERCONTROLLER.addCrafting(new Object[]{"PCP", "OGO", "g g", 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'g', Block.glowStone, 'C', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PLAYERDETECTOR.getCraftedProduct(), new Object[]{
-			"LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', ItemStacks.radar, 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold});
+		MachineRegistry.PLAYERDETECTOR.addCrafting(new Object[]{"LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', ItemStacks.radar, 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.OBSIDIAN.getCraftedProduct(), new Object[]{
-			"SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
+		MachineRegistry.OBSIDIAN.addCrafting(new Object[]{"SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.HEATER.getCraftedProduct(), new Object[]{
-			"sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Block.fenceIron, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor});
+		MachineRegistry.HEATER.addCrafting(new Object[]{"sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Block.fenceIron, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.GPR.getCraftedProduct(), new Object[]{
-			"SsS", "PCP", "SRS", 'S', ItemStacks.steelingot, 's', ItemStacks.screen, 'P', ItemStacks.basepanel, 'R', ItemStacks.radar, 'C', ItemStacks.pcb});
+		MachineRegistry.GPR.addCrafting(new Object[]{"SsS", "PCP", "SRS", 'S', ItemStacks.steelingot, 's', ItemStacks.screen, 'P', ItemStacks.basepanel, 'R', ItemStacks.radar, 'C', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PULSEJET.getCraftedProduct(), new Object[]{
-			"OCD", "PcO", "BBB", 'B', ItemStacks.basepanel, 'O', Block.obsidian, 'C', ItemStacks.compressor, 'D', ItemStacks.diffuser, 'c', ItemStacks.combustor, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
+		MachineRegistry.PULSEJET.addCrafting(new Object[]{"OCD", "PcO", "BBB", 'B', ItemStacks.basepanel, 'O', Block.obsidian, 'C', ItemStacks.compressor, 'D', ItemStacks.diffuser, 'c', ItemStacks.combustor, 'P', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1)});
 
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(MachineRegistry.EXTRACTOR.getCraftedProduct(), new Object[]{
-			"SWS", "siD", "PIN", 'D', ItemStacks.drill, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.shaftitem, 's', Block.stone, 'i', ItemStacks.impeller, 'N', Block.netherrack, 'W', ExpandedOreRecipe.getWoodList()}));
+		MachineRegistry.EXTRACTOR.addRecipe(new ExpandedOreRecipe(MachineRegistry.EXTRACTOR.getCraftedProduct(), new Object[]{"SWS", "siD", "PIN", 'D', ItemStacks.drill, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.shaftitem, 's', Block.stone, 'i', ItemStacks.impeller, 'N', Block.netherrack, 'W', ExpandedOreRecipe.getWoodList()}));
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.LIGHTBRIDGE.getCraftedProduct(), new Object[]{
-			"GgG", "BgS", "BBD", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Item.diamond, 'G', Item.ingotGold, 'g', Block.glass});
+		MachineRegistry.LIGHTBRIDGE.addCrafting(new Object[]{"GgG", "BgS", "BBD", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Item.diamond, 'G', Item.ingotGold, 'g', Block.glass});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PILEDRIVER.getCraftedProduct(), new Object[]{
-			"PGP", "gFg", "PDP", 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit8, 'g', ItemStacks.shaftitem, 'F', ItemStacks.flywheelcore3, 'D', ItemStacks.drill});
+		MachineRegistry.PILEDRIVER.addCrafting(new Object[]{"PGP", "gFg", "PDP", 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit8, 'g', ItemStacks.shaftitem, 'F', ItemStacks.flywheelcore3, 'D', ItemStacks.drill});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PUMP.getCraftedProduct(), new Object[]{
-			"SGS", "pIp", "PpP", 'P', ItemStacks.basepanel, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'I', ItemStacks.impeller, 'G', Block.thinGlass, 'S', ItemStacks.steelingot});
+		MachineRegistry.PUMP.addCrafting(new Object[]{"SGS", "pIp", "PpP", 'P', ItemStacks.basepanel, 'p', new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1), 'I', ItemStacks.impeller, 'G', Block.thinGlass, 'S', ItemStacks.steelingot});
 
-		//WorktableRecipes.getInstance().addRecipe(MachineRegistry.RAILGUN.getCraftedProduct(), new Object[]{
-		//	"LLS", "LLG", "SGB", 'L', ItemStacks.lim, 'S', ItemStacks.steelingot, 'G', ItemStacks.gearunit, 'B', ItemStacks.basepanel});
+		MachineRegistry.MOBRADAR.addCrafting(new Object[]{" rs", " g ", "pcp", 'r', ItemStacks.radar, 's', ItemStacks.screen, 'c', ItemStacks.pcb, 'g', ItemStacks.gearunit, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.MOBRADAR.getCraftedProduct(), new Object[]{
-			" rs", " g ", "pcp", 'r', ItemStacks.radar, 's', ItemStacks.screen, 'c', ItemStacks.pcb, 'g', ItemStacks.gearunit, 'p', ItemStacks.basepanel});
+		MachineRegistry.TNTCANNON.addCrafting(new Object[]{"sgc", "pcp", "pCr", 'g', Block.blockRedstone, 'C', ItemStacks.compressor, 'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'r', Block.chest, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.TNTCANNON.getCraftedProduct(), new Object[]{
-			"sgc", "pcp", "pCr", 'g', Block.blockRedstone, 'C', ItemStacks.compressor, 'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'r', Block.chest, 'p', ItemStacks.basepanel});
+		MachineRegistry.SONICWEAPON.addCrafting(new Object[]{"psp", "sts", "psp", 't', ItemStacks.turbine, 's', ItemStacks.sonar, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SONICWEAPON.getCraftedProduct(), new Object[]{
-			"psp", "sts", "psp", 't', ItemStacks.turbine, 's', ItemStacks.sonar, 'p', ItemStacks.basepanel});
+		MachineRegistry.FORCEFIELD.addCrafting(new Object[]{"lnl", "ddd", "sgs", 'd', Item.diamond, 's', ItemStacks.basepanel, 'n', Item.netherStar, 'g', Item.ingotGold, 'l', ReikaItemHelper.lapisDye});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FORCEFIELD.getCraftedProduct(), new Object[]{
-			"lnl", "ddd", "sgs", 'd', Item.diamond, 's', ItemStacks.basepanel, 'n', Item.netherStar, 'g', Item.ingotGold, 'l', ReikaItemHelper.lapisDye});
+		MachineRegistry.MUSICBOX.addCrafting(new Object[]{"sns", "ncn", "sns", 'n', Block.music, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.MUSICBOX.getCraftedProduct(), new Object[]{
-			"sns", "ncn", "sns", 'n', Block.music, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb});
+		MachineRegistry.WEATHERCONTROLLER.addCrafting(new Object[]{"s s", "sls", "pcp", 'l', Block.daylightSensor, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.WEATHERCONTROLLER.getCraftedProduct(), new Object[]{
-			"s s", "sls", "pcp", 'l', Block.daylightSensor, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel});
+		MachineRegistry.MOBHARVESTER.addCrafting(new Object[]{"shs", "sps", 'h', MachineRegistry.HEATER.getCraftedProduct(), 'p', Item.enderPearl, 's', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.MOBHARVESTER.getCraftedProduct(), new Object[]{
-			"shs", "sps", 'h', MachineRegistry.HEATER.getCraftedProduct(), 'p', Item.enderPearl, 's', ItemStacks.basepanel});
+		MachineRegistry.PROJECTOR.addCrafting(new Object[]{"sss", "gcl", "ppp", 'c', ItemStacks.pcb, 's', ItemStacks.steelingot, 'g', Block.glass, 'l', Block.glowStone, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PROJECTOR.getCraftedProduct(), new Object[]{
-			"sss", "gcl", "ppp", 'c', ItemStacks.pcb, 's', ItemStacks.steelingot, 'g', Block.glass, 'l', Block.glowStone, 'p', ItemStacks.basepanel});
+		MachineRegistry.REFRESHER.addCrafting(new Object[]{"ses", "epe", "ses", 'p', Item.enderPearl, 's', ItemStacks.steelingot, 'e', Block.whiteStone});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.REFRESHER.getCraftedProduct(), new Object[]{
-			"ses", "epe", "ses", 'p', Item.enderPearl, 's', ItemStacks.steelingot, 'e', Block.whiteStone});
+		MachineRegistry.CAVESCANNER.addCrafting(new Object[]{"sps", "pcp", "sns", 'n', ItemStacks.sonar, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.CAVESCANNER.getCraftedProduct(), new Object[]{
-			"sps", "pcp", "sns", 'n', ItemStacks.sonar, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel});
+		MachineRegistry.SCALECHEST.addCrafting(new Object[]{"sss", "scs", "sss", 'c', Block.chest, 's', ItemStacks.steelingot});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SCALECHEST.getCraftedProduct(), new Object[]{
-			"sss", "scs", "sss", 'c', Block.chest, 's', ItemStacks.steelingot});
+		MachineRegistry.SPILLER.addCrafting(new Object[]{" p ", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPILLER.getCraftedProduct(), new Object[]{
-			" p ", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot});
+		MachineRegistry.SMOKEDETECTOR.addCrafting(new Object[]{" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Item.redstone, 'N', Block.music});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SMOKEDETECTOR.getCraftedProduct(), new Object[]{
-			" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Item.redstone, 'N', Block.music});
+		MachineRegistry.IGNITER.addCrafting(new Object[]{"OGO", "GCG", "OGO", 'O', Block.obsidian, 'G', Item.ingotGold, 'C', ItemStacks.combustor});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.IGNITER.getCraftedProduct(), new Object[]{
-			"OGO", "GCG", "OGO", 'O', Block.obsidian, 'G', Item.ingotGold, 'C', ItemStacks.combustor});
+		MachineRegistry.CONTAINMENT.addCrafting(new Object[]{"lnl", "ddd", "sgs", 'd', Item.diamond, 's', ItemStacks.basepanel, 'n', Item.netherStar, 'g', Item.ingotGold, 'l', ReikaItemHelper.purpleDye});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.CONTAINMENT.getCraftedProduct(), new Object[]{
-			"lnl", "ddd", "sgs", 'd', Item.diamond, 's', ItemStacks.basepanel, 'n', Item.netherStar, 'g', Item.ingotGold, 'l', ReikaItemHelper.purpleDye});
+		MachineRegistry.MAGNETIZER.addCrafting(new Object[]{"p p", "gmg", "prp", 'r', Item.redstone, 'p', ItemStacks.basepanel, 'm', ItemStacks.mount, 'g', ItemStacks.goldcoil});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.MAGNETIZER.getCraftedProduct(), new Object[]{
-			"p p", "gmg", "prp", 'r', Item.redstone, 'p', ItemStacks.basepanel, 'm', ItemStacks.mount, 'g', ItemStacks.goldcoil});
+		MachineRegistry.FREEZEGUN.addCrafting(new Object[]{" ss", "iig", "sgp", 'i', Block.ice, 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'g', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FREEZEGUN.getCraftedProduct(), new Object[]{
-			" ss", "iig", "sgp", 'i', Block.ice, 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'g', ItemStacks.gearunit});
+		MachineRegistry.SCREEN.addCrafting(new Object[]{"sss", "mcs", "ppp", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'm', ItemStacks.screen, 'c', ItemStacks.pcb});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SCREEN.getCraftedProduct(), new Object[]{
-			"sss", "mcs", "ppp", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'm', ItemStacks.screen, 'c', ItemStacks.pcb});
+		MachineRegistry.CCTV.addCrafting(new Object[]{" g ", "brs", " p ", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'b', Block.thinGlass, 'r', Item.redstone, 'g', Item.ingotGold});
 
-		//WorktableRecipes.getInstance().addRecipe(MachineRegistry.CCTV.getCraftedProduct(), new Object[]{
-		//	" g ", "brs", " p ", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'b', Block.thinGlass, 'r', Item.redstone, 'g', Item.ingotGold});
+		MachineRegistry.PURIFIER.addCrafting(new Object[]{"sbs", "prp", "sps", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'r', Item.redstone, 'b', Block.fenceIron});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.PURIFIER.getCraftedProduct(), new Object[]{
-			"sbs", "prp", "sps", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'r', Item.redstone, 'b', Block.fenceIron});
+		MachineRegistry.MIRROR.addCrafting(new Object[]{" m ", " g ", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'm', ItemStacks.mirror, 'g', ItemStacks.steelgear});
 
-		//WorktableRecipes.getInstance().addRecipe(MachineRegistry.MIRROR.getCraftedProduct(), new Object[]{
-		//	"GGG", "III", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'I', Item.ingotIron, 'G', Block.glass});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.MIRROR.getCraftedProduct(), new Object[]{
-			" m ", " g ", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'm', ItemStacks.mirror, 'g', ItemStacks.steelgear});
+		MachineRegistry.SOLARTOWER.addCrafting(new Object[]{"pPp", "iPi", "pPp", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'i', ReikaItemHelper.inksac});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SOLARTOWER.getCraftedProduct(), new Object[]{
-			"pPp", "iPi", "pPp", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'i', ReikaItemHelper.inksac});
+		MachineRegistry.RAILGUN.addCrafting(new Object[]{" H ", " A ", " B ", 'B', ItemStacks.railbase, 'A', ItemStacks.railaim, 'H', ItemStacks.railhead});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.RAILGUN.getCraftedProduct(), new Object[]{
-			" H ", " A ", " B ", 'B', ItemStacks.railbase, 'A', ItemStacks.railaim, 'H', ItemStacks.railhead});
+		MachineRegistry.LASERGUN.addCrafting(new Object[]{"CLB", "APG", " b ", 'b', ItemStacks.railbase, 'C', ItemStacks.bulb, 'L', ItemStacks.lens, 'P', ItemStacks.power, 'B', ItemStacks.barrel, 'A', ItemStacks.railaim, 'G', ItemStacks.gearunit});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.LASERGUN.getCraftedProduct(), new Object[]{
-			"CLB", "APG", " b ", 'b', ItemStacks.railbase, 'C', ItemStacks.bulb, 'L', ItemStacks.lens, 'P', ItemStacks.power, 'B', ItemStacks.barrel, 'A', ItemStacks.railaim, 'G', ItemStacks.gearunit});
+		MachineRegistry.ITEMCANNON.addCrafting(new Object[]{"s c", "pcp", "pCr", 'C', ItemStacks.compressor, 'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.gearunit, 'r', Block.chest, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ITEMCANNON.getCraftedProduct(), new Object[]{
-			"s c", "pcp", "pCr", 'C', ItemStacks.compressor, 'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.gearunit, 'r', Block.chest, 'p', ItemStacks.basepanel});
+		MachineRegistry.BLOCKCANNON.addCrafting(new Object[]{"s c", "pcp", "pCr", 'C', ItemStacks.compressor,  'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'r', Block.chest, 'p', ItemStacks.basepanel});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BLOCKCANNON.getCraftedProduct(), new Object[]{
-			"s c", "pcp", "pCr", 'C', ItemStacks.compressor,  'c', ItemStacks.screen, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'r', Block.chest, 'p', ItemStacks.basepanel});
+		MachineRegistry.FRICTION.addCrafting(new Object[]{"S  ", "Sss", "SPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FRICTION.getCraftedProduct(), new Object[]{
-			"S  ", "Sss", "SPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
+		MachineRegistry.LANDMINE.addCrafting(new Object[]{" P ", "RGR", "SIS", 'P', Block.pressurePlateStone, 'S', ItemStacks.steelingot, 'I', ItemStacks.igniter, 'R', Item.redstone, 'G', Item.ingotGold});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.LANDMINE.getCraftedProduct(), new Object[]{
-			" P ", "RGR", "SIS", 'P', Block.pressurePlateStone, 'S', ItemStacks.steelingot, 'I', ItemStacks.igniter, 'R', Item.redstone, 'G', Item.ingotGold});
+		MachineRegistry.BUCKETFILLER.addCrafting(new Object[]{"SPS", "PCP", "SPS", 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot, 'C', Block.chest});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.BUCKETFILLER.getCraftedProduct(), new Object[]{
-			"SPS", "PCP", "SPS", 'P', ItemStacks.pipe, 'S', ItemStacks.steelingot, 'C', Block.chest});
+		MachineRegistry.SPYCAM.addCrafting(new Object[]{"SCS", "PRP", "SGS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ItemStacks.pcb, 'G', Block.thinGlass, 'R', Item.redstone});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SPYCAM.getCraftedProduct(), new Object[]{
-			"SCS", "PRP", "SGS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ItemStacks.pcb, 'G', Block.thinGlass, 'R', Item.redstone});
+		MachineRegistry.COOLINGFIN.addCrafting(new Object[]{"SSS", "SSS", "PPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem});
+
+		MachineRegistry.SELFDESTRUCT.addCrafting(new Object[]{"STS", "TCs", "STS", 'T', Block.tnt, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
+
+		MachineRegistry.DISPLAY.addCrafting(new Object[]{"SES", "SCS", " P ", 'P', ItemStacks.basepanel, 'E', Item.enderPearl, 'S', ItemStacks.steelingot, 'C', ItemStacks.pcb});
+
+		MachineRegistry.COMPRESSOR.addCrafting(new Object[]{"SSS", " G ", "CPC", 'S', ItemStacks.steelingot, 'G', Block.glass, 'P', Block.pistonBase, 'C', ItemStacks.compressor});
+
+		MachineRegistry.PNEUENGINE.addCrafting(new Object[]{"ppS", "sT ", "PPP", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem, 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'T', ItemStacks.turbine});
 	}
 
 	private static void addCraftItems() {
@@ -431,14 +369,12 @@ public class RotaryRecipes {
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
 		if (ReikaJavaLibrary.doesClassExist("mods.PamHarvestCraft.PamHarvestCraft")) {
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: HarvestCraft found, not loading iron screwdriver recipe.");
+			RotaryCraft.logger.log("ROTARYCRAFT: HarvestCraft found, not loading iron screwdriver recipe.");
 		}
 		else {
 			GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
 				"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
-			if (ConfigRegistry.LOGLOADING.getState())
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: HarvestCraft not found, loading iron screwdriver recipe.");
+			RotaryCraft.logger.log("ROTARYCRAFT: HarvestCraft not found, loading iron screwdriver recipe.");
 		}
 
 		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
@@ -540,6 +476,7 @@ public class RotaryRecipes {
 
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaloredust);
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});
@@ -616,124 +553,80 @@ public class RotaryRecipes {
 
 	private static void addItemBlocks() {
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(0), new Object[]{
-			"SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear}); //Worm gear
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), new Object[]{
-			"BSB", "BSB", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing}); //CVT
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(2), new Object[]{
-			"BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil}); //Coil
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(0, new Object[]{"SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear}); //Worm gear
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, new Object[]{"BSB", "BSB", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing}); //CVT
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, new Object[]{"BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil}); //Coil
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(0), new Object[]{
-			"W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(1), new Object[]{
-			"W", "M", 'W', ItemStacks.flywheelcore2, 'M', ItemStacks.mount});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(2), new Object[]{
-			"W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(3), new Object[]{
-			"W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount});
+		MachineRegistry.FLYWHEEL.addMetaCrafting(0, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount});
+		MachineRegistry.FLYWHEEL.addMetaCrafting(1, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore2, 'M', ItemStacks.mount});
+		MachineRegistry.FLYWHEEL.addMetaCrafting(2, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount});
+		MachineRegistry.FLYWHEEL.addMetaCrafting(3, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount});
 
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{ //Wood shaft unit
-			"BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', Item.stick}));
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(1), new Object[]{ //Stone shaft unit
-			"sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(2), new Object[]{ //Steel shaft unit
-			"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(3), new Object[]{ //Diamond shaft unit
-			"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(4), new Object[]{ //Bedrock shaft unit
-			"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft});
+		MachineRegistry.SHAFT.addRecipe(new ExpandedOreRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{"BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', Item.stick}));
+		MachineRegistry.SHAFT.addMetaCrafting(1, new Object[]{"sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod});
+		MachineRegistry.SHAFT.addMetaCrafting(2, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem});
+		MachineRegistry.SHAFT.addMetaCrafting(3, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft});
+		MachineRegistry.SHAFT.addMetaCrafting(4, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft});
 
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.DC.ordinal()), new Object[]{
-			"SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.WIND.ordinal()), new Object[]{
-			"SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.STEAM.ordinal()), new Object[]{
-			"SSS", "CIs", "PGP", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', Item.ingotGold, 'C', ItemStacks.condenser});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.GAS.ordinal()), new Object[]{
-			"CgC", "SGs", "PIP", 'g', Item.ingotGold, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'C', ItemStacks.cylinder});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.AC.ordinal()), new Object[]{
-			"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.SPORT.ordinal()), new Object[]{
-			"CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.HYDRO.ordinal()), new Object[]{
-			"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.MICRO.ordinal()), new Object[]{
-			"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		WorktableRecipes.getInstance().addRecipe(MachineRegistry.ENGINE.getCraftedMetadataProduct(EnumEngineType.JET.ordinal()), new Object[]{
-			"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.DC.ordinal(), new Object[]{"SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.WIND.ordinal(), new Object[]{"SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.STEAM.ordinal(), new Object[]{"SSS", "CIs", "PGP", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', Item.ingotGold, 'C', ItemStacks.condenser});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.GAS.ordinal(), new Object[]{"CgC", "SGs", "PIP", 'g', Item.ingotGold, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'C', ItemStacks.cylinder});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.AC.ordinal(), new Object[]{"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.SPORT.ordinal(), new Object[]{"CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.HYDRO.ordinal(), new Object[]{"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.MICRO.ordinal(), new Object[]{"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.JET.ordinal(), new Object[]{"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{ //Hose
-			"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
-		WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.pipe, 16), new Object[]{ //Pipe
-			"S S", "S S", "S S", 'S', ItemStacks.steelingot});
-		WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.fuelline, 16), new Object[]{ //Fuel Line
-			"O O", "O O", "O O", 'O', Block.obsidian});
+		MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
+		MachineRegistry.PIPE.addSizedCrafting(16, new Object[]{"S S", "S S", "S S", 'S', ItemStacks.steelingot});
+		MachineRegistry.FUELLINE.addSizedCrafting(16, new Object[]{"O O", "O O", "O O", 'O', Block.obsidian});
 
 		ItemStack gear;
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(0));
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood2x}));
+		MachineRegistry.GEARBOX.addRecipe(new ExpandedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood2x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(5));
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood4x}));
+		MachineRegistry.GEARBOX.addRecipe(new ExpandedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood4x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(10));
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood8x}));
+		MachineRegistry.GEARBOX.addRecipe(new ExpandedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood8x}));
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(15));
-		WorktableRecipes.getInstance().addRecipe(new ExpandedOreRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood16x}));
+		MachineRegistry.GEARBOX.addRecipe(new ExpandedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', ExpandedOreRecipe.getWoodList(), 'G', ItemStacks.wood16x}));
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(1));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone2x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone2x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(6));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone4x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone4x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(11));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone8x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone8x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(16));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone16x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone16x});
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(2));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(7));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit4});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit4});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(12));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit8});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit8});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(17));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit16});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit16});
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(3));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond2x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond2x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(8));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond4x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond4x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(13));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond8x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond8x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(18));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond16x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond16x});
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(4));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock2x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock2x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(9));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock4x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock4x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(14));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock8x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock8x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(19));
-		WorktableRecipes.getInstance().addRecipe(gear, new Object[]{
-				"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock16x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock16x});
 	}
 
 	private static void addFurnace() {

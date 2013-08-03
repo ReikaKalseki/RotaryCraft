@@ -16,7 +16,6 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemLiquid;
@@ -32,7 +31,6 @@ import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Items.Placers.ItemBlockGravLeaves;
 import Reika.RotaryCraft.Items.Placers.ItemBlockGravLog;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
@@ -91,11 +89,11 @@ public class RotaryRegistration {
 	}
 
 	public static void instantiateMachines() {
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, ConfigRegistry.LOGLOADING.getState());
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, RotaryCraft.logger);
 	}
 
 	public static void instantiateItems() {
-		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, ConfigRegistry.LOGLOADING.getState());
+		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, RotaryCraft.logger);
 	}
 
 	public static void loadOreDictionary() {
@@ -108,8 +106,7 @@ public class RotaryRegistration {
 	}
 
 	public static void setupLiquids() {
-		if (ConfigRegistry.LOGLOADING.getState())
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading And Registering Liquids");
+		RotaryCraft.logger.log("ROTARYCRAFT: Loading And Registering Liquids");
 		RotaryCraft.jetFuel = new ItemLiquid(ExtraConfigIDs.JETFUEL.getValue()).setUnlocalizedName("jetfuel");
 		RotaryCraft.lubricant = new ItemLiquid(ExtraConfigIDs.LUBE.getValue()).setUnlocalizedName("lubricant");
 
@@ -128,8 +125,7 @@ public class RotaryRegistration {
 
 	@SideOnly(Side.CLIENT)
 	public static void setupLiquidIcons() {
-		if (ConfigRegistry.LOGLOADING.getState())
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Loading Liquid Icons");
+		RotaryCraft.logger.log("ROTARYCRAFT: Loading Liquid Icons");
 
 		LiquidDictionary.getCanonicalLiquid("Jet Fuel").setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
 		LiquidDictionary.getCanonicalLiquid("Lubricant").setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));

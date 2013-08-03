@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.Registry.EnumLook;
+import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public interface PipeConnector {

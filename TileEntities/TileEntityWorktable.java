@@ -132,6 +132,8 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		if (i >= 9)
+			return false;
 		return i < 9;
 	}
 

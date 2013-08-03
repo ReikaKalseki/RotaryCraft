@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
@@ -945,5 +947,35 @@ public enum MachineRegistry {
 
 	public boolean matches(MachineRegistry m) {
 		return this == m;
+	}
+
+	public void addRecipe(IRecipe ir) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(ir);
+	}
+
+	public void addRecipe(ItemStack is, Object... obj) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(is, obj);
+	}
+
+	public void addCrafting(Object... obj) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
+	}
+
+	public void addSizedCrafting(int num, Object... obj) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+	}
+
+	public void addMetaCrafting(int metadata, Object... obj) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+	}
+
+	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
+		if (!this.isDummiedOut())
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 	}
 }

@@ -172,28 +172,31 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return true;
 	}
 
-	public void dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
+	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (drops && id != 0) {
 			TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 			if (id == Block.mobSpawner.blockID) {
 				TileEntityMobSpawner spw = (TileEntityMobSpawner)tile;
 				if (spw != null) {
-					if (world.isRemote)
-						return;
 					ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
 					ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 					EntityItem ent = new EntityItem(world, x, y, z, is);
 					ent.delayBeforeCanPickup = 10;
 					if (!this.chestCheck(world, x, y, z, is))
 						world.spawnEntityInWorld(ent);
-					return;
+					return true;
 				}
 			}
 			if (tile instanceof IInventory) {
-				List<ItemStack> contents = ReikaInventoryHelper.getWholeInventory((IInventory)tile);
+				IInventory ii = (IInventory)tile;
+				List<ItemStack> contents = ReikaInventoryHelper.getWholeInventory(ii);
+				ReikaInventoryHelper.clearInventory(ii);
+				//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+contents);
 				for (int i = 0; i < contents.size(); i++) {
 					ItemStack is = contents.get(i);
-					if (!this.chestCheck(world, x, y, z, is)) {
+					boolean fits = this.chestCheck(world, x, y, z, is);
+					//ReikaJavaLibrary.pConsole(fits+" for "+is+" on "+FMLCommonHandler.instance().getEffectiveSide());
+					if (!fits) {
 						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 					}
 				}
@@ -204,7 +207,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}
-				return;
+				return true;
 			}
 			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, xread, yread, zread, metaread, this.getEnchantment(Enchantment.fortune));
 			for (int i = 0; i < items.size(); i++) {
@@ -214,9 +217,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
+		return true;
 	}
 
 	private boolean chestCheck(World world, int x, int y, int z, ItemStack is) {
+		if (is == null)
+			return false;
+		if (world.isRemote)
+			return false;
 		TileEntity te = world.getBlockTileEntity(x+1, y, z);
 		IInventory ii;
 		if (te instanceof IInventory) {
@@ -280,8 +288,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
-					this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlockId(xread, yread, zread), world.getBlockMetadata(xread, yread, zread));
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, xread, yread, zread, RotaryCraft.miningpipe.blockID, pipemeta);
+					if (this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlockId(xread, yread, zread), world.getBlockMetadata(xread, yread, zread)))
+						world.setBlock(xread, yread, zread, RotaryCraft.miningpipe.blockID, pipemeta, 3);
+					else
+						step--;
 				}
 			}
 		}

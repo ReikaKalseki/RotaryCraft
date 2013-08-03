@@ -12,11 +12,11 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaChunkHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
-import Reika.RotaryCraft.Registry.EnumLook;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends TileEntityPiping {
@@ -34,14 +34,14 @@ public class TileEntityFlooder extends TileEntityPiping {
 		this.draw(world, x, y, z);
 		if (blocks.isEmpty() || liquidLevel == 0) {
 			if (liquidID == 9) {
-				blocks.recursiveFillWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
 			}
 			if (liquidID == 11) {
-				blocks.recursiveFillWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveFillWithBounds(world, x, y-1, z, Block.lavaMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveFillWithBounds(world, x, y-1, z, Block.lavaStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.lavaMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.lavaStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
 			}
 			blocks.sortBlocksByHeight();
 		}

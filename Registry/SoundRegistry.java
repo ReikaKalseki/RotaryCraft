@@ -25,20 +25,20 @@ import cpw.mods.fml.relauncher.Side;
 
 public enum SoundRegistry implements SoundList {
 
-	ELECTRIC("elecengine"),
-	WIND("windengine"),
-	STEAM("steamengine"),
-	CAR("gasengine"),
-	HYDRO("hydroengine"),
-	MICRO("microengine"),
-	JET("jetengine"),
+	ELECTRIC("#elecengine"),
+	WIND("#windengine"),
+	STEAM("#steamengine"),
+	CAR("#gasengine"),
+	HYDRO("#hydroengine"),
+	MICRO("#microengine"),
+	JET("#jetengine"),
 	KNOCKBACK("knockback"),
-	PULSEJET("pulsejet"),
-	PUMP("pump"),
+	PULSEJET("#pulsejet"),
+	PUMP("#pump"),
 	PILEDRIVER("piledriver"),
 	SMOKE("smokealarm"),
-	SPRINKLER("sprinkler"),
-	FLYWHEEL("flywheel"),
+	SPRINKLER("#sprinkler"),
+	FLYWHEEL("#flywheel"),
 	PROJECTOR("projector"),
 	LOWBASS("basslo"),
 	BASS("bass"),
@@ -49,10 +49,10 @@ public enum SoundRegistry implements SoundList {
 	LOWPLING("plinglo"),
 	PLING("pling"),
 	HIPLING("plinghi"),
-	FRICTION("friction"),
-	CRAFT("craft"),
-	AIRCOMP("aircomp"),
-	PNEUMATIC("pneu");
+	FRICTION("#friction"),
+	CRAFT("#craft"),
+	AIRCOMP("#aircomp"),
+	PNEUMATIC("#pneu");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
@@ -66,7 +66,13 @@ public enum SoundRegistry implements SoundList {
 	private String path;
 	private String name;
 
+	private boolean isVolumed = false;
+
 	private SoundRegistry(String n) {
+		if (n.startsWith("#")) {
+			isVolumed = true;
+			n = n.substring(1);
+		}
 		name = n;
 		if (this.isNote())
 			path = SOUND_FOLDER+MUSIC_FOLDER+name+SOUND_EXT;
@@ -74,12 +80,28 @@ public enum SoundRegistry implements SoundList {
 			path = SOUND_FOLDER+name+SOUND_EXT;
 	}
 
+	public float getSoundVolume() {
+		float vol = ConfigRegistry.MACHINEVOLUME.getFloat();
+		if (vol < 0)
+			vol = 0;
+		if (vol > 1)
+			vol = 1F;
+		return vol;
+	}
+
+	public float getModVolume() {
+		if (!isVolumed)
+			return 1F;
+		else
+			return this.getSoundVolume();
+	}
+
 	public static void playSound(SoundRegistry s, World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, s.getPlayableReference(), x, y, z, vol, pitch);
+		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, s.getPlayableReference(), x, y, z, vol*s.getModVolume(), pitch);
 	}
 
 	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {
