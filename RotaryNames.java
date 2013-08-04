@@ -139,8 +139,8 @@ public class RotaryNames {
 
 		LanguageRegistry.addName(RotaryCraft.blastglass, "Blast Glass Pane");
 		LanguageRegistry.addName(RotaryCraft.obsidianglass, "Blast Glass");
-		LanguageRegistry.addName(RotaryCraft.gravlog, "Gravity Log Block (Technical Block)");
-		LanguageRegistry.addName(RotaryCraft.gravleaves, "Gravity Leaf Block (Technical Block)");
+		//LanguageRegistry.addName(RotaryCraft.gravlog, "Gravity Log Block (Technical Block)");
+		//LanguageRegistry.addName(RotaryCraft.gravleaves, "Gravity Leaf Block (Technical Block)");
 
 		LanguageRegistry.addName(RotaryCraft.canola, "Canola Plant (Technical Block)");
 

@@ -17,9 +17,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -50,7 +50,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			int maxdist = this.getRange();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
 				int id = world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep);
-				if (ReikaWorldHelper.flammable(id) || id == RotaryCraft.gravleaves.blockID || id == RotaryCraft.gravlog.blockID)
+				if (Block.blocksList[id].getFlammability(world, x, y, z, world.getBlockMetadata(x, y, z), ForgeDirection.UNKNOWN) > 0)
 					this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
 				if (this.makeBeam(world, x, y, z, metadata, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
 					blocked = true;

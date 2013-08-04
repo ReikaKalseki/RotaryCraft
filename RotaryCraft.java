@@ -29,8 +29,6 @@ import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Instantiable.ModLogger;
-import Reika.DragonAPI.ModInteract.DartOreHandler;
-import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -44,8 +42,6 @@ import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
 import Reika.RotaryCraft.Blocks.BlockBlastGlass;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Blocks.BlockDeco;
-import Reika.RotaryCraft.Blocks.BlockGravLeaves;
-import Reika.RotaryCraft.Blocks.BlockGravLog;
 import Reika.RotaryCraft.Blocks.BlockLightBridge;
 import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
@@ -137,8 +133,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block beamblock;
 	public static Block lightbridge;
 
-	public static Block gravlog;
-	public static Block gravleaves;
+	//public static Block gravlog;
+	//public static Block gravleaves;
 
 	public static Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
 	public static Item[] basicItems = new Item[ItemRegistry.itemList.length];
@@ -151,8 +147,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, BlockRegistry.blockList, ItemRegistry.itemList, ExtraConfigIDs.idList, 0);
 
-	public static ThaumOreHandler thaumOre;
-	public static DartOreHandler dartOre;
 	public static ModLogger logger;
 
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
@@ -175,7 +169,7 @@ public class RotaryCraft extends DragonAPIMod {
 		config.initProps(evt);
 		proxy.registerSounds();
 
-		logger = new ModLogger(ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState());
+		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState());
 
 		this.setupClassFiles();
 
@@ -257,8 +251,8 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryRegistration.instantiateMachines();
 
 		miningpipe = new BlockMiningPipe(ExtraConfigIDs.MININGPIPE.getValue()).setUnlocalizedName("MiningPipe");
-		gravlog = new BlockGravLog(ExtraConfigIDs.GRAVLOG.getValue()).setUnlocalizedName("GravLog");
-		gravleaves = new BlockGravLeaves(ExtraConfigIDs.GRAVLEAVES.getValue()).setUnlocalizedName("GravLeaves");
+		//gravlog = new BlockGravLog(ExtraConfigIDs.GRAVLOG.getValue()).setUnlocalizedName("GravLog");
+		//gravleaves = new BlockGravLeaves(ExtraConfigIDs.GRAVLEAVES.getValue()).setUnlocalizedName("GravLeaves");
 		lightblock = new BlockLightblock(ExtraConfigIDs.LIGHTBLOCK.getValue()).setUnlocalizedName("LightBlock");
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");

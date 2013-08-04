@@ -14,9 +14,9 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.Entities.EntityFallingBlock;
 
 public class BlockGravityCustom extends Block
 {
@@ -82,7 +82,7 @@ public class BlockGravityCustom extends Block
 				if (!world.isRemote)
 				{
 
-					EntityFallingBlock var9 = new EntityFallingBlock(world, x + 0.5F, y + 0.5F, z + 0.5F, blockID, world.getBlockMetadata(x, y, z));
+					EntityFallingSand var9 = new EntityFallingSand(world, x + 0.5F, y + 0.5F, z + 0.5F, blockID, world.getBlockMetadata(x, y, z));
 					this.onStartFalling(var9);
 					world.spawnEntityInWorld(var9);
 				}
@@ -107,7 +107,7 @@ public class BlockGravityCustom extends Block
 	/**
 	 * Called when the falling block entity for this block is created
 	 */
-	protected void onStartFalling(EntityFallingBlock par1EntityFallingGravity) {}
+	protected void onStartFalling(EntityFallingSand par1EntityFallingGravity) {}
 
 	/**
 	 * How many world ticks before ticking

@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockGravity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -212,7 +211,7 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		this.propagate(world, x, y, z);
+		//this.propagate(world, x, y, z);
 
 		super.onBlockAdded(world, x, y, z);
 		/*
@@ -236,7 +235,7 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 			return false;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d:%d @ %d in ", world.getBlockId(x, y, z), world.getBlockMetadata(x, y, z), y)+String.valueOf(world.getBiomeGenForCoords(x, z)));
 		return true;
-	}
+	}/*
 
 	public void propagate(World world, int x, int y, int z) {
 		if (world.getBlockId(x, y-1, z) == Block.vine.blockID)
@@ -277,7 +276,7 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
     	if (par5Random.nextInt(4) == 0 && world.getBlockId(x, y-1, z) == Block.leaves.blockID) {
     		int meta = world.getBlockMetadata(x, y-1, z);
     		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, RotaryCraft.gravleaves.blockID, meta);
-    	}*/
+    	}
 
 		if (world.getBlockId(x, y, z+1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z+1), 4);
@@ -329,11 +328,11 @@ public class BlockGravLeaves extends BlockGravity implements SidedTextureIndex {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z+1), 4);
 			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, RotaryCraft.gravleaves.blockID, meta);
 		}
-	}
+	}*/
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int meta, int a) {
-		this.propagate(world, x, y, z);
+		//this.propagate(world, x, y, z);
 
 		if (!world.isRemote && par5Random.nextInt(2) == 0) { // Ensure client side
 			//Reason for 50% cut is that falling counts as a break - spawns 2x saplings, apples

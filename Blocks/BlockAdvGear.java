@@ -13,16 +13,16 @@ import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,7 +51,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 	{
 		return new TileEntityAdvancedGear();
 	}
-
+	/*
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack is)		//Directional code
 	{
@@ -90,6 +90,38 @@ public class BlockAdvGear extends BlockModelledMachine {
 		if (!world.isRemote)
 			world.spawnEntityInWorld(item);
 		super.breakBlock(world, x, y, z, a, b);
+	}*/
+
+	@Override
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	{
+		if (this.canHarvest(world, player, x, y, z));
+		this.harvestBlock(world, player, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		ItemStack eitem = ep.inventory.getCurrentItem();
+		if (eitem == null)
+			return false;
+		if (!(eitem.getItem() instanceof ItemPickaxe))
+			return false;
+		if (eitem.itemID == Item.pickaxeWood.itemID)
+			return false;
+		return !ep.capabilities.isCreativeMode;
+	}
+
+	@Override
+	public final void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta)
+	{
+		if (!this.canHarvest(world, ep, x, y, z))
+			return;
+		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
+			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
+		}
+		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override

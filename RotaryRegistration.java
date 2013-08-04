@@ -22,14 +22,11 @@ import Reika.RotaryCraft.Auxiliary.ItemLiquid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
-import Reika.RotaryCraft.Entities.EntityFallingBlock;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
-import Reika.RotaryCraft.Items.Placers.ItemBlockGravLeaves;
-import Reika.RotaryCraft.Items.Placers.ItemBlockGravLog;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -55,8 +52,8 @@ public class RotaryRegistration {
 		GameRegistry.registerBlock(RotaryCraft.lightbridge, "Bridge");
 
 		GameRegistry.registerBlock(RotaryCraft.miningpipe, "MiningPipe");
-		GameRegistry.registerBlock(RotaryCraft.gravlog, ItemBlockGravLog.class, "GravLog");
-		GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
+		//GameRegistry.registerBlock(RotaryCraft.gravlog, ItemBlockGravLog.class, "GravLog");
+		//GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
 		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
 		/*
@@ -79,7 +76,6 @@ public class RotaryRegistration {
 	}
 
 	public static void addEntities() {
-		EntityRegistry.registerModEntity(EntityFallingBlock.class, "Falling Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 160, 20, true);
 		EntityRegistry.registerModEntity(EntityCustomTNT.class, "Custom TNT", EntityRegistry.findGlobalUniqueEntityId()+1, RotaryCraft.instance, 160, 20, true);
 		EntityRegistry.registerModEntity(EntityRailGunShot.class, "RailGun Shot", EntityRegistry.findGlobalUniqueEntityId()+2, RotaryCraft.instance, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityFreezeGunShot.class, "Freeze Gun Shot", EntityRegistry.findGlobalUniqueEntityId()+3, RotaryCraft.instance, 64, 20, true);
@@ -89,11 +85,11 @@ public class RotaryRegistration {
 	}
 
 	public static void instantiateMachines() {
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, RotaryCraft.logger);
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, RotaryCraft.logger.shouldLog());
 	}
 
 	public static void instantiateItems() {
-		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, RotaryCraft.logger);
+		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, RotaryCraft.logger.shouldLog());
 	}
 
 	public static void loadOreDictionary() {

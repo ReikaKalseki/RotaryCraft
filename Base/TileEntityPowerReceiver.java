@@ -593,14 +593,14 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (m == MachineRegistry.COMPACTOR) {
 			if (ticks < 2)
 				return false;
-			int time = 10*(60-(int)(3*ReikaMathLibrary.logbase(omega, 2)));
+			int time = (10*(60-(int)(3*ReikaMathLibrary.logbase(omega, 2))))/2;
 			time *= stage;
 			return (ticks >= time);
 		}
 		if (m == MachineRegistry.WOODCUTTER) {
 			if (ticks < 2)
 				return false;
-			int time = 300-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			int time = (300-(int)(20*ReikaMathLibrary.logbase(omega, 2)))/8;
 			//if (!this.worldObj.isRemote)
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ticks, time));
 			return (ticks >= time);
@@ -692,11 +692,11 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 		}
 		if (m == MachineRegistry.COMPACTOR) {
-			time = 10*(60-(int)(3*ReikaMathLibrary.logbase(omegap, 2)));
+			time = (10*(60-(int)(3*ReikaMathLibrary.logbase(omegap, 2))))/2;
 			time *= stage;
 		}
 		if (m == MachineRegistry.WOODCUTTER) {
-			time = 300-(int)(20*ReikaMathLibrary.logbase(omegap, 2));
+			time = (300-(int)(20*ReikaMathLibrary.logbase(omegap, 2)))/8;
 		}
 		if (m == MachineRegistry.OBSIDIAN) {
 			time = 800-(int)(60*ReikaMathLibrary.logbase(omegap, 2));

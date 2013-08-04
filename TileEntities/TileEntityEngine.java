@@ -28,12 +28,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Auxiliary.EnumLook;
+import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -866,7 +868,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				break;
 			case HYDRO:
 				omega = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
-				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false));
+				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
@@ -1150,7 +1152,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F);
 		if (type.carNoise())
 			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F);
-		if (type.waterNoise())
+		if (type.waterNoise() && this.isFrontOfArray())
 			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F);
 		if (type.windNoise()) {
 			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F);
@@ -1590,5 +1592,54 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	@Override
 	public int getTemperature() {
 		return temperature;
+	}
+
+	private boolean isPartOfArray() {
+		return this.isBackEndOfArray() || this.isFrontOfArray();
+	}
+
+	public boolean isBackEndOfArray() {
+		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
+		if (to == MachineRegistry.ENGINE) {
+			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(writex, writey, writez);
+			return te.type == EnumEngineType.HYDRO;
+		}
+		return false;
+	}
+
+	public boolean isFrontOfArray() {
+		MachineRegistry from = MachineRegistry.getMachine(worldObj, backx, yCoord, backz);
+		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
+		if (from == MachineRegistry.ENGINE && to != MachineRegistry.ENGINE) {
+			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(backx, yCoord, backz);
+			return te.type == EnumEngineType.HYDRO;
+		}
+		return false;
+	}
+
+	public int getArrayTorqueMultiplier() {
+		boolean front = this.isFrontOfArray();
+		boolean back = this.isBackEndOfArray();
+		if (!front && !back)
+			return 1;
+		if (back)
+			return 0;
+		if (front) {
+			BlockArray b = new BlockArray();
+			b.recursiveAdd(worldObj, xCoord, yCoord, zCoord, this.getTileEntityBlockID());
+			int size = 0;
+			for (int i = 0; i < b.getSize(); i++) {
+				int[] xyz = b.getNthBlock(i);
+				TileEntity te = worldObj.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+				if (te instanceof TileEntityEngine) {
+					TileEntityEngine eng = (TileEntityEngine)te;
+					if (eng.type == EnumEngineType.HYDRO)
+						size++;
+				}
+			}
+			return size;
+		}
+		else //never happens
+			return 1;
 	}
 }

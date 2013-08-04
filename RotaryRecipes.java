@@ -60,7 +60,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.shaftItemNames.length-1, new Object[]{" S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem}); //Shaft cross
 
-		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), new Object[]{"SSS", "SrS", "SSS", 'r', Item.redstone, 'S', Block.stoneBrick});
+		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), new Object[]{"SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks});
 
 		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), new Object[]{" C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab});
 
@@ -183,7 +183,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.COOLINGFIN.addCrafting(new Object[]{"SSS", "SSS", "PPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem});
 
-		MachineRegistry.SELFDESTRUCT.addCrafting(new Object[]{"STS", "TCs", "STS", 'T', Block.tnt, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
+		MachineRegistry.SELFDESTRUCT.addCrafting(new Object[]{"STS", "TCs", "STS", 'T', Block.tnt, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem, 'C', ItemStacks.pcb});
 
 		MachineRegistry.DISPLAY.addCrafting(new Object[]{"SES", "SCS", " P ", 'P', ItemStacks.basepanel, 'E', Item.enderPearl, 'S', ItemStacks.steelingot, 'C', ItemStacks.pcb});
 

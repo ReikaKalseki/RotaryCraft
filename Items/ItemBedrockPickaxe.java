@@ -33,8 +33,11 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -86,20 +89,20 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack block = new ItemStack(id, 1, meta);
-		if (APIRegistry.THAUMCRAFT.conditionsMet() && RotaryCraft.thaumOre.isThaumOre(block) && ConfigRegistry.MODORES.getState() && RotaryCraft.thaumOre.isShardOre(block)) {
+		if (APIRegistry.THAUMCRAFT.conditionsMet() && ThaumOreHandler.getInstance().isThaumOre(block) && ConfigRegistry.MODORES.getState() && ThaumOreHandler.getInstance().isShardOre(block)) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, RotaryCraft.thaumOre.oreID);
+				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, ThaumOreHandler.getInstance().oreID);
 			}
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;
 		}
-		if (APIRegistry.DARTCRAFT.conditionsMet() && RotaryCraft.dartOre.isDartOre(block) && ConfigRegistry.MODORES.getState()) {
+		if (APIRegistry.DARTCRAFT.conditionsMet() && DartOreHandler.getInstance().isDartOre(block) && ConfigRegistry.MODORES.getState()) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, RotaryCraft.dartOre.oreID);
+				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, DartOreHandler.getInstance().oreID);
 			}
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;
@@ -183,6 +186,8 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 		if (par2Block == RotaryCraft.decoblock)
 			return 12F;
 		if (par2Block instanceof BlockBasicMachine)
+			return 12F;
+		if (par2Block instanceof BlockBasicMultiTE)
 			return 12F;
 		return 1F;
 	}

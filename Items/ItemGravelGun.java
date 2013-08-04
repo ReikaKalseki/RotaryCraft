@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,7 +79,12 @@ public class ItemGravelGun extends ItemChargedTool {
 						world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
 						world.spawnEntityInWorld(ei);
 					}
-					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
+					if (ent instanceof EntityDragon) {
+						EntityDragon ed = (EntityDragon)ent;
+						ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
+					}
+					else
+						ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
 					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 100)
 						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
@@ -119,7 +125,7 @@ public class ItemGravelGun extends ItemChargedTool {
 		if (is == null)
 			return 0;
 		double pow = 2+ReikaMathLibrary.intpow(is.getItemDamage()/2, 6);
-		return (int)((ReikaMathLibrary.logbase(pow, 2)/4)*ReikaMathLibrary.doubpow(1.001, is.getItemDamage()));
+		return (int)((ReikaMathLibrary.logbase(pow, 2)/4)*ReikaMathLibrary.doubpow(1.0001, is.getItemDamage()));
 	}
 
 }

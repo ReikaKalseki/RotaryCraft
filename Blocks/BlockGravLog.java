@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Blocks;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,8 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
-import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockGravity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -86,12 +83,12 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 	 */
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		this.propagate(world, x, y, z);
+		//this.propagate(world, x, y, z);
 
 		super.onBlockAdded(world, x, y, z);
 		//this.metadata = world.getBlockMetadata(x, y, z);
 	}
-
+	/*
 	public void propagate(World world, int x, int y, int z) {
 		if (world.getBlockId(x, y-1, z) == Block.vine.blockID)
 			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-1, z, 0);
@@ -130,7 +127,7 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
     	if (world.getBlockId(x, y-1, z) == Block.leaves.blockID) {
     		int meta = world.getBlockMetadata(x, y-1, z);
     		ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-1, z, RotaryCraft.gravleaves.blockID, meta);
-    	}*/
+    	}
 
 		if (world.getBlockId(x, y, z+1) == Block.wood.blockID) {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x, y, z+1), 4);
@@ -182,7 +179,7 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 			int meta = ReikaWorldHelper.capMetadata(world.getBlockMetadata(x-1, y, z+1), 4);
 			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x-1, y, z+1, RotaryCraft.gravleaves.blockID, meta);
 		}
-	}
+	}*/
 
 	@Override
 	public int quantityDropped(Random par1Random)
@@ -192,7 +189,7 @@ public class BlockGravLog extends BlockGravity implements SidedTextureIndex {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int meta, int a) {
-		this.propagate(world, x, y, z);
+		//this.propagate(world, x, y, z);
 		super.breakBlock(world, x, y, z, meta, a);
 	}
 

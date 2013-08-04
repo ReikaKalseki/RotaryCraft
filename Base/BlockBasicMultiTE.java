@@ -54,6 +54,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -383,6 +384,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityDisplay) {
 			((TileEntityDisplay)te).deleteFiles(x, y, z);
+		}
+		if (te instanceof TileEntityLamp) {
+			((TileEntityLamp)te).clearAll();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
