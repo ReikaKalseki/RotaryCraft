@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 
@@ -195,5 +196,26 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 	protected void writePowerToChat() {
 		ReikaChatHelper.write(String.format("Torque: %d Nm;   Omega: %d rad/s;   Power: %.3fkW", torque, omega, power/1000D));
+	}
+
+	public boolean isOutputBlock(int x, int y, int z) {
+		if (x == writex && y == writey && z == writez && writex != Integer.MIN_VALUE && writey != Integer.MIN_VALUE && writez != Integer.MIN_VALUE)
+			return true;
+		if (x == writex2 && y == writey2 && z == writez2 && writex2 != Integer.MIN_VALUE && writey2 != Integer.MIN_VALUE && writez2 != Integer.MIN_VALUE)
+			return true;
+		return false;
+	}
+
+	protected void writePowerToReciever(ShaftPowerReceiver sp) {
+		if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
+			sp.setOmega(omega);
+			sp.setTorque(torque);
+			sp.setPower(omega*torque);
+		}
+		else {
+			sp.setOmega(0);
+			sp.setTorque(0);
+			sp.setPower(0);
+		}
 	}
 }

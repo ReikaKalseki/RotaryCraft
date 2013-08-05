@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -357,6 +358,15 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 						omegain = devicein.omega;
 					}
 					else
+						torquein = omegain = 0;
+				}
+				if (te instanceof ShaftPowerEmitter) {
+					ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+					if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+						torquein = sp.getTorque();
+						omegain = sp.getOmega();
+					}
+					else
 						torquein2 = omegain2 = 0;
 				}
 				if (m == MachineRegistry.SPLITTER) {
@@ -391,6 +401,15 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 					if (devicein.writex == x && devicein.writez == z) {
 						torquein2 = devicein.torque;
 						omegain2 = devicein.omega;
+					}
+					else
+						torquein2 = omegain2 = 0;
+				}
+				if (te2 instanceof ShaftPowerEmitter) {
+					ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
+					if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+						torquein2 = sp.getTorque();
+						omegain2 = sp.getOmega();
 					}
 					else
 						torquein2 = omegain2 = 0;
@@ -460,6 +479,15 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 				if (devicein.writex == x && devicein.writez == z) {
 					torque = devicein.torque;
 					omega = devicein.omega;
+				}
+				else
+					torque = omega = 0;
+			}
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+					torque = sp.getTorque();
+					omega = sp.getOmega();
 				}
 				else
 					torque = omega = 0;

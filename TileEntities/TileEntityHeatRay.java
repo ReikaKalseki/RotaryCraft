@@ -50,8 +50,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			int maxdist = this.getRange();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
 				int id = world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep);
-				if (Block.blocksList[id].getFlammability(world, x, y, z, world.getBlockMetadata(x, y, z), ForgeDirection.UNKNOWN) > 0)
-					this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
+				if (Block.blocksList[id].isFlammable(world, x+step*xstep, y+step*ystep, z+step*zstep, world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), ForgeDirection.UP));
+				this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
 				if (this.makeBeam(world, x, y, z, metadata, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
 					blocked = true;
 					tickcount = 0;
@@ -157,17 +157,17 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 	public void ignite(World world, int x, int y, int z, int metadata, int step) {
 		if (world.getBlockId(x+1, y, z) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x+1, y, z, Block.fire.blockID);
+			world.setBlock(x+1, y, z, Block.fire.blockID);
 		if (world.getBlockId(x-1, y, z) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x-1, y, z, Block.fire.blockID);
+			world.setBlock(x-1, y, z, Block.fire.blockID);
 		if (world.getBlockId(x, y+1, z) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y+1, z, Block.fire.blockID);
+			world.setBlock(x, y+1, z, Block.fire.blockID);
 		if (world.getBlockId(x, y-1, z) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-1, z, Block.fire.blockID);
+			world.setBlock(x, y-1, z, Block.fire.blockID);
 		if (world.getBlockId(x, y, z+1) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z+1, Block.fire.blockID);
+			world.setBlock(x, y, z+1, Block.fire.blockID);
 		if (world.getBlockId(x, y, z-1) == 0)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z-1, Block.fire.blockID);
+			world.setBlock(x, y, z-1, Block.fire.blockID);
 	}
 
 	public boolean makeBeam(World world, int x, int y, int z, int metadata, int step, int id, int maxdist) {

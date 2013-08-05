@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
+import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
 public enum MaterialRegistry {
 
@@ -34,19 +38,7 @@ public enum MaterialRegistry {
 	}
 
 	public static MaterialRegistry setType(int type) {
-		switch(type) {
-		case 0:
-			return WOOD;
-		case 1:
-			return STONE;
-		case 2:
-			return STEEL;
-		case 3:
-			return DIAMOND;
-		case 4:
-			return BEDROCK;
-		}
-		return null;
+		return values()[type];
 	}
 
 	public double getElasticModulus() {
@@ -79,5 +71,43 @@ public enum MaterialRegistry {
 
 	public boolean consumesLubricant() {
 		return this == WOOD || this == STONE || this == STEEL;
+	}
+
+	public boolean isHarvestablePickaxe(ItemStack tool) {
+		if (this == WOOD)
+			return true;
+		if (tool == null)
+			return false;
+		if (tool.itemID == ItemRegistry.BEDPICK.getShiftedID())
+			return true;
+		if (tool.getItem() instanceof ItemPickaxe) {
+			switch(this) {
+			case STONE:
+				return true;
+			case STEEL:
+				return tool.getItem().canHarvestBlock(Block.oreIron);
+			case DIAMOND:
+				return tool.getItem().canHarvestBlock(Block.oreDiamond);
+			case BEDROCK:
+				return tool.getItem().canHarvestBlock(Block.obsidian);
+			default:
+				return false;
+			}
+		}
+		if (TinkerToolHandler.getInstance().isPick(tool)) {
+			switch(this) {
+			case STONE:
+				return true;
+			case STEEL:
+				return TinkerToolHandler.getInstance().isStoneOrBetterPick(tool);
+			case DIAMOND:
+				return TinkerToolHandler.getInstance().isIronOrBetterPick(tool);
+			case BEDROCK:
+				return TinkerToolHandler.getInstance().isDiamondOrBetterPick(tool);
+			default:
+				return false;
+			}
+		}
+		return false;
 	}
 }

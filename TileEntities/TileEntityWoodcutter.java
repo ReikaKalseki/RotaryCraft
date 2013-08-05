@@ -18,7 +18,9 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaPlantHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
@@ -57,9 +59,14 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			return;
 
 		if (tree.isEmpty() && this.hasWood()) {
-			for (int i = -1; i <= 1; i++) {
-				for (int j = -1; j <= 1; j++) {
-					tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
+			if (ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz)) == ModWoodList.SEQUOIA) {
+				tree.addSequoia(world, editx, edity, editz);
+			}
+			else {
+				for (int i = -1; i <= 1; i++) {
+					for (int j = -1; j <= 1; j++) {
+						tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
+					}
 				}
 			}
 		}
@@ -71,7 +78,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			world.setBlock(x, y+1, z, 0);
 		}
 
-		//ReikaJavaLibrary.pConsole(tree);
+		RotaryCraft.logger.debug(tree);
 
 		if (tree.isEmpty())
 			return;
@@ -88,7 +95,16 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			Block dropBlock = Block.blocksList[drop];
 			if (ConfigRegistry.INSTACUT.getState()) {
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+
 				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+
+				if (xyz[1] == edity) {
+					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+						ItemStack plant = this.getSapling(drop, dropmeta);
+						if (plant != null)
+							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+					}
+				}
 			}
 			else {
 				boolean fall = BlockSand.canFallBelow(world, xyz[0], xyz[1]-1, xyz[2]);
@@ -103,14 +119,35 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 				}
 				else {
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+
 					ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+par5Random.nextFloat(), 1F);
 					else
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+par5Random.nextFloat(), 1F);
+
+					if (xyz[1] == edity) {
+						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+							ItemStack plant = this.getSapling(drop, dropmeta);
+							if (plant != null)
+								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+						}
+					}
 				}
 			}
 		}
+	}
+
+	public ItemStack getSapling(int id, int meta) {
+		if (id == Block.wood.blockID) {
+			return new ItemStack(Block.sapling.blockID, 1, meta%4);
+		}
+		ModWoodList wood = ModWoodList.getModWood(id, meta);
+		if (wood == null)
+			return null;
+		else
+			return wood.getCorrespondingSapling();
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -211,9 +248,13 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 	private boolean hasWood() {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				if (worldObj.getBlockId(editx+i, edity, editz+j) == Block.wood.blockID)
+				int id = worldObj.getBlockId(editx+i, edity, editz+j);
+				int meta = worldObj.getBlockMetadata(editx+i, edity, editz+j);
+				if (id == Block.wood.blockID)
 					return true;
-				if (ModWoodList.isModWood(new ItemStack(worldObj.getBlockId(editx+i, edity, editz+j), 1, worldObj.getBlockMetadata(editx+i, edity, editz+j))))
+				ModWoodList wood = ModWoodList.getModWood(id, meta);
+				RotaryCraft.logger.debug("Retrieved wood "+wood+" from "+id+":"+meta);
+				if (wood != null)
 					return true;
 			}
 		}

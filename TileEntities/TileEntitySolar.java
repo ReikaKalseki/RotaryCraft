@@ -21,11 +21,13 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector {
@@ -118,7 +120,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		int temp = (int)(15*this.getArraySize()*this.getArrayOverallBrightness());
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {
-				ReikaWorldHelper.temperatureEnvironment(world, x+i, y, z+j, temp);
+				if (ConfigRegistry.BLOCKDAMAGE.getState())
+					ReikaWorldHelper.temperatureEnvironment(world, x+i, y, z+j, temp);
 				AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
 				List in = world.getEntitiesWithinAABB(EntityLiving.class, above);
 				for (int k = 0; k < in.size(); k++) {
@@ -154,6 +157,13 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			}
 			lightMultiplier /= 15F;
 			lightMultiplier /= numberMirrors;
+		}
+
+		if (writex != Integer.MIN_VALUE && writey != Integer.MIN_VALUE && writez != Integer.MIN_VALUE) {
+			TileEntity te = world.getBlockTileEntity(writex, writey, writez);
+			if (te instanceof ShaftPowerReceiver) {
+				this.writePowerToReciever((ShaftPowerReceiver)te);
+			}
 		}
 	}
 

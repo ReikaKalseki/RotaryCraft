@@ -20,6 +20,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
@@ -28,6 +29,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelCompactor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PressureTE
@@ -126,11 +128,6 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public int getSizeInventory()
 	{
 		return compactorItemStacks.length;
-	}
-
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
 	}
 
 	/**
@@ -283,8 +280,21 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (pressure < Pamb)
 			pressure += ReikaMathLibrary.extrema((Pamb-pressure)/40, 1, "max");
 
-		if (omega > 0)
-			pressure += power/(1500*omega); //not direct this.torque since need omega > 0
+		if (omega > 0) {
+			switch(RotaryConfig.getDifficulty()) {
+			case EASY:
+				pressure += power/(500*omega); //not direct this.torque since need omega > 0
+				break;
+			case MEDIUM:
+				pressure += power/(1500*omega); //not direct this.torque since need omega > 0
+				break;
+			case HARD:
+				pressure += power/(3000*omega); //not direct this.torque since need omega > 0
+				break;
+			default:
+				break;
+			}
+		}
 
 		//if (this.pressure > Pamb)
 		//	this.pressure *= 0.95; //Natural p loss
@@ -336,7 +346,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
-		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1F, false, true, 2F);
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 2F);
 	}
 
 	public int getStage() {
@@ -538,7 +548,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public void overpressure(World world, int x, int y, int z) {
-		world.createExplosion(null, x, y, z, 4, true);
+		world.createExplosion(null, x, y, z, 4, ConfigRegistry.BLOCKDAMAGE.getState());
 		pressure = MAXPRESSURE;
 	}
 }

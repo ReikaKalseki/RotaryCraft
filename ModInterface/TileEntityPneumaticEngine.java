@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -77,6 +79,7 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
+
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 			if (te != null) {
@@ -88,6 +91,7 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 				}
 			}
 		}
+
 		float mj = pp.getEnergyStored();
 		PneuEngineStage st = PneuEngineStage.getStageFromMJ(mj);
 		if (st == st.OFF)
@@ -98,6 +102,11 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		power = (long)torque*(long)omega;
 		//pp.useEnergy(mj, mj, true);
 		pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
+
+		TileEntity te = world.getBlockTileEntity(writex, writey, writez);
+		if (te instanceof ShaftPowerReceiver) {
+			this.writePowerToReciever((ShaftPowerReceiver)te);
+		}
 	}
 
 	@Override

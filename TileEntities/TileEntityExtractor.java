@@ -62,16 +62,50 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	private int getSmeltNumber(int num, ModOreList ore) {
 		if (num == 63)
 			return 1;
-		if (ore != null) {
-			if (ore.isNetherOres()) {
-				int r = par5Random.nextInt(4);
-				if (r == 0)
-					return 1;
-				else
-					return 2; //75% chance of doubling -> 1.75^4 = 9.3
+		int r;
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			r = par5Random.nextInt(10);
+			if (ore != null) {
+				if (ore.isNetherOres()) {
+					if (r < 9)
+						return 1;
+					else
+						return 2; //90% chance of doubling -> 13
+				}
 			}
+			if (r < 7)
+				return 2;
+			else
+				return 1; //60% chance -> 6.55
+		case MEDIUM:
+			if (ore != null) {
+				if (ore.isNetherOres()) {
+					r = par5Random.nextInt(4);
+					if (r == 0)
+						return 1;
+					else
+						return 2; //75% chance of doubling -> 1.75^4 = 9.3
+				}
+			}
+			return (1+par5Random.nextInt(2));
+		case HARD:
+			r = par5Random.nextInt(10);
+			if (ore != null) {
+				if (ore.isNetherOres()) {
+					if (r < 5)
+						return 1;
+					else
+						return 2; //50% chance of doubling
+				}
+			}
+			if (r < 4)
+				return 2;
+			else
+				return 1; //40% chance -> 3.84
+		default:
+			return (1+par5Random.nextInt(2));
 		}
-		return (1+par5Random.nextInt(2));
 	}
 
 	public void throughPut() {

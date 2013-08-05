@@ -22,7 +22,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -33,11 +32,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.EnumLook;
+import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
@@ -157,6 +158,13 @@ public abstract class BlockBasicMultiTE extends Block {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
+		if (DartItemHandler.getInstance().isWrench(is)) {
+			ep.setCurrentItemOrArmor(0, null);
+			ep.playSound("random.break", 1, 1);
+			ep.attackEntityFrom(DamageSource.inWall, 4);
+			ReikaChatHelper.write("Your tool has shattered into a dozen pieces.");
+			return true;
+		}
 		if (ep.isSneaking() && !((RotaryCraftTileEntity)te).getMachine().hasSneakActions())
 			return false;
 		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick()) {
@@ -332,14 +340,11 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
-		ItemStack eitem = ep.inventory.getCurrentItem();
-		if (eitem == null)
+		if (ep.capabilities.isCreativeMode)
 			return false;
-		if (!(eitem.getItem() instanceof ItemPickaxe || this instanceof BlockPiping))
-			return false;
-		if (eitem.itemID == Item.pickaxeWood.itemID && !(this instanceof BlockPiping))
-			return false;
-		return !ep.capabilities.isCreativeMode;
+		if (this instanceof BlockPiping)
+			return true;
+		return RotaryAux.canHarvestSteelMachine(ep);
 	}
 
 	@Override

@@ -12,8 +12,6 @@ package Reika.RotaryCraft.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -22,6 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -117,12 +116,6 @@ public class BlockEngine extends BlockModelledMachine {
 	}
 
 	@Override
-	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-	{
-		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
-	}
-
-	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
 		if (this.canHarvest(world, player, x, y, z));
@@ -131,14 +124,7 @@ public class BlockEngine extends BlockModelledMachine {
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
-		ItemStack eitem = ep.inventory.getCurrentItem();
-		if (eitem == null)
-			return false;
-		if (!(eitem.getItem() instanceof ItemPickaxe))
-			return false;
-		if (eitem.itemID == Item.pickaxeWood.itemID)
-			return false;
-		return true;
+		return RotaryAux.canHarvestSteelMachine(ep);
 	}
 
 	@Override

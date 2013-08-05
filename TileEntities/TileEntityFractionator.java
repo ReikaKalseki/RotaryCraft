@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -104,12 +105,28 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
 		for (int i = 0; i < ingredients.length; i++) {
-			boolean consume = (par5Random.nextInt(16) == 0);
+			boolean consume;
+			switch(RotaryConfig.getDifficulty()) {
+			case EASY:
+				consume = (par5Random.nextInt(32) == 0);
+				fuel += par5Random.nextInt(16)+8;
+				break;
+			case MEDIUM:
+				consume = (par5Random.nextInt(16) == 0);
+				fuel += par5Random.nextInt(11)+5;
+				break;
+			case HARD:
+				consume = (par5Random.nextInt(2) == 0);
+				fuel += par5Random.nextInt(4)+2;
+				break;
+			default:
+				consume = (par5Random.nextInt(16) == 0);
+				fuel += par5Random.nextInt(11)+5;
+				break;
+			}
 			if (consume)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
-		//fuel++;
-		fuel += par5Random.nextInt(11)+5;
 		if (fuel > CAPACITY)
 			fuel = CAPACITY;
 	}

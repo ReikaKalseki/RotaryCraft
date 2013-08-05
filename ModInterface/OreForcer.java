@@ -10,25 +10,30 @@
 package Reika.RotaryCraft.ModInterface;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
 
 	public static void forceCompatibility() {
 		for (int i = 0; i < APIRegistry.apiList.length; i++) {
-			if (APIRegistry.apiList[i].conditionsMet()) {
-				String mod = APIRegistry.apiList[i].getModLabel();
+			APIRegistry mod = APIRegistry.apiList[i];
+			if (mod.conditionsMet()) {
 				try {
-					force(APIRegistry.apiList[i]);
+					force(mod);
 				}
 				catch (NullPointerException e) {
 					RotaryCraft.logger.logError("ROTARYCRAFT: Could not force compatibility with "+mod+". Reason: ");
@@ -54,46 +59,66 @@ public final class OreForcer {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	private static void force(APIRegistry api) {
-		RotaryCraft.logger.log("ROTARYCRAFT: Forcing compatibility with "+api.getModLabel());
+		RotaryCraft.logger.log("ROTARYCRAFT: Forcing compatibility with "+api);
 		switch(api) {
 		case APPLIEDENERGISTICS:
 			intercraftQuartz();
 			break;
-		case BUILDCRAFTENERGY:
-			break;
-		case BUILDCRAFTFACTORY:
-			break;
-		case BUILDCRAFTTRANSPORT:
-			break;
 		case FORESTRY:
 			intercraftApatite();
 			break;
-		case GREGTECH:
-			break;
-		case INDUSTRIALCRAFT:
-			break;
 		case THAUMCRAFT:
+			ReikaJavaLibrary.initClass(ThaumOreHandler.class);
 			registerThaumcraft();
 			break;
 		case MFFS:
 			intercraftForcicium();
 			break;
-		case REDPOWER:
-			break;
-		case BOP:
-			break;
-		case BXL:
-			break;
-		case NATURA:
-			break;
-		case TWILIGHT:
-			break;
-		case MINEFACTORY:
-			break;
 		case DARTCRAFT:
 			registerDart();
+			breakForceWrench();
+			ReikaJavaLibrary.initClass(DartOreHandler.class);
+			ReikaJavaLibrary.initClass(DartItemHandler.class);
 			break;
+		case TINKERER:
+			ReikaJavaLibrary.initClass(TinkerToolHandler.class);
+		}
+	}
+
+	private static void breakForceWrench() {
+		try {
+			Class api = Class.forName("bluedart.api.DartAPI");
+			Field blacklist = api.getField("tileBlacklist");
+			ArrayList list = (ArrayList)blacklist.get(null);
+			RotaryCraft.logger.log("ROTARYCRAFT: Breaking force wrench on RotaryCraft machines!");
+			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+				Class machine = MachineRegistry.machineList[i].getTEClass();
+				list.add(machine);
+				RotaryCraft.logger.log("ROTARYCRAFT: Force wrench no longer works on "+MachineRegistry.machineList[i].getName()+"!");
+			}
+			blacklist.set(null, list);
+		}
+		catch (ClassNotFoundException e) {
+			RotaryCraft.logger.logError("ROTARYCRAFT: DartAPI class not found!");
+			e.printStackTrace();
+		}
+		catch (NoSuchFieldException e) {
+			RotaryCraft.logger.logError("ROTARYCRAFT: DartAPI TileBlackList field not found!");
+			e.printStackTrace();
+		}
+		catch (SecurityException e) {
+			RotaryCraft.logger.logError("ROTARYCRAFT: DartAPI class threw security exception! "+e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e) {
+			RotaryCraft.logger.logError("ROTARYCRAFT: Could not add argument to DartAPI list!");
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			RotaryCraft.logger.logError("ROTARYCRAFT: DartAPI class fields not accessible!");
+			e.printStackTrace();
 		}
 	}
 
@@ -115,7 +140,7 @@ public final class OreForcer {
 			RotaryCraft.logger.logError("ROTARYCRAFT: MFFS Item class not found! Cannot read its items for compatibility forcing!");
 		}
 		catch (NoSuchFieldException e) {
-			RotaryCraft.logger.logError("ROTARYCRAFT: MFFS item field not found! "+e.getMessage());
+			RotaryCraft.logger.logError("ROTARYCRAFT: MFFS item field not found!");
 		}
 		catch (SecurityException e) {
 			RotaryCraft.logger.logError("ROTARYCRAFT: Cannot read MFFS items (Security Exception)! Monazit not convertible!"+e.getMessage());

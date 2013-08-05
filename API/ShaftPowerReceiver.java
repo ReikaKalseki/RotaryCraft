@@ -11,4 +11,21 @@ package Reika.RotaryCraft.API;
 
 public interface ShaftPowerReceiver {
 
+	public void setOmega(int omega);
+
+	public void setTorque(int torque);
+
+	public void setPower(long power);
+
+	public int[] getInputBlocksX();
+
+	public int[] getInputBlocksY();
+
+	public int[] getInputBlocksZ();
+
+	/** x,y,z to read from */
+	public boolean canReadFromBlock(int x, int y, int z);
+
+	public boolean isReceiving();
+
 }

@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -914,8 +915,24 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (isJetFailing)
 			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
 		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0) {
-			isJetFailing = true;
-			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
+			boolean go = false;
+			switch(RotaryConfig.getDifficulty()) {
+			case EASY:
+				go = par5Random.nextInt(5) == 0;
+				break;
+			case MEDIUM:
+				go = par5Random.nextInt(2) == 0;
+				break;
+			case HARD:
+				go = true;
+				break;
+			default:
+				break;
+			}
+			if (go) {
+				isJetFailing = true;
+				RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
+			}
 		}
 	}
 
@@ -1163,17 +1180,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
 		super.updateTileEntity();
-		power = omega*torque;
 		this.getIOSides(world, x, y, z, meta);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", writex, writex2, writez, writez2));
 		tickcount2++;
 		this.getType();
+		power = torque*omega;
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 			if (te != null) {
 				if (!te.enabled) {
 					omega = 0;
 					torque = 0;
+					power = 0;
 					if (type.hasTemperature()) {
 						if (tickcount2 >= 20) {
 							this.updateTemperature(world, x, y, z, meta);
@@ -1186,6 +1204,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				}
 			}
 		}
+
+		TileEntity te = world.getBlockTileEntity(writex, writey, writez);
+		if (te instanceof ShaftPowerReceiver) {
+			this.writePowerToReciever((ShaftPowerReceiver)te);
+		}
+
 		if (type.isJetFueled() && fuelslot[0] != null && jetfuels < FUELCAP) {
 			if (fuelslot[0].itemID == ItemStacks.fuelbucket.itemID && fuelslot[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
 				fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
@@ -1197,9 +1221,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			this.getLiq(world, x, y, z, meta);
 		if (type.burnsFuel())
 			this.consumeFuel(world, x, y, z, meta);
-		//this.getPower(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord));
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("Outputting %f kW @ %f rpm.", ((double)(torque*omega))/(double)1000, (double)omega*9.55));
-		//this.transferPower(this.worldObj, ratio);
+
 		if (power > 0) {
 			this.playSounds(world, x, y, z);
 		}
@@ -1447,16 +1469,17 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			for (int i = -6; i <= 6; i++) {
 				for (int j = -6; j <= 6; j++) {
 					for (int k = -6; k <= 6; k++) {
-						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
+						if (ConfigRegistry.BLOCKDAMAGE.getState())
+							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
 						world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
 						world.spawnParticle("lava", x+i, y+j, z+k, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5);
 					}
 				}
 			}
 			if (!world.isRemote) {
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
+				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, ConfigRegistry.BLOCKDAMAGE.getState());
 				for (int m = 0; m < 6; m++)
-					world.newExplosion(null, x-4+par5Random.nextInt(5), y-4+par5Random.nextInt(5), z-4+par5Random.nextInt(5), 4F+par5Random.nextFloat(), true, true);
+					world.newExplosion(null, x-4+par5Random.nextInt(5), y-4+par5Random.nextInt(5), z-4+par5Random.nextInt(5), 4F+par5Random.nextFloat(), true, ConfigRegistry.BLOCKDAMAGE.getState());
 			}
 		}
 	}

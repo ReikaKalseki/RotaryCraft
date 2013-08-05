@@ -21,6 +21,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelFriction;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -52,7 +53,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature >= MAXTEMP)
-			if (par5Random.nextInt(600) == 0)
+			if (par5Random.nextInt(600) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
 	}
 

@@ -14,13 +14,12 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -101,14 +100,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
-		ItemStack eitem = ep.inventory.getCurrentItem();
-		if (eitem == null)
-			return false;
-		if (!(eitem.getItem() instanceof ItemPickaxe))
-			return false;
-		if (eitem.itemID == Item.pickaxeWood.itemID)
-			return false;
-		return !ep.capabilities.isCreativeMode;
+		return RotaryAux.canHarvestSteelMachine(ep);
 	}
 
 	@Override

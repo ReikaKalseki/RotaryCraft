@@ -11,10 +11,12 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.src.BaseMod;
@@ -22,6 +24,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -210,5 +213,20 @@ public class RotaryAux {
 					while (true);
 				}
 		}
+	}
+
+	public static boolean canHarvestSteelMachine(EntityPlayer ep) {
+		if (ep.capabilities.isCreativeMode)
+			return false;
+		ItemStack eitem = ep.inventory.getCurrentItem();
+		if (eitem == null)
+			return false;
+		if (TinkerToolHandler.getInstance().isStoneOrBetterPick(eitem))
+			return true;
+		if (!(eitem.getItem() instanceof ItemPickaxe))
+			return false;
+		if (eitem.getItem().canHarvestBlock(Block.oreIron))
+			return true;
+		return false;
 	}
 }

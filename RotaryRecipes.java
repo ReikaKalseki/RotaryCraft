@@ -193,6 +193,23 @@ public class RotaryRecipes {
 	}
 
 	private static void addCraftItems() {
+
+		int partcraft;
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			partcraft = 6;
+			break;
+		case MEDIUM:
+			partcraft = 3;
+			break;
+		case HARD:
+			partcraft = 2;
+			break;
+		default:
+			partcraft = 3;
+			break;
+		}
+
 		GameRegistry.addRecipe(ItemStacks.impeller, new Object[]{
 				" S ", "SGS", " S ", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.compressor, new Object[]{
@@ -236,7 +253,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.bedingot, new Object[]{
 				" B ", "BSB", " B ", 'S', ItemStacks.steelingot, 'B', ItemStacks.bedrockdust});
 
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.basepanel, 3), new Object[]{
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.basepanel, partcraft), new Object[]{
 			"SSS", 'S', ItemStacks.steelingot});
 
 		GameRegistry.addRecipe(ItemStacks.mount, new Object[]{
@@ -259,7 +276,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.radar, new Object[]{
 				"SSS", " G ", "RMR", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'G', Item.ingotGold, 'M', new ItemStack(RotaryCraft.engineitems.itemID, 1, 0)});
 
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.belt, 2), new Object[]{
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.belt, (partcraft+1)/2), new Object[]{
 			"LLL", "LSL", "LLL", 'L', Item.leather, 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.bearing, new Object[]{
 				"LLL", "LSL", "LLL", 'L', ItemStacks.bearingitem, 'S', ItemStacks.steelingot});
@@ -279,9 +296,9 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.bulb, new Object[]{
 				"GGG", "BDB", "BRB", 'D', Item.netherStar, 'G', Block.glowStone, 'R', Item.redstone, 'B', Item.blazeRod});
 
-
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, 3), new Object[]{
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, partcraft), new Object[]{
 			" B ", "BBB", " B ", 'B', ItemStacks.steelingot});
+
 		GameRegistry.addRecipe(ItemStacks.gearunit, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.gearunit4, new Object[]{
@@ -329,7 +346,7 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonerod, 2), new Object[]{
 			"  B", " B ", "B  ", 'B', Block.stone});
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.shaftitem, 3), new Object[]{
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.shaftitem, partcraft), new Object[]{
 			"  B", " B ", "B  ", 'B', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondshaft, 8), new Object[]{
 			"  B", " B ", "B  ", 'B', Item.diamond});
@@ -578,9 +595,25 @@ public class RotaryRecipes {
 		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.MICRO.ordinal(), new Object[]{"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.JET.ordinal(), new Object[]{"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
-		MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, 16), new Object[]{"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
-		MachineRegistry.PIPE.addSizedCrafting(16, new Object[]{"S S", "S S", "S S", 'S', ItemStacks.steelingot});
-		MachineRegistry.FUELLINE.addSizedCrafting(16, new Object[]{"O O", "O O", "O O", 'O', Block.obsidian});
+		int pipenum;
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			pipenum = 32;
+			break;
+		case MEDIUM:
+			pipenum = 16;
+			break;
+		case HARD:
+			pipenum = 8;
+			break;
+		default:
+			pipenum = 16;
+			break;
+		}
+
+		MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, pipenum), new Object[]{"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
+		MachineRegistry.PIPE.addSizedCrafting(pipenum, new Object[]{"S S", "S S", "S S", 'S', ItemStacks.steelingot});
+		MachineRegistry.FUELLINE.addSizedCrafting(pipenum, new Object[]{"O O", "O O", "O O", 'O', Block.obsidian});
 
 		ItemStack gear;
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(0));

@@ -16,10 +16,12 @@ import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelFlywheel;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -56,7 +58,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	private void fail(World world, int x, int y, int z, double e) {
 		failed = true;
 		if (!world.isRemote)
-			world.createExplosion(null, x+0.5, y+0.5, z+0.5, ReikaPhysicsHelper.getExplosionFromEnergy(e), true);
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, ReikaPhysicsHelper.getExplosionFromEnergy(e), ConfigRegistry.BLOCKDAMAGE.getState());
 	}
 
 	public double getDensity() {
@@ -198,6 +200,13 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		}
 		if (te instanceof SimpleProvider) {
 			this.copyStandardPower(worldObj, readx, ready, readz);
+		}
+		if (te instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				torquein = sp.getTorque();
+				omegain = sp.getOmega();
+			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);

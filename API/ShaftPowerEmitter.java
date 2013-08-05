@@ -9,6 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+
 public interface ShaftPowerEmitter {
+
+	public int getOmega();
+
+	public int getTorque();
+
+	public long getPower();
+
+	public int[] getOutputBlocksX();
+
+	public int[] getOutputBlocksY();
+
+	public int[] getOutputBlocksZ();
+
+	/** x,y,z to write to */
+	public boolean canWriteToBlock(int x, int y, int z);
+
+	public boolean isEmitting();
 
 }

@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -226,7 +227,7 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 	}
 
 	private void dropItem(World world, int x, int y, int z, int meta, ItemStack is) {
-		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, ItemStacks.bedrockdust.copy());
+		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, this.getDrops());
 		ReikaJavaLibrary.pConsole(itementity.getEntityItem());
 		itementity.delayBeforeCanPickup = 0;
 		itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
@@ -236,6 +237,24 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 		itementity.velocityChanged = true;
 		world.spawnEntityInWorld(itementity);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.pop", 0.2F, ((par5Random.nextFloat() - par5Random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+	}
+
+	private ItemStack getDrops() {
+		ItemStack dust = ItemStacks.bedrockdust.copy();
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			dust.stackSize = 3;
+			break;
+		case MEDIUM:
+			dust.stackSize = 2;
+			break;
+		case HARD:
+			dust.stackSize = 1;
+			break;
+		default:
+			break;
+		}
+		return dust;
 	}
 
 	public void dropItemFromInventory() {

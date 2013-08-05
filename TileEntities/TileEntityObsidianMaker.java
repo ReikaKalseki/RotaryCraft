@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelObsidian;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector {
@@ -85,8 +86,21 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		overblue = 0;
 		overgreen = 0;
 		overred = 0;
-		if (lavaLevel > 0 && waterLevel <= 0)
-			temperature++;
+
+		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+
+		if (par5Random.nextInt(20) == 0) {
+			if (temperature > Tamb) {
+				temperature--;
+			}
+			if (temperature < Tamb) {
+				temperature++;
+			}
+
+			if (lavaLevel > 0 && waterLevel <= 0)
+				temperature += 3;
+		}
+
 		if (temperature > MAXTEMP/2) { //500C
 			overred = 0.25F;
 		}
@@ -94,7 +108,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 			overred = 0.4F;
 			overgreen = 0.1F;
 		}
-		if (temperature > MAXTEMP) { //1000C
+		if (temperature > MAXTEMP && ConfigRegistry.BLOCKDAMAGE.getState()) { //1000C
 			this.overheat(world, x, y, z);
 		}
 	}
@@ -142,13 +156,6 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public int getLavaScaled(int par1)
 	{
 		return (lavaLevel*par1)/CAPACITY;
-	}
-
-	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityObsidianMaker te = (TileEntityObsidianMaker)world.getBlockTileEntity(x, y, z);
-		if (te != null) {
-			te.temperature = ReikaWorldHelper.getBiomeTemp(world, x, z);
-		}
 	}
 
 	public void getLava(World world, int x, int y, int z, int metadata) {

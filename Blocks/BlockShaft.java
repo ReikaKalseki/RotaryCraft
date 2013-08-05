@@ -16,7 +16,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -262,31 +261,13 @@ public class BlockShaft extends BlockModelledMachine {
 
 	public boolean canHarvest(World world, EntityPlayer player, int x, int y, int z)
 	{
+		if (player.capabilities.isCreativeMode)
+			return false;
 		TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (ts == null)
 			return false;
 		MaterialRegistry type = ts.type;
-		if (type == MaterialRegistry.WOOD)
-			return true;
-		ItemStack stack = player.inventory.getCurrentItem();
-		if (stack == null)
-			return false;
-		if (stack.getItem() instanceof ItemPickaxe) {
-			if (type == MaterialRegistry.STONE)
-				return true;
-			if (stack.itemID == Item.pickaxeWood.itemID)
-				return false;
-			if (type == MaterialRegistry.STEEL)
-				return true;
-			if (stack.itemID == Item.pickaxeStone.itemID)
-				return false;
-			if (type == MaterialRegistry.DIAMOND)
-				return true;
-			if (stack.itemID == Item.pickaxeIron.itemID)
-				return false;
-			return true;
-		}
-		return false;
+		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
@@ -65,7 +66,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
 		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(id)));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
-		if (ReikaWorldHelper.softBlocks(id) && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, id))
+		if (ReikaWorldHelper.softBlocks(id) && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, id) && ConfigRegistry.BLOCKDAMAGE.getState())
 			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, (int)posX, (int)posY, (int)posZ, id, -1, (int)posX, (int)posY, (int)posZ, 4);
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
@@ -151,104 +152,106 @@ public class EntityRailGunShot extends EntityTurretShot {
 			for (int j = -3; j <= 3; j++) {
 				for (int k = -3; k <= 3; k++) {
 					if (i*j*k < 9 && i*j*k > -9) {
-						int id = world.getBlockId(x0+i, y0+j, z0+k);
-						if (ReikaWorldHelper.softBlocks(id) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 5);
-						if (power >= 1) {
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.leaves.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.plantRed.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.plantYellow.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.reed.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.waterlily.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomBrown.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomRed.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.sapling.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.web.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.cactus.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.flowerPot.blockID, -1, x0+i, y0+j, z0+k, 5);
-						}
-						if (power >= 2) {
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.glass.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.thinGlass.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.glowStone.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomCapRed.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomCapBrown.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.ladder.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.signPost.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.signWall.blockID, -1, x0+i, y0+j, z0+k, 5);
-						}
-						if (power >= 3) {
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.wood.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.planks.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.fence.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.cloth.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.workbench.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.doorWood.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.netherrack.blockID, -1, x0+i, y0+j, z0+k, 5);
-						}
-						if (power >= 4) {
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.sand.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.gravel.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.blockClay.blockID, -1, x0+i, y0+j, z0+k, 5);
-							ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.slowSand.blockID, -1, x0+i, y0+j, z0+k, 5);
-						}
-						if (power >= 3) {
-							//ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.grass.blockID, -1, x0+i, y0+j, z0+k, 5);
-							//ReikaWorldHelper.recursiveFillWithinSphere(world, x0+i, y0+j-7, z0+k, Block.grass.blockID, -1, Block.dirt.blockID, 0, x0+i, y0+j-7, z0+k, 5);
-							if (id == Block.grass.blockID) {
-								if (power >= 5) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
-								}
-								else
-									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.dirt.blockID);
+						if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+							int id = world.getBlockId(x0+i, y0+j, z0+k);
+							if (ReikaWorldHelper.softBlocks(id) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 5);
+							if (power >= 1) {
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.leaves.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.plantRed.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.plantYellow.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.reed.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.waterlily.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomBrown.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomRed.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.sapling.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.web.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.cactus.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.flowerPot.blockID, -1, x0+i, y0+j, z0+k, 5);
 							}
-							world.markBlockForUpdate(x0+i, y0+j, z0+k);
-							if (id == Block.dirt.blockID) {
-								int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
-								if (meta >= 3 || (meta > 3-(power-6) && power > 6)) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
-								}
-								else
-									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+							if (power >= 2) {
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.glass.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.thinGlass.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.glowStone.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomCapRed.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.mushroomCapBrown.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.ladder.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.signPost.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.signWall.blockID, -1, x0+i, y0+j, z0+k, 5);
 							}
-						}
-						if (power >= 5) {
-							if (id == Block.stone.blockID) {
-								int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
-								if (meta >= 2 || (meta > 2-(power-8) && power > 8)) {
-									if (power <= 12)
-										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.cobblestone.blockID);
-									else {
+							if (power >= 3) {
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.wood.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.planks.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.fence.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.cloth.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.workbench.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.doorWood.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.netherrack.blockID, -1, x0+i, y0+j, z0+k, 5);
+							}
+							if (power >= 4) {
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.sand.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.gravel.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.blockClay.blockID, -1, x0+i, y0+j, z0+k, 5);
+								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.slowSand.blockID, -1, x0+i, y0+j, z0+k, 5);
+							}
+							if (power >= 3) {
+								//ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.grass.blockID, -1, x0+i, y0+j, z0+k, 5);
+								//ReikaWorldHelper.recursiveFillWithinSphere(world, x0+i, y0+j-7, z0+k, Block.grass.blockID, -1, Block.dirt.blockID, 0, x0+i, y0+j-7, z0+k, 5);
+								if (id == Block.grass.blockID) {
+									if (power >= 5) {
 										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
 										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
 									}
+									else
+										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.dirt.blockID);
 								}
-								else
-									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
-							}
-							if (id == Block.cobblestone.blockID || id == Block.cobblestoneWall.blockID || id == Block.cobblestoneMossy.blockID) {
-								int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
-								if (meta >= 3 || (meta > 3-(power-8) && power > 8)) {
-									Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-									ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
-								}
-								else
-									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
-							}
-						}
-						if (power == 14) {
-							for (int n = 1; n < Block.blocksList.length; n++) {
-								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
-									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 3);
+								world.markBlockForUpdate(x0+i, y0+j, z0+k);
+								if (id == Block.dirt.blockID) {
+									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
+									if (meta >= 3 || (meta > 3-(power-6) && power > 6)) {
+										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
+										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+									}
+									else
+										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
 								}
 							}
-						}
-						if (power == 15) {
-							for (int n = 1; n < Block.blocksList.length; n++) {
-								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
-									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 6);
+							if (power >= 5) {
+								if (id == Block.stone.blockID) {
+									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
+									if (meta >= 2 || (meta > 2-(power-8) && power > 8)) {
+										if (power <= 12)
+											ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.cobblestone.blockID);
+										else {
+											Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
+											ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+										}
+									}
+									else
+										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+								}
+								if (id == Block.cobblestone.blockID || id == Block.cobblestoneWall.blockID || id == Block.cobblestoneMossy.blockID) {
+									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
+									if (meta >= 3 || (meta > 3-(power-8) && power > 8)) {
+										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
+										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+									}
+									else
+										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+								}
+							}
+							if (power == 14) {
+								for (int n = 1; n < Block.blocksList.length; n++) {
+									if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
+										ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 3);
+									}
+								}
+							}
+							if (power == 15) {
+								for (int n = 1; n < Block.blocksList.length; n++) {
+									if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
+										ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 6);
+									}
 								}
 							}
 						}

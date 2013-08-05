@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
@@ -99,6 +100,13 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
+			}
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+					torquein = sp.getTorque();
+					omegain = sp.getOmega();
+				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -100,8 +101,24 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 				ReikaInventoryHelper.decrStack(11, inventory);
 			}
 		}
-		if (ReikaMathLibrary.doWithChance(ReikaMathLibrary.intpow(1.005, num*num))) {
-			num *= 1+par5Random.nextFloat();
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			if (ReikaMathLibrary.doWithChance(2*ReikaMathLibrary.intpow(1.005, num*num))) {
+				num *= 1+par5Random.nextFloat();
+			}
+			break;
+		case MEDIUM:
+			if (ReikaMathLibrary.doWithChance(ReikaMathLibrary.intpow(1.005, num*num))) {
+				num *= 1+par5Random.nextFloat();
+			}
+			break;
+		case HARD:
+			if (ReikaMathLibrary.doWithChance(0.5*ReikaMathLibrary.intpow(1.005, num*num))) {
+				num *= 1+par5Random.nextFloat();
+			}
+			break;
+		default:
+			break;
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
 		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 10))
@@ -206,11 +223,6 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	public int getSizeInventory()
 	{
 		return inventory.length;
-	}
-
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
 	}
 
 	/**

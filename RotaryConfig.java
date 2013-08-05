@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import net.minecraftforge.liquids.LiquidContainerRegistry;
+import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
@@ -40,6 +41,9 @@ public class RotaryConfig extends ControlledConfig {
 	public static final int torquelimit = (Integer.MAX_VALUE-1)/2;	// ~1 billion
 	public static final int omegalimit = (Integer.MAX_VALUE-1)/2;
 	public static final boolean debugmode = false;
+
+	public static final EnumDifficulty EASIEST = EnumDifficulty.EASY;
+	public static final EnumDifficulty HARDEST = EnumDifficulty.HARD;
 
 	public static final int MILLIBUCKET = LiquidContainerRegistry.BUCKET_VOLUME;
 
@@ -122,6 +126,10 @@ public class RotaryConfig extends ControlledConfig {
 			e.printStackTrace();
 		}
 		configFile.delete();
+	}
+
+	public static EnumDifficulty getDifficulty() {
+		return EnumDifficulty.getDifficulty(ConfigRegistry.DIFFICULTY.getValue());
 	}
 
 }

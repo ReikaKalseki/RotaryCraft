@@ -34,7 +34,7 @@ public abstract class IntegrityChecker {
 			String culprit = hostileMods.get(i);
 			if (culprit == null)
 				return;
-			if (culprit.equalsIgnoreCase("")) {
+			if (culprit.equalsIgnoreCase("NOMOD")) {
 				destroyTechtree();
 			}
 			else {

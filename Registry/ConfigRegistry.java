@@ -10,8 +10,10 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraftforge.common.Configuration;
+import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.ConfigList;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
@@ -46,7 +48,9 @@ public enum ConfigRegistry implements ConfigList {
 	ACHIEVEMENTS("Enable Achievements", false, true),
 	MODORES("Force Inter-Mod Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
-	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true);
+	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
+	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),
+	DIFFICULTY("Difficulty Control", 2);
 
 	private String label;
 	private boolean defaultState;
@@ -127,6 +131,9 @@ public enum ConfigRegistry implements ConfigList {
 	}
 
 	public int getValue() {
+		if (this == DIFFICULTY) {
+			return EnumDifficulty.getBoundedDifficulty((Integer)RotaryCraft.config.getControl(this.ordinal()), RotaryConfig.EASIEST, RotaryConfig.HARDEST).ordinal();
+		}
 		return (Integer)RotaryCraft.config.getControl(this.ordinal());
 	}
 

@@ -13,10 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -24,6 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -104,36 +102,18 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		if (this.canHarvest(world, player, x, y, z));
 		this.harvestBlock(world, player, x, y, z, 0);
-		return ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
 	}
 
 	public boolean canHarvest(World world, EntityPlayer player, int x, int y, int z)
 	{
+		if (player.capabilities.isCreativeMode)
+			return false;
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx == null)
 			return false;
 		MaterialRegistry type = gbx.type;
-		if (type == MaterialRegistry.WOOD)
-			return true;
-		ItemStack stack = player.inventory.getCurrentItem();
-		if (stack == null)
-			return false;
-		if (stack.getItem() instanceof ItemPickaxe) {
-			if (type == MaterialRegistry.STONE)
-				return true;
-			if (stack.itemID == Item.pickaxeWood.itemID)
-				return false;
-			if (type == MaterialRegistry.STEEL)
-				return true;
-			if (stack.itemID == Item.pickaxeStone.itemID)
-				return false;
-			if (type == MaterialRegistry.DIAMOND)
-				return true;
-			if (stack.itemID == Item.pickaxeIron.itemID)
-				return false;
-			return true;
-		}
-		return false;
+		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
 	}
 
 	@Override
@@ -148,10 +128,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			if (todrop.stackTagCompound == null)
 				todrop.setTagCompound(new NBTTagCompound());
 			todrop.stackTagCompound.setInteger("damage", gbx.damage);
-			EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-			item.delayBeforeCanPickup = 10;
-			if (!world.isRemote && !ep.capabilities.isCreativeMode)
-				world.spawnEntityInWorld(item);
+			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 		super.harvestBlock(world, ep, x, y, z, meta);
 	}

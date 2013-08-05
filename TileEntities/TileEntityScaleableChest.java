@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
@@ -100,7 +101,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		if (numchanges > 18) {
 			Block.blocksList[this.getTileEntityBlockID()].dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2F, true);
+			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2F, ConfigRegistry.BLOCKDAMAGE.getState());
 		}
 		else if (numchanges > 10) {
 			for (int i = 0; i < numchanges/3; i++)

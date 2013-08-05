@@ -16,6 +16,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesCompactor
@@ -36,11 +37,25 @@ public class RecipesCompactor
 
 	private RecipesCompactor()
 	{
-		this.addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 2, 0), 0.2F); //No charcoal
-		this.addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, 2, 1), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, 2, 2), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, 2, 0), 0.2F);
+		this.addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F); //No charcoal
+		this.addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F);
+		this.addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F);
+		this.addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F);
+
 		this.addSmelting(Item.blazePowder.itemID, 0, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F);
+	}
+
+	public final int getNumberPerStep() {
+		switch(RotaryConfig.getDifficulty()) {
+		case EASY:
+			return 2;
+		case MEDIUM:
+			return 2;
+		case HARD:
+			return 1;
+		default:
+			return 2;
+		}
 	}
 
 	/** Adds a smelting recipe. */

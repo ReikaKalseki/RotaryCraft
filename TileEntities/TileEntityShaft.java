@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -381,6 +382,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				readtorque[0] = ((TileEntityIOMachine)te1).torque;
 				readomega[0] = ((TileEntityIOMachine)te1).omega;
 			}
+			if (te1 instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te1;
+				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+					readtorque[0] = sp.getTorque();
+					readomega[0] = sp.getOmega();
+				}
+			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, yCoord, readz);
 				if (devicein.getBlockMetadata() >= 8) {
@@ -409,6 +417,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			if (te2 instanceof SimpleProvider) {
 				readtorque[1] = ((TileEntityIOMachine)te2).torque;
 				readomega[1] = ((TileEntityIOMachine)te2).omega;
+			}
+			if (te2 instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
+				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+					readtorque[1] = sp.getTorque();
+					readomega[1] = sp.getOmega();
+				}
 			}
 			if (m2 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein2 = (TileEntitySplitter)world.getBlockTileEntity(readx2, yCoord, readz2);
@@ -453,6 +468,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 		if (te instanceof SimpleProvider) {
 			this.copyStandardPower(worldObj, readx, ready, readz);
+		}
+		if (te instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				torquein = sp.getTorque();
+				omegain = sp.getOmega();
+			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
