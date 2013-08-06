@@ -65,7 +65,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta, false);
 		this.transferPower(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
+
+		this.basicPowerReceiver();
 	}
 
 	public void readFromCross(TileEntityShaft cross) {

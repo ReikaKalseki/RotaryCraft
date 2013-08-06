@@ -28,4 +28,7 @@ public interface ShaftPowerReceiver {
 
 	public boolean isReceiving();
 
+	/** When there is no input machine */
+	public void noInputMachine();
+
 }

@@ -70,7 +70,8 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 
 		this.getIOSides(world, x, y, z, meta, false);
 		this.transferPower(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
+
+		this.basicPowerReceiver();
 	}
 
 	public void readFromCross(TileEntityShaft cross) {

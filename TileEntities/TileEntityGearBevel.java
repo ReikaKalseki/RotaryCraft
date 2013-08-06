@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.awt.Color;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -27,9 +25,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiController {
 
 	public int direction;
-
-	public static final Color[] colors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
-	public static final String[] colorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
@@ -77,7 +72,8 @@ public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiC
 		int id = worldObj.getBlockId(x, y, z);
 		this.getIOSides(world, x, y, z);
 		this.transferPower(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
+
+		this.basicPowerReceiver();
 	}
 
 	public void getIOSides(World world, int x, int y, int z) {

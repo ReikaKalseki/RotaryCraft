@@ -9,11 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import java.awt.Color;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
+import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer.SideState;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiPressureBalancer extends GuiNonPoweredMachine
 {
@@ -27,7 +40,7 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 		super(new CoreContainer(p5ep, te), te);
 		PressureBalancer = te;
 		xSize = 176;
-		ySize = 172;
+		ySize = 156;
 		ep = p5ep;
 	}
 
@@ -36,15 +49,61 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 		super.initGui();
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		buttonList.add(new ImagedGuiButton(0, j+25, k+13, 18, 72, 256-18, 256-72, 0, "/Reika/RotaryCraft/Textures/GUI/buttons.png"));
-		buttonList.add(new ImagedGuiButton(1, j+61, k+13, 18, 72, 256-18, 256-72, 0, "/Reika/RotaryCraft/Textures/GUI/buttons.png"));
-		buttonList.add(new ImagedGuiButton(2, j+97, k+13, 18, 72, 256-18, 256-72, 0, "/Reika/RotaryCraft/Textures/GUI/buttons.png"));
-		buttonList.add(new ImagedGuiButton(3, j+133, k+13, 18, 72, 256-18, 256-72, 0, "/Reika/RotaryCraft/Textures/GUI/buttons.png"));
+		String tex = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
+
+		for (int i = 0; i < 6; i++)
+			buttonList.add(new ImagedGuiButton(i, j+84, k+31+20*i, 18, 18, 256-18, 256-72, 0, tex));
 	}
 
 	@Override
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
+		this.initGui();
+		if (b.id < 6) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BALANCER.getMinValue(), PressureBalancer, ep, b.id);
+		}
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		Color[] colors = new Color[RotaryAux.sideColors.length];
+		System.arraycopy(RotaryAux.sideColors, 0, colors, 0, colors.length);
+		Color sc = colors[3];
+		colors[3] = colors[5];
+		colors[5] = sc;
+
+		String tex = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";
+
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = ForgeDirection.values()[i];
+			SideState s = PressureBalancer.getStateOfSide(dir);
+
+			GL11.glColor4d(1, 1, 1, 1);
+			mc.renderEngine.bindTexture(tex);
+
+			if (s.canAcceptLiquid()) {
+				this.drawTexturedModalRect(125, 31+20*i, 24, 156, 24, 18);
+			}
+			else {
+				this.drawTexturedModalRect(125, 31+20*i, 0, 156, 24, 18);
+			}
+		}
+
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = ForgeDirection.values()[i];
+
+			SideState s = PressureBalancer.getStateOfSide(dir);
+
+			this.drawRect(85, 32+20*i, 85+16, 32+16+20*i, 0xc0000000+colors[dir.ordinal()].getRGB());
+
+			ItemStack liq = s.getItemForIcon();
+			ItemStack pipe = s.getItemForPiping();
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, liq, 108, 32+20*i);
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, pipe, 150, 32+20*i);
+		}
 	}
 
 	/**
@@ -57,20 +116,20 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int w = PressureBalancer.getWaterScaled(70);
-		int lv = PressureBalancer.getLavaScaled(70);
-		int f = PressureBalancer.getFuelScaled(70);
-		int lb = PressureBalancer.getLubeScaled(70);
-		//ReikaJavaLibrary.pConsole(w);
-		this.drawTexturedModalRect(j+26, k+84-w, 176, 95-w, 16, w);
-		this.drawTexturedModalRect(j+62, k+84-w, 193, 95-w, 16, lv);
-		this.drawTexturedModalRect(j+98, k+84-w, 210, 95-w, 16, f);
-		this.drawTexturedModalRect(j+134, k+84-w, 227, 95-w, 16, lb);
+		int w = PressureBalancer.getWaterScaled(60);
+		int lv = PressureBalancer.getLavaScaled(60);
+		int f = PressureBalancer.getFuelScaled(60);
+		int lb = PressureBalancer.getLubeScaled(60);
+
+		this.drawTexturedModalRect(j+10, k+81-w, 176, 160-w, 17, w);
+		this.drawTexturedModalRect(j+38, k+81-w, 193, 160-w, 17, lv);
+		this.drawTexturedModalRect(j+10, k+148-w, 210, 160-w, 17, f);
+		this.drawTexturedModalRect(j+38, k+148-w, 227, 160-w, 17, lb);
 
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "balancergui";
+		return "balancergui2";
 	}
 }

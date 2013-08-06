@@ -44,7 +44,6 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -1205,10 +1204,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			}
 		}
 
-		TileEntity te = world.getBlockTileEntity(writex, writey, writez);
-		if (te instanceof ShaftPowerReceiver) {
-			this.writePowerToReciever((ShaftPowerReceiver)te);
-		}
+		this.basicPowerReceiver();
 
 		if (type.isJetFueled() && fuelslot[0] != null && jetfuels < FUELCAP) {
 			if (fuelslot[0].itemID == ItemStacks.fuelbucket.itemID && fuelslot[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {

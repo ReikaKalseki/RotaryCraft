@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
@@ -142,6 +143,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	protected boolean isProvider(TileEntity te) {
+		if (te instanceof ShaftPowerEmitter)
+			return true;
 		if (!(te instanceof TileEntityIOMachine))
 			return false;
 		return ((TileEntityIOMachine)te).canProvidePower();
@@ -216,6 +219,30 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			sp.setOmega(0);
 			sp.setTorque(0);
 			sp.setPower(0);
+		}
+	}
+
+	protected void basicPowerReceiver() {
+		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		if (te instanceof ShaftPowerReceiver) {
+			this.writePowerToReciever((ShaftPowerReceiver)te);
+		}
+	}
+
+	protected void writeToPowerReceiverAt(World world, int x, int y, int z, int om, int tq) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te instanceof ShaftPowerReceiver) {
+			ShaftPowerReceiver sp = (ShaftPowerReceiver)te;
+			if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
+				sp.setOmega(om);
+				sp.setTorque(tq);
+				sp.setPower(om*tq);
+			}
+			else {
+				sp.setOmega(0);
+				sp.setTorque(0);
+				sp.setPower(0);
+			}
 		}
 	}
 }

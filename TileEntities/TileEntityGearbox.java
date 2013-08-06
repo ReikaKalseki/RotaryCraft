@@ -134,7 +134,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				lubricant += ItemFuelLubeBucket.value[0];
 			}
 		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
+
+		this.basicPowerReceiver();
 	}
 
 	public void getLube(World world, int x, int y, int z, int metadata) {

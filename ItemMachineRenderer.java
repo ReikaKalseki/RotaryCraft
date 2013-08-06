@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -342,6 +343,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case PNEUENGINE:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPneumaticEngine(), a, -0.1D, b, 0.0F);
+				break;
+			case BALANCER:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPressureBalancer(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

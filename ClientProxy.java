@@ -19,12 +19,10 @@ import Reika.DragonAPI.Instantiable.SoundLoader;
 import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
-import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Entities.RenderCustomTNT;
 import Reika.RotaryCraft.Entities.RenderFreezeGunShot;
 import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
@@ -62,7 +60,6 @@ public class ClientProxy extends CommonProxy
 	public void registerRenderers() {
 		this.loadModels();
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityCustomTNT.class, new RenderCustomTNT());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRailGunShot.class, new RenderRailGunShot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityExplosiveShell.class, new RenderRailGunShot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFreezeGunShot.class, new RenderFreezeGunShot());

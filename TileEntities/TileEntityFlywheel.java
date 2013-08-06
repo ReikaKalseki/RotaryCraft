@@ -110,6 +110,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		this.testFailure();
 		this.playSounds();
 
+		this.basicPowerReceiver();
 	}
 
 	private void playSounds() {

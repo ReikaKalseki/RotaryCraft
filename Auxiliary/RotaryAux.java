@@ -9,16 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.Random;
+import java.awt.Color;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
@@ -47,6 +44,9 @@ public class RotaryAux {
 	public static final String terrainpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Terrain/textures.png";
 	public static final String tileentdir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/TileEntityTex/";
 	public static final String mididir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/MIDIs/";
+
+	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
+	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
 	public static void initializeModel (BaseMod mod) {
 		blockModel = ModLoader.getUniqueBlockModelID(mod, true);
@@ -179,42 +179,6 @@ public class RotaryAux {
 		}
 	}
 
-
-	public static void dropInventory(World world, int x, int y, int z)
-	{
-		IInventory ii = (IInventory)world.getBlockTileEntity(x, y, z);
-		Random par5Random = new Random();
-		if (ii != null) {
-			label0:
-				for (int i = 0; i < ii.getSizeInventory(); i++){
-					ItemStack itemstack = ii.getStackInSlot(i);
-					if (itemstack == null)
-						continue;
-					float f = par5Random.nextFloat() * 0.8F + 0.1F;
-					float f1 = par5Random.nextFloat() * 0.8F + 0.1F;
-					float f2 = par5Random.nextFloat() * 0.8F + 0.1F;
-					do {
-						if (itemstack.stackSize <= 0)
-							continue label0;
-						int j = par5Random.nextInt(21) + 10;
-						if (j > itemstack.stackSize)
-							j = itemstack.stackSize;
-						itemstack.stackSize -= j;
-						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
-						if (itemstack.hasTagCompound())
-							entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-						float f3 = 0.05F;
-						entityitem.motionX = (float)par5Random.nextGaussian() * f3;
-						entityitem.motionY = (float)par5Random.nextGaussian() * f3 + 0.2F;
-						entityitem.motionZ = (float)par5Random.nextGaussian() * f3;
-						entityitem.delayBeforeCanPickup = 10;
-						world.spawnEntityInWorld(entityitem);
-					}
-					while (true);
-				}
-		}
-	}
-
 	public static boolean canHarvestSteelMachine(EntityPlayer ep) {
 		if (ep.capabilities.isCreativeMode)
 			return false;
@@ -225,7 +189,7 @@ public class RotaryAux {
 			return true;
 		if (!(eitem.getItem() instanceof ItemPickaxe))
 			return false;
-		if (eitem.getItem().canHarvestBlock(Block.oreIron))
+		if (eitem.getItem().canHarvestBlock(Block.oreIron, eitem))
 			return true;
 		return false;
 	}

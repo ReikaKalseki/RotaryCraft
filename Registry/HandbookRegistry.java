@@ -142,6 +142,7 @@ public enum HandbookRegistry {
 	WORKTABLE(MachineRegistry.WORKTABLE),
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
+	BALANCER(MachineRegistry.BALANCER),
 	DISPLAY(MachineRegistry.DISPLAY),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),

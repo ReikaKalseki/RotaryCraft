@@ -20,7 +20,6 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemLiquid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
@@ -76,7 +75,6 @@ public class RotaryRegistration {
 	}
 
 	public static void addEntities() {
-		EntityRegistry.registerModEntity(EntityCustomTNT.class, "Custom TNT", EntityRegistry.findGlobalUniqueEntityId()+1, RotaryCraft.instance, 160, 20, true);
 		EntityRegistry.registerModEntity(EntityRailGunShot.class, "RailGun Shot", EntityRegistry.findGlobalUniqueEntityId()+2, RotaryCraft.instance, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityFreezeGunShot.class, "Freeze Gun Shot", EntityRegistry.findGlobalUniqueEntityId()+3, RotaryCraft.instance, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityIceBlock.class, "Ice Block", EntityRegistry.findGlobalUniqueEntityId()+4, RotaryCraft.instance, 64, 20, true);

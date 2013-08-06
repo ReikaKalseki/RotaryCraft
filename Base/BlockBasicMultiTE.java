@@ -31,6 +31,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
@@ -158,7 +159,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
-		if (DartItemHandler.getInstance().isWrench(is)) {
+		if (APIRegistry.DARTCRAFT.conditionsMet() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
 			ep.attackEntityFrom(DamageSource.inWall, 4);
@@ -374,7 +375,7 @@ public abstract class BlockBasicMultiTE extends Block {
 	public final void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory)
-			RotaryAux.dropInventory(world, x, y, z);
+			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntityVacuum) {
 			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).experience);
 		}

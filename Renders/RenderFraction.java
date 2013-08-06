@@ -26,20 +26,12 @@ public class RenderFraction extends RotaryTERenderer
 {
 
 	private ModelFraction FractionModel = new ModelFraction();
-	//private ModelFractionV FractionModelV = new ModelFractionV();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
 	public void renderTileEntityFractionatorAt(TileEntityFractionator tile, double par2, double par4, double par6, float par8)
 	{
-		int var9;
-
-		if (!tile.isInWorld())
-			var9 = 0;
-		else
-			var9 = tile.getBlockMetadata();
-
 		ModelFraction var14;
 		var14 = FractionModel;
 

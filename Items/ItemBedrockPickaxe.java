@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
@@ -44,7 +45,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
+public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 
 	private int index;
 
@@ -71,8 +72,14 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 	// To make un-unenchantable
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity entity, int par4, boolean par5) {
-		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is))
+		this.forceSilkTouch(is);
+	}
+
+	private void forceSilkTouch(ItemStack is) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			is.stackTagCompound = null;
 			is.addEnchantment(Enchantment.silkTouch, 1);
+		}
 	}
 
 	@Override
@@ -202,6 +209,19 @@ public class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprite
 
 	public void setIndex(int a) {
 		index = a;
+	}
+
+	@Override
+	public final int getItemEnchantability()
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem ei) {
+		ItemStack is = ei.getEntityItem();
+		this.forceSilkTouch(is);
+		return false;
 	}
 
 	@Override

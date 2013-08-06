@@ -209,7 +209,7 @@ public class RenderBevel extends RotaryTERenderer
 			this.renderTileEntityBevelAt((TileEntityGearBevel)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			//this.renderCompass(tile, par2, par4, par6);
-			this.renderFaceNumbers((TileEntityGearBevel)tile, par2, par4, par6);
+			this.renderFaceColors((TileEntityIOMachine) tile, par2, par4, par6);
 			//if (((TileEntityIOMachine)tile).iotick < 255)
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
@@ -249,133 +249,6 @@ public class RenderBevel extends RotaryTERenderer
 		v5.addVertex(p2+0.65, p4+vo, p6-1.25);
 		v5.draw();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		ReikaRenderHelper.exitGeoDraw();
-	}
-
-	public void renderFaceNumbers(TileEntityGearBevel te, double p2, double p4, double p6) {
-		double offset = 0.0625;
-		int alpha = te.iotick;
-		ReikaRenderHelper.prepareGeoDraw(true);
-		Tessellator v5 = new Tessellator();
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[0].getRed(), te.colors[0].getGreen(), te.colors[0].getBlue(), alpha);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[0].getRed(), te.colors[0].getGreen(), te.colors[0].getBlue(), alpha/3);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.draw();
-
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[1].getRed(), te.colors[1].getGreen(), te.colors[1].getBlue(), alpha);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[1].getRed(), te.colors[1].getGreen(), te.colors[1].getBlue(), alpha/3);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.draw();
-
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[2].getRed(), te.colors[2].getGreen(), te.colors[2].getBlue(), alpha);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[2].getRed(), te.colors[2].getGreen(), te.colors[2].getBlue(), alpha/3);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.draw();
-
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[3].getRed(), te.colors[3].getGreen(), te.colors[3].getBlue(), alpha);
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[3].getRed(), te.colors[3].getGreen(), te.colors[3].getBlue(), (int)(alpha/2.4));
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.draw();
-
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[4].getRed(), te.colors[4].getGreen(), te.colors[4].getBlue(), alpha);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[4].getRed(), te.colors[4].getGreen(), te.colors[4].getBlue(), alpha/3);
-		v5.addVertex(p2-offset, p4-offset, p6-offset);
-		v5.addVertex(p2-offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2-offset, p4+1+offset, p6-offset);
-		v5.draw();
-
-		v5.startDrawing(GL11.GL_LINE_LOOP);
-		v5.setColorRGBA(te.colors[5].getRed(), te.colors[5].getGreen(), te.colors[5].getBlue(), alpha);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.draw();
-		v5.startDrawing(GL11.GL_QUADS);
-		v5.setColorRGBA(te.colors[5].getRed(), te.colors[5].getGreen(), te.colors[5].getBlue(), alpha/3);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6-offset);
-		v5.addVertex(p2+1+offset, p4+1+offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6+1+offset);
-		v5.addVertex(p2+1+offset, p4-offset, p6-offset);
-		v5.draw();
-
-		for (int i = 0; i < 6; i++) {
-			int a = 0; int b = 0; int c = 0;
-			switch(i) {
-			case 0:
-				b = -3;
-				break;
-			case 1:
-				b = 3;
-				break;
-			case 2:
-				c = -3;
-				break;
-			case 3:
-				c = 3;
-				break;
-			case 4:
-				a = -3;
-				break;
-			case 5:
-				a = 3;
-				break;
-			}
-			v5.startDrawing(GL11.GL_LINES);
-			v5.setColorRGBA(te.colors[i].getRed(), te.colors[i].getGreen(), te.colors[i].getBlue(), alpha);
-			v5.addVertex(p2+0.5, p4+0.5, p6+0.5);
-			v5.addVertex(p2+0.5+a, p4+0.5+b, p6+0.5+c);
-			v5.draw();
-		}
-
 		ReikaRenderHelper.exitGeoDraw();
 	}
 

@@ -27,6 +27,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
+import Reika.RotaryCraft.Containers.ContainerBalancer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
@@ -248,7 +249,10 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerWorktable(player, (TileEntityWorktable)te, world);
 		}
 		if (te instanceof TileEntityLandmine) {
-			return new ContainerLandmine(player, te);
+			return new ContainerLandmine(player, (TileEntityLandmine)te);
+		}
+		if (te instanceof TileEntityPressureBalancer) {
+			return new ContainerBalancer(player, (TileEntityPressureBalancer)te);
 		}
 
 		if (te instanceof OneSlotMachine)

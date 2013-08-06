@@ -12,12 +12,12 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 
 public class ContainerLandmine extends CoreContainer {
 
-	public ContainerLandmine(EntityPlayer player, TileEntity te) {
+	public ContainerLandmine(EntityPlayer player, TileEntityLandmine te) {
 		super(player, te);
 		IInventory ii = (IInventory)te;
 

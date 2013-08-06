@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.ModInteract.BCMachineHandler;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
@@ -63,6 +64,9 @@ public final class OreForcer {
 	private static void force(APIRegistry api) {
 		RotaryCraft.logger.log("ROTARYCRAFT: Forcing compatibility with "+api);
 		switch(api) {
+		case BUILDCRAFTFACTORY:
+			ReikaJavaLibrary.initClass(BCMachineHandler.class);
+			break;
 		case APPLIEDENERGISTICS:
 			intercraftQuartz();
 			break;
@@ -214,6 +218,7 @@ public final class OreForcer {
 	}
 
 	private static void registerThaumcraft() {
+		ThaumOreHandler.getInstance().forceOreRegistration();
 		RotaryCraft.logger.log("ROTARYCRAFT: Adding ore item conversion recipes!");
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];

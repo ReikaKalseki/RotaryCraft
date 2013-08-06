@@ -85,11 +85,11 @@ public enum MaterialRegistry {
 			case STONE:
 				return true;
 			case STEEL:
-				return tool.getItem().canHarvestBlock(Block.oreIron);
+				return tool.getItem().canHarvestBlock(Block.oreIron, tool);
 			case DIAMOND:
-				return tool.getItem().canHarvestBlock(Block.oreDiamond);
+				return tool.getItem().canHarvestBlock(Block.oreDiamond, tool);
 			case BEDROCK:
-				return tool.getItem().canHarvestBlock(Block.obsidian);
+				return tool.getItem().canHarvestBlock(Block.obsidian, tool);
 			default:
 				return false;
 			}

@@ -27,6 +27,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
@@ -129,7 +130,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
-		if (DartItemHandler.getInstance().isWrench(is)) {
+		if (APIRegistry.DARTCRAFT.conditionsMet() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
 			ep.attackEntityFrom(DamageSource.inWall, 4);
@@ -307,7 +308,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	{
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory)
-			RotaryAux.dropInventory(world, x, y, z);
+			ReikaItemHelper.dropInventory(world, x, y, z);
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

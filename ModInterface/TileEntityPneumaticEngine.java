@@ -9,11 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -103,10 +101,7 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		//pp.useEnergy(mj, mj, true);
 		pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
 
-		TileEntity te = world.getBlockTileEntity(writex, writey, writez);
-		if (te instanceof ShaftPowerReceiver) {
-			this.writePowerToReciever((ShaftPowerReceiver)te);
-		}
+		this.basicPowerReceiver();
 	}
 
 	@Override

@@ -437,6 +437,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 		}
+		this.writeToPowerReceiverAt(world, writex, yCoord, writez, readomega[0], readtorque[0]);
+		this.writeToPowerReceiverAt(world, writex2, yCoord, writez2, readomega[1], readtorque[1]);
 	}
 
 	@Override
@@ -491,6 +493,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		omega = omegain / ratio;
 		torque = torquein * ratio;
 		power = omega*torque;
+
+		this.basicPowerReceiver();
 
 		this.testFailure();
 		if (omega >= 32000000 && !failed) {

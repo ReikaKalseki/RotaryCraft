@@ -21,7 +21,6 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -160,10 +159,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		}
 
 		if (writex != Integer.MIN_VALUE && writey != Integer.MIN_VALUE && writez != Integer.MIN_VALUE) {
-			TileEntity te = world.getBlockTileEntity(writex, writey, writez);
-			if (te instanceof ShaftPowerReceiver) {
-				this.writePowerToReciever((ShaftPowerReceiver)te);
-			}
+			this.basicPowerReceiver();
 		}
 	}
 

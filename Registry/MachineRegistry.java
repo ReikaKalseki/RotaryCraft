@@ -215,7 +215,7 @@ public enum MachineRegistry {
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
 	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", APIRegistry.BUILDCRAFTENERGY),
 	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
-	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, APIRegistry.BUILDCRAFTENERGY),
+	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, "RenderBalancer", APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4);
 

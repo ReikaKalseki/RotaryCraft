@@ -446,6 +446,7 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 					world.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
+				this.basicPowerReceiver();
 			}
 		}
 		else {
@@ -507,8 +508,51 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 					torque = omega = 0;
 			}
 			power = torque*omega;
+			this.writeToReceiver();
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d * %d = %d", this.omega, this.torque, this.power));
 		}
+	}
+
+	private void writeToReceiver() {
+		int t1;
+		int t2;
+		int x1 = writeinline[0];
+		int z1 = writeinline[1];
+		int x2 = writebend[0];
+		int z2 = writebend[1];
+		int y = yCoord;
+		World world = worldObj;
+
+		int ratio = this.getRatioFromMode();
+		if (ratio == 0)
+			return;
+		boolean favorbent = false;
+		if (ratio < 0) {
+			favorbent = true;
+			ratio = -ratio;
+		}
+		if (ratio == 1) { //Even split, favorbent irrelevant
+			t1 = torque/2;
+			return;
+		}
+		if (favorbent) {
+			t1 = torque/ratio;
+		}
+		else {
+			t1 = (int)(torque*((ratio-1D)/(ratio)));
+		}
+		if (ratio == 1) { //Even split, favorbent irrelevant
+			t2 = torque/2;
+		}
+		if (favorbent) {
+			t2 = (int)(torque*((ratio-1D)/(ratio)));
+		}
+		else {
+			t2 = torque/ratio;
+		}
+
+		this.writeToPowerReceiverAt(world, x1, y, z1, omega, t1);
+		this.writeToPowerReceiverAt(world, x2, y, z2, omega, t2);
 	}
 
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function

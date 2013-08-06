@@ -309,6 +309,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public String getVersionName() {
-		return "Release 1";
+		return "Release";
 	}
 }
