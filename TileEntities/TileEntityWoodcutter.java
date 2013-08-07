@@ -19,6 +19,7 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPlantHelper;
+import Reika.DragonAPI.Libraries.ReikaTreeHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -59,13 +60,24 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			return;
 
 		if (tree.isEmpty() && this.hasWood()) {
-			if (ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz)) == ModWoodList.SEQUOIA) {
-				tree.addSequoia(world, editx, edity, editz);
+			ModWoodList wood = ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			if (wood == ModWoodList.SEQUOIA) {
+				tree.addSequoia(world, editx, edity, editz, RotaryCraft.logger.shouldDebug());
 			}
-			else {
+			else if (wood != null) {
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
-						tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
+						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
+						tree.addModTree(world, editx+i, edity, editz+j, wood);
+					}
+				}
+			}
+			else if (vanilla != null) {
+				for (int i = -1; i <= 1; i++) {
+					for (int j = -1; j <= 1; j++) {
+						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
+						tree.addTree(world, editx+i, edity, editz+j, vanilla);
 					}
 				}
 			}
@@ -98,13 +110,13 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 
 				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 
-				if (xyz[1] == edity) {
-					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
-						ItemStack plant = this.getSapling(drop, dropmeta);
-						if (plant != null)
-							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
-					}
+				//if (xyz[1] == edity) {
+				if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+					ItemStack plant = this.getSapling(drop, dropmeta);
+					if (plant != null)
+						world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
 				}
+				//}
 			}
 			else {
 				boolean fall = BlockSand.canFallBelow(world, xyz[0], xyz[1]-1, xyz[2]);

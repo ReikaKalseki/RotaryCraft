@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 
+@Deprecated
 public class BlockGravity extends Block implements SidedTextureIndex
 {
 	/** Do blocks fall instantly to where they stop or do they fall over time */

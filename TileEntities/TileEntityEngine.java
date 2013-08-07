@@ -1168,7 +1168,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F);
 		if (type.carNoise())
 			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F);
-		if (type.waterNoise() && this.isFrontOfArray())
+		if (type.waterNoise() && (this.isFrontOfArray() || !this.isPartOfArray()))
 			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F);
 		if (type.windNoise()) {
 			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F);

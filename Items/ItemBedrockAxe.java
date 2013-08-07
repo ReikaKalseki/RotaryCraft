@@ -16,8 +16,6 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Blocks.BlockGravLeaves;
-import Reika.RotaryCraft.Blocks.BlockGravLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -47,10 +45,6 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	public float getStrVsBlock(ItemStack is, Block par2Block) {
 		if (par2Block == null)
 			return 0;
-		if (par2Block instanceof BlockGravLog)
-			return 12F;
-		if (par2Block instanceof BlockGravLeaves)
-			return 12F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == par2Block)
 				return 12F;

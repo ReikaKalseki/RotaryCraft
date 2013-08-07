@@ -15,12 +15,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -105,6 +109,16 @@ public class ItemMeter extends ItemRotaryTool
 			if (clicked == null)
 				return false;
 			ReikaChatHelper.writeString(String.format("Hose contains %d L of lubricant.", clicked.lubricant));
+			return true;
+		}
+		if (tile instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
+			ReikaChatHelper.writeString(String.format("%s producing %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));
+			return true;
+		}
+		if (tile instanceof ShaftPowerReceiver) {
+			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
+			ReikaChatHelper.writeString(String.format("%s receiving %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));
 			return true;
 		}
 		if (tile instanceof TileEntityIOMachine) {
@@ -324,6 +338,13 @@ public class ItemMeter extends ItemRotaryTool
 					torque = omega = 0;
 					return true;
 				}
+			}
+			if (m == MachineRegistry.COMPRESSOR) {
+				ratioclicked = 16;
+				TileEntityAirCompressor clicked = (TileEntityAirCompressor)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				ReikaChatHelper.writeString(String.format("Air Compressor generating %.3f MJ/t.", clicked.power/ReikaBuildCraftHelper.getWattsPerMJ()));
 			}
 			if (m == MachineRegistry.FLYWHEEL) {
 				ratioclicked = 16;

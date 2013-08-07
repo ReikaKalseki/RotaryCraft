@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 
+/** NEVER ALTER THE ORDER OF THIS LIST!! */
 public enum ExtraConfigIDs implements IDRegistry {
 
 	MACHINEPLACER("ItemBlock IDs", "Machine Items", 30616, Item.class),
@@ -41,8 +42,8 @@ public enum ExtraConfigIDs implements IDRegistry {
 
 	DECOBLOCKS("Extra Block IDs", "Deco Block", 450, Block.class),
 	BEDROCKSLICE("Extra Block IDs", "Bedrock Slice", 451, Block.class),
-	GRAVLOG("Extra Block IDs", "Tree Log", 452, Block.class),
-	GRAVLEAVES("Extra Block IDs", "Tree Leaves", 453, Block.class),
+	//GRAVLOG("Extra Block IDs", "Tree Log", 452, Block.class),
+	//GRAVLEAVES("Extra Block IDs", "Tree Leaves", 453, Block.class),
 	LIGHTBLOCK("Extra Block IDs", "LightBlock", 454, Block.class),
 	CANOLA("Extra Block IDs", "Canola", 455, Block.class),
 	MININGPIPE("Extra Block IDs", "Mining Pipe", 456, Block.class),
@@ -92,5 +93,9 @@ public enum ExtraConfigIDs implements IDRegistry {
 	@Override
 	public String getConfigName() {
 		return this.getName();
+	}
+
+	public boolean isDummiedOut() {
+		return type == null;
 	}
 }

@@ -141,4 +141,8 @@ public enum ConfigRegistry implements ConfigList {
 		return (Float)RotaryCraft.config.getControl(this.ordinal());
 	}
 
+	public boolean isDummiedOut() {
+		return type == null;
+	}
+
 }

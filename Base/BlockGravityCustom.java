@@ -18,6 +18,7 @@ import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 
+@Deprecated
 public class BlockGravityCustom extends Block
 {
 	/** Do blocks fall instantly to where they stop or do they fall over time */

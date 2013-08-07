@@ -188,4 +188,8 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	public String getCategory() {
 		return "Machine Blocks";
 	}
+
+	public boolean isDummiedOut() {
+		return block == null;
+	}
 }

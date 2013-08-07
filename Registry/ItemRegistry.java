@@ -348,4 +348,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return "Tool Item IDs";
 		return "Item IDs";
 	}
+
+	public boolean isDummiedOut() {
+		return itemClass == null;
+	}
 }

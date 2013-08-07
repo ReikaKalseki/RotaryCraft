@@ -29,4 +29,7 @@ public interface ShaftPowerEmitter {
 
 	public boolean isEmitting();
 
+	/** For when to write it to chat or the like */
+	public String getName();
+
 }

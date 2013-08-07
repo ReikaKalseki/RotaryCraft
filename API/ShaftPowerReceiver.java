@@ -17,6 +17,12 @@ public interface ShaftPowerReceiver {
 
 	public void setPower(long power);
 
+	public int getOmega();
+
+	public int getTorque();
+
+	public long getPower();
+
 	public int[] getInputBlocksX();
 
 	public int[] getInputBlocksY();
@@ -28,7 +34,10 @@ public interface ShaftPowerReceiver {
 
 	public boolean isReceiving();
 
-	/** When there is no input machine */
+	/** When there is no input machine. Usually used to set power, speed, torque = 0 */
 	public void noInputMachine();
+
+	/** For when to write it to chat or the like */
+	public String getName();
 
 }
