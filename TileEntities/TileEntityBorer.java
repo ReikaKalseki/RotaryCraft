@@ -81,11 +81,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
+
 		if (this.hasEnchantments()) {
 			for (int i = 0; i < 8; i++) {
 				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
 			}
 		}
+
 		if (nodig)
 			return;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(cutShape[0][0]));

@@ -46,7 +46,7 @@ public enum ConfigRegistry implements ConfigList {
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
 	ACHIEVEMENTS("Enable Achievements", false, true),
-	MODORES("Force Inter-Mod Compatibility", true),
+	MODORES("Force Inter-Mod Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
 	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),

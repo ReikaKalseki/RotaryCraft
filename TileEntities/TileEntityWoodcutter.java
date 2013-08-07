@@ -9,26 +9,37 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.ReikaTreeHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWoodcutter extends TileEntityPowerReceiver {
+public class TileEntityWoodcutter extends TileEntityPowerReceiver implements EnchantableMachine {
+
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	public int editx;
 	public int edity;
@@ -86,7 +97,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		int id = world.getBlockId(x, y+1, z);
 		if (id != 0) {
 			Block b = Block.blocksList[id];
-			ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getBlockDropped(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), 0));
+			ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getBlockDropped(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
 			world.setBlock(x, y+1, z, 0);
 		}
 
@@ -95,7 +106,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		if (tree.isEmpty())
 			return;
 
-		if (!this.operationComplete(tickcount, 0) && ConfigRegistry.INSTACUT.getState())
+		if (!this.operationComplete((int)(tickcount*ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency))), 0) && ConfigRegistry.INSTACUT.getState())
 			return;
 		tickcount = 0;
 
@@ -104,11 +115,11 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 		if (drop != 0) {
 			int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			Material mat = world.getBlockMaterial(xyz[0], xyz[1], xyz[2]);
-			Block dropBlock = Block.blocksList[drop];
 			if (ConfigRegistry.INSTACUT.getState()) {
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
-				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 
 				//if (xyz[1] == edity) {
 				if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
@@ -132,7 +143,8 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 				else {
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
-					ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+					this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+par5Random.nextFloat(), 1F);
@@ -149,6 +161,28 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 				}
 			}
 		}
+	}
+
+	private void dropBlocks(World world, int x, int y, int z) {
+		int drop = world.getBlockId(x, y, z);
+		int dropmeta = world.getBlockMetadata(x, y, z);
+		Block dropBlock = Block.blocksList[drop];
+		List<ItemStack> drops = dropBlock.getBlockDropped(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
+		for (int i = 0; i < drops.size(); i++) {
+			ItemStack todrop = drops.get(i);
+			if (!this.chestCheck(todrop))
+				ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, todrop);
+		}
+	}
+
+	private boolean chestCheck(ItemStack is) {
+		TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+		if (te instanceof IInventory) {
+			IInventory ii = (IInventory)te;
+			if (ReikaInventoryHelper.addToIInv(is, ii))
+				return true;
+		}
+		return false;
 	}
 
 	public ItemStack getSapling(int id, int meta) {
@@ -271,5 +305,47 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean applyEnchants(ItemStack is) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
+			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
+			return true;
+		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
+			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public HashMap<Enchantment,Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
 	}
 }

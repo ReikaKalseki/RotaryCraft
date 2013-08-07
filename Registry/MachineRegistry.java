@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
@@ -832,11 +833,7 @@ public enum MachineRegistry {
 	}
 
 	public boolean isEnchantable() {
-		if (this == BORER)
-			return true;
-		if (this == MOBHARVESTER)
-			return true;
-		return false;
+		return EnchantableMachine.class.isAssignableFrom(te);
 	}
 
 	public boolean hasSubdivisions() {

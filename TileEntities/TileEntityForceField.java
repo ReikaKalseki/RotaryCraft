@@ -9,10 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityTNTPrimed;
@@ -30,6 +32,7 @@ import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.entity.projectile.EntityWitherSkull;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -37,8 +40,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -47,7 +52,9 @@ import Reika.RotaryCraft.Models.ModelForce;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityForceField extends TileEntityPowerReceiver implements GuiController, RangedEffect {
+public class TileEntityForceField extends TileEntityPowerReceiver implements GuiController, RangedEffect, EnchantableMachine {
+
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	public static final int FALLOFF = 32768;
 
@@ -92,6 +99,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 		if (power < MINPOWER)
 			return 0;
 		int range = 2+(int)(power-MINPOWER)/FALLOFF;
+		range += 8*this.getEnchantment(Enchantment.protection);
 		if (range > ConfigRegistry.FORCERANGE.getValue())
 			return ConfigRegistry.FORCERANGE.getValue();
 		return range;
@@ -340,5 +348,43 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean applyEnchants(ItemStack is) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.protection, is)) {
+			enchantments.put(Enchantment.protection, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.protection, is));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public HashMap<Enchantment,Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
 	}
 }

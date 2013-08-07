@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -71,8 +72,12 @@ public class RenderForceField extends RotaryTERenderer
 			this.renderTileEntityForceFieldAt((TileEntityForceField)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
-		if (ConfigRegistry.RENDERFORCEFIELD.getState() && ((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			this.renderField(((TileEntityForceField)tile), par2+0.5, par4+0.5, par6+0.5);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			if (ConfigRegistry.RENDERFORCEFIELD.getState())
+				this.renderField(((TileEntityForceField)tile), par2+0.5, par4+0.5, par6+0.5);
+			if (((TileEntityForceField)tile).hasEnchantments())
+				EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
+		}
 	}
 
 	private void renderField(TileEntityForceField te, double x, double y, double z) {

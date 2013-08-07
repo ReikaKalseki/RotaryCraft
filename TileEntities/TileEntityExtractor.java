@@ -9,18 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.HashMap;
+
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
@@ -30,8 +35,10 @@ import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector
-{
+public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector, EnchantableMachine {
+
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+
 	private ItemStack inv[] = new ItemStack[9];
 
 	/** The number of ticks that the current item has been cooking for */
@@ -65,7 +72,10 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		int r;
 		switch(RotaryConfig.getDifficulty()) {
 		case EASY:
-			r = par5Random.nextInt(10);
+			if (ore == ModOreList.PLATINUM || ore == ModOreList.NETHERPLATINUM) {
+				return 2;
+			}
+			r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
 			if (ore != null) {
 				if (ore.isNetherOres()) {
 					if (r < 9)
@@ -80,6 +90,9 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				return 1; //60% chance -> 6.55
 		case MEDIUM:
 			if (ore != null) {
+				if (ore == ModOreList.NETHERPLATINUM) {
+					return 2;
+				}
 				if (ore.isNetherOres()) {
 					r = par5Random.nextInt(4);
 					if (r == 0)
@@ -87,11 +100,24 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 					else
 						return 2; //75% chance of doubling -> 1.75^4 = 9.3
 				}
+				if (ore == ModOreList.PLATINUM) {
+					r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
+					if (r < 9)
+						return 2;
+					else
+						return 1;
+				}
 			}
 			return (1+par5Random.nextInt(2));
 		case HARD:
-			r = par5Random.nextInt(10);
+			r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
 			if (ore != null) {
+				if (ore == ModOreList.NETHERPLATINUM) {
+					if (r < 8) //80%
+						return 2;
+					else
+						return 1;
+				}
 				if (ore.isNetherOres()) {
 					if (r < 5)
 						return 1;
@@ -524,5 +550,43 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return !side.isTopOrBottom();
+	}
+
+	@Override
+	public boolean applyEnchants(ItemStack is) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
+			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public HashMap<Enchantment,Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
 	}
 }

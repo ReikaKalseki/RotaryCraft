@@ -10,7 +10,9 @@
 package Reika.RotaryCraft.TileEntities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -18,13 +20,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceiver {
+public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceiver implements EnchantableMachine {
+
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	public boolean idle = false;
 
@@ -90,6 +96,12 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		//-------TEST CODE----------
 		//EntityItem ent = new EntityItem(world, x, y+1, z, star);
 		//world.spawnEntityInWorld(ent);
+
+		if (this.hasEnchantments()) {
+			for (int i = 0; i < 8; i++) {
+				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
+			}
+		}
 	}
 
 	@Override
@@ -98,8 +110,10 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 	}
 
 	private boolean consumeChance() {
+		if (this.hasEnchantment(Enchantment.silkTouch))
+			return false;
 		int excess = (int)(power/MINPOWER);
-		int chance = par5Random.nextInt(excess/2);
+		int chance = par5Random.nextInt(excess/8);
 		return (chance == 0);
 	}
 
@@ -639,5 +653,43 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		if (!this.canCraftARocket())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean applyEnchants(ItemStack is) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public HashMap<Enchantment,Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
 	}
 }

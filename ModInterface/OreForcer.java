@@ -21,9 +21,11 @@ import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
+import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -75,19 +77,25 @@ public final class OreForcer {
 			break;
 		case THAUMCRAFT:
 			ReikaJavaLibrary.initClass(ThaumOreHandler.class);
-			registerThaumcraft();
+			if (ConfigRegistry.MODORES.getState())
+				registerThaumcraft();
 			break;
 		case MFFS:
 			intercraftForcicium();
 			break;
 		case DARTCRAFT:
-			registerDart();
+			if (ConfigRegistry.MODORES.getState())
+				registerDart();
 			breakForceWrench();
 			ReikaJavaLibrary.initClass(DartOreHandler.class);
 			ReikaJavaLibrary.initClass(DartItemHandler.class);
 			break;
 		case TINKERER:
 			ReikaJavaLibrary.initClass(TinkerToolHandler.class);
+			break;
+		case TWILIGHT:
+			ReikaJavaLibrary.initClass(TwilightBlockHandler.class);
+			break;
 		}
 	}
 

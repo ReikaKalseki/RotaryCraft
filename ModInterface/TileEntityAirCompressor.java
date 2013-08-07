@@ -12,24 +12,27 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelCompressor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeConnection;
 
-public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerReceptor, IPipeConnection {
+public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerReceptor, IPipeConnection, PressureTE {
 
 	private int pressure;
 
 	private boolean isOut;
 
-	public static final int MAXPRESSURE = 1000000;
+	public static final int MAXPRESSURE = 1000;
 
 	public CompressorPowerProvider prov;
 
@@ -116,6 +119,8 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		else {
 			prov.setEnergyStored(0);
 		}
+
+		this.updatePressure(world, x, y, z, meta);
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -196,6 +201,40 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		super.writeToNBT(NBT);
 
 		NBT.setBoolean("out", isOut);
+	}
+
+	@Override
+	public void updatePressure(World world, int x, int y, int z, int meta) {
+		int Pamb = 101;
+		if (world.getBiomeGenForCoordsBody(x, z) == BiomeGenBase.hell)
+			Pamb = 20000;
+
+		if (pressure > Pamb)
+			this.addPressure((Pamb-pressure)/50);
+
+		this.addPressure((int)Math.sqrt(power)/64);
+
+		if (pressure > MAXPRESSURE)
+			this.overpressure(world, x, y, z);
+	}
+
+	@Override
+	public void addPressure(int press) {
+		pressure += press;
+	}
+
+	@Override
+	public int getPressure() {
+		return pressure;
+	}
+
+	@Override
+	public void overpressure(World world, int x, int y, int z) {
+		pressure = MAXPRESSURE;
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 4F+par5Random.nextFloat()*2, ConfigRegistry.BLOCKDAMAGE.getState());
+
+		for (int i = 0; i < 6; i++)
+			world.createExplosion(null, x+0.5-1+par5Random.nextDouble()*2, y+0.5-1+par5Random.nextDouble()*2, z+0.5-1+par5Random.nextDouble()*2, 3F, ConfigRegistry.BLOCKDAMAGE.getState());
 	}
 
 }
