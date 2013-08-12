@@ -336,8 +336,10 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		if (temperature > 915)
+		if (temperature > 915) {
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
 			world.spawnParticle("lava", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), 0, 0, 0);
+		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
 		if (temperature > MAXTEMP) {
 			this.overheat(world, x, y, z);

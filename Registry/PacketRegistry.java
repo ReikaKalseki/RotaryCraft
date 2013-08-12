@@ -38,7 +38,7 @@ public enum PacketRegistry {
 	MUSICPARTICLE(39),
 	DISPLAY(40, 42),
 	CHESTRELOAD(43),
-	BALANCER(44);
+	BALANCER(44, 45);
 
 	private int min;
 	private int max;

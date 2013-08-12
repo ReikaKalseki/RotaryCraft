@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import thaumcraft.api.EnumTag;
+import thaumcraft.api.ObjectTags;
+import thaumcraft.api.ThaumcraftApi;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BCMachineHandler;
@@ -26,6 +29,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -79,6 +83,7 @@ public final class OreForcer {
 			ReikaJavaLibrary.initClass(ThaumOreHandler.class);
 			if (ConfigRegistry.MODORES.getState())
 				registerThaumcraft();
+			addThaumAspects();
 			break;
 		case MFFS:
 			intercraftForcicium();
@@ -97,6 +102,19 @@ public final class OreForcer {
 			ReikaJavaLibrary.initClass(TwilightBlockHandler.class);
 			break;
 		}
+	}
+
+	private static void addThaumAspects() {
+		ObjectTags ot = new ObjectTags();
+		ot.add(EnumTag.EXCHANGE, 2);
+		ot.add(EnumTag.CROP, 1);
+		ot.add(EnumTag.MECHANISM, 1);
+		ThaumcraftApi.registerObjectTag(ItemRegistry.CANOLA.getShiftedID(), 0, ot);
+
+		ot = new ObjectTags();
+		ot.add(EnumTag.METAL, 10);
+		ot.add(EnumTag.MECHANISM, 6);
+		ThaumcraftApi.registerObjectTag(ItemStacks.steelingot.itemID, ItemStacks.steelingot.getItemDamage(), ot);
 	}
 
 	private static void breakForceWrench() {

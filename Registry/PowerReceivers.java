@@ -63,7 +63,9 @@ public enum PowerReceivers {
 	BUCKETFILLER(1, 512, 8192),
 	SELFDESTRUCT(),
 	COMPRESSOR(),
-	DISPLAY();
+	DISPLAY(),
+	EMP(),
+	LINEBUILDER();
 
 	private int minT;
 	private int minS;

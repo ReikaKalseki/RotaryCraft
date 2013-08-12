@@ -21,6 +21,7 @@ import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
+import Reika.RotaryCraft.Blocks.BlockDeadMachine;
 import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
@@ -36,34 +37,37 @@ import Reika.RotaryCraft.Blocks.BlockTrans;
 
 public enum BlockRegistry implements RegistrationList, IDRegistry {
 
-	ADVANCEDGEAR(BlockAdvGear.class),
-	DIR(BlockDMachine.class),
-	DIRMODELINV(BlockDMIMachine.class),
-	DIRMODEL(BlockDMMachine.class),
-	ENGINE(BlockEngine.class),
-	GPR(BlockGPR.class),
-	FLYWHEEL(BlockFlywheel.class),
-	GEARBOX(BlockGearbox.class),
-	INV(BlockIMachine.class),
-	BASIC(BlockMachine.class),
-	MODELINV(BlockMIMachine.class),
-	MODEL(BlockMMachine.class),
-	PIPING(BlockPiping.class),
-	SHAFT(BlockShaft.class),
-	TRANS(BlockTrans.class),
-	MODELINV2(BlockMIMachine.class),
-	SOLAR(BlockSolar.class),
-	BCENGINE(BlockBCEngine.class);
+	ADVANCEDGEAR(BlockAdvGear.class, Material.iron),
+	DIR(BlockDMachine.class, Material.iron),
+	DIRMODELINV(BlockDMIMachine.class, Material.iron),
+	DIRMODEL(BlockDMMachine.class, Material.iron),
+	ENGINE(BlockEngine.class, Material.iron),
+	GPR(BlockGPR.class, Material.iron),
+	FLYWHEEL(BlockFlywheel.class, Material.iron),
+	GEARBOX(BlockGearbox.class, Material.iron),
+	INV(BlockIMachine.class, Material.iron),
+	BASIC(BlockMachine.class, Material.iron),
+	MODELINV(BlockMIMachine.class, Material.iron),
+	MODEL(BlockMMachine.class, Material.iron),
+	PIPING(BlockPiping.class, Material.iron),
+	SHAFT(BlockShaft.class, Material.iron),
+	TRANS(BlockTrans.class, Material.iron),
+	MODELINV2(BlockMIMachine.class, Material.iron),
+	SOLAR(BlockSolar.class, Material.iron),
+	BCENGINE(BlockBCEngine.class, Material.iron),
+	DEADMACHINE(BlockDeadMachine.class, Material.wood);
 
 	private Class block;
+	private Material mat;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface", "Disabled Machine"
 	};
 
-	private BlockRegistry(Class cl) {
+	private BlockRegistry(Class cl, Material m) {
 		block = cl;
+		mat = m;
 	}
 
 	public boolean isNthBlock(int n) {
@@ -116,7 +120,7 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 			return Material.ground;
 		if (this.ordinal() == MachineRegistry.SPILLER.getBlockVariableIndex())
 			return Material.ground;*/
-		return Material.iron;
+		return mat;
 	}
 
 	public Class getObjectClass() {

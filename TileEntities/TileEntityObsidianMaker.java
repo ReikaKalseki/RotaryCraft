@@ -19,6 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -107,6 +108,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		if (temperature > MAXTEMP/1.25) { //800C
 			overred = 0.4F;
 			overgreen = 0.1F;
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
 		}
 		if (temperature > MAXTEMP && ConfigRegistry.BLOCKDAMAGE.getState()) { //1000C
 			this.overheat(world, x, y, z);

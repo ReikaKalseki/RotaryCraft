@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.TreeReader;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
@@ -31,15 +31,19 @@ import Reika.DragonAPI.Libraries.ReikaTreeHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWoodcutter extends TileEntityPowerReceiver implements EnchantableMachine {
+public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver implements EnchantableMachine, InertIInv {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+
+	private ItemStack[] inv = new ItemStack[1];
 
 	public int editx;
 	public int edity;
@@ -53,7 +57,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 	public int stepx;
 	public int stepz;
 
-	private BlockArray tree = new BlockArray();
+	private TreeReader tree = new TreeReader();
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -71,6 +75,7 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 			return;
 
 		if (tree.isEmpty() && this.hasWood()) {
+			tree.reset();
 			ModWoodList wood = ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 			if (wood == ModWoodList.SEQUOIA) {
@@ -80,7 +85,8 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
 						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.addModTree(world, editx+i, edity, editz+j, wood);
+						tree.setModTree(wood);
+						tree.addModTree(world, editx+i, edity, editz+j);
 					}
 				}
 			}
@@ -88,10 +94,12 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
 						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.addTree(world, editx+i, edity, editz+j, vanilla);
+						tree.setTree(vanilla);
+						tree.addTree(world, editx+i, edity, editz+j);
 					}
 				}
 			}
+			this.checkAndMatchInventory(wood, vanilla);
 		}
 
 		int id = world.getBlockId(x, y+1, z);
@@ -110,22 +118,28 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 			return;
 		tickcount = 0;
 
+		if (!tree.isValidTree())
+			return;
+
 		int[] xyz = tree.getNextAndMoveOn();
 		int drop = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+		int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+
 		if (drop != 0) {
-			int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			Material mat = world.getBlockMaterial(xyz[0], xyz[1], xyz[2]);
 			if (ConfigRegistry.INSTACUT.getState()) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
+				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
 				//if (xyz[1] == edity) {
 				if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
-					ItemStack plant = this.getSapling(drop, dropmeta);
-					if (plant != null)
+					ItemStack plant = this.getPlantedSapling();
+					if (plant != null) {
+						ReikaInventoryHelper.decrStack(0, inv);
 						world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+					}
 				}
 				//}
 			}
@@ -141,10 +155,10 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 				}
 				else {
-					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
 					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 					this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
+					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+par5Random.nextFloat(), 1F);
@@ -153,9 +167,11 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 
 					if (xyz[1] == edity) {
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
-							ItemStack plant = this.getSapling(drop, dropmeta);
-							if (plant != null)
+							ItemStack plant = this.getPlantedSapling();
+							if (plant != null) {
+								ReikaInventoryHelper.decrStack(0, inv);
 								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+							}
 						}
 					}
 				}
@@ -163,15 +179,56 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 		}
 	}
 
+	private void checkAndMatchInventory(ModWoodList wood, ReikaTreeHelper vanilla) {
+		ItemStack sapling;
+		if (wood != null) {
+			sapling = wood.getCorrespondingSapling();
+			if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
+				this.dumpInventory();
+			}
+		}
+		else if (vanilla != null) {
+			sapling = vanilla.getSapling();
+			if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
+				this.dumpInventory();
+			}
+		}
+	}
+
 	private void dropBlocks(World world, int x, int y, int z) {
 		int drop = world.getBlockId(x, y, z);
+		if (drop == 0)
+			return;
 		int dropmeta = world.getBlockMetadata(x, y, z);
 		Block dropBlock = Block.blocksList[drop];
+		ItemStack sapling = null;
+		int logID = -1;
+		if (tree.isVanillaTree()) {
+			sapling = tree.getVanillaTree().getSapling();
+			logID = tree.getVanillaTree().getLog().itemID;
+		}
+		else if (tree.isModTree()) {
+			sapling = tree.getModTree().getCorrespondingSapling();
+			logID = tree.getModTree().getItem().itemID;
+		}
+
 		List<ItemStack> drops = dropBlock.getBlockDropped(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
+		if (drop == logID) {
+			if (par5Random.nextInt(3) == 0) {
+				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+par5Random.nextInt(4)));
+			}
+		}
+
 		for (int i = 0; i < drops.size(); i++) {
 			ItemStack todrop = drops.get(i);
-			if (!this.chestCheck(todrop))
-				ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, todrop);
+
+			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
+				ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
+			}
+			else {
+				if (!this.chestCheck(todrop))
+					ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, todrop);
+			}
 		}
 	}
 
@@ -185,15 +242,30 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 		return false;
 	}
 
-	public ItemStack getSapling(int id, int meta) {
-		if (id == Block.wood.blockID) {
-			return new ItemStack(Block.sapling.blockID, 1, meta%4);
-		}
-		ModWoodList wood = ModWoodList.getModWood(id, meta);
-		if (wood == null)
+	private void dumpInventory() {
+		ItemStack is = inv[0].copy();
+		inv[0] = null;
+		this.chestCheck(is);
+	}
+
+	public ItemStack getPlantedSapling() {
+		if (!this.shouldPlantSapling())
 			return null;
+		if (tree.isVanillaTree())
+			return tree.getVanillaTree().getSapling();
+		else if (tree.isModTree())
+			return tree.getModTree().getCorrespondingSapling();
 		else
-			return wood.getCorrespondingSapling();
+			return null;
+	}
+
+	private boolean shouldPlantSapling() {
+		if (this.hasEnchantment(Enchantment.infinity))
+			return true;
+		if (tree.isVanillaTree()) {
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], tree.getVanillaTree().getSapling());
+		}
+		return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], tree.getModTree().getCorrespondingSapling());
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -313,6 +385,10 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
 			return true;
 		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
+			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
+			return true;
+		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
 			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
 			return true;
@@ -347,5 +423,25 @@ public class TileEntityWoodcutter extends TileEntityPowerReceiver implements Enc
 			return 0;
 		else
 			return this.getEnchantments().get(e);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 1;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inv[i];
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inv[i] = itemstack;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack is) {
+		return false;
 	}
 }

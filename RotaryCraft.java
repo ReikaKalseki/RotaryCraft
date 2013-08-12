@@ -169,7 +169,7 @@ public class RotaryCraft extends DragonAPIMod {
 		config.initProps(evt);
 		proxy.registerSounds();
 
-		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState());
+		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
 
 		this.setupClassFiles();
 

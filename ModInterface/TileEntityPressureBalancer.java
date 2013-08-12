@@ -161,8 +161,18 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 			}
 		}
 
+		//ReikaJavaLibrary.pConsole(lubeLevel+" on "+FMLCommonHandler.instance().getEffectiveSide());
+
 		//ReikaJavaLibrary.pConsoleSideOnly(waterLevel+" to "+storage[Tanks.WATER.ordinal()].getLiquid().amount, Side.SERVER);
 		this.convertLiquids();
+	}
+
+	public boolean isToForge(int i) {
+		return makeForge[i];
+	}
+
+	public void swapConversion(int i) {
+		makeForge[i] = !makeForge[i];
 	}
 
 	private void convertLiquids() {
@@ -176,7 +186,8 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 			}
 			else {
 				int level = this.getLiquid(Tanks.tankList[i]);
-				if (level < CAPACITY) {
+				if (level < CAPACITY && storage[i].getLiquid() != null) {
+					//ReikaJavaLibrary.pConsoleSideOnly(Tanks.tankList[i].toString()+" to "+level+" + "+storage[i].getLiquid().amount, Side.SERVER);
 					int amt = storage[i].getLiquid().amount;
 					this.addLiquid(Tanks.tankList[i], amt);
 					storage[i].drain(amt, true);
@@ -200,6 +211,7 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 	}
 
 	private void addLiquid(Tanks tank, int amount) {
+		//ReikaJavaLibrary.pConsoleSideOnly("Tank "+tank+" + "+amount+"  ("+waterLevel+")", Side.SERVER);
 		switch(tank) {
 		case WATER:
 			waterLevel += amount;
@@ -417,31 +429,43 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 	}
 
 	public int getWaterScaled(int px) {
-		if (makeForge[Tanks.WATER.ordinal()])
+		if (makeForge[Tanks.WATER.ordinal()]) {
+			if (storage[Tanks.WATER.ordinal()].getLiquid() == null)
+				return 0;
 			return storage[Tanks.WATER.ordinal()].getLiquid().amount*px/CAPACITY;
+		}
 		else
-			return px*waterLevel*LiquidContainerRegistry.BUCKET_VOLUME/CAPACITY;
+			return px*waterLevel/CAPACITY;
 	}
 
 	public int getLavaScaled(int px) {
-		if (makeForge[Tanks.LAVA.ordinal()])
+		if (makeForge[Tanks.LAVA.ordinal()]) {
+			if (storage[Tanks.LAVA.ordinal()].getLiquid() == null)
+				return 0;
 			return storage[Tanks.LAVA.ordinal()].getLiquid().amount*px/CAPACITY;
+		}
 		else
-			return px*lavaLevel*LiquidContainerRegistry.BUCKET_VOLUME/CAPACITY;
+			return px*lavaLevel/CAPACITY;
 	}
 
 	public int getFuelScaled(int px) {
-		if (makeForge[Tanks.FUEL.ordinal()])
+		if (makeForge[Tanks.FUEL.ordinal()]) {
+			if (storage[Tanks.FUEL.ordinal()].getLiquid() == null)
+				return 0;
 			return storage[Tanks.FUEL.ordinal()].getLiquid().amount*px/CAPACITY;
+		}
 		else
-			return px*jetFuelLevel*LiquidContainerRegistry.BUCKET_VOLUME/CAPACITY;
+			return px*jetFuelLevel/CAPACITY;
 	}
 
 	public int getLubeScaled(int px) {
-		if (makeForge[Tanks.LUBE.ordinal()])
+		if (makeForge[Tanks.LUBE.ordinal()]) {
+			if (storage[Tanks.LUBE.ordinal()].getLiquid() == null)
+				return 0;
 			return storage[Tanks.LUBE.ordinal()].getLiquid().amount*px/CAPACITY;
+		}
 		else
-			return px*lubeLevel*LiquidContainerRegistry.BUCKET_VOLUME/CAPACITY;
+			return px*lubeLevel/CAPACITY;
 	}
 
 	enum SideState {
@@ -566,6 +590,10 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 			NBT.setInteger("side"+i, sides[i].ordinal());
 		}
 
+		for (int i = 0; i < 4; i++) {
+			NBT.setBoolean("forge"+i, makeForge[i]);
+		}
+
 		for (int i = 0; i < Tanks.tankList.length; i++) {
 			if (storage[i].getLiquid() != null) {
 				NBT.setTag("tank"+i, storage[i].getLiquid().writeToNBT(new NBTTagCompound()));
@@ -602,6 +630,12 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 
 		for (int i = 0; i < 6; i++) {
 			sides[i] = SideState.values()[NBT.getInteger("side"+i)];
+		}
+
+		makeForge = new boolean[4];
+
+		for (int i = 0; i < 4; i++) {
+			makeForge[i] = NBT.getBoolean("forge"+i);
 		}
 
 		for (int i = 0; i < Tanks.tankList.length; i++) {

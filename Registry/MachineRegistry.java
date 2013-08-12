@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
+import Reika.RotaryCraft.Blocks.BlockDeadMachine;
 import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
@@ -73,7 +74,9 @@ import Reika.RotaryCraft.TileEntities.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
+import Reika.RotaryCraft.TileEntities.TileEntityDeadMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
+import Reika.RotaryCraft.TileEntities.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
@@ -101,6 +104,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
+import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
@@ -218,7 +222,10 @@ public enum MachineRegistry {
 	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
 	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, "RenderBalancer", APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
-	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4);
+	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
+	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
+	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10),
+	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0);
 
 
 	private String name;
@@ -904,6 +911,8 @@ public enum MachineRegistry {
 
 	public boolean isAvailableInCreativeInventory() {
 		if (this.isDummiedOut())
+			return false;
+		if (this == DEAD)
 			return false;
 		return true;
 	}

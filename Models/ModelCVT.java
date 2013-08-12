@@ -18,6 +18,9 @@ package Reika.RotaryCraft.Models;
 import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelCVT extends RotaryModelBase
@@ -123,8 +126,16 @@ public class ModelCVT extends RotaryModelBase
 		Shape3.render(f5);
 		Shape4.render(f5);
 		Shape5.render(f5);
+
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
 		Shape12.render(f5);
 		Shape13.render(f5);
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(-phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+
 		Shape14.render(f5);
 		Shape14a.render(f5);
 		Shape14b.render(f5);

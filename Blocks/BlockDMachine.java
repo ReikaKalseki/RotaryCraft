@@ -19,6 +19,7 @@ public class BlockDMachine extends BlockBasicMultiTE {
 	public BlockDMachine(int id, Material mat) {
 		super(id, mat);
 	}
+
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		int p = MachineRegistry.BORER.getMachineMetadata();

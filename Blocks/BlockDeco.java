@@ -18,6 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -99,5 +100,11 @@ public class BlockDeco extends BlockBasic {
 		icons[0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 		icons[1][0] = par1IconRegister.registerIcon("RotaryCraft:anthra");
 		icons[2][0] = par1IconRegister.registerIcon("RotaryCraft:lons");
+	}
+
+	@Override
+	public boolean isBeaconBase(World worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ)
+	{
+		return true;
 	}
 }

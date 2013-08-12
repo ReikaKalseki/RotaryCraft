@@ -891,8 +891,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
 					TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
 					if (te != null) {
-						if (!te.enabled)
+						if (!te.enabled) {
 							return;
+						}
 					}
 				}
 				if (omega > 0)
@@ -929,6 +930,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				break;
 			}
 			if (go) {
+				RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
 				isJetFailing = true;
 				RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
 			}
@@ -1198,7 +1200,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 						}
 					}
 					soundtick = 2000;
-					fueltick = 0;
+					//fueltick = 0;
 					return;
 				}
 			}
@@ -1461,6 +1463,11 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		if (par5Random.nextInt(2) == 0)
 			temperature++;
+
+		if (temperature >= 800) {
+			RotaryCraft.logger.warn("WARNING: "+this+" is near explosion!");
+		}
+
 		if (temperature > 1000) {
 			for (int i = -6; i <= 6; i++) {
 				for (int j = -6; j <= 6; j++) {

@@ -53,6 +53,12 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 
 		for (int i = 0; i < 6; i++)
 			buttonList.add(new ImagedGuiButton(i, j+84, k+31+20*i, 18, 18, 256-18, 256-72, 0, tex));
+
+		buttonList.add(new ImagedGuiButton(6, j+9, k+20, 18, 62, 256-18, 256-62, 0, tex));
+		buttonList.add(new ImagedGuiButton(7, j+37, k+20, 18, 62, 256-18, 256-62, 0, tex));
+
+		buttonList.add(new ImagedGuiButton(8, j+9, k+87, 18, 62, 256-18, 256-62, 0, tex));
+		buttonList.add(new ImagedGuiButton(9, j+37, k+87, 18, 62, 256-18, 256-62, 0, tex));
 	}
 
 	@Override
@@ -62,12 +68,41 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 		if (b.id < 6) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BALANCER.getMinValue(), PressureBalancer, ep, b.id);
 		}
+		else if (b.id < 10) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BALANCER.getMinValue()+1, PressureBalancer, ep, b.id-6);
+		}
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
+
+		int color;
+
+		if (PressureBalancer.isToForge(0))
+			color = 0xff00ff00;
+		else
+			color = 0xffff0000;
+		this.drawRect(29, 78, 32, 81, color);
+
+		if (PressureBalancer.isToForge(1))
+			color = 0xff00ff00;
+		else
+			color = 0xffff0000;
+		this.drawRect(57, 78, 60, 81, color);
+
+		if (PressureBalancer.isToForge(2))
+			color = 0xff00ff00;
+		else
+			color = 0xffff0000;
+		this.drawRect(29, 145, 32, 148, color);
+
+		if (PressureBalancer.isToForge(3))
+			color = 0xff00ff00;
+		else
+			color = 0xffff0000;
+		this.drawRect(57, 145, 60, 148, color);
 
 		Color[] colors = new Color[RotaryAux.sideColors.length];
 		System.arraycopy(RotaryAux.sideColors, 0, colors, 0, colors.length);

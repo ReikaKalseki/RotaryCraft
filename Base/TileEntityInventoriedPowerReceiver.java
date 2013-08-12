@@ -90,4 +90,8 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 	public final ItemStack getStackInSlotOnClosing(int par1) {
 		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
 	}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 }

@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -36,6 +37,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	protected int tickcount = 0;
 	/** Rotational speed in radians per render tick. */
 	public float phi = 0;
+
+	/** For emp */
+	private boolean disabled;
 
 	public int[] paint = {-1, -1, -1};
 
@@ -128,10 +132,14 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
+		if (this instanceof InertIInv)
+			return new int[0];
 		return ReikaInventoryHelper.getWholeInventoryForISided((ISidedInventory)this);
 	}
 
 	public boolean canInsertItem(int i, ItemStack is, int side) {
+		if (this instanceof InertIInv)
+			return false;
 		return ((IInventory)this).isStackValidForSlot(i, is);
 	}
 	/*
@@ -168,5 +176,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		if (te instanceof ShaftPowerEmitter)
 			return world.getBlockId(x, y, z) == te.getBlockType().blockID;
 		return super.isIDTEMatch(world, x, y, z);
+	}
+
+	public boolean isShutdown() {
+		return disabled;
+	}
+
+	public void shutdown() {
+		disabled = true;
 	}
 }

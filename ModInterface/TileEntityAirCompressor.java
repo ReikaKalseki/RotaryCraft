@@ -12,7 +12,6 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -52,7 +51,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-		if (omega == 0) {
+		if (omega == 0 || !this.hasOutputTile()) {
 			if (phi > 0) {
 				double speed = 0.0625;
 				if (isOut)
@@ -82,6 +81,11 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 			isOut = false;
 	}
 
+	private boolean hasOutputTile() {
+		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		return te instanceof IPowerReceptor;
+	}
+
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.COMPRESSOR.ordinal();
@@ -100,6 +104,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
 		//ReikaJavaLibrary.pConsole(ReikaBuildCraftHelper.getWattsPerMJ());
@@ -119,6 +124,10 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		else {
 			prov.setEnergyStored(0);
 		}
+
+		if (tickcount < 20)
+			return;
+		tickcount = 0;
 
 		this.updatePressure(world, x, y, z, meta);
 	}
@@ -206,8 +215,6 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	public void updatePressure(World world, int x, int y, int z, int meta) {
 		int Pamb = 101;
-		if (world.getBiomeGenForCoordsBody(x, z) == BiomeGenBase.hell)
-			Pamb = 20000;
 
 		if (pressure > Pamb)
 			this.addPressure((Pamb-pressure)/50);

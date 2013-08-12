@@ -190,6 +190,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		}
 		if (par2Block.blockMaterial == Material.rock || par2Block.blockMaterial == Material.iron)
 			return 12F;
+		if (par2Block.blockMaterial == Material.glass)
+			return 12F;
 		if (par2Block == RotaryCraft.decoblock)
 			return 12F;
 		if (par2Block instanceof BlockBasicMachine)

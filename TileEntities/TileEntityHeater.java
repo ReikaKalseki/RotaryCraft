@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -115,6 +116,11 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 		int deltaT = this.findHottestUsefulItemTemp(tempdiff, true);
 		if (deltaT != -1)
 			temperature += deltaT * 1.5;
+
+		if (temperature >= MAXTEMP*0.9) {
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching a very high temperature!");
+		}
+
 		if (temperature > MAXTEMP)
 			//this.overheat(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 			temperature = MAXTEMP;

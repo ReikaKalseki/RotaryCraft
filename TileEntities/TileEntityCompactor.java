@@ -51,6 +51,8 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public boolean idle = false;
 	private boolean animdir = false;
 
+	private int envirotick = 0;
+
 
 	/*
     Minecraft m = Minecraft.getMinecraft();
@@ -296,8 +298,9 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			}
 		}
 
-		//if (this.pressure > Pamb)
-		//	this.pressure *= 0.95; //Natural p loss
+		if (pressure >= 0.8*MAXPRESSURE) {
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high pressure!");
+		}
 
 		if (pressure > MAXPRESSURE) {
 			this.overpressure(world, x, y, z);
@@ -307,6 +310,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int Tamb = ReikaWorldHelper.getBiomeTemp(biome);
+		Tamb = 25;
 		if (temperature > Tamb)
 			temperature -= ReikaMathLibrary.extrema((temperature-Tamb)/200, 1, "max");
 		if (temperature < Tamb)
@@ -322,21 +326,28 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			temperature++;
 
 		int a = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (a != -1 && temperature > 20) {
+		if (a != -1 && temperature > 600) {
 			temperature--;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0);
+			if (par5Random.nextInt(4000) == 0)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0);
 		}
 		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-		if (iceside != -1 && temperature > -20) {
+		if (iceside != -1 && temperature > 0) {
 			temperature -= 2;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+			if (par5Random.nextInt(200) == 0)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
 		}
 		int snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
 		if (snowside != -1 && temperature > -5) {
 			temperature -= 2;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+			if (par5Random.nextInt(100) == 0)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
 		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
+
+		if (temperature >= 0.9*MAXTEMP) {
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
+		}
 
 		if (temperature > MAXTEMP) {
 			this.overheat(world, x, y, z);
@@ -347,6 +358,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 2F);
+		world.setBlock(x, y, z, 0);
 	}
 
 	public int getStage() {
@@ -369,10 +381,14 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPower(false, false);
-		this.updatePressure(world, x, y, z, meta);
-		this.updateTemperature(world, x, y, z, meta);
+		if (envirotick >= 20) {
+			this.updatePressure(world, x, y, z, meta);
+			this.updateTemperature(world, x, y, z, meta);
+			envirotick = 0;
+		}
 		this.testIdle();
 		boolean flag1 = false;
+		envirotick++;
 		tickcount++;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 		if (!world.isRemote)

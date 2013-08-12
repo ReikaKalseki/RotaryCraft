@@ -335,8 +335,8 @@ public abstract class BlockBasicMultiTE extends Block {
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
-		if (this.canHarvest(world, player, x, y, z));
-		this.harvestBlock(world, player, x, y, z, 0);
+		if (this.canHarvest(world, player, x, y, z))
+			this.harvestBlock(world, player, x, y, z, 0);
 		return world.setBlock(x, y, z, 0);
 	}
 

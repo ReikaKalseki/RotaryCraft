@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,6 +63,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public boolean[][] cutShape = new boolean[7][5]; // 7 cols, 5 rows
 
+	private boolean jammed = false;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -82,6 +83,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 		}
 
+		if (jammed && tickcount%5 == 0) {
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
+			for (int i = 0; i < 6; i++) {
+				world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1+par5Random.nextDouble()*0.2, z+par5Random.nextDouble(), 0, 0, 0);
+				world.spawnParticle("crit", x+par5Random.nextDouble(), y+1+par5Random.nextDouble()*0.2, z+par5Random.nextDouble(), 0, 0, 0);
+			}
+		}
+
 		if (this.hasEnchantments()) {
 			for (int i = 0; i < 8; i++) {
 				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
@@ -95,12 +104,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return;
 		if (this.operationComplete((int)(tickcount*ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency))), 0)) {
 			this.calcReqPower(world, x, y, z, meta);
+
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.reqpow));
-			if (power > reqpow && reqpow != -1)
+			if (power > reqpow && reqpow != -1) {
+				this.calcReqPower(world, x, y, z, meta);
 				this.dig(world, x, y, z, meta);
+				jammed = false;
+			}
+			else {
+				jammed = true;
+			}
 			tickcount = 0;
-			if (reqpow == -1)
-				step = ReikaMathLibrary.extrema(step-1, 1, "max");
+			if (reqpow == -1) {
+				//step = ReikaMathLibrary.extrema(step-1, 1, "max");
+			}
 		}
 	}
 
@@ -109,7 +126,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			reqpow += (int)(DIGPOWER*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread));
 			if (ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread))) > mintorque)
 				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));
-			if (world.getBlockId(xread, yread, zread) == 7)
+			if (Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread) < 0)
 				reqpow = -1;
 		}
 	}
@@ -129,6 +146,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (cutShape[i][j] || step == 1) {
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
 					this.reqPowAdd(world, xread, yread, zread, metadata);
+					//ReikaJavaLibrary.pConsole(reqpow+" for "+world.getBlockId(xread, yread, zread)+":"+world.getBlockMetadata(xread, yread, zread));
 				}
 			}
 		}
@@ -182,10 +200,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (spw != null) {
 					ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
 					ReikaSpawnerHelper.addMobNBTToItem(is, spw);
-					EntityItem ent = new EntityItem(world, x, y, z, is);
-					ent.delayBeforeCanPickup = 10;
 					if (!this.chestCheck(world, x, y, z, is))
-						world.spawnEntityInWorld(ent);
+						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 					return true;
 				}
 			}
@@ -292,8 +308,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
 					if (this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlockId(xread, yread, zread), world.getBlockMetadata(xread, yread, zread)))
 						world.setBlock(xread, yread, zread, RotaryCraft.miningpipe.blockID, pipemeta, 3);
-					else
+					else {
 						step--;
+					}
 				}
 			}
 		}
@@ -330,6 +347,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		NBT.setInteger("mode", mode);
 		NBT.setBoolean("drops", drops);
 		NBT.setInteger("step", step);
+		NBT.setBoolean("jam", jammed);
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++)
 				NBT.setBoolean("cut"+String.valueOf(i*7+j), cutShape[i][j]);
@@ -352,6 +370,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		mode = NBT.getInteger("mode");
 		drops = NBT.getBoolean("drops");
 		step = NBT.getInteger("step");
+		jammed = NBT.getBoolean("jam");
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++)
 				cutShape[i][j] = NBT.getBoolean("cut"+String.valueOf(i*7+j));

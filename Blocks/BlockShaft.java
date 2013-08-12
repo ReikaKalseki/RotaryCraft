@@ -101,8 +101,8 @@ public class BlockShaft extends BlockModelledMachine {
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
-		if (this.canHarvest(world, player, x, y, z));
-		this.harvestBlock(world, player, x, y, z, 0);
+		if (this.canHarvest(world, player, x, y, z))
+			this.harvestBlock(world, player, x, y, z, 0);
 		return ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
 	}
 

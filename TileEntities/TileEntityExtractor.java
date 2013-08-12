@@ -9,23 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.HashMap;
-
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.ReikaBlockHelper;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
@@ -35,9 +30,7 @@ import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector, EnchantableMachine {
-
-	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector {
 
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -66,16 +59,15 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		return i == 7 || i == 8;
 	}
 
-	private int getSmeltNumber(int num, ModOreList ore) {
-		if (num == 63)
-			return 1;
+	private int getSmeltNumber(ModOreList ore) {
 		int r;
+		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		switch(RotaryConfig.getDifficulty()) {
 		case EASY:
 			if (ore == ModOreList.PLATINUM || ore == ModOreList.NETHERPLATINUM) {
 				return 2;
 			}
-			r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
+			r = par5Random.nextInt(10);
 			if (ore != null) {
 				if (ore.isNetherOres()) {
 					if (r < 9)
@@ -101,7 +93,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 						return 2; //75% chance of doubling -> 1.75^4 = 9.3
 				}
 				if (ore == ModOreList.PLATINUM) {
-					r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
+					r = par5Random.nextInt(10);
 					if (r < 9)
 						return 2;
 					else
@@ -110,7 +102,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			}
 			return (1+par5Random.nextInt(2));
 		case HARD:
-			r = par5Random.nextInt(10)-this.getEnchantment(Enchantment.fortune);
+			r = par5Random.nextInt(10);
 			if (ore != null) {
 				if (ore == ModOreList.NETHERPLATINUM) {
 					if (r < 8) //80%
@@ -329,6 +321,8 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		this.testIdle();
 		this.throughPut();
 		this.getLiq(world, x, y, z, meta);
+		if (world.isRemote)
+			return;
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
 			if (this.canSmelt(i)) {
@@ -362,7 +356,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 		if (inv[i] == null)
 			return false;
-		if (inv[i+4] != null && inv[i+4].stackSize >= inv[i+4].getMaxStackSize())
+		if (inv[i+4] != null && inv[i+4].stackSize+1 >= inv[i+4].getMaxStackSize())
 			return false;
 		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 		if (inv[i].itemID == RotaryCraft.modextracts.itemID || ModOreList.isModOre(inv[i])) {
@@ -419,12 +413,14 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		if (!this.canSmelt(i))
 			return;
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
+		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
+		int num = this.getSmeltNumber(null);
 		if (inv[i+4] == null) {
 			inv[i+4] = itemstack.copy();
-			inv[i+4].stackSize *= this.getSmeltNumber(0, null);
+			inv[i+4].stackSize *= num;
 		}
 		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
-			inv[i+4].stackSize += this.getSmeltNumber(inv[i+4].stackSize, null);
+			inv[i+4].stackSize += num;
 
 		if (i == 3)
 			this.bonusItems(inv[i]);
@@ -457,38 +453,39 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 	private boolean processModOre(int i) {
 		if (this.isValidModOre(inv[i])) {
-			int targetsize = 0;
-			if (inv[i+4] != null)
-				targetsize = inv[i+4].stackSize;
 			ModOreList m = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 			if (ModOreList.isModOre(inv[i]) && i == 0) {
 				m = ModOreList.getModOreFromOre(inv[0]);
 				ItemStack is = ExtractorModOres.getDustProduct(m);
-				ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
-				ReikaInventoryHelper.decrStack(i, inv);
+				if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+					ReikaInventoryHelper.decrStack(i, inv);
+				}
 				return true;
 			}
 			else if (ExtractorModOres.isModOreIngredient(inv[i])) {
 				if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
-					ReikaInventoryHelper.decrStack(i, inv);
-					if (par5Random.nextInt(8) == 0)
-						waterLevel -= RotaryConfig.MILLIBUCKET;
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+						ReikaInventoryHelper.decrStack(i, inv);
+						if (par5Random.nextInt(8) == 0)
+							waterLevel -= RotaryConfig.MILLIBUCKET;
+					}
 					return true;
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
-					ReikaInventoryHelper.decrStack(i, inv);
-					if (par5Random.nextInt(8) == 0)
-						waterLevel -= RotaryConfig.MILLIBUCKET;
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+						ReikaInventoryHelper.decrStack(i, inv);
+						if (par5Random.nextInt(8) == 0)
+							waterLevel -= RotaryConfig.MILLIBUCKET;
+					}
 					return true;
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
 					ItemStack is = ExtractorModOres.getFlakeProduct(m);
-					ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(targetsize, m), is.getItemDamage(), inv, i+4);
-					ReikaInventoryHelper.decrStack(i, inv);
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+						ReikaInventoryHelper.decrStack(i, inv);
+					}
 					return true;
 				}
 			}
@@ -550,43 +547,5 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return !side.isTopOrBottom();
-	}
-
-	@Override
-	public boolean applyEnchants(ItemStack is) {
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
-			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public HashMap<Enchantment,Integer> getEnchantments() {
-		return enchantments;
-	}
-
-	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
-	}
-
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
 	}
 }

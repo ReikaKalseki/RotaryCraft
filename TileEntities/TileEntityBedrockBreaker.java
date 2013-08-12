@@ -19,6 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -27,7 +28,7 @@ import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver {
+public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver implements InertIInv {
 	private int harvestx;
 	private int harvesty;
 	private int harvestz;
@@ -302,18 +303,13 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
-	}
-
-	@Override
 	public int getSizeInventory() {
 		return 1;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inv [i];
+		return inv[i];
 	}
 
 	@Override

@@ -325,15 +325,15 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				if (clicked.getBlockMetadata() >= 8) {
+				if (clicked.coil) {
 					long energy = clicked.energy;
-					if (energy >= 1000000000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f GJ.", energy/1000000000.0D, omega));
-					if (energy >= 1000000 && energy < 1000000000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f MJ.", energy/1000000.0D, omega));
-					if (energy >= 1000 && energy < 1000000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f kJ.", energy/1000.0D, omega));
-					if (energy < 1000)
+					if (energy/20D >= 1000000000)
+						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
+					else if (energy/20D >= 1000000)
+						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f MJ.", energy/20D/1000000.0D, omega));
+					else if (energy/20D >= 1000)
+						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f kJ.", energy/20D/1000.0D, omega));
+					else
 						ReikaChatHelper.writeString(String.format("Stored Energy: %d J.", energy, omega));
 					torque = omega = 0;
 					return true;

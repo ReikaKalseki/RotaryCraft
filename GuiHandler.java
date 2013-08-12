@@ -19,6 +19,7 @@ import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
@@ -259,7 +260,7 @@ public class GuiHandler implements IGuiHandler {
 			return new OneSlotContainer(player, te);
 		if (te instanceof GuiController)
 			return new CoreContainer(player, te);
-		if (te instanceof IInventory)
+		if (te instanceof IInventory && !(te instanceof InertIInv))
 			return new ContainerBasicStorage(player, te);
 		return null;
 	}
@@ -426,7 +427,7 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof OneSlotMachine) {
 			return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 		}
-		if (te instanceof IInventory)
+		if (te instanceof IInventory && !(te instanceof InertIInv))
 			return new GuiBasicStorage(player, (RotaryCraftTileEntity)te);
 		return null;
 	}

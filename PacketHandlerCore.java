@@ -396,7 +396,12 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 		case BALANCER:
 			balancer = (TileEntityPressureBalancer)world.getBlockTileEntity(x, y, z);
-			balancer.incrementStateOnSide(ForgeDirection.values()[data[0]]);
+			if (control == 44) {
+				balancer.incrementStateOnSide(ForgeDirection.values()[data[0]]);
+			}
+			if (control == 45) {
+				balancer.swapConversion(data[0]);
+			}
 			break;
 		}
 	}

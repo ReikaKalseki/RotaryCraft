@@ -50,7 +50,8 @@ public enum ConfigRegistry implements ConfigList {
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
 	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),
-	DIFFICULTY("Difficulty Control", 2);
+	DIFFICULTY("Difficulty Control", 2),
+	ALARM("Machine Warning Alarms", false);
 
 	private String label;
 	private boolean defaultState;

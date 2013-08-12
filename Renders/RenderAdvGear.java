@@ -130,7 +130,7 @@ public class RenderAdvGear extends RotaryTERenderer implements MultiModel
 				var14.renderAll(null, tile.phi);
 			else if (tile.getBlockMetadata() < 8) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-				var15.renderAll(null, 0);
+				var15.renderAll(null, tile.phi);
 			}
 			else if (tile.getBlockMetadata() < 12) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
