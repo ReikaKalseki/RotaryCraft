@@ -37,6 +37,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
@@ -76,6 +77,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityEngine engine;
 	private TileEntityDisplay display;
 	private TileEntityPressureBalancer balancer;
+	private TileEntityMultiClutch redgear;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -402,6 +404,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			if (control == 45) {
 				balancer.swapConversion(data[0]);
 			}
+			break;
+		case REDGEAR:
+			redgear = (TileEntityMultiClutch)world.getBlockTileEntity(x, y, z);
+			redgear.setSideOfState(data[0], data[1]);
 			break;
 		}
 	}

@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.EnumTag;
-import thaumcraft.api.ObjectTags;
-import thaumcraft.api.ThaumcraftApi;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.BCMachineHandler;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
@@ -81,9 +81,10 @@ public final class OreForcer {
 			break;
 		case THAUMCRAFT:
 			ReikaJavaLibrary.initClass(ThaumOreHandler.class);
+			ReikaJavaLibrary.initClass(ThaumBlockHandler.class);
+			addThaumAspects();
 			if (ConfigRegistry.MODORES.getState())
 				registerThaumcraft();
-			addThaumAspects();
 			break;
 		case MFFS:
 			intercraftForcicium();
@@ -105,16 +106,26 @@ public final class OreForcer {
 	}
 
 	private static void addThaumAspects() {
-		ObjectTags ot = new ObjectTags();
-		ot.add(EnumTag.EXCHANGE, 2);
-		ot.add(EnumTag.CROP, 1);
-		ot.add(EnumTag.MECHANISM, 1);
-		ThaumcraftApi.registerObjectTag(ItemRegistry.CANOLA.getShiftedID(), 0, ot);
+		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), EnumTag.EXCHANGE, 2, EnumTag.CROP, 1, EnumTag.MECHANISM, 1);
+		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), EnumTag.EXCHANGE, 4, EnumTag.FUNGUS, 4);
 
-		ot = new ObjectTags();
-		ot.add(EnumTag.METAL, 10);
-		ot.add(EnumTag.MECHANISM, 6);
-		ThaumcraftApi.registerObjectTag(ItemStacks.steelingot.itemID, ItemStacks.steelingot.getItemDamage(), ot);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), EnumTag.TOOL, 24);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), EnumTag.TOOL, 24);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), EnumTag.TOOL, 18);
+
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.MOTION, 2, EnumTag.MECHANISM, 2);
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.FIRE, 3, EnumTag.POWER, 12);
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.POWER, 7, EnumTag.PLANT, 3);
+
+		ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), EnumTag.DESTRUCTION, 12, EnumTag.FIRE, 8);
+
+		ReikaThaumHelper.addAspects(ItemStacks.steelingot, EnumTag.METAL, 10, EnumTag.MECHANISM, 6);
+		ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, EnumTag.FIRE, 4);
+		ReikaThaumHelper.addAspects(ItemStacks.sludge, EnumTag.POWER, 1);
+		ReikaThaumHelper.addAspects(ItemStacks.sawdust, EnumTag.WOOD, 1);
+		ReikaThaumHelper.addAspects(ItemStacks.nitrate, EnumTag.FLUX, 1);
+		ReikaThaumHelper.addAspects(ItemStacks.anthracite, EnumTag.FIRE, 2, EnumTag.POWER, 2);
+		ReikaThaumHelper.addAspects(ItemStacks.lonsda, EnumTag.VALUABLE, 4);
 	}
 
 	private static void breakForceWrench() {

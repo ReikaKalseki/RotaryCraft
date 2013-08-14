@@ -35,6 +35,7 @@ import Reika.DragonAPI.Libraries.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
@@ -180,6 +181,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 6F;
 		if (par2Block.blockID == Block.glowStone.blockID)
 			return 6F;
+
+		if (par2Block.blockID == ThaumBlockHandler.getInstance().totemID)
+			return 48F;
+
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == par2Block)
 				return 12F;

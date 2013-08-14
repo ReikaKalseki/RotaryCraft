@@ -110,6 +110,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.TileEntityMonitor;
+import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
@@ -133,6 +134,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
@@ -225,7 +227,9 @@ public enum MachineRegistry {
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
 	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10),
-	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0);
+	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0),
+	MULTICLUTCH(		"Multidirectional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4),
+	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6);
 
 
 	private String name;

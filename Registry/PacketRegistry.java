@@ -38,7 +38,8 @@ public enum PacketRegistry {
 	MUSICPARTICLE(39),
 	DISPLAY(40, 42),
 	CHESTRELOAD(43),
-	BALANCER(44, 45);
+	BALANCER(44, 45),
+	REDGEAR(46);
 
 	private int min;
 	private int max;
@@ -73,6 +74,8 @@ public enum PacketRegistry {
 		if (this == MUSIC)
 			return 4;
 		if (this == CANNON)
+			return 2;
+		if (this == REDGEAR)
 			return 2;
 		return 1;
 	}

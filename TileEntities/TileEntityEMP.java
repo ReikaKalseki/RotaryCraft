@@ -29,7 +29,7 @@ import thaumcraft.api.ObjectTags;
 import thaumcraft.api.aura.AuraNode;
 import thaumcraft.api.aura.EnumNodeType;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.ModInteract.ReikaNodeHelper;
+import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -113,7 +113,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void affectNearNodes(World world, int x, int y, int z) {
-		List<AuraNode> nodes = ReikaNodeHelper.getAllNodeCopiesNear(world, x+0.5, y+0.5, z+0.5, this.getRange());
+		List<AuraNode> nodes = ReikaThaumHelper.getAllNodeCopiesNear(world, x+0.5, y+0.5, z+0.5, this.getRange());
 		if (nodes == null)
 			return;
 		ObjectTags flux = new ObjectTags();
@@ -128,24 +128,24 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 				int base = au.baseLevel;
 				switch(au.type) {
 				case NORMAL:
-					ReikaNodeHelper.affectNode(au, 0, par5Random.nextInt(base/2), false, flux, 0, 0, 0);
+					ReikaThaumHelper.affectNode(au, 0, par5Random.nextInt(base/2), false, flux, 0, 0, 0);
 					if (par5Random.nextInt(100) == 0) {
-						ReikaNodeHelper.setNodeType(au, EnumNodeType.UNSTABLE);
+						ReikaThaumHelper.setNodeType(au, EnumNodeType.UNSTABLE);
 					}
 					break;
 				case PURE:
-					ReikaNodeHelper.affectNode(au, 0, -base/2, false, flux, 0, 0, 0);
+					ReikaThaumHelper.affectNode(au, 0, -base/2, false, flux, 0, 0, 0);
 					break;
 				case UNSTABLE:
-					ReikaNodeHelper.affectNode(au, 0, base/2, false, flux, 0, 0, 0);
+					ReikaThaumHelper.affectNode(au, 0, base/2, false, flux, 0, 0, 0);
 					if (par5Random.nextInt(50) == 0) {
-						ReikaNodeHelper.setNodeType(au, EnumNodeType.DARK);
+						ReikaThaumHelper.setNodeType(au, EnumNodeType.DARK);
 					}
 					break;
 				case DARK:
-					ReikaNodeHelper.affectNode(au, 0, -base/2+par5Random.nextInt(base)+1, false, flux, 0, 0, 0);
+					ReikaThaumHelper.affectNode(au, 0, -base/2+par5Random.nextInt(base)+1, false, flux, 0, 0, 0);
 					if (par5Random.nextInt(1000) == 0) {
-						ReikaNodeHelper.setNodeType(au, EnumNodeType.PURE);
+						ReikaThaumHelper.setNodeType(au, EnumNodeType.PURE);
 					}
 					break;
 				default:
