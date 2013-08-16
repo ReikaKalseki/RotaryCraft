@@ -19,6 +19,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -46,6 +47,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import cpw.mods.fml.common.network.IPacketHandler;
@@ -78,6 +80,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityDisplay display;
 	private TileEntityPressureBalancer balancer;
 	private TileEntityMultiClutch redgear;
+	private TileEntityTerraformer terra;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -408,6 +411,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		case REDGEAR:
 			redgear = (TileEntityMultiClutch)world.getBlockTileEntity(x, y, z);
 			redgear.setSideOfState(data[0], data[1]);
+			break;
+		case TERRAFORMER:
+			terra = (TileEntityTerraformer)world.getBlockTileEntity(x, y, z);
+			terra.setTarget(BiomeGenBase.biomeList[data[0]]);
 			break;
 		}
 	}

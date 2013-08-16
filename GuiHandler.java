@@ -54,6 +54,7 @@ import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.Containers.ContainerSteam;
+import Reika.RotaryCraft.Containers.ContainerTerraformer;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.Containers.ContainerWorldEdit;
@@ -81,6 +82,7 @@ import Reika.RotaryCraft.GUIs.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.GuiJet;
 import Reika.RotaryCraft.GUIs.GuiLandmine;
 import Reika.RotaryCraft.GUIs.GuiMobRadar;
+import Reika.RotaryCraft.GUIs.GuiMultiClutch;
 import Reika.RotaryCraft.GUIs.GuiMusic;
 import Reika.RotaryCraft.GUIs.GuiObsidian;
 import Reika.RotaryCraft.GUIs.GuiPerformance;
@@ -97,6 +99,7 @@ import Reika.RotaryCraft.GUIs.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.GuiSplitter;
 import Reika.RotaryCraft.GUIs.GuiSpyCam;
 import Reika.RotaryCraft.GUIs.GuiSteam;
+import Reika.RotaryCraft.GUIs.GuiTerraformer;
 import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
@@ -127,6 +130,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
+import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
@@ -140,6 +144,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
+import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
@@ -254,6 +259,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityPressureBalancer) {
 			return new ContainerBalancer(player, (TileEntityPressureBalancer)te);
+		}
+		if (te instanceof TileEntityTerraformer) {
+			return new ContainerTerraformer(player, (TileEntityTerraformer)te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -422,6 +430,12 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityPressureBalancer) {
 			return new GuiPressureBalancer(player, (TileEntityPressureBalancer)te);
+		}
+		if (te instanceof TileEntityMultiClutch) {
+			return new GuiMultiClutch(player, (TileEntityMultiClutch)te);
+		}
+		if (te instanceof TileEntityTerraformer) {
+			return new GuiTerraformer(player, (TileEntityTerraformer)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

@@ -39,7 +39,8 @@ public enum PacketRegistry {
 	DISPLAY(40, 42),
 	CHESTRELOAD(43),
 	BALANCER(44, 45),
-	REDGEAR(46);
+	REDGEAR(46),
+	TERRAFORMER(47);
 
 	private int min;
 	private int max;

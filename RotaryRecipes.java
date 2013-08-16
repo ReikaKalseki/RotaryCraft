@@ -386,12 +386,12 @@ public class RotaryRecipes {
 			" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye});
 
 		if (ReikaJavaLibrary.doesClassExist("mods.PamHarvestCraft.PamHarvestCraft")) {
-			RotaryCraft.logger.log("ROTARYCRAFT: HarvestCraft found, not loading iron screwdriver recipe.");
+			RotaryCraft.logger.log("HarvestCraft found, not loading iron screwdriver recipe.");
 		}
 		else {
 			GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
 				"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
-			RotaryCraft.logger.log("ROTARYCRAFT: HarvestCraft not found, loading iron screwdriver recipe.");
+			RotaryCraft.logger.log("HarvestCraft not found, loading iron screwdriver recipe.");
 		}
 
 		GameRegistry.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{

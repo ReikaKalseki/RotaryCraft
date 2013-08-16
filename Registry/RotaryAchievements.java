@@ -55,7 +55,8 @@ public enum RotaryAchievements {
 	LANDMINE("Watch Your Step", 			-3, -2, null, false), //step on
 	GPRENDPORTAL("Who Needs Ender Eyes?", 	-3, -1, null, true), //gpr thru end portal
 	NETHERHEATRAY("Boom Miner", 			-3, 0, null, true), //dig 500m with heat ray in nether
-	GPRSPAWNER("Spawner",					-3, 1, null, true);
+	GPRSPAWNER("Spawner",					-3, 1, null, true),
+	CUTKNOT("Cutting the Knot",				-3, 2, null, true);
 
 	//private int id;
 	private String label;
@@ -126,7 +127,7 @@ public enum RotaryAchievements {
 			RotaryCraft.achievements[i].registerAchievement();
 			if (list[i].isSpecial())
 				RotaryCraft.achievements[i].setSpecial();
-			RotaryCraft.logger.log("ROTARYCRAFT: Registering achievement "+list[i].name()+" with ID "+RotaryCraft.achievements[i].statId+" and ingame name \""+list[i].getName()+"\" (slot "+i+").");
+			RotaryCraft.logger.log("Registering achievement "+list[i].name()+" with ID "+RotaryCraft.achievements[i].statId+" and ingame name \""+list[i].getName()+"\" (slot "+i+").");
 		}
 		AchievementPage.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));
 	}

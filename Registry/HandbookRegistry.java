@@ -75,6 +75,7 @@ public enum HandbookRegistry {
 	WORM(MachineRegistry.ADVANCEDGEARS, 0),
 	CVT(MachineRegistry.ADVANCEDGEARS, 1),
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
+	MULTI(MachineRegistry.MULTICLUTCH),
 
 	//---------------------MACHINES--------------------//
 	MACHINEDESC("Machines", GuiHandbook.MACHINESTART),
@@ -144,6 +145,7 @@ public enum HandbookRegistry {
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
 	BALANCER(MachineRegistry.BALANCER),
 	DISPLAY(MachineRegistry.DISPLAY),
+	TERRA(MachineRegistry.TERRAFORMER),
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
 	SPRING(ItemRegistry.SPRING),

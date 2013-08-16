@@ -65,7 +65,8 @@ public enum PowerReceivers {
 	COMPRESSOR(),
 	DISPLAY(),
 	EMP(),
-	LINEBUILDER();
+	LINEBUILDER(),
+	TERRAFORMER();
 
 	private int minT;
 	private int minS;

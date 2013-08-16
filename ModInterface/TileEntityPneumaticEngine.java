@@ -12,6 +12,7 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -91,15 +92,22 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		}
 
 		float mj = pp.getEnergyStored();
-		PneuEngineStage st = PneuEngineStage.getStageFromMJ(mj);
-		if (st == st.OFF)
-			pp.useEnergy(mj, mj, true);
+		//PneuEngineStage st = PneuEngineStage.getStageFromMJ(mj);
+		//if (st == st.OFF)
+		//	pp.useEnergy(mj, mj, true);
 		//ReikaJavaLibrary.pConsoleSideOnly(st+" from "+mj, Side.SERVER);
-		torque = st.getTorque();
-		omega = st.getOmega();
-		power = (long)torque*(long)omega;
-		//pp.useEnergy(mj, mj, true);
-		pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
+		//torque = st.getTorque();
+		//omega = st.getOmega();
+
+		long power = (long)(mj*ReikaBuildCraftHelper.getWattsPerMJ());
+		int sqrt = (int)Math.sqrt(power);
+		torque = sqrt/4;
+		omega = sqrt*4;
+
+		//power = (long)torque*(long)omega;
+
+		pp.useEnergy(mj, mj, true);
+		//pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
 
 		this.basicPowerReceiver();
 	}

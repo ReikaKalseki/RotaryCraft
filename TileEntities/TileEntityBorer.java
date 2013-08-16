@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -30,6 +31,8 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
+import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -126,9 +129,17 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			reqpow += (int)(DIGPOWER*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread));
 			if (ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread))) > mintorque)
 				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));
-			if (Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread) < 0)
+			if (Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread) < 0 && !this.isLabyBedrock(world, xread, yread, zread))
 				reqpow = -1;
+			if (this.isLabyBedrock(world, xread, yread, zread)) {
+				mintorque = 8192;
+				reqpow = 262144;
+			}
 		}
+	}
+
+	private boolean isLabyBedrock(World world, int x, int y, int z) {
+		return y > 4 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.TWILIGHT_ID;
 	}
 
 	public void calcReqPower(World world, int x, int y, int z, int metadata) {
@@ -193,6 +204,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
+		if (APIRegistry.TWILIGHT.conditionsMet() && id == TwilightBlockHandler.getInstance().mazeStoneID)
+			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		if (drops && id != 0) {
 			TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 			if (id == Block.mobSpawner.blockID) {

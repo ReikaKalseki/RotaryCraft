@@ -100,7 +100,7 @@ public class RotaryRegistration {
 	}
 
 	public static void setupLiquids() {
-		RotaryCraft.logger.log("ROTARYCRAFT: Loading And Registering Liquids");
+		RotaryCraft.logger.log("Loading And Registering Liquids");
 		RotaryCraft.jetFuel = new ItemLiquid(ExtraConfigIDs.JETFUEL.getValue()).setUnlocalizedName("jetfuel");
 		RotaryCraft.lubricant = new ItemLiquid(ExtraConfigIDs.LUBE.getValue()).setUnlocalizedName("lubricant");
 
@@ -119,7 +119,7 @@ public class RotaryRegistration {
 
 	@SideOnly(Side.CLIENT)
 	public static void setupLiquidIcons() {
-		RotaryCraft.logger.log("ROTARYCRAFT: Loading Liquid Icons");
+		RotaryCraft.logger.log("Loading Liquid Icons");
 
 		LiquidDictionary.getCanonicalLiquid("Jet Fuel").setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
 		LiquidDictionary.getCanonicalLiquid("Lubricant").setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));

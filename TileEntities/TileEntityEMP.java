@@ -145,7 +145,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 				case DARK:
 					ReikaThaumHelper.affectNode(au, 0, -base/2+par5Random.nextInt(base)+1, false, flux, 0, 0, 0);
 					if (par5Random.nextInt(1000) == 0) {
-						ReikaThaumHelper.setNodeType(au, EnumNodeType.PURE);
+						ReikaThaumHelper.setNodeType(	au, EnumNodeType.PURE);
 					}
 					break;
 				default:
