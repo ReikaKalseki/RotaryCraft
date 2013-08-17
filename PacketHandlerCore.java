@@ -25,7 +25,9 @@ import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
+import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -81,6 +83,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityPressureBalancer balancer;
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
+	private TileEntityLiquidConverter liq;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -415,6 +418,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		case TERRAFORMER:
 			terra = (TileEntityTerraformer)world.getBlockTileEntity(x, y, z);
 			terra.setTarget(BiomeGenBase.biomeList[data[0]]);
+			break;
+		case LIQUID:
+			liq = (TileEntityLiquidConverter)world.getBlockTileEntity(x, y, z);
+			if (control == 48)
+				liq.setLiquid(LiquidRegistry.liquidList[data[0]]);
+			if (control == 49)
+				liq.setToForge(data[0] > 0);
 			break;
 		}
 	}

@@ -96,7 +96,7 @@ public class TileEntityPressureBalancer extends RotaryCraftTileEntity implements
 
 	@Override
 	public int getMachineIndex() {
-		return MachineRegistry.BALANCER.ordinal();
+		return 0;//return MachineRegistry.BALANCER.ordinal();
 	}
 
 	@Override

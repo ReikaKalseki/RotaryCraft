@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
@@ -44,6 +45,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityPump;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
@@ -86,6 +88,10 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
 			clicked.ticks = 512;
 		}
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
+			ReikaChatHelper.writeString(String.format("Pipe contains %d m^3 of %s.", clicked.liquidLevel/RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase()));
+		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
@@ -94,21 +100,21 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString("Pipe contains no liquid.");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("Pipe contains %d m^3 of %s, with pressure %d kPa.", clicked.liquidLevel, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase(), clicked.fluidPressure));
+			ReikaChatHelper.writeString(String.format("Pipe contains %.3f m^3 of %s, with pressure %d kPa.", clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase(), clicked.fluidPressure));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine clicked = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Fuel line contains %d L of fuel.", clicked.fuel));
+			ReikaChatHelper.writeString(String.format("Fuel line contains %.3f L of fuel.", clicked.fuel/(double)RotaryConfig.MILLIBUCKET));
 			return true;
 		}
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose clicked = (TileEntityHose)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Hose contains %d L of lubricant.", clicked.lubricant));
+			ReikaChatHelper.writeString(String.format("Hose contains %.3f L of lubricant.", clicked.lubricant/(double)RotaryConfig.MILLIBUCKET));
 			return true;
 		}
 		if (tile instanceof ShaftPowerEmitter) {

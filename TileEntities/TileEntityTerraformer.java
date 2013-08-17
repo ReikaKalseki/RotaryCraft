@@ -15,6 +15,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -93,10 +95,18 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		this.getSummativeSidedPower();
 		tickcount++;
+
 		//ReikaWorldHelper.setBiomeForXZ(world, -158, 301, BiomeGenBase.taiga);
-		if (coords.isEmpty())
+		if (coords.isEmpty()) {
+			for (int i = -20; i <= 20; i++) {
+				for (int j = -20; j <= 20; j++) {
+					this.addCoordinate(x+i, z+j);
+				}
+			}
 			return;
+		}
 
 		if (this.operationComplete(tickcount, 0)) {
 			int index = par5Random.nextInt(coords.size());
@@ -115,6 +125,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			return;
 		if (!this.getReqsForTransform(from, target))
 			return;
+		ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
 	}
 
@@ -161,8 +172,10 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 		if (power < min)
 			return false;
 
-		if (waterLevel < liq.amount)
-			return false;
+		if (liq != null) {
+			if (waterLevel < liq.amount)
+				return false;
+		}
 
 		for (int i = 0; i < items.size(); i++) {
 			ItemReq is = items.get(i);
@@ -178,7 +191,8 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 				ReikaInventoryHelper.decrStack(slot, inv);
 			}
 		}
-		waterLevel -= liq.amount;
+		if (liq != null)
+			waterLevel -= liq.amount;
 		return true;
 	}
 
@@ -240,5 +254,53 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 	public BiomeGenBase getCentralBiome() {
 		return worldObj.getBiomeGenForCoords(xCoord, zCoord);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+		waterLevel = NBT.getInteger("water");
+		target = BiomeGenBase.biomeList[NBT.getInteger("tg")];
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("water", waterLevel);
+		NBT.setInteger("tg", target.biomeID);
+
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 }

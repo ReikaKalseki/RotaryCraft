@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
 import java.util.List;
@@ -47,8 +56,11 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		this.initGui();
-		if (b.id < 0) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, ep, b.id);
+
+		List<BiomeGenBase> li = terra.getValidTargetBiomes(terra.getCentralBiome());
+		if (b.id < li.size()) {
+			BiomeGenBase biome = li.get(b.id);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, ep, biome.biomeID);
 		}
 	}
 
@@ -75,7 +87,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 			}
 			List<ItemStack> items = terra.getItemsForTransform(from, to);
 			if (items != null && !items.isEmpty()) {
-				int step = (int)((System.nanoTime()/1000000000)%items.size());
+				int step = (int)((System.nanoTime()/500000000)%items.size());
 				ItemStack is = items.get(step);
 				ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, is, 48, 19+16+i*39);
 			}

@@ -40,7 +40,8 @@ public enum PacketRegistry {
 	CHESTRELOAD(43),
 	BALANCER(44, 45),
 	REDGEAR(46),
-	TERRAFORMER(47);
+	TERRAFORMER(47),
+	LIQUID(48, 49);
 
 	private int min;
 	private int max;

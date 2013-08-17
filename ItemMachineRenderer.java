@@ -20,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -162,6 +161,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 				b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
+			if (item.getItemDamage() >= MachineRegistry.machineList.length)
+				return;
 			switch (MachineRegistry.machineList[item.getItemDamage()]) {
 			case ENGINE:
 				TileEntityEngine eng = new TileEntityEngine();
@@ -344,10 +345,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;
 			case PNEUENGINE:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPneumaticEngine(), a, -0.1D, b, 0.0F);
-				break;
+				break;/*
 			case BALANCER:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPressureBalancer(), a, -0.1D, b, 0.0F);
-				break;
+				break;*/
 			case MULTICLUTCH:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMultiClutch(), a, -0.1D, b, 0.0F);
 				break;

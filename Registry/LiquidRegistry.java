@@ -22,8 +22,8 @@ public enum LiquidRegistry {
 
 	WATER(Item.bucketWater.itemID, LiquidDictionary.getCanonicalLiquid("Water")),
 	LAVA(Item.bucketLava.itemID, LiquidDictionary.getCanonicalLiquid("Lava")),
-	LUBRICANT(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage()),
-	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage());
+	LUBRICANT(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("Lubricant")),
+	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("Jet Fuel"));
 	//ETHANOL(ItemStacks.ethanolbucket.itemID, ItemStacks.ethanolbucket.getItemDamage());
 
 	public static final LiquidRegistry[] liquidList = LiquidRegistry.values();
@@ -33,14 +33,13 @@ public enum LiquidRegistry {
 	private LiquidStack forgeLiquid;
 
 	private LiquidRegistry(int id, LiquidStack liq) {
-		liquidID = id;
-		liquidMeta = -1;
-		forgeLiquid = liq;
+		this(id, -1, liq);
 	}
 
-	private LiquidRegistry(int id, int meta) {
+	private LiquidRegistry(int id, int meta, LiquidStack liq) {
 		liquidID = id;
 		liquidMeta = meta;
+		forgeLiquid = liq;
 	}
 
 	public boolean isMetadata() {
@@ -118,5 +117,9 @@ public enum LiquidRegistry {
 
 	private boolean hasForgeLiquid() {
 		return forgeLiquid != null;
+	}
+
+	public LiquidStack getForgeLiquid() {
+		return forgeLiquid.copy();
 	}
 }

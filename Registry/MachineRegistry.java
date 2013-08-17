@@ -55,8 +55,8 @@ import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
@@ -222,14 +222,14 @@ public enum MachineRegistry {
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
 	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", APIRegistry.BUILDCRAFTENERGY),
 	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
-	BALANCER(			"Pressure Balancer", 		BlockBCEngine.class,		TileEntityPressureBalancer.class,	2, "RenderBalancer", APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
 	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10),
 	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
-	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6);
+	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
+	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7);
 
 
 	private String name;
@@ -953,6 +953,14 @@ public enum MachineRegistry {
 		if (this.hasModel() && TileEntityIOMachine.class.isAssignableFrom(te))
 			return true;
 		if (this == COOLINGFIN)
+			return true;
+		return false;
+	}
+
+	public boolean isSidePlaced() {
+		if (this == COOLINGFIN)
+			return true;
+		if (this == COMPRESSOR)
 			return true;
 		return false;
 	}

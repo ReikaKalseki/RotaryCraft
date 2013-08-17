@@ -41,5 +41,23 @@ public class BlockMachine extends BlockBasicMultiTE {
 			icons[p][i] = ico.registerIcon("RotaryCraft:destruct");
 		icons[p][0] = ico.registerIcon("RotaryCraft:steel");
 		icons[p][1] = ico.registerIcon("RotaryCraft:steel");
+
+		p = MachineRegistry.TERRAFORMER.getMachineMetadata();
+		for (int i = 0; i < 6; i++)
+			icons[p][i] = ico.registerIcon("RotaryCraft:steel");
+		icons[p][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[p][1] = ico.registerIcon("RotaryCraft:screen");
+
+		p = MachineRegistry.LIQUIDCONVERTER.getMachineMetadata();
+		for (int i = 0; i < 6; i++)
+			icons[p][i] = ico.registerIcon("RotaryCraft:bucketfiller");
+
+		p = MachineRegistry.LAMP.getMachineMetadata();
+		for (int i = 0; i < 6; i++)
+			icons[p][i] = ico.registerIcon("RotaryCraft:lamp");
+
+		p = MachineRegistry.EMP.getMachineMetadata();
+		for (int i = 0; i < 6; i++)
+			icons[p][i] = ico.registerIcon("RotaryCraft:steel");
 	}
 }

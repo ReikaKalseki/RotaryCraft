@@ -100,6 +100,9 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		//omega = st.getOmega();
 
 		long power = (long)(mj*ReikaBuildCraftHelper.getWattsPerMJ());
+		double log = ReikaMathLibrary.logbase(power, 2);
+		int pow = (int)Math.ceil(log);
+		power = (long)Math.pow(2, pow);
 		int sqrt = (int)Math.sqrt(power);
 		torque = sqrt/4;
 		omega = sqrt*4;

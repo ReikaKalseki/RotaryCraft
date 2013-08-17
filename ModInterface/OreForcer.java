@@ -16,15 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.EnumTag;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.DragonAPI.ModInteract.BCMachineHandler;
-import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
-import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
-import Reika.DragonAPI.ModInteract.TinkerToolHandler;
-import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -68,11 +62,9 @@ public final class OreForcer {
 
 	@SuppressWarnings("incomplete-switch")
 	private static void force(APIRegistry api) {
-		RotaryCraft.logger.log("Forcing compatibility with "+api);
+		if (api != APIRegistry.ROTARYCRAFT)
+			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
-		case BUILDCRAFTFACTORY:
-			ReikaJavaLibrary.initClass(BCMachineHandler.class);
-			break;
 		case APPLIEDENERGISTICS:
 			intercraftQuartz();
 			break;
@@ -80,8 +72,6 @@ public final class OreForcer {
 			intercraftApatite();
 			break;
 		case THAUMCRAFT:
-			ReikaJavaLibrary.initClass(ThaumOreHandler.class);
-			ReikaJavaLibrary.initClass(ThaumBlockHandler.class);
 			addThaumAspects();
 			if (ConfigRegistry.MODORES.getState())
 				registerThaumcraft();
@@ -93,14 +83,6 @@ public final class OreForcer {
 			if (ConfigRegistry.MODORES.getState())
 				registerDart();
 			breakForceWrench();
-			ReikaJavaLibrary.initClass(DartOreHandler.class);
-			ReikaJavaLibrary.initClass(DartItemHandler.class);
-			break;
-		case TINKERER:
-			ReikaJavaLibrary.initClass(TinkerToolHandler.class);
-			break;
-		case TWILIGHT:
-			ReikaJavaLibrary.initClass(TwilightBlockHandler.class);
 			break;
 		}
 	}

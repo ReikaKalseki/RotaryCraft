@@ -43,6 +43,7 @@ import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaVectorHelper;
+import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -238,6 +239,12 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 				threat.motionZ = 0;
 			}
 			if (threat instanceof EntityTNTPrimed) {
+				threat.setDead();
+				if (!world.isRemote)
+					world.createExplosion(null, x, y, z, 4F, true);
+				tickcount = 0;
+			}
+			if (ModExplosiveHandler.getInstance().isModExplosive(threat)) {
 				threat.setDead();
 				if (!world.isRemote)
 					world.createExplosion(null, x, y, z, 4F, true);

@@ -143,7 +143,8 @@ public enum HandbookRegistry {
 	WORKTABLE(MachineRegistry.WORKTABLE),
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
-	BALANCER(MachineRegistry.BALANCER),
+	//BALANCER(MachineRegistry.BALANCER),
+	CONVERTER(MachineRegistry.LIQUIDCONVERTER),
 	DISPLAY(MachineRegistry.DISPLAY),
 	TERRA(MachineRegistry.TERRAFORMER),
 	//---------------------TOOLS--------------------//

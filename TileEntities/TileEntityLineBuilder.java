@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -44,6 +46,10 @@ public class TileEntityLineBuilder extends TileEntityPowerReceiver {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 
+	}
+
+	public ItemStack getNextBlockToAdd() {
+		return new ItemStack(Block.cloth.blockID, 1, par5Random.nextInt(16));
 	}
 
 }
