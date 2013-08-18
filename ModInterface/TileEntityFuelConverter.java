@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.item.Item;
@@ -13,6 +22,7 @@ import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -21,8 +31,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver implements ITankContainer {
 
 	public static final LiquidStack BC_FUEL = LiquidDictionary.getCanonicalLiquid("Fuel");
+	public static final LiquidStack JET_FUEL = LiquidDictionary.getCanonicalLiquid("Jet Fuel");
 
-	public static final int CAPACITY = 240*LiquidContainerRegistry.BUCKET_VOLUME;
+	public static final int CAPACITY = 5*LiquidContainerRegistry.BUCKET_VOLUME;
 
 	private LiquidTank bctank = new LiquidTank(CAPACITY);
 	private LiquidTank jettank = new LiquidTank(CAPACITY);
@@ -40,7 +51,11 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -50,7 +65,7 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 
 	@Override
 	public boolean hasModelTransparency() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -62,11 +77,11 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
-		this.getSummativeSidedPower();
+		this.getPowerBelow();
 
 		int factor = 1;
 
-		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.SERVER);
+		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.CLIENT);
 
 		boolean convert = true;
 
@@ -212,6 +227,22 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		else if (type.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Jet Fuel")))
 			return jettank;
 		return null;
+	}
+
+	public int getFuel(LiquidStack liquid) {
+		if (liquid.isLiquidEqual(BC_FUEL))
+			return this.getBCFuel();
+		else if (liquid.isLiquidEqual(JET_FUEL))
+			return this.getJetFuel();
+		return 0;
+	}
+
+	public double getLiquidModelOffset(LiquidStack liquid) {
+		if (liquid.isLiquidEqual(BC_FUEL))
+			return 10/16D;
+		else if (liquid.isLiquidEqual(JET_FUEL))
+			return 1/16D;
+		return 0;
 	}
 
 	public int getBCFuel() {

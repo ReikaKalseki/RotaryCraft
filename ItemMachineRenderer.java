@@ -18,71 +18,13 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
-import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
-import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
-import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
-import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
-import Reika.RotaryCraft.TileEntities.TileEntityBlockCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
-import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
-import Reika.RotaryCraft.TileEntities.TileEntityClutch;
-import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
-import Reika.RotaryCraft.TileEntities.TileEntityContainment;
-import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
-import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
-import Reika.RotaryCraft.TileEntities.TileEntityFan;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.TileEntityForceField;
-import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
-import Reika.RotaryCraft.TileEntities.TileEntityFreezeGun;
-import Reika.RotaryCraft.TileEntities.TileEntityFurnaceHeater;
-import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.TileEntityGrinder;
-import Reika.RotaryCraft.TileEntities.TileEntityHeatRay;
-import Reika.RotaryCraft.TileEntities.TileEntityHeater;
-import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
-import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
-import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
-import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
-import Reika.RotaryCraft.TileEntities.TileEntityMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
-import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
-import Reika.RotaryCraft.TileEntities.TileEntityMonitor;
-import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
-import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
-import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
-import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityProjector;
-import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
-import Reika.RotaryCraft.TileEntities.TileEntityPump;
-import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
-import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
-import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
-import Reika.RotaryCraft.TileEntities.TileEntitySolar;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
-import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
-import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
-import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
-import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
-import Reika.RotaryCraft.TileEntities.TileEntityWinder;
-import Reika.RotaryCraft.TileEntities.TileEntityWoodcutter;
 
 public class ItemMachineRenderer implements IItemRenderer {
 
@@ -164,203 +106,13 @@ public class ItemMachineRenderer implements IItemRenderer {
 			}
 			if (item.getItemDamage() >= MachineRegistry.machineList.length)
 				return;
-			switch (MachineRegistry.machineList[item.getItemDamage()]) {
-			case ENGINE:
-				TileEntityEngine eng = new TileEntityEngine();
-				eng.type = EnumEngineType.DC;
-				TileEntityRenderer.instance.renderTileEntityAt(eng, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
-				break;
-			case AEROSOLIZER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAerosolizer(), a, 0.0D, b, 0.0F);
-				break;
-			case BEVELGEARS:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityGearBevel(), a, -0.1D, b, 0.0F);
-				break;
-			case LIGHTBRIDGE:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBridgeEmitter(), a, 0.0D, b, 0.0F);
-				break;
-			case CLUTCH:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityClutch(), a, 0.0D, b, 0.0F);
-				break;
-			case COMPACTOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCompactor(), a, -0.1D, b, 0.0F);
-				break;
-			case EXTRACTOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityExtractor(), a, 0.0D, b, 0.0F);
-				break;
-			case FAN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFan(), a, -0.1D, b, 0.0F);
-				break;
-			case FLYWHEEL:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFlywheel(), a, 0.0D, b, -250F*(item.getItemDamage()+1));
-				break;
-			case GEARBOX:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityGearbox(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
-				break;
-			case HEATRAY:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityHeatRay(), a, 0.0D, b, 0.0F);
-				break;
-			case FLOODLIGHT:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFloodlight(), a, 0.0D, b, 0.0F);
-				break;
-			case PULSEJET:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPulseFurnace(), a, 0.0D, b, 0.0F);
-				break;
-			case PUMP:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPump(), a, 0.0D, b, 0.0F);
-				break;
-			case RESERVOIR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityReservoir(), a, -0.1D, b, 0.0F);
-				break;
-			case FRACTIONATOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFractionator(), a, 0.0D, b, 0.0F);
-				break;
-			case VACUUM:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityVacuum(), a, -0.1D, b, 0.0F);
-				break;
-			case PILEDRIVER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPileDriver(), a, -0.1D, b, 0.0F);
-				break;
-			case SPLITTER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySplitter(), a, -0.1D, b, 0.0F);
-				break;
-			case SPRINKLER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySprinkler(), a, -0.1D, b, 0.0F);
-				break;
-			case GRINDER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityGrinder(), a, -0.1D, b, 0.0F);
-				break;
-			case WOODCUTTER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityWoodcutter(), a, -0.1D, b, 0.0F);
-				break;
-			case OBSIDIAN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityObsidianMaker(), a, -0.1D, b, 0.0F);
-				break;
-			case SPAWNERCONTROLLER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySpawnerController(), a, -0.1D, b, 0.0F);
-				break;
-			case PLAYERDETECTOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPlayerDetector(), a, -0.1D, b, 0.0F);
-				break;
-			case DYNAMOMETER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMonitor(), a, -0.1D, b, 0.0F);
-				break;
-			case HEATER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityHeater(), a, -0.1D, b, 0.0F);
-				break;
-			case AUTOBREEDER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAutoBreeder(), a, -0.1D, b, 0.0F);
-				break;
-			case BAITBOX:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBaitBox(), a, -0.1D, b, 0.0F);
-				break;
-			case BEDROCKBREAKER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBedrockBreaker(), a, -0.1D, b, 0.0F);
-				break;
-			case ADVANCEDGEARS:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAdvancedGear(), a, -0.1D, b, -1000F*(item.getItemDamage()+1));
-				break;
-			case TNTCANNON:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityTNTCannon(), a, -0.1D, b, 0.0F);
-				break;
-			case WINDER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityWinder(), a, -0.1D, b, 0.0F);
-				break;
-			case SMOKEDETECTOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySmokeDetector(), a, -0.1D, b, 0.0F);
-				break;
-			case SONICWEAPON:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySonicWeapon(), a, -0.1D, b, 0.0F);
-				break;
-			case FORCEFIELD:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityForceField(), a, -0.1D, b, 0.0F);
-				break;
-			case MOBHARVESTER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMobHarvester(), a, -0.1D, b, 0.0F);
-				break;
-			case RAILGUN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityRailGun(), a, -0.1D, b, 0.0F);
-				break;
-			case MOBRADAR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMobRadar(), a, -0.1D, b, 0.0F);
-				break;
-			case PROJECTOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityProjector(), a, -0.1D, b, 0.0F);
-				break;
-			case WEATHERCONTROLLER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityWeatherController(), a, -0.1D, b, 0.0F);
-				break;
-			case SCALECHEST:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityScaleableChest(), a, -0.1D, b, 0.0F);
-				break;
-			case CAVESCANNER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCaveFinder(), a, -0.1D, b, 0.0F);
-				break;
-			case CCTV:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCCTV(), a, -0.1D, b, 0.0F);
-				break;
-			case MAGNETIZER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMagnetizer(), a, -0.1D, b, 0.0F);
-				break;
-			case CONTAINMENT:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityContainment(), a, -0.1D, b, 0.0F);
-				break;
-			case FREEZEGUN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFreezeGun(), a, -0.1D, b, 0.0F);
-				break;
-			case SCREEN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityScreen(), a, -0.1D, b, 0.0F);
-				break;
-			case LASERGUN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityLaserGun(), a, -0.1D, b, 0.0F);
-				break;
-			case ITEMCANNON:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityItemCannon(), a, -0.1D, b, 0.0F);
-				break;
-			case LANDMINE:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityLandmine(), a, -0.1D, b, 0.0F);
-				break;
-			case FRICTION:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFurnaceHeater(), a, -0.1D, b, 0.0F);
-				break;
-			case BLOCKCANNON:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityBlockCannon(), a, -0.1D, b, 0.0F);
-				break;
-			case MIRROR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMirror(), a, -0.1D, b, 0.0F);
-				break;
-			case SOLARTOWER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySolar(), a, -0.1D, b, 0.0F);
-				break;
-			case SPYCAM:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntitySpyCam(), a, -0.1D, b, 0.0F);
-				break;
-			case DISPLAY:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityDisplay(), a, -0.1D, b, 0.0F);
-				break;
-			case COOLINGFIN:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityCoolingFin(), a, -0.1D, b, 0.0F);
-				break;
-			case COMPRESSOR:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAirCompressor(), a, -0.1D, b, 0.0F);
-				break;
-			case PNEUENGINE:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPneumaticEngine(), a, -0.1D, b, 0.0F);
-				break;/*
-			case BALANCER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityPressureBalancer(), a, -0.1D, b, 0.0F);
-				break;*/
-			case MULTICLUTCH:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMultiClutch(), a, -0.1D, b, 0.0F);
-				break;
-			case LINEBUILDER:
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityLineBuilder(), a, -0.1D, b, 0.0F);
-				break;
-			default:
+			MachineRegistry machine = MachineRegistry.machineList[item.getItemDamage()];
+			if (machine.hasModel())
+				TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
+			else {
 				RenderBlocks rb = new RenderBlocks();
 				Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
 				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlockVariable(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
-				break;
 			}
 		}
 	}

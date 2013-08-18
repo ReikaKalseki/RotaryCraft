@@ -108,6 +108,12 @@ public final class OreForcer {
 		ReikaThaumHelper.addAspects(ItemStacks.nitrate, EnumTag.FLUX, 1);
 		ReikaThaumHelper.addAspects(ItemStacks.anthracite, EnumTag.FIRE, 2, EnumTag.POWER, 2);
 		ReikaThaumHelper.addAspects(ItemStacks.lonsda, EnumTag.VALUABLE, 4);
+
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList[i];
+			int num = m.getNumberMetadatas();
+			ReikaThaumHelper.clearAspects(m.getCraftedProduct());
+		}
 	}
 
 	private static void breakForceWrench() {

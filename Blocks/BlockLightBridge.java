@@ -9,10 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,6 +58,13 @@ public class BlockLightBridge extends BlockBasic {
 	}
 
 	@Override
+	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		return ret;
+	}
+
+	@Override
 	public boolean canCollideCheck(int par1, boolean par2)
 	{
 		return false;
@@ -64,8 +73,8 @@ public class BlockLightBridge extends BlockBasic {
 	public int getBlockTextureFromSideAndMetadata(int s, int meta) {
 		if (s > 1)
 			return 0;//this.blockIndexInTexture+2;
-			else
-				return 0;//this.blockIndexInTexture+meta;
+		else
+			return 0;//this.blockIndexInTexture+meta;
 	}
 
 	/**

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
 import cpw.mods.fml.relauncher.Side;
@@ -55,6 +57,14 @@ public class BlockDeco extends BlockBasic {
 	public int damageDropped(int par1)
 	{
 		return par1;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(new ItemStack(RotaryCraft.decoblock, 1, metadata));
+		return ret;
 	}
 
 	@Override

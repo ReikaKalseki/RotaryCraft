@@ -70,7 +70,7 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
         	}
         	GL11.glBindTexture(GL11.GL_TEXTURE_2D, img);
         }*/
-		String filename = file.substring(18, file.length());
+		//String filename = file.substring(18, file.length());
 		super.bindTextureByName(file);
 	}
 

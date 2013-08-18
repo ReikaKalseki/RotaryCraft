@@ -51,7 +51,8 @@ public enum ConfigRegistry implements ConfigList {
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
 	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),
 	DIFFICULTY("Difficulty Control", 2),
-	ALARM("Machine Warning Alarms", false);
+	ALARM("Machine Warning Alarms", false),
+	BIOMEBLOCKS("Terraformer Block Editing", true);
 
 	private String label;
 	private boolean defaultState;

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -89,7 +90,6 @@ public class BlockFlywheel extends BlockModelledMachine {
 					world.spawnEntityInWorld(item);
 			}
 		}
-		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override
@@ -132,5 +132,13 @@ public class BlockFlywheel extends BlockModelledMachine {
 			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+1);
 			break;
 		}
+	}
+
+	@Override
+	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata/4));
+		return ret;
 	}
 }

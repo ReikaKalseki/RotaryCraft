@@ -9,12 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -60,6 +60,14 @@ public class BlockCanola extends BlockBasic {
 		return true;
 	}
 
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(this.getDrops(metadata));
+		return ret;
+	}
+
 	/**
 	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
 	 */
@@ -94,24 +102,15 @@ public class BlockCanola extends BlockBasic {
 	}
 
 	public void die(World world, int x, int y, int z) {
-		//this.drops(world, x, y, z);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		world.setBlock(x, y, z, 0);
 	}
 
-	public void drops(World world, int x, int y, int z) {
+	public ItemStack getDrops(int metadata) {
 		int ndrops = 2+rand.nextInt(8)+rand.nextInt(5);
-		if (world.getBlockMetadata(x, y, z) != 9)
+		if (metadata != 9)
 			ndrops = 1;
 		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
-		for (int i = 0; i < 1; i++) {
-			EntityItem itemdrop = new EntityItem(world, x+0.5D, y+0.5D, z+0.5D, items);
-			itemdrop.motionX = -0.1+0.2*rand.nextFloat();
-			itemdrop.motionY = 0.1*rand.nextFloat();
-			itemdrop.motionZ = -0.1+0.2*rand.nextFloat();
-			itemdrop.delayBeforeCanPickup = 10;
-			if (!world.isRemote)
-				world.spawnEntityInWorld(itemdrop);
-		}
+		return items;
 	}
 
 	@Override
@@ -158,12 +157,6 @@ public class BlockCanola extends BlockBasic {
 		if (var6 < 0.125F)
 			var6 = 0.125F;
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var6, 1.0F);
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, int a, int b) {
-		this.drops(world, x, y, z);
-		super.breakBlock(world, x, y, z, a, b);
 	}
 
 	@Override

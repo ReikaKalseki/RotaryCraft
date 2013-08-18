@@ -35,6 +35,7 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -72,6 +73,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		//ReikaJavaLibrary.pConsole(this.hasEnchantments());
+
+		//enchantments.put(Enchantment.efficiency, 4);
+		//enchantments.put(Enchantment.silkTouch, 1);
+
+		//ReikaJavaLibrary.pConsole(this.getEnchantment(Enchantment.efficiency));
 
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
@@ -211,8 +217,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (APIRegistry.TWILIGHT.conditionsMet() && id == TwilightBlockHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
+		TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
+		if (tile instanceof RotaryCraftTileEntity)
+			return false;
 		if (drops && id != 0) {
-			TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 			if (id == Block.mobSpawner.blockID) {
 				TileEntityMobSpawner spw = (TileEntityMobSpawner)tile;
 				if (spw != null) {
@@ -336,19 +344,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public boolean applyEnchants(ItemStack is) {
+		boolean accepted = false;
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
 			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
-			return true;
+			accepted = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
 			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
-			return true;
+			accepted = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
 			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
-			return true;
+			accepted = true;
 		}
-		return false;
+		return accepted;
 	}
 
 	public HashMap<Enchantment,Integer> getEnchantments() {

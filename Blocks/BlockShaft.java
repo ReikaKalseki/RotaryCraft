@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -215,8 +217,6 @@ public class BlockShaft extends BlockModelledMachine {
 					world.spawnEntityInWorld(item);
 			}
 		}
-		//super.breakBlock(world, x, y, z, a, b);
-		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override
@@ -287,5 +287,16 @@ public class BlockShaft extends BlockModelledMachine {
 		maxy -= 0.1825F;
 
 		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
+	}
+
+	@Override
+	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		TileEntityShaft tile = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+		if (tile == null)
+			return ret;
+		ret.add(new ItemStack(RotaryCraft.shaftitems.itemID, 1, tile.type.ordinal()));
+		return ret;
 	}
 }

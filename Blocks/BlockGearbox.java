@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -130,7 +132,6 @@ public class BlockGearbox extends BlockModelledMachine {
 			todrop.stackTagCompound.setInteger("damage", gbx.damage);
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
-		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override
@@ -221,5 +222,14 @@ public class BlockGearbox extends BlockModelledMachine {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess par1iBlockAccess, int x, int y, int z) {
 		this.setFullBlockBounds();
+	}
+
+	@Override
+	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+		ret.add(new ItemStack(RotaryCraft.gbxitems.itemID, 1, (metadata/4)*5+gbx.type.ordinal()));
+		return ret;
 	}
 }

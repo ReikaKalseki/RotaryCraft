@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -164,7 +165,8 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 		int rx = xCoord+dir.offsetX*i;
 		int ry = yCoord+dir.offsetY*i;
 		int rz = zCoord+dir.offsetZ*i;
-		if (ry <= 0)
+		int id = worldObj.getBlockId(rx, ry, rz);
+		if (id == Block.bedrock.blockID)
 			return Integer.MIN_VALUE;
 		int maxr = this.getMaxRange();
 		TileEntity te = worldObj.getBlockTileEntity(rx, ry, rz);
@@ -175,7 +177,8 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 			rx = xCoord+dir.offsetX*i;
 			ry = yCoord+dir.offsetY*i;
 			rz = zCoord+dir.offsetZ*i;
-			if (ry <= 0)
+			id = worldObj.getBlockId(rx, ry, rz);
+			if (id == Block.bedrock.blockID)
 				return Integer.MIN_VALUE;
 			TileEntity tile = worldObj.getBlockTileEntity(rx, ry, rz);
 			if (tile != null)

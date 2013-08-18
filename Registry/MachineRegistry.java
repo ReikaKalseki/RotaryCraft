@@ -231,7 +231,7 @@ public enum MachineRegistry {
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
-	FUELENHANCER(		"Fuel Enhancer",			BlockMachine.class,			TileEntityFuelConverter.class,		8);
+	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter");
 
 
 	private String name;
@@ -1003,5 +1003,17 @@ public enum MachineRegistry {
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
 		if (!this.isDummiedOut())
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
+	}
+
+	public TileEntity createTEInstanceForRender() {
+		try {
+			return (TileEntity)te.newInstance();
+		}
+		catch (InstantiationException e) {
+			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
+		}
+		catch (IllegalAccessException e) {
+			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
+		}
 	}
 }

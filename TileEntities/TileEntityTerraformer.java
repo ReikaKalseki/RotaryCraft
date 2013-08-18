@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver implements PipeConnector {
@@ -100,33 +102,52 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 		//ReikaWorldHelper.setBiomeForXZ(world, -158, 301, BiomeGenBase.taiga);
 		if (coords.isEmpty()) {
-			for (int i = -20; i <= 20; i++) {
-				for (int j = -20; j <= 20; j++) {
+			for (int i = -8; i <= 8; i++) {
+				for (int j = -8; j <= 8; j++) {
 					this.addCoordinate(x+i, z+j);
 				}
 			}
 			return;
 		}
 
+		//ReikaJavaLibrary.pConsole(coords.size());
+
 		if (this.operationComplete(tickcount, 0)) {
 			int index = par5Random.nextInt(coords.size());
 			int[] xz = coords.get(index);
-			this.setBiome(world, xz[0], xz[1]);
+			while(xz[0] == x && xz[1] == z && coords.size() > 1) { //edit our block last
+				//ReikaJavaLibrary.pConsole("EDIT ON "+coords.size());
+				index = par5Random.nextInt(coords.size());
+				xz = coords.get(index);
+			}
+			//if (xz[0] == x && xz[1] == z)
+			//	ReikaJavaLibrary.pConsole("CHANGE ON "+coords.size());
+			if (this.setBiome(world, xz[0], xz[1])); //deliberate ;
 			coords.remove(index);
 			tickcount = 0;
 		}
 	}
 
-	private void setBiome(World world, int x, int z) {
+	private boolean setBiome(World world, int x, int z) {
 		BiomeGenBase from = world.getBiomeGenForCoords(x, z);
 		if (from != this.getCentralBiome())
-			return;
+			return false;
 		if (!this.isValidTarget(from))
-			return;
+			return false;
 		if (!this.getReqsForTransform(from, target))
-			return;
+			;//return false;
 		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
-		ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
+		if (this.modifyBlocks())
+			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);
+		else
+			ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
+		ReikaWorldHelper.causeAdjacentUpdates(world, x, yCoord, z);
+		world.markBlockRangeForRenderUpdate(x, 0, z, x, world.provider.getHeight(), z);
+		return true;
+	}
+
+	public boolean modifyBlocks() {
+		return ConfigRegistry.BIOMEBLOCKS.getState() && ReikaInventoryHelper.checkForItem(Item.diamond.itemID, inv);
 	}
 
 	public void addCoordinate(int x, int z) {
@@ -188,7 +209,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			ItemReq is = items.get(i);
 			if (is.callAndConsume()) {
 				int slot = ReikaInventoryHelper.locateInInventory(is.itemID, is.metadata, inv);
-				ReikaInventoryHelper.decrStack(slot, inv);
+				//ReikaInventoryHelper.decrStack(slot, inv);
 			}
 		}
 		if (liq != null)
@@ -246,6 +267,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 	public void setTarget(BiomeGenBase tg) {
 		target = tg;
+		coords.clear();
 	}
 
 	public List<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -165,7 +167,6 @@ public class BlockEngine extends BlockModelledMachine {
 				}
 			}
 		}
-		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	/**
@@ -183,5 +184,16 @@ public class BlockEngine extends BlockModelledMachine {
 		if (te != null) {
 			te.temperature = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		}
+	}
+
+	@Override
+	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+		if (tile == null)
+			return ret;
+		ret.add(new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.type.ordinal()));
+		return ret;
 	}
 }

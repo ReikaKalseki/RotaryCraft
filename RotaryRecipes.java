@@ -190,6 +190,14 @@ public class RotaryRecipes {
 		MachineRegistry.COMPRESSOR.addCrafting(new Object[]{"SSS", " G ", "CPC", 'S', ItemStacks.steelingot, 'G', Block.glass, 'P', Block.pistonBase, 'C', ItemStacks.compressor});
 
 		MachineRegistry.PNEUENGINE.addCrafting(new Object[]{"ppS", "sT ", "PPP", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem, 'p', ItemStacks.pipe, 'P', ItemStacks.basepanel, 'T', ItemStacks.turbine});
+
+		MachineRegistry.LAMP.addCrafting(new Object[]{"SGS", "GgG", "SGS", 'S', ItemStacks.steelingot, 'G', Block.glass, 'g', Block.glowStone});
+
+		MachineRegistry.MULTICLUTCH.addCrafting(new Object[]{"PSP", "SGS", "RSR", 'R', Item.redstone, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'P', ItemStacks.basepanel});
+
+		MachineRegistry.LIQUIDCONVERTER.addCrafting(new Object[]{"SSS", "pCp", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.impeller, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe});
+
+		MachineRegistry.FUELENHANCER.addCrafting(new Object[]{"PGP", "gMg", "PGP", 'G', Block.thinGlass, 'M', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'g', Item.ingotGold});
 	}
 
 	private static void addCraftItems() {

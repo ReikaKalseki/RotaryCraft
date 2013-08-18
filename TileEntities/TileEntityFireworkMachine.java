@@ -598,6 +598,14 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+
+		enchantments = new HashMap<Enchantment,Integer>();
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
+				enchantments.put(Enchantment.enchantmentsList[i], lvl);
+			}
+		}
 	}
 
 	/**
@@ -621,6 +629,13 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
 	}
 
 	@Override
@@ -657,11 +672,12 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 
 	@Override
 	public boolean applyEnchants(ItemStack is) {
+		boolean accepted = false;
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
 			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
-			return true;
+			accepted = true;
 		}
-		return false;
+		return accepted;
 	}
 
 	@Override

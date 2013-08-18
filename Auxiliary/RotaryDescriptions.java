@@ -13,11 +13,13 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
@@ -62,144 +64,96 @@ public final class RotaryDescriptions {
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
 	private static final ArrayList<String> partDescs = new ArrayList<String>();
-
+	/*
 	public static Object[][] machineNotes = {
-		{PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque()},
-		{PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed()},
-		{PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque()},
-		{PowerReceivers.FLOODLIGHT.getMinPower()},
-		{PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF},
-		{TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE},
-		{TileEntityPileDriver.BASEPOWER},
-		{PowerReceivers.AEROSOLIZER.getMinPower()},
-		{PowerReceivers.LIGHTBRIDGE.getMinPower()},
-		{PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3), PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3), PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2)},
-		{PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP},
-		{PowerReceivers.PUMP.getMinPower()},
-		{TileEntityReservoir.CAPACITY},
-		{PowerReceivers.FAN.getMinPower(), PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF},
-		{PowerReceivers.COMPACTOR.getMinPower(), PowerReceivers.COMPACTOR.getMinTorque(), TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP, TileEntityCompactor.MAXPRESSURE, TileEntityCompactor.MAXTEMP},
-		{PowerReceivers.AUTOBREEDER.getMinPower(), PowerReceivers.AUTOBREEDER.getMinPower(), TileEntityAutoBreeder.FALLOFF},
-		{PowerReceivers.BAITBOX.getMinPower(), PowerReceivers.BAITBOX.getMinPower(), TileEntityBaitBox.FALLOFF},
-		{PowerReceivers.FIREWORK.getMinPower(), PowerReceivers.FIREWORK.getMinSpeed()},
-		{PowerReceivers.FRACTIONATOR.getMinPower(), PowerReceivers.FRACTIONATOR.getMinSpeed()},
-		{PowerReceivers.GPR.getMinPower(), PowerReceivers.GPR.getMinPower()},
-		{PowerReceivers.HEATER.getMinPower(), TileEntityHeater.MAXTEMP},
-		{PowerReceivers.OBSIDIAN.getMinPower(), PowerReceivers.OBSIDIAN.getMinSpeed(), TileEntityObsidianMaker.MAXTEMP, TileEntityObsidianMaker.CAPACITY},
-		{TileEntityPlayerDetector.FALLOFF, TileEntityPlayerDetector.BASESPEED, TileEntityPlayerDetector.SPEEDFACTOR},
-		{PowerReceivers.SPAWNERCONTROLLER.getMinPower(), TileEntitySpawnerController.BASEDELAY},
-		{TileEntitySprinkler.CAPACITY},
-		{PowerReceivers.VACUUM.getMinPower(), PowerReceivers.VACUUM.getMinPower()},
-		{PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque()},
 		{},
-		{PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), TileEntityMobRadar.FALLOFF},
-		{},
-		{PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque()},
-		{PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE, TileEntitySonicWeapon.BRAINDAMAGE, TileEntitySonicWeapon.LUNGDAMAGE, TileEntitySonicWeapon.LETHALVOLUME},
-		{},
-		{PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF},
-		{TileEntityMusicBox.LOOPPOWER},
-		{PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower()},
-		{PowerReceivers.PROJECTOR.getMinPower()},
-		{PowerReceivers.RAILGUN.getMinPower()},
-		{PowerReceivers.WEATHERCONTROLLER.getMinPower()},
-		{PowerReceivers.ITEMREFRESHER.getMinPower(), PowerReceivers.ITEMREFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF},
-		{PowerReceivers.CAVESCANNER.getMinPower()},
-		{PowerReceivers.SCALECHEST.getMinPower(), PowerReceivers.SCALECHEST.getMinPower(), TileEntityScaleableChest.FALLOFF, TileEntityScaleableChest.MAXSIZE},
-		{},
-		{},
-		{PowerReceivers.IGNITER.getMinPower()},
-		{PowerReceivers.FREEZEGUN.getMinPower(), PowerReceivers.FREEZEGUN.getMinTorque()},
-		{PowerReceivers.MAGNETIZER.getMinPower(), PowerReceivers.MAGNETIZER.getMinSpeed()},
-		{PowerReceivers.CONTAINMENT.getMinPower(), PowerReceivers.CONTAINMENT.getMinPower(), TileEntityContainment.FALLOFF, TileEntityContainment.WITHERPOWER, TileEntityContainment.DRAGONPOWER},
-		{PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque()},
-		{},
-		{PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP},
-		{PowerReceivers.LASERGUN.getMinPower()},
-		{PowerReceivers.ITEMCANNON.getMinPower(), PowerReceivers.ITEMCANNON.getMinTorque()},
-		{PowerReceivers.FRICTION.getMinPower(), PowerReceivers.FRICTION.getMinTorque()},
-		{},
-		{PowerReceivers.BUCKETFILLER.getMinPower(), PowerReceivers.BUCKETFILLER.getMinSpeed()},
-		{PowerReceivers.BLOCKCANNON.getMinPower()},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-	};
 
-	public static Object[][] machineData = {
-		{},
-		{},
-		{},
-		{TileEntityFloodlight.FALLOFF},
-		{},
-		{TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE},
-		{TileEntityPileDriver.BASEPOWER},
-		{},
-		{},
-		{PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2)},
-		{},
-		{},
-		{TileEntityReservoir.CAPACITY},
-		{PowerReceivers.FAN.getMinPower(), TileEntityFan.MAXPOWER},
-		{TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{TileEntityWinder.UNWINDTORQUE, TileEntityWinder.UNWINDSPEED},
-		{},
-		{},
-		{TileEntityBlastFurnace.SMELTTEMP},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{TileEntityScaleableChest.MAXSIZE},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{TileEntityPurifier.SMELTTEMP},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-	};
+	};*/
+
+	private static HashMap<MachineRegistry, Object[]> machineData = new HashMap<MachineRegistry, Object[]>();
+	private static HashMap<MachineRegistry, Object[]> machineNotes = new HashMap<MachineRegistry, Object[]>();
+
+	private static void addData(MachineRegistry m, Object... data) {
+		machineData.put(m, data);
+	}
+
+	private static void addNotes(MachineRegistry m, Object... data) {
+		machineNotes.put(m, data);
+	}
+
+	static {
+		addData(MachineRegistry.FLOODLIGHT, TileEntityFloodlight.FALLOFF);
+		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE);
+		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
+		addData(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2));
+		addData(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY);
+		addData(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), TileEntityFan.MAXPOWER);
+		addData(MachineRegistry.COMPACTOR, TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP);
+		addData(MachineRegistry.WINDER, TileEntityWinder.UNWINDTORQUE, TileEntityWinder.UNWINDSPEED);
+		addData(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELTTEMP);
+		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
+		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
+
+		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
+		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());
+		addNotes(MachineRegistry.GRINDER, PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque());
+		addNotes(MachineRegistry.FLOODLIGHT, PowerReceivers.FLOODLIGHT.getMinPower());
+		addNotes(MachineRegistry.HEATRAY, PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF);
+		addNotes(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE);
+		addNotes(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
+		addNotes(MachineRegistry.AEROSOLIZER, PowerReceivers.AEROSOLIZER.getMinPower());
+		addNotes(MachineRegistry.LIGHTBRIDGE, PowerReceivers.LIGHTBRIDGE.getMinPower());
+		addNotes(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3), PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3), PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2));
+		addNotes(MachineRegistry.PULSEJET, PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP);
+		addNotes(MachineRegistry.PUMP, PowerReceivers.PUMP.getMinPower());
+		addNotes(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY);
+		addNotes(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF);
+		addNotes(MachineRegistry.COMPACTOR, PowerReceivers.COMPACTOR.getMinPower(), PowerReceivers.COMPACTOR.getMinTorque(), TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP, TileEntityCompactor.MAXPRESSURE, TileEntityCompactor.MAXTEMP);
+		addNotes(MachineRegistry.AUTOBREEDER, PowerReceivers.AUTOBREEDER.getMinPower(), PowerReceivers.AUTOBREEDER.getMinPower(), TileEntityAutoBreeder.FALLOFF);
+		addNotes(MachineRegistry.BAITBOX, PowerReceivers.BAITBOX.getMinPower(), PowerReceivers.BAITBOX.getMinPower(), TileEntityBaitBox.FALLOFF);
+		addNotes(MachineRegistry.FIREWORK, PowerReceivers.FIREWORK.getMinPower(), PowerReceivers.FIREWORK.getMinSpeed());
+		addNotes(MachineRegistry.FRACTIONATOR, PowerReceivers.FRACTIONATOR.getMinPower(), PowerReceivers.FRACTIONATOR.getMinSpeed());
+		addNotes(MachineRegistry.GPR, PowerReceivers.GPR.getMinPower(), PowerReceivers.GPR.getMinPower());
+		addNotes(MachineRegistry.HEATER, PowerReceivers.HEATER.getMinPower(), TileEntityHeater.MAXTEMP);
+		addNotes(MachineRegistry.OBSIDIAN, PowerReceivers.OBSIDIAN.getMinPower(), PowerReceivers.OBSIDIAN.getMinSpeed(), TileEntityObsidianMaker.MAXTEMP, TileEntityObsidianMaker.CAPACITY);
+		addNotes(MachineRegistry.PLAYERDETECTOR, TileEntityPlayerDetector.FALLOFF, TileEntityPlayerDetector.BASESPEED, TileEntityPlayerDetector.SPEEDFACTOR);
+		addNotes(MachineRegistry.SPAWNERCONTROLLER, PowerReceivers.SPAWNERCONTROLLER.getMinPower(), TileEntitySpawnerController.BASEDELAY);
+		addNotes(MachineRegistry.SPRINKLER, TileEntitySprinkler.CAPACITY);
+		addNotes(MachineRegistry.VACUUM, PowerReceivers.VACUUM.getMinPower(), PowerReceivers.VACUUM.getMinPower());
+		addNotes(MachineRegistry.WOODCUTTER, PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque());
+		addNotes(MachineRegistry.MOBRADAR, PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), TileEntityMobRadar.FALLOFF);
+		addNotes(MachineRegistry.TNTCANNON, PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque());
+		addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE, TileEntitySonicWeapon.BRAINDAMAGE, TileEntitySonicWeapon.LUNGDAMAGE, TileEntitySonicWeapon.LETHALVOLUME);
+		addNotes(MachineRegistry.FORCEFIELD, PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF);
+		addNotes(MachineRegistry.MUSICBOX, TileEntityMusicBox.LOOPPOWER);
+		addNotes(MachineRegistry.MOBHARVESTER, PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower());
+		addNotes(MachineRegistry.PROJECTOR, PowerReceivers.PROJECTOR.getMinPower());
+		addNotes(MachineRegistry.RAILGUN, PowerReceivers.RAILGUN.getMinPower());
+		addNotes(MachineRegistry.WEATHERCONTROLLER, PowerReceivers.WEATHERCONTROLLER.getMinPower());
+		addNotes(MachineRegistry.REFRESHER, PowerReceivers.ITEMREFRESHER.getMinPower(), PowerReceivers.ITEMREFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF);
+		addNotes(MachineRegistry.CAVESCANNER, PowerReceivers.CAVESCANNER.getMinPower());
+		addNotes(MachineRegistry.SCALECHEST, PowerReceivers.SCALECHEST.getMinPower(), PowerReceivers.SCALECHEST.getMinPower(), TileEntityScaleableChest.FALLOFF, TileEntityScaleableChest.MAXSIZE);
+		addNotes(MachineRegistry.IGNITER, PowerReceivers.IGNITER.getMinPower());
+		addNotes(MachineRegistry.FREEZEGUN, PowerReceivers.FREEZEGUN.getMinPower(), PowerReceivers.FREEZEGUN.getMinTorque());
+		addNotes(MachineRegistry.MAGNETIZER, PowerReceivers.MAGNETIZER.getMinPower(), PowerReceivers.MAGNETIZER.getMinSpeed());
+		addNotes(MachineRegistry.CONTAINMENT, PowerReceivers.CONTAINMENT.getMinPower(), PowerReceivers.CONTAINMENT.getMinPower(), TileEntityContainment.FALLOFF, TileEntityContainment.WITHERPOWER, TileEntityContainment.DRAGONPOWER);
+		addNotes(MachineRegistry.SCREEN, PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque());
+		addNotes(MachineRegistry.PURIFIER, PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), TileEntityPurifier.SMELTTEMP);
+		addNotes(MachineRegistry.LASERGUN, PowerReceivers.LASERGUN.getMinPower());
+		addNotes(MachineRegistry.ITEMCANNON, PowerReceivers.ITEMCANNON.getMinPower(), PowerReceivers.ITEMCANNON.getMinTorque());
+		addNotes(MachineRegistry.FRICTION, PowerReceivers.FRICTION.getMinPower(), PowerReceivers.FRICTION.getMinTorque());
+		addNotes(MachineRegistry.BUCKETFILLER, PowerReceivers.BUCKETFILLER.getMinPower(), PowerReceivers.BUCKETFILLER.getMinSpeed());
+		addNotes(MachineRegistry.BLOCKCANNON, PowerReceivers.BLOCKCANNON.getMinPower());
+	}
+
+	private static MachineRegistry getMachineFromString(String line) {
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			String name = MachineRegistry.machineList[i].getName().toLowerCase();
+			if (line.toLowerCase().contains(name))
+				return MachineRegistry.machineList[i];
+		}
+		return null;
+	}
 
 	public static void loadData() {
 		pad();
@@ -329,7 +283,9 @@ public final class RotaryDescriptions {
 			while((line = p.readLine()) != null) {
 				String line2 = p2.readLine();
 				if (!line.isEmpty()) {
-					machines.add(new String[]{String.format(line, machineData[i]), String.format(line2.replaceAll("\\\\n", "\n"), machineNotes[i])});
+					if (line2 == null)
+						line2 = "";
+					machines.add(new String[]{String.format(line, machineData.get(getMachineFromString(line))), String.format(line2.replaceAll("\\\\n", "\n"), machineNotes.get(getMachineFromString(line)))});
 					i++;
 				}
 			}
@@ -338,7 +294,7 @@ public final class RotaryDescriptions {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
+			//throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
 		}
 	}
 

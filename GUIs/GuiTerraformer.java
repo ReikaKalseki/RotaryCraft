@@ -91,6 +91,10 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 				ItemStack is = items.get(step);
 				ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, is, 48, 19+16+i*39);
 			}
+			else {
+				ReikaGuiAPI.instance.drawLine(48, 18+17+i*39, 16+48, 18+16+17+i*39, 0);
+				ReikaGuiAPI.instance.drawLine(16+48, 18+17+i*39, 48, 18+16+17+i*39, 0);
+			}
 		}
 	}
 

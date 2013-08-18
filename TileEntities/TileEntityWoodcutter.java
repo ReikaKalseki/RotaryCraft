@@ -19,6 +19,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.TreeReader;
@@ -389,19 +390,20 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public boolean applyEnchants(ItemStack is) {
+		boolean accepted = false;
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
 			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
-			return true;
+			accepted = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
 			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			return true;
+			accepted = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
 			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
-			return true;
+			accepted = true;
 		}
-		return false;
+		return accepted;
 	}
 
 	@Override
@@ -451,5 +453,30 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
 		return false;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		enchantments = new HashMap<Enchantment,Integer>();
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
+				enchantments.put(Enchantment.enchantmentsList[i], lvl);
+			}
+		}
 	}
 }

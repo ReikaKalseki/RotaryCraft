@@ -375,7 +375,6 @@ public abstract class BlockBasicMultiTE extends Block {
 				li = ReikaJavaLibrary.makeListFrom(is);
 			ReikaItemHelper.dropItems(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), li);
 		}
-		super.harvestBlock(world, ep, x, y, z, meta);
 	}
 
 	@Override
@@ -451,6 +450,14 @@ public abstract class BlockBasicMultiTE extends Block {
 	public final int getComparatorInputOverride(World world, int x, int y, int z, int par5)
 	{
 		return ((RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z)).getRedstoneOverride();
+	}
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(new ItemStack(RotaryCraft.machineplacer.itemID, 1, MachineRegistry.getMachineIndexFromIDandMetadata(blockID, metadata)));
+		return ret;
 	}
 
 }

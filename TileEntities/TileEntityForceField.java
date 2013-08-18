@@ -317,6 +317,13 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("setRange", setRange);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
 	}
 
 	@Override
@@ -324,6 +331,14 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 	{
 		super.readFromNBT(NBT);
 		setRange = NBT.getInteger("setRange");
+
+		enchantments = new HashMap<Enchantment,Integer>();
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
+				enchantments.put(Enchantment.enchantmentsList[i], lvl);
+			}
+		}
 	}
 	/*
     @SideOnly(Side.CLIENT)
@@ -359,11 +374,12 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 
 	@Override
 	public boolean applyEnchants(ItemStack is) {
+		boolean accepted = false;
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.protection, is)) {
 			enchantments.put(Enchantment.protection, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.protection, is));
-			return true;
+			accepted = true;
 		}
-		return false;
+		return accepted;
 	}
 
 	@Override
