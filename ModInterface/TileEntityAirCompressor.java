@@ -175,7 +175,21 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	@Override
 	public boolean isPipeConnected(ForgeDirection with) {
-		return true;
+		switch(this.getBlockMetadata()) {
+		case 0:
+			return with == ForgeDirection.NORTH;
+		case 1:
+			return with == ForgeDirection.WEST;
+		case 2:
+			return with == ForgeDirection.SOUTH;
+		case 3:
+			return with == ForgeDirection.EAST;
+		case 4:
+			return with == ForgeDirection.UP;
+		case 5:
+			return with == ForgeDirection.DOWN;
+		}
+		return false;
 	}
 
 	@Override

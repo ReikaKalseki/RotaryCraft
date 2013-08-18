@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityEnchantmentTable;
 import net.minecraft.tileentity.TileEntityEndPortal;
 import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
@@ -30,6 +31,7 @@ import thaumcraft.api.aura.AuraNode;
 import thaumcraft.api.aura.EnumNodeType;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -43,18 +45,76 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private static List<Class<? extends TileEntity>> blacklist = new ArrayList<Class<? extends TileEntity>>();
 
+	public static final double BLAST_ENERGY = 4.814*1000000000000D; //1 kiloton
+
+	private long energy;
+
 	static {
 		addEntry(TileEntityChest.class);
 		addEntry(TileEntityEnderChest.class);
+		addEntry(TileEntityHopper.class);
 		addEntry(TileEntityBrewingStand.class);
 		addEntry(TileEntityEnchantmentTable.class);
 		addEntry(TileEntityEndPortal.class);
 		addEntry(TileEntitySign.class);
 		addEntry(TileEntitySkull.class);
+
+		addEntry("buildcraft.factory.TileTank");
+		addEntry("buildcraft.transport.PipeTransportItems");
+		addEntry("buildcraft.transport.PipeTransportLiquids");
+		addEntry("buildcraft.transport.PipeTransportPower");
+
+		addEntry("TE conduits");
+
+		addEntry("IC2 Wires");
+		addEntry("Ender Tank");
+
+		addEntry("Thaum tables and cauldrons");
+
+		/* IMMUNITY LIST (some are conditional)
+		addEntry(TileEntityShaft.class);
+		addEntry(TileEntityGearBevel.class);
+		addEntry(TileEntityAdvancedGear.class);
+		addEntry(TileEntityBeamMirror.class);
+		addEntry(TileEntityBlastFurnace.class);
+		addEntry(TileEntityBedrockBreaker.class);
+		addEntry(TileEntityCoolingFin.class);
+		addEntry(TileEntityFan.class);
+		addEntry(TileEntityFlywheel.class);
+		addEntry(TileEntityFurnaceHeater.class);
+		addEntry(TileEntityGearbox.class);
+		addEntry(TileEntityGrinder.class);
+		addEntry(TileEntityHose.class);
+		addEntry(TileEntityFuelLine.class);
+		addEntry(TileEntityPipe.class);
+		addEntry(TileEntityMirror.class);
+		addEntry(TileEntityPump.class);
+		addEntry(TileEntityReservoir.class);
+		addEntry(TileEntityPurifier.class);
+		addEntry(TileEntitySolar.class);
+		addEntry(TileEntityVacuum.class);
+		addEntry(TileEntityWinder.class);
+		addEntry(TileEntityWoodcutter.class);
+		addEntry(TileEntityWorktable.class);
+		addEntry(TileEntityEngine.class);*/
+
+		addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag");
 	}
 
 	private static void addEntry(Class<? extends TileEntity> cl) {
 		blacklist.add(cl);
+	}
+
+	private static void addEntry(String name) {
+		Class cl;
+		try {
+			cl = Class.forName(name);
+			blacklist.add(cl);
+		}
+		catch (ClassNotFoundException e) {
+			RotaryCraft.logger.logError("Could not add EMP blacklist for "+name);
+			e.printStackTrace();
+		}
 	}
 
 	private boolean fired = false;
@@ -91,9 +151,15 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		this.getSummativeSidedPower();
 
+		if (fired)
+			return;
+
 		this.createListing();
 
-		this.fire(world, x, y, z);
+		energy += power;
+
+		if (energy >= BLAST_ENERGY)
+			this.fire(world, x, y, z);
 	}
 
 	private void createListing() {
@@ -101,8 +167,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void fire(World world, int x, int y, int z) {
-		if (fired)
-			return;
+		energy = 0;
 		fired = true;
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i);

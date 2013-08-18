@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-public class TileEntityBeamMirror {
+import net.minecraft.tileentity.TileEntity;
+
+public class TileEntityBeamMirror extends TileEntity {
 
 }

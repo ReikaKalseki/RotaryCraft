@@ -243,6 +243,13 @@ public abstract class BlockBasicMultiTE extends Block {
 			td.setColorToArgon();
 			return true;
 		}
+		if (m == MachineRegistry.DISPLAY && is != null && is.itemID == ItemRegistry.SPRING.getShiftedID()) {
+			TileEntityDisplay td = (TileEntityDisplay)te;
+			td.swapCoils(is);
+			if (!ep.capabilities.isCreativeMode)
+				ep.setCurrentItemOrArmor(0, null);
+			return true;
+		}
 		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;
 			if (tm.broken) {

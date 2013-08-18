@@ -55,6 +55,7 @@ import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
@@ -225,11 +226,12 @@ public enum MachineRegistry {
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
-	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10),
+	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10, "RenderLineBuilder"),
 	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
-	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7);
+	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
+	FUELENHANCER(		"Fuel Enhancer",			BlockMachine.class,			TileEntityFuelConverter.class,		8);
 
 
 	private String name;
@@ -765,6 +767,8 @@ public enum MachineRegistry {
 			return true;
 		if (this == COMPRESSOR)
 			return true;
+		if (this == LINEBUILDER)
+			return true;
 		return false;
 	}
 
@@ -953,6 +957,8 @@ public enum MachineRegistry {
 		if (this.hasModel() && TileEntityIOMachine.class.isAssignableFrom(te))
 			return true;
 		if (this == COOLINGFIN)
+			return true;
+		if (this == DISPLAY)
 			return true;
 		return false;
 	}

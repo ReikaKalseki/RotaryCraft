@@ -1643,7 +1643,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return false;
 	}
 
-	public int getArrayTorqueMultiplier() {
+	public double getArrayTorqueMultiplier() {
 		boolean front = this.isFrontOfArray();
 		boolean back = this.isBackEndOfArray();
 		if (!front && !back)
@@ -1653,14 +1653,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (front) {
 			BlockArray b = new BlockArray();
 			b.recursiveAdd(worldObj, xCoord, yCoord, zCoord, this.getTileEntityBlockID());
-			int size = 0;
+			double size = 0;
 			for (int i = 0; i < b.getSize(); i++) {
 				int[] xyz = b.getNthBlock(i);
 				TileEntity te = worldObj.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
 				if (te instanceof TileEntityEngine) {
 					TileEntityEngine eng = (TileEntityEngine)te;
-					if (eng.type == EnumEngineType.HYDRO)
-						size++;
+					if (eng.type == EnumEngineType.HYDRO) {
+						if (eng.hydroCheck(worldObj, xyz[0], xyz[1], xyz[2], eng.getBlockMetadata())) {
+							float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
+							size += 1*fac;
+						}
+					}
 				}
 			}
 			return size;

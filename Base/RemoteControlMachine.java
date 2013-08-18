@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public abstract class RemoteControlMachine extends RotaryCraftTileEntity implements ISidedInventory {
@@ -105,42 +106,12 @@ public abstract class RemoteControlMachine extends RotaryCraftTileEntity impleme
 
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize == 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
+		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
 	}
 
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
+		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
 	}
 
 	@Override
@@ -159,11 +130,9 @@ public abstract class RemoteControlMachine extends RotaryCraftTileEntity impleme
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 }

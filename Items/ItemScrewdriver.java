@@ -247,6 +247,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				else
 					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata());
 			}
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
 		else {
 			int id = world.getBlockId(x, y, z);

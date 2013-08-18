@@ -64,7 +64,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			return;
 		if (!this.getReqsForTransform(from, target))
 			return;
-		ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
+		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
 	}
 
@@ -225,14 +225,14 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 
 		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.desert, 0, null, new ItemReq(Block.sand, 1), new ItemReq(Block.sandStone, 0.5F), new ItemReq(Block.cactus, 0.1F));
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass, 0.8F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
 		addBiomeTransformation(BiomeGenBase.jungle, BiomeGenBase.forest, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
 
-		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass, 0.8F), new ItemReq(Block.dirt, 0.8F));
+		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F), new ItemReq(Block.dirt, 0.8F));
 		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.swampland, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F), new ItemReq(Block.grass, 0.125F));
 
 		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.ocean, 0, null);
-		addBiomeTransformation(BiomeGenBase.extremeHills, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass, 0.6F));
+		addBiomeTransformation(BiomeGenBase.extremeHills, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.6F));
 
 		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.forest, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 2, 0.1F));
 
@@ -274,7 +274,10 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			}
 		}
 		waterLevel = NBT.getInteger("water");
-		target = BiomeGenBase.biomeList[NBT.getInteger("tg")];
+
+		int tg = NBT.getInteger("tg");
+		if (tg != -1)
+			target = BiomeGenBase.biomeList[tg];
 	}
 
 	/**
@@ -285,7 +288,11 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("water", waterLevel);
-		NBT.setInteger("tg", target.biomeID);
+
+		if (target != null)
+			NBT.setInteger("tg", target.biomeID);
+		else
+			NBT.setInteger("tg", -1);
 
 
 		NBTTagList nbttaglist = new NBTTagList();

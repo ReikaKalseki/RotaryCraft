@@ -63,10 +63,10 @@ public enum PowerReceivers {
 	BUCKETFILLER(1, 512, 8192),
 	SELFDESTRUCT(),
 	COMPRESSOR(),
-	DISPLAY(),
 	EMP(),
-	LINEBUILDER(),
-	TERRAFORMER();
+	LINEBUILDER(1024, 1, 131072),
+	TERRAFORMER(),
+	FUELENHANCER(1, 1024, 1024);
 
 	private int minT;
 	private int minS;

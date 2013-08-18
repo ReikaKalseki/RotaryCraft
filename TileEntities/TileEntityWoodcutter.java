@@ -79,7 +79,11 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 			ModWoodList wood = ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 			if (wood == ModWoodList.SEQUOIA) {
-				tree.addSequoia(world, editx, edity, editz, RotaryCraft.logger.shouldDebug());
+				for (int i = -32; i < 255; i += 16)
+					tree.addSequoia(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
+			}
+			else if (wood == ModWoodList.DARKWOOD) {
+				tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
 			}
 			else if (wood != null) {
 				for (int i = -1; i <= 1; i++) {
@@ -137,7 +141,8 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 				if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 					ItemStack plant = this.getPlantedSapling();
 					if (plant != null) {
-						ReikaInventoryHelper.decrStack(0, inv);
+						if (inv[0] != null)
+							ReikaInventoryHelper.decrStack(0, inv);
 						world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
 					}
 				}
@@ -169,7 +174,8 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
-								ReikaInventoryHelper.decrStack(0, inv);
+								if (inv[0] != null)
+									ReikaInventoryHelper.decrStack(0, inv);
 								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
 							}
 						}
@@ -227,7 +233,7 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 			}
 			else {
 				if (!this.chestCheck(todrop))
-					ReikaItemHelper.dropItem(world, dropx, y-0.25, dropz, todrop);
+					ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 			}
 		}
 	}
@@ -243,6 +249,8 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	private void dumpInventory() {
+		if (inv[0] == null)
+			return;
 		ItemStack is = inv[0].copy();
 		inv[0] = null;
 		this.chestCheck(is);

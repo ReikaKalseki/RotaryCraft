@@ -20,7 +20,6 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelDisplay;
@@ -83,8 +82,7 @@ public class RenderDisplay extends RotaryTERenderer {
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityDisplayAt((TileEntityDisplay)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			IORenderer.renderIO(tile, par2, par4, par6);
-			if (((TileEntityDisplay)tile).hasSpace()) {
+			if (((TileEntityDisplay)tile).canDisplay() && ((TileEntityDisplay)tile).hasSpace()) {
 				int dir = 0;
 				int dx = 0;
 				int dz = 0;

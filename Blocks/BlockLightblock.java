@@ -73,16 +73,16 @@ public class BlockLightblock extends BlockBasic {
 	{
 		//ReikaJavaLibrary.pConsole(id);
 		if (id != 0) {
-			world.setBlock(x, y, z, 0);/*
-    		boolean px = true;
-    		boolean py = true;
-    		boolean pz = true;
-    		boolean nx = true;
-    		boolean ny = true;
-    		boolean nz = true;*//*
+			world.setBlock(x, y, z, 0);
+			boolean px = true;
+			boolean py = true;
+			boolean pz = true;
+			boolean nx = true;
+			boolean ny = true;
+			boolean nz = true;
 			int i = 1;
 			//(px || py || pz || nx || ny || nz) &&
-			while (i <= ConfigRegistry.FLOODLIGHTRANGE.getValue()) {
+			while (i <= 8) {
 				//if (px)
 				world.notifyBlocksOfNeighborChange(x + i, y, z, blockID);
 				//ReikaChatHelper.writeBlockAtCoords(world, x+i, y, z);

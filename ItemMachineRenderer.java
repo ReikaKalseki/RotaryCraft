@@ -53,6 +53,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
+import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
@@ -351,6 +352,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				break;*/
 			case MULTICLUTCH:
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityMultiClutch(), a, -0.1D, b, 0.0F);
+				break;
+			case LINEBUILDER:
+				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityLineBuilder(), a, -0.1D, b, 0.0F);
 				break;
 			default:
 				RenderBlocks rb = new RenderBlocks();

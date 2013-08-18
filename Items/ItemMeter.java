@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -90,7 +91,7 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
-			ReikaChatHelper.writeString(String.format("Pipe contains %d m^3 of %s.", clicked.liquidLevel/RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase()));
+			ReikaChatHelper.writeString(String.format("Reservoir contains %d m^3 of %s.", clicked.liquidLevel/RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase()));
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
@@ -435,6 +436,10 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (m == MachineRegistry.GEARBOX) {
 				ReikaChatHelper.writeString(String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, damage))), lube));
+			}
+			if (m == MachineRegistry.FUELENHANCER) {
+				TileEntityFuelConverter clicked = (TileEntityFuelConverter)world.getBlockTileEntity(x, y, z);
+				ReikaChatHelper.writeString(String.format("%s contains %d m^3 of fuel and %d m^3 of jet fuel.", clicked.getName(), clicked.getBCFuel(), clicked.getJetFuel()));
 			}
 		}
 

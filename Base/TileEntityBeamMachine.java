@@ -59,13 +59,13 @@ public abstract class TileEntityBeamMachine extends TileEntityPowerReceiver {
 			pipemeta = 2;
 			break;
 		case 4:	//moving up
-		readx = x;
-		readz = z;
-		ready = y-1;
-		xstep = 0;
-		ystep = 1;
-		zstep = 0;
-		break;
+			readx = x;
+			readz = z;
+			ready = y-1;
+			xstep = 0;
+			ystep = 1;
+			zstep = 0;
+			break;
 		case 5:	//moving down
 			readx = x;
 			readz = z;

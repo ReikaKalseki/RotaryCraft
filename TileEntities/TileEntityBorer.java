@@ -72,6 +72,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		//ReikaJavaLibrary.pConsole(this.hasEnchantments());
+
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
@@ -131,11 +132,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));
 			if (Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread) < 0 && !this.isLabyBedrock(world, xread, yread, zread))
 				reqpow = -1;
+
 			if (this.isLabyBedrock(world, xread, yread, zread)) {
 				mintorque = 8192;
-				reqpow = 262144;
+				reqpow += 262144;
 			}
 		}
+		//ReikaJavaLibrary.pConsole(mintorque);
 	}
 
 	private boolean isLabyBedrock(World world, int x, int y, int z) {
@@ -161,6 +164,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
+
+		lowtorque = mintorque;
 
 		if (torque < lowtorque)
 			reqpow = -1;

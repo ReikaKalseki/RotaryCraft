@@ -139,8 +139,17 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 
 	@Override
 	public boolean isPipeConnected(ForgeDirection with) {
-		//return with == facingDir.getOpposite();
-		return true;
+		switch(this.getBlockMetadata()) {
+		case 0:
+			return with == ForgeDirection.NORTH;
+		case 1:
+			return with == ForgeDirection.WEST;
+		case 2:
+			return with == ForgeDirection.SOUTH;
+		case 3:
+			return with == ForgeDirection.EAST;
+		}
+		return false;
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
