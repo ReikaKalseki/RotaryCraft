@@ -93,7 +93,7 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		if (convert && bctank.getLiquid() != null && bctank.getLiquid().amount >= 8*factor && this.hasItems()) {
 			LiquidStack drain = bctank.drain(8*factor, true);
 			jettank.fill(LiquidDictionary.getLiquid("Jet Fuel", factor), true);
-			if (par5Random.nextInt(1+LiquidContainerRegistry.BUCKET_VOLUME/factor) == 0)
+			if (par5Random.nextInt(12*(1+LiquidContainerRegistry.BUCKET_VOLUME/factor)) == 0)
 				this.consumeItems();
 		}
 	}

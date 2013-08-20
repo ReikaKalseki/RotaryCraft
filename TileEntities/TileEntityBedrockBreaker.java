@@ -17,7 +17,6 @@ import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -25,6 +24,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -241,20 +241,7 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 	}
 
 	private ItemStack getDrops() {
-		ItemStack dust = ItemStacks.bedrockdust.copy();
-		switch(RotaryConfig.getDifficulty()) {
-		case EASY:
-			dust.stackSize = 3;
-			break;
-		case MEDIUM:
-			dust.stackSize = 2;
-			break;
-		case HARD:
-			dust.stackSize = 1;
-			break;
-		default:
-			break;
-		}
+		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, DifficultyEffects.BEDROCKDUST.getInt());
 		return dust;
 	}
 

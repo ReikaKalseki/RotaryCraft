@@ -163,9 +163,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			if (is != null && is.stackSize == 1) {
 				if (is.itemID == Item.bucketEmpty.itemID) {
 					if (tile.type.isEthanolFueled()) {
-						if (tile.ethanols >= ItemFuelLubeBucket.value[2]) {
+						if (tile.ethanols >= ItemFuelLubeBucket.ETHANOL_VALUE) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket);
-							tile.ethanols -= ItemFuelLubeBucket.value[2];
+							tile.ethanols -= ItemFuelLubeBucket.ETHANOL_VALUE;
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -174,9 +174,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						return true;
 					}
 					if (tile.type.isJetFueled()) {
-						if (tile.jetfuels >= ItemFuelLubeBucket.value[1]) {
+						if (tile.jetfuels >= ItemFuelLubeBucket.JET_VALUE) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket);
-							tile.jetfuels -= ItemFuelLubeBucket.value[1];
+							tile.jetfuels -= ItemFuelLubeBucket.JET_VALUE;
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -187,9 +187,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				}
 				if (tile.type.isJetFueled()) {
 					if (is.itemID == ItemStacks.fuelbucket.itemID && is.getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
-						if (tile.jetfuels <= tile.FUELCAP-ItemFuelLubeBucket.value[1]) {
+						if (tile.jetfuels <= tile.FUELCAP-ItemFuelLubeBucket.JET_VALUE) {
 							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.jetfuels += ItemFuelLubeBucket.value[1];
+							tile.jetfuels += ItemFuelLubeBucket.JET_VALUE;
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -200,9 +200,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				}
 				if (tile.type.isEthanolFueled()) {
 					if (is.itemID == ItemStacks.ethanolbucket.itemID && is.getItemDamage() == ItemStacks.ethanolbucket.getItemDamage()) {
-						if (tile.ethanols <= tile.FUELCAP-ItemFuelLubeBucket.value[2]) {
+						if (tile.ethanols <= tile.FUELCAP-ItemFuelLubeBucket.ETHANOL_VALUE) {
 							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.ethanols += ItemFuelLubeBucket.value[1];
+							tile.ethanols += ItemFuelLubeBucket.ETHANOL_VALUE;
 						}
 						else {
 							ReikaChatHelper.clearChat();

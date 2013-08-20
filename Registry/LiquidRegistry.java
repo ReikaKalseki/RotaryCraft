@@ -23,8 +23,8 @@ public enum LiquidRegistry {
 	WATER(Item.bucketWater.itemID, LiquidDictionary.getCanonicalLiquid("Water")),
 	LAVA(Item.bucketLava.itemID, LiquidDictionary.getCanonicalLiquid("Lava")),
 	LUBRICANT(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("Lubricant")),
-	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("Jet Fuel"));
-	//ETHANOL(ItemStacks.ethanolbucket.itemID, ItemStacks.ethanolbucket.getItemDamage());
+	JETFUEL(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("Jet Fuel")),
+	ETHANOL(ItemStacks.ethanolbucket.itemID, ItemStacks.ethanolbucket.getItemDamage(), LiquidDictionary.getCanonicalLiquid("RC Ethanol"));
 
 	public static final LiquidRegistry[] liquidList = LiquidRegistry.values();
 

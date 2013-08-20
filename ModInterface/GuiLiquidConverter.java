@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.GUIs;
+package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,6 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.ModInteract.BCMachineHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
@@ -33,6 +32,7 @@ public class GuiLiquidConverter extends GuiNonPoweredMachine {
 		this.ep = ep;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void initGui() {
 		super.initGui();

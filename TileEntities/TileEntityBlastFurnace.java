@@ -20,11 +20,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements TemperatureTE, ISidedInventory {
@@ -101,24 +101,8 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 				ReikaInventoryHelper.decrStack(11, inventory);
 			}
 		}
-		switch(RotaryConfig.getDifficulty()) {
-		case EASY:
-			if (ReikaMathLibrary.doWithChance(2*ReikaMathLibrary.intpow(1.005, num*num))) {
-				num *= 1+par5Random.nextFloat();
-			}
-			break;
-		case MEDIUM:
-			if (ReikaMathLibrary.doWithChance(ReikaMathLibrary.intpow(1.005, num*num))) {
-				num *= 1+par5Random.nextFloat();
-			}
-			break;
-		case HARD:
-			if (ReikaMathLibrary.doWithChance(0.5*ReikaMathLibrary.intpow(1.005, num*num))) {
-				num *= 1+par5Random.nextFloat();
-			}
-			break;
-		default:
-			break;
+		if (ReikaMathLibrary.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
+			num *= 1+par5Random.nextFloat();
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
 		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 10))

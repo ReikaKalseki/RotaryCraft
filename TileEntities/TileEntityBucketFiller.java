@@ -272,7 +272,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 			else {
 				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.lubebucket.itemID, ItemStacks.lubebucket.getItemDamage(), inv);
 				if (slot != -1) {
-					lubeLevel += ItemFuelLubeBucket.value[0];
+					lubeLevel += ItemFuelLubeBucket.LUBE_VALUE;
 					ReikaInventoryHelper.decrStack(slot, inv);
 					if (!ReikaInventoryHelper.addToIInv(is, this))
 						ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
@@ -280,7 +280,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 				else {
 					slot = ReikaInventoryHelper.locateInInventory(ItemStacks.fuelbucket.itemID, ItemStacks.fuelbucket.getItemDamage(), inv);
 					if (slot != -1) {
-						fuelLevel += ItemFuelLubeBucket.value[1];
+						fuelLevel += ItemFuelLubeBucket.JET_VALUE;
 						ReikaInventoryHelper.decrStack(slot, inv);
 						if (!ReikaInventoryHelper.addToIInv(is, this))
 							ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
@@ -328,19 +328,19 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 		slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
 		if (slot == -1)
 			return;
-		if (lubeLevel >= ItemFuelLubeBucket.value[0]) {
+		if (lubeLevel >= ItemFuelLubeBucket.LUBE_VALUE) {
 			if (!ReikaInventoryHelper.addToIInv(ItemStacks.lubebucket.copy(), this))
 				return;
-			lubeLevel -= ItemFuelLubeBucket.value[0];
+			lubeLevel -= ItemFuelLubeBucket.LUBE_VALUE;
 			ReikaInventoryHelper.decrStack(slot, inv);
 		}
 		slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
 		if (slot == -1)
 			return;
-		if (fuelLevel >= ItemFuelLubeBucket.value[1]) {
+		if (fuelLevel >= ItemFuelLubeBucket.JET_VALUE) {
 			if (!ReikaInventoryHelper.addToIInv(ItemStacks.fuelbucket.copy(), this))
 				return;
-			fuelLevel -= ItemFuelLubeBucket.value[1];
+			fuelLevel -= ItemFuelLubeBucket.JET_VALUE;
 			ReikaInventoryHelper.decrStack(slot, inv);
 		}
 

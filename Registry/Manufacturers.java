@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 
 public enum Manufacturers {
 
@@ -33,7 +32,7 @@ public enum Manufacturers {
 
 	private Manufacturers(String n) {
 		makerName = n;
-		desc = RotaryDescriptions.getPartDesc(this.ordinal());
+		//desc = RotaryDescriptions.getPartDesc(this.ordinal());
 	}
 
 	public static boolean hasSubMakers(MachineRegistry m) {

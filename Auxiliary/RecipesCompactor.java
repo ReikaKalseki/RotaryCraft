@@ -16,8 +16,8 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 
 public class RecipesCompactor
 {
@@ -46,16 +46,7 @@ public class RecipesCompactor
 	}
 
 	public final int getNumberPerStep() {
-		switch(RotaryConfig.getDifficulty()) {
-		case EASY:
-			return 2;
-		case MEDIUM:
-			return 2;
-		case HARD:
-			return 1;
-		default:
-			return 2;
-		}
+		return DifficultyEffects.COMPACTOR.getInt();
 	}
 
 	/** Adds a smelting recipe. */

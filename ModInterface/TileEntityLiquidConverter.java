@@ -114,6 +114,7 @@ public class TileEntityLiquidConverter extends RotaryCraftTileEntity implements 
 		isToForge = is;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 

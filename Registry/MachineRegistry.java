@@ -226,7 +226,7 @@ public enum MachineRegistry {
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
-	LINEBUILDER(		"Line Builder",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10, "RenderLineBuilder"),
+	LINEBUILDER(		"Block Ram",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10, "RenderLineBuilder"),
 	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),

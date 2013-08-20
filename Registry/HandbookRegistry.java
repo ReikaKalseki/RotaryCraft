@@ -23,6 +23,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -335,6 +336,39 @@ public enum HandbookRegistry {
 				return tabList[i].getScreen();
 		}
 		return -1;
+	}
+
+	public static HandbookRegistry[] getEngineTabs() {
+		int size = TRANSDESC.ordinal()-ENGINEDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, ENGINEDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+
+	public static HandbookRegistry[] getMachineTabs() {
+		int size = TOOLDESC.ordinal()-MACHINEDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, MACHINEDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+	public static HandbookRegistry[] getTransTabs() {
+		int size = MACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, TRANSDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+	public static HandbookRegistry[] getToolTabs() {
+		int size = CRAFTDESC.ordinal()-TOOLDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, TOOLDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+	public MachineRegistry getMachine() {
+		return machine;
 	}
 
 	private int getScreen() {
@@ -778,6 +812,14 @@ public enum HandbookRegistry {
 		if (this == CANOLA)
 			return ItemRegistry.CANOLA.getStackOf();
 		return null;
+	}
+
+	public String getData() {
+		return RotaryDescriptions.getData(this);
+	}
+
+	public String getNotes() {
+		return RotaryDescriptions.getNotes(this);
 	}
 
 }

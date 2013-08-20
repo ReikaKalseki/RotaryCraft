@@ -15,11 +15,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Models.ModelWinder;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -64,22 +64,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
 				return;
 			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()+1);
-			int mult;
-			switch(RotaryConfig.getDifficulty()) {
-			case EASY:
-				mult = 16;
-				break;
-			case MEDIUM:
-				mult = 4;
-				break;
-			case HARD:
-				mult = 1;
-				break;
-			default:
-				mult = 4;
-				break;
-			}
-			if (par5Random.nextInt(mult*(65536-inslot[0].getItemDamage())) == 0) {
+			if (par5Random.nextInt(DifficultyEffects.BREAKCOIL.getInt()*(65536-inslot[0].getItemDamage())) == 0) {
 				inslot[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
 			}

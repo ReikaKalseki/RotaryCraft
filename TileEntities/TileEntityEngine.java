@@ -62,6 +62,7 @@ import Reika.RotaryCraft.Models.ModelPerformance;
 import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -914,26 +915,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	private void checkJetFailure() {
 		if (isJetFailing)
 			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
-		else if (FOD > 0 && par5Random.nextInt(900*(9-FOD)) == 0) {
-			boolean go = false;
-			switch(RotaryConfig.getDifficulty()) {
-			case EASY:
-				go = par5Random.nextInt(5) == 0;
-				break;
-			case MEDIUM:
-				go = par5Random.nextInt(2) == 0;
-				break;
-			case HARD:
-				go = true;
-				break;
-			default:
-				break;
-			}
-			if (go) {
-				RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
-				isJetFailing = true;
-				RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
-			}
+		else if (FOD > 0 && par5Random.nextInt(DifficultyEffects.JETFAILURE.getInt()*(9-FOD)) == 0) {
+			RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
+			isJetFailing = true;
+			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
 		}
 	}
 
@@ -1211,7 +1196,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		if (type.isJetFueled() && fuelslot[0] != null && jetfuels < FUELCAP) {
 			if (fuelslot[0].itemID == ItemStacks.fuelbucket.itemID && fuelslot[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
 				fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				jetfuels += ItemFuelLubeBucket.value[1];
+				jetfuels += ItemFuelLubeBucket.JET_VALUE;
 			}
 		}
 		fueltick++;

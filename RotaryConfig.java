@@ -127,9 +127,4 @@ public class RotaryConfig extends ControlledConfig {
 		}
 		configFile.delete();
 	}
-
-	public static EnumDifficulty getDifficulty() {
-		return EnumDifficulty.getDifficulty(ConfigRegistry.DIFFICULTY.getValue());
-	}
-
 }

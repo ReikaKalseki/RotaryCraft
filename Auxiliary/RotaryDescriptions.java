@@ -9,16 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import Reika.DragonAPI.Libraries.ReikaStringParser;
+import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
@@ -50,25 +47,14 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public final class RotaryDescriptions {
 
-	public static String[][] data;
+	public static final String PARENT = "Resources/";
+	public static final String DESC_SUFFIX = ".desc";
+	public static final String NOTE_SUFFIX = ".note";
 
-	private static ArrayList<String[]> engines = new ArrayList<String[]>();
-	private static ArrayList<String[]> machines = new ArrayList<String[]>();
-	private static ArrayList<String[]> crafting = new ArrayList<String[]>();
-	private static ArrayList<String[]> tools = new ArrayList<String[]>();
-	private static ArrayList<String[]> resource = new ArrayList<String[]>();
-	private static ArrayList<String[]> misc = new ArrayList<String[]>();
-	private static ArrayList<String[]> trans = new ArrayList<String[]>();
-	private static ArrayList<String[]> info = new ArrayList<String[]>();
-	private static ArrayList<String[]> category = new ArrayList<String[]>();
 	private static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.CRAFTSTART+" - Crafting Items\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
 
-	private static final ArrayList<String> partDescs = new ArrayList<String>();
-	/*
-	public static Object[][] machineNotes = {
-		{},
-
-	};*/
+	private static HashMap<HandbookRegistry, String> data = new HashMap<HandbookRegistry, String>();
+	private static HashMap<HandbookRegistry, String> notes = new HashMap<HandbookRegistry, String>();
 
 	private static HashMap<MachineRegistry, Object[]> machineData = new HashMap<MachineRegistry, Object[]>();
 	private static HashMap<MachineRegistry, Object[]> machineNotes = new HashMap<MachineRegistry, Object[]>();
@@ -79,6 +65,63 @@ public final class RotaryDescriptions {
 
 	private static void addNotes(MachineRegistry m, Object... data) {
 		machineNotes.put(m, data);
+	}
+
+	public static void loadData() {
+		HandbookRegistry[] engines = HandbookRegistry.getEngineTabs();
+		HandbookRegistry[] machines = HandbookRegistry.getMachineTabs();
+		HandbookRegistry[] trans = HandbookRegistry.getTransTabs();
+		HandbookRegistry[] tools = HandbookRegistry.getToolTabs();
+
+		for (int i = 0; i < machines.length; i++) {
+			HandbookRegistry h = machines[i];
+			MachineRegistry m = h.getMachine();
+			String desc = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+m.name().toLowerCase()+DESC_SUFFIX);
+			String aux = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+m.name().toLowerCase()+NOTE_SUFFIX);
+
+			desc = String.format(desc, machineData.get(m));
+			aux = String.format(aux, machineNotes.get(m));
+
+			data.put(h, desc);
+			notes.put(h, aux);
+		}
+
+		for (int i = 0; i < engines.length; i++) {
+			HandbookRegistry h = engines[i];
+			String desc;
+			String aux;
+			if (i < EnumEngineType.engineList.length) {
+				EnumEngineType e = EnumEngineType.engineList[i];
+				desc = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+e.name().toLowerCase()+DESC_SUFFIX);
+				aux = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+e.name().toLowerCase()+NOTE_SUFFIX);
+
+				desc = String.format(desc, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+				aux = String.format(aux, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+			}
+			else {
+				desc = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+MachineRegistry.SOLARTOWER.name().toLowerCase()+DESC_SUFFIX);
+				aux = ReikaFileReader.readTextFile(RotaryCraft.class, PARENT+MachineRegistry.SOLARTOWER.name().toLowerCase()+NOTE_SUFFIX);
+
+				desc = String.format(desc, TileEntitySolar.GENOMEGA);
+				aux = String.format(aux, TileEntitySolar.GENOMEGA);
+			}
+
+			data.put(h, desc);
+			notes.put(h, aux);
+		}
+	}
+
+
+	public static String getData(HandbookRegistry h) {
+		if (!data.containsKey(h))
+			return "";
+		return data.get(h);
+	}
+
+	public static String getNotes(HandbookRegistry h) {
+		if (!notes.containsKey(h))
+			return "";
+		return notes.get(h);
 	}
 
 	static {
@@ -144,305 +187,5 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.FRICTION, PowerReceivers.FRICTION.getMinPower(), PowerReceivers.FRICTION.getMinTorque());
 		addNotes(MachineRegistry.BUCKETFILLER, PowerReceivers.BUCKETFILLER.getMinPower(), PowerReceivers.BUCKETFILLER.getMinSpeed());
 		addNotes(MachineRegistry.BLOCKCANNON, PowerReceivers.BLOCKCANNON.getMinPower());
-	}
-
-	private static MachineRegistry getMachineFromString(String line) {
-		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			String name = MachineRegistry.machineList[i].getName().toLowerCase();
-			if (line.toLowerCase().contains(name))
-				return MachineRegistry.machineList[i];
-		}
-		return null;
-	}
-
-	public static void loadData() {
-		pad();
-		loadCategories();
-		loadEngineData();
-		loadMachineData();
-		loadToolData();
-		loadTransData();
-		loadCraftingData();
-		loadResourceData();
-		loadMiscData();
-		loadInfoData();
-		assignData();
-	}
-
-	private static void pad() {
-		engines.add(null);
-		crafting.add(null);
-		machines.add(null);
-		trans.add(null);
-		tools.add(null);
-		misc.add(null);
-		resource.add(null);
-	}
-
-	private static void assignData() {
-		data = new String[GuiHandbook.MAXPAGE*8+8][2];
-
-		for (int i = 1; i < engines.size(); i++) {
-			data[GuiHandbook.ENGINESTART*8+i][0] = engines.get(i)[0];
-			data[GuiHandbook.ENGINESTART*8+i][1] = engines.get(i)[1];
-		}
-		for (int i = 1; i < machines.size(); i++) {
-			data[GuiHandbook.MACHINESTART*8+i][0] = machines.get(i)[0];
-			data[GuiHandbook.MACHINESTART*8+i][1] = machines.get(i)[1];
-		}
-		for (int i = 1; i < trans.size(); i++) {
-			data[GuiHandbook.TRANSSTART*8+i][0] = trans.get(i)[0];
-			data[GuiHandbook.TRANSSTART*8+i][1] = trans.get(i)[1];
-		}
-		for (int i = 1; i < tools.size(); i++) {
-			data[GuiHandbook.TOOLSTART*8+i][0] = tools.get(i)[0];
-			data[GuiHandbook.TOOLSTART*8+i][1] = tools.get(i)[1];
-		}
-		for (int i = 0; i < info.size(); i++) {
-			data[GuiHandbook.INFOSTART*8+i][0] = info.get(i)[0];
-		}
-		for (int i = 1; i < crafting.size(); i++) {
-			data[GuiHandbook.CRAFTSTART*8+i][0] = crafting.get(i)[0];
-		}
-		for (int i = 1; i < misc.size(); i++) {
-			data[GuiHandbook.MISCSTART*8+i][0] = misc.get(i)[0];
-		}
-		for (int i = 1; i < resource.size(); i++) {
-			data[GuiHandbook.RESOURCESTART*8+i][0] = resource.get(i)[0];
-		}
-		for (int i = 0; i < category.size(); i++) {
-			if (category.get(i)[0] != null && !category.get(i)[0].isEmpty() && !category.get(i)[0].equalsIgnoreCase("empty"))
-				data[i*8][0] = category.get(i)[0];
-		}
-		data[0][0] = ToC;
-	}
-
-	private static void loadCategories() {
-		String path = "Resources/Categories.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					category.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	private static void loadEngineData() {
-		String path = "Resources/EngineDesc.txt";
-		String path2 = "Resources/EngineNotes.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
-		int i = 0;
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				String line2 = p2.readLine();
-				if (!line.isEmpty()) {
-					Object[] args = new Object[3];
-					if (i < EnumEngineType.engineList.length) {
-						args[0] = EnumEngineType.engineList[i].getTorque();
-						args[1] = EnumEngineType.engineList[i].getSpeed();
-						args[2] = EnumEngineType.engineList[i].getPowerForDisplay();
-					}
-					else {
-						args[0] = TileEntitySolar.GENOMEGA;
-					}
-					engines.add(new String[]{String.format(line, args), String.format(line2.replaceAll("\\\\n", "\n"), args)});
-					i++;
-				}
-			}
-			p.close();
-			p2.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
-		}
-	}
-
-	private static void loadMachineData() {
-		String path = "Resources/MachineDesc.txt";
-		String path2 = "Resources/MachineNotes.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
-		int i = 0;
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				String line2 = p2.readLine();
-				if (!line.isEmpty()) {
-					if (line2 == null)
-						line2 = "";
-					machines.add(new String[]{String.format(line, machineData.get(getMachineFromString(line))), String.format(line2.replaceAll("\\\\n", "\n"), machineNotes.get(getMachineFromString(line)))});
-					i++;
-				}
-			}
-			p.close();
-			p2.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			//throw new RuntimeException(e.getMessage()+" from "+e.getClass()+" on loading line "+i);
-		}
-	}
-
-	private static void loadToolData() {
-		String path = "Resources/ToolDesc.txt";
-		String path2 = "Resources/ToolNotes.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
-		int i = 0;
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				String line2 = p2.readLine();
-				if (!line.isEmpty()) {
-					tools.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line), ReikaStringParser.getStringWithEmbeddedReferences(line2)});
-					i++;
-				}
-			}
-			p.close();
-			p2.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage()+" on loading line "+i);
-		}
-	}
-
-	private static void loadTransData() {
-		String path = "Resources/TransDesc.txt";
-		String path2 = "Resources/TransNotes.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
-		int i = 0;
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				String line2 = p2.readLine();
-				if (!line.isEmpty()) {
-					trans.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line), ReikaStringParser.getStringWithEmbeddedReferences(line2)});
-					i++;
-				}
-			}
-			p.close();
-			p2.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage()+" on loading line "+i);
-		}
-	}
-
-	private static void loadCraftingData() {
-		String path = "Resources/CraftDesc.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					crafting.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	private static void loadResourceData() {
-		String path = "Resources/ResourceDesc.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					resource.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	private static void loadMiscData() {
-		String path = "Resources/MiscDesc.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					misc.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	private static void loadInfoData() {
-		String path = "Resources/Info.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					info.add(new String[]{ReikaStringParser.getStringWithEmbeddedReferences(line),""});
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public static String getPartDesc(int i) {
-		if (partDescs.size() == 0)
-			fillPartDescs();
-		return partDescs.get(i);
-	}
-
-	private static void fillPartDescs() {
-		String path = "Resources/ManufacturerDescs.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					partDescs.add(line);
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
 	}
 }

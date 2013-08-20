@@ -103,18 +103,23 @@ public class RotaryRegistration {
 		RotaryCraft.logger.log("Loading And Registering Liquids");
 		RotaryCraft.jetFuel = new ItemLiquid(ExtraConfigIDs.JETFUEL.getValue()).setUnlocalizedName("jetfuel");
 		RotaryCraft.lubricant = new ItemLiquid(ExtraConfigIDs.LUBE.getValue()).setUnlocalizedName("lubricant");
+		RotaryCraft.ethanol = new ItemLiquid(ExtraConfigIDs.ETHANOL.getValue()).setUnlocalizedName("ethanol");
 
 		LanguageRegistry.addName(RotaryCraft.jetFuel, "Jet Fuel");
 		LanguageRegistry.addName(RotaryCraft.lubricant, "Lubricant");
+		LanguageRegistry.addName(RotaryCraft.ethanol, "Ethanol");
 
 		RotaryCraft.jetFuelStack = new LiquidStack(RotaryCraft.jetFuel, LiquidContainerRegistry.BUCKET_VOLUME);
 		RotaryCraft.lubeStack = new LiquidStack(RotaryCraft.lubricant, LiquidContainerRegistry.BUCKET_VOLUME);
+		RotaryCraft.ethanolStack = new LiquidStack(RotaryCraft.ethanol, LiquidContainerRegistry.BUCKET_VOLUME);
 
 		LiquidDictionary.getOrCreateLiquid("Jet Fuel", RotaryCraft.jetFuelStack);
 		LiquidDictionary.getOrCreateLiquid("Lubricant", RotaryCraft.lubeStack);
+		LiquidDictionary.getOrCreateLiquid("RC Ethanol", RotaryCraft.ethanolStack);
 
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Lubricant", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.LUBRICANT.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Jet Fuel", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.JETFUEL.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("RC Ethanol", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.ETHANOL.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -123,10 +128,13 @@ public class RotaryRegistration {
 
 		LiquidDictionary.getCanonicalLiquid("Jet Fuel").setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
 		LiquidDictionary.getCanonicalLiquid("Lubricant").setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));
+		LiquidDictionary.getCanonicalLiquid("RC Ethanol").setRenderingIcon(RotaryCraft.ethanol.getIconFromDamage(0));
 
 		RotaryCraft.jetFuelStack.canonical().setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
 		RotaryCraft.jetFuelStack.canonical().setTextureSheet("/gui/items.png");
 		RotaryCraft.lubeStack.canonical().setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));
 		RotaryCraft.lubeStack.canonical().setTextureSheet("/gui/items.png");
+		RotaryCraft.ethanolStack.canonical().setRenderingIcon(RotaryCraft.ethanol.getIconFromDamage(0));
+		RotaryCraft.ethanolStack.canonical().setTextureSheet("/gui/items.png");
 	}
 }

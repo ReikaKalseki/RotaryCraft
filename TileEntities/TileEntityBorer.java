@@ -35,6 +35,7 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -83,6 +84,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
 		power = omega*torque;
+		if (power == 0)
+			jammed = false;
 		boolean nodig = true;
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -221,6 +224,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (tile instanceof RotaryCraftTileEntity)
 			return false;
 		if (drops && id != 0) {
+			if (this.isLabyBedrock(world, xread, yread, zread)) {
+				ItemStack is = ItemStacks.bedrockdust.copy();
+				if (!this.chestCheck(world, x, y, z, is)) {
+					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+				}
+				return true;
+			}
 			if (id == Block.mobSpawner.blockID) {
 				TileEntityMobSpawner spw = (TileEntityMobSpawner)tile;
 				if (spw != null) {
@@ -246,7 +256,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 			int metaread = world.getBlockMetadata(xread, yread, zread);
-			if (this.getEnchantment(Enchantment.silkTouch) > 0) {
+			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, metaread)) {
 				ItemStack is = new ItemStack(id, 1, metaread);
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
@@ -261,6 +271,18 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
+		return true;
+	}
+
+	private boolean canSilk(int id, int meta) {
+		if (id == 0)
+			return false;
+		if (Block.blocksList[id].blockMaterial == Material.water)
+			return false;
+		if (Block.blocksList[id].blockMaterial == Material.lava)
+			return false;
+		if (MachineRegistry.getMachineFromIDandMetadata(id, meta) != null)
+			return false;
 		return true;
 	}
 

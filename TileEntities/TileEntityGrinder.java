@@ -216,10 +216,10 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inventory[2] != null && lubricant >= ItemFuelLubeBucket.value[0]) {
+		if (inventory[2] != null && lubricant >= ItemFuelLubeBucket.LUBE_VALUE) {
 			if (inventory[2].itemID == Item.bucketEmpty.itemID && inventory[2].stackSize == 1) {
 				inventory[2] = ItemStacks.lubebucket;
-				lubricant -= ItemFuelLubeBucket.value[0];
+				lubricant -= ItemFuelLubeBucket.LUBE_VALUE;
 			}
 		}
 	}

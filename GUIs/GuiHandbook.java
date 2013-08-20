@@ -25,7 +25,6 @@ import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
-import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
@@ -406,13 +405,13 @@ public class GuiHandbook extends GuiScreen
 		int xo = 0;
 		int yo = 0;
 		fontRenderer.drawString(HandbookRegistry.getEntry(screen, page).getTitle(), posX+xo+6, posY+yo+6, 0x000000);
+		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		if (subpage == 0) {
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][0]), posX+descX, posY+descY, 242, 0xffffff);
-			//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineInfo[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
+			fontRenderer.drawSplitString(String.format("%s", h.getData()), posX+descX, posY+descY, 242, 0xffffff);
 		}
-		else
-			fontRenderer.drawSplitString(String.format("%s", RotaryDescriptions.data[screen*8+page][1]), posX+descX, posY+descY, 242, 0xffffff);
-		//fontRenderer.drawSplitString(String.format("%s", HandbookText.machineNotes[screen*8+page]), posX+descX, posY+descY, 242, 0xffffff);
+		else {
+			fontRenderer.drawSplitString(String.format("%s", h.getNotes()), posX+descX, posY+descY, 242, 0xffffff);
+		}
 
 		this.drawGraphics();
 

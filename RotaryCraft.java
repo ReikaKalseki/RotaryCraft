@@ -104,9 +104,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static Item jetFuel;
 	public static Item lubricant;
+	public static Item ethanol;
 
 	public static LiquidStack jetFuelStack;
 	public static LiquidStack lubeStack;
+	public static LiquidStack ethanolStack;
 
 	public static Item shaftcraft;
 	public static Item enginecraft;

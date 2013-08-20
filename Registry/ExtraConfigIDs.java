@@ -37,6 +37,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	MODINGOTS("Resource Item IDs", "Mod Ore Ingots", 30645, Item.class),
 	JETFUEL("Resource Item IDs", "Jet Fuel ID", 30646, Item.class),
 	LUBE("Resource Item IDs", "Lubricant ID", 30647, Item.class),
+	ETHANOL("Resource Item IDs", "Ethanol ID", 30648, Item.class),
 
 	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 

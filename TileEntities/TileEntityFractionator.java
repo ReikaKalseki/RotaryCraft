@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -24,6 +23,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -77,10 +77,10 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		super.updateTileEntity();
 		this.getPowerBelow();
 		power = omega * torque;
-		if (inv[ingredients.length+1] != null && fuel >= ItemFuelLubeBucket.value[1]) {
+		if (inv[ingredients.length+1] != null && fuel >= ItemFuelLubeBucket.JET_VALUE) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket;
-				fuel -= ItemFuelLubeBucket.value[1];
+				fuel -= ItemFuelLubeBucket.JET_VALUE;
 			}
 		}
 		if (power < MINPOWER || omega < MINSPEED)
@@ -105,28 +105,10 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
 		for (int i = 0; i < ingredients.length; i++) {
-			boolean consume;
-			switch(RotaryConfig.getDifficulty()) {
-			case EASY:
-				consume = (par5Random.nextInt(32) == 0);
-				fuel += par5Random.nextInt(16)+8;
-				break;
-			case MEDIUM:
-				consume = (par5Random.nextInt(16) == 0);
-				fuel += par5Random.nextInt(11)+5;
-				break;
-			case HARD:
-				consume = (par5Random.nextInt(2) == 0);
-				fuel += par5Random.nextInt(4)+2;
-				break;
-			default:
-				consume = (par5Random.nextInt(16) == 0);
-				fuel += par5Random.nextInt(11)+5;
-				break;
-			}
-			if (consume)
+			if (DifficultyEffects.CONSUMEFRAC.testChance())
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
+		fuel += DifficultyEffects.PRODUCEFRAC.getInt();
 		if (fuel > CAPACITY)
 			fuel = CAPACITY;
 	}

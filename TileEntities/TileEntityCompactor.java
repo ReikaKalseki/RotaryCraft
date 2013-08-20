@@ -20,7 +20,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
@@ -283,19 +282,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			pressure += ReikaMathLibrary.extrema((Pamb-pressure)/40, 1, "max");
 
 		if (omega > 0) {
-			switch(RotaryConfig.getDifficulty()) {
-			case EASY:
-				pressure += power/(500*omega); //not direct this.torque since need omega > 0
-				break;
-			case MEDIUM:
-				pressure += power/(1500*omega); //not direct this.torque since need omega > 0
-				break;
-			case HARD:
-				pressure += power/(3000*omega); //not direct this.torque since need omega > 0
-				break;
-			default:
-				break;
-			}
+			pressure += power/(1500*omega); //not direct this.torque since need omega > 0
 		}
 
 		if (pressure >= 0.8*MAXPRESSURE) {

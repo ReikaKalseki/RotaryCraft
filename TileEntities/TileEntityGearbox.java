@@ -131,7 +131,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		if (inv[0] != null && lubricant < MAXLUBE) {
 			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
 				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				lubricant += ItemFuelLubeBucket.value[0];
+				lubricant += ItemFuelLubeBucket.LUBE_VALUE;
 			}
 		}
 
