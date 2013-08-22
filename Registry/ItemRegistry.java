@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
@@ -22,6 +24,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Items.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.ItemBedrockPickaxe;
 import Reika.RotaryCraft.Items.ItemBedrockShovel;
@@ -47,6 +50,7 @@ import Reika.RotaryCraft.Items.ItemTarget;
 import Reika.RotaryCraft.Items.ItemUltrasound;
 import Reika.RotaryCraft.Items.ItemVacuum;
 import Reika.RotaryCraft.Items.ItemWorldEdit;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements RegistrationList, IDRegistry {
 
@@ -78,7 +82,11 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class),
 	KEY(4, false,				"Cannon Key",				ItemCannonKey.class),
 	SHELL(5, false,				"Explosive Shell",			ItemBasic.class),
-	MINECART(6, false,			"Ethanol Minecart",			ItemEthanolMinecart.class);
+	MINECART(6, false,			"Ethanol Minecart",			ItemEthanolMinecart.class),
+	BEDHELM(7, false,			"Bedrock Helmet",			ItemBedrockArmor.class),
+	BEDCHEST(9, false,			"Bedrock Chestplate",		ItemBedrockArmor.class),
+	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
+	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -129,16 +137,51 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 
 
 	public Class[] getConstructorParamTypes() {
-		if (this.isArmor())
+		if (this.isArmor()) {
+			if (this.isBedrockArmor())
+				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
 			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
+		}
+
 		return new Class[]{int.class, int.class}; // ID, Sprite index
 	}
 
+	private boolean isBedrockArmor() {
+		if (this == BEDHELM)
+			return true;
+		if (this == BEDCHEST)
+			return true;
+		if (this == BEDLEGS)
+			return true;
+		if (this == BEDBOOTS)
+			return true;
+		return false;
+	}
+
 	public Object[] getConstructorParams() {
-		if (this.isArmor())
-			return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
+		if (this.isArmor()) {
+			if (this.isBedrockArmor())
+				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
+			else
+				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
+		}
 		else
 			return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex()};
+	}
+
+	private int getArmorType() {
+		switch(this) {
+		case BEDBOOTS:
+			return 3;
+		case BEDCHEST:
+			return 1;
+		case BEDHELM:
+			return 0;
+		case BEDLEGS:
+			return 2;
+		default:
+			return 0;
+		}
 	}
 
 	public int getTextureIndex() {
@@ -206,6 +249,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return RotaryCraft.proxy.NVGoggles;
 		if (this == NVH)
 			return RotaryCraft.proxy.NVHelmet;
+		if (this.isBedrockArmor())
+			return RotaryCraft.proxy.BedArmor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
 	}
 
@@ -275,6 +320,14 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this == NVG)
 			return true;
 		if (this == NVH)
+			return true;
+		if (this == BEDHELM)
+			return true;
+		if (this == BEDCHEST)
+			return true;
+		if (this == BEDLEGS)
+			return true;
+		if (this == BEDBOOTS)
 			return true;
 		return false;
 	}
@@ -351,5 +404,35 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 
 	public boolean isDummiedOut() {
 		return itemClass == null;
+	}
+
+	public void addRecipe(Object... params) {
+		GameRegistry.addRecipe(this.getStackOf(), params);
+	}
+
+	public void addSizedRecipe(int num, Object... params) {
+		GameRegistry.addRecipe(this.getCraftedProduct(num), params);
+	}
+
+	public void addMetaRecipe(int meta, Object... params) {
+		GameRegistry.addRecipe(this.getStackOfMetadata(meta), params);
+	}
+
+	public void addSizedMetaRecipe(int meta, int num, Object... params) {
+		GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+	}
+
+	public void addEnchantedRecipe(Enchantment e, int lvl, Object... params) {
+		ItemStack is = this.getStackOf();
+		is.addEnchantment(e, lvl);
+		GameRegistry.addRecipe(is, params);
+	}
+
+	public void addShapelessRecipe(Object... params) {
+		GameRegistry.addShapelessRecipe(this.getStackOf(), params);
+	}
+
+	public void addRecipe(IRecipe ir) {
+		GameRegistry.addRecipe(ir);
 	}
 }

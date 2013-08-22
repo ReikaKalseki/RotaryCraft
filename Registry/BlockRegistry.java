@@ -74,6 +74,18 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 		return this.getOffset() == n-1;
 	}
 
+	public static boolean isMachineBlock(int id) {
+		return getMachineBlock(id) != null;
+	}
+
+	public static BlockRegistry getMachineBlock(int id) {
+		for (int i = 0; i < blockList.length; i++) {
+			if (blockList[i].getBlockID() == id)
+				return blockList[i];
+		}
+		return null;
+	}
+
 	public int getOffset() {
 		String name = this.getBlockVariableName();
 		String num = name.substring(name.length()-1);

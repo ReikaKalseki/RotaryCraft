@@ -98,6 +98,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 
+	public static EnumArmorMaterial BEDROCK = EnumHelper.addArmorMaterial("Bedrock", Integer.MAX_VALUE, new int[]{6, 12, 10, 5}, 18);
+
 	public static Block decoblock;
 	public static Block blastglass;
 	public static Block obsidianglass;
@@ -221,6 +223,8 @@ public class RotaryCraft extends DragonAPIMod {
 		DragonAPICore.loadHandlers();
 
 		OreForcer.forceCompatibility();
+
+		RotaryRecipes.addModInterface();
 	}
 
 	private static void setupClassFiles() {

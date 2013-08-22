@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
@@ -26,7 +25,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SuppressWarnings("deprecation")
-public class ItemNightVisionGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
+public class ItemNightVisionGoggles extends ItemRotaryArmor {
 
 	public ItemNightVisionGoggles(int ID, int tex, int render) {
 		super(ID, RotaryCraft.NVGM, render, 0, tex);

@@ -13,13 +13,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 
 @SuppressWarnings("deprecation")
-public class ItemIOGoggles extends ItemRotaryArmor implements IArmorTextureProvider {
+public class ItemIOGoggles extends ItemRotaryArmor {
 
 	public ItemIOGoggles(int ID, int tex, int render) {
 		super(ID, RotaryCraft.IOGM, render, 0, tex);

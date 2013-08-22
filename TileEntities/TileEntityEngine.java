@@ -36,6 +36,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
@@ -89,8 +90,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	/** For timing control */
 	public int soundtick = 2000;
-	private int tickcount2 = 0;
-	private int fueltick = 0;
 
 	/** Used in acPower */
 	private boolean lastpower = false;
@@ -135,6 +134,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	private boolean isOn;
 
 	public ItemStack[] fuelslot = new ItemStack[2];
+
+	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ParallelTicker.SECOND);
 
 	/**
 	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
@@ -298,37 +299,36 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	private void consumeFuel(World world, int x, int y, int z, int meta) {
 		this.internalizeFuel(world, x, y, z, meta);
 
-		if (fueltick < type.getFuelUnitDuration()) {
-			return;
-		}
-		fueltick = 0;
+		if (timer.checkCap("fuel")) {
 
-		switch(type) {
-		case STEAM:
-			if (waterLevel > 0 && temperature >= 100)
-				waterLevel -= RotaryConfig.MILLIBUCKET;
-			break;
-		case GAS:
-			if (ethanols > 0)
-				ethanols--;
-			break;
-		case SPORT:
-			if (ethanols > 0)
-				ethanols--;
-			if (par5Random.nextInt(6) == 0)
-				if (additives > 0)
-					additives--;
-			break;
-		case MICRO:
-			if (jetfuels > 0)
-				jetfuels--;
-			break;
-		case JET:
-			if (jetfuels > 0)
-				jetfuels--;
-			break;
-		default:
-			break;
+			switch(type) {
+			case STEAM:
+				if (waterLevel > 0 && temperature >= 100)
+					waterLevel -= RotaryConfig.MILLIBUCKET;
+				break;
+			case GAS:
+				if (ethanols > 0)
+					ethanols--;
+				break;
+			case SPORT:
+				if (ethanols > 0)
+					ethanols--;
+				if (par5Random.nextInt(6) == 0)
+					if (additives > 0)
+						additives--;
+				break;
+			case MICRO:
+				if (jetfuels > 0)
+					jetfuels--;
+				break;
+			case JET:
+				if (jetfuels > 0)
+					jetfuels--;
+				break;
+			default:
+				break;
+			}
+
 		}
 	}
 
@@ -583,9 +583,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private boolean combustionCheck(World world, int x, int y, int z, boolean isPerf) {
-		if (tickcount2 >= 20) {
+		if (timer.checkCap("temperature")) {
 			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
-			tickcount2 = 0;
 		}
 		if (ethanols <= 0)
 			return false;
@@ -599,9 +598,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	private boolean steamCheck(World world, int x, int y, int z) {
-		if (tickcount2 >= 20) {
+		if (timer.checkCap("temperature")) {
 			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
-			tickcount2 = 0;
 		}
 
 		if (temperature < 100) //water boiling point
@@ -742,8 +740,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		lastpower2 = lastpower;
 		lastpower = currentpower;
 
-		if (fueltick >= type.getFuelUnitDuration() && ac) {
-			fueltick = 0;
+		if (ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
 			m--;
 			is.stackTagCompound.setInteger("magnet", m);
@@ -818,6 +815,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			torque = 0;
 			return;
 		}
+
 		switch (type) {
 		case STEAM:
 			MAXTEMP = 150;
@@ -828,6 +826,10 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		default:
 			break;
 		}
+
+		timer.setCap("fuel", type.getFuelUnitDuration());
+		timer.setCap("sound", type.getSoundLength(FOD));
+
 		if (this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
 			isOn = true;
 			switch (type) {
@@ -908,7 +910,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			torque = 0;
 			if (soundtick == 0)
 				soundtick = 2000;
-			fueltick = 0;
+			timer.resetTicker("fuel");
 		}
 	}
 
@@ -1168,7 +1170,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", writex, writex2, writez, writez2));
-		tickcount2++;
+		timer.updateTicker("temperature");
 		this.getType();
 		power = torque*omega;
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
@@ -1179,13 +1181,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 					torque = 0;
 					power = 0;
 					if (type.hasTemperature()) {
-						if (tickcount2 >= 20) {
+						if (timer.checkCap("temperature")) {
 							this.updateTemperature(world, x, y, z, meta);
-							tickcount2 = 0;
 						}
 					}
 					soundtick = 2000;
-					//fueltick = 0;
+
 					return;
 				}
 			}
@@ -1199,7 +1200,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				jetfuels += ItemFuelLubeBucket.JET_VALUE;
 			}
 		}
-		fueltick++;
+		timer.updateTicker("fuel");
 		if (type.isWaterPiped())
 			this.getLiq(world, x, y, z, meta);
 		if (type.burnsFuel())
@@ -1255,7 +1256,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		NBT.setInteger("water", waterLevel);
 		NBT.setInteger("ethanol", ethanols);
 		NBT.setInteger("jetfuel", jetfuels);
-		NBT.setInteger("fuelburn", fueltick);
+		NBT.setInteger("fuelburn", timer.getTickOf("fuel"));
 		NBT.setInteger("additive", additives);
 		NBT.setBoolean("choke", isChoking);
 		NBT.setBoolean("jetfail", isJetFailing);
@@ -1288,7 +1289,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		waterLevel = NBT.getInteger("water");
 		ethanols = NBT.getInteger("ethanol");
 		jetfuels = NBT.getInteger("jetfuel");
-		fueltick = NBT.getInteger("fuelburn");
+
+		timer.setTickOf("fuel", NBT.getInteger("fuelburn"));
+
 		additives = NBT.getInteger("additive");
 		isChoking = NBT.getBoolean("choke");
 		isJetFailing = NBT.getBoolean("jetfail");
@@ -1547,7 +1550,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		int fuel = this.getFuelLevel();
 		float burnprogress = 0;
 		if (fuel > 0)
-			burnprogress = 1F-(float)fueltick/type.getFuelUnitDuration()/fuel;
+			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
 		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20;
 	}
 

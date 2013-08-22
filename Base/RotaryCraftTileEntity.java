@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
@@ -42,6 +43,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	private boolean disabled;
 
 	public int[] paint = {-1, -1, -1};
+
+	protected StepTimer second = new StepTimer(20);
 
 	@Override
 	public final boolean canUpdate() {

@@ -19,6 +19,8 @@ public class CommonProxy implements IGuiHandler
 	public static int NVGoggles;
 	public static int NVHelmet;
 
+	public static int BedArmor;
+
 	/**
 	 * Client side only register stuff...
 	 */

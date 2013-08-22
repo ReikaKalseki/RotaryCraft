@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -257,7 +258,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			int metaread = world.getBlockMetadata(xread, yread, zread);
 			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, metaread)) {
-				ItemStack is = new ItemStack(id, 1, metaread);
+				int ismeta = 0;
+				if (this.matchMeta(id))
+					ismeta = metaread;
+				ItemStack is = new ItemStack(id, 1, ismeta);
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}
@@ -274,6 +278,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return true;
 	}
 
+	private boolean matchMeta(int id) {
+		if (id == Block.torchWood.blockID)
+			return false;
+		return true;
+	}
+
 	private boolean canSilk(int id, int meta) {
 		if (id == 0)
 			return false;
@@ -281,7 +291,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (Block.blocksList[id].blockMaterial == Material.lava)
 			return false;
-		if (MachineRegistry.getMachineFromIDandMetadata(id, meta) != null)
+		if (BlockRegistry.isMachineBlock(id))
 			return false;
 		return true;
 	}

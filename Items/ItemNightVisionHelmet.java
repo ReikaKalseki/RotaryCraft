@@ -15,12 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 @SuppressWarnings("deprecation")
-public class ItemNightVisionHelmet extends ItemRotaryArmor implements IArmorTextureProvider {
+public class ItemNightVisionHelmet extends ItemRotaryArmor {
 
 	public ItemNightVisionHelmet(int ID, int tex, int render) {
 		super(ID, RotaryCraft.NVHM, render, 0, tex);

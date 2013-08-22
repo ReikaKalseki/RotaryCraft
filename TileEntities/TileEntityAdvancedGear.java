@@ -127,7 +127,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	private double getPowerLossFraction(int speed) {
 		if (worm)
-			return (100-4*ReikaMathLibrary.logbase(speed, 2)+28)/100;
+			return (128-4*ReikaMathLibrary.logbase(speed, 2))/100;
 		return 1;
 	}
 

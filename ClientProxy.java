@@ -77,6 +77,7 @@ public class ClientProxy extends CommonProxy
 		NVHelmet = RenderingRegistry.addNewArmourRendererPrefix("NVHelmet");
 		NVGoggles = RenderingRegistry.addNewArmourRendererPrefix("NVGoggles");
 		IOGoggles = RenderingRegistry.addNewArmourRendererPrefix("IOGoggles");
+		BedArmor = RenderingRegistry.addNewArmourRendererPrefix("Bedrock");
 	}
 
 	public void loadModels() {
@@ -112,7 +113,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.extracts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gearunits.itemID, items[0]);
 
-		for (int i = 0; i < RotaryCraft.basicItems.length; i++) {
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getShiftedID()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
 			MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemList[i].getShiftedID(), items[ItemRegistry.itemList[i].getTextureSheet()]);
 		}
