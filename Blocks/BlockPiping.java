@@ -109,10 +109,10 @@ public class BlockPiping extends BlockBasicMultiTE {
 	@Override
 	public void registerIcons(IconRegister ico) {
 		for (int i = 0; i < 6; i++) {
-			icons[MachineRegistry.HOSE.getMachineMetadata()][i] = ico.registerIcon("RotaryCraft:hose");
-			icons[MachineRegistry.PIPE.getMachineMetadata()][i] = ico.registerIcon("RotaryCraft:pipe");
-			icons[MachineRegistry.FUELLINE.getMachineMetadata()][i] = ico.registerIcon("RotaryCraft:fuelline");
-			icons[MachineRegistry.SPILLER.getMachineMetadata()][i] = ico.registerIcon("RotaryCraft:spiller");
+			icons[MachineRegistry.HOSE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:hose");
+			icons[MachineRegistry.PIPE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:pipe");
+			icons[MachineRegistry.FUELLINE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:fuelline");
+			icons[MachineRegistry.SPILLER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:spiller");
 		}
 	}
 }

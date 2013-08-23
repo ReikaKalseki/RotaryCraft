@@ -22,46 +22,37 @@ public class BlockMachine extends BlockBasicMultiTE {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
-		int p = MachineRegistry.ECU.getMachineMetadata();
-		icons[p][0] = ico.registerIcon("RotaryCraft:steel");
-		icons[p][1] = ico.registerIcon("RotaryCraft:ecu_top");
+		icons[MachineRegistry.ECU.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.ECU.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:ecu_top");
 		for (int i = 2; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:ecu_side");
+			icons[MachineRegistry.ECU.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:ecu_side");
 
-		p = MachineRegistry.MUSICBOX.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:musicbox");
+			icons[MachineRegistry.MUSICBOX.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:musicbox");
 
-		p = MachineRegistry.REFRESHER.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:refresh");
+			icons[MachineRegistry.REFRESHER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:refresh");
 
-		p = MachineRegistry.SELFDESTRUCT.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:destruct");
-		icons[p][0] = ico.registerIcon("RotaryCraft:steel");
-		icons[p][1] = ico.registerIcon("RotaryCraft:steel");
+			icons[MachineRegistry.SELFDESTRUCT.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:destruct");
+		icons[MachineRegistry.SELFDESTRUCT.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.SELFDESTRUCT.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:steel");
 
-		p = MachineRegistry.TERRAFORMER.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:steel");
-		icons[p][0] = ico.registerIcon("RotaryCraft:steel");
-		icons[p][1] = ico.registerIcon("RotaryCraft:screen");
+			icons[MachineRegistry.TERRAFORMER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.TERRAFORMER.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.TERRAFORMER.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:screen");
 
-		p = MachineRegistry.LIQUIDCONVERTER.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:bucketfiller");
+			icons[MachineRegistry.LIQUIDCONVERTER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:bucketfiller");
 
-		p = MachineRegistry.LAMP.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:lamp");
+			icons[MachineRegistry.LAMP.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:lamp");
 
-		p = MachineRegistry.EMP.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:steel");
+			icons[MachineRegistry.EMP.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
 
-		p = MachineRegistry.FUELENHANCER.getMachineMetadata();
 		for (int i = 0; i < 6; i++)
-			icons[p][i] = ico.registerIcon("RotaryCraft:steel");
+			icons[MachineRegistry.FUELENHANCER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
 	}
 }

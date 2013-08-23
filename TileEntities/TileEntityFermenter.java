@@ -49,6 +49,11 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	private int temperaturetick = 0;
 
 	@Override
+	protected int getActiveTexture() {
+		return (power >= MINPOWER && omega >= MINSPEED && this.canMake() ? 1 : 0);
+	}
+
+	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return i == 3;
 	}

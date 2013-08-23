@@ -36,6 +36,12 @@ public class BlockLightblock extends BlockBasic {
 	}
 
 	@Override
+	public boolean isAirBlock(World world, int x, int y, int z) {
+		return true;
+	}
+
+
+	@Override
 	public int idDropped(int par1, Random par2Random, int par3)
 	{
 		return 0;

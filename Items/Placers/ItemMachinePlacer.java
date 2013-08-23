@@ -142,19 +142,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {
 			switch(RotaryAux.get4SidedMetadataFromPlayerLook(ep)) {
 			case 0:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
+				te.setBlockMetadata(0);
 				break;
 			case 1:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 1);
+				te.setBlockMetadata(1);
 				break;
 			case 2:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 3);
+				te.setBlockMetadata(3);
 				break;
 			case 3:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 2);
+				te.setBlockMetadata(2);
 				break;
 			}
-			te.setBlockMetadata(world.getBlockMetadata(x, y, z));
 			return true;
 		}
 		if (m.hasModel()) {
@@ -170,12 +169,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
 		}
 		else {
-			if (m.is6Sided())
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata()+RotaryAux.get6SidedMetadataFromPlayerLook(ep));
-			else if (m.is4Sided())
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata()+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
-			else if (m.is2Sided())
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata()+RotaryAux.get2SidedMetadataFromPlayerLook(ep));
+			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata());
 
 			if (m.is6Sided())
 				te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
@@ -186,17 +180,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 			if (m.isXFlipped()) {
 				RotaryAux.flipXMetadatas(world.getBlockTileEntity(x, y, z));
-				if (world.getBlockMetadata(x, y, z) == m.getMachineMetadata())
-					world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata()+1, 3);
-				if (world.getBlockMetadata(x, y, z) == m.getMachineMetadata()+1)
-					world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata(), 3);
 			}
 			if (m.isZFlipped()) {
 				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
-				if (world.getBlockMetadata(x, y, z) == m.getMachineMetadata()+2)
-					world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata()+3, 3);
-				if (world.getBlockMetadata(x, y, z) == m.getMachineMetadata()+3)
-					world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata()+2, 3);
 			}
 		}
 

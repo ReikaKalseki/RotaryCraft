@@ -21,20 +21,24 @@ public class BlockDMachine extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public void registerIcons(IconRegister par1IconRegister) {
-		int p = MachineRegistry.BORER.getMachineMetadata();
+	public void registerIcons(IconRegister ico) {
 		//-------------Borer------------------------
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 4; j++)
-				icons[p+j][i] = par1IconRegister.registerIcon("RotaryCraft:steel");
-		icons[p][4] = par1IconRegister.registerIcon("RotaryCraft:borer_front");
-		icons[p+1][5] = par1IconRegister.registerIcon("RotaryCraft:borer_front");
-		icons[p+3][2] = par1IconRegister.registerIcon("RotaryCraft:borer_front");
-		icons[p+2][3] = par1IconRegister.registerIcon("RotaryCraft:borer_front");
+				icons[MachineRegistry.BORER.getMachineMetadata()][j][i][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.BORER.getMachineMetadata()][0][4][0] = ico.registerIcon("RotaryCraft:borer_front");
+		icons[MachineRegistry.BORER.getMachineMetadata()][1][5][0] = ico.registerIcon("RotaryCraft:borer_front");
+		icons[MachineRegistry.BORER.getMachineMetadata()][3][2][0] = ico.registerIcon("RotaryCraft:borer_front");
+		icons[MachineRegistry.BORER.getMachineMetadata()][2][3][0] = ico.registerIcon("RotaryCraft:borer_front");
 
-		icons[p][5] = par1IconRegister.registerIcon("RotaryCraft:borer_back");
-		icons[p+1][4] = par1IconRegister.registerIcon("RotaryCraft:borer_back");
-		icons[p+3][3] = par1IconRegister.registerIcon("RotaryCraft:borer_back");
-		icons[p+2][2] = par1IconRegister.registerIcon("RotaryCraft:borer_back");
+		icons[MachineRegistry.BORER.getMachineMetadata()][0][4][1] = ico.registerIcon("RotaryCraft:borer_front_active");
+		icons[MachineRegistry.BORER.getMachineMetadata()][1][5][1] = ico.registerIcon("RotaryCraft:borer_front_active");
+		icons[MachineRegistry.BORER.getMachineMetadata()][3][2][1] = ico.registerIcon("RotaryCraft:borer_front_active");
+		icons[MachineRegistry.BORER.getMachineMetadata()][2][3][1] = ico.registerIcon("RotaryCraft:borer_front_active");
+
+		icons[MachineRegistry.BORER.getMachineMetadata()][0][5][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[MachineRegistry.BORER.getMachineMetadata()][1][4][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[MachineRegistry.BORER.getMachineMetadata()][3][3][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[MachineRegistry.BORER.getMachineMetadata()][2][2][0] = ico.registerIcon("RotaryCraft:borer_back");
 	}
 }

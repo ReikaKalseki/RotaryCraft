@@ -28,6 +28,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -57,6 +58,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
+import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -69,7 +71,7 @@ public abstract class BlockBasicMultiTE extends Block {
 	protected Random par5Random = new Random();
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
-	public Icon[][] icons = new Icon[16][6];
+	public Icon[][][][] icons = new Icon[16][16][6][8];
 
 	public BlockBasicMultiTE(int ID, Material mat) {
 		super(ID, mat);
@@ -86,8 +88,17 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	@Override
+	public final Icon getBlockTexture(IBlockAccess iba, int x, int y, int z, int s)
+	{
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
+		int meta = te.getBlockMetadata();
+		int machine = te.getMachine().getMachineMetadata();
+		return icons[machine][meta][s][te.getTextureStateForSide(s)];
+	}
+
+	@Override
 	public final Icon getIcon(int s, int meta) {
-		return icons[meta][s];
+		return icons[meta][0][s][0];
 	}
 
 	public final AxisAlignedBB getBlockAABB() {
@@ -458,6 +469,22 @@ public abstract class BlockBasicMultiTE extends Block {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(RotaryCraft.machineplacer.itemID, 1, MachineRegistry.getMachineIndexFromIDandMetadata(blockID, metadata)));
 		return ret;
+	}
+
+	@Override
+	public void fillWithRain(World par1World, int par2, int par3, int par4) {
+
+	}
+
+	@Override
+	public final void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+	{
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te instanceof TileEntityLandmine) {
+			TileEntityLandmine tl = (TileEntityLandmine)te;
+			tl.detonate(world, x, y, z);
+		}
+		super.onBlockExploded(world, x, y, z, explosion);
 	}
 
 }

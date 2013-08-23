@@ -72,6 +72,26 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean jammed = false;
 
 	@Override
+	public int getTextureStateForSide(int s) {
+		switch(this.getBlockMetadata()) {
+		case 0:
+			return s == 4 ? this.getActiveTexture() : 0;
+		case 1:
+			return s == 5 ? this.getActiveTexture() : 0;
+		case 3:
+			return s == 2 ? this.getActiveTexture() : 0;
+		case 2:
+			return s == 3 ? this.getActiveTexture() : 0;
+		}
+		return 0;
+	}
+
+	@Override
+	protected int getActiveTexture() {
+		return power > 0 && power >= reqpow && torque >= mintorque ? 1 : 0;
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		//ReikaJavaLibrary.pConsole(this.hasEnchantments());

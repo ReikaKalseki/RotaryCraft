@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -55,9 +56,9 @@ public class RotaryRecipes {
 	public static void addModInterface() {
 		if (APIRegistry.THERMAL.conditionsMet()) {
 			LiquidStack ethanol = RotaryCraft.ethanolStack.copy();
-			ethanol.amount = ItemFuelLubeBucket.ETHANOL_VALUE;
+			ethanol.amount = LiquidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {
-				CraftingManagers.crucibleManager.addRecipe(40, ItemRegistry.ETHANOL.getStackOf(), ethanol);
+				CraftingManagers.crucibleManager.addRecipe(80, ItemRegistry.ETHANOL.getStackOf(), ethanol);
 			}
 			catch (NullPointerException e) {
 				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");

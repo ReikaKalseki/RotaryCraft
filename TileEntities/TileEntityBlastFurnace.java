@@ -37,6 +37,11 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	public static final int MAXTEMP = 1200;
 
 	@Override
+	protected int getActiveTexture() {
+		return (temperature >= SMELTTEMP && this.haveIngredients() ? 1 : 0);
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
 		if (tickcount >= 20) {

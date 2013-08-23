@@ -188,4 +188,22 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public void shutdown() {
 		disabled = true;
 	}
+
+	public int getTextureStateForSide(int s) {
+		switch(this.getBlockMetadata()) {
+		case 0:
+			return s == 4 ? this.getActiveTexture() : 0;
+		case 1:
+			return s == 5 ? this.getActiveTexture() : 0;
+		case 2:
+			return s == 2 ? this.getActiveTexture() : 0;
+		case 3:
+			return s == 3 ? this.getActiveTexture() : 0;
+		}
+		return 0;
+	}
+
+	protected int getActiveTexture() {
+		return 0;
+	}
 }

@@ -175,7 +175,7 @@ public enum MachineRegistry {
 	OBSIDIAN(			"Obsidian Factory", 		BlockMIMachine.class,		TileEntityObsidianMaker.class,		4,	"RenderObsidian"),
 	PILEDRIVER(			"Pile Driver", 				BlockDMMachine.class,		TileEntityPileDriver.class,			6,	"RenderPileDriver"),
 	VACUUM(				"Item Vacuum", 				BlockMIMachine.class,		TileEntityVacuum.class,				5,	"RenderVacuum"),
-	FIREWORK(			"Fireworks Display", 		BlockIMachine.class,		TileEntityFireworkMachine.class,	4),
+	FIREWORK(			"Fireworks Display", 		BlockIMachine.class,		TileEntityFireworkMachine.class,	1),
 	SPRINKLER(			"Sprinkler", 				BlockMMachine.class,		TileEntitySprinkler.class,			1,	"RenderSprinkler"),
 	WOODCUTTER(			"Woodcutter", 				BlockDMMachine.class,		TileEntityWoodcutter.class,			7,	"RenderWoodcutter"),
 	SPAWNERCONTROLLER(	"Spawner Controller", 		BlockMMachine.class,		TileEntitySpawnerController.class,	2,	"RenderSpawner"),
@@ -190,7 +190,7 @@ public enum MachineRegistry {
 	ADVANCEDGEARS(		"Advanced Gears", 			BlockAdvGear.class,			TileEntityAdvancedGear.class,		0,	"RenderAdvGear"),
 	TNTCANNON(			"TNT Cannon", 				BlockMIMachine.class,		TileEntityTNTCannon.class,			10,	"RenderCannon"),
 	SONICWEAPON(		"Sonic Weapon", 			BlockMMachine.class,		TileEntitySonicWeapon.class,		5,	"RenderSonic"),
-	BLASTFURNACE(		"Blast Furnace", 			BlockIMachine.class,		TileEntityBlastFurnace.class,		5),
+	BLASTFURNACE(		"Blast Furnace", 			BlockIMachine.class,		TileEntityBlastFurnace.class,		2),
 	FORCEFIELD(			"Force Field", 				BlockMMachine.class,		TileEntityForceField.class,			6,	"RenderForceField"),
 	MUSICBOX(			"Music Box", 				BlockMachine.class,			TileEntityMusicBox.class,			1),
 	SPILLER(			"Liquid Spiller", 			BlockPiping.class,			TileEntityFlooder.class,			3,	"PipeRenderer"),
@@ -204,23 +204,23 @@ public enum MachineRegistry {
 	FREEZEGUN(			"Freeze Gun", 				BlockMIMachine.class,		TileEntityFreezeGun.class,			14,	"RenderFreezeGun"),
 	CAVESCANNER(		"Cave Scanner", 			BlockMMachine.class,		TileEntityCaveFinder.class,			9,	"RenderCaveFinder"),
 	SCALECHEST(			"Scaleable Chest", 			BlockDMIMachine.class,		TileEntityScaleableChest.class,		4,	"RenderScaleChest"),
-	IGNITER(			"Firestarter", 				BlockIMachine.class,		TileEntityIgniter.class,			9),
+	IGNITER(			"Firestarter", 				BlockIMachine.class,		TileEntityIgniter.class,			3),
 	MAGNETIZER(			"Magnetizing Unit",			BlockDMIMachine.class,		TileEntityMagnetizer.class,			5,	"RenderMagnetizer"),
 	CONTAINMENT(		"Containment Field",		BlockMMachine.class,		TileEntityContainment.class,		10,	"RenderContainment"),
 	SCREEN(				"CCTV Screen",				BlockDMIMachine.class,		TileEntityScreen.class,				6,	"RenderCCTVScreen"),
-	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			10),
+	PURIFIER(			"Steel Purifier",			BlockIMachine.class,		TileEntityPurifier.class,			4),
 	LASERGUN(			"Laser Gun",				BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"Item Cannon",				BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
 	LANDMINE(			"Land Mine",				BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
 	FRICTION(			"Friction Heater",			BlockDMMachine.class,		TileEntityFurnaceHeater.class,		8, "RenderFriction"),
 	BLOCKCANNON(		"Block Cannon",				BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
-	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		11),
+	BUCKETFILLER(		"Bucket Filler",			BlockIMachine.class,		TileEntityBucketFiller.class,		5),
 	MIRROR(				"Solar Mirror",				BlockSolar.class,			TileEntityMirror.class,				0,	"RenderMirror"),
 	SOLARTOWER(			"Solar Tower",				BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
 	SPYCAM(				"Aerial Camera",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9, "RenderFin"),
-	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			12),
+	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			6),
 	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", APIRegistry.BUILDCRAFTENERGY),
 	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
@@ -512,12 +512,6 @@ public enum MachineRegistry {
 	}
 
 	public int getNumberMetadatas() {
-		if (this == BORER)
-			return 4;
-		if (this == FERMENTER)
-			return 4;
-		if (this == BLASTFURNACE)
-			return 4;
 		return 1;
 	}
 

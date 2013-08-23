@@ -39,6 +39,11 @@ public class BlockBeam extends BlockBasic {
 	}
 
 	@Override
+	public boolean isAirBlock(World world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
 	{
 		this.setBlockBounds(0.25F, 0F, 0.25F, 0.75F, 1F, 0.75F);
