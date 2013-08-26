@@ -29,6 +29,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect {
 
+	CUSTOM AIMING!!
+
 	private List<String> safePlayers = new ArrayList<String>();
 
 	public boolean targetPlayers = true;

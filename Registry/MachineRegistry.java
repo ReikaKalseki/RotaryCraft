@@ -504,11 +504,13 @@ public enum MachineRegistry {
 	}
 
 	public boolean hasSneakActions() {
-		if (this == CAVESCANNER)
+		switch(this) {
+		case CAVESCANNER:
+		case SCREEN:
 			return true;
-		if (this == SCREEN)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public int getNumberMetadatas() {
@@ -522,21 +524,18 @@ public enum MachineRegistry {
 	}
 
 	public boolean isZFlipped() {
-		if (this == BEDROCKBREAKER)
+		switch(this) {
+		case BEDROCKBREAKER:
+		case FLOODLIGHT:
+		case LIGHTBRIDGE:
+		case HEATRAY:
+		case FAN:
+		case PROJECTOR:
+		case SCALECHEST:
 			return true;
-		if (this == FLOODLIGHT)
-			return true;
-		if (this == LIGHTBRIDGE)
-			return true;
-		if (this == HEATRAY)
-			return true;
-		if (this == FAN)
-			return true;
-		if (this == PROJECTOR)
-			return true;
-		if (this == SCALECHEST)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public Block getBlockVariable() {
@@ -561,44 +560,6 @@ public enum MachineRegistry {
 		if (BlockDMIMachine.class.isAssignableFrom(blockClass))
 			return true;
 		if (BlockMIMachine.class.isAssignableFrom(blockClass))
-			return true;
-		return false;
-	}
-
-	public boolean isDir() {
-		if (this == BEDROCKBREAKER)
-			return true;
-		if (this == BORER)
-			return true;
-		if (this == FERMENTER)
-			return true;
-		if (this == BLASTFURNACE)
-			return true;
-		if (this == GRINDER)
-			return true;
-		if (this == COMPACTOR)
-			return true;
-		if (this == WINDER)
-			return true;
-		if (this == PROJECTOR)
-			return true;
-		if (this == SCALECHEST)
-			return true;
-		if (this == MAGNETIZER)
-			return true;
-		if (this == FLOODLIGHT)
-			return true;
-		if (this == HEATRAY)
-			return true;
-		if (this == LIGHTBRIDGE)
-			return true;
-		if (this == PUMP)
-			return true;
-		if (this == FAN)
-			return true;
-		if (this == PILEDRIVER)
-			return true;
-		if (this == WOODCUTTER)
 			return true;
 		return false;
 	}
@@ -639,17 +600,16 @@ public enum MachineRegistry {
 	}
 
 	public boolean isMultiNamed() {
-		if (this == ENGINE)
+		switch(this) {
+		case ENGINE:
+		case GEARBOX:
+		case SHAFT:
+		case ADVANCEDGEARS:
+		case FLYWHEEL:
 			return true;
-		if (this == GEARBOX)
-			return true;
-		if (this == SHAFT)
-			return true;
-		if (this == ADVANCEDGEARS)
-			return true;
-		if (this == FLYWHEEL)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public boolean isPowerReceiver() {
@@ -669,17 +629,16 @@ public enum MachineRegistry {
 	public boolean dealsHeatDamage(Entity e) {
 		if (e instanceof EntityItem || e instanceof EntityXPOrb)
 			return false;
-		if (this == COMPACTOR)
+		switch(this) {
+		case COMPACTOR:
+		case HEATER:
+		case IGNITER:
+		case OBSIDIAN:
+		case PULSEJET:
 			return true;
-		if (this == HEATER)
-			return true;
-		if (this == IGNITER)
-			return true;
-		if (this == OBSIDIAN)
-			return true;
-		if (this == PULSEJET)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public int getContactDamage(RotaryCraftTileEntity tile) {
@@ -697,85 +656,63 @@ public enum MachineRegistry {
 	}
 
 	public boolean is4Sided() {
-		if (this == ENGINE)
+		switch(this) {
+		case ENGINE:
+		case BORER:
+		case LIGHTBRIDGE:
+		case FLYWHEEL:
+		case GEARBOX:
+		case SPLITTER:
+		case FERMENTER:
+		case CLUTCH:
+		case DYNAMOMETER:
+		case GRINDER:
+		case HEATRAY:
+		case COMPACTOR:
+		case WOODCUTTER:
+		case WINDER:
+		case ADVANCEDGEARS:
+		case BLASTFURNACE:
+		case PROJECTOR:
+		case SCALECHEST:
+		case MAGNETIZER:
+		case SCREEN:
+		case FRICTION:
+		case PNEUENGINE:
+		case DISPLAY:
+		case MULTICLUTCH:
 			return true;
-		if (this == BORER)
-			return true;
-		if (this == LIGHTBRIDGE)
-			return true;
-		if (this == FLYWHEEL)
-			return true;
-		if (this == GEARBOX)
-			return true;
-		if (this == SPLITTER)
-			return true;
-		if (this == FERMENTER)
-			return true;
-		if (this == CLUTCH)
-			return true;
-		if (this == DYNAMOMETER)
-			return true;
-		if (this == GRINDER)
-			return true;
-		if (this == HEATRAY)
-			return true;
-		if (this == COMPACTOR)
-			return true;
-		if (this == WOODCUTTER)
-			return true;
-		if (this == WINDER)
-			return true;
-		if (this == ADVANCEDGEARS)
-			return true;
-		if (this == BLASTFURNACE)
-			return true;
-		if (this == PROJECTOR)
-			return true;
-		if (this == SCALECHEST)
-			return true;
-		if (this == MAGNETIZER)
-			return true;
-		if (this == SCREEN)
-			return true;
-		if (this == FRICTION)
-			return true;
-		if (this == PNEUENGINE)
-			return true;
-		if (this == DISPLAY)
-			return true;
-		if (this == MULTICLUTCH)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public boolean is6Sided() {
-		if (this == SHAFT)
+		switch(this) {
+		case SHAFT:
+		case BEDROCKBREAKER:
+		case FLOODLIGHT:
+		case FAN:
+		case COOLINGFIN:
+		case COMPRESSOR:
+		case LINEBUILDER:
 			return true;
-		if (this == BEDROCKBREAKER)
-			return true;
-		if (this == FLOODLIGHT)
-			return true;
-		if (this == FAN)
-			return true;
-		if (this == COOLINGFIN)
-			return true;
-		if (this == COMPRESSOR)
-			return true;
-		if (this == LINEBUILDER)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public boolean is2Sided() {
-		if (this == PILEDRIVER)
-			return true;
-		if (this == GPR)
-			return true;
-		if (this == PUMP)
-			return true;
 		if (this.isCannon())
 			return true;
-		return false;
+		switch(this) {
+		case PILEDRIVER:
+		case GPR:
+		case PUMP:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public boolean isCannon() {
@@ -783,33 +720,31 @@ public enum MachineRegistry {
 	}
 
 	public boolean hasModel() {
-		if (this == ENGINE)
+		switch(this) {
+		case ENGINE:
+		case SHAFT:
+		case GEARBOX:
+		case FLYWHEEL:
+		case ADVANCEDGEARS:
 			return true;
-		if (this == SHAFT)
-			return true;
-		if (this == GEARBOX)
-			return true;
-		if (this == FLYWHEEL)
-			return true;
-		if (this == ADVANCEDGEARS)
-			return true;
-		return (BlockModelledMultiTE.class.isAssignableFrom(blockClass));
+		default:
+			return (BlockModelledMultiTE.class.isAssignableFrom(blockClass));
+		}
 	}
 
 	public boolean hasCustomPlacerItem() {
-		if (this == ENGINE)
-			return true;
-		if (this == SHAFT)
-			return true;
-		if (this == GEARBOX)
-			return true;
 		if (this.isPipe())
 			return true;
-		if (this == ADVANCEDGEARS)
+		switch(this) {
+		case ENGINE:
+		case SHAFT:
+		case GEARBOX:
+		case ADVANCEDGEARS:
+		case FLYWHEEL:
 			return true;
-		if (this == FLYWHEEL)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public ItemStack getCraftedProduct() {
@@ -848,17 +783,16 @@ public enum MachineRegistry {
 	}
 
 	public boolean hasSubdivisions() {
-		if (this == ENGINE)
+		switch(this) {
+		case ENGINE:
+		case GEARBOX:
+		case SHAFT:
+		case ADVANCEDGEARS:
+		case FLYWHEEL:
 			return true;
-		if (this == GEARBOX)
-			return true;
-		if (this == SHAFT)
-			return true;
-		if (this == ADVANCEDGEARS)
-			return true;
-		if (this == FLYWHEEL)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public String getManufacturerName() {
@@ -876,15 +810,15 @@ public enum MachineRegistry {
 	}
 
 	public boolean canBeBroken() {
-		if (this == MIRROR)
+		switch(this) {
+		case MIRROR:
+		case SHAFT:
+		case FLYWHEEL:
+		case ENGINE:
 			return true;
-		if (this == SHAFT)
-			return true;
-		if (this == FLYWHEEL)
-			return true;
-		if (this == ENGINE)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public boolean isBroken(RotaryCraftTileEntity tile) {

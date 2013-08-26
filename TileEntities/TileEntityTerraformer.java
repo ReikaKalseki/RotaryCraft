@@ -22,19 +22,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.EnumLook;
+import Reika.DragonAPI.Instantiable.ColumnArray;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.ObjectWeb;
+import Reika.DragonAPI.Libraries.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.SelectableTiles;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver implements PipeConnector, SelectableTiles {
 
 	private static final ObjectWeb transforms = new ObjectWeb(BiomeGenBase.class);
 	private static final HashMap<List<BiomeGenBase>, List<ItemReq>> itemReqs = new HashMap<List<BiomeGenBase>, List<ItemReq>>();
@@ -44,8 +50,9 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	private ItemStack[] inv = new ItemStack[54];
 
 	private int waterLevel = 0;
+	private int oldLevel;
 
-	private List<int[]> coords = new ArrayList<int[]>();
+	private ColumnArray coords = new ColumnArray();
 
 	private BiomeGenBase target;
 
@@ -98,44 +105,62 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
+		this.getWater(world, x, y, z);
 		tickcount++;
 
-		//ReikaWorldHelper.setBiomeForXZ(world, -158, 301, BiomeGenBase.taiga);
+		//ReikaJavaLibrary.pConsoleSideOnly(String.format("Tick %2d: ", tickcount)+coords, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(this.getValidTargetBiomes(this.getCentralBiome()));
+
 		if (coords.isEmpty()) {
-			for (int i = -8; i <= 8; i++) {
-				for (int j = -8; j <= 8; j++) {
-					this.addCoordinate(x+i, z+j);
-				}
-			}
 			return;
 		}
 
-		//ReikaJavaLibrary.pConsole(coords.size());
+		if (!world.isBlockIndirectlyGettingPowered(x, y, z))
+			return;
+
+		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.operationComplete(tickcount, 0));
 
 		if (this.operationComplete(tickcount, 0)) {
-			int index = par5Random.nextInt(coords.size());
-			int[] xz = coords.get(index);
-			while(xz[0] == x && xz[1] == z && coords.size() > 1) { //edit our block last
-				//ReikaJavaLibrary.pConsole("EDIT ON "+coords.size());
-				index = par5Random.nextInt(coords.size());
-				xz = coords.get(index);
+			int index = par5Random.nextInt(coords.getSize());
+			int[] xz = coords.getNthColumn(index);
+			if (this.setBiome(world, xz[0], xz[1])) {
+				//ReikaJavaLibrary.pConsole("Removing "+x+", "+z);
+				coords.remove(index);
 			}
-			//if (xz[0] == x && xz[1] == z)
-			//	ReikaJavaLibrary.pConsole("CHANGE ON "+coords.size());
-			if (this.setBiome(world, xz[0], xz[1])); //deliberate ;
-			coords.remove(index);
 			tickcount = 0;
+		}
+	}
+
+	public int[] getUniqueID() {
+		return new int[]{xCoord, yCoord, zCoord};
+	}
+
+	private void getWater(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			int dx = x+dirs[i].offsetX;
+			int dy = y+dirs[i].offsetY;
+			int dz = z+dirs[i].offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == MachineRegistry.PIPE)
+				this.interPipe(world, dx, dy, dz);
+		}
+	}
+
+	private void interPipe(World world, int x, int y, int z) {
+		TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
+		if (tile != null && (tile.liquidID == 9 && tile.liquidLevel > 0)) {
+			oldLevel = tile.liquidLevel;
+			tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+			waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
 		}
 	}
 
 	private boolean setBiome(World world, int x, int z) {
 		BiomeGenBase from = world.getBiomeGenForCoords(x, z);
-		if (from != this.getCentralBiome())
-			return false;
 		if (!this.isValidTarget(from))
 			return false;
 		if (!this.getReqsForTransform(from, target))
-			;//return false;
+			return false;
 		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		if (this.modifyBlocks())
 			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);
@@ -147,11 +172,19 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	public boolean modifyBlocks() {
-		return ConfigRegistry.BIOMEBLOCKS.getState() && ReikaInventoryHelper.checkForItem(Item.diamond.itemID, inv);
+		return DragonAPICore.isReikasComputer() && ConfigRegistry.BIOMEBLOCKS.getState() && ReikaInventoryHelper.checkForItem(Item.diamond.itemID, inv);
 	}
 
-	public void addCoordinate(int x, int z) {
-		coords.add(new int[]{x,z});
+	private void addCoordinate(int x, int z) {
+		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+			return;
+		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+		RotaryCraft.logger.debug("Added coordinate "+x+"x, "+z+"z to "+this);
+		coords.add(x, z);
+	}
+
+	public void addTile(int x, int y, int z) {
+		this.addCoordinate(x, z);
 	}
 
 	@Override
@@ -209,7 +242,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			ItemReq is = items.get(i);
 			if (is.callAndConsume()) {
 				int slot = ReikaInventoryHelper.locateInInventory(is.itemID, is.metadata, inv);
-				//ReikaInventoryHelper.decrStack(slot, inv);
+				ReikaInventoryHelper.decrStack(slot, inv);
 			}
 		}
 		if (liq != null)
@@ -218,10 +251,14 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	private static void addBiomeTransformation(BiomeGenBase from, BiomeGenBase to, int power, LiquidStack liq, ItemReq... items) {
-		transforms.addDirectionalConnection(from, to);
-		itemReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from, to}), ReikaJavaLibrary.makeListFromArray(items));
-		powerReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from, to}), power);
-		liquidReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from, to}), liq);
+		List<BiomeGenBase> li = ReikaBiomeHelper.getAllAssociatedBiomes(from);
+		for (int i = 0; i < li.size(); i++) {
+			BiomeGenBase from_ = li.get(i);
+			transforms.addDirectionalConnection(from_, to);
+			itemReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from_, to}), ReikaJavaLibrary.makeListFromArray(items));
+			powerReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from_, to}), power);
+			liquidReqs.put(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from_, to}), liq);
+		}
 	}
 
 	static {
@@ -239,6 +276,8 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.7F));
 
 		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.mushroomIsland, 0, null, new ItemReq(Block.dirt, 1), new ItemReq(Block.mycelium, 1), new ItemReq(Block.mushroomRed, 0.9F), new ItemReq(Block.mushroomBrown, 0.9F)); //?
+
+		addBiomeTransformation(BiomeGenBase.mushroomIsland, BiomeGenBase.extremeHills, 0, null, new ItemReq(Block.grass, 0.125F), new ItemReq(Block.sapling.blockID, 0, 0.05F), new ItemReq(Block.tallGrass.blockID, 1, 0.25F)); //?
 
 		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 0, null, new ItemReq(Block.blockSnow, 0.3F), new ItemReq(Block.sapling.blockID, 1, 0.25F));
 		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.icePlains, 0, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
@@ -267,7 +306,6 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 	public void setTarget(BiomeGenBase tg) {
 		target = tg;
-		coords.clear();
 	}
 
 	public List<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {

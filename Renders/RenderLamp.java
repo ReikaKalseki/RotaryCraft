@@ -40,85 +40,71 @@ public class RenderLamp extends RotaryTERenderer implements MultiModel
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelLamp var14;
+		ModelVLamp var15;
+		var14 = LampModel;
+		var15 = beamModel;
+		//ModelLampV var15;
+		//var14 = this.LampModelV;
+		if (tile.isInWorld() && tile.getBlockMetadata() > 3)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/LampVertical.png");
+		else
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/lamptex.png");
 
-			{
-				//((BlockLampBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
+		int meta;
+		if (tile.isInWorld() && !tile.beammode) {
+			meta = tile.getBlockMetadata();
+			switch(meta) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
+			}
+
+			if (tile.getBlockMetadata() <= 3)
+				GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
+			else if (tile.getBlockMetadata() == 5) {
+				GL11.glRotatef(180, 1F, 0F, 0.0F);
+				GL11.glTranslatef(0F, -2F, 0F);
 			}
 		}
-
-		if (true)
-		{
-			ModelLamp var14;
-			ModelVLamp var15;
-			var14 = LampModel;
-			var15 = beamModel;
-			//ModelLampV var15;
-			//var14 = this.LampModelV;
-			if (tile.isInWorld() && tile.getBlockMetadata() > 3)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/LampVertical.png");
-			else
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/lamptex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-			int meta;
-			if (tile.isInWorld() && !tile.beammode) {
-				meta = tile.getBlockMetadata();
-				switch(meta) {
-				case 0:
-					var11 = 0;
-					break;
-				case 1:
-					var11 = 180;
-					break;
-				case 2:
-					var11 = 270;
-					break;
-				case 3:
-					var11 = 90;
-					break;
-				}
-
-				if (tile.getBlockMetadata() <= 3)
-					GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
-				else if (tile.getBlockMetadata() == 5) {
-					GL11.glRotatef(180, 1F, 0F, 0.0F);
-					GL11.glTranslatef(0F, -2F, 0F);
-				}
-			}
-			else
-				meta = 0;
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+		else
+			meta = 0;
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
-			if (tile.isInWorld() && tile.getBlockMetadata() > 3)
-				var15.renderAll(ReikaJavaLibrary.makeListFrom(tile.beammode), 0);
-			else
-				var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0);
-			// else
-			//var15.renderAll();
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		// if (tile.getBlockMetadata() < 4)
+		if (tile.isInWorld() && tile.getBlockMetadata() > 3)
+			var15.renderAll(ReikaJavaLibrary.makeListFrom(tile.beammode), 0);
+		else
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0);
+		// else
+		//var15.renderAll();
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

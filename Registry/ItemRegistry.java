@@ -24,32 +24,33 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.Items.ItemBedrockArmor;
-import Reika.RotaryCraft.Items.ItemBedrockAxe;
-import Reika.RotaryCraft.Items.ItemBedrockPickaxe;
-import Reika.RotaryCraft.Items.ItemBedrockShovel;
-import Reika.RotaryCraft.Items.ItemCannonKey;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
-import Reika.RotaryCraft.Items.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Items.ItemGravelGun;
 import Reika.RotaryCraft.Items.ItemHandBook;
-import Reika.RotaryCraft.Items.ItemHandheldCrafting;
-import Reika.RotaryCraft.Items.ItemIOGoggles;
-import Reika.RotaryCraft.Items.ItemMeter;
-import Reika.RotaryCraft.Items.ItemMotionTracker;
-import Reika.RotaryCraft.Items.ItemNightVisionGoggles;
-import Reika.RotaryCraft.Items.ItemNightVisionHelmet;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
-import Reika.RotaryCraft.Items.ItemScrewdriver;
-import Reika.RotaryCraft.Items.ItemStunGun;
-import Reika.RotaryCraft.Items.ItemTarget;
-import Reika.RotaryCraft.Items.ItemUltrasound;
-import Reika.RotaryCraft.Items.ItemVacuum;
-import Reika.RotaryCraft.Items.ItemWorldEdit;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockArmor;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockPickaxe;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockShovel;
+import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
+import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
+import Reika.RotaryCraft.Items.Tools.ItemGravelGun;
+import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
+import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
+import Reika.RotaryCraft.Items.Tools.ItemMeter;
+import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
+import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
+import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
+import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Items.Tools.ItemStunGun;
+import Reika.RotaryCraft.Items.Tools.ItemTarget;
+import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
+import Reika.RotaryCraft.Items.Tools.ItemUltrasound;
+import Reika.RotaryCraft.Items.Tools.ItemVacuum;
+import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements RegistrationList, IDRegistry {
@@ -86,7 +87,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDHELM(7, false,			"Bedrock Helmet",			ItemBedrockArmor.class),
 	BEDCHEST(9, false,			"Bedrock Chestplate",		ItemBedrockArmor.class),
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
-	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class);
+	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
+	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -315,21 +317,18 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public boolean isArmor() {
-		if (this == IOGOGGLES)
+		switch(this) {
+		case IOGOGGLES:
+		case NVG:
+		case NVH:
+		case BEDHELM:
+		case BEDCHEST:
+		case BEDLEGS:
+		case BEDBOOTS:
 			return true;
-		if (this == NVG)
-			return true;
-		if (this == NVH)
-			return true;
-		if (this == BEDHELM)
-			return true;
-		if (this == BEDCHEST)
-			return true;
-		if (this == BEDLEGS)
-			return true;
-		if (this == BEDBOOTS)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
@@ -349,15 +348,16 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public boolean overridesRightClick() {
-		if (this == DEBUG)
+		switch(this) {
+		case DEBUG:
+		case METER:
+		case SCREWDRIVER:
+		case KEY:
+		case TILESELECTOR:
 			return true;
-		if (this == METER)
-			return true;
-		if (this == SCREWDRIVER)
-			return true;
-		if (this == KEY)
-			return true;
-		return false;
+		default:
+			return false;
+		}
 	}
 
 	@Override

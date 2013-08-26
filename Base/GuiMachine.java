@@ -56,8 +56,8 @@ public abstract class GuiMachine extends GuiContainer {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
-		buttonList.add(new ImagedGuiButton(24000, j-17, k+4, 18, ySize-12, 72, 0, 0, file));
-		buttonList.add(new ImagedGuiButton(24001, j-17, k+ySize-8, 18, 4, 72, 252, 0, file));
+		buttonList.add(new ImagedGuiButton(24000, j-17, k+4, 18, ySize-12, 72, 0, file, "Info", 0xffffff, false));
+		buttonList.add(new ImagedGuiButton(24001, j-17, k+ySize-8, 18, 4, 72, 252, file, "Info", 0xffffff, false));
 	}
 
 	@Override

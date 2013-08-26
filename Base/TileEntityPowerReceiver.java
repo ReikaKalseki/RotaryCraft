@@ -694,7 +694,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (m == MachineRegistry.TERRAFORMER) {
 			if (ticks < 2)
 				return false;
-			int time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			int time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 			return (ticks >= time);
 		}
 		if (m != null)
@@ -770,7 +770,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
 		}
 		if (m == MachineRegistry.TERRAFORMER) {
-			time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 		}
 		if (m != null && time == -1) {
 			ReikaChatHelper.write(String.format("Non-speed m called operationTime! Coords %d %d %d", m, xCoord, yCoord, zCoord));

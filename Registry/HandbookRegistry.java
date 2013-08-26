@@ -476,7 +476,7 @@ public enum HandbookRegistry {
 		int id = 0;
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen) {
-				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0*tabList[i].getTabColumn(), 0*tabList[i].getTabRow(), 0, tabList[i].getTabImageFile()));
+				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0*tabList[i].getTabColumn(), 0*tabList[i].getTabRow(), tabList[i].getTabImageFile()));
 				//ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
 				id++;
 			}

@@ -45,7 +45,7 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		String tex = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
 
 		for (int i = 0; i < 16; i++) {
-			buttonList.add(new ImagedGuiButton(i, j+6+70*(i/8)+15, k+20+16*(i%8)-1, 35, 9, 256-18, 256-62, 0, tex));
+			buttonList.add(new ImagedGuiButton(i, j+6+70*(i/8)+15, k+20+16*(i%8)-1, 35, 9, 256-18, 256-62, tex));
 		}
 	}
 

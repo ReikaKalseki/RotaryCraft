@@ -19,23 +19,23 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelFullBlock;
+import Reika.RotaryCraft.Models.ModelRam;
 import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
 
 public class RenderLineBuilder extends RotaryTERenderer
 {
 
-	private ModelFullBlock LineBuilderModel = new ModelFullBlock();
+	private ModelRam LineBuilderModel = new ModelRam();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
 	public void renderTileEntityLineBuilderAt(TileEntityLineBuilder tile, double par2, double par4, double par6, float par8)
 	{
-		ModelFullBlock var14;
+		ModelRam var14;
 		var14 = LineBuilderModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/linebuildtex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/ramtex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -45,8 +45,42 @@ public class RenderLineBuilder extends RotaryTERenderer
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;
 		float var13;
+		int meta = 0;
 
-		var14.renderAll(null, 0);
+		if (tile.isInWorld()) {
+			meta = tile.getBlockMetadata();
+			switch(meta) {
+			case 1:
+				var11 = 0;
+				break;
+			case 0:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
+			case 5:
+				var11 = 270;
+				break;
+			case 4:
+				var11 = 90;
+				break;
+			}
+		}
+
+		if (meta <= 3)
+			GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
+		else {
+			GL11.glRotatef(var11, 1F, 0F, 0.0F);
+			GL11.glTranslatef(0F, -1F, 1F);
+			if (meta == 4)
+				GL11.glTranslatef(0F, 0F, -2F);
+		}
+
+		var14.renderAll(null, tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -67,6 +101,6 @@ public class RenderLineBuilder extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "linebuildtex.png";
+		return "ramtex.png";
 	}
 }

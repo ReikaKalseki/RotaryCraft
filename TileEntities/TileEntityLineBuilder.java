@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
@@ -30,6 +31,9 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 	private ForgeDirection dir;
 	private ItemStack[] inv = new ItemStack[9];
 
+	private StepTimer timer = new StepTimer(40);
+	private boolean isOut = false;
+
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
 		return null;
@@ -37,7 +41,7 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		phi = 1-timer.getFraction()-0.01F;
 	}
 
 	@Override
@@ -61,12 +65,17 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, true);
 
-		tickcount++;
-		if (tickcount < 20)
+		if (power < MINPOWER || torque < MINTORQUE)
 			return;
-		tickcount = 0;
-		if (!world.isRemote)
-			this.shiftBlocks(world, x, y, z);
+
+		timer.update();
+
+		if (timer.checkCap()) {
+			if (!world.isRemote) {
+				this.shiftBlocks(world, x, y, z);
+				phi = 0.5F;
+			}
+		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

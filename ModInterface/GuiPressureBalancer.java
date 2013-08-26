@@ -52,13 +52,13 @@ public class GuiPressureBalancer extends GuiNonPoweredMachine
 		String tex = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
 
 		for (int i = 0; i < 6; i++)
-			buttonList.add(new ImagedGuiButton(i, j+84, k+31+20*i, 18, 18, 256-18, 256-72, 0, tex));
+			buttonList.add(new ImagedGuiButton(i, j+84, k+31+20*i, 18, 18, 256-18, 256-72, tex));
 
-		buttonList.add(new ImagedGuiButton(6, j+9, k+20, 18, 62, 256-18, 256-62, 0, tex));
-		buttonList.add(new ImagedGuiButton(7, j+37, k+20, 18, 62, 256-18, 256-62, 0, tex));
+		buttonList.add(new ImagedGuiButton(6, j+9, k+20, 18, 62, 256-18, 256-62, tex));
+		buttonList.add(new ImagedGuiButton(7, j+37, k+20, 18, 62, 256-18, 256-62, tex));
 
-		buttonList.add(new ImagedGuiButton(8, j+9, k+87, 18, 62, 256-18, 256-62, 0, tex));
-		buttonList.add(new ImagedGuiButton(9, j+37, k+87, 18, 62, 256-18, 256-62, 0, tex));
+		buttonList.add(new ImagedGuiButton(8, j+9, k+87, 18, 62, 256-18, 256-62, tex));
+		buttonList.add(new ImagedGuiButton(9, j+37, k+87, 18, 62, 256-18, 256-62, tex));
 	}
 
 	@Override
