@@ -40,6 +40,7 @@ import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.Tools.ItemGravelGun;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
+import Reika.RotaryCraft.Items.Tools.ItemJetPackChest;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
@@ -88,7 +89,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDCHEST(9, false,			"Bedrock Chestplate",		ItemBedrockArmor.class),
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
-	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class);
+	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
+	JETCHEST(12, true,			"Bedrock Jetpack",			ItemJetPackChest.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -153,6 +155,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return true;
 		if (this == BEDCHEST)
 			return true;
+		if (this == JETCHEST)
+			return true;
 		if (this == BEDLEGS)
 			return true;
 		if (this == BEDBOOTS)
@@ -176,6 +180,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case BEDBOOTS:
 			return 3;
 		case BEDCHEST:
+			return 1;
+		case JETCHEST:
 			return 1;
 		case BEDHELM:
 			return 0;
@@ -325,6 +331,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case BEDCHEST:
 		case BEDLEGS:
 		case BEDBOOTS:
+		case JETCHEST:
 			return true;
 		default:
 			return false;

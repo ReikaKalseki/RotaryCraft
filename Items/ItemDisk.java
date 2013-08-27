@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.ItemBasic;
 
 public class ItemDisk extends ItemBasic {
@@ -29,7 +30,7 @@ public class ItemDisk extends ItemBasic {
 			par3List.add("Track: ");
 			String[] sg = is.stackTagCompound.getString("music").split(" ");
 			for (int i = 0; i < sg.length; i++)
-				par3List.add(sg[i].substring(0, 1).toUpperCase()+sg[i].substring(1, sg[i].length()));
+				par3List.add(ReikaJavaLibrary.capFirstChar(sg[i]));
 		}
 	}
 
