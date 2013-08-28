@@ -18,6 +18,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -28,8 +31,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect {
-
-	CUSTOM AIMING!!
 
 	private List<String> safePlayers = new ArrayList<String>();
 
@@ -45,6 +46,8 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	public static final int MAXLOWANGLE = -10;
 	/** Up/down angle */
 	protected int dir = 1;
+
+	public boolean isCustomAim;
 
 	public final double[] getTarget() {
 		return target;
@@ -91,8 +94,37 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		}
 		if (power < MINPOWER)
 			return;
-		target = this.getTarget(worldObj, xCoord, yCoord, zCoord);
-		this.adjustAim(worldObj, xCoord, yCoord, zCoord, target);
+		if (isCustomAim) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+				phi--;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+				phi++;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+				if (theta < 45)
+					theta++;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+				if (theta > MAXLOWANGLE)
+					theta--;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
+				if (this.hasAmmo()) {
+					double dd = 20;
+					double[] tg = ReikaPhysicsHelper.polarToCartesian(dd, theta, 90-phi);
+					tg[0] += xCoord;
+					tg[1] += yCoord;
+					tg[2] += zCoord;
+					this.fire(worldObj, tg);
+				}
+			}
+			return;
+		}
+		else {
+			target = this.getTarget(worldObj, xCoord, yCoord, zCoord);
+			this.adjustAim(worldObj, xCoord, yCoord, zCoord, target);
+		}
 	}
 
 	public boolean isAimingAtTarget(World world, int x, int y, int z, double[] t) {
@@ -157,6 +189,9 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		NBT.setFloat("theta", theta);
 		NBT.setInteger("direction", dir);
 		NBT.setInteger("numsafe", numSafePlayers);
+
+		NBT.setBoolean("aim", isCustomAim);
+
 		for (int i = 0; i < safePlayers.size(); i++) {
 			NBT.setString("Safe_Player_"+String.valueOf(i), safePlayers.get(i));
 		}
@@ -171,6 +206,8 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		super.readFromNBT(NBT);
 		theta = NBT.getFloat("theta");
 		dir = NBT.getInteger("direction");
+
+		isCustomAim = NBT.getBoolean("aim");
 
 		safePlayers = new ArrayList<String>();
 		numSafePlayers = NBT.getInteger("numsafe");

@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import ic2.api.IElectricItem;
+import ic2.api.item.IElectricItem;
 
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,8 +23,11 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.Libraries.ReikaKeyHelper;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem {
@@ -34,45 +38,45 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		super(ID, tex, render, type);
 	}
 
-	public int getCharge(ItemStack is) {/*
-		int ret = this.getMaxCharge(is) - is.getItemDamage() - 1;
-
-		return ret > 0 ? ret : 0;*/
-		return -29000;
-	}
-
-	public int getMaxCharge(ItemStack is) {
-		return is.getMaxDamage() - 2;
+	public int getCharge(ItemStack is) {
+		NBTTagCompound nbt = is.stackTagCompound;
+		if (nbt == null)
+			return 0;
+		return nbt.getInteger("charge");
 	}
 
 	public void use(ItemStack is, int amount) {
 		int newCharge = this.getCharge(is) - amount;
-		if (newCharge < 0) newCharge = 0;
+		if (newCharge < 0)
+			newCharge = 0;
 
-		is.setItemDamage(1 + is.getMaxDamage() - newCharge);
-		//ElectricItem.discharge(is, amount, 2147483647, true, false); ???
+		NBTTagCompound nbt = is.stackTagCompound;
+		if (nbt == null)
+			is.stackTagCompound = new NBTTagCompound();
+		nbt.setInteger("charge", newCharge);
 	}
 
-	public boolean useJetpack(EntityPlayer player, boolean hoverMode)
+	public boolean useJetpack(EntityPlayer player)
 	{
 		ItemStack jetpack = player.inventory.armorInventory[2];
+		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
-		if (this.getCharge(jetpack) == 0) return false;
+		if (this.getCharge(jetpack) == 0)
+			return false;
+		if (player.ridingEntity != null)
+			return false;
 
 		boolean electric = true;
 
-		float power = 0.7F;
+		float power = 0.03875F;
 		float dropPercentage = 0.05F;
 
 		if (this.getCharge(jetpack) / this.getMaxCharge(jetpack) <= dropPercentage) {
 			power *= this.getCharge(jetpack) / (this.getMaxCharge(jetpack) * dropPercentage);
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			float retruster = 0.15F;
-
-			if (hoverMode) retruster = 0.5F;
-			if (electric) retruster += 0.15F;
+		if (Keyboard.isKeyDown(ReikaKeyHelper.getForwardKey())) {
+			float retruster = 0.30F;
 
 			float forwardpower = power * retruster * 2.0F;
 
@@ -83,7 +87,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		}
 
 		int worldHeight = player.worldObj.provider.getHeight();
-		int maxFlightHeight = electric ? (int)(worldHeight / 1.28F) : worldHeight;
+		int maxFlightHeight = worldHeight*this.getCharge(jetpack)/this.getMaxCharge(jetpack);
 
 		double y = player.posY;
 
@@ -96,7 +100,10 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		double prevmotion = player.motionY;
 		player.motionY = Math.min(player.motionY + power * 0.2F, 0.6000000238418579D);
 
-		int consume = 7;
+		int consume = 4;
+
+		if (player.capabilities.isCreativeMode)
+			consume = 0;
 
 		this.use(jetpack, consume);
 
@@ -114,12 +121,11 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		NBTTagCompound nbtData = is.stackTagCompound;
-		boolean hoverMode = nbtData.getBoolean("hoverMode");
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		if ((Keyboard.isKeyDown(Keyboard.KEY_SPACE)) || ((hoverMode) && (player.motionY < -0.3499999940395355D))) {
-			jetpackUsed = this.useJetpack(player, hoverMode);
+		if (Keyboard.isKeyDown(ReikaKeyHelper.getJumpKey())) {
+			jetpackUsed = this.useJetpack(player);
 		}
 
 		if (!world.isRemote && (toggleTimer > 0)) {
@@ -143,42 +149,59 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 	}
 
 	@Override
-	public boolean canProvideEnergy() {
+	public boolean canProvideEnergy(ItemStack is) {
 		return false;
 	}
 
 	@Override
-	public int getChargedItemId() {
+	public int getChargedItemId(ItemStack is) {
 		return itemID;
 	}
 
 	@Override
-	public int getEmptyItemId() {
+	public int getEmptyItemId(ItemStack is) {
 		return itemID;
 	}
 
 	@Override
-	public int getMaxCharge() {
+	public int getMaxCharge(ItemStack is) {
 		return 30000;
 	}
 
 	@Override
-	public int getTier() {
+	public int getTier(ItemStack is) {
 		return 1;
 	}
 
 	@Override
-	public int getTransferLimit() {
+	public int getTransferLimit(ItemStack is) {
 		return 60;
 	}
-	/*
-	public int getCharge(ItemStack itemStack)
-	{
-		return ElectricItem.manager.getCharge(itemStack);
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
+		if (is.stackTagCompound == null)
+			return;
+		int ch = is.stackTagCompound.getInteger("charge");
+		li.add(String.format("Charge: %d EU", ch));
 	}
 
-	public void use(ItemStack itemStack, int amount)
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
-		ElectricItem.manager.discharge(itemStack, amount, 2147483647, true, false);
-	}*/
+		ItemStack is = new ItemStack(id, 1, 0);
+		Enchantment ench = this.getDefaultEnchantment();
+		if (ench != null)
+			is.addEnchantment(ench, 4);
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("charge", this.getMaxCharge(is));
+		li.add(is);
+	}
+
+	@Override
+	public String getArmorTextureFile(ItemStack is) {
+		return "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png";
+	}
 }

@@ -435,11 +435,41 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		GameRegistry.addRecipe(is, params);
 	}
 
+	public void addShapelessEnchantedRecipe(Enchantment e, int lvl, Object... params) {
+		ItemStack is = this.getStackOf();
+		is.addEnchantment(e, lvl);
+		GameRegistry.addShapelessRecipe(is, params);
+	}
+
+	public ItemStack getEnchantedStack() {
+		ItemStack is;
+		switch(this) {
+		case BEDBOOTS:
+		case BEDCHEST:
+		case BEDHELM:
+		case BEDLEGS:
+		case JETCHEST:
+			is = this.getStackOf();
+			is.addEnchantment(((ItemBedrockArmor)is.getItem()).getDefaultEnchantment(), 4);
+			return is;
+		case BEDPICK:
+			is = this.getStackOf();
+			is.addEnchantment(Enchantment.silkTouch, 1);
+			return is;
+		default:
+			return this.getStackOf();
+		}
+	}
+
 	public void addShapelessRecipe(Object... params) {
 		GameRegistry.addShapelessRecipe(this.getStackOf(), params);
 	}
 
 	public void addRecipe(IRecipe ir) {
 		GameRegistry.addRecipe(ir);
+	}
+
+	public void addWorktableRecipe(Object... params) {
+
 	}
 }

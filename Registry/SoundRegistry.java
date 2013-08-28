@@ -53,7 +53,8 @@ public enum SoundRegistry implements SoundList {
 	CRAFT("#craft"),
 	AIRCOMP("#aircomp"),
 	PNEUMATIC("#pneu"),
-	LINEBUILDER("linebuild");
+	LINEBUILDER("linebuild"),
+	JETPACK("pack");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

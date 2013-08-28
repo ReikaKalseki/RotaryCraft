@@ -30,7 +30,6 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.chargeTools();
-		//ReikaJavaLibrary.pConsole(Arrays.toString(inventory));
 	}
 
 	@Override

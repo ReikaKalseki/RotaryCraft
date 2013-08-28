@@ -9,12 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockArmor extends ItemRotaryArmor {
 
@@ -41,6 +47,32 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 			return "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png";
 		default:
 			return "";
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
+	{
+		ItemStack is = new ItemStack(id, 1, 0);
+		Enchantment ench = this.getDefaultEnchantment();
+		if (ench != null)
+			;//is.addEnchantment(ench, 4);
+		li.add(is);
+	}
+
+	public Enchantment getDefaultEnchantment() {
+		switch(armorType) {
+		case 0:
+			return Enchantment.projectileProtection;
+		case 1:
+			return Enchantment.blastProtection;
+		case 2:
+			return Enchantment.fireProtection;
+		case 3:
+			return Enchantment.featherFalling;
+		default:
+			return null;
 		}
 	}
 

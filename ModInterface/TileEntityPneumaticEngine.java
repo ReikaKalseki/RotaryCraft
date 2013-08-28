@@ -11,6 +11,7 @@ package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -18,6 +19,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelPneumatic;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -33,11 +35,14 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 
 	public static final int maxMJ = 1000000; //up to 1 MC megajoule
 
+	private StepTimer sound = new StepTimer(72);
+
 	public TileEntityPneumaticEngine()
 	{
 		super();
 		pp = new CompressorPowerProvider();
 		pp.configure(0, 0, maxMJ, 0, maxMJ);
+		sound.setTick(sound.getCap());
 	}
 
 	@Override
@@ -113,6 +118,12 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		//pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
 
 		this.basicPowerReceiver();
+
+		if (power > 0) {
+			sound.update();
+			if (sound.checkCap())
+				SoundRegistry.playSoundAtBlock(SoundRegistry.PNEUMATIC, world, x, y, z, 1.2F, 1);
+		}
 	}
 
 	@Override
