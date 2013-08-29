@@ -19,20 +19,20 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelFullBlock;
+import Reika.RotaryCraft.Models.ModelMultiClutch;
 import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
 
 public class RenderMultiClutch extends RotaryTERenderer
 {
 
-	private ModelFullBlock MultiClutchModel = new ModelFullBlock();
+	private ModelMultiClutch MultiClutchModel = new ModelMultiClutch();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
 	public void renderTileEntityMultiClutchAt(TileEntityMultiClutch tile, double par2, double par4, double par6, float par8)
 	{
-		ModelFullBlock var14;
+		ModelMultiClutch var14;
 		var14 = MultiClutchModel;
 
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/multiclutchtex.png");
@@ -46,7 +46,7 @@ public class RenderMultiClutch extends RotaryTERenderer
 		int var11 = 0;
 		float var13;
 
-		var14.renderAll(null, 0);
+		var14.renderAll(null, tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

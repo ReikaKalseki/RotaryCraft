@@ -110,12 +110,12 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		if (isExplosiveShell) {
 			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getShiftedID(), ammo, maxmeta);
 			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SHELL.getShiftedID(), m, ammo);
-			//ReikaInventoryHelper.decrStack(slot, ammo);
+			ReikaInventoryHelper.decrStack(slot, ammo);
 		}
 		else {
 			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getShiftedID(), ammo, maxmeta);
 			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getShiftedID(), m, ammo);
-			//ReikaInventoryHelper.decrStack(slot, ammo);
+			ReikaInventoryHelper.decrStack(slot, ammo);
 		}
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
