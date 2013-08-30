@@ -1568,6 +1568,8 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+		if (type == null)
+			return false;
 		if (type.isJetFueled())
 			return p == MachineRegistry.FUELLINE && side == EnumLook.UP;
 		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {

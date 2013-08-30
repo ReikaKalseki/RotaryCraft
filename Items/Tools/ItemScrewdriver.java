@@ -45,7 +45,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 		super(ID, tex);
 	}
 
-	public static void setmaxdmgs() {
+	static {
 		for (int i = 0; i < maxdamage.length; i++)
 			maxdamage[i] = -1;
 
@@ -69,7 +69,6 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
-		this.setmaxdmgs();
 		int damage = 0;
 		TileEntity teb = world.getBlockTileEntity(x, y, z);
 		if (teb instanceof RotaryCraftTileEntity) {
@@ -251,6 +250,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 		}
 		else {
 			int id = world.getBlockId(x, y, z);
+			damage = world.getBlockMetadata(x, y, z);
 			if (damage < maxdamage[id] && maxdamage[id] != -1)
 				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, damage+1);
 			else if (maxdamage[id] != -1)
