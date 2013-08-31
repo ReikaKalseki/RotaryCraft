@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,6 @@ import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -36,9 +32,6 @@ import Reika.RotaryCraft.Registry.PlantMaterials;
 public final class HandbookAuxData {
 	/** One GuiHandbook.SECOND in nanoGuiHandbook.SECONDs. */
 	private static int tickcount;
-
-	public static ArrayList<String> crafting = new ArrayList<String>();
-	public static ArrayList<String> resource = new ArrayList<String>();
 
 	public static List<IRecipe> getWorktable() {
 		return WorktableRecipes.getInstance().getRecipeListCopy();
@@ -161,40 +154,11 @@ public final class HandbookAuxData {
 			}
 			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 		}
-		else if (h == HandbookRegistry.SCRAP) {
-			List<IRecipe> li = new ArrayList<IRecipe>();
-			li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.ironscrap));
-			li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.scrap));
-			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
-		}
-	}
-
-	public static void loadNames() {
-		crafting.add(null);
-		resource.add(null);
-		String path = "Resources/CraftItems.txt";
-		String path2 = "Resources/ResourceItems.txt";
-		InputStream in = RotaryCraft.class.getResourceAsStream(path);
-		InputStream in2 = RotaryCraft.class.getResourceAsStream(path2);
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(in));
-			BufferedReader p2 = new BufferedReader(new InputStreamReader(in2));
-			String line = null;
-			String line2 = null;
-			while((line = p.readLine()) != null) {
-				if (!line.isEmpty())
-					crafting.add(ReikaStringParser.getStringWithEmbeddedReferences(line));
-			}
-			while((line2 = p2.readLine()) != null) {
-				if (!line2.isEmpty())
-					resource.add(ReikaStringParser.getStringWithEmbeddedReferences(line2));
-			}
-			p.close();
-			p2.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
+		//else if (h == HandbookRegistry.SCRAP) {
+		//	List<IRecipe> li = new ArrayList<IRecipe>();
+		//	li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.ironscrap));
+		//	li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.scrap));
+		//	ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
+		//}
 	}
 }

@@ -31,7 +31,6 @@ import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
-import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -196,7 +195,6 @@ public class RotaryCraft extends DragonAPIMod {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ConfigRegistry.ACHIEVEMENTS.getState())
 			RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
-		HandbookAuxData.loadNames();
 		//DemoMusic.addTracks();
 
 		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});

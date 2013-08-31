@@ -21,7 +21,6 @@ import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaOreHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -37,11 +36,12 @@ public enum HandbookRegistry {
 	TRANS(),
 	MACHINES(),
 	TOOLS(),
-	CRAFTING(),
 	RESOURCE(),
 	//---------------------INFO--------------------//
 	TERMS("Basic Terms", GuiHandbook.INFOSTART),
 	PHYSICS("Relevant Physics"),
+	MATERIAL("Material Properties"),
+	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", GuiHandbook.MISCSTART),
 	LUBE("Lubricant"),
@@ -164,83 +164,39 @@ public enum HandbookRegistry {
 	NVG(ItemRegistry.NVG),
 	BUCKETS(ItemRegistry.BUCKET),
 	BEDTOOLS("Bedrock Tools"),
+	BEDARMOR("Bedrock Armor"),
 	TARGETER(ItemRegistry.TARGET),
 	IOGOGGLES(ItemRegistry.IOGOGGLES),
-	//---------------------CRAFTING--------------------//
-	CRAFTDESC("Crafting Items", GuiHandbook.CRAFTSTART),
-	STEELINGOT(ItemStacks.steelingot),
-	PANEL(ItemStacks.basepanel),
-	SHAFTITEM(ItemStacks.shaftitem),
-	GEAR(ItemStacks.steelgear),
-	GEARUNIT(ItemStacks.gearunit),
-	MOUNT(ItemStacks.mount),
-	SCRAP(ItemStacks.scrap),
-	IMPELLER(ItemStacks.impeller),
-	COMPRESSOR(ItemStacks.compressor),
-	TURBINE(ItemStacks.turbine),
-	COMPOUND(ItemStacks.compoundturb),
-	DIFFUSER(ItemStacks.diffuser),
-	COMBUSTOR(ItemStacks.combustor),
-	RADIATOR(ItemStacks.radiator),
-	CONDENSER(ItemStacks.condenser),
-	GOLDCOIL(ItemStacks.goldcoil),
-	CYLINDER(ItemStacks.cylinder),
-	PADDLE(ItemStacks.waterplate),
-	CORE(ItemStacks.shaftcore),
-	IGNITER(ItemStacks.igniter),
-	PROP(ItemStacks.prop),
-	HUB(ItemStacks.hub),
-	BARREL(ItemStacks.barrel),
-	LENS(ItemStacks.lens),
-	POWERMODULE(ItemStacks.power),
-	HEATCORE(ItemStacks.bulb),
-	DRILL(ItemStacks.drill),
-	PRESSHEAD(ItemStacks.presshead),
-	FLYCORE(),
-	RADARITEM(ItemStacks.radar),
-	SONAR(ItemStacks.sonar),
-	PCB(ItemStacks.pcb),
-	SCREEN(ItemStacks.screen),
-	MIXER(ItemStacks.mixer),
-	SAW(ItemStacks.saw),
-	BEARING(ItemStacks.bearing),
-	BELT(ItemStacks.belt),
-	BALLBEARING(ItemStacks.bearingitem),
-	BRAKE(ItemStacks.brake),
-	WORMITEM(ItemStacks.wormgear),
-	OTHERGEAR(),
-	OTHERSHAFT(),
-	OTHERGEARUNIT(),
-	INDUCTION(ItemStacks.lim),
-	TENSCOIL(ItemStacks.tenscoil),
-	MIRRORITEM(ItemStacks.mirror),
-	GENERATOR(ItemStacks.generator),
-	RAILHEAD(ItemStacks.railhead),
-	TURRETBASE(ItemStacks.railbase),
-	TURRETAIM(ItemStacks.railaim),
+	CKEY(ItemRegistry.KEY),
+	MINECART(ItemRegistry.MINECART),
+	TILESELECT(ItemRegistry.TILESELECTOR),
+	JETPACK(ItemRegistry.JETCHEST),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", GuiHandbook.RESOURCESTART),
-	NETHERDUST(),
-	SAWDUST(),
-	BEDDUST(),
-	EXTRACTS(),
-	FLAKES(),
-	COMPACTS(),
-	DECOBLOCKS(),
-	GLASS(),
-	SPAWNERS(),
-	YEAST(),
-	ETHANOL(),
-	BEDINGOT(),
-	SILVERINGOT(),
-	SALT(),
-	AMMONIUM(),
-	SILVERIODIDE(),
-	ALUMINUM(),
-	RAILGUNAMMO(),
-	SLIDES(),
-	EXPLOSIVES(),
-	MINECART();
+	STEELINGOT("Steel Ingot"),
+	OTHERSHAFT("Alternative Shafts"),
+	OTHERGEARUNIT("Alternative Gear Units"),
+	OTHERGEAR("Alternative Gearboxes"),
+	NETHERDUST("Netherrack Dust and Tar"),
+	SAWDUST("Sawdust"),
+	BEDDUST("Bedrock Dust"),
+	EXTRACTS("Dust/Slurry/Solution"),
+	FLAKES("Ore Flakes"),
+	COMPACTS("Anthracite/Prismane/Lonsdaleite"),
+	DECOBLOCKS("Decorative Blocks"),
+	GLASS("Blast Glass"),
+	SPAWNERS("Monster Spawners"),
+	YEAST("Yeast"),
+	ETHANOL("Ethanol"),
+	BEDINGOT("Bedrock Ingot"),
+	SILVERINGOT("Silver Ingot"),
+	SALT("Salt"),
+	AMMONIUM("Ammonium Nitrate"),
+	SILVERIODIDE("Silver Iodide"),
+	ALUMINUM("Aluminum Powder"),
+	RAILGUNAMMO("Railgun Ammunition"),
+	SLIDES("Projector Slides"),
+	EXPLOSIVES("Explosive Shells");
 
 	private MachineRegistry machine;
 	private ItemRegistry item;
@@ -361,14 +317,48 @@ public enum HandbookRegistry {
 	}
 
 	public static HandbookRegistry[] getToolTabs() {
-		int size = CRAFTDESC.ordinal()-TOOLDESC.ordinal()-1;
+		int size = RESOURCEDESC.ordinal()-TOOLDESC.ordinal()-1;
 		HandbookRegistry[] tabs = new HandbookRegistry[size];
 		System.arraycopy(tabList, TOOLDESC.ordinal()+1, tabs, 0, size);
 		return tabs;
 	}
 
+	public static HandbookRegistry[] getResourceTabs() {
+		int size = tabList.length-RESOURCEDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, RESOURCEDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+	public static HandbookRegistry[] getMiscTabs() {
+		int size = ENGINEDESC.ordinal()-MISCDESC.ordinal()-1;
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, MISCDESC.ordinal()+1, tabs, 0, size);
+		return tabs;
+	}
+
+	public static HandbookRegistry[] getInfoTabs() {
+		int size = MISCDESC.ordinal()-TERMS.ordinal();
+		HandbookRegistry[] tabs = new HandbookRegistry[size];
+		System.arraycopy(tabList, TERMS.ordinal(), tabs, 0, size);
+		return tabs;
+	}
+
+	public static List<HandbookRegistry> getCategoryTabs() {
+		ArrayList<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
+		for (int i = 0; i < tabList.length; i++) {
+			if (tabList[i].isParent && tabList[i] != TOC && tabList[i] != TERMS)
+				li.add(tabList[i]);
+		}
+		return li;
+	}
+
 	public MachineRegistry getMachine() {
 		return machine;
+	}
+
+	public ItemRegistry getItem() {
+		return item;
 	}
 
 	private int getScreen() {
@@ -441,25 +431,7 @@ public enum HandbookRegistry {
 		return offset/8;
 	}
 
-	public HandbookRegistry getParent() {/*
-		if (this.ordinal() < TERMS.ordinal())
-			return TOC;
-		else if (this.ordinal() < MISCDESC.ordinal())
-			return TERMS;
-		else if (this.ordinal() < ENGINEDESC.ordinal())
-			return MISCDESC;
-		else if (this.ordinal() < TRANSDESC.ordinal())
-			return ENGINEDESC;
-		else if (this.ordinal() < MACHINEDESC.ordinal())
-			return TRANSDESC;
-		else if (this.ordinal() < TOOLDESC.ordinal())
-			return MACHINEDESC;
-		else if (this.ordinal() < CRAFTDESC.ordinal())
-			return TOOLDESC;
-		else if (this.ordinal() < RESOURCEDESC.ordinal())
-			return CRAFTDESC;
-		else
-			return RESOURCEDESC;*/
+	public HandbookRegistry getParent() {
 		HandbookRegistry parent = null;
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].isParent) {
@@ -508,9 +480,7 @@ public enum HandbookRegistry {
 		//ReikaJavaLibrary.pConsole(this);
 		if (this == TOC)
 			return true;
-		if (this == TERMS)
-			return true;
-		if (this == PHYSICS)
+		if (this.getParent() == TERMS)
 			return true;
 		if (isParent)
 			return true;
@@ -542,21 +512,9 @@ public enum HandbookRegistry {
 			return RotaryNames.advGearItemNames[offset];
 		if (this.getParent() == TRANSDESC)
 			return machine.getName();
-		if (this.getParent() == TOOLDESC && this != BEDTOOLS)
+		if (this.getParent() == TOOLDESC && this != BEDTOOLS && this != BEDARMOR)
 			return item.getBasicName();
-		if (this.getParent() == CRAFTDESC)
-			return this.getCraftName();
-		if (this.getParent() == RESOURCEDESC)
-			return this.getResourceName();
 		return title;
-	}
-
-	private String getResourceName() {
-		return HandbookAuxData.resource.get(this.ordinal()-this.getParent().ordinal());
-	}
-
-	private String getCraftName() {
-		return HandbookAuxData.crafting.get(this.ordinal()-this.getParent().ordinal());
 	}
 
 	public boolean isCrafting() {
@@ -566,9 +524,9 @@ public enum HandbookRegistry {
 			return false;
 		if (this.getParent() == TOC || this.getParent() == TERMS)
 			return false;
-		if (this == STEELINGOT)
-			return false;
 		if (this == LUBE)
+			return false;
+		if (this == STEELINGOT)
 			return false;
 		if (this == NETHERDUST)
 			return false;
@@ -589,8 +547,6 @@ public enum HandbookRegistry {
 		if (this == ALUMINUM)
 			return false;
 		if (this == RAILGUNAMMO)
-			return false;
-		if (this == SCRAP)
 			return false;
 		if (this == CANOLA)
 			return false;
@@ -619,36 +575,6 @@ public enum HandbookRegistry {
 			for (int i = 0; i < 4; i++) {
 				li.add(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(i));
 			}
-			return li;
-		}
-		if (crafted != null)
-			return ReikaJavaLibrary.makeListFrom(crafted);
-		if (machine != null && machine.isPipe())
-			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
-		if (this == BEDTOOLS) {
-			List<ItemStack> li = new ArrayList<ItemStack>();
-			li.add(ItemRegistry.BEDPICK.getStackOf());
-			li.add(ItemRegistry.BEDSHOVEL.getStackOf());
-			li.add(ItemRegistry.BEDAXE.getStackOf());
-			return li;
-		}
-		if (this == SOLAR)
-			return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getCraftedProduct());
-		if (this.getParent() == ENGINEDESC)
-			return ReikaJavaLibrary.makeListFrom(EnumEngineType.engineList[offset].getCraftedProduct());
-		if (machine == MachineRegistry.ADVANCEDGEARS)
-			return ReikaJavaLibrary.makeListFrom(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(offset));
-		if (this.getParent() == TRANSDESC || this.getParent() == MACHINEDESC) {
-			if (machine.hasCustomPlacerItem())
-				return ReikaJavaLibrary.makeListFrom(machine.getCraftedMetadataProduct(0));
-			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
-		}
-		if (this == FLYCORE) {
-			List<ItemStack> li = new ArrayList<ItemStack>();
-			li.add(ItemStacks.flywheelcore);
-			li.add(ItemStacks.flywheelcore2);
-			li.add(ItemStacks.flywheelcore3);
-			li.add(ItemStacks.flywheelcore4);
 			return li;
 		}
 		if (this == OTHERGEAR) {
@@ -685,6 +611,36 @@ public enum HandbookRegistry {
 			li.add(ItemStacks.bedrock8x);
 			li.add(ItemStacks.bedrock16x);
 			return li;
+		}
+		if (crafted != null)
+			return ReikaJavaLibrary.makeListFrom(crafted);
+		if (machine != null && machine.isPipe())
+			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
+		if (this == BEDTOOLS) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			li.add(ItemRegistry.BEDPICK.getStackOf());
+			li.add(ItemRegistry.BEDSHOVEL.getStackOf());
+			li.add(ItemRegistry.BEDAXE.getStackOf());
+			return li;
+		}
+		if (this == BEDARMOR) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			li.add(ItemRegistry.BEDHELM.getStackOf());
+			li.add(ItemRegistry.BEDCHEST.getStackOf());
+			li.add(ItemRegistry.BEDLEGS.getStackOf());
+			li.add(ItemRegistry.BEDBOOTS.getStackOf());
+			return li;
+		}
+		if (this == SOLAR)
+			return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getCraftedProduct());
+		if (this.getParent() == ENGINEDESC)
+			return ReikaJavaLibrary.makeListFrom(EnumEngineType.engineList[offset].getCraftedProduct());
+		if (machine == MachineRegistry.ADVANCEDGEARS)
+			return ReikaJavaLibrary.makeListFrom(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(offset));
+		if (this.getParent() == TRANSDESC || this.getParent() == MACHINEDESC) {
+			if (machine.hasCustomPlacerItem())
+				return ReikaJavaLibrary.makeListFrom(machine.getCraftedMetadataProduct(0));
+			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
 		}
 		if (this == DECOBLOCKS) {
 			List<ItemStack> li = new ArrayList<ItemStack>();
@@ -735,6 +691,12 @@ public enum HandbookRegistry {
 			return 3;
 		if (this == DECOBLOCKS)
 			return 1;
+		if (this == OTHERSHAFT)
+			return 2;
+		if (this == OTHERGEARUNIT)
+			return 8;
+		if (this == OTHERGEAR)
+			return 0;
 		return 0;
 	}
 
@@ -771,14 +733,16 @@ public enum HandbookRegistry {
 			return MachineRegistry.RAILGUN.getCraftedProduct();
 		if (this == TOOLS)
 			return ItemRegistry.MOTION.getStackOf();
-		if (this == CRAFTING)
-			return ItemStacks.steelingot;
 		if (this == RESOURCE)
 			return ItemStacks.bedrockdust;
 		if (this == FLAKES)
 			return ItemStacks.goldoreflakes;
-		if (this == OTHERGEARUNIT)
-			return ItemStacks.diamond2x;
+		if (this == BEDTOOLS)
+			return ItemRegistry.BEDPICK.getEnchantedStack();
+		if (this == BEDARMOR)
+			return ItemRegistry.BEDHELM.getEnchantedStack();
+		if (this == JETPACK)
+			return ItemRegistry.JETCHEST.getEnchantedStack();
 		if (this.isCrafting())
 			return this.getCrafting().get(this.getTabIconIndex());
 		if (this.isSmelting())
@@ -807,19 +771,29 @@ public enum HandbookRegistry {
 			return ItemStacks.aluminumpowder;
 		if (this == RAILGUNAMMO)
 			return ItemRegistry.RAILGUN.getStackOf();
-		if (this == SCRAP)
-			return ItemStacks.scrap;
 		if (this == CANOLA)
 			return ItemRegistry.CANOLA.getStackOf();
 		return null;
 	}
 
 	public String getData() {
+		if (this == TOC)
+			return RotaryDescriptions.ToC;
 		return RotaryDescriptions.getData(this);
 	}
 
 	public String getNotes() {
 		return RotaryDescriptions.getNotes(this);
+	}
+
+	public boolean hasSubpages() {
+		if (isParent)
+			return false;
+		if (this.getParent() == ENGINEDESC)
+			return true;
+		if (this.getParent() == MACHINEDESC)
+			return true;
+		return false;
 	}
 
 }

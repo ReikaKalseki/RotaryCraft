@@ -34,6 +34,10 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 	private ItemStack inv[] = new ItemStack[9];
 
+	public static final int oreCopy = 50;
+	public static final int oreCopyNether = 75;
+	public static final int oreCopyRare = 90;
+
 	/** The number of ticks that the current item has been cooking for */
 	public int[] extractorCookTime = new int[4];
 
@@ -63,19 +67,19 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
 			if (ore.isNetherOres()) {
-				if (ReikaMathLibrary.doWithChance(0.75))
+				if (ReikaMathLibrary.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
 					return 1; //75% chance of doubling -> 1.75^4 = 9.3
 			}
-			if (ore == ModOreList.PLATINUM || ore == ModOreList.NETHERPLATINUM) {
-				if (ReikaMathLibrary.doWithChance(0.9))
+			if (ore == ModOreList.PLATINUM || ore == ModOreList.NETHERPLATINUM || ore == ModOreList.IRIDIUM) {
+				if (ReikaMathLibrary.doWithChance(oreCopyRare/100D))
 					return 2;
 				else
 					return 1;
 			}
 		}
-		return (1+par5Random.nextInt(2));
+		return ReikaMathLibrary.doWithChance(oreCopy/100D) ? 2 : 1;
 	}
 
 	public void throughPut() {

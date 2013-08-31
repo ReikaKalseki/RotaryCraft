@@ -33,6 +33,8 @@ public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInven
 
 	private ItemStack[] inv = new ItemStack[1];
 
+	public static final int MAXRANGE = 12;
+
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
 		return null;
@@ -123,7 +125,7 @@ public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInven
 
 	@Override
 	public int getMaxRange() {
-		return 12;
+		return MAXRANGE;
 	}
 
 	public void clearAll() {

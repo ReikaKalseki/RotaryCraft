@@ -25,6 +25,7 @@ import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
+import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
@@ -65,11 +66,10 @@ public class GuiHandbook extends GuiScreen
 	public static final int TRANSSTART = 5;
 	public static final int MACHINESTART = 7;
 	public static final int TOOLSTART = 16;
-	public static final int CRAFTSTART = 18;
-	public static final int RESOURCESTART = 25;
+	public static final int RESOURCESTART = 19;
 	public static final int MISCSTART = 2;
 
-	public static final int MAXPAGE = 27;
+	public static final int MAXPAGE = 21;
 
 	@SuppressWarnings("unused")
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
@@ -85,6 +85,8 @@ public class GuiHandbook extends GuiScreen
 
 		screen = (byte)s;
 		page = (byte)p;
+
+		RotaryDescriptions.reload();
 	}
 
 	@Override
@@ -101,7 +103,9 @@ public class GuiHandbook extends GuiScreen
 		buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, "<<", 220, 20, 0, false, file));	//Next page
 		buttonList.add(new GuiButton(12, j+xSize-27, k+6, 20, 20, "X"));	//Close gui button
 
-		if (screen >= ENGINESTART && screen < CRAFTSTART) {
+		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+
+		if (h.hasSubpages()) {
 			buttonList.add(new GuiButton(13, j+xSize-27, k+40, 20, 20, ">"));
 			buttonList.add(new GuiButton(14, j+xSize-27, k+60, 20, 20, "<"));
 		}
@@ -181,9 +185,6 @@ public class GuiHandbook extends GuiScreen
 				screen = TOOLSTART;
 				break;
 			case 6:
-				screen = CRAFTSTART;
-				break;
-			case 7:
 				screen = RESOURCESTART;
 				break;
 			}
@@ -208,6 +209,7 @@ public class GuiHandbook extends GuiScreen
 		i = 0;
 		page = (byte)button.id;
 		subpage = 0;
+		this.initGui();
 	}
 
 	public void refreshScreen() {
