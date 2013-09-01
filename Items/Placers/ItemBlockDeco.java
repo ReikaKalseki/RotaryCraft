@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Items.Placers;
 
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.RotaryNames;
 
 public class ItemBlockDeco extends ItemBlock {
 
@@ -42,9 +41,7 @@ public class ItemBlockDeco extends ItemBlock {
 	public String getUnlocalizedName(ItemStack is)
 	{
 		int d = is.getItemDamage();
-		if (d > 2)
-			d = 0;
-		return this.getUnlocalizedName() + RotaryNames.blockNames[d];
+		return this.getUnlocalizedName() + d;
 	}
 
 	public String getItemNameIS(ItemStack itemstack){

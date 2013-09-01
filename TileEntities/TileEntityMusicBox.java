@@ -79,6 +79,12 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public static final int LOOPPOWER = 1024;
 
+	public TileEntityMusicBox() {
+		super();
+		if (this.hasSavedFile())
+			this.read();
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -395,6 +401,19 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		catch (Exception e) {
 			e.printStackTrace();
 			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
+		}
+	}
+
+	public boolean hasSavedFile() {
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
+		try {
+			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(save.getPath()+"\\Music Box\\"+name)));
+			p.close();
+			return true;
+		}
+		catch (Exception e) {
+			return false;
 		}
 	}
 

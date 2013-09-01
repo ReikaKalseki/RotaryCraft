@@ -57,7 +57,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		ItemStack is = new ItemStack(id, 1, 0);
 		Enchantment ench = this.getDefaultEnchantment();
 		if (ench != null)
-			;//is.addEnchantment(ench, 4);
+			is.addEnchantment(ench, 4);
 		li.add(is);
 	}
 

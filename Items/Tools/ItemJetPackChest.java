@@ -143,11 +143,6 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		if (jetpackUsed) player.inventoryContainer.detectAndSendChanges();
 	}
 
-	public void func_77633_a(int i, CreativeTabs tabs, List itemList)
-	{
-		itemList.add(new ItemStack(this, 1, 1));
-	}
-
 	@Override
 	public boolean canProvideEnergy(ItemStack is) {
 		return false;

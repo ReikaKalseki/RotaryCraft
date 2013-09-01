@@ -52,7 +52,8 @@ public enum ConfigRegistry implements ConfigList {
 	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),
 	DIFFICULTY("Difficulty Control", 2),
 	ALARM("Machine Warning Alarms", false),
-	BIOMEBLOCKS("Terraformer Block Editing", true);
+	BIOMEBLOCKS("Terraformer Block Editing", true),
+	DYNAMICHANDBOOK("Reload Handbook Data on Open", true);
 
 	private String label;
 	private boolean defaultState;

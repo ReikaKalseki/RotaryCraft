@@ -215,7 +215,7 @@ public class RotaryCraft extends DragonAPIMod {
 			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 
-		if (!this.isDeObfEnvironment())
+		if (!DragonAPICore.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
 
 		DragonAPICore.loadHandlers();
@@ -223,6 +223,7 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.forceCompatibility();
 
 		RotaryRecipes.addModInterface();
+		RotaryRecipes.addProps();
 	}
 
 	private static void setupClassFiles() {
@@ -248,7 +249,7 @@ public class RotaryCraft extends DragonAPIMod {
 		modextracts = new ItemModOre(ExtraConfigIDs.MODEXTRACTS.getValue()).setUnlocalizedName("modextracts");
 		modingots = new ItemModOre(ExtraConfigIDs.MODINGOTS.getValue()).setUnlocalizedName("modingots");
 
-		decoblock = new BlockDeco(ExtraConfigIDs.DECOBLOCKS.getValue());
+		decoblock = new BlockDeco(ExtraConfigIDs.DECOBLOCKS.getValue()).setUnlocalizedName("decoblock");
 		blastglass = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");
 		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
 		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");

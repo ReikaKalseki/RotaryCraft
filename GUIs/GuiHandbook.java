@@ -23,9 +23,9 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
@@ -45,9 +45,9 @@ public class GuiHandbook extends GuiScreen
 	private static final int descX = 8;
 	private static final int descY = 88;
 
-	protected byte screen = 0;
-	protected byte page = 0;
-	protected byte subpage = 0;
+	protected int screen = 0;
+	protected int page = 0;
+	protected int subpage = 0;
 	private byte bcg;
 	private int tickcount;
 
@@ -60,33 +60,19 @@ public class GuiHandbook extends GuiScreen
 	private static int staticwidth;
 	private static int staticheight;
 
-	public static final int TOCSTART = 0;
-	public static final int INFOSTART = 1;
-	public static final int ENGINESTART = 3;
-	public static final int TRANSSTART = 5;
-	public static final int MACHINESTART = 7;
-	public static final int TOOLSTART = 16;
-	public static final int RESOURCESTART = 19;
-	public static final int MISCSTART = 2;
-
-	public static final int MAXPAGE = 21;
-
-	@SuppressWarnings("unused")
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
 	{
 		//super();
 		player = p5ep;
 		worldObj = world;
-		if (MAXPAGE < MISCSTART) {
-			ReikaJavaLibrary.spamConsole("HANDBOOK MAX PAGE IS TOO LOW, CANNOT ACCESS HIGH PAGES!");
-		}
 		staticwidth = xSize;
 		staticheight = ySize;
 
-		screen = (byte)s;
-		page = (byte)p;
+		screen = s;
+		page = p;
 
-		RotaryDescriptions.reload();
+		if (ConfigRegistry.DYNAMICHANDBOOK.getState())
+			RotaryDescriptions.reload();
 	}
 
 	@Override
@@ -122,6 +108,10 @@ public class GuiHandbook extends GuiScreen
 		return true;
 	}
 
+	public int getMaxPage() {
+		return HandbookRegistry.RESOURCEDESC.getScreen()+HandbookRegistry.RESOURCEDESC.getNumberChildren()/8;
+	}
+
 	@Override
 	public void actionPerformed(GuiButton button) {
 		if (button.id == 12) {
@@ -150,7 +140,7 @@ public class GuiHandbook extends GuiScreen
 			return;
 		}
 		if (button.id == 11) {
-			if (screen < MAXPAGE) {
+			if (screen < this.getMaxPage()) {
 				screen++;
 				page = 0;
 				subpage = 0;
@@ -164,28 +154,28 @@ public class GuiHandbook extends GuiScreen
 			//this.refreshScreen();
 			return;
 		}
-		if (screen >= TOCSTART && screen < INFOSTART) {
+		if (screen == HandbookRegistry.TOC.getScreen()) {
 			switch(button.id) {
 			case 0:
-				screen = INFOSTART;
+				screen = HandbookRegistry.TERMS.getScreen();
 				break;
 			case 1:
-				screen = MISCSTART;
+				screen = HandbookRegistry.MISC.getScreen();
 				break;
 			case 2:
-				screen = ENGINESTART;
+				screen = HandbookRegistry.ENGINEDESC.getScreen();
 				break;
 			case 3:
-				screen = TRANSSTART;
+				screen = HandbookRegistry.TRANSDESC.getScreen();
 				break;
 			case 4:
-				screen = MACHINESTART;
+				screen = HandbookRegistry.PROCMACHINEDESC.getScreen();
 				break;
 			case 5:
-				screen = TOOLSTART;
+				screen = HandbookRegistry.TOOLDESC.getScreen();
 				break;
 			case 6:
-				screen = RESOURCESTART;
+				screen = HandbookRegistry.RESOURCEDESC.getScreen();
 				break;
 			}
 			this.initGui();
@@ -207,7 +197,7 @@ public class GuiHandbook extends GuiScreen
 		}
 		time = System.nanoTime();
 		i = 0;
-		page = (byte)button.id;
+		page = button.id;
 		subpage = 0;
 		this.initGui();
 	}

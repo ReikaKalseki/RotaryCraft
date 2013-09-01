@@ -90,7 +90,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
-	JETCHEST(12, true,			"Bedrock Jetpack",			ItemJetPackChest.class);
+	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class);
 
 	private int index;
 	private boolean hasSubtypes;

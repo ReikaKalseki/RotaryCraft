@@ -18,19 +18,17 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.ReikaOreHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 
 public enum HandbookRegistry {
 
 	//---------------------TOC--------------------//
-	TOC("Table of Contents", GuiHandbook.TOCSTART),
+	TOC("Table of Contents", "TOC"),
 	MISC(),
 	ENGINES(),
 	TRANS(),
@@ -38,12 +36,12 @@ public enum HandbookRegistry {
 	TOOLS(),
 	RESOURCE(),
 	//---------------------INFO--------------------//
-	TERMS("Basic Terms", GuiHandbook.INFOSTART),
+	TERMS("Basic Terms", "Terms and Physics Explanations"),
 	PHYSICS("Relevant Physics"),
 	MATERIAL("Material Properties"),
 	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------MISC--------------------//
-	MISCDESC("Important Notes", GuiHandbook.MISCSTART),
+	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
 	HOSE("Lubricant Hose", MachineRegistry.HOSE),
 	CANOLA("Canola", ItemRegistry.CANOLA),
@@ -52,7 +50,7 @@ public enum HandbookRegistry {
 	PIPE("Pipe", MachineRegistry.PIPE),
 	FUELLINE("Fuel Line", MachineRegistry.FUELLINE),
 	//---------------------ENGINES--------------------//
-	ENGINEDESC("Power Supply", GuiHandbook.ENGINESTART),
+	ENGINEDESC("Power Supply", "Engines"),
 	DCENGINE(MachineRegistry.ENGINE, EnumEngineType.DC.ordinal()),
 	WINDENGINE(MachineRegistry.ENGINE, EnumEngineType.WIND.ordinal()),
 	STEAMENGINE(MachineRegistry.ENGINE, EnumEngineType.STEAM.ordinal()),
@@ -65,7 +63,7 @@ public enum HandbookRegistry {
 	SOLAR(MachineRegistry.SOLARTOWER),
 
 	//---------------------TRANSMISSION--------------------//
-	TRANSDESC("Power Transfer", GuiHandbook.TRANSSTART),
+	TRANSDESC("Power Transfer", "Transmission"),
 	SHAFT(MachineRegistry.SHAFT),
 	GEARBOX(MachineRegistry.GEARBOX),
 	BEVEL(MachineRegistry.BEVELGEARS),
@@ -79,80 +77,94 @@ public enum HandbookRegistry {
 	MULTI(MachineRegistry.MULTICLUTCH),
 
 	//---------------------MACHINES--------------------//
-	MACHINEDESC("Machines", GuiHandbook.MACHINESTART),
-	BEDROCK(MachineRegistry.BEDROCKBREAKER),
+	PRODMACHINEDESC("Production Machines", "Production"),
+	BLAST(MachineRegistry.BLASTFURNACE),
+	WORKTABLE(MachineRegistry.WORKTABLE),
 	FERMENTER(MachineRegistry.FERMENTER),
-	GRINDER(MachineRegistry.GRINDER),
-	FLOODLIGHT(MachineRegistry.FLOODLIGHT),
-	HEATRAY(MachineRegistry.HEATRAY),
+	FRACTION(MachineRegistry.FRACTIONATOR),
+	BEDROCK(MachineRegistry.BEDROCKBREAKER),
 	BORER(MachineRegistry.BORER),
+	PUMP(MachineRegistry.PUMP),
+	PNEUMATIC(MachineRegistry.PNEUENGINE),
+
+	PROCMACHINEDESC("Processing Machines", "Processing"),
+	GRINDER(MachineRegistry.GRINDER),
+	EXTRACTOR(MachineRegistry.EXTRACTOR),
+	PULSEJET(MachineRegistry.PULSEJET),
+	COMPACTOR(MachineRegistry.COMPACTOR),
+	PURIFIER(MachineRegistry.PURIFIER),
+	ENHANCER(MachineRegistry.FUELENHANCER),
+	MAGNET(MachineRegistry.MAGNETIZER),
+	FURNACEHEATER(MachineRegistry.FRICTION),
+	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
+	CONVERTER(MachineRegistry.LIQUIDCONVERTER),
+
+	FARMMACHINEDESC("Farming Machines", "Farming"),
+	FAN(MachineRegistry.FAN),
+	BREEDER(MachineRegistry.AUTOBREEDER),
+	SPAWNER(MachineRegistry.SPAWNERCONTROLLER),
+	SPRINKLER(MachineRegistry.SPRINKLER),
+	WOODCUTTER(MachineRegistry.WOODCUTTER),
+	HARVESTER(MachineRegistry.MOBHARVESTER),
+
+	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
+	HEATER(MachineRegistry.HEATER),
+	VACUUM(MachineRegistry.VACUUM),
+	ECU(MachineRegistry.ECU),
+	WINDER(MachineRegistry.WINDER),
+	REFRESHER(MachineRegistry.REFRESHER),
+	CCTVSCREEN(MachineRegistry.SCREEN),
+	MIRROR(MachineRegistry.MIRROR),
+	COOLINGFIN(MachineRegistry.COOLINGFIN),
+
+	WEPMACHINEDESC("Defence/Offence Machines", "Defence/Offense"),
+	HEATRAY(MachineRegistry.HEATRAY),
+	TNT(MachineRegistry.TNTCANNON),
+	SONIC(MachineRegistry.SONICWEAPON),
+	FORCE(MachineRegistry.FORCEFIELD),
+	RAILGUN(MachineRegistry.RAILGUN),
+	FREEZE(MachineRegistry.FREEZEGUN),
+	CONTAIN(MachineRegistry.CONTAINMENT),
+	LASERGUN(MachineRegistry.LASERGUN),
+	LANDMINE(MachineRegistry.LANDMINE),
+	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
+	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
+	EMP(MachineRegistry.EMP),
+
+	SURVMACHINEDESC("Surveying Machines", "Surveying"),
+	GPR(MachineRegistry.GPR),
+	RADAR(MachineRegistry.MOBRADAR),
+	SCANNER(MachineRegistry.CAVESCANNER),
+	CCTV(MachineRegistry.CCTV),
+	SPYCAM(MachineRegistry.SPYCAM),
+
+	COSMACHINEDESC("Cosmetic Machines", "Cosmetic"),
+	FIREWORK(MachineRegistry.FIREWORK),
+	MUSIC(MachineRegistry.MUSICBOX),
+	PROJECTOR(MachineRegistry.PROJECTOR),
+	WEATHER(MachineRegistry.WEATHERCONTROLLER),
+	DISPLAY(MachineRegistry.DISPLAY),
+
+	UTILMACHINEDESC("Utility Machines", "Utility"),
+	FLOODLIGHT(MachineRegistry.FLOODLIGHT),
 	PILEDRIVER(MachineRegistry.PILEDRIVER),
 	AEROSOL(MachineRegistry.AEROSOLIZER),
 	LIGHTBRID(MachineRegistry.LIGHTBRIDGE),
-	EXTRACTOR(MachineRegistry.EXTRACTOR),
-	PULSEJET(MachineRegistry.PULSEJET),
-	PUMP(MachineRegistry.PUMP),
 	RESERVOIR(MachineRegistry.RESERVOIR),
-	FAN(MachineRegistry.FAN),
-	COMPACTOR(MachineRegistry.COMPACTOR),
-	BREEDER(MachineRegistry.AUTOBREEDER),
 	BAITBOX(MachineRegistry.BAITBOX),
-	FIREWORK(MachineRegistry.FIREWORK),
-	FRACTION(MachineRegistry.FRACTIONATOR),
-	GPR(MachineRegistry.GPR),
-	HEATER(MachineRegistry.HEATER),
-	OBSIDIAN(MachineRegistry.OBSIDIAN),
 	DETECTOR(MachineRegistry.PLAYERDETECTOR),
-	SPAWNER(MachineRegistry.SPAWNERCONTROLLER),
-	SPRINKLER(MachineRegistry.SPRINKLER),
-	VACUUM(MachineRegistry.VACUUM),
-	WOODCUTTER(MachineRegistry.WOODCUTTER),
-	ECU(MachineRegistry.ECU),
-	RADAR(MachineRegistry.MOBRADAR),
-	WINDER(MachineRegistry.WINDER),
-	TNT(MachineRegistry.TNTCANNON),
-	SONIC(MachineRegistry.SONICWEAPON),
-	BLAST(MachineRegistry.BLASTFURNACE),
-	FORCE(MachineRegistry.FORCEFIELD),
-	MUSIC(MachineRegistry.MUSICBOX),
-	HARVESTER(MachineRegistry.MOBHARVESTER),
-	PROJECTOR(MachineRegistry.PROJECTOR),
-	RAILGUN(MachineRegistry.RAILGUN),
-	WEATHER(MachineRegistry.WEATHERCONTROLLER),
-	REFRESHER(MachineRegistry.REFRESHER),
-	SCANNER(MachineRegistry.CAVESCANNER),
 	CHEST(MachineRegistry.SCALECHEST),
 	SPILLER(MachineRegistry.SPILLER),
 	SMOKE(MachineRegistry.SMOKEDETECTOR),
 	FIRESTARTER(MachineRegistry.IGNITER),
-	FREEZE(MachineRegistry.FREEZEGUN),
-	MAGNET(MachineRegistry.MAGNETIZER),
-	CONTAIN(MachineRegistry.CONTAINMENT),
-	CCTVSCREEN(MachineRegistry.SCREEN),
-	CCTV(MachineRegistry.CCTV),
-	PURIFIER(MachineRegistry.PURIFIER),
-	LASERGUN(MachineRegistry.LASERGUN),
 	ITEMCANNON(MachineRegistry.ITEMCANNON),
-	FURNACEHEATER(MachineRegistry.FRICTION),
-	LANDMINE(MachineRegistry.LANDMINE),
 	BUCKETFILLER(MachineRegistry.BUCKETFILLER),
-	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
-	SPYCAM(MachineRegistry.SPYCAM),
-	MIRROR(MachineRegistry.MIRROR),
-	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
-	COOLINGFIN(MachineRegistry.COOLINGFIN),
-	WORKTABLE(MachineRegistry.WORKTABLE),
-	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
-	PNEUMATIC(MachineRegistry.PNEUENGINE),
-	CONVERTER(MachineRegistry.LIQUIDCONVERTER),
-	DISPLAY(MachineRegistry.DISPLAY),
 	LAMP(MachineRegistry.LAMP),
 	TERRA(MachineRegistry.TERRAFORMER),
-	ENHANCER(MachineRegistry.FUELENHANCER),
-	EMP(MachineRegistry.EMP),
 	LINE(MachineRegistry.LINEBUILDER),
+
 	//---------------------TOOLS--------------------//
-	TOOLDESC("Tool Items", GuiHandbook.TOOLSTART),
+	TOOLDESC("Tool Items", "Tools"),
 	SPRING(ItemRegistry.SPRING),
 	ULTRA(ItemRegistry.ULTRASOUND),
 	MOTION(ItemRegistry.MOTION),
@@ -172,7 +184,7 @@ public enum HandbookRegistry {
 	TILESELECT(ItemRegistry.TILESELECTOR),
 	JETPACK(ItemRegistry.JETCHEST),
 	//---------------------RESOURCE--------------------//
-	RESOURCEDESC("Resource Items", GuiHandbook.RESOURCESTART),
+	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
 	OTHERSHAFT("Alternative Shafts"),
 	OTHERGEARUNIT("Alternative Gear Units"),
@@ -201,10 +213,13 @@ public enum HandbookRegistry {
 	private MachineRegistry machine;
 	private ItemRegistry item;
 	private int offset;
+	private int parentindex;
 	private int basescreen;
 	private boolean isParent;
 	private String title;
 	private ItemStack crafted;
+	private String name;
+
 
 	public static final HandbookRegistry[] tabList = HandbookRegistry.values();
 
@@ -272,21 +287,23 @@ public enum HandbookRegistry {
 		item = null;
 	}
 
-	private HandbookRegistry(String s, int base) {
+	private HandbookRegistry(String s, String toc) {
 		machine = null;
 		offset = -1;
-		basescreen = base;
+		parentindex = RotaryDescriptions.getCategoryCount();
 		isParent = true;
 		item = null;
 		title = s;
 		crafted = null;
+		name = toc;
+		RotaryDescriptions.addCategory(this);
 	}
 
 	public static int getScreen(MachineRegistry m, TileEntity te) {
 		if (m == MachineRegistry.ENGINE)
 			return getEngineScreen(te);
 		if (m == MachineRegistry.ADVANCEDGEARS)
-			return GuiHandbook.TRANSSTART+1;
+			return TRANSDESC.ordinal()+1;
 		for (int i = ENGINEDESC.ordinal(); i < TOOLDESC.ordinal(); i++) {
 			if (tabList[i].machine == m)
 				return tabList[i].getScreen();
@@ -302,15 +319,18 @@ public enum HandbookRegistry {
 	}
 
 
-	public static HandbookRegistry[] getMachineTabs() {
-		int size = TOOLDESC.ordinal()-MACHINEDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, MACHINEDESC.ordinal()+1, tabs, 0, size);
+	public static List<HandbookRegistry> getMachineTabs() {
+		List<HandbookRegistry> tabs = new ArrayList<HandbookRegistry>();
+		for (int i = 0; i < tabList.length; i++) {
+			HandbookRegistry h = tabList[i];
+			if (h.isMachine() && !h.isParent)
+				tabs.add(h);
+		}
 		return tabs;
 	}
 
 	public static HandbookRegistry[] getTransTabs() {
-		int size = MACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
+		int size = PROCMACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
 		HandbookRegistry[] tabs = new HandbookRegistry[size];
 		System.arraycopy(tabList, TRANSDESC.ordinal()+1, tabs, 0, size);
 		return tabs;
@@ -353,6 +373,39 @@ public enum HandbookRegistry {
 		return li;
 	}
 
+	public static List<HandbookRegistry> getTOCTabs() {
+		ArrayList<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
+		for (int i = 0; i < tabList.length; i++) {
+			if (tabList[i].isParent && tabList[i] != TOC)
+				li.add(tabList[i]);
+		}
+		return li;
+	}
+
+	public String getTOCTitle() {
+		return name;
+	}
+
+	public boolean isMachine() {
+		if (this.getParent() == PROCMACHINEDESC)
+			return true;
+		if (this.getParent() == UTILMACHINEDESC)
+			return true;
+		if (this.getParent() == WEPMACHINEDESC)
+			return true;
+		if (this.getParent() == SURVMACHINEDESC)
+			return true;
+		if (this.getParent() == PRODMACHINEDESC)
+			return true;
+		if (this.getParent() == FARMMACHINEDESC)
+			return true;
+		if (this.getParent() == COSMACHINEDESC)
+			return true;
+		if (this.getParent() == ACCMACHINEDESC)
+			return true;
+		return false;
+	}
+
 	public MachineRegistry getMachine() {
 		return machine;
 	}
@@ -361,8 +414,35 @@ public enum HandbookRegistry {
 		return item;
 	}
 
-	private int getScreen() {
-		return this.getParent().basescreen+this.getRelativeScreen();
+	public int getBaseScreen() {
+		int sc = 0;
+		for (int i = 0; i < this.ordinal(); i++) {
+			HandbookRegistry h = tabList[i];
+			if (h.isParent) {
+				sc += h.getNumberChildren()/8+1;
+			}
+		}
+		return sc;
+	}
+
+	public int getNumberChildren() {
+		if (!isParent)
+			return 0;
+		int ch = 0;
+		for (int i = this.ordinal()+1; i < tabList.length; i++) {
+			HandbookRegistry h = tabList[i];
+			if (h.isParent) {
+				return ch;
+			}
+			else {
+				ch++;
+			}
+		}
+		return ch;
+	}
+
+	public int getScreen() {
+		return this.getParent().getBaseScreen()+this.getRelativeScreen();
 	}
 
 	private int getPage() {
@@ -386,7 +466,7 @@ public enum HandbookRegistry {
 	}
 
 	public int getShiftedOrdinal() {
-		return this.getParent().basescreen+this.ordinal()-this.getParent().ordinal();
+		return this.getParent().getBaseScreen()+this.ordinal()-this.getParent().ordinal();
 	}
 
 	private static int getAdvGearPage(TileEntity te) {
@@ -395,12 +475,12 @@ public enum HandbookRegistry {
 
 	private static int getEnginePage(TileEntity te) {
 		EnumEngineType e = ((TileEntityEngine)te).type;
-		return 1+e.ordinal()-(getEngineScreen(te)-GuiHandbook.ENGINESTART)*8;
+		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.ordinal())*8;
 	}
 
 	private static int getEngineScreen(TileEntity te) {
 		EnumEngineType e = ((TileEntityEngine)te).type;
-		return GuiHandbook.ENGINESTART+(1+e.ordinal())/8;
+		return ENGINEDESC.ordinal()+(1+e.ordinal())/8;
 	}
 
 	public String getTabImageFile() {
@@ -462,11 +542,12 @@ public enum HandbookRegistry {
 				return tabList[i];
 			}
 		}
-		throw new RuntimeException("Handbook screen "+screen+" and page "+page+" do not correspond to an entry!");
+		return TOC;
+		//throw new RuntimeException("Handbook screen "+screen+" and page "+page+" do not correspond to an entry!");
 	}
 
 	public static List<HandbookRegistry> getEntriesForScreen(int screen) {
-		//ReikaJavaLibrary.pConsole(screen+"   "+page);
+		//ReikaJavaLibrary.pConsole(screen);
 		List<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen) {
@@ -506,7 +587,7 @@ public enum HandbookRegistry {
 			else
 				return RotaryNames.engineNames[offset];
 		}
-		if (this.getParent() == MACHINEDESC)
+		if (this.isMachine())
 			return machine.getName();
 		if (machine == MachineRegistry.ADVANCEDGEARS)
 			return RotaryNames.advGearItemNames[offset];
@@ -549,6 +630,8 @@ public enum HandbookRegistry {
 		if (this == RAILGUNAMMO)
 			return false;
 		if (this == CANOLA)
+			return false;
+		if (this == FLAKES)
 			return false;
 		return true;
 	}
@@ -637,7 +720,7 @@ public enum HandbookRegistry {
 			return ReikaJavaLibrary.makeListFrom(EnumEngineType.engineList[offset].getCraftedProduct());
 		if (machine == MachineRegistry.ADVANCEDGEARS)
 			return ReikaJavaLibrary.makeListFrom(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(offset));
-		if (this.getParent() == TRANSDESC || this.getParent() == MACHINEDESC) {
+		if (this.getParent() == TRANSDESC || this.isMachine()) {
 			if (machine.hasCustomPlacerItem())
 				return ReikaJavaLibrary.makeListFrom(machine.getCraftedMetadataProduct(0));
 			return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
@@ -675,7 +758,7 @@ public enum HandbookRegistry {
 			return true;
 		if (this.getParent() == TRANSDESC)
 			return true;
-		if (this.getParent() == MACHINEDESC)
+		if (this.isMachine())
 			return true;
 		if (machine != null && machine.isPipe())
 			return true;
@@ -703,8 +786,6 @@ public enum HandbookRegistry {
 	public boolean isSmelting() {
 		if (this == ETHANOL)
 			return true;
-		if (this == FLAKES)
-			return true;
 		if (this == SILVERINGOT)
 			return true;
 		return false;
@@ -715,8 +796,6 @@ public enum HandbookRegistry {
 			return null;
 		if (this == ETHANOL)
 			return ItemRegistry.ETHANOL.getStackOf();
-		if (this == FLAKES)
-			return ReikaOreHelper.oreList[(int)((System.nanoTime()/2000000000)%ReikaOreHelper.oreList.length)].getResource();
 		if (this == SILVERINGOT)
 			return ItemStacks.silveringot;
 		return ItemStacks.barrel;
@@ -778,7 +857,7 @@ public enum HandbookRegistry {
 
 	public String getData() {
 		if (this == TOC)
-			return RotaryDescriptions.ToC;
+			return RotaryDescriptions.getTOC();
 		return RotaryDescriptions.getData(this);
 	}
 
@@ -791,7 +870,7 @@ public enum HandbookRegistry {
 			return false;
 		if (this.getParent() == ENGINEDESC)
 			return true;
-		if (this.getParent() == MACHINEDESC)
+		if (this.isMachine())
 			return true;
 		return false;
 	}

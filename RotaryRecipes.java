@@ -24,7 +24,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thermalexpansion.api.crafting.CraftingManagers;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
+import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
@@ -51,6 +53,12 @@ public class RotaryRecipes {
 		addToolItems();
 		addMisc();
 		addFurnace();
+	}
+
+	public static void addProps() {
+		ItemMaterialController.addItem(ItemStacks.scrap, ItemMaterial.STEEL);
+		ItemMaterialController.addItem(ItemStacks.ironscrap, ItemMaterial.IRON);
+		ItemMaterialController.addItem(ItemStacks.steelblock, ItemMaterial.STEEL);
 	}
 
 	public static void addModInterface() {

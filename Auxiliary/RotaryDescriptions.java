@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import Reika.DragonAPI.Instantiable.XMLInterface;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -60,14 +59,14 @@ public final class RotaryDescriptions {
 	public static final String DESC_SUFFIX = ":desc";
 	public static final String NOTE_SUFFIX = ":note";
 
-	public static final String ToC = "Page "+GuiHandbook.INFOSTART+" - Terms and Physics Explanations\nPage "+GuiHandbook.MISCSTART+" - Important Notes\nPage "+GuiHandbook.ENGINESTART+" - Engines\nPage "+GuiHandbook.TRANSSTART+" - Transmission\nPage "+GuiHandbook.MACHINESTART+" - Machines\nPage "+GuiHandbook.TOOLSTART+" - Tools\nPage "+GuiHandbook.RESOURCESTART+" - Resource Items";
-
 	private static HashMap<HandbookRegistry, String> data = new HashMap<HandbookRegistry, String>();
 	private static HashMap<HandbookRegistry, String> notes = new HashMap<HandbookRegistry, String>();
 
 	private static HashMap<MachineRegistry, Object[]> machineData = new HashMap<MachineRegistry, Object[]>();
 	private static HashMap<MachineRegistry, Object[]> machineNotes = new HashMap<MachineRegistry, Object[]>();
 	private static HashMap<HandbookRegistry, Object[]> infoData = new HashMap<HandbookRegistry, Object[]>();
+
+	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
 	private static final XMLInterface parents = new XMLInterface(RotaryCraft.class, PARENT+"categories.xml");
 	private static final XMLInterface machines = new XMLInterface(RotaryCraft.class, PARENT+"machines.xml");
@@ -77,6 +76,29 @@ public final class RotaryDescriptions {
 	private static final XMLInterface resources = new XMLInterface(RotaryCraft.class, PARENT+"resource.xml");
 	private static final XMLInterface miscs = new XMLInterface(RotaryCraft.class, PARENT+"misc.xml");
 	private static final XMLInterface infos = new XMLInterface(RotaryCraft.class, PARENT+"info.xml");
+
+	public static void addCategory(HandbookRegistry h) {
+		categories.add(h);
+	}
+
+	public static int getCategoryCount() {
+		return categories.size();
+	}
+
+	public static String getTOC() {
+		List<HandbookRegistry> toctabs = HandbookRegistry.getTOCTabs();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < toctabs.size(); i++) {
+			HandbookRegistry h = toctabs.get(i);
+			sb.append("Page ");
+			sb.append(h.getScreen());
+			sb.append(" - ");
+			sb.append(h.getTOCTitle());
+			if (i < toctabs.size()-1)
+				sb.append("\n");
+		}
+		return sb.toString();
+	}
 
 	private static void addData(MachineRegistry m, Object... data) {
 		machineData.put(m, data);
@@ -110,7 +132,7 @@ public final class RotaryDescriptions {
 		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs();
 
 		HandbookRegistry[] enginetabs = HandbookRegistry.getEngineTabs();
-		HandbookRegistry[] machinetabs = HandbookRegistry.getMachineTabs();
+		List<HandbookRegistry> machinetabs = HandbookRegistry.getMachineTabs();
 		HandbookRegistry[] transtabs = HandbookRegistry.getTransTabs();
 		HandbookRegistry[] tooltabs = HandbookRegistry.getToolTabs();
 		HandbookRegistry[] resourcetabs = HandbookRegistry.getResourceTabs();
@@ -123,14 +145,19 @@ public final class RotaryDescriptions {
 			data.put(h, desc);
 		}
 
-		for (int i = 0; i < machinetabs.length; i++) {
-			HandbookRegistry h = machinetabs[i];
+		for (int i = 0; i < machinetabs.size(); i++) {
+			HandbookRegistry h = machinetabs.get(i);
 			MachineRegistry m = h.getMachine();
 			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase()+DESC_SUFFIX);
 			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase()+NOTE_SUFFIX);
 
 			desc = String.format(desc, machineData.get(m));
 			aux = String.format(aux, machineNotes.get(m));
+
+			if (m.isDummiedOut()) {
+				desc += "\nThis machine is currently unavailable.";
+				aux += "\nNote: Dummied Out";
+			}
 
 			data.put(h, desc);
 			notes.put(h, aux);
@@ -165,7 +192,6 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = infotabs[i];
 			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase());
 			desc = String.format(desc, infoData.get(h));
-			ReikaJavaLibrary.pConsole(h+":"+desc);
 			data.put(h, desc);
 		}
 

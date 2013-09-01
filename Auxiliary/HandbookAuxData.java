@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -37,7 +38,7 @@ public final class HandbookAuxData {
 		return WorktableRecipes.getInstance().getRecipeListCopy();
 	}
 
-	public static void drawPage(FontRenderer f, byte screen, byte page, byte subpage, int dx, int dy) {
+	public static void drawPage(FontRenderer f, int screen, int page, int subpage, int dx, int dy) {
 		RenderItem ri = new RenderItem();
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		if (h.isCrafting()) {
@@ -56,12 +57,75 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawSmelting(ri, f, out, dx+87, dy+36, dx+141, dy+32);
 		}
 		else if (h == HandbookRegistry.EXTRACTS) {
-			int k = (int)((System.nanoTime()/2000000000)%ReikaOreHelper.oreList.length);
-			ItemStack[] in = {	ReikaOreHelper.oreList[k].getOreBlock(), new ItemStack(RotaryCraft.extracts.itemID, 1, k),
-					new ItemStack(RotaryCraft.extracts.itemID, 1, k+8),  new ItemStack(RotaryCraft.extracts.itemID, 1, k+16)};
-			ItemStack[] out = {	new ItemStack(RotaryCraft.extracts.itemID, 1, k), new ItemStack(RotaryCraft.extracts.itemID, 1, k+8),
-					new ItemStack(RotaryCraft.extracts.itemID, 1, k+16),  new ItemStack(RotaryCraft.extracts.itemID, 1, k+24)};
+			ArrayList<ItemStack> modores = ModOreList.getAllRegisteredOreBlocks();
+			int time = 1000000000;
+			int k = (int)((System.nanoTime()/time)%(ReikaOreHelper.oreList.length+modores.size()));
+			boolean van = k < ReikaOreHelper.oreList.length;
+			ItemStack[] in = new ItemStack[4];
+			ItemStack[] out = new ItemStack[4];
+			String oreName;
+			if (van) {
+				in[0] = ReikaOreHelper.oreList[k].getOreBlock();
+				in[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
+				in[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
+				in[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
+
+				out[0] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
+				out[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
+				out[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
+				out[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+24);
+
+				oreName = ReikaOreHelper.oreList[k].getName();
+			}
+			else {
+				int i = k-ReikaOreHelper.oreList.length;
+				//ReikaJavaLibrary.pConsoleIf(modores.get(i)+" at "+i+" ("+""+")");
+				ModOreList ore = ModOreList.getModOreFromOre(modores.get(i));
+				in[0] = modores.get(i);
+				in[1] = ExtractorModOres.getDustProduct(ore);
+				in[2] = ExtractorModOres.getSlurryProduct(ore);
+				in[3] = ExtractorModOres.getSolutionProduct(ore);
+
+				out[0] = ExtractorModOres.getDustProduct(ore);
+				out[1] = ExtractorModOres.getSlurryProduct(ore);
+				out[2] = ExtractorModOres.getSolutionProduct(ore);
+				out[3] = ExtractorModOres.getFlakeProduct(ore);
+
+				oreName = ore.getName();
+			}
+
 			ReikaGuiAPI.instance.drawExtractor(ri, f, dx+66, dy+17, in, dx+66, dy+59, out);
+			String[] words = oreName.split(" ");
+			for (int i = 0; i < words.length; i++)
+				f.drawString(words[i], dx+194, dy+60+f.FONT_HEIGHT*i-words.length*f.FONT_HEIGHT/2, 0);
+		}
+		else if (h == HandbookRegistry.FLAKES) {
+			ArrayList<ItemStack> li = new ArrayList<ItemStack>();
+			for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+				li.add(ReikaOreHelper.oreList[i].getResource());
+			}
+			for (int i = 0; i < ModOreList.oreList.length; i++) {
+				li.add(ItemStacks.getModOreIngot(ModOreList.oreList[i]));
+			}
+			ItemStack in;
+			int time = (int)((System.nanoTime()/1000000000)%li.size());
+			boolean van = time < ReikaOreHelper.oreList.length;
+			int i = time-ReikaOreHelper.oreList.length;
+			String oreName;
+			if (van) {
+				in = new ItemStack(RotaryCraft.extracts, 1, time+24);
+				oreName = ReikaOreHelper.oreList[time].getName();
+			}
+			else {
+				in = ExtractorModOres.getFlakeProduct(ModOreList.oreList[i]);
+				oreName = ModOreList.oreList[i].getName();
+			}
+			ReikaGuiAPI.instance.drawItemStack(ri, f, in, dx+87, dy+28);
+			ReikaGuiAPI.instance.drawItemStack(ri, f, li.get(time), dx+145, dy+28);
+
+			String[] words = oreName.split(" ");
+			for (int k = 0; k < words.length; k++)
+				f.drawString(words[k], dx+168, dy+36+f.FONT_HEIGHT*k-words.length*f.FONT_HEIGHT/2, 0);
 		}
 		else if (h == HandbookRegistry.COMPACTS) {
 			ItemStack in = new ItemStack(Item.coal);
