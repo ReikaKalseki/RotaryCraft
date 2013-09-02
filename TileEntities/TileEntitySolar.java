@@ -282,4 +282,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return true;
 	}
 
+	@Override
+	public void onEMP() {}
+
 }

@@ -371,4 +371,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return side != EnumLook.DOWN;
 	}
+
+	@Override
+	public void onEMP() {}
 }

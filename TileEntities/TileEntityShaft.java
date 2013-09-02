@@ -562,4 +562,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public void onEMP() {}
 }

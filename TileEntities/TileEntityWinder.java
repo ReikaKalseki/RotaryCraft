@@ -225,4 +225,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	{
 		return 1;
 	}
+
+	@Override
+	public void onEMP() {}
 }

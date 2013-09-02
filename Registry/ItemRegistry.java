@@ -17,8 +17,8 @@ import net.minecraft.item.crafting.IRecipe;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemBasic;
@@ -26,7 +26,6 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
-import Reika.RotaryCraft.Items.ItemDebug;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemHandBook;
@@ -36,6 +35,7 @@ import Reika.RotaryCraft.Items.Tools.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockPickaxe;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockShovel;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
+import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.Tools.ItemGravelGun;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
@@ -263,7 +263,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public String getUnlocalizedName() {
-		return ReikaJavaLibrary.stripSpaces(name).toLowerCase();
+		return ReikaStringParser.stripSpaces(name).toLowerCase();
 	}
 	/*
 	public int getID() {

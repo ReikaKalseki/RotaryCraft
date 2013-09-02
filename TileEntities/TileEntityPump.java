@@ -290,4 +290,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return !side.isTopOrBottom();
 	}
+
+	@Override
+	public void onEMP() {}
 }

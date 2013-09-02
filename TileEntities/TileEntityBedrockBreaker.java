@@ -316,4 +316,7 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 			return true;
 		return inv[0].stackSize >= inv[0].getMaxStackSize();
 	}
+
+	@Override
+	public void onEMP() {}
 }

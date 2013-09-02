@@ -170,4 +170,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 		super.readFromNBT(NBT);
 		ticks = NBT.getInteger("tick");
 	}
+
+	@Override
+	public void onEMP() {}
 }

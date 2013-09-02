@@ -53,7 +53,9 @@ public enum ConfigRegistry implements ConfigList {
 	DIFFICULTY("Difficulty Control", 2),
 	ALARM("Machine Warning Alarms", false),
 	BIOMEBLOCKS("Terraformer Block Editing", true),
-	DYNAMICHANDBOOK("Reload Handbook Data on Open", true);
+	DYNAMICHANDBOOK("Reload Handbook Data on Open", true),
+	TABLEMACHINES("Crafting Table can Make Machines", false),
+	EMPLOAD("EMP Charging Speed", 4);
 
 	private String label;
 	private boolean defaultState;

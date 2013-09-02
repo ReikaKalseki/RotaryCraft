@@ -534,4 +534,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return side != EnumLook.DOWN;
 	}
+
+	@Override
+	public void onEMP() {}
 }

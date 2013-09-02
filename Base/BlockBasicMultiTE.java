@@ -56,6 +56,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
+import Reika.RotaryCraft.TileEntities.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
@@ -242,6 +243,11 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.BEDROCKBREAKER && !ep.isSneaking()) {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropItemFromInventory();
+			return true;
+		}
+		if (m == MachineRegistry.EMP) {
+			TileEntityEMP tp = (TileEntityEMP)te;
+			tp.updateListing();
 			return true;
 		}
 		if (m == MachineRegistry.DISPLAY && ReikaDyeHelper.isDyeItem(is)) {

@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Items.ItemDebug;
+import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.GuiRegistry;

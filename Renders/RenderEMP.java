@@ -19,19 +19,19 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
+import Reika.RotaryCraft.Models.ModelEMP;
+import Reika.RotaryCraft.TileEntities.TileEntityEMP;
 
-public class RenderDetector extends RotaryTERenderer
+public class RenderEMP extends RotaryTERenderer
 {
 
-	private ModelDetector DetectorModel = new ModelDetector();
-	//private ModelDetectorV DetectorModelV = new ModelDetectorV();
+	private ModelEMP EMPModel = new ModelEMP();
+	//private ModelEMPV EMPModelV = new ModelEMPV();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityPlayerDetectorAt(TileEntityPlayerDetector tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityEMPAt(TileEntityEMP tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -40,11 +40,14 @@ public class RenderDetector extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelDetector var14;
-		var14 = DetectorModel;
-		//ModelDetectorV var15;
-		//var14 = this.DetectorModelV;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/detectortex.png");
+		ModelEMP var14;
+		var14 = EMPModel;
+		//ModelEMPV var15;
+		//var14 = this.EMPModelV;
+		if (tile.isLoading())
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/emptex2.png");
+		else
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/emptex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -52,6 +55,11 @@ public class RenderDetector extends RotaryTERenderer
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		if (!tile.isInWorld()) {
+			GL11.glScaled(1.125, 1.125, 1.125);
+			GL11.glTranslatef(0, -0.25F, 0);
+			GL11.glRotatef(-90, 0, 1, 0);
+		}
 		int var11 = 0;	 //used to rotate the model about metadata
 
 
@@ -73,13 +81,20 @@ public class RenderDetector extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityPlayerDetectorAt((TileEntityPlayerDetector)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+			this.renderTileEntityEMPAt((TileEntityEMP)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+			if (((TileEntityEMP)tile).isLoading())
+				this.renderCharging((TileEntityEMP)tile, par2, par4, par6);
+		}
+	}
+
+	private void renderCharging(TileEntityEMP te, double par2, double par4, double par6) {
+
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "detectortex.png";
+		return "emptex.png";
 	}
 }

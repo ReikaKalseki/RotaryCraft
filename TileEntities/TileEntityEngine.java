@@ -1169,10 +1169,16 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	{
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", writex, writex2, writez, writez2));
+
 		timer.updateTicker("temperature");
-		this.getType();
-		power = torque*omega;
+		if (this.isShutdown()) {
+			omega = torque = 0;
+			power = 0;
+		}
+		else {
+			this.getType();
+			power = torque*omega;
+		}
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 			if (te != null) {
@@ -1661,5 +1667,13 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		else //never happens
 			return 1;
+	}
+
+	@Override
+	public void onEMP() {
+		if (type.isEMPImmune())
+			return;
+		else
+			super.onEMP();
 	}
 }

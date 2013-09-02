@@ -196,4 +196,7 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 			}
 		}
 	}
+
+	@Override
+	public void onEMP() {}
 }

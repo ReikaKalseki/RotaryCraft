@@ -483,4 +483,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public void onEMP() {
+		if (!coil && !worm)
+			super.onEMP();
+	}
 }

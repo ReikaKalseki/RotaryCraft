@@ -293,4 +293,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		return finalphi;
 	}
 
+	@Override
+	public void onEMP() {}
+
 }

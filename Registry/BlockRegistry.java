@@ -15,6 +15,7 @@ import net.minecraft.item.ItemBlock;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockBCEngine;
@@ -116,7 +117,7 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public String getUnlocalizedName() {
-		return ReikaJavaLibrary.stripSpaces(this.getObjectClass().toString());
+		return ReikaStringParser.stripSpaces(this.getObjectClass().toString());
 	}
 
 	public String getBlockVariableName() {

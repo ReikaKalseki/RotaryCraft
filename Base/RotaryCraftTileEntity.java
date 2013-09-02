@@ -121,6 +121,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		super.writeToNBT(NBT);
 		NBT.setFloat("phi", phi);
 		NBT.setInteger("tick", tickcount);
+
+		NBT.setBoolean("emp", disabled);
 	}
 
 	/**
@@ -132,6 +134,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		super.readFromNBT(NBT);
 		phi = NBT.getFloat("phi");
 		tickcount = NBT.getInteger("tick");
+
+		disabled = NBT.getBoolean("emp");
 	}
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
@@ -185,8 +189,14 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return disabled;
 	}
 
-	public void shutdown() {
+	public void onEMP() {
 		disabled = true;
+		if (this instanceof TileEntityIOMachine) {
+			TileEntityIOMachine io = (TileEntityIOMachine)this;
+			io.power = 0;
+			io.torque = 0;
+			io.omega = 0;
+		}
 	}
 
 	public int getTextureStateForSide(int s) {

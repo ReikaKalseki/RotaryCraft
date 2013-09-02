@@ -420,10 +420,13 @@ public class TileEntityLiquidConverter extends RotaryCraftTileEntity implements 
 	}
 
 	public LiquidRegistry getNextLiquid() {
-		if (liquid.ordinal() == LiquidRegistry.liquidList.length-1)
-			return LiquidRegistry.liquidList[0];
-		else
-			return LiquidRegistry.liquidList[liquid.ordinal()+1];
+		int i = liquid.ordinal();
+		i++;
+		if (i == LiquidRegistry.ETHANOL.ordinal())
+			i++;
+		if (i >= LiquidRegistry.liquidList.length-1)
+			i = 0;
+		return LiquidRegistry.liquidList[i];
 	}
 
 }

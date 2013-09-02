@@ -356,4 +356,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public void onEMP() {}
 }

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -17,17 +18,23 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.liquids.LiquidStack;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.ItemReq;
+import Reika.DragonAPI.Libraries.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
+import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -160,7 +167,7 @@ public class GuiHandbook extends GuiScreen
 				screen = HandbookRegistry.TERMS.getScreen();
 				break;
 			case 1:
-				screen = HandbookRegistry.MISC.getScreen();
+				screen = HandbookRegistry.MISCDESC.getScreen();
 				break;
 			case 2:
 				screen = HandbookRegistry.ENGINEDESC.getScreen();
@@ -169,7 +176,7 @@ public class GuiHandbook extends GuiScreen
 				screen = HandbookRegistry.TRANSDESC.getScreen();
 				break;
 			case 4:
-				screen = HandbookRegistry.PROCMACHINEDESC.getScreen();
+				screen = HandbookRegistry.PRODMACHINEDESC.getScreen();
 				break;
 			case 5:
 				screen = HandbookRegistry.TOOLDESC.getScreen();
@@ -224,6 +231,8 @@ public class GuiHandbook extends GuiScreen
 			return 1;
 		if (h == HandbookRegistry.BAITBOX && subpage == 1)
 			return 9;
+		if (h == HandbookRegistry.TERRA && subpage == 1)
+			return 10;
 		if (subpage == 1)
 			return 1;
 		if (h == HandbookRegistry.STEELINGOT)
@@ -335,6 +344,43 @@ public class GuiHandbook extends GuiScreen
 			fontRenderer.drawString("Attractor", posX+110, posY+30, 0);
 			fontRenderer.drawString("Repellent", posX+110, posY+48, 0);
 		}
+		if (h == HandbookRegistry.TERRA && subpage == 1) {
+			RenderItem ri = new RenderItem();
+			ArrayList<Object[]> transforms = TileEntityTerraformer.getTransformList();
+			int time = 2000000000;
+			int k = (int)((System.nanoTime()/time)%transforms.size());
+			String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
+			mc.renderEngine.bindTexture(tex);
+			Object[] data = transforms.get(k);
+			BiomeGenBase from = (BiomeGenBase)data[0];
+			BiomeGenBase from_ = from;
+			from = ReikaBiomeHelper.getParentBiomeType(from);
+			BiomeGenBase to = (BiomeGenBase)data[1];
+			this.drawTexturedModalRect(posX+16, posY+22, 32*(from.biomeID%8), 32*(from.biomeID/8), 32, 32);
+			this.drawTexturedModalRect(posX+80, posY+22, 32*(to.biomeID%8), 32*(to.biomeID/8), 32, 32);
+			String name = ReikaStringParser.splitCamelCase(from_.biomeName);
+			String[] words = name.split(" ");
+			for (int i = 0; i < words.length; i++) {
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, words[i], posX+33, posY+57+i*fontRenderer.FONT_HEIGHT, 0);
+			}
+			String name2 = ReikaStringParser.splitCamelCase(to.biomeName);
+			String[] words2 = name2.split(" ");
+			for (int i = 0; i < words2.length; i++) {
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, words2[i], posX+97, posY+57+i*fontRenderer.FONT_HEIGHT, 0);
+			}
+			fontRenderer.drawString(String.format("%.3f kW", (Integer)data[2]/1000D), posX+116, posY+22, 0);
+			LiquidStack liq = (LiquidStack)data[3];
+			if (liq != null) {
+				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);
+				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
+			}
+			List<ItemReq> li = (List<ItemReq>)data[4];
+			for (int i = 0; i < li.size(); i++) {
+				ItemStack is = li.get(i).asItemStack();
+				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is, posX+190, posY+8+i*18);
+			}
+		}
 	}
 
 	@Override
@@ -381,6 +427,9 @@ public class GuiHandbook extends GuiScreen
 			break;
 		case 9:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguik.png";
+			break;
+		case 10:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguil.png";
 			break;
 		default:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui

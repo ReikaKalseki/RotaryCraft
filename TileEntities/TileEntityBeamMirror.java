@@ -13,4 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityBeamMirror extends TileEntity {
 
+	public void onEMP() {}
+
 }

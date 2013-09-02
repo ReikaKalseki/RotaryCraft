@@ -150,4 +150,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return side != EnumLook.DOWN;
 	}
+
+	@Override
+	public void onEMP() {}
 }

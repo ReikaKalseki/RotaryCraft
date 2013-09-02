@@ -17,12 +17,15 @@ import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.ModInteract.BCMachineHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiLiquidConverter extends GuiNonPoweredMachine {
 
-	TileEntityLiquidConverter liquid;
+	private TileEntityLiquidConverter liquid;
+	private LiquidRegistry current;
+	private boolean forge;
 
 	public GuiLiquidConverter(EntityPlayer ep, TileEntityLiquidConverter te) {
 		super(new CoreContainer(ep, te), te);
@@ -30,6 +33,8 @@ public class GuiLiquidConverter extends GuiNonPoweredMachine {
 		xSize = 176;
 		ySize = 78;
 		this.ep = ep;
+		current = te.getLiquid();
+		forge = te.isToForge();
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -39,12 +44,12 @@ public class GuiLiquidConverter extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		buttonList.add(new ItemIconButton(0, j+16, k+20, 0, liquid.getLiquid().getForgeLiquid().asItemStack(), itemRenderer));
+		buttonList.add(new ItemIconButton(0, j+16, k+20, 0, current.getForgeLiquid().asItemStack(), itemRenderer));
 
-		if (liquid.isToForge())
+		if (forge)
 			buttonList.add(new ItemIconButton(1, j+16, k+24+28, 0, BCMachineHandler.getInstance().getTank(), itemRenderer));
 		else {
-			switch(liquid.getLiquid()) {
+			switch(current) {
 			case WATER:
 			case LAVA:
 				buttonList.add(new ItemIconButton(1, j+16, k+24+28, 0, MachineRegistry.PIPE.getCraftedProduct(), itemRenderer));
@@ -64,9 +69,11 @@ public class GuiLiquidConverter extends GuiNonPoweredMachine {
 		super.actionPerformed(b);
 		if (b.id == 0) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.LIQUID.getMinValue(), liquid, ep, liquid.getNextLiquid().ordinal());
+			current = liquid.getNextLiquid();
 		}
 		else if (b.id == 1) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.LIQUID.getMinValue()+1, liquid, ep, 1-liquid.getToForgeAsInt());
+			forge = !forge;
 		}
 
 		this.initGui();
@@ -81,6 +88,8 @@ public class GuiLiquidConverter extends GuiNonPoweredMachine {
 
 		fontRenderer.drawString("Target Liquid Type", 40, 24, 0);
 		fontRenderer.drawString("Target Pipe System", 40, 56, 0);
+
+		//ReikaJavaLibrary.pConsole(current);
 	}
 
 	@Override

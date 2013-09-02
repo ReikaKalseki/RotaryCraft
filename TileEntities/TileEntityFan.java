@@ -446,4 +446,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public void onEMP() {}
 }

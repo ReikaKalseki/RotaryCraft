@@ -16,6 +16,7 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemLiquid;
@@ -71,6 +72,7 @@ public class RotaryRegistration {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			String label = "RC"+MachineRegistry.machineList[i].getName().toLowerCase().replaceAll("\\s","");
 			GameRegistry.registerTileEntity(MachineRegistry.machineList[i].getTEClass(), label);
+			ReikaJavaLibrary.initClass(MachineRegistry.machineList[i].getTEClass());
 		}
 	}
 

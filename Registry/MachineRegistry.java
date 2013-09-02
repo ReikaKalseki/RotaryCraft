@@ -141,6 +141,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWoodcutter;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
 public enum MachineRegistry {
@@ -225,7 +226,7 @@ public enum MachineRegistry {
 	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
-	EMP(				"EMP Machine",				BlockMachine.class,			TileEntityEMP.class,				5),
+	EMP(				"EMP Machine",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
 	LINEBUILDER(		"Block Ram",				BlockDMMachine.class,		TileEntityLineBuilder.class,		10, "RenderLineBuilder"),
 	DEAD(				"Dead Machine",				BlockDeadMachine.class,		TileEntityDeadMachine.class,		0),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
@@ -486,6 +487,8 @@ public enum MachineRegistry {
 			return 0.4375F;
 		if (this == BLOCKCANNON)
 			return 0.9375F;
+		if (this == EMP)
+			return 0.5F;
 		return 1;
 	}
 
@@ -904,33 +907,57 @@ public enum MachineRegistry {
 	}
 
 	public void addRecipe(IRecipe ir) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
 	}
 
 	public void addRecipe(ItemStack is, Object... obj) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
+			}
+		}
 	}
 
 	public void addCrafting(Object... obj) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
+			}
+		}
 	}
 
 	public void addSizedCrafting(int num, Object... obj) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			}
+		}
 	}
 
 	public void addMetaCrafting(int metadata, Object... obj) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+			}
+		}
 	}
 
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
+			}
+		}
 	}
 
 	public TileEntity createTEInstanceForRender() {

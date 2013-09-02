@@ -224,8 +224,12 @@ public enum EnumEngineType {
 			return 0;
 		}
 	}
-	
+
 	public ItemStack getCraftedProduct() {
 		return MachineRegistry.ENGINE.getCraftedMetadataProduct(this.ordinal());
+	}
+
+	public boolean isEMPImmune() {
+		return this == HYDRO || this == WIND;
 	}
 }

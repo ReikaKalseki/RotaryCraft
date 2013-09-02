@@ -229,4 +229,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	}
 
+	@Override
+	public void onEMP() {}
+
 }

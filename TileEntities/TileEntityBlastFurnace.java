@@ -419,4 +419,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	public void overheat(World world, int x, int y, int z) {
 
 	}
+
+	@Override
+	public void onEMP() {}
 }

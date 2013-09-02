@@ -303,7 +303,7 @@ public enum HandbookRegistry {
 		if (m == MachineRegistry.ENGINE)
 			return getEngineScreen(te);
 		if (m == MachineRegistry.ADVANCEDGEARS)
-			return TRANSDESC.ordinal()+1;
+			return TRANSDESC.getBaseScreen()+1;
 		for (int i = ENGINEDESC.ordinal(); i < TOOLDESC.ordinal(); i++) {
 			if (tabList[i].machine == m)
 				return tabList[i].getScreen();
@@ -330,7 +330,7 @@ public enum HandbookRegistry {
 	}
 
 	public static HandbookRegistry[] getTransTabs() {
-		int size = PROCMACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
+		int size = PRODMACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
 		HandbookRegistry[] tabs = new HandbookRegistry[size];
 		System.arraycopy(tabList, TRANSDESC.ordinal()+1, tabs, 0, size);
 		return tabs;
@@ -475,12 +475,14 @@ public enum HandbookRegistry {
 
 	private static int getEnginePage(TileEntity te) {
 		EnumEngineType e = ((TileEntityEngine)te).type;
-		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.ordinal())*8;
+		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.getBaseScreen())*8;
 	}
 
 	private static int getEngineScreen(TileEntity te) {
 		EnumEngineType e = ((TileEntityEngine)te).type;
-		return ENGINEDESC.ordinal()+(1+e.ordinal())/8;
+		int ei = (1+e.ordinal())/8;
+		ReikaJavaLibrary.pConsole(ENGINEDESC.getBaseScreen()+ei);
+		return ENGINEDESC.getBaseScreen()+ei;
 	}
 
 	public String getTabImageFile() {
@@ -632,6 +634,8 @@ public enum HandbookRegistry {
 		if (this == CANOLA)
 			return false;
 		if (this == FLAKES)
+			return false;
+		if (this == SILVERINGOT)
 			return false;
 		return true;
 	}
@@ -786,8 +790,6 @@ public enum HandbookRegistry {
 	public boolean isSmelting() {
 		if (this == ETHANOL)
 			return true;
-		if (this == SILVERINGOT)
-			return true;
 		return false;
 	}
 
@@ -796,8 +798,6 @@ public enum HandbookRegistry {
 			return null;
 		if (this == ETHANOL)
 			return ItemRegistry.ETHANOL.getStackOf();
-		if (this == SILVERINGOT)
-			return ItemStacks.silveringot;
 		return ItemStacks.barrel;
 	}
 
@@ -852,6 +852,8 @@ public enum HandbookRegistry {
 			return ItemRegistry.RAILGUN.getStackOf();
 		if (this == CANOLA)
 			return ItemRegistry.CANOLA.getStackOf();
+		if (this == SILVERINGOT)
+			return ItemStacks.silveringot;
 		return null;
 	}
 

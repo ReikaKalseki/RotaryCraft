@@ -293,4 +293,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 	public int getRedstoneOverride() {
 		return Container.calcRedstoneFromInventory(this);
 	}
+
+	@Override
+	public void onEMP() {}
 }

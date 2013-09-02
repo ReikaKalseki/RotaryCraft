@@ -68,4 +68,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public final AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
 	}
+
+	@Override
+	public final void onEMP() {}
 }

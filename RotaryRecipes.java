@@ -240,6 +240,12 @@ public class RotaryRecipes {
 		MachineRegistry.LIQUIDCONVERTER.addCrafting("SSS", "pCp", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.impeller, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe);
 
 		MachineRegistry.FUELENHANCER.addCrafting("PGP", "gMg", "PGP", 'G', Block.thinGlass, 'M', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'g', Item.ingotGold);
+
+		MachineRegistry.LINEBUILDER.addCrafting("sbs", "sps", "PgP", 'g', ItemStacks.gearunit, 'p', Block.pistonBase, 'P', ItemStacks.basepanel, 'b', ItemStacks.bedingot, 's', ItemStacks.steelingot);
+
+		MachineRegistry.TERRAFORMER.addCrafting("SsS", "ici", "PiP", 'i', ItemStacks.impeller, 'S', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'P', ItemStacks.basepanel, 's', ItemStacks.screen);
+
+		MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', ItemStacks.basepanel, 'n', Item.netherStar, 'G', ItemStacks.goldcoil, 'D', Block.blockDiamond, 's', ItemStacks.shaftcore);
 	}
 
 	private static void addCraftItems() {
@@ -453,6 +459,10 @@ public class RotaryRecipes {
 		ItemRegistry.NVG.addRecipe("scs", "ese", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'e', Item.eyeOfEnder);
 
 		ItemRegistry.IOGOGGLES.addRecipe("scs", "ese", 's', ItemStacks.steelingot, 'c', Item.enderPearl, 'e', Item.redstone);
+
+		ItemRegistry.KEY.addRecipe("s", "s", "P", 'P', ItemStacks.basepanel, 's', ItemStacks.steelingot);
+
+		ItemRegistry.TILESELECTOR.addRecipe(" l ", "srs", "ses", 'e', Item.enderPearl, 'r', Item.redstone, 'l', ReikaItemHelper.lapisDye, 's', ItemStacks.steelingot);
 
 	}
 

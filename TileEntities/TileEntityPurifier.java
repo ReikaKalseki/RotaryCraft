@@ -276,4 +276,7 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 		return temperature;
 	}
 
+	@Override
+	public void onEMP() {}
+
 }

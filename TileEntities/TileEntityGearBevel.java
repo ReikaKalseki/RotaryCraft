@@ -380,4 +380,7 @@ public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiC
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
+	@Override
+	public void onEMP() {}
 }

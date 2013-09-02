@@ -479,4 +479,7 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 			}
 		}
 	}
+
+	@Override
+	public void onEMP() {}
 }

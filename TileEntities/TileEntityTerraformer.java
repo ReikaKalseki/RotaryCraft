@@ -262,42 +262,42 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	static {
-		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.plains, 0, LiquidDictionary.getLiquid("Water", 30), new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.forest, 0, LiquidDictionary.getLiquid("Water", 10), new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.jungle, 0, LiquidDictionary.getLiquid("Water", 50), new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 0, 0.6F), new ItemReq(Block.tallGrass.blockID, 2, 0.3F));
+		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.plains, 65536, LiquidDictionary.getLiquid("Water", 30), new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.forest, 131072, LiquidDictionary.getLiquid("Water", 10), new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.jungle, 262144, LiquidDictionary.getLiquid("Water", 50), new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 0, 0.6F), new ItemReq(Block.tallGrass.blockID, 2, 0.3F));
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.swampland, 0, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F));
-		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.ocean, 0, LiquidDictionary.getLiquid("Water", 500));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.swampland, 32768, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F));
+		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.ocean, 131072, LiquidDictionary.getLiquid("Water", 500));
 		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.frozenOcean, 0, null, new ItemReq(Block.ice, 1));
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.extremeHills, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.05F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.extremeHills, 65536, null, new ItemReq(Block.sapling.blockID, 0, 0.05F));
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.icePlains, 0, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
-		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.7F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.icePlains, 8192, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
+		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.plains, 524288, null, new ItemReq(Block.tallGrass.blockID, 1, 0.7F));
 
-		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.mushroomIsland, 0, null, new ItemReq(Block.dirt, 1), new ItemReq(Block.mycelium, 1), new ItemReq(Block.mushroomRed, 0.9F), new ItemReq(Block.mushroomBrown, 0.9F)); //?
+		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.mushroomIsland, 1048576, null, new ItemReq(Block.dirt, 1), new ItemReq(Block.mycelium, 1), new ItemReq(Block.mushroomRed, 0.9F), new ItemReq(Block.mushroomBrown, 0.9F)); //?
 
-		addBiomeTransformation(BiomeGenBase.mushroomIsland, BiomeGenBase.extremeHills, 0, null, new ItemReq(Block.grass, 0.125F), new ItemReq(Block.sapling.blockID, 0, 0.05F), new ItemReq(Block.tallGrass.blockID, 1, 0.25F)); //?
+		addBiomeTransformation(BiomeGenBase.mushroomIsland, BiomeGenBase.extremeHills, 262144, null, new ItemReq(Block.grass, 0.125F), new ItemReq(Block.sapling.blockID, 0, 0.05F), new ItemReq(Block.tallGrass.blockID, 1, 0.25F)); //?
 
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 0, null, new ItemReq(Block.blockSnow, 0.3F), new ItemReq(Block.sapling.blockID, 1, 0.25F));
-		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.icePlains, 0, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
-		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.frozenOcean, 0, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.ice, 1));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 131072, null, new ItemReq(Block.blockSnow, 0.3F), new ItemReq(Block.sapling.blockID, 1, 0.25F));
+		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.icePlains, 65536, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
+		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.frozenOcean, 32768, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.ice, 1));
 
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.desert, 0, null, new ItemReq(Block.sand, 1), new ItemReq(Block.sandStone, 0.5F), new ItemReq(Block.cactus, 0.1F));
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
-		addBiomeTransformation(BiomeGenBase.jungle, BiomeGenBase.forest, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.desert, 131072, null, new ItemReq(Block.sand, 1), new ItemReq(Block.sandStone, 0.5F), new ItemReq(Block.cactus, 0.1F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.plains, 262144, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
+		addBiomeTransformation(BiomeGenBase.jungle, BiomeGenBase.forest, 65536, null, new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
 
-		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F), new ItemReq(Block.dirt, 0.8F));
-		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.swampland, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F), new ItemReq(Block.grass, 0.125F));
+		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.plains, 262144, null, new ItemReq(Block.tallGrass.blockID, 1, 0.8F), new ItemReq(Block.dirt, 0.8F));
+		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.swampland, 524288, null, new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F), new ItemReq(Block.grass, 0.125F));
 
-		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.ocean, 0, null);
-		addBiomeTransformation(BiomeGenBase.extremeHills, BiomeGenBase.plains, 0, null, new ItemReq(Block.tallGrass.blockID, 1, 0.6F));
+		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.ocean, 524288, null);
+		addBiomeTransformation(BiomeGenBase.extremeHills, BiomeGenBase.plains, 262144, null, new ItemReq(Block.tallGrass.blockID, 1, 0.6F));
 
-		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.forest, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 2, 0.1F));
+		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.forest, 131072, null, new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 2, 0.1F));
 
-		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.taiga, 0, null, new ItemReq(Block.sapling.blockID, 1, 0.4F));
-		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.icePlains, 0, null, new ItemReq(Block.sapling.blockID, 0, 0.05F), new ItemReq(Block.dirt, 1), new ItemReq(Block.grass, 0.125F));
+		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.taiga, 65536, null, new ItemReq(Block.sapling.blockID, 1, 0.4F));
+		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.icePlains, 65536, null, new ItemReq(Block.sapling.blockID, 0, 0.05F), new ItemReq(Block.dirt, 1), new ItemReq(Block.grass, 0.125F));
 	}
 
 	public BiomeGenBase getTarget() {
@@ -369,5 +369,33 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	/** Returns the valid transformations registered to the terraformer.
+	 * Return format: Object[5]:<br>
+	 * O[0] = Start Biome<br>
+	 * O[1] = Target Biome<br>
+	 * O[2] = Required Power<br>
+	 * O[3] = Required Liquid (as LiquidStack)<br>
+	 * O[4] = Required items (as List of ItemReq) */
+	public static ArrayList<Object[]> getTransformList() {
+		ArrayList<Object[]> li = new ArrayList<Object[]>();
+		for (int i = 0; i < BiomeGenBase.biomeList.length; i++) {
+			BiomeGenBase start = BiomeGenBase.biomeList[i];
+			if (transforms.hasNode(start)) {
+				List<BiomeGenBase> tgs = transforms.getChildren(start);
+				for (int j = 0; j < tgs.size(); j++) {
+					BiomeGenBase to = tgs.get(j);
+					Object[] o = new Object[5];
+					o[0] = start;
+					o[1] = to;
+					o[2] = powerReqs.get(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{start, to}));
+					o[3] = liquidReqs.get(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{start, to}));
+					o[4] = itemReqs.get(ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{start, to}));
+					li.add(o);
+				}
+			}
+		}
+		return li;
 	}
 }

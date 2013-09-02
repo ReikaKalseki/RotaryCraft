@@ -161,6 +161,10 @@ public final class HandbookAuxData {
 				ReikaGuiAPI.instance.drawItemStack(ri, f, ItemStacks.tar, dx+145, dy+28);
 			}
 		}
+		else if (h == HandbookRegistry.SILVERINGOT) {
+			ReikaGuiAPI.instance.drawItemStack(ri, f, ItemStacks.silverflakes, dx+87, dy+28);
+			ReikaGuiAPI.instance.drawItemStack(ri, f, ItemStacks.silveringot, dx+145, dy+28);
+		}
 		else if (h == HandbookRegistry.SALT) {
 			ReikaGuiAPI.instance.drawItemStack(ri, f, new ItemStack(Item.bucketWater), dx+90, dy+28);
 			ReikaGuiAPI.instance.drawItemStack(ri, f, ItemStacks.salt, dx+166, dy+28);
@@ -218,11 +222,5 @@ public final class HandbookAuxData {
 			}
 			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 		}
-		//else if (h == HandbookRegistry.SCRAP) {
-		//	List<IRecipe> li = new ArrayList<IRecipe>();
-		//	li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.ironscrap));
-		//	li.addAll(ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), ItemStacks.scrap));
-		//	ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
-		//}
 	}
 }

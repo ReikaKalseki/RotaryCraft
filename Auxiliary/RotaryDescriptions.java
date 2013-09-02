@@ -112,6 +112,7 @@ public final class RotaryDescriptions {
 		machineNotes.put(m, data);
 	}
 
+	/** Call this from the SERVER side! */
 	public static void reload() {
 		loadNumericalData();
 
@@ -128,6 +129,10 @@ public final class RotaryDescriptions {
 		loadData();
 	}
 
+	private static void addEntry(HandbookRegistry h, String sg) {
+		data.put(h, sg);
+	}
+
 	public static void loadData() {
 		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs();
 
@@ -142,7 +147,7 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < parenttabs.size(); i++) {
 			HandbookRegistry h = parenttabs.get(i);
 			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase().substring(0, h.name().length()-4));
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < machinetabs.size(); i++) {
@@ -159,7 +164,7 @@ public final class RotaryDescriptions {
 				aux += "\nNote: Dummied Out";
 			}
 
-			data.put(h, desc);
+			addEntry(h, desc);
 			notes.put(h, aux);
 		}
 
@@ -167,32 +172,32 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = transtabs[i];
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase());
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < tooltabs.length; i++) {
 			HandbookRegistry h = tooltabs[i];
 			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase());
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < resourcetabs.length; i++) {
 			HandbookRegistry h = resourcetabs[i];
 			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase());
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < misctabs.length; i++) {
 			HandbookRegistry h = misctabs[i];
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase());
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < infotabs.length; i++) {
 			HandbookRegistry h = infotabs[i];
 			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase());
 			desc = String.format(desc, infoData.get(h));
-			data.put(h, desc);
+			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < enginetabs.length; i++) {
