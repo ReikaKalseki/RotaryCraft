@@ -406,6 +406,14 @@ public enum HandbookRegistry {
 		return false;
 	}
 
+	public boolean isEngine() {
+		return (this.getParent() == ENGINEDESC);
+	}
+
+	public boolean isTrans() {
+		return (this.getParent() == TRANSDESC);
+	}
+
 	public MachineRegistry getMachine() {
 		return machine;
 	}
@@ -451,6 +459,10 @@ public enum HandbookRegistry {
 
 	public boolean hasOffset() {
 		return offset > -1;
+	}
+
+	public int getOffset() {
+		return offset;
 	}
 
 	public static int getPage(MachineRegistry m, TileEntity te) {

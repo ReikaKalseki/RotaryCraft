@@ -41,7 +41,18 @@ public final class HandbookAuxData {
 	public static void drawPage(FontRenderer f, int screen, int page, int subpage, int dx, int dy) {
 		RenderItem ri = new RenderItem();
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-		if (h.isCrafting()) {
+		if (h.isMachine() || h.isTrans() || h.isEngine()) {
+			List<ItemStack> out = h.getCrafting();
+			if (out == null || out.size() <= 0)
+				return;
+			if (h.isCustomRecipe()) {
+				ReikaGuiAPI.instance.drawCustomRecipes(ri, f, out, getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
+			}
+			else {
+				ReikaGuiAPI.instance.drawCustomRecipes(ri, f, out, CraftingManager.getInstance().getRecipeList(), dx+72-18, dy+18, dx-1620, dy+32);
+			}
+		}
+		else if (h.isCrafting()) {
 			List<ItemStack> out = h.getCrafting();
 			if (out == null || out.size() <= 0)
 				return;

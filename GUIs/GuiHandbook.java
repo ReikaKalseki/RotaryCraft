@@ -12,11 +12,15 @@ package Reika.RotaryCraft.GUIs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.liquids.LiquidStack;
@@ -29,11 +33,16 @@ import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Libraries.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.ReikaStringParser;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
+import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 
 public class GuiHandbook extends GuiScreen
@@ -260,6 +269,10 @@ public class GuiHandbook extends GuiScreen
 				return 7;
 		}
 
+		if (h.isMachine() || h.isEngine() || h.isTrans()) {
+			return 11;
+		}
+
 		return 0;
 	}
 
@@ -286,6 +299,7 @@ public class GuiHandbook extends GuiScreen
 		int posY = (height - ySize) / 2-8;
 
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+
 		if (h == HandbookRegistry.TERMS) {
 			int xc = posX+xSize/2; int yc = posY+43; int r = 35;
 			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
@@ -431,6 +445,9 @@ public class GuiHandbook extends GuiScreen
 		case 10:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguil.png";
 			break;
+		case 11:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguim.png";
+			break;
 		default:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
 			break;
@@ -461,7 +478,85 @@ public class GuiHandbook extends GuiScreen
 		if (subpage == 0)
 			this.drawRecipes();
 
-		if (!(this instanceof GuiHandbookPage))
+		if (!(this instanceof GuiHandbookPage)) {
 			this.drawTabIcons();
+
+			this.drawMachineRender();
+		}
+	}
+
+	private void drawMachineRender() {
+		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+
+		double x = 252;
+		double y = ySize/2-64;
+		float fscale = 22.5F;
+		float q = 12.5F + fscale*(float)Math.sin(System.nanoTime()/1000000000D); //wobble
+		q = fscale;
+		float p8 = 0;
+		MaterialRegistry[] mats = MaterialRegistry.values();
+		int mat = (int)((System.nanoTime()/2000000000)%mats.length);
+
+		if (h.isMachine() || h.isEngine() || h.isTrans()) {
+			MachineRegistry m = h.getMachine();
+			if (m != null) {
+				int r = (int)(System.nanoTime()/20000000)%360;
+				TileEntity te = m.createTEInstanceForRender();
+				if (h.isEngine() && h != HandbookRegistry.SOLAR) {
+					((TileEntityEngine)te).type = EnumEngineType.engineList[h.getOffset()];
+					p8 = -1000F*(h.getOffset()+1);
+				}
+				if (h == HandbookRegistry.SHAFT) {
+					p8 = -1000F*(mat+1);
+				}
+				if (h == HandbookRegistry.FLYWHEEL) {
+					int tick = (int)((System.nanoTime()/2000000000)%RotaryNames.flywheelItemNames.length);
+					p8 = 500-1000F*(tick+1);
+				}
+				if (h == HandbookRegistry.GEARBOX) {
+					p8 = -1000F*(mat+1);
+				}
+				if (h == HandbookRegistry.WORM) {
+					p8 = -1000F;
+				}
+				if (h == HandbookRegistry.CVT) {
+					p8 = -2000F;
+				}
+				if (h == HandbookRegistry.COIL) {
+					p8 = -3000F;
+				}
+				double sc = 48;
+				if (m.hasModel()) {
+					double dx = -x;
+					double dy = -y-21;
+					double dz = 0;
+					GL11.glTranslated(-dx, -dy, -dz);
+					GL11.glScaled(sc, -sc, sc);
+					GL11.glRotatef(q, 1, 0, 0);
+					GL11.glRotatef(r, 0, 1, 0);
+					TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, 0, -0.5, p8);
+					GL11.glRotatef(-r, 0, 1, 0);
+					GL11.glRotatef(-q, 1, 0, 0);
+					GL11.glTranslated(-dx, -dy, -dz);
+					GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
+				}
+				else {
+					double dx = x;
+					double dy = y;
+					double dz = 0;
+					GL11.glTranslated(dx, dy, dz);
+					GL11.glScaled(sc, -sc, sc);
+					GL11.glRotatef(q, 1, 0, 0);
+					GL11.glRotatef(r, 0, 1, 0);
+					RenderBlocks rb = new RenderBlocks();
+					Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+					rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
+					GL11.glRotatef(-r, 0, 1, 0);
+					GL11.glRotatef(-q, 1, 0, 0);
+					GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
+					GL11.glTranslated(-dx, -dy, -dz);
+				}
+			}
+		}
 	}
 }
