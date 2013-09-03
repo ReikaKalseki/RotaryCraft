@@ -76,6 +76,8 @@ public class GuiHandbook extends GuiScreen
 	private static int staticwidth;
 	private static int staticheight;
 
+	private float renderq = 22.5F;
+
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
 	{
 		//super();
@@ -141,6 +143,7 @@ public class GuiHandbook extends GuiScreen
 			screen = 0;
 			page = 0;
 			subpage = 0;
+			renderq = 22.5F;
 			this.initGui();
 			//this.refreshScreen();
 			return;
@@ -151,6 +154,7 @@ public class GuiHandbook extends GuiScreen
 				page = 0;
 				subpage = 0;
 			}
+			renderq = 22.5F;
 			this.initGui();
 			//this.refreshScreen();
 			return;
@@ -166,6 +170,7 @@ public class GuiHandbook extends GuiScreen
 				page = 0;
 				subpage = 0;
 			}
+			renderq = 22.5F;
 			this.initGui();
 			//this.refreshScreen();
 			return;
@@ -197,6 +202,7 @@ public class GuiHandbook extends GuiScreen
 			this.initGui();
 			page = 0;
 			subpage = 0;
+			renderq = 22.5F;
 			return;
 		}
 		if (button.id == 13) {
@@ -215,6 +221,7 @@ public class GuiHandbook extends GuiScreen
 		i = 0;
 		page = button.id;
 		subpage = 0;
+		renderq = 22.5F;
 		this.initGui();
 	}
 
@@ -357,6 +364,7 @@ public class GuiHandbook extends GuiScreen
 			this.drawTexturedModalRect(posX+88-UNIT/2, posY+41-UNIT/2, u, v, UNIT*2, UNIT*2);
 			fontRenderer.drawString("Attractor", posX+110, posY+30, 0);
 			fontRenderer.drawString("Repellent", posX+110, posY+48, 0);
+			//RenderManager.instance.renderEntityWithPosYaw(new EntityCreeper(Minecraft.getMinecraft().theWorld), 120, 60, 0, 0, 0);
 		}
 		if (h == HandbookRegistry.TERRA && subpage == 1) {
 			RenderItem ri = new RenderItem();
@@ -480,22 +488,33 @@ public class GuiHandbook extends GuiScreen
 
 		if (!(this instanceof GuiHandbookPage)) {
 			this.drawTabIcons();
-
-			this.drawMachineRender();
 		}
+
+		if (subpage == 0)
+			this.drawMachineRender(posX, posY);
 	}
 
-	private void drawMachineRender() {
+	private void drawMachineRender(int posX, int posY) {
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-
-		double x = 252;
-		double y = ySize/2-64;
-		float fscale = 22.5F;
-		float q = 12.5F + fscale*(float)Math.sin(System.nanoTime()/1000000000D); //wobble
-		q = fscale;
+		double x = posX+167;
+		double y = posY+44;
+		//float q = 12.5F + fscale*(float)Math.sin(System.nanoTime()/1000000000D); //wobble
+		//ReikaJavaLibrary.pConsole(y-ReikaGuiAPI.instance.getMouseScreenY(height));
+		int mx = ReikaGuiAPI.instance.getMouseScreenX(width);
+		int my = ReikaGuiAPI.instance.getMouseScreenY(height);
+		if (Mouse.isButtonDown(0) && Math.abs(mx/2-x) < 32 && Math.abs(my/2-y) < 64) {
+			int mvy = Mouse.getDY();
+			if (mvy < 0 && renderq < 45) {
+				renderq++;
+			}
+			if (mvy > 0 && renderq > -45) {
+				renderq--;
+			}
+		}
+		y -= 8*Math.sin(Math.abs(Math.toRadians(renderq)));
 		float p8 = 0;
 		MaterialRegistry[] mats = MaterialRegistry.values();
-		int mat = (int)((System.nanoTime()/2000000000)%mats.length);
+		int mat = (int)((System.nanoTime()/SECOND)%mats.length);
 
 		if (h.isMachine() || h.isEngine() || h.isTrans()) {
 			MachineRegistry m = h.getMachine();
@@ -510,7 +529,7 @@ public class GuiHandbook extends GuiScreen
 					p8 = -1000F*(mat+1);
 				}
 				if (h == HandbookRegistry.FLYWHEEL) {
-					int tick = (int)((System.nanoTime()/2000000000)%RotaryNames.flywheelItemNames.length);
+					int tick = (int)((System.nanoTime()/SECOND)%RotaryNames.flywheelItemNames.length);
 					p8 = 500-1000F*(tick+1);
 				}
 				if (h == HandbookRegistry.GEARBOX) {
@@ -532,11 +551,11 @@ public class GuiHandbook extends GuiScreen
 					double dz = 0;
 					GL11.glTranslated(-dx, -dy, -dz);
 					GL11.glScaled(sc, -sc, sc);
-					GL11.glRotatef(q, 1, 0, 0);
+					GL11.glRotatef(renderq, 1, 0, 0);
 					GL11.glRotatef(r, 0, 1, 0);
 					TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, 0, -0.5, p8);
 					GL11.glRotatef(-r, 0, 1, 0);
-					GL11.glRotatef(-q, 1, 0, 0);
+					GL11.glRotatef(-renderq, 1, 0, 0);
 					GL11.glTranslated(-dx, -dy, -dz);
 					GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
 				}
@@ -546,13 +565,13 @@ public class GuiHandbook extends GuiScreen
 					double dz = 0;
 					GL11.glTranslated(dx, dy, dz);
 					GL11.glScaled(sc, -sc, sc);
-					GL11.glRotatef(q, 1, 0, 0);
+					GL11.glRotatef(renderq, 1, 0, 0);
 					GL11.glRotatef(r, 0, 1, 0);
 					RenderBlocks rb = new RenderBlocks();
 					Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
 					rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
 					GL11.glRotatef(-r, 0, 1, 0);
-					GL11.glRotatef(-q, 1, 0, 0);
+					GL11.glRotatef(-renderq, 1, 0, 0);
 					GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
 					GL11.glTranslated(-dx, -dy, -dz);
 				}

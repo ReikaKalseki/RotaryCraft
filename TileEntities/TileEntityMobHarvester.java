@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -109,6 +110,15 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 			return true;
 		}
 		return false;
+	}
+
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
+		li.add(Enchantment.sharpness);
+		li.add(Enchantment.fireAspect);
+		li.add(Enchantment.silkTouch);
+		li.add(Enchantment.looting);
+		return li;
 	}
 
 	public HashMap<Enchantment,Integer> getEnchantments() {

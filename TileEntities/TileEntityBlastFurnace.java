@@ -360,10 +360,10 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 			return false;
 		if (i == 0)
 			return is.itemID == Item.coal.itemID;
-		else if (i <= 9)
-			return is.itemID == Item.ingotIron.itemID;
 		else if (i == 11)
 			return is.itemID == Item.gunpowder.itemID;
+		else if (i <= 9)
+			return is.itemID == Item.ingotIron.itemID;
 		else
 			return false;
 	}

@@ -290,7 +290,9 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		break;
 		case CHEST: {
 			chest = (TileEntityScaleableChest)world.getBlockTileEntity(x, y, z);
+			int oldpg = chest.page;
 			chest.page = data[0];
+			//ep.openGui(RotaryCraft.instance, 0, chest.worldObj, chest.xCoord, chest.yCoord, chest.zCoord);
 			break;
 		}
 		case COIL:

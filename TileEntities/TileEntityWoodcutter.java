@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -404,6 +405,14 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 			accepted = true;
 		}
 		return accepted;
+	}
+
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
+		li.add(Enchantment.fortune);
+		li.add(Enchantment.infinity);
+		li.add(Enchantment.efficiency);
+		return li;
 	}
 
 	@Override

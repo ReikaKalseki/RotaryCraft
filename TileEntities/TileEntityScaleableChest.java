@@ -80,6 +80,13 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		return (int)Math.ceil(size);
 	}
 
+	public static int getMaxPages() {
+		int size = MAXSIZE;
+		size /= 9D;
+		size /= MAXROWS;
+		return (int)Math.ceil(size);
+	}
+
 	private boolean testInconsistentPower() {
 		for (int i = 0; i < powerchanges.size(); i++) {
 			int b = powerchanges.get(i);

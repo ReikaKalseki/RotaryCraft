@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -106,7 +107,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 			return 0;
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
-		float sun = worldObj.getSunBrightness(0);
+		float sun = ReikaWorldHelper.getSunIntensity(worldObj);
 		if (sun > 0.21) {
 			return (int)(15*sun);
 		}

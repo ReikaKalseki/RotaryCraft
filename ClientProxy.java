@@ -50,6 +50,8 @@ public class ClientProxy extends CommonProxy
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png", RotaryAux.terrainpng);
 
+	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
+
 	@Override
 	public void registerSounds() {
 		//RotarySounds.addSounds();
@@ -89,12 +91,12 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.machineplacer.itemID, new ItemMachineRenderer());
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.engineitems.itemID, new ItemMachineRenderer());
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gbxitems.itemID, new ItemMachineRenderer());
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.shaftitems.itemID, new ItemMachineRenderer());
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.advgearitems.itemID, new ItemMachineRenderer());
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.flywheelitems.itemID, new ItemMachineRenderer());
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.machineplacer.itemID, machineItems);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.engineitems.itemID, machineItems);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gbxitems.itemID, machineItems);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.shaftitems.itemID, machineItems);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.advgearitems.itemID, machineItems);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.flywheelitems.itemID, machineItems);
 	}
 
 

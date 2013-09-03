@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.ReikaKeyHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -192,7 +193,8 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("charge", this.getMaxCharge(is));
-		li.add(is);
+		if (ItemRegistry.JETCHEST.isAvailableInCreativeInventory())
+			li.add(is);
 	}
 
 	@Override

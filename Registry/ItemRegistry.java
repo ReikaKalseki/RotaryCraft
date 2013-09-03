@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
@@ -90,17 +91,22 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
-	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class);
+	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, APIRegistry.INDUSTRIALCRAFT);
 
 	private int index;
 	private boolean hasSubtypes;
 	private String name;
 	private Class itemClass;
 	private int texturesheet;
+	private APIRegistry condition;
 
 	private int maxindex;
 
 	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl) {
+		this(tex, sub, n, iCl, null);
+	}
+
+	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl, APIRegistry api) {
 		texturesheet = 1;
 		if (tex < 0) {
 			tex = -tex;
@@ -114,6 +120,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		hasSubtypes = sub;
 		name = n;
 		itemClass = iCl;
+		condition = api;
 	}
 
 	private ItemRegistry(int lotex, int hitex, boolean sub, String n, Class <?extends Item> iCl) {
@@ -410,35 +417,53 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public boolean isDummiedOut() {
+		if (this.hasPrerequisite() && !this.getPrerequisite().conditionsMet())
+			return true;
 		return itemClass == null;
 	}
 
+	private boolean hasPrerequisite() {
+		return condition != null;
+	}
+
+	private APIRegistry getPrerequisite() {
+		return condition;
+	}
+
 	public void addRecipe(Object... params) {
-		GameRegistry.addRecipe(this.getStackOf(), params);
+		if (!this.isDummiedOut())
+			GameRegistry.addRecipe(this.getStackOf(), params);
 	}
 
 	public void addSizedRecipe(int num, Object... params) {
-		GameRegistry.addRecipe(this.getCraftedProduct(num), params);
+		if (!this.isDummiedOut())
+			GameRegistry.addRecipe(this.getCraftedProduct(num), params);
 	}
 
 	public void addMetaRecipe(int meta, Object... params) {
-		GameRegistry.addRecipe(this.getStackOfMetadata(meta), params);
+		if (!this.isDummiedOut())
+			GameRegistry.addRecipe(this.getStackOfMetadata(meta), params);
 	}
 
 	public void addSizedMetaRecipe(int meta, int num, Object... params) {
-		GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+		if (!this.isDummiedOut())
+			GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
 	}
 
 	public void addEnchantedRecipe(Enchantment e, int lvl, Object... params) {
-		ItemStack is = this.getStackOf();
-		is.addEnchantment(e, lvl);
-		GameRegistry.addRecipe(is, params);
+		if (!this.isDummiedOut()) {
+			ItemStack is = this.getStackOf();
+			is.addEnchantment(e, lvl);
+			GameRegistry.addRecipe(is, params);
+		}
 	}
 
 	public void addShapelessEnchantedRecipe(Enchantment e, int lvl, Object... params) {
-		ItemStack is = this.getStackOf();
-		is.addEnchantment(e, lvl);
-		GameRegistry.addShapelessRecipe(is, params);
+		if (!this.isDummiedOut()) {
+			ItemStack is = this.getStackOf();
+			is.addEnchantment(e, lvl);
+			GameRegistry.addShapelessRecipe(is, params);
+		}
 	}
 
 	public ItemStack getEnchantedStack() {
@@ -462,14 +487,22 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public void addShapelessRecipe(Object... params) {
-		GameRegistry.addShapelessRecipe(this.getStackOf(), params);
+		if (!this.isDummiedOut())
+			GameRegistry.addShapelessRecipe(this.getStackOf(), params);
 	}
 
 	public void addRecipe(IRecipe ir) {
-		GameRegistry.addRecipe(ir);
+		if (!this.isDummiedOut())
+			GameRegistry.addRecipe(ir);
 	}
 
 	public void addWorktableRecipe(Object... params) {
 
+	}
+
+	public boolean isAvailableInCreativeInventory() {
+		if (this.isDummiedOut())
+			return false;
+		return true;
 	}
 }

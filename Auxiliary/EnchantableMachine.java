@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
@@ -25,5 +26,7 @@ public interface EnchantableMachine {
 	public boolean hasEnchantments();
 
 	public int getEnchantment(Enchantment e);
+
+	public ArrayList<Enchantment> getValidEnchantments();
 
 }

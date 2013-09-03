@@ -64,7 +64,7 @@ public final class RotaryDescriptions {
 
 	private static HashMap<MachineRegistry, Object[]> machineData = new HashMap<MachineRegistry, Object[]>();
 	private static HashMap<MachineRegistry, Object[]> machineNotes = new HashMap<MachineRegistry, Object[]>();
-	private static HashMap<HandbookRegistry, Object[]> infoData = new HashMap<HandbookRegistry, Object[]>();
+	private static HashMap<HandbookRegistry, Object[]> miscData = new HashMap<HandbookRegistry, Object[]>();
 
 	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
@@ -105,7 +105,7 @@ public final class RotaryDescriptions {
 	}
 
 	private static void addData(HandbookRegistry h, Object... data) {
-		infoData.put(h, data);
+		miscData.put(h, data);
 	}
 
 	private static void addNotes(MachineRegistry m, Object... data) {
@@ -190,13 +190,14 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < misctabs.length; i++) {
 			HandbookRegistry h = misctabs[i];
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase());
+			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < infotabs.length; i++) {
 			HandbookRegistry h = infotabs[i];
 			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase());
-			desc = String.format(desc, infoData.get(h));
+			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
@@ -292,6 +293,15 @@ public final class RotaryDescriptions {
 				TileEntityExtractor.oreCopyNether,
 				TileEntityExtractor.oreCopyRare
 				);
+
+		ArrayList<MachineRegistry> li = MachineRegistry.getEnchantableMachineList();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < li.size(); i++) {
+			sb.append(li.get(i).getName());
+			if (i < li.size()-1)
+				sb.append(", ");
+		}
+		addData(HandbookRegistry.ENCHANTING, sb.toString());
 
 		addData(MachineRegistry.FLOODLIGHT, TileEntityFloodlight.FALLOFF);
 		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE);

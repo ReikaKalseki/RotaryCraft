@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.DragonAPICore;
@@ -39,7 +40,6 @@ public enum HandbookRegistry {
 	TERMS("Basic Terms", "Terms and Physics Explanations"),
 	PHYSICS("Relevant Physics"),
 	MATERIAL("Material Properties"),
-	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -49,6 +49,8 @@ public enum HandbookRegistry {
 	SCREW("Screwdriver", ItemRegistry.SCREWDRIVER),
 	PIPE("Pipe", MachineRegistry.PIPE),
 	FUELLINE("Fuel Line", MachineRegistry.FUELLINE),
+	ENCHANTING("Enchanting Machines"),
+	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------ENGINES--------------------//
 	ENGINEDESC("Power Supply", "Engines"),
 	DCENGINE(MachineRegistry.ENGINE, EnumEngineType.DC.ordinal()),
@@ -579,6 +581,10 @@ public enum HandbookRegistry {
 			return true;
 		if (isParent)
 			return true;
+		if (this == MODINTERFACE)
+			return true;
+		if (this == ENCHANTING)
+			return true;
 		if (this == BEDDUST)
 			return true;
 		if (this == SPAWNERS)
@@ -618,6 +624,10 @@ public enum HandbookRegistry {
 		if (this.isSmelting())
 			return false;
 		if (this.getParent() == TOC || this.getParent() == TERMS)
+			return false;
+		if (this == MODINTERFACE)
+			return false;
+		if (this == ENCHANTING)
 			return false;
 		if (this == LUBE)
 			return false;
@@ -814,6 +824,20 @@ public enum HandbookRegistry {
 	}
 
 	public ItemStack getTabIcon() {
+		if (this == TOC)
+			return ItemRegistry.HANDBOOK.getStackOf();
+		if (this == TERMS)
+			return ItemRegistry.HANDBOOK.getStackOf();
+		if (this == PHYSICS)
+			return new ItemStack(Item.book);
+		if (this == MATERIAL)
+			return ItemStacks.steelingot;
+		if (this == LUBE)
+			return ItemStacks.lubebucket;
+		if (this == MODINTERFACE)
+			return MachineRegistry.COMPRESSOR.getCraftedProduct();
+		if (this == ENCHANTING)
+			return new ItemStack(Item.enchantedBook);
 		if (this == ENGINES)
 			return EnumEngineType.AC.getCraftedProduct();
 		if (this == MISC)

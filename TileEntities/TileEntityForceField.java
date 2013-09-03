@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -380,6 +381,12 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			accepted = true;
 		}
 		return accepted;
+	}
+
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
+		li.add(Enchantment.protection);
+		return li;
 	}
 
 	@Override

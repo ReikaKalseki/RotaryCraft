@@ -34,6 +34,8 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	private int numrows;
 	private int page;
 
+	private ContainerScaleChest[] pages = new ContainerScaleChest[TileEntityScaleableChest.getMaxPages()];
+
 	int x;
 	int y;
 
@@ -89,7 +91,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			return;
 		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CHEST.getMinValue(), scale, ep, page);
 		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CHESTRELOAD.getMinValue(), scale);
-		//player.closeScreen();
+		//ep.closeScreen();
 		//this.refresh();
 		//this.setValues();
 	}
@@ -98,7 +100,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		int lastx = x;
 		int lasty = y;
 		mc.thePlayer.closeScreen();
-		ep.openGui(RotaryCraft.instance, 9, scale.worldObj, scale.xCoord, scale.yCoord, scale.zCoord);
+		ep.openGui(RotaryCraft.instance, 0, scale.worldObj, scale.xCoord, scale.yCoord, scale.zCoord);
 		Mouse.setCursorPosition(lastx, lasty);
 		invsize = scale.getSizeInventory();
 		numrows = (int)Math.ceil(invsize/9D);

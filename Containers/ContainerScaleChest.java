@@ -28,7 +28,8 @@ public class ContainerScaleChest extends CoreContainer
 		chest = par2IInventory;
 		size = par2IInventory.getSizeInventory();
 		par2IInventory.openChest();
-		this.setSlots(player, par2IInventory);
+		int page = chest.page;
+		this.setSlots(player, par2IInventory, page);
 	}
 
 	public void reset(EntityPlayer player, TileEntityScaleableChest te) {
@@ -37,11 +38,10 @@ public class ContainerScaleChest extends CoreContainer
 		//this.setSlots(par1IInventory, te);
 	}
 
-	private void setSlots(EntityPlayer player, TileEntityScaleableChest te) {
+	private void setSlots(EntityPlayer player, TileEntityScaleableChest te, int page) {
 		int var3 = 0;
 		int var4 = 8;
 		int var5 = 18;
-		int page = chest.page;
 		int rowsize = size;
 		if (rowsize > chest.MAXROWS*9)
 			rowsize = chest.MAXROWS*9;

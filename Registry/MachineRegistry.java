@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -296,7 +297,12 @@ public enum MachineRegistry {
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int metad) {
-		Class TEClass = machineList[getMachineIndexFromIDandMetadata(id, metad)].te;
+		int index = getMachineIndexFromIDandMetadata(id, metad);
+		if (index == -1) {
+			RotaryCraft.logger.logError("ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
+			return null;
+		}
+		Class TEClass = machineList[index].te;
 		try {
 			return (TileEntity)TEClass.newInstance();
 		}
@@ -345,7 +351,8 @@ public enum MachineRegistry {
 			if (m.getBlockID() == id && ReikaMathLibrary.isValueInsideBoundsIncl(m.getMachineMetadata(), m.getMachineMetadata()+m.getNumberMetadatas()-1, metad))
 				return i;
 		}
-		throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
+		//throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
+		return -1;
 	}
 
 	public static MachineRegistry getMachine(World world, int x, int y, int z) {
@@ -970,5 +977,31 @@ public enum MachineRegistry {
 		catch (IllegalAccessException e) {
 			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
 		}
+	}
+
+	public static ArrayList<MachineRegistry> getEnchantableMachineList() {
+		ArrayList<MachineRegistry> li = new ArrayList<MachineRegistry>();
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList[i];
+			if (m.isEnchantable()) {
+				li.add(m);
+			}
+		}
+		return li;
+	}
+
+	/** ret.get(i)[0] = machine; ret.get(i)[1] = enchantment arraylist */
+	public static ArrayList<Object[]> getDeepEnchantableMachineList() {
+		ArrayList<Object[]> li = new ArrayList<Object[]>();
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList[i];
+			if (m.isEnchantable()) {
+				Object[] o = new Object[2];
+				o[0] = m;
+				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender())).getValidEnchantments();
+				li.add(o);
+			}
+		}
+		return li;
 	}
 }

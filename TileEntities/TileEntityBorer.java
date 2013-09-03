@@ -412,6 +412,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return accepted;
 	}
 
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
+		li.add(Enchantment.fortune);
+		li.add(Enchantment.silkTouch);
+		li.add(Enchantment.efficiency);
+		return li;
+	}
+
 	public HashMap<Enchantment,Integer> getEnchantments() {
 		return enchantments;
 	}

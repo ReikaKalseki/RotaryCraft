@@ -680,6 +680,12 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		return accepted;
 	}
 
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
+		li.add(Enchantment.silkTouch);
+		return li;
+	}
+
 	@Override
 	public HashMap<Enchantment,Integer> getEnchantments() {
 		return enchantments;
