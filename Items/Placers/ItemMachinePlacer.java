@@ -77,18 +77,10 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		te.placer = ep.getEntityName();
 		if (te instanceof TemperatureTE) {
 			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
-			try {
-				if (te.getClass().getField("temperature") != null) {
-					te.getClass().getField("temperature").setInt(te, Tb);
-				}
-			} catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
+			((TemperatureTE)te).addTemperature(Tb);
 		}
 		if (te instanceof PressureTE) {
-			try {
-				if (te.getClass().getField("pressure") != null) {
-					te.getClass().getField("pressure").setInt(te, 101);
-				}
-			} catch (NoSuchFieldException e) {} catch (SecurityException e) {} catch (IllegalArgumentException e) {} catch (IllegalAccessException e) {}
+			((PressureTE)te).addPressure(101);
 		}
 
 		if (te instanceof EnchantableMachine) {

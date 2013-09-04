@@ -299,6 +299,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		//	NBT.setInteger("pwr"+String.valueOf(i), powerchanges.get(i));
 
 		NBT.setInteger("pwr", numchanges);
+		NBT.setInteger("player", numUsingPlayers);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -330,6 +331,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		//ArrayList<Integer> pwr = new ArrayList<Integer>();
 
 		numchanges = NBT.getInteger("pwr");
+		numUsingPlayers = NBT.getInteger("player");
 
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");

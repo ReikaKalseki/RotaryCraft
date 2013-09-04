@@ -129,7 +129,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		super.drawGuiContainerForegroundLayer(a, b);
+		mc.renderEngine.bindTexture("/font/glyph_AA.png");
 
 		fontRenderer.drawString("Output Speed", xSize/2-82, 22, 4210752);
 		fontRenderer.drawString("Output Torque", xSize/2-82, 52, 4210752);
@@ -141,6 +141,8 @@ public class GuiCoil extends GuiNonPoweredMachine
 			fontRenderer.drawString(String.format("%d", coil.releaseOmega), xSize/2-3, 22, 0xffffffff);
 		if (!input2.isFocused())
 			fontRenderer.drawString(String.format("%d", coil.releaseTorque), xSize/2-3, 52, 0xffffffff);
+
+		super.drawGuiContainerForegroundLayer(a, b);
 	}
 
 	/**

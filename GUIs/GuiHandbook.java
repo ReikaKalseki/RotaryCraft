@@ -500,9 +500,9 @@ public class GuiHandbook extends GuiScreen
 		double y = posY+44;
 		//float q = 12.5F + fscale*(float)Math.sin(System.nanoTime()/1000000000D); //wobble
 		//ReikaJavaLibrary.pConsole(y-ReikaGuiAPI.instance.getMouseScreenY(height));
-		int mx = ReikaGuiAPI.instance.getMouseScreenX(width);
-		int my = ReikaGuiAPI.instance.getMouseScreenY(height);
-		if (Mouse.isButtonDown(0) && Math.abs(mx/2-x) < 32 && Math.abs(my/2-y) < 64) {
+		int range = 64;
+		boolean rotate = ReikaGuiAPI.instance.isMouseInBox((int)x-range/2, (int)x+range/2, (int)y-range, (int)y+range);
+		if (Mouse.isButtonDown(0) && rotate) {
 			int mvy = Mouse.getDY();
 			if (mvy < 0 && renderq < 45) {
 				renderq++;

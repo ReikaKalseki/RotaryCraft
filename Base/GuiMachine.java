@@ -76,6 +76,8 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
+		mc.renderEngine.bindTexture("/font/glyph_AA.png");
+
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		if (tile instanceof TileEntityProjector)

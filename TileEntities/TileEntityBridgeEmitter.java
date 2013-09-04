@@ -67,6 +67,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 			for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
 				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
+				int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
 				if (idview == 0 || ReikaWorldHelper.softBlocks(idview) || idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID || idview == RotaryCraft.lightbridge.blockID) { //Only overwrite air blocks
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
 					world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightbridge.blockID, dir, 3);
@@ -74,7 +75,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 					//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
 					//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
 				}
-				if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && idview != RotaryCraft.lightbridge.blockID || animtick > range) {
+				if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && (idview != RotaryCraft.lightbridge.blockID) || animtick > range) {
 					animtick--;
 					blocked = true;
 				}
@@ -87,12 +88,26 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 	public void lightsOut(World world, int x, int y, int z) {
 		//ReikaChatHelper.writeInt(44);
 		animtick = 0;
-		int i = 1;
-		int idview = world.getBlockId(x+xstep, y+ystep, z+zstep);
-		while (idview == RotaryCraft.lightbridge.blockID) {
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x+xstep*i, y+ystep*i, z+zstep*i, 0);
-			i++;
-			idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
+		int dir = 0;
+		switch(this.getBlockMetadata()) {
+		case 0:
+			dir = 3;
+			break;
+		case 1:
+			dir = 1;
+			break;
+		case 2:
+			dir = 2;
+			break;
+		case 3:
+			dir = 0;
+			break;
+		}
+		for (int i = 1; i < this.getMaxRange(); i++) {
+			int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
+			int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
+			if (idview == RotaryCraft.lightbridge.blockID && metaview == dir)
+				world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, 0);
 			world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
 		}
 	}
