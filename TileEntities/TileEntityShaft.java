@@ -18,8 +18,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -272,6 +274,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
 	}
 
+	public boolean isCross() {
+		return this.getBlockMetadata() >= 6;
+	}
+
 	public void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
@@ -444,7 +450,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		reading2Dir = false;
-		if (meta >= 6) {
+		if (this.isCross()) {
 			this.crossTransfer(world);
 			return;
 		}
@@ -565,4 +571,19 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		if (this.isCross()) {
+			boolean read1 = io.xCoord == writex && io.zCoord == writez;
+			if (read1) {
+				return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
+			}
+			else {
+				return PowerSourceList.getAllFrom(worldObj, readx2, ready2, readz2, this, caller);
+			}
+		}
+		else
+			return super.getPowerSources(io, caller);
+	}
 }

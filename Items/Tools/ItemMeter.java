@@ -504,6 +504,8 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityFuelConverter clicked = (TileEntityFuelConverter)world.getBlockTileEntity(x, y, z);
 				ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getBCFuel()/1000D, clicked.getJetFuel()/1000D));
 			}
+
+			ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((TileEntityIOMachine)tile).getPowerSources((TileEntityIOMachine) tile, null)));
 		}
 
 		if (tile instanceof TemperatureTE) {
@@ -529,6 +531,7 @@ public class ItemMeter extends ItemRotaryTool
 			if (power < 1000)
 				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
 		}
+
 		return true;
 	}
 }

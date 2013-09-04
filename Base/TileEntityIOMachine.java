@@ -14,8 +14,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 
@@ -245,4 +247,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			}
 		}
 	}
+
+	public abstract PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller);
 }

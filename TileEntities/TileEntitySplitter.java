@@ -14,7 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -22,7 +24,7 @@ import Reika.RotaryCraft.Models.ModelSplitter;
 import Reika.RotaryCraft.Models.ModelSplitter2;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySplitter extends TileEntityIOMachine implements GuiController {
+public class TileEntitySplitter extends TileEntityIOMachine implements GuiController, ShaftMerger {
 
 	public int[] writeinline = new int[2]; //xz coords
 	public int[] writebend = new int[2]; //xz coords
@@ -429,12 +431,18 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 				torquein2 = omegain2 = 0;
 			}
 
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d, %d", omegain, omegain2));
+			PowerSourceList in1 = PowerSourceList.getAllFrom(world, readx, ready, readz, this, this);
+			PowerSourceList in2 = PowerSourceList.getAllFrom(world, readx2, ready2, readz2, this, this);
+			if (this.isLoopingPower(in1, in2)) {
+				omega = omegain;
+				torque = torquein;
+				power = omega*torque;
+				return;
+			}
 
 			if (omegain == omegain2) {
 				omega = omegain;
 				torque = torquein+torquein2;
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d, %d", this.omega, this.torque));
 			}
 			else {
 				omega = ReikaMathLibrary.extrema(omegain, omegain2, "max");
@@ -511,6 +519,20 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 			this.writeToReceiver();
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d * %d = %d", this.omega, this.torque, this.power));
 		}
+	}
+
+	private boolean isLoopingPower(PowerSourceList in1, PowerSourceList in2) {
+		if (torquein*omegain != 0 && in1.getMaxGennablePower() == 0) {
+			omegain = omegain2;
+			torquein = torquein2;
+			return true;
+		}
+		if (torquein2*omegain2 != 0 && in2.getMaxGennablePower() == 0) {
+			omegain2 = omegain;
+			torquein2 = torquein;
+			return true;
+		}
+		return false;
 	}
 
 	private void writeToReceiver() {
@@ -652,5 +674,25 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		PowerSourceList pwr = new PowerSourceList();
+		if (this.equals(caller)) {
+			return pwr;
+		}
+		if (caller == null)
+			caller = this;
+		if (this.getBlockMetadata() < 8) { //merge
+			PowerSourceList in1 = pwr.getAllFrom(worldObj, readx, ready, readz, this, caller);
+			PowerSourceList in2 = pwr.getAllFrom(worldObj, readx2, ready2, readz2, this, caller);
+			pwr.addAll(in1);
+			pwr.addAll(in2);
+			return pwr;
+		}
+		else {
+			return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
+		}
 	}
 }

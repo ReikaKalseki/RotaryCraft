@@ -15,7 +15,9 @@ import Reika.DragonAPI.Libraries.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
@@ -784,5 +786,23 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	@Override
 	public boolean canProvidePower() {
 		return false;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		PowerSourceList pwr = new PowerSourceList();
+		if (readx != Integer.MIN_VALUE && ready != Integer.MIN_VALUE && readz != Integer.MIN_VALUE) {
+			pwr.addAll(pwr.getAllFrom(worldObj, readx, ready, readz, this, caller));
+		}
+		if (readx2 != Integer.MIN_VALUE && ready2 != Integer.MIN_VALUE && readz2 != Integer.MIN_VALUE) {
+			pwr.addAll(pwr.getAllFrom(worldObj, readx2, ready2, readz2, this, caller));
+		}
+		if (readx3 != Integer.MIN_VALUE && ready3 != Integer.MIN_VALUE && readz3 != Integer.MIN_VALUE) {
+			pwr.addAll(pwr.getAllFrom(worldObj, readx3, ready3, readz3, this, caller));
+		}
+		if (readx4 != Integer.MIN_VALUE && ready4 != Integer.MIN_VALUE && readz4 != Integer.MIN_VALUE) {
+			pwr.addAll(pwr.getAllFrom(worldObj, readx4, ready4, readz4, this, caller));
+		}
+		return pwr;
 	}
 }

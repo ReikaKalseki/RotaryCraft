@@ -45,8 +45,11 @@ import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.PowerGenerator;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.EntityTurretShot;
@@ -73,7 +76,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider, PipeConnector {
+public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider, PipeConnector, PowerGenerator {
 	/** s/e *//*
 	public long power = 0;
 	public int torque = 0;
@@ -1675,5 +1678,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			return;
 		else
 			super.onEMP();
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		return new PowerSourceList().addSource(this);
+	}
+
+	public long getMaxPower() {
+		return type.getPower();
+	}
+
+	public long getCurrentPower() {
+		return power;
 	}
 }

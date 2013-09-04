@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.world.World;
+import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 
 public abstract class TileEntity1DTransmitter extends TileEntityIOMachine implements SimpleProvider {
@@ -81,5 +83,10 @@ public abstract class TileEntity1DTransmitter extends TileEntityIOMachine implem
 	@Override
 	public boolean canProvidePower() {
 		return true;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
 	}
 }

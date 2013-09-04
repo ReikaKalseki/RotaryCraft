@@ -14,6 +14,9 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.API.PowerGenerator;
+import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -25,7 +28,7 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeConnection;
 
-public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor, IPipeConnection, SimpleProvider {
+public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor, IPipeConnection, SimpleProvider, PowerGenerator {
 
 	private int MJ;
 
@@ -192,6 +195,19 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 			facingDir = ForgeDirection.EAST;
 			break;
 		}
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		return new PowerSourceList().addSource(this);
+	}
+
+	public long getMaxPower() {
+		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored());
+	}
+
+	public long getCurrentPower() {
+		return power;
 	}
 
 }
