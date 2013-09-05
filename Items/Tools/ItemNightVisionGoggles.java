@@ -24,7 +24,6 @@ import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@SuppressWarnings("deprecation")
 public class ItemNightVisionGoggles extends ItemRotaryArmor {
 
 	public ItemNightVisionGoggles(int ID, int tex, int render) {

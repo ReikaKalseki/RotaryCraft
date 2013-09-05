@@ -216,6 +216,8 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!DragonAPICore.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
 
+		DragonAPICore.loadHandlers();
+
 		OreForcer.forceCompatibility();
 
 		RotaryRecipes.addModInterface();

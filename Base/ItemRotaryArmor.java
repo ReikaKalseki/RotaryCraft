@@ -21,6 +21,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@SuppressWarnings("deprecation")
 public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites, IArmorTextureProvider {
 
 	private int index;
