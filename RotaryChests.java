@@ -11,7 +11,7 @@ package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ChestGenHooks;
-import Reika.DragonAPI.Libraries.ReikaGenHelper;
+import Reika.DragonAPI.Libraries.World.ReikaGenHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Containers.ContainerWorldEdit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

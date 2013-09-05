@@ -20,8 +20,8 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;

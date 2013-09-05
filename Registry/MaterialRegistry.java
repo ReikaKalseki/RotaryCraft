@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
 public enum MaterialRegistry {

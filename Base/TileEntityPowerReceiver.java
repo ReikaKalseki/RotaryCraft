@@ -11,10 +11,10 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaArrayHelper;
-import Reika.DragonAPI.Libraries.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;

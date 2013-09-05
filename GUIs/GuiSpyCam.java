@@ -15,7 +15,7 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
 

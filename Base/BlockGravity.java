@@ -17,7 +17,7 @@ import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
-import Reika.DragonAPI.Libraries.ReikaWorldHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 
 @Deprecated
 public class BlockGravity extends Block implements SidedTextureIndex

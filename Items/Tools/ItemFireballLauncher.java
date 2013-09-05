@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaVectorHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,7 +47,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 		ef.field_92057_e = (int)(charge);
 		ef.posY = ep.posY+1;
 		if (!world.isRemote) {
-			world.playAuxSFX(1008, (int)ep.posX, (int)ep.posY, (int)ep.posZ, 1);
+			world.playSoundAtEntity(ep, "mob.ghast.fireball", 1, 1);
 			world.spawnEntityInWorld(ef);
 		}
 		if (!ep.capabilities.isCreativeMode && par5Random.nextInt(3) == 0)

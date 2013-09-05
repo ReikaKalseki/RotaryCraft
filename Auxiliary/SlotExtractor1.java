@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 
 public class SlotExtractor1 extends Slot {
 

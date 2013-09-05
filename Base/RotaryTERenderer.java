@@ -20,7 +20,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.TextureFetcher;
-import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

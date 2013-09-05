@@ -12,8 +12,8 @@ package Reika.RotaryCraft.Registry;
 import java.util.Random;
 
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 
 public enum DifficultyEffects {
 

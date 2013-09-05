@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;

@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 
 public abstract class EnchantmentRenderer {
 

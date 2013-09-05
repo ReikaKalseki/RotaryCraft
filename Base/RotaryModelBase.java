@@ -15,7 +15,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.client.MinecraftForgeClient;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public abstract class RotaryModelBase extends ModelBase {
 

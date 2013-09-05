@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;

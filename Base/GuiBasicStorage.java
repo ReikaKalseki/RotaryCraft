@@ -15,7 +15,7 @@ import net.minecraft.inventory.IInventory;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.ContainerBasicStorage;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class GuiBasicStorage extends GuiMachine {

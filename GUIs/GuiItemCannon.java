@@ -21,7 +21,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Auxiliary.PacketTypes;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;

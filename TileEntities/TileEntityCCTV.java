@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.Libraries.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Base.RemoteControlMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelCCTV;

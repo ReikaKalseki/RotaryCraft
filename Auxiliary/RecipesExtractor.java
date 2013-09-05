@@ -15,7 +15,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesExtractor

@@ -30,9 +30,9 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.ItemReq;
-import Reika.DragonAPI.Libraries.ReikaBiomeHelper;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.ReikaStringParser;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;

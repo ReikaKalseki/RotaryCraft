@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import Reika.DragonAPI.Instantiable.MIDIInterface;
-import Reika.DragonAPI.Libraries.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 
 public final class DemoMusic {

@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.IO.ReikaPNGLoader;
 import Reika.DragonAPI.Instantiable.PixelRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;

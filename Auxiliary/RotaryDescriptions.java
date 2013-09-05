@@ -15,8 +15,8 @@ import java.util.List;
 
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import Reika.DragonAPI.Instantiable.XMLInterface;
-import Reika.DragonAPI.Libraries.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;

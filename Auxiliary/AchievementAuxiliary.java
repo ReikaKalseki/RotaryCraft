@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Registry.EnumEngineType;

@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaVectorHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 

@@ -13,7 +13,7 @@ import net.minecraft.inventory.Container;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 
 public abstract class GuiPowerOnlyMachine extends GuiMachine {
 

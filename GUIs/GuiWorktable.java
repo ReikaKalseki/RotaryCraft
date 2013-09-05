@@ -11,7 +11,7 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
