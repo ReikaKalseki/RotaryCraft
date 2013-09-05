@@ -167,8 +167,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		this.checkAPI();
-
 		config.initProps(evt);
 		proxy.registerSounds();
 
@@ -217,8 +215,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (!DragonAPICore.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
-
-		DragonAPICore.loadHandlers();
 
 		OreForcer.forceCompatibility();
 

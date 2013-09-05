@@ -50,8 +50,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			int maxdist = this.getRange();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
 				int id = world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep);
-				if (Block.blocksList[id].isFlammable(world, x+step*xstep, y+step*ystep, z+step*zstep, world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), ForgeDirection.UP));
-				this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
+				if (id != 0 && Block.blocksList[id].isFlammable(world, x+step*xstep, y+step*ystep, z+step*zstep, world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), ForgeDirection.UP))
+					this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
 				if (this.makeBeam(world, x, y, z, metadata, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
 					blocked = true;
 					tickcount = 0;
