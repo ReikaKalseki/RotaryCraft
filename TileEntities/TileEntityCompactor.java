@@ -316,19 +316,19 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (a != -1 && temperature > 600) {
 			temperature--;
 			if (par5Random.nextInt(4000) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0, 0);
 		}
 		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
 		if (iceside != -1 && temperature > 0) {
 			temperature -= 2;
 			if (par5Random.nextInt(200) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
 		int snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
 		if (snowside != -1 && temperature > -5) {
 			temperature -= 2;
 			if (par5Random.nextInt(100) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
 

@@ -42,6 +42,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -138,7 +139,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	public ItemStack[] fuelslot = new ItemStack[2];
 
-	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ParallelTicker.SECOND);
+	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
 	/**
 	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't

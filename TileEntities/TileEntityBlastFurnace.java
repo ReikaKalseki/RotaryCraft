@@ -184,7 +184,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 		if (iceside != -1) {
 			if (Tamb > 0)
 				Tamb /= 4;
-			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID);
+			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
 		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
 		if (fireside != -1) {
