@@ -227,6 +227,8 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		int id = this.idPicked(world, x, y, z);
 		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
+		if (m == null)
+			return null;
 		if (id == 0)
 			return null;
 		if (m == MachineRegistry.ENGINE) {

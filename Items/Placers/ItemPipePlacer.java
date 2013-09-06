@@ -67,6 +67,8 @@ public class ItemPipePlacer extends ItemMulti {
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
 			MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(BlockRegistry.PIPING.getBlockID(), is.getItemDamage());
+			if (m == null)
+				return false;
 			switch(is.getItemDamage()) {
 			case 0:
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 1F+0.2F*par5Random.nextFloat(), 0.6F+0.4F*par5Random.nextFloat());

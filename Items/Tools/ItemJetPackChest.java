@@ -60,7 +60,6 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 	public boolean useJetpack(EntityPlayer player)
 	{
 		ItemStack jetpack = player.inventory.armorInventory[2];
-		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
 		if (this.getCharge(jetpack) == 0)
 			return false;
@@ -68,6 +67,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 			return false;
 
 		boolean electric = true;
+		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
 		float power = 0.03875F;
 		float dropPercentage = 0.05F;

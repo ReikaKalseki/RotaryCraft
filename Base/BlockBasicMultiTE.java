@@ -92,6 +92,8 @@ public abstract class BlockBasicMultiTE extends Block {
 	public final Icon getBlockTexture(IBlockAccess iba, int x, int y, int z, int s)
 	{
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
+		if (te == null)
+			return null;
 		int meta = te.getBlockMetadata();
 		int machine = te.getMachine().getMachineMetadata();
 		return icons[machine][meta][s][te.getTextureStateForSide(s)];
@@ -322,6 +324,8 @@ public abstract class BlockBasicMultiTE extends Block {
 			return null;
 		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
+		if (m == null)
+			return null;
 		TileEntity tile = world.getBlockTileEntity(target.blockX, target.blockY, target.blockZ);
 		ItemStack core = m.getCraftedProduct();
 		if (m.isEnchantable()) {
@@ -436,6 +440,8 @@ public abstract class BlockBasicMultiTE extends Block {
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e)
 	{
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == null)
+			return;
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		if (m.dealsContactDamage(e)) {
 			e.attackEntityFrom(DamageSource.generic, m.getContactDamage(tile));

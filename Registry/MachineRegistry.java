@@ -377,7 +377,12 @@ public enum MachineRegistry {
 	}
 
 	public static MachineRegistry getMachineFromIDandMetadata(int id, int metad) {
-		return machineList[getMachineIndexFromIDandMetadata(id, metad)];
+		int index = getMachineIndexFromIDandMetadata(id, metad);
+		if (index == -1) {
+			RotaryCraft.logger.logError("ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
+			return null;
+		}
+		return machineList[index];
 	}
 
 	public int getMachineMetadata() {

@@ -97,7 +97,7 @@ public class ItemGravelGun extends ItemChargedTool {
 				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
 			}
 		}
-		return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
+		return is;
 	}
 
 	private void fire(ItemStack is, World world, EntityPlayer ep, Entity ent) {
