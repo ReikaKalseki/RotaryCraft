@@ -20,6 +20,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -81,6 +82,10 @@ public class ItemMeter extends ItemRotaryTool
 		if (tile instanceof ShaftMachine) {
 			ShaftMachine sm = (ShaftMachine)tile;
 			sm.setIORenderAlpha(512);
+		}
+		if (tile instanceof ThermalMachine) {
+			ThermalMachine th = (ThermalMachine)tile;
+			ReikaChatHelper.writeString(String.format("%s Temperature: %dC", th.getName(), th.getTemperature()));
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BLASTFURNACE) {
