@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -28,7 +30,8 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeConnection;
 
-public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor, IPipeConnection, SimpleProvider, PowerGenerator {
+public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor,IPipeConnection, SimpleProvider,
+PowerGenerator, GuiController {
 
 	private int MJ;
 
@@ -36,9 +39,16 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 
 	private ForgeDirection facingDir;
 
-	public static final int maxMJ = 1000000; //up to 1 MC megajoule
+	public static final int maxMJ = 36000; //up to 1 MC megajoule
 
 	private StepTimer sound = new StepTimer(72);
+
+	public static final int GENOMEGA = 1024;
+
+	private int base;
+
+	private static final int MINBASE = 0;
+	private static final int MAXBASE = 11; //2048 Nm -> 2.09 MW
 
 	public TileEntityPneumaticEngine()
 	{
@@ -46,6 +56,49 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 		pp = new CompressorPowerProvider();
 		pp.configure(0, 0, maxMJ, 0, maxMJ);
 		sound.setTick(sound.getCap());
+	}
+
+	public boolean hasEnoughEnergy() {
+		float energy = pp.getEnergyStored();
+		return energy > this.getMJPerTick();
+	}
+
+	public long getPowerLevel() {
+		return GENOMEGA*this.getTorqueLevel();
+	}
+
+	public int getTorqueLevel() {
+		return ReikaMathLibrary.intpow2(2, base);
+	}
+
+	public float getMJPerTick() {
+		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
+	}
+
+	public float getStoredEnergy() {
+		return pp.getEnergyStored();
+	}
+
+	public float getPercentStorage() {
+		return this.getStoredEnergy()/maxMJ;
+	}
+
+	public int getEnergyScaled(int h) {
+		return (int)(this.getPercentStorage()*h);
+	}
+
+	public int getTier() {
+		return base;
+	}
+
+	public void increment() {
+		if (base < MAXBASE)
+			base++;
+	}
+
+	public void decrement() {
+		if (base > MINBASE)
+			base--;
 	}
 
 	@Override
@@ -99,31 +152,29 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 			}
 		}
 
+		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
+
+		if (!this.hasEnoughEnergy()) {
+			torque = 0;
+			omega = 0;
+			power = 0;
+			return;
+		}
+
 		float mj = pp.getEnergyStored();
-		//PneuEngineStage st = PneuEngineStage.getStageFromMJ(mj);
-		//if (st == st.OFF)
-		//	pp.useEnergy(mj, mj, true);
-		//ReikaJavaLibrary.pConsoleSideOnly(st+" from "+mj, Side.SERVER);
-		//torque = st.getTorque();
-		//omega = st.getOmega();
 
-		long power = (long)(mj*ReikaBuildCraftHelper.getWattsPerMJ());
-		double log = ReikaMathLibrary.logbase(power, 2);
-		int pow = (int)Math.ceil(log);
-		power = (long)Math.pow(2, pow);
-		int sqrt = (int)Math.sqrt(power);
-		torque = sqrt/4;
-		omega = sqrt*4;
+		torque = this.getTorqueLevel();
+		omega = GENOMEGA;
 
-		//power = (long)torque*(long)omega;
+		power = (long)torque*(long)omega;
 
-		pp.useEnergy(mj, mj, true);
-		//pp.useEnergy(st.getConsumedMJ(), st.getConsumedMJ(), true);
+		pp.useEnergy(this.getMJPerTick(), this.getMJPerTick(), true);
 
 		this.basicPowerReceiver();
 
+		sound.update();
+
 		if (power > 0) {
-			sound.update();
 			if (sound.checkCap())
 				SoundRegistry.playSoundAtBlock(SoundRegistry.PNEUMATIC, world, x, y, z, 1.2F, 1);
 		}
@@ -208,6 +259,28 @@ public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IP
 
 	public long getCurrentPower() {
 		return power;
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("tier", base);
+		pp.writeToNBT(NBT);
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		base = NBT.getInteger("tier");
+		pp.readFromNBT(NBT);
 	}
 
 }

@@ -24,7 +24,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
 
 public class RenderFraction extends RotaryTERenderer
 {
-
 	private ModelFraction FractionModel = new ModelFraction();
 
 	/**

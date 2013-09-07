@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-/** If your machine merges two shafts, call this to avoid being the source of a loop exploit */
+/** If your machine merges two shafts, implement this to avoid being the source of a loop exploit or StackOverflow */
 public interface ShaftMerger {
 
 }

@@ -26,13 +26,13 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
@@ -119,7 +119,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
 			if (ConfigRegistry.SPAWNERLEAK.getState())
 				ReikaSpawnerHelper.forceSpawn(spw, world, 12+itemRand.nextInt(25));
-			ItemStack item = new ItemStack(DragonAPICore.getItem("spawner"));
+			ItemStack item = new ItemStack(RotaryCraft.spawner);
 			ReikaSpawnerHelper.addMobNBTToItem(item, spw);
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
 			//world.setBlock(x, y, z, 0);
@@ -136,20 +136,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ReikaRenderHelper.spawnDropParticles(world, x, y, z, Block.silverfish, meta);
 		}
-		ItemStack drop;
-		switch(meta) {
-		case 0:
-			drop = new ItemStack(Block.stone);
-			break;
-		case 1:
-			drop = new ItemStack(Block.cobblestone);
-			break;
-		case 2:
-			drop = new ItemStack(Block.stoneBrick);
-			break;
-		default:
-			drop = null;
-		}
+		ItemStack drop = new ItemStack(ReikaBlockHelper.getSilverfishImitatedBlock(meta), 1, 0);
 		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
 		EntitySilverfish si = new EntitySilverfish(world);
 		si.setPosition(x+0.5, y, z+0.5);

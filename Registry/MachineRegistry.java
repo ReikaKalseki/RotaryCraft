@@ -233,7 +233,7 @@ public enum MachineRegistry {
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
-	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter");
+	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", APIRegistry.BUILDCRAFTENERGY);
 
 
 	private String name;

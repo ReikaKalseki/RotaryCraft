@@ -11,12 +11,14 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
@@ -27,6 +29,7 @@ public abstract class IORenderer {
 	private static double par4;
 	private static double par6;
 	private static final double expand = 0.5;
+	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public static void renderOut(double x, double y, double z, int a) {
 		int[] color = {255, 0, 0, a};
@@ -39,20 +42,50 @@ public abstract class IORenderer {
 	}
 
 	public static void renderIO(TileEntity teb, double p2, double p4, double p6) {
-		if (!(teb instanceof TileEntityIOMachine)) {
-			ReikaJavaLibrary.pConsole(teb+" is not a IOMachine!");
-			return;
-		}
 		par2 = p2;
 		par4 = p4;
 		par6 = p6;
-		TileEntityIOMachine te = (TileEntityIOMachine)teb;
-		if (teb instanceof TileEntitySplitter) {
-			TileEntitySplitter ts = (TileEntitySplitter)teb;
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d > %d %d", ts.splitmode, ts.writex, ts.writez));
-			if (ts.getBlockMetadata() < 8) { //Merging
+		if (teb instanceof TileEntityIOMachine) {
+			TileEntityIOMachine te = (TileEntityIOMachine)teb;
+			if (teb instanceof TileEntitySplitter) {
+				TileEntitySplitter ts = (TileEntitySplitter)teb;
+				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d > %d %d", ts.splitmode, ts.writex, ts.writez));
+				if (ts.getBlockMetadata() < 8) { //Merging
+					double xdiff = ts.writex-ts.xCoord;
+					double zdiff = ts.writez-ts.zCoord;
+					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+
+					xdiff = ts.readx-ts.xCoord;
+					zdiff = ts.readz-ts.zCoord;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+
+					xdiff = ts.readx2-ts.xCoord;
+					zdiff = ts.readz2-ts.zCoord;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				else { //Splitting
+					double xdiff = ts.writeinline[0]-ts.xCoord;
+					double zdiff = ts.writeinline[1]-ts.zCoord;
+					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+
+					xdiff = ts.writebend[0]-ts.xCoord;
+					zdiff = ts.writebend[1]-ts.zCoord;
+					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+
+					xdiff = ts.readx-ts.xCoord;
+					zdiff = ts.readz-ts.zCoord;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				return;
+			}
+			if (teb instanceof TileEntityShaft && teb.getBlockMetadata() >= 6) { //cross
+				TileEntityShaft ts = (TileEntityShaft)teb;
 				double xdiff = ts.writex-ts.xCoord;
 				double zdiff = ts.writez-ts.zCoord;
+				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+
+				xdiff = ts.writex2-ts.xCoord;
+				zdiff = ts.writez2-ts.zCoord;
 				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
 				xdiff = ts.readx-ts.xCoord;
@@ -62,108 +95,104 @@ public abstract class IORenderer {
 				xdiff = ts.readx2-ts.xCoord;
 				zdiff = ts.readz2-ts.zCoord;
 				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				return;
 			}
-			else { //Splitting
-				double xdiff = ts.writeinline[0]-ts.xCoord;
-				double zdiff = ts.writeinline[1]-ts.zCoord;
-				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-				xdiff = ts.writebend[0]-ts.xCoord;
-				zdiff = ts.writebend[1]-ts.zCoord;
-				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-				xdiff = ts.readx-ts.xCoord;
-				zdiff = ts.readz-ts.zCoord;
-				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+			if (teb instanceof TileEntityWinder) {
+				TileEntityWinder ts = (TileEntityWinder)teb;
+				if (!ts.winding) {
+					double xdiff = ts.readx-ts.xCoord;
+					double ydiff = ts.ready-ts.yCoord;
+					double zdiff = ts.readz-ts.zCoord;
+					renderOut(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
+				}
+				else {
+					double xdiff = ts.readx-ts.xCoord;
+					double zdiff = ts.readz-ts.zCoord;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				return;
 			}
-			return;
-		}
-		if (teb instanceof TileEntityShaft && teb.getBlockMetadata() >= 6) { //cross
-			TileEntityShaft ts = (TileEntityShaft)teb;
-			double xdiff = ts.writex-ts.xCoord;
-			double zdiff = ts.writez-ts.zCoord;
-			renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-			xdiff = ts.writex2-ts.xCoord;
-			zdiff = ts.writez2-ts.zCoord;
-			renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-			xdiff = ts.readx-ts.xCoord;
-			zdiff = ts.readz-ts.zCoord;
-			renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-			xdiff = ts.readx2-ts.xCoord;
-			zdiff = ts.readz2-ts.zCoord;
-			renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
-			return;
-		}
-		if (teb instanceof TileEntityWinder) {
-			TileEntityWinder ts = (TileEntityWinder)teb;
-			if (!ts.winding) {
-				double xdiff = ts.readx-ts.xCoord;
-				double ydiff = ts.ready-ts.yCoord;
-				double zdiff = ts.readz-ts.zCoord;
-				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
+			if (te.isOmniSided) {
+				if (te.getMachine().getMaxY(te) == 1)
+					renderIn(par2, par4+1, par6, te.iotick);
+				if (te.getMachine().getMinY(te) == 0)
+					renderIn(par2, par4-1, par6, te.iotick);
+				if (te.getMachine().getMaxX(te) == 1)
+					renderIn(par2+1, par4, par6, te.iotick);
+				if (te.getMachine().getMinX(te) == 0)
+					renderIn(par2-1, par4, par6, te.iotick);
+				if (te.getMachine().getMaxZ(te) == 1)
+					renderIn(par2, par4, par6+1, te.iotick);
+				if (te.getMachine().getMinZ(te) == 0)
+					renderIn(par2, par4, par6-1, te.iotick);
+				return;
 			}
-			else {
-				double xdiff = ts.readx-ts.xCoord;
-				double zdiff = ts.readz-ts.zCoord;
-				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", te.writex, te.writey, te.writez));
+			if (te.writex != Integer.MIN_VALUE && te.writey != Integer.MIN_VALUE && te.writez != Integer.MIN_VALUE) {
+				double xdiff = te.writex-te.xCoord;
+				double ydiff = te.writey-te.yCoord;
+				double zdiff = te.writez-te.zCoord;
+				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			return;
+			if (te.writex2 != Integer.MIN_VALUE && te.writey2 != Integer.MIN_VALUE && te.writez2 != Integer.MIN_VALUE) {
+				double xdiff = te.writex2-te.xCoord;
+				double ydiff = te.writey2-te.yCoord;
+				double zdiff = te.writez2-te.zCoord;
+				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+			}
+			//ReikaChatHelper.writeInt(te.ready);
+			if (te.readx != Integer.MIN_VALUE && te.ready != Integer.MIN_VALUE && te.readz != Integer.MIN_VALUE) {
+				double xdiff = te.readx-te.xCoord;
+				double ydiff = te.ready-te.yCoord;
+				double zdiff = te.readz-te.zCoord;
+				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+			}
+			if (te.readx2 != Integer.MIN_VALUE && te.ready2 != Integer.MIN_VALUE && te.readz2 != Integer.MIN_VALUE) {
+				double xdiff = te.readx2-te.xCoord;
+				double ydiff = te.ready2-te.yCoord;
+				double zdiff = te.readz2-te.zCoord;
+				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+			}
+			if (te.readx3 != Integer.MIN_VALUE && te.ready3 != Integer.MIN_VALUE && te.readz3 != Integer.MIN_VALUE) {
+				double xdiff = te.readx3-te.xCoord;
+				double ydiff = te.ready3-te.yCoord;
+				double zdiff = te.readz3-te.zCoord;
+				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+			}
+			if (te.readx4 != Integer.MIN_VALUE && te.ready4 != Integer.MIN_VALUE && te.readz4 != Integer.MIN_VALUE) {
+				double xdiff = te.readx4-te.xCoord;
+				double ydiff = te.ready4-te.yCoord;
+				double zdiff = te.readz4-te.zCoord;
+				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+			}
 		}
-		if (te.isOmniSided) {
-			if (te.getMachine().getMaxY(te) == 1)
-				renderIn(par2, par4+1, par6, te.iotick);
-			if (te.getMachine().getMinY(te) == 0)
-				renderIn(par2, par4-1, par6, te.iotick);
-			if (te.getMachine().getMaxX(te) == 1)
-				renderIn(par2+1, par4, par6, te.iotick);
-			if (te.getMachine().getMinX(te) == 0)
-				renderIn(par2-1, par4, par6, te.iotick);
-			if (te.getMachine().getMaxZ(te) == 1)
-				renderIn(par2, par4, par6+1, te.iotick);
-			if (te.getMachine().getMinZ(te) == 0)
-				renderIn(par2, par4, par6-1, te.iotick);
-			return;
-		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", te.writex, te.writey, te.writez));
-		if (te.writex != Integer.MIN_VALUE && te.writey != Integer.MIN_VALUE && te.writez != Integer.MIN_VALUE) {
-			double xdiff = te.writex-te.xCoord;
-			double ydiff = te.writey-te.yCoord;
-			double zdiff = te.writez-te.zCoord;
-			renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
-		}
-		if (te.writex2 != Integer.MIN_VALUE && te.writey2 != Integer.MIN_VALUE && te.writez2 != Integer.MIN_VALUE) {
-			double xdiff = te.writex2-te.xCoord;
-			double ydiff = te.writey2-te.yCoord;
-			double zdiff = te.writez2-te.zCoord;
-			renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
-		}
-		//ReikaChatHelper.writeInt(te.ready);
-		if (te.readx != Integer.MIN_VALUE && te.ready != Integer.MIN_VALUE && te.readz != Integer.MIN_VALUE) {
-			double xdiff = te.readx-te.xCoord;
-			double ydiff = te.ready-te.yCoord;
-			double zdiff = te.readz-te.zCoord;
-			renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
-		}
-		if (te.readx2 != Integer.MIN_VALUE && te.ready2 != Integer.MIN_VALUE && te.readz2 != Integer.MIN_VALUE) {
-			double xdiff = te.readx2-te.xCoord;
-			double ydiff = te.ready2-te.yCoord;
-			double zdiff = te.readz2-te.zCoord;
-			renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
-		}
-		if (te.readx3 != Integer.MIN_VALUE && te.ready3 != Integer.MIN_VALUE && te.readz3 != Integer.MIN_VALUE) {
-			double xdiff = te.readx3-te.xCoord;
-			double ydiff = te.ready3-te.yCoord;
-			double zdiff = te.readz3-te.zCoord;
-			renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
-		}
-		if (te.readx4 != Integer.MIN_VALUE && te.ready4 != Integer.MIN_VALUE && te.readz4 != Integer.MIN_VALUE) {
-			double xdiff = te.readx4-te.xCoord;
-			double ydiff = te.ready4-te.yCoord;
-			double zdiff = te.readz4-te.zCoord;
-			renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+		else {
+			if (teb instanceof ShaftPowerReceiver) {
+				ShaftPowerReceiver sr = (ShaftPowerReceiver)teb;
+				int io = sr.getIORenderAlpha();
+				for (int i = 0; i < 6; i++) {
+					ForgeDirection dir = dirs[i];
+					int dx = dir.offsetX+sr.getMachineX();
+					int dy = dir.offsetY+sr.getMachineY();
+					int dz = dir.offsetZ+sr.getMachineZ();
+					if (sr.canReadFromBlock(dx, dy, dz)) {
+						renderIn(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
+					}
+				}
+			}
+			if (teb instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter se = (ShaftPowerEmitter)teb;
+				int io = se.getIORenderAlpha();
+				for (int i = 0; i < 6; i++) {
+					ForgeDirection dir = dirs[i];
+					int dx = dir.offsetX+se.getMachineX();
+					int dy = dir.offsetY+se.getMachineY();
+					int dz = dir.offsetZ+se.getMachineZ();
+					if (se.canWriteToBlock(dx, dy, dz)) {
+						renderOut(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
+					}
+				}
+			}
 		}
 	}
 

@@ -12,8 +12,11 @@ package Reika.RotaryCraft.API;
 /** Implement this if your TE "spawns" power */
 public interface PowerGenerator {
 
+	/** The maximum amount of power your machine can ever generate, in watts.
+	 * If there is no cap, use Long.MAX_VALUE. */
 	public long getMaxPower();
 
+	/** The current power your machine is producing, in watts. */
 	public long getCurrentPower();
 
 }

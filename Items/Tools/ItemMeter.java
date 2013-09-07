@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
@@ -77,6 +78,10 @@ public class ItemMeter extends ItemRotaryTool
 			name = ((RotaryCraftTileEntity)tile).getMultiValuedName();
 		else
 			name = "";
+		if (tile instanceof ShaftMachine) {
+			ShaftMachine sm = (ShaftMachine)tile;
+			sm.setIORenderAlpha(512);
+		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BLASTFURNACE) {
 			TileEntityBlastFurnace clicked = (TileEntityBlastFurnace)world.getBlockTileEntity(x, y, z);

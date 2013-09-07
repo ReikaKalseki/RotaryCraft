@@ -77,19 +77,19 @@ public final class ItemStacks {
 	public static final ItemStack diamond16x = new ItemStack(RotaryCraft.gearunits, 1, 11);
 	public static final ItemStack bedrock16x = new ItemStack(RotaryCraft.gearunits, 1, 15);
 
-	public static final ItemStack barrel = new ItemStack(RotaryCraft.heatcraft, 1, 0);
-	public static final ItemStack lens = new ItemStack(RotaryCraft.heatcraft, 1, 1);
-	public static final ItemStack power = new ItemStack(RotaryCraft.heatcraft, 1, 2);
-	public static final ItemStack bulb = new ItemStack(RotaryCraft.heatcraft, 1, 3);
-	public static final ItemStack lim = new ItemStack(RotaryCraft.heatcraft, 1, 4);
-	public static final ItemStack prop = new ItemStack(RotaryCraft.heatcraft, 1, 5);
-	public static final ItemStack hub = new ItemStack(RotaryCraft.heatcraft, 1, 6);
-	public static final ItemStack mirror = new ItemStack(RotaryCraft.heatcraft, 1, 7);
-	public static final ItemStack generator = new ItemStack(RotaryCraft.heatcraft, 1, 8);
-	public static final ItemStack railhead = new ItemStack(RotaryCraft.heatcraft, 1, 9);
-	public static final ItemStack railbase = new ItemStack(RotaryCraft.heatcraft, 1, 10);
-	public static final ItemStack railaim = new ItemStack(RotaryCraft.heatcraft, 1, 11);
-	public static final ItemStack compoundturb = new ItemStack(RotaryCraft.heatcraft, 1, 12);
+	public static final ItemStack barrel = new ItemStack(RotaryCraft.misccraft, 1, 0);
+	public static final ItemStack lens = new ItemStack(RotaryCraft.misccraft, 1, 1);
+	public static final ItemStack power = new ItemStack(RotaryCraft.misccraft, 1, 2);
+	public static final ItemStack bulb = new ItemStack(RotaryCraft.misccraft, 1, 3);
+	public static final ItemStack lim = new ItemStack(RotaryCraft.misccraft, 1, 4);
+	public static final ItemStack prop = new ItemStack(RotaryCraft.misccraft, 1, 5);
+	public static final ItemStack hub = new ItemStack(RotaryCraft.misccraft, 1, 6);
+	public static final ItemStack mirror = new ItemStack(RotaryCraft.misccraft, 1, 7);
+	public static final ItemStack generator = new ItemStack(RotaryCraft.misccraft, 1, 8);
+	public static final ItemStack railhead = new ItemStack(RotaryCraft.misccraft, 1, 9);
+	public static final ItemStack railbase = new ItemStack(RotaryCraft.misccraft, 1, 10);
+	public static final ItemStack railaim = new ItemStack(RotaryCraft.misccraft, 1, 11);
+	public static final ItemStack compoundturb = new ItemStack(RotaryCraft.misccraft, 1, 12);
 
 	public static final ItemStack impeller = new ItemStack(RotaryCraft.enginecraft, 1, 0);
 	public static final ItemStack compressor = new ItemStack(RotaryCraft.enginecraft, 1, 1);

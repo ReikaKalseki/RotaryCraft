@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
+import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Base.ItemMulti;
 import Reika.RotaryCraft.Blocks.BlockBeam;
 import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
@@ -90,6 +91,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
 	public static CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
 	public static CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(),"RotaryModOres");
+	public static CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(),"Spawners");
 
 	private static int[] dmgs = {EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(1),
 		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(2), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(3)};
@@ -113,7 +115,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static Item shaftcraft;
 	public static Item enginecraft;
-	public static Item heatcraft;
+	public static Item misccraft;
 	public static Item borecraft;
 	public static Item extracts;
 	public static Item compacts;
@@ -128,6 +130,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item advgearitems;
 	public static Item modextracts;
 	public static Item modingots;
+	public static Item spawner;
 
 	public static Block canola;
 	public static Block miningpipe;
@@ -173,9 +176,6 @@ public class RotaryCraft extends DragonAPIMod {
 		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
 
 		this.setupClassFiles();
-
-		DragonAPICore.addIDMapping("spawner", ExtraConfigIDs.SPAWNERS.getValue());
-		DragonAPICore.addItem(instance, ItemSpawner.class, "Monster Spawner", "spawner");
 	}
 
 	@Override
@@ -216,8 +216,6 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!DragonAPICore.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
 
-		DragonAPICore.loadHandlers();
-
 		OreForcer.forceCompatibility();
 
 		RotaryRecipes.addModInterface();
@@ -229,7 +227,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		shaftcraft = new ItemMulti(ExtraConfigIDs.SHAFTCRAFT.getValue(), 0).setUnlocalizedName("shaftcraft");
 		enginecraft = new ItemMulti(ExtraConfigIDs.ENGINECRAFT.getValue(), 1).setUnlocalizedName("enginecraft");
-		heatcraft = new ItemMulti(ExtraConfigIDs.HEATCRAFT.getValue(), 2).setUnlocalizedName("heatcraft");
+		misccraft = new ItemMulti(ExtraConfigIDs.MISCCRAFT.getValue(), 2).setUnlocalizedName("misccraft");
 		borecraft = new ItemMulti(ExtraConfigIDs.BORECRAFT.getValue(), 3).setUnlocalizedName("borecraft");
 		extracts = new ItemMulti(ExtraConfigIDs.EXTRACTS.getValue(), 4).setUnlocalizedName("extracts");
 		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
@@ -251,6 +249,8 @@ public class RotaryCraft extends DragonAPIMod {
 		blastglass = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");
 		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
 		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");
+
+		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner");
 
 		RotaryRegistration.instantiateMachines();
 

@@ -73,6 +73,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		super.writeToNBT(NBT);
 		NBT.setInteger("torque", torque);
 		NBT.setInteger("omega", omega);
+		//NBT.setLong("pwr", power);
 		NBT.setInteger("io", iotick);
 		NBT.setInteger("rx", readx);
 		NBT.setInteger("ry", ready);
@@ -104,6 +105,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		super.readFromNBT(NBT);
 		torque = NBT.getInteger("torque");
 		omega = NBT.getInteger("omega");
+		//power = NBT.getLong("pwr");
 		iotick = NBT.getInteger("io");
 		readx = NBT.getInteger("rx");
 		ready = NBT.getInteger("ry");

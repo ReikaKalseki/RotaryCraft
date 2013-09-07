@@ -105,8 +105,10 @@ import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
 import Reika.RotaryCraft.ModInterface.GuiLiquidConverter;
+import Reika.RotaryCraft.ModInterface.GuiPneumatic;
 import Reika.RotaryCraft.ModInterface.GuiPressureBalancer;
 import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -441,6 +443,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityLiquidConverter) {
 			return new GuiLiquidConverter(player, (TileEntityLiquidConverter)te);
+		}
+		if (te instanceof TileEntityPneumaticEngine) {
+			return new GuiPneumatic(player, (TileEntityPneumaticEngine)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

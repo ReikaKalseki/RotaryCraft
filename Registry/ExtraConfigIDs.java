@@ -18,7 +18,7 @@ import Reika.RotaryCraft.RotaryCraft;
 public enum ExtraConfigIDs implements IDRegistry {
 
 	MACHINEPLACER("ItemBlock IDs", "Machine Items", 30616, Item.class),
-	HEATCRAFT("Crafting Item IDs", "Heat Ray Crafting Items", 30628, Item.class),
+	MISCCRAFT("Crafting Item IDs", "Heat Ray Crafting Items", 30628, Item.class),
 	ENGINECRAFT("Crafting Item IDs", "Engine Crafting Items", 30629, Item.class),
 	BORECRAFT("Crafting Item IDs", "Borer Crafting Items", 30630, Item.class),
 	SHAFTCRAFT("Crafting Item IDs", "Shaft Crafting Items", 30631, Item.class),

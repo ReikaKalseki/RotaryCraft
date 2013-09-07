@@ -33,6 +33,7 @@ public final class MachineInteracter {
 		}
 	}
 
+	/** To get the machine's MachineRegistry enum entry by machine name. */
 	public static MachineRegistry getMachineByName(String name) {
 		MachineRegistry[] list = (MachineRegistry[])machines.getEnumConstants();
 		for (int i = 0; i < list.length; i++) {
@@ -43,6 +44,8 @@ public final class MachineInteracter {
 		return null;
 	}
 
+	/** To get the machine's MachineRegistry enum entry by enum entry name.
+	Easier to use if you are familiar with the code. */
 	public static MachineRegistry getMachineByEnumName(String name) {
 		MachineRegistry[] list = (MachineRegistry[])machines.getEnumConstants();
 		for (int i = 0; i < list.length; i++) {
@@ -53,6 +56,7 @@ public final class MachineInteracter {
 		return null;
 	}
 
+	/** To get a MachineRegistry entry from an ID and Metadata. */
 	public static MachineRegistry getMachineFromIDAndMeta(int id, int meta) {
 		MachineRegistry[] list = (MachineRegistry[])machines.getEnumConstants();
 		for (int i = 0; i < list.length; i++) {
@@ -65,6 +69,7 @@ public final class MachineInteracter {
 		return null;
 	}
 
+	/** A simple check to test if the block ID is one of RC's machine blocks. */
 	public static boolean isRCMachine(Block b) {
 		BlockRegistry[] list = (BlockRegistry[])blocks.getEnumConstants();
 		for (int i = 0; i < list.length; i++) {
@@ -75,6 +80,7 @@ public final class MachineInteracter {
 		return false;
 	}
 
+	/** To get the block's BlockRegistry enum entry. */
 	public static BlockRegistry getRCMachineBlockType(Block b) {
 		BlockRegistry[] list = (BlockRegistry[])blocks.getEnumConstants();
 		for (int i = 0; i < list.length; i++) {

@@ -22,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -255,7 +254,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (id == Block.mobSpawner.blockID) {
 				TileEntityMobSpawner spw = (TileEntityMobSpawner)tile;
 				if (spw != null) {
-					ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
+					ItemStack is = new ItemStack(RotaryCraft.spawner);
 					ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 					if (!this.chestCheck(world, x, y, z, is))
 						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);

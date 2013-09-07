@@ -76,7 +76,7 @@ public class RotaryNames {
 		"Wood Flywheel Core", "Stone Flywheel Core", "Iron Flywheel Core", "Gold Flywheel Core", "Worm Gear"
 	};
 
-	public static final String[] heatPartNames = {
+	public static final String[] miscPartNames = {
 		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror",
 		"Generator", "Railgun Accelerator", "Turret Base", "Turret Aiming Unit", "Compound Turbine"
 	};
@@ -144,6 +144,8 @@ public class RotaryNames {
 
 		LanguageRegistry.addName(RotaryCraft.canola, "Canola Plant (Technical Block)");
 
+		LanguageRegistry.addName(RotaryCraft.spawner, "Monster Spawner");
+
 		LanguageRegistry.addName(RotaryCraft.miningpipe, "Mining Pipe (Technical Block)");
 		LanguageRegistry.addName(RotaryCraft.lightblock, "Light Block (Technical Block)");
 		LanguageRegistry.addName(RotaryCraft.beamblock, "Beam Block (Technical Block)");
@@ -152,8 +154,8 @@ public class RotaryNames {
 		for (int i = 0; i < shaftPartNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), shaftPartNames[i]);
 		}
-		for (int i = 0; i < heatPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.heatcraft, 1, i), heatPartNames[i]);
+		for (int i = 0; i < miscPartNames.length; i++) {
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.misccraft, 1, i), miscPartNames[i]);
 		}
 		for (int i = 0; i < enginePartNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.enginecraft, 1, i), enginePartNames[i]);
@@ -180,11 +182,7 @@ public class RotaryNames {
 		for (int i = 0; i < powderNames.length; i++) {
 			ItemStack jetfuelstack = new ItemStack(RotaryCraft.powders, 1, i);
 			LanguageRegistry.addName(jetfuelstack, powderNames[jetfuelstack.getItemDamage()]);
-		}/*
-		for (int i = 0; i < spawnerNames.length; i++) {
-			ItemStack spawnerstack = new ItemStack(RotaryCraft.spawner, 1, i);
-			LanguageRegistry.addName(spawnerstack, spawnerNames[spawnerstack.getItemDamage()]);
-		}*/
+		}
 		for (int i = 0; i < pipeNames.length; i++) {
 			ItemStack pipestack = new ItemStack(RotaryCraft.pipeplacer, 1, i);
 			LanguageRegistry.addName(pipestack, pipeNames[pipestack.getItemDamage()]);

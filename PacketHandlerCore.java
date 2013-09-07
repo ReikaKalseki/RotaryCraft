@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -84,6 +85,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
 	private TileEntityLiquidConverter liq;
+	private TileEntityPneumaticEngine eng;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -428,6 +430,12 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			if (control == 49)
 				liq.setToForge(data[0] > 0);
 			break;
+		case PNEUMATIC:
+			eng = (TileEntityPneumaticEngine)world.getBlockTileEntity(x, y, z);
+			if (control == 50)
+				eng.decrement();
+			if (control == 51)
+				eng.increment();
 		}
 	}
 }

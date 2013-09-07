@@ -41,7 +41,8 @@ public enum PacketRegistry {
 	BALANCER(44, 45),
 	REDGEAR(46),
 	TERRAFORMER(47),
-	LIQUID(48, 49);
+	LIQUID(48, 49),
+	PNEUMATIC(50, 51);
 
 	private int min;
 	private int max;

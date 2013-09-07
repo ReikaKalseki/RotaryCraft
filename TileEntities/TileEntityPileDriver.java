@@ -30,7 +30,6 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -428,7 +427,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public void spawnSpawner(World world, int x, int y, int z, TileEntityMobSpawner spw) {
 		if (world.isRemote)
 			return;
-		ItemStack is = new ItemStack(DragonAPICore.getItem("spawner"));
+		ItemStack is = new ItemStack(RotaryCraft.spawner);
 		ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 		EntityItem ent = new EntityItem(world, x, y, z, is);
 		world.spawnEntityInWorld(ent);

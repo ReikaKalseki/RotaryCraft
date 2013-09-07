@@ -12,8 +12,10 @@ package Reika.RotaryCraft.Items.Tools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 
@@ -33,9 +35,14 @@ public class ItemIOGoggles extends ItemRotaryArmor {
 		for (int i = -6; i <= 6; i++) {
 			for (int j = -6; j <= 6; j++) {
 				for (int k = -6; k <= 6; k++) {
-					if (world.getBlockTileEntity(x+i, y+j, z+k) instanceof TileEntityIOMachine) {
-						TileEntityIOMachine te = (TileEntityIOMachine)world.getBlockTileEntity(x+i, y+j, z+k);
-						te.iotick = 512;
+					TileEntity te = world.getBlockTileEntity(x+i, y+j, z+k);
+					if (te instanceof TileEntityIOMachine) {
+						TileEntityIOMachine io = (TileEntityIOMachine)te;
+						io.iotick = 512;
+					}
+					else if (te instanceof ShaftMachine) {
+						ShaftMachine sm = (ShaftMachine)te;
+						sm.setIORenderAlpha(512);
 					}
 				}
 			}

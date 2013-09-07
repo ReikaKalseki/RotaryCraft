@@ -47,10 +47,6 @@ public class RotaryRenderList {
 		return getRenderForMachine(m).getImageFileName(te);
 	}
 
-	public static void registerRenderers() {
-
-	}
-
 	public static TileEntitySpecialRenderer instantiateRenderer(MachineRegistry m) {
 		try {
 			RotaryTERenderer r = (RotaryTERenderer)Class.forName(m.getRenderer()).newInstance();

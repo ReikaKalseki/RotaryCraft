@@ -113,7 +113,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 			j = RotaryNames.enginePartNames.length;
 			break;
 		case 2: //heatcraft
-			j = RotaryNames.heatPartNames.length;
+			j = RotaryNames.miscPartNames.length;
 			break;
 		case 3: //misccraft 2
 			j = RotaryNames.borerPartNames.length;
@@ -182,7 +182,7 @@ public class ItemMulti extends ItemBasic implements IndexedItemSprites {
 		case 1:
 			return super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
 		case 2:
-			return super.getUnlocalizedName() + "." + RotaryNames.heatPartNames[d];
+			return super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
 		case 3:
 			return super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
 		case 4:

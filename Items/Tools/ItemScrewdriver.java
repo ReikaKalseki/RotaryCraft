@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
@@ -70,19 +71,24 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
 		int damage = 0;
-		TileEntity teb = world.getBlockTileEntity(x, y, z);
-		if (teb instanceof RotaryCraftTileEntity) {
-			RotaryCraftTileEntity t = (RotaryCraftTileEntity)teb;
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te instanceof RotaryCraftTileEntity) {
+			RotaryCraftTileEntity t = (RotaryCraftTileEntity)te;
 			damage = t.getBlockMetadata();
 		}
-		if (teb instanceof TileEntityIOMachine) {
-			((TileEntityIOMachine)teb).iotick = 512;
+		if (te instanceof TileEntityIOMachine) {
+			((TileEntityIOMachine)te).iotick = 512;
+			world.markBlockForUpdate(x, y, z);
+		}
+		if (te instanceof ShaftMachine) {
+			ShaftMachine sm = (ShaftMachine)te;
+			sm.setIORenderAlpha(512);
 			world.markBlockForUpdate(x, y, z);
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
 			if (m == MachineRegistry.ENGINE) {
-				TileEntityEngine clicked = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+				TileEntityEngine clicked = (TileEntityEngine)te;
 				int dmg = damage;
 				while (damage > 3)
 					damage -= 4;
@@ -93,7 +99,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			if (m == MachineRegistry.FLYWHEEL) {
-				TileEntityFlywheel clicked = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
+				TileEntityFlywheel clicked = (TileEntityFlywheel)te;
 				if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
 					clicked.setBlockMetadata(damage+1);
 				else
@@ -101,11 +107,11 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			if (m == MachineRegistry.COOLINGFIN) {
-				TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
+				TileEntityCoolingFin clicked = (TileEntityCoolingFin)te;
 				clicked.ticks = 512;
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
-				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)te;
 				if (damage != 3 && damage != 7 && damage != 11)
 					clicked.setBlockMetadata(damage+1);
 				else
@@ -113,7 +119,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+				TileEntityShaft ts = (TileEntityShaft)te;
 				MaterialRegistry type = ts.type;
 				if (damage < 5)
 					ts.setBlockMetadata(damage+1);
@@ -123,13 +129,13 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					ts.setBlockMetadata(damage+1);
 				if (damage == 9)
 					ts.setBlockMetadata(6);
-				TileEntityShaft ts1 = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+				TileEntityShaft ts1 = (TileEntityShaft)te;
 				ts1.type = type;
 				return true;
 			}
 			if (m == MachineRegistry.FLOODLIGHT) {
 				if (ep.isSneaking()) {
-					TileEntityFloodlight clicked = (TileEntityFloodlight)world.getBlockTileEntity(x, y, z);
+					TileEntityFloodlight clicked = (TileEntityFloodlight)te;
 					if (clicked != null) {
 						if (clicked.beammode)
 							clicked.beammode = false;
@@ -142,7 +148,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}
 			if (m.isCannon()) {
 				if (ep.isSneaking()) {
-					TileEntityAimedCannon clicked = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
+					TileEntityAimedCannon clicked = (TileEntityAimedCannon)te;
 					if (clicked != null) {
 						if (clicked.targetPlayers)
 							clicked.targetPlayers = false;
@@ -153,7 +159,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				}
 			}
 			if (m == MachineRegistry.TNTCANNON) {
-				TileEntityTNTCannon clicked = (TileEntityTNTCannon)world.getBlockTileEntity(x, y, z);
+				TileEntityTNTCannon clicked = (TileEntityTNTCannon)te;
 				if (clicked != null) {
 					if (clicked.targetMode)
 						clicked.targetMode = false;
@@ -163,7 +169,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				}
 			}
 			if (m == MachineRegistry.BUCKETFILLER) {
-				TileEntityBucketFiller clicked = (TileEntityBucketFiller)world.getBlockTileEntity(x, y, z);
+				TileEntityBucketFiller clicked = (TileEntityBucketFiller)te;
 				if (clicked != null) {
 					if (clicked.filling)
 						clicked.filling = false;
@@ -173,7 +179,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				}
 			}
 			if (m == MachineRegistry.GPR) {
-				TileEntityGPR clicked = (TileEntityGPR)world.getBlockTileEntity(x, y, z);
+				TileEntityGPR clicked = (TileEntityGPR)te;
 				if (clicked != null) {
 					if (clicked.xdir)
 						clicked.xdir = false;
@@ -183,7 +189,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				}
 			}
 			if (m == MachineRegistry.CCTV) {
-				TileEntityCCTV clicked = (TileEntityCCTV)world.getBlockTileEntity(x, y, z);
+				TileEntityCCTV clicked = (TileEntityCCTV)te;
 				if (ep.isSneaking()) {
 					clicked.theta -= 5;
 
@@ -195,7 +201,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}
 			if (m == MachineRegistry.GEARBOX) {
 				if (ep.isSneaking()) {
-					TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+					TileEntityGearbox clicked = (TileEntityGearbox)te;
 					if (clicked.reduction)
 						clicked.reduction = false;
 					else
@@ -203,7 +209,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 
 				}
 				else {
-					TileEntityGearbox clicked = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+					TileEntityGearbox clicked = (TileEntityGearbox)te;
 					if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
 						clicked.setBlockMetadata(damage+1);
 					else
@@ -213,7 +219,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			if (m == MachineRegistry.SPLITTER && (!ep.isSneaking())) {
-				TileEntitySplitter clicked = (TileEntitySplitter)teb;
+				TileEntitySplitter clicked = (TileEntitySplitter)te;
 				if (damage < 7 || (damage < 15 && damage > 7))
 					clicked.setBlockMetadata(damage+1);
 				if (damage == 7)
@@ -223,7 +229,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			if (m == MachineRegistry.SPLITTER && (ep.isSneaking())) {	// Toggle in/out
-				TileEntitySplitter clicked = (TileEntitySplitter)teb;
+				TileEntitySplitter clicked = (TileEntitySplitter)te;
 				if (damage < 8)
 					clicked.setBlockMetadata(damage+8);
 				else
@@ -232,7 +238,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}
 			int max = m.getNumberDirections()-1;
 			if (m.hasModel()) {
-				RotaryCraftTileEntity t = (RotaryCraftTileEntity)teb;
+				RotaryCraftTileEntity t = (RotaryCraftTileEntity)te;
 				int meta = t.getBlockMetadata();
 				if (meta < max)
 					t.setBlockMetadata(meta+1);
@@ -257,40 +263,6 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
 		}
 		return true;
-	}
-
-	public int setBevel(int dir) {
-		if (dir < 4)
-			return dir;
-		if (dir >= 8 && dir <= 15)
-			return dir-4;
-		switch (dir) {
-		case 4:
-			return 3;
-		case 5:
-			return 0;
-		case 6:
-			return 1;
-		case 7:
-			return 2;
-		case 16:
-			return 8;
-		case 17:
-			return 9;
-		case 18:
-			return 10;
-		case 19:
-			return 11;
-		case 20:
-			return 4;
-		case 21:
-			return 5;
-		case 22:
-			return 6;
-		case 23:
-			return 7;
-		}
-		return 0;
 	}
 
 	@Override
