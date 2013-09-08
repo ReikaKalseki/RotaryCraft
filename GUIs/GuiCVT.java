@@ -17,6 +17,7 @@ import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;
@@ -106,7 +107,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
 			return;
 		}
-		ratio = Integer.parseInt(input.getText());
+		ratio = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (reduction)
 			ratio = -ratio;
 		if (ratio != 0)

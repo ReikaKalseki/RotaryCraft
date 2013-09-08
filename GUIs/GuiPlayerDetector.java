@@ -17,6 +17,7 @@ import org.lwjgl.input.Mouse;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -78,7 +79,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
 			return;
 		}
-		range = Integer.parseInt(input.getText());
+		range = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (range >= 0)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
 	}

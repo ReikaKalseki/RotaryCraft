@@ -86,17 +86,17 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	}
 
 	public void sendPacket(int a) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(20); // 6 ints
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(24); // 6 ints
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
-			if (a == 32)
-				outputStream.writeInt(target[0]);
 			if (a == 33)
-				outputStream.writeInt(target[1]);
+				outputStream.writeInt(target[0]);
 			if (a == 34)
+				outputStream.writeInt(target[1]);
+			if (a == 35)
 				outputStream.writeInt(target[2]);
 			outputStream.writeInt(ica.xCoord);
 			outputStream.writeInt(ica.yCoord);
@@ -169,15 +169,15 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		if (input3.getText().contentEquals("-"))
 			valid3 = false;
 		if (valid1) {
-			target[0] = Integer.parseInt(input.getText());
+			target[0] = ReikaJavaLibrary.safeIntParse(input.getText());
 			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue());
 		}
 		if (valid2) {
-			target[1] = Integer.parseInt(input2.getText());
+			target[1] = ReikaJavaLibrary.safeIntParse(input2.getText());
 			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+1);
 		}
 		if (valid3) {
-			target[2] = Integer.parseInt(input3.getText());
+			target[2] = ReikaJavaLibrary.safeIntParse(input3.getText());
 			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+2);
 		}
 	}

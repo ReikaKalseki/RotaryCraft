@@ -16,6 +16,7 @@ import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
@@ -129,7 +130,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMinValue(), sonic, ep, freq);
 		}
 		if (valid2) {
-			dB = Integer.parseInt(input2.getText());
+			dB = ReikaJavaLibrary.safeIntParse(input2.getText());
 			if (dB >= 0) {
 				this.getVolFromdB();
 				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMaxValue(), sonic, ep, vol);

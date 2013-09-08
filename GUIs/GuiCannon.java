@@ -29,7 +29,6 @@ import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
@@ -122,39 +121,39 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	}
 
 	public void sendPacket(int a) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(24); // 6 ints
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(28); // 7 ints
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			int b = 0;
-			if (tile instanceof TileEntityTNTCannon)
+			if (tile instanceof TileEntityLaunchCannon)
 				b = a+PacketRegistry.CANNON.getMinValue();
 			if (tile instanceof TileEntityItemCannon)
 				b = a+PacketRegistry.ITEMCANNON.getMinValue();
-			ReikaJavaLibrary.pConsole("Sending packet number "+b+" Type "+PacketRegistry.getEnum(b));
+			//ReikaJavaLibrary.pConsole("Sending packet number "+b+" Type "+PacketRegistry.getEnum(b));
 			outputStream.writeInt(b);
 			if (targetMode) {
 				outputStream.writeInt(1);
-				if (a == 12)
+				if (a == 0)
 					outputStream.writeInt(target[0]);
-				if (a == 13)
+				if (a == 1)
 					outputStream.writeInt(target[1]);
-				if (a == 14)
+				if (a == 2)
 					outputStream.writeInt(target[2]);
 			}
 			else {
 				outputStream.writeInt(0);
-				if (a == 12)
+				if (a == 0)
 					outputStream.writeInt((int)phid);
-				if (a == 13)
+				if (a == 1)
 					outputStream.writeInt((int)thetad);
-				if (a == 14)
+				if (a == 2)
 					outputStream.writeInt(velocity);
 			}
-			outputStream.writeInt(tnt.xCoord);
-			outputStream.writeInt(tnt.yCoord);
-			outputStream.writeInt(tnt.zCoord);
+			outputStream.writeInt(tile.xCoord);
+			outputStream.writeInt(tile.yCoord);
+			outputStream.writeInt(tile.zCoord);
 
 		}
 		catch (Exception ex) {
@@ -235,11 +234,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		//System.out.println(input.getText());
 		if (valid1) {
 			if (targetMode) {
-				target[0] = Integer.parseInt(input.getText());
+				target[0] = ReikaJavaLibrary.safeIntParse(input.getText());
 				this.sendPacket(0);
 			}
 			else {
-				phid = Integer.parseInt(input.getText());
+				phid = ReikaJavaLibrary.safeIntParse(input.getText());
 				while (phid > 360) {
 					phid -= 360;
 				}
@@ -249,11 +248,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 		if (valid2) {
 			if (targetMode) {
-				target[1] = Integer.parseInt(input2.getText());
+				target[1] = ReikaJavaLibrary.safeIntParse(input2.getText());
 				this.sendPacket(1);
 			}
 			else {
-				thetad = Integer.parseInt(input2.getText());
+				thetad = ReikaJavaLibrary.safeIntParse(input2.getText());
 				if (thetad > 90) {
 					thetad = 90;
 				}
@@ -263,11 +262,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 		if (valid3) {
 			if (targetMode) {
-				target[2] = Integer.parseInt(input3.getText());
+				target[2] = ReikaJavaLibrary.safeIntParse(input3.getText());
 				this.sendPacket(2);
 			}
 			else {
-				velocity = Integer.parseInt(input3.getText());
+				velocity = ReikaJavaLibrary.safeIntParse(input3.getText());
 				if (velocity < 0) {
 					velocity = 0;
 				}

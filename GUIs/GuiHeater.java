@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerHeater;
@@ -93,7 +94,7 @@ public class GuiHeater extends GuiMachine
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, ep, temperature);
 			return;
 		}
-		temperature = Integer.parseInt(input.getText());
+		temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (temperature >= 0)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, ep, temperature);
 	}

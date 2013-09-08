@@ -108,6 +108,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		String stringdata = null;
 		//System.out.print(packet.length);
 		try {
+			//ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
 			packetType = PacketTypes.getPacketType(inputStream.readInt());
 			switch(packetType) {
 			case SOUND:
@@ -144,7 +145,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			e.printStackTrace();
 			return;
 		}
-
 		switch (pack) {
 		case BORER: {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", control, data));
@@ -363,13 +363,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		case ITEMCANNON: {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 			icannon = (TileEntityItemCannon)world.getBlockTileEntity(x, y, z);
-			if (control == 32) {
+			if (control == 33) {
 				icannon.target[0] = data[0];
 			}
-			if (control == 33) {
+			if (control == 34) {
 				icannon.target[1] = data[0];
 			}
-			if (control == 34) {
+			if (control == 35) {
 				icannon.target[2] = data[0];
 			}
 			break;

@@ -19,6 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.IO.ReikaMIDIReader;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -162,13 +163,13 @@ public class GuiMusic extends GuiNonPoweredMachine
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
 		//System.out.println(input.getText());
 		if (valid1) {
-			channel = Integer.parseInt(input.getText());
+			channel = ReikaJavaLibrary.safeIntParse(input.getText());
 		}
 		if (valid2) {
-			voice = Integer.parseInt(input2.getText());
+			voice = ReikaJavaLibrary.safeIntParse(input2.getText());
 		}
 		if (valid3) {
-			volume = Integer.parseInt(input3.getText());
+			volume = ReikaJavaLibrary.safeIntParse(input3.getText());
 		}
 	}
 

@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -114,7 +115,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
 			//System.out.println(input.getText());
-			timer = Integer.parseInt(input.getText());
+			timer = ReikaJavaLibrary.safeIntParse(input.getText());
 			int dat;
 			if (disabled)
 				dat = -1;

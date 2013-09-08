@@ -16,6 +16,7 @@ import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -103,7 +104,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
 		//System.out.println(input.getText());
 		if (valid1) {
-			omega = Integer.parseInt(input.getText());
+			omega = ReikaJavaLibrary.safeIntParse(input.getText());
 			if (omega >= 0) {
 				if (omega > RotaryConfig.omegalimit)
 					omega = RotaryConfig.omegalimit;
@@ -111,7 +112,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 			}
 		}
 		if (valid2) {
-			torque = Integer.parseInt(input2.getText());
+			torque = ReikaJavaLibrary.safeIntParse(input2.getText());
 			if (torque >= 0) {
 				if (torque > RotaryConfig.torquelimit)
 					torque = RotaryConfig.torquelimit;
