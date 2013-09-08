@@ -11,7 +11,6 @@ package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -27,7 +26,7 @@ public class GuiPneumatic extends GuiNonPoweredMachine {
 	private static final int SHIFT = -12;
 
 	public GuiPneumatic(EntityPlayer pl, TileEntityPneumaticEngine te) {
-		super(new CoreContainer(pl, te), te);
+		super(new ContainerPneumatic(pl, te), te);
 		engine = te;
 		ySize = 99;
 		xSize = 199;
@@ -78,7 +77,7 @@ public class GuiPneumatic extends GuiNonPoweredMachine {
 		this.drawCenteredString(fontRenderer, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+xSize/2, ySize-30-48+6+dy*2, 0xffffff);
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+171, j+188, k+21, k+90)) {
-			int e = (int)engine.getStoredEnergy();
+			int e = engine.getStoredEnergy();
 			String sg = String.format("%d/%d MJ", e, engine.maxMJ);
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
 		}

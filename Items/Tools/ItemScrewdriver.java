@@ -237,21 +237,12 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				return true;
 			}
 			int max = m.getNumberDirections()-1;
-			if (m.hasModel()) {
-				RotaryCraftTileEntity t = (RotaryCraftTileEntity)te;
-				int meta = t.getBlockMetadata();
-				if (meta < max)
-					t.setBlockMetadata(meta+1);
-				else
-					t.setBlockMetadata(0);
-			}
-			else {
-				int meta = world.getBlockMetadata(x, y, z);
-				if (meta-m.getMachineMetadata() < max)
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, meta+1);
-				else
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata());
-			}
+			RotaryCraftTileEntity t = (RotaryCraftTileEntity)te;
+			int meta = t.getBlockMetadata();
+			if (meta < max)
+				t.setBlockMetadata(meta+1);
+			else
+				t.setBlockMetadata(0);
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
 		else {

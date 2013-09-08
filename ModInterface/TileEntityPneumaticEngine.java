@@ -47,6 +47,8 @@ PowerGenerator, GuiController {
 
 	private int base;
 
+	public int storedpower;
+
 	private static final int MINBASE = 0;
 	private static final int MAXBASE = 11; //2048 Nm -> 2.09 MW
 
@@ -75,12 +77,12 @@ PowerGenerator, GuiController {
 		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
 	}
 
-	public float getStoredEnergy() {
-		return pp.getEnergyStored();
+	public int getStoredEnergy() {
+		return storedpower;
 	}
 
 	public float getPercentStorage() {
-		return this.getStoredEnergy()/maxMJ;
+		return pp.getEnergyStored()/maxMJ;
 	}
 
 	public int getEnergyScaled(int h) {
@@ -139,6 +141,9 @@ PowerGenerator, GuiController {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
+
+		if (!world.isRemote)
+			storedpower = (int)pp.getEnergyStored();
 
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
@@ -269,6 +274,7 @@ PowerGenerator, GuiController {
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("tier", base);
+		NBT.setInteger("storage", storedpower);
 		pp.writeToNBT(NBT);
 	}
 
@@ -280,6 +286,7 @@ PowerGenerator, GuiController {
 	{
 		super.readFromNBT(NBT);
 		base = NBT.getInteger("tier");
+		storedpower = NBT.getInteger("storage");
 		pp.readFromNBT(NBT);
 	}
 

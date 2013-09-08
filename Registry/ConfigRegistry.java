@@ -55,7 +55,8 @@ public enum ConfigRegistry implements ConfigList {
 	BIOMEBLOCKS("Terraformer Block Editing", true),
 	DYNAMICHANDBOOK("Reload Handbook Data on Open", true),
 	TABLEMACHINES("Crafting Table can Make Machines", false),
-	EMPLOAD("EMP Charging Speed", 4);
+	EMPLOAD("EMP Charging Speed", 4),
+	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false);
 
 	private String label;
 	private boolean defaultState;

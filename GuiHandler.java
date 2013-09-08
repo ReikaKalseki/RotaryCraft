@@ -104,6 +104,7 @@ import Reika.RotaryCraft.GUIs.GuiVacuum;
 import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
+import Reika.RotaryCraft.ModInterface.ContainerPneumatic;
 import Reika.RotaryCraft.ModInterface.GuiLiquidConverter;
 import Reika.RotaryCraft.ModInterface.GuiPneumatic;
 import Reika.RotaryCraft.ModInterface.GuiPressureBalancer;
@@ -266,6 +267,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityTerraformer) {
 			return new ContainerTerraformer(player, (TileEntityTerraformer)te);
+		}
+		if (te instanceof TileEntityPneumaticEngine) {
+			return new ContainerPneumatic(player, (TileEntityPneumaticEngine)te);
 		}
 
 		if (te instanceof OneSlotMachine)
