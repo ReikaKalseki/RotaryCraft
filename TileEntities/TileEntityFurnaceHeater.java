@@ -22,6 +22,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Models.ModelFriction;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -39,7 +40,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		if (this.hasFurnace(world)) {
-			temperature += 2*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
+			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		if (temperature > Tamb) {
@@ -53,7 +54,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature >= MAXTEMP)
-			if (par5Random.nextInt(600) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
+			if (par5Random.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
 	}
 
@@ -112,10 +113,17 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
 		this.smeltCalculation();
 		smeltTime++;
-		tile.furnaceCookTime = smeltTime;
+		tile.furnaceCookTime = Math.min(smeltTime, 195);
+		if (tile.getStackInSlot(0) != null) {
+			if (smeltTime >= 200) {
+				tile.smeltItem();
+				smeltTime = 0;
+			}
+		}
+		else {
+			tile.furnaceCookTime = 0;
+		}
 		//ReikaJavaLibrary.pConsole(smeltTime+" , "+tile.furnaceCookTime);
-		if (smeltTime >= 200)
-			smeltTime = 0;
 		soundtick++;
 		if (soundtick > 49) {
 			SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 1);
@@ -140,7 +148,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	private void smeltCalculation() {
 		int factor = this.getSpeedFactorFromTemperature();
-		smeltTime *= factor;
+		smeltTime += factor;
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {
@@ -182,9 +190,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private int getSpeedFactorFromTemperature() {
-		if (temperature < 800)
+		if (temperature < 500)
 			return 1;
-		return 1+(int)((temperature-800)/100F);
+		return 1+(int)((temperature-500)/100F)*2;
 	}
 
 	@Override

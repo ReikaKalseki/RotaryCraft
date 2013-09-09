@@ -115,7 +115,7 @@ public class RotaryRecipes {
 		MachineRegistry.CLUTCH.addCrafting("S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone);
 		MachineRegistry.CLUTCH.addCrafting("S", "R", 'S', MachineRegistry.SHAFT.getCraftedMetadataProduct(2), 'R', Item.redstone);
 
-		MachineRegistry.DYNAMOMETER.addCrafting(" S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl);
+		MachineRegistry.DYNAMOMETER.addSizedCrafting(2, " S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl);
 
 		MachineRegistry.BEDROCKBREAKER.addCrafting("BDO", "BSO", "BDO", 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel);
 
@@ -311,8 +311,8 @@ public class RotaryRecipes {
 				" S ", "SIS", " S ", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller});
 		GameRegistry.addRecipe(ItemStacks.saw, new Object[]{
 				"S S", " C ", "S S", 'S', ItemStacks.steelingot, 'C', ItemStacks.steelgear});
-		GameRegistry.addRecipe(ItemStacks.pcb, new Object[]{
-				"PGP", "RER", "GPG", 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'R', Item.redstone, 'E', Item.enderPearl});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.pcb, 2), new Object[]{
+			"PGP", "RER", "GPG", 'P', ItemStacks.steelingot, 'G', Item.ingotGold, 'R', Item.redstone, 'E', Item.enderPearl});
 		GameRegistry.addRecipe(ItemStacks.sonar, new Object[]{
 				" S ", "SNS", "RCR", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'N', Block.music, 'C', ItemStacks.pcb});
 		GameRegistry.addRecipe(ItemStacks.radar, new Object[]{

@@ -26,7 +26,8 @@ public enum DifficultyEffects {
 	JETFAILURE(4500, 1800, 900),
 	CONSUMEFRAC(0.03125F, 0.0625F, 0.5F),
 	PRODUCEFRAC(new int[]{8,16}, new int[]{5,11}, new int[]{2,4}),
-	BREAKCOIL(16, 4, 1);
+	BREAKCOIL(16, 4, 1),
+	FURNACEMELT(1800, 600, 150);
 
 	private boolean isChance = false;
 
