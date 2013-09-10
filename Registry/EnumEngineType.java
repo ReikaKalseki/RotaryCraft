@@ -106,27 +106,37 @@ public enum EnumEngineType {
 		return EnumEngineType.values()[type];
 	}
 
-	public int getSoundLength(int FOD) {
-		if (this.carNoise()) {
-			return 88;
-		}
-		if (this.electricNoise()) {
-			return 74;
-		}
-		if (this.steamNoise()) {
-			return 49;
-		}
-		if (this.waterNoise()) {
-			return 59;
-		}
-		if (this.windNoise()) {
-			return 105;
+	public int getSoundLength(int FOD, float factor) {
+		//Minor corrections
+		if (factor == 2.5F && this.carNoise())
+			factor = 1.81F;
+		if (factor == 2.5F && this.turbineNoise()) {
+			factor = 2F;
 		}
 		if (this.jetNoise()) {
-			return 79+FOD*11;
+			factor += 0.0125F;
+		}
+
+		if (this.carNoise()) {
+			return (int)(88*factor);
+		}
+		if (this.electricNoise()) {
+			return (int)(74*factor);
+		}
+		if (this.steamNoise()) {
+			return (int)(49*factor);
+		}
+		if (this.waterNoise()) {
+			return (int)(59*factor);
+		}
+		if (this.windNoise()) {
+			return (int)(105*factor);
+		}
+		if (this.jetNoise()) {
+			return (int)((79+FOD*11)*factor);
 		}
 		if (this.turbineNoise()) {
-			return 20;
+			return (int)(20*factor);
 		}
 		return 0;
 	}
@@ -231,5 +241,17 @@ public enum EnumEngineType {
 
 	public boolean isEMPImmune() {
 		return this == HYDRO || this == WIND;
+	}
+
+	public boolean isECUControllable() {
+		switch(this) {
+		case DC:
+		case HYDRO:
+		case STEAM:
+		case WIND:
+			return false;
+		default:
+			return true;
+		}
 	}
 }

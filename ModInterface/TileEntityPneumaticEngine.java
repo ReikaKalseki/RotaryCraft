@@ -25,7 +25,6 @@ import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelPneumatic;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeConnection;
@@ -43,13 +42,13 @@ PowerGenerator, GuiController {
 
 	private StepTimer sound = new StepTimer(72);
 
-	public static final int GENOMEGA = 1024;
+	private static final int GENOMEGA = 1024;
 
-	private int base;
+	private int base = -1;
 
 	public int storedpower;
 
-	private static final int MINBASE = 0;
+	private static final int MINBASE = -1;
 	private static final int MAXBASE = 11; //2048 Nm -> 2.09 MW
 
 	public TileEntityPneumaticEngine()
@@ -69,7 +68,15 @@ PowerGenerator, GuiController {
 		return GENOMEGA*this.getTorqueLevel();
 	}
 
+	public int getSpeed() {
+		if (base < 0)
+			return 0;
+		return GENOMEGA;
+	}
+
 	public int getTorqueLevel() {
+		if (base < 0)
+			return 0;
 		return ReikaMathLibrary.intpow2(2, base);
 	}
 
@@ -144,18 +151,6 @@ PowerGenerator, GuiController {
 
 		if (!world.isRemote)
 			storedpower = (int)pp.getEnergyStored();
-
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
-			if (te != null) {
-				if (!te.enabled) {
-					omega = 0;
-					torque = 0;
-					power = 0;
-					return;
-				}
-			}
-		}
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 

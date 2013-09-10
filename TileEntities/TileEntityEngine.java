@@ -304,7 +304,6 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		this.internalizeFuel(world, x, y, z, meta);
 
 		if (timer.checkCap("fuel")) {
-
 			switch(type) {
 			case STEAM:
 				if (waterLevel > 0 && temperature >= 100)
@@ -832,7 +831,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 
 		timer.setCap("fuel", type.getFuelUnitDuration());
-		timer.setCap("sound", type.getSoundLength(FOD));
+		timer.setCap("sound", type.getSoundLength(FOD, 1));
 
 		if (this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
 			isOn = true;
@@ -898,7 +897,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
 					TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
 					if (te != null) {
-						if (!te.enabled) {
+						if (!te.canProducePower()) {
 							return;
 						}
 					}
@@ -1131,7 +1130,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
 	}
 
-	private void playSounds(World world, int x, int y, int z) {
+	private void playSounds(World world, int x, int y, int z, float pit) {
 		soundtick++;
 		if (type.jetNoise() && FOD > 0 && par5Random.nextInt(2*(9-FOD)) == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+par5Random.nextFloat(), 1F);
@@ -1139,12 +1138,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		if (!ConfigRegistry.ENGINESOUNDS.getState())
 			return;
-		if (soundtick < type.getSoundLength(FOD) && soundtick < 2000)
+		if (soundtick < type.getSoundLength(FOD, 1F/pit) && soundtick < 2000)
 			return;
 		soundtick = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F*pit);
 		if (type.turbineNoise()) {
 			float volume = 0.125F;
 			float pitch = 1F;
@@ -1153,18 +1152,18 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 				pitch = 1F/(0.125F*FOD+1);
 			}
 			if (type.jetNoise())
-				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pit);
 			else
-				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pit);
 		}
 		if (type.steamNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F*pit);
 		if (type.carNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F*pit);
 		if (type.waterNoise() && (this.isFrontOfArray() || !this.isPartOfArray()))
-			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F*pit);
 		if (type.windNoise()) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F*pit);
 		}
 	}
 
@@ -1183,21 +1182,40 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			this.getType();
 			power = torque*omega;
 		}
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
-			if (te != null) {
-				if (!te.enabled) {
-					omega = 0;
-					torque = 0;
-					power = 0;
-					if (type.hasTemperature()) {
-						if (timer.checkCap("temperature")) {
-							this.updateTemperature(world, x, y, z, meta);
-						}
-					}
-					soundtick = 2000;
 
-					return;
+		float pitch = 1F;
+		float soundfactor = 1F;
+		if (type.isECUControllable()) {
+			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
+				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
+				if (te != null) {
+					if (te.canProducePower()) {
+						omega = (int)(omega*te.getSpeedMultiplier());
+						int fuelcap = timer.getCapOf("fuel");
+						fuelcap = fuelcap*te.getFuelMultiplier();
+						timer.setCap("fuel", fuelcap);
+						pitch = te.getSoundStretch();
+						soundfactor = 1F/te.getSoundStretch();
+						int soundcap = timer.getCapOf("sound");
+						soundcap = (int)(soundcap*soundfactor);
+						timer.setCap("sound", soundcap);
+						int tempcap = timer.getCapOf("temperature");
+						tempcap *= soundfactor;
+						timer.setCap("temperature", tempcap);
+					}
+					else {
+						omega = 0;
+						torque = 0;
+						power = 0;
+						if (type.hasTemperature()) {
+							if (timer.checkCap("temperature")) {
+								this.updateTemperature(world, x, y, z, meta);
+							}
+						}
+						soundtick = 2000;
+
+						return;
+					}
 				}
 			}
 		}
@@ -1217,9 +1235,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			this.consumeFuel(world, x, y, z, meta);
 
 		if (power > 0) {
-			this.playSounds(world, x, y, z);
+			this.playSounds(world, x, y, z, pitch);
 		}
-		else if (soundtick < type.getSoundLength(FOD))
+		else if (soundtick < type.getSoundLength(FOD, soundfactor))
 			soundtick = 2000;
 	}
 

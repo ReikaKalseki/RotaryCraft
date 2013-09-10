@@ -19,18 +19,86 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector {
-	public boolean enabled = true;
 
 	public int fuelLevel = 0;
 	public static final int FUELCAP = 300;
 
+	private EngineSettings setting = EngineSettings.FULL;
+
+	private enum EngineSettings {
+		SHUTDOWN(0, 0),
+		STANDBY(16, 64),
+		LOW(4, 8),
+		MEDIUM(2, 2),
+		FULL(1, 1);
+
+		public final int speedFactor;
+		public final int fuelFactor;
+
+		public static final EngineSettings[] list = values();
+
+		private EngineSettings(int speed, int fuel) {
+			speedFactor = speed;
+			fuelFactor = fuel;
+		}
+	}
+
+	public boolean consumeFuel() {
+		return setting.fuelFactor != 0;
+	}
+
+	public boolean canProducePower() {
+		return setting.speedFactor != 0;
+	}
+
+	public boolean playSound() {
+		return this.canProducePower();
+	}
+
+	public float getSpeedMultiplier() {
+		if (this.canProducePower())
+			return 1F/setting.speedFactor;
+		return 0;
+	}
+
+	public int getFuelMultiplier() {
+		return setting.fuelFactor;
+	}
+
+	public float getSoundStretch() {
+		switch(setting) {
+		case FULL:
+			return 1F;
+		case LOW:
+			return 0.6F;
+		case MEDIUM:
+			return 0.8F;
+		case SHUTDOWN:
+			return 0F;
+		case STANDBY:
+			return 0.4F;
+		default:
+			return 1F;
+		}
+	}
+
+	public void increment() {
+		int l = EngineSettings.list.length;
+		int o = setting.ordinal();
+		o++;
+		if (o >= l)
+			o = 0;
+		setting = EngineSettings.list[o];
+
+	}
+
+	public int getSettingNumber() {
+		return setting.ordinal();
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.drawFuel(world, x, y, z, meta);
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
-			enabled = false;
-		else
-			enabled = true;
 		if (fuelLevel <= 0)
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
@@ -134,6 +202,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("fuel", fuelLevel);
+		NBT.setInteger("lvl", setting.ordinal());
 	}
 
 	/**
@@ -144,6 +213,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	{
 		super.readFromNBT(NBT);
 		fuelLevel = NBT.getInteger("fuel");
+		setting = EngineSettings.list[NBT.getInteger("lvl")];
 	}
 
 	@Override

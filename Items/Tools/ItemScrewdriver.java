@@ -27,6 +27,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.TileEntityGPR;
@@ -109,6 +110,10 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			if (m == MachineRegistry.COOLINGFIN) {
 				TileEntityCoolingFin clicked = (TileEntityCoolingFin)te;
 				clicked.ticks = 512;
+			}
+			if (m == MachineRegistry.ECU) {
+				TileEntityEngineController clicked = (TileEntityEngineController)te;
+				clicked.increment();
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)te;

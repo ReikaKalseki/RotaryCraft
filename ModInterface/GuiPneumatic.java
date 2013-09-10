@@ -61,7 +61,7 @@ public class GuiPneumatic extends GuiNonPoweredMachine {
 		super.drawGuiContainerForegroundLayer(a, b);
 
 		int torque = engine.getTorqueLevel();
-		int omega = engine.GENOMEGA;
+		int omega = engine.getSpeed();
 		long power = engine.getPowerLevel();
 		int inset = 1;
 		int w = 50;
