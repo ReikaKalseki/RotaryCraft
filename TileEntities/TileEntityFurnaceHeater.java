@@ -202,7 +202,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public int getRedstoneOverride() {
-		return 0;
+		return temperature/100;
 	}
 
 	@Override

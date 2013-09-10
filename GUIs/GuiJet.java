@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerJet;
 import Reika.RotaryCraft.TileEntities.TileEntityEngine;
@@ -18,7 +19,7 @@ public class GuiJet extends GuiNonPoweredMachine
 {
 	private TileEntityEngine eng;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	
+
 	int x;
 	int y;
 
@@ -29,6 +30,31 @@ public class GuiJet extends GuiNonPoweredMachine
 		xSize = 176;
 		ySize = 166;
 		ep = p5ep;
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		super.drawGuiContainerForegroundLayer(a, b);
+		int x = ReikaGuiAPI.instance.getMouseRealX();
+		int y = ReikaGuiAPI.instance.getMouseRealY();
+		if (ReikaGuiAPI.instance.isMouseInBox(j+84, j+90, k+16, k+71)) {
+			float time = eng.getFuelDuration();
+			String sg;
+			if (time < 60)
+				sg = String.format("Fuel: %ds", (int)time);
+			else if (time < 3600) {
+				time /= 60F;
+				sg = String.format("Fuel: %.2f min", time);
+			}
+			else {
+				time /= 3600F;
+				sg = String.format("Fuel: %.2fh", time);
+			}
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, x-j, y-k);
+		}
 	}
 
 	/**
