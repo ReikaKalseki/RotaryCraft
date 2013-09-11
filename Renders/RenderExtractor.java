@@ -27,7 +27,6 @@ public class RenderExtractor extends RotaryTERenderer
 {
 
 	private ModelExtractor ExtractorModel = new ModelExtractor();
-	//private ModelExtractorV ExtractorModelV = new ModelExtractorV();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -43,8 +42,7 @@ public class RenderExtractor extends RotaryTERenderer
 
 		ModelExtractor var14;
 		var14 = ExtractorModel;
-		//ModelExtractorV var15;
-		//var14 = this.ExtractorModelV;
+
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/extractortex.png");
 
 		GL11.glPushMatrix();
@@ -84,17 +82,9 @@ public class RenderExtractor extends RotaryTERenderer
 			}
 
 		}
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
-
 
 		var14.renderAll(ReikaJavaLibrary.makeListFrom(MinecraftForgeClient.getRenderPass() == 1), 0);
-		// else
-		//var15.renderAll();
+
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_BLEND);

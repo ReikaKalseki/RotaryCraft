@@ -107,6 +107,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
+import Reika.RotaryCraft.TileEntities.TileEntityMachineGun;
 import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMobHarvester;
@@ -234,7 +235,7 @@ public enum MachineRegistry {
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
 	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", APIRegistry.BUILDCRAFTENERGY),
-	ARROWGUN(		"Arrow Gun",			BlockDMMachine.class,			TileEntityMachineGun.class,		11, "RenderMachineGun);
+	ARROWGUN(			"Arrow Gun",				BlockDMMachine.class,		TileEntityMachineGun.class,			11, "RenderMachineGun");
 
 
 	private String name;

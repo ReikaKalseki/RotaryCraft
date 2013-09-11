@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.RotaryCraft.GLListData;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,16 +28,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class RotaryTERenderer extends TileEntitySpecialRenderer implements TextureFetcher {
 
-	public abstract void createLists();
+	//public abstract void createLists();
 
-	private void callList(TileEntity te, int i) {
-	try {
-GLList li = GLListData(te.getMachine, i);
-GL11.callList(li);
-	}
-catch (NullPointerException e) {
+	private void callList(RotaryCraftTileEntity te, int i) {
+		try {
+			int li = GLListData.getMachineRenderList(te.getMachine(), i);
+			GL11.glCallList(li);
+		}
+		catch (ClassCastException e) {
 
-}
+		}
+		catch (NullPointerException e) {
+
+		}
 	}
 
 	public final boolean isValidMachineRenderpass(TileEntityBase te) {

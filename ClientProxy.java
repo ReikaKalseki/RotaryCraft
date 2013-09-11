@@ -18,6 +18,7 @@ import Reika.DragonAPI.Instantiable.SoundLoader;
 import Reika.DragonAPI.Instantiable.SpawnerRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
@@ -87,8 +88,8 @@ public class ClientProxy extends CommonProxy
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (m.hasRender()) {
 				RotaryTERenderer render = RotaryRenderList.instantiateRenderer(m);
-				GLList[] renderLists = render.createLists();
-				GLListData.addListData(m, renderLists);
+				//int[] renderLists = render.createLists();
+				//GLListData.addListData(m, renderLists);
 				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), render);
 			}
 		}

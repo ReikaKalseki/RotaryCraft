@@ -19,18 +19,18 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Models.ModelHRay;
-import Reika.RotaryCraft.TileEntities.TileEntityHeatRay;
+import Reika.RotaryCraft.Models.ModelFullBlock;
+import Reika.RotaryCraft.TileEntities.TileEntityMachineGun;
 
-public class RenderHRay extends RotaryTERenderer
+public class RenderMachineGun extends RotaryTERenderer
 {
 
-	private ModelHRay HRayModel = new ModelHRay();
+	private ModelFullBlock MachineGunModel = new ModelFullBlock();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityHeatRayAt(TileEntityHeatRay tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityMachineGunAt(TileEntityMachineGun tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -39,8 +39,8 @@ public class RenderHRay extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelHRay var14 = HRayModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/HRay.png");
+		ModelFullBlock var14 = MachineGunModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/machineguntex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -85,13 +85,13 @@ public class RenderHRay extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityHeatRayAt((TileEntityHeatRay)tile, par2, par4, par6, par8);
+			this.renderTileEntityMachineGunAt((TileEntityMachineGun)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "HRay.png";
+		return "machineguntex.png";
 	}
 }

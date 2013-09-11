@@ -164,7 +164,7 @@ PowerGenerator, GuiController {
 		float mj = pp.getEnergyStored();
 
 		torque = this.getTorqueLevel();
-		omega = GENOMEGA;
+		omega = this.getSpeed();
 
 		power = (long)torque*(long)omega;
 
