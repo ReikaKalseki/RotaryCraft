@@ -27,6 +27,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class RotaryTERenderer extends TileEntitySpecialRenderer implements TextureFetcher {
 
+	public abstract void createLists();
+
 	public final boolean isValidMachineRenderpass(TileEntityBase te) {
 		if (!te.isInWorld())
 			return true;

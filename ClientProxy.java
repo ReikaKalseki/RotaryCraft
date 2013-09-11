@@ -86,7 +86,10 @@ public class ClientProxy extends CommonProxy
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (m.hasRender()) {
-				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), RotaryRenderList.instantiateRenderer(m));
+				RotaryTERenderer render = RotaryRenderList.instantiateRenderer(m);
+				GLList[] renderLists = render.createLists();
+				GLListData.addListData(m, renderLists);
+				ClientRegistry.bindTileEntitySpecialRenderer(m.getTEClass(), render);
 			}
 		}
 
