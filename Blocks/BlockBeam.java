@@ -25,17 +25,11 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockBeam extends BlockBasic {
 
-	public int metadata;
-
 	public BlockBeam(int ID) {
 		super(ID, Material.circuits);	// no pistons, breaks with water
-		//this.setBlockUnbreakable();
 		this.setResistance(3600000F);
 		this.setStepSound(soundGlassFootstep);
-		////this.requiresSelfNotify[this.blockID] = true;
 		this.setLightValue(1F);
-
-		//this.blockIndexInTexture = 4;
 	}
 
 	@Override
