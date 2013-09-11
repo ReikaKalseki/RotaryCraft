@@ -103,6 +103,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
 			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
+if (world.isBlockIndirectlyGettingPowered(x, y, z))
+this.setting = EngineSettings.SHUTDOWN;
 	}
 
 	private void transferToEngine(TileEntityEngine te) {
