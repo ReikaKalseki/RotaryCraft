@@ -29,6 +29,16 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
 
 	public abstract void createLists();
 
+	private void callList(TileEntity te, int i) {
+	try {
+GLList li = GLListData(te.getMachine, i);
+GL11.callList(li);
+	}
+catch (NullPointerException e) {
+
+}
+	}
+
 	public final boolean isValidMachineRenderpass(TileEntityBase te) {
 		if (!te.isInWorld())
 			return true;
