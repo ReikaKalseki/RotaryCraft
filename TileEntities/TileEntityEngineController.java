@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -40,6 +41,18 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		private EngineSettings(int speed, int fuel) {
 			speedFactor = speed;
 			fuelFactor = fuel;
+		}
+
+		public double getSpeedDecimal() {
+			if (this == SHUTDOWN)
+				return 0;
+			return 100D/speedFactor;
+		}
+
+		public int getEfficiencyFactor() {
+			if (this == SHUTDOWN)
+				return 0;
+			return fuelFactor/speedFactor;
 		}
 	}
 
@@ -103,8 +116,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
 			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
-if (world.isBlockIndirectlyGettingPowered(x, y, z))
-this.setting = EngineSettings.SHUTDOWN;
+		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			setting = EngineSettings.SHUTDOWN;
 	}
 
 	private void transferToEngine(TileEntityEngine te) {
@@ -236,5 +249,22 @@ this.setting = EngineSettings.SHUTDOWN;
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
 		return true;
+	}
+
+	public static EngineSettings[] getSettingList() {
+		EngineSettings[] arr = new EngineSettings[EngineSettings.list.length];
+		System.arraycopy(EngineSettings.list, 0, arr, 0, arr.length);
+		return arr;
+	}
+
+	public static String getSettingsAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < EngineSettings.list.length; i++) {
+			EngineSettings set = EngineSettings.list[i];
+			sb.append(String.format("%s: %.2f%% Speed, %dx Fuel Efficiency", ReikaStringParser.capFirstChar(set.name()), set.getSpeedDecimal(), set.getEfficiencyFactor()));
+			if (i < EngineSettings.list.length-1)
+				sb.append("\n");
+		}
+		return sb.toString();
 	}
 }

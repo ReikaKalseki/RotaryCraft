@@ -135,7 +135,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.WINDER.addCrafting(" ss", " hg", "ppp", 'h', ItemStacks.shaftitem, 's', ItemStacks.steelingot, 'g', ItemStacks.gearunit, 'p', ItemStacks.basepanel);
 
-		MachineRegistry.ECU.addCrafting("IPI", "IRI", "IRI", 'I', ItemStacks.steelingot, 'P', ItemStacks.power, 'R', Item.redstone);
+		MachineRegistry.ECU.addCrafting("IPI", "IGI", "IRI", 'I', ItemStacks.steelingot, 'G', Item.ingotGold, 'P', ItemStacks.pcb, 'R', Item.redstone);
 
 		MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit);
 

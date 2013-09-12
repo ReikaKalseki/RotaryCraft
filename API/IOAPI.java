@@ -44,9 +44,9 @@ public class IOAPI {
 	 * Calling it on pass 1 only is strongly recommended to
 	 * prevent visual glitches caused by OpenGL limitations.
 	 * @param machine Your TileEntity as either a ShaftPowerEmitter or ShaftPowerReceiver
-	 * @param par2 The "par2" passed in the renderTileEntityAt"; related to x-displacement
-	 * @param par4 The "par4" passed in the renderTileEntityAt"; related to y-displacement
-	 * @param par6 The "par6" passed in the renderTileEntityAt"; related to z-displacement
+	 * @param par2 The "par2" passed in the "renderTileEntityAt"; related to x-displacement
+	 * @param par4 The "par4" passed in the "renderTileEntityAt"; related to y-displacement
+	 * @param par6 The "par6" passed in the "renderTileEntityAt"; related to z-displacement
 	 */
 	public static void renderIO(ShaftMachine machine, double par2, double par4, double par6) {
 		try {

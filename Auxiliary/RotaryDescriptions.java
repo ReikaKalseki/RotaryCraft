@@ -30,6 +30,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -367,5 +368,6 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.BLOCKCANNON, PowerReceivers.BLOCKCANNON.getMinPower());
 		addNotes(MachineRegistry.COMPRESSOR, TileEntityAirCompressor.MAXPRESSURE);
 		addNotes(MachineRegistry.LAMP, TileEntityLamp.MAXRANGE);
+		addNotes(MachineRegistry.ECU, TileEntityEngineController.getSettingsAsString());
 	}
 }
