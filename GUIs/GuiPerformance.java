@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerPerformance;
@@ -41,18 +42,8 @@ public class GuiPerformance extends GuiNonPoweredMachine
 		int x = ReikaGuiAPI.instance.getMouseRealX();
 		int y = ReikaGuiAPI.instance.getMouseRealY();
 		if (ReikaGuiAPI.instance.isMouseInBox(j+81, j+88, k+16, k+71)) {
-			float time = Engine.getFuelDuration();
-			String sg;
-			if (time < 60)
-				sg = String.format("Fuel: %ds", (int)time);
-			else if (time < 3600) {
-				time /= 60F;
-				sg = String.format("Fuel: %.2f min", time);
-			}
-			else {
-				time /= 3600F;
-				sg = String.format("Fuel: %.2fh", time);
-			}
+			int time = Engine.getFuelDuration();
+			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, x-j, y-k);
 		}
 	}
