@@ -660,12 +660,12 @@ public enum MachineRegistry {
 
 	public int getContactDamage(RotaryCraftTileEntity tile) {
 		if (this == WOODCUTTER) {
-			if (((TileEntityWoodcutter)tile).power == 0)
+			if (((TileEntityWoodcutter)tile).power <= 0)
 				return 0;
 			return 3;
 		}
 		if (this == GRINDER) {
-			if (((TileEntityGrinder)tile).power == 0)
+			if (((TileEntityGrinder)tile).power <= 0)
 				return 0;
 			return 1;
 		}

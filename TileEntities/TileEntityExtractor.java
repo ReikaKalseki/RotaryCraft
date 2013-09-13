@@ -471,19 +471,13 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		ModOreList entry = ModOreList.getEntryFromDamage(is.getItemDamage()/4);
-		if (slot != 0 && is.itemID != RotaryCraft.extracts.itemID && is.itemID != RotaryCraft.modextracts.itemID)
-			return false;
-		switch (slot) {
-		case 0:
+		if (slot == 0)
 			return ReikaBlockHelper.isOre(is);
-		case 1:
-			if (is.itemID != RotaryCraft.extracts.itemID && is.itemID != RotaryCraft.modextracts.itemID)
-				return ExtractorModOres.isDust(entry, is.getItemDamage()) || RecipesExtractor.isDust(is);
-		case 2:
-			return ExtractorModOres.isSlurry(entry, is.getItemDamage()) || RecipesExtractor.isSlurry(is);
-		case 3:
-			return ExtractorModOres.isSolution(entry, is.getItemDamage()) || RecipesExtractor.isSolution(is);
+		if (is.itemID == RotaryCraft.extracts.itemID) {
+			return slot == 1+is.getItemDamage()/8;
+		}
+		if (is.itemID == RotaryCraft.modextracts.itemID) {
+			return slot == 1+is.getItemDamage()%4;
 		}
 		return false;
 	}
