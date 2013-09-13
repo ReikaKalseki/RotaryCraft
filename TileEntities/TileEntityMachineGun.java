@@ -18,9 +18,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -28,23 +30,26 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
-	private StepTimer timer = new StepTimer(5); // controls max fire rate
-
 	private ItemStack[] inv = new ItemStack[27];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false, false);
 
-		timer.update();
-		if (timer.checkCap() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
-			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
+		if (power <= 0)
+			return;
+
+		if (tickcount >= this.getFireRate() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
+			AxisAlignedBB box = this.drawAABB(x, y, z, meta);;
 			List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
-			if (li.size() > 0) {
+			ReikaJavaLibrary.pConsole(li.size());
+			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
 				this.fire(world, x, y, z, meta);
 			}
+			tickcount = 0;
 		}
 	}
 
@@ -70,30 +75,38 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 		return 27;
 	}
 
+	private double getFirePower() {
+		return ReikaMathLibrary.logbase(torque, 2);
+	}
+
+	private int getFireRate() {
+		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega, 2), 2, "max");
+	}
+
 	private void fire(World world, int x, int y, int z, int meta) {
 		double vx = 0;
 		double vz = 0;
-		double v = 2;
+		double v = this.getFirePower();
 		switch(meta) {
-		case 0:
+		case 1:
 			x++;
 			vx = v;
 			break;
-		case 1:
+		case 0:
 			x--;
 			vx = -v;
 			break;
-		case 2:
+		case 3:
 			z++;
 			vz = v;
 			break;
-		case 3:
+		case 2:
 			z--;
 			vz = -v;
 			break;
 		}
 		EntityArrow ar = new EntityArrow(world);
-		ar.setLocationAndAngles(x, y, z, 0, 0);
+		ar.setLocationAndAngles(x+0.5, y+0.8, z+0.5, 0, 0);
 		ar.motionX = vx;
 		ar.motionZ = vz;
 		if (!world.isRemote) {
@@ -105,21 +118,22 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	private AxisAlignedBB drawAABB(int x, int y, int z, int meta) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		double d = 0.1;
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).contract(d, d, d);
 		switch(meta) {
-		case 0:
+		case 1:
 			box.offset(1, 0, 0);
 			box.maxX += this.getRange();
 			break;
-		case 1:
+		case 0:
 			box.offset(-1, 0, 0);
 			box.minX -= this.getRange();
 			break;
-		case 2:
+		case 3:
 			box.offset(0, 0, 1);
 			box.maxZ += this.getRange();
 			break;
-		case 3:
+		case 2:
 			box.offset(0, 0, -1);
 			box.minZ -= this.getRange();
 			break;
@@ -140,7 +154,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public int getRange() {
-		return 8;
+		return this.getMaxRange();
 	}
 
 	@Override

@@ -698,6 +698,7 @@ public enum MachineRegistry {
 		case PNEUENGINE:
 		case DISPLAY:
 		case MULTICLUTCH:
+		case ARROWGUN:
 			return true;
 		default:
 			return false;

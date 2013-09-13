@@ -281,7 +281,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack is) {
-		return true;
+		return false;
 	}
 
 	@Override
