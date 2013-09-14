@@ -48,7 +48,6 @@ public class RotaryConfig extends ControlledConfig {
 	public static final int MILLIBUCKET = LiquidContainerRegistry.BUCKET_VOLUME;
 
 	//Initialization of the config
-	// Args: String mod used to name the config file to mods name
 	@Override
 	public void initProps(FMLPreInitializationEvent event) {
 

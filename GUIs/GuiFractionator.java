@@ -35,6 +35,21 @@ public class GuiFractionator extends GuiMachine
 		ep = p5ep;
 	}
 
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+138, j+145, k+17, k+68)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", fct.fuel, fct.CAPACITY), mx-j, my-k);
+		}
+	}
+
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */

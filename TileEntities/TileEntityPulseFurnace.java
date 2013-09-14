@@ -322,6 +322,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		if (temperature < 0)
 			temperature = 0;
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		int Tamb = ReikaWorldHelper.getBiomeTemp(biome);
 		if (biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.frozenRiver ||
 				biome == BiomeGenBase.iceMountains || biome == BiomeGenBase.icePlains ||
 				biome == BiomeGenBase.taiga || biome == BiomeGenBase.taigaHills)
@@ -331,6 +332,8 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 			temperature -= 1;
 		else if (biome != BiomeGenBase.hell) //do not cool in the nether
 			temperature -= 2;
+		if (temperature < Tamb)
+			temperature = Tamb;
 	}
 
 	public void smeltHeat() {

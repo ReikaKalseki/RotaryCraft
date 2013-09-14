@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
@@ -68,6 +69,12 @@ public class GuiGearbox extends GuiNonPoweredMachine
 			fontRenderer.drawString(String.format("%.1f kW", gearboxInventory.power/1000D), 112, 48, 0x000000);
 		if (gearboxInventory.power >= 1000000)
 			fontRenderer.drawString(String.format("%.1f MW", gearboxInventory.power/1000000D), 112, 48, 0x000000);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+23, j+32, k+20, k+76)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", gearboxInventory.lubricant, gearboxInventory.MAXLUBE), mx-j, my-k);
+		}
 	}
 
 	/**

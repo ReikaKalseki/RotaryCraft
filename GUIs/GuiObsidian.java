@@ -29,6 +29,26 @@ public class GuiObsidian extends GuiMachine
 		ep = p5ep;
 	}
 
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+47, j+55, k+16, k+71)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Water: %d", obs.waterLevel/1000), mx-j, my-k);
+		}
+		if (ReikaGuiAPI.instance.isMouseInBox(j+119, j+127, k+16, k+71)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Lava: %d", obs.waterLevel/1000), mx-j, my-k);
+		}
+	}
+
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */

@@ -640,6 +640,8 @@ public enum MachineRegistry {
 			return true;
 		if (this == WOODCUTTER)
 			return true;
+		if (this == FRICTION)
+			return true;
 		return false;
 	}
 
@@ -666,6 +668,11 @@ public enum MachineRegistry {
 		}
 		if (this == GRINDER) {
 			if (((TileEntityGrinder)tile).power <= 0)
+				return 0;
+			return 2;
+		}
+		if (this == FRICTION) {
+			if (((TileEntityFurnaceHeater)tile).power <= 0)
 				return 0;
 			return 1;
 		}

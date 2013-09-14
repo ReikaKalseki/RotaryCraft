@@ -29,6 +29,26 @@ public class GuiCompactor extends GuiMachine
 		ep = p5ep;
 	}
 
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+146, j+151, k+15, k+70)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d kPa", comp.pressure), mx-j, my-k);
+		}
+		if (ReikaGuiAPI.instance.isMouseInBox(j+117, j+127, k+15, k+70)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%dC", comp.temperature), mx-j, my-k);
+		}
+	}
+
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */

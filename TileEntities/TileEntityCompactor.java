@@ -44,7 +44,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	public static final int REQTEMP = 800; 		//real temp/2
 	public static final int REQPRESS = 550000; //real pressure
 
-	public int pressure = 101; //1 atm
+	public int pressure = 0; //1 atm
 	public int temperature;
 
 	public boolean idle = false;
@@ -52,11 +52,6 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 	private int envirotick = 0;
 
-
-	/*
-    Minecraft m = Minecraft.getMinecraft();
-    WorldServer ws = m.getIntegratedServer().worldServerForDimension(m.thePlayer.dimension);
-	 */
 	public TileEntityCompactor()
 	{
 		compactorItemStacks = new ItemStack[5];

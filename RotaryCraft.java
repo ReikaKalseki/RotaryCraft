@@ -80,7 +80,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="release", certificateFingerprint = "@GET_FINGERPRINT@")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version="release", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
@@ -170,6 +170,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
+		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		proxy.registerSounds();
 

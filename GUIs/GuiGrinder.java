@@ -41,6 +41,12 @@ public class GuiGrinder extends GuiMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 
 		fontRenderer.drawString("Lubricant", 5, 11, 4210752);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+23, j+32, k+20, k+76)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", grin.lubricant, grin.MAXLUBE), mx-j, my-k);
+		}
 	}
 
 	/**

@@ -32,6 +32,26 @@ public class GuiPulseFurnace extends GuiMachine {
 		ep = p5ep;
 	}
 
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+90, j+96, k+17, k+68)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", puls.fuelLevel, puls.MAXFUEL), mx-j, my-k);
+		}
+		if (ReikaGuiAPI.instance.isMouseInBox(j+20, j+30, k+15, k+70)) {
+			int mx = ReikaGuiAPI.instance.getMouseRealX();
+			int my = ReikaGuiAPI.instance.getMouseRealY();
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%dC", puls.temperature), mx-j, my-k);
+		}
+	}
+
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */

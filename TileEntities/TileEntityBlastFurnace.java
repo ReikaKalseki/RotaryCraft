@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,9 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 
 	public static final int SMELTTEMP = 600;
 	public static final int MAXTEMP = 1200;
+	public static final float SMELT_XP = 0.6F;
+
+	private float xp;
 
 	@Override
 	protected int getActiveTexture() {
@@ -122,7 +126,21 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 				}
 			}
 		}
-		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord+par5Random.nextFloat(), yCoord+1.25F, zCoord+par5Random.nextFloat(), (int)(0.6*num));
+		xp += SMELT_XP*num;
+	}
+
+	public void dropXP() {
+		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord+par5Random.nextFloat(), yCoord+1.25F, zCoord+par5Random.nextFloat(), (int)xp);
+		xp = 0;
+	}
+
+	public float getXP() {
+		return xp;
+	}
+
+	public void addXPToPlayer(EntityPlayer ep) {
+		ep.addExperience((int)xp);
+		xp = 0;
 	}
 
 	private boolean checkSpreadFit(int num) {
@@ -307,6 +325,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 		super.writeToNBT(NBT);
 		NBT.setInteger("melt", meltTime);
 		NBT.setInteger("temp", temperature);
+		NBT.setFloat("exp", xp);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -333,6 +352,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 		super.readFromNBT(NBT);
 		meltTime = NBT.getInteger("melt");
 		temperature = NBT.getInteger("temp");
+		xp = NBT.getFloat("exp");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];

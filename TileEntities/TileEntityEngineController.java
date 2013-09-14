@@ -74,6 +74,12 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		return 0;
 	}
 
+	public int getSpeedFactor() {
+		if (this.canProducePower())
+			return setting.speedFactor;
+		return 0;
+	}
+
 	public int getFuelMultiplier() {
 		return setting.fuelFactor;
 	}
