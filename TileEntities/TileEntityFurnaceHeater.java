@@ -54,7 +54,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature >= MAXTEMP)
-			if (par5Random.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
+			if (!world.isRemote && par5Random.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
 	}
 
@@ -173,7 +173,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	private void meltFurnace(World world) {
 		world.createExplosion(null, fx+0.5, fy+0.5, fz+0.5, 1F, false);
-		world.setBlock(fx, fy, fz, Block.lavaMoving.blockID);
+		//world.setBlock(fx, fy, fz, Block.lavaMoving.blockID);
 		ItemStack cobb = new ItemStack(Block.cobblestone);
 		for (int i = 0; i < 8; i++)
 			ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);

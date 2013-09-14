@@ -28,10 +28,8 @@ public class BlockBedrockSlice extends Block
 	{
 		super(par1, Material.rock);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
-		//this.blockIndexInTexture = (17);
 		this.setBlockUnbreakable();
 		this.setResistance(3600000F);
-		////this.requiresSelfNotify[this.blockID] = true;
 	}
 
 	@Override

@@ -259,6 +259,8 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			meta = sha.getBlockMetadata();
 			if (meta >= 6)
 				return new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1);
+			if (sha.type == null)
+				return null;
 			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, sha.type.ordinal());
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
