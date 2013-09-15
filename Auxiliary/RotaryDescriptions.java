@@ -370,5 +370,6 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.LAMP, TileEntityLamp.MAXRANGE);
 		addNotes(MachineRegistry.ECU, TileEntityEngineController.getSettingsAsString());
 		addNotes(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELT_XP);
+		addNotes(MachineRegistry.ARROWGUN, PowerReceivers.ARROWGUN.getMinPower(), PowerReceivers.ARROWGUN.getMinTorque());
 	}
 }

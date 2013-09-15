@@ -235,7 +235,7 @@ public enum MachineRegistry {
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
 	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", APIRegistry.BUILDCRAFTENERGY),
-	ARROWGUN(			"Arrow Gun",				BlockDMMachine.class,		TileEntityMachineGun.class,			11, "RenderMachineGun");
+	ARROWGUN(			"Arrow Gun",				BlockDMachine.class,		TileEntityMachineGun.class,			1);
 
 
 	private String name;

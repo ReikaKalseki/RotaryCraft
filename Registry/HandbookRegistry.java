@@ -119,6 +119,7 @@ public enum HandbookRegistry {
 	COOLINGFIN(MachineRegistry.COOLINGFIN),
 
 	WEPMACHINEDESC("Defence/Offence Machines", "Defence/Offense"),
+	ARROWGUN(MachineRegistry.ARROWGUN),
 	HEATRAY(MachineRegistry.HEATRAY),
 	TNT(MachineRegistry.TNTCANNON),
 	SONIC(MachineRegistry.SONICWEAPON),

@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -36,20 +35,46 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
-		this.getIOSidesDefault(world, x, y, z, meta);
+		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
 
-		if (power <= 0)
+		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 
+		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
+
 		if (tickcount >= this.getFireRate() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
-			AxisAlignedBB box = this.drawAABB(x, y, z, meta);;
+			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
 			List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
-			ReikaJavaLibrary.pConsole(li.size());
 			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
 				this.fire(world, x, y, z, meta);
 			}
 			tickcount = 0;
+		}
+	}
+
+	public void getIOSides(World world, int x, int y, int z, int metadata) {
+		switch(metadata) {
+		case 1:
+			readx = xCoord-1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 0:
+			readx = xCoord+1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 2:
+			readz = zCoord-1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		case 3:
+			readz = zCoord+1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
 		}
 	}
 
@@ -80,7 +105,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	private int getFireRate() {
-		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega, 2), 2, "max");
+		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega, 2), 4, "max");
 	}
 
 	private void fire(World world, int x, int y, int z, int meta) {
@@ -96,11 +121,11 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 			x--;
 			vx = -v;
 			break;
-		case 3:
+		case 2:
 			z++;
 			vz = v;
 			break;
-		case 2:
+		case 3:
 			z--;
 			vz = -v;
 			break;
@@ -129,11 +154,11 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 			box.offset(-1, 0, 0);
 			box.minX -= this.getRange();
 			break;
-		case 3:
+		case 2:
 			box.offset(0, 0, 1);
 			box.maxZ += this.getRange();
 			break;
-		case 2:
+		case 3:
 			box.offset(0, 0, -1);
 			box.minZ -= this.getRange();
 			break;
@@ -159,7 +184,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public int getMaxRange() {
-		return 16;
+		return 10+2*(int)ReikaMathLibrary.logbase(torque, 2);
 	}
 
 	@Override

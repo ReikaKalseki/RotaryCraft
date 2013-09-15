@@ -63,9 +63,9 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.BLASTFURNACE) {
 			TileEntityBlastFurnace tile = (TileEntityBlastFurnace)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("Temperature: %dC", tile.temperature));
+				ReikaChatHelper.write(String.format("Temperature: %dC", tile.getTemperature()));
 				if (player.isSneaking()) {
-					tile.temperature = tile.MAXTEMP;
+					tile.addTemperature(tile.MAXTEMP-tile.getTemperature());
 				}
 			}
 		}

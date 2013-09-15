@@ -96,6 +96,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			return null;
 		int meta = te.getBlockMetadata();
 		int machine = te.getMachine().getMachineMetadata();
+		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
 		return icons[machine][meta][s][te.getTextureStateForSide(s)];
 	}
 

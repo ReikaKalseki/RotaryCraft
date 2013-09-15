@@ -248,6 +248,8 @@ public class RotaryRecipes {
 		MachineRegistry.TERRAFORMER.addCrafting("SsS", "ici", "PiP", 'i', ItemStacks.impeller, 'S', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'P', ItemStacks.basepanel, 's', ItemStacks.screen);
 
 		MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', ItemStacks.basepanel, 'n', Item.netherStar, 'G', ItemStacks.goldcoil, 'D', Block.blockDiamond, 's', ItemStacks.shaftcore);
+
+		MachineRegistry.ARROWGUN.addCrafting("SSS", "BDB", "SBS", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Block.dispenser);
 	}
 
 	private static void addCraftItems() {

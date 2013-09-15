@@ -55,34 +55,34 @@ public class RenderFriction extends RotaryTERenderer
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
+		case 0:
+			var11 = 0;
+			break;
+		case 1:
+			var11 = 180;
+			break;
+		case 2:
+			var11 = 90;
+			break;
+		case 3:
+			var11 = 270;
+			break;
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.temperature >= 1150) {
+			if (tile.getTemperature() >= 1150) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-5.png");
 			}
-			else if (tile.temperature >= 1000) {
+			else if (tile.getTemperature() >= 1000) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-4.png");
 			}
-			else if (tile.temperature >= 800) {
+			else if (tile.getTemperature() >= 800) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-3.png");
 			}
-			else if (tile.temperature >= 500) {
+			else if (tile.getTemperature() >= 500) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-2.png");
 			}
-			else if (tile.temperature >= 300) {
+			else if (tile.getTemperature() >= 300) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-1.png");
 			}
 		}
@@ -112,40 +112,40 @@ public class RenderFriction extends RotaryTERenderer
 		if (!tile.hasFurnace(tile.worldObj))
 			return;
 		Tessellator v5 = new Tessellator();
-		if (tile.temperature > 1000)
+		if (tile.getTemperature() > 1000)
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_2.png");
-		else if (tile.temperature > 750)
+		else if (tile.getTemperature() > 750)
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_1.png");
-		else if (tile.temperature > 500)
+		else if (tile.getTemperature() > 500)
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_0.png");
 		else
 			return;
 		v5.startDrawingQuads();
 		switch(tile.getBlockMetadata()) {
-			case 0:
-				v5.addVertexWithUV(par2+0.001, par4, par6+1, 0, 1);
-				v5.addVertexWithUV(par2+0.001, par4, par6, 1, 1);
-				v5.addVertexWithUV(par2+0.001, par4+1, par6, 1, 0);
-				v5.addVertexWithUV(par2+0.001, par4+1, par6+1, 0, 0);
-				break;
-			case 1:
-				v5.addVertexWithUV(par2+0.999, par4, par6, 0, 1);
-				v5.addVertexWithUV(par2+0.999, par4, par6+1, 1, 1);
-				v5.addVertexWithUV(par2+0.999, par4+1, par6+1, 1, 0);
-				v5.addVertexWithUV(par2+0.999, par4+1, par6, 0, 0);
-				break;
-			case 2:
-				v5.addVertexWithUV(par2, par4, par6+0.001, 0, 1);
-				v5.addVertexWithUV(par2+1, par4, par6+0.001, 1, 1);
-				v5.addVertexWithUV(par2+1, par4+1, par6+0.001, 1, 0);
-				v5.addVertexWithUV(par2, par4+1, par6+0.001, 0, 0);
-				break;
-			case 3:
-				v5.addVertexWithUV(par2, par4, par6+0.999, 0, 0);
-				v5.addVertexWithUV(par2+1, par4, par6+0.999, 1, 0);
-				v5.addVertexWithUV(par2+1, par4+1, par6+0.999, 1, 1);
-				v5.addVertexWithUV(par2, par4+1, par6+0.999, 0, 1);
-				break;
+		case 0:
+			v5.addVertexWithUV(par2+0.001, par4, par6+1, 0, 1);
+			v5.addVertexWithUV(par2+0.001, par4, par6, 1, 1);
+			v5.addVertexWithUV(par2+0.001, par4+1, par6, 1, 0);
+			v5.addVertexWithUV(par2+0.001, par4+1, par6+1, 0, 0);
+			break;
+		case 1:
+			v5.addVertexWithUV(par2+0.999, par4, par6, 0, 1);
+			v5.addVertexWithUV(par2+0.999, par4, par6+1, 1, 1);
+			v5.addVertexWithUV(par2+0.999, par4+1, par6+1, 1, 0);
+			v5.addVertexWithUV(par2+0.999, par4+1, par6, 0, 0);
+			break;
+		case 2:
+			v5.addVertexWithUV(par2, par4, par6+0.001, 0, 1);
+			v5.addVertexWithUV(par2+1, par4, par6+0.001, 1, 1);
+			v5.addVertexWithUV(par2+1, par4+1, par6+0.001, 1, 0);
+			v5.addVertexWithUV(par2, par4+1, par6+0.001, 0, 0);
+			break;
+		case 3:
+			v5.addVertexWithUV(par2, par4, par6+0.999, 0, 0);
+			v5.addVertexWithUV(par2+1, par4, par6+0.999, 1, 0);
+			v5.addVertexWithUV(par2+1, par4+1, par6+0.999, 1, 1);
+			v5.addVertexWithUV(par2, par4+1, par6+0.999, 0, 1);
+			break;
 		}
 		v5.draw();
 	}

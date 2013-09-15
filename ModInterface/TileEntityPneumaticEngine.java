@@ -151,6 +151,8 @@ PowerGenerator, GuiController {
 
 		if (!world.isRemote)
 			storedpower = (int)pp.getEnergyStored();
+		if (storedpower < 0)
+			storedpower = 0;
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 
@@ -160,23 +162,24 @@ PowerGenerator, GuiController {
 			power = 0;
 			return;
 		}
+		if (!world.isRemote) {
+			float mj = pp.getEnergyStored();
 
-		float mj = pp.getEnergyStored();
+			torque = this.getTorqueLevel();
+			omega = this.getSpeed();
 
-		torque = this.getTorqueLevel();
-		omega = this.getSpeed();
+			power = (long)torque*(long)omega;
 
-		power = (long)torque*(long)omega;
+			pp.useEnergy(this.getMJPerTick(), this.getMJPerTick(), true);
 
-		pp.useEnergy(this.getMJPerTick(), this.getMJPerTick(), true);
+			this.basicPowerReceiver();
 
-		this.basicPowerReceiver();
+			sound.update();
 
-		sound.update();
-
-		if (power > 0) {
-			if (sound.checkCap())
-				SoundRegistry.playSoundAtBlock(SoundRegistry.PNEUMATIC, world, x, y, z, 1.2F, 1);
+			if (power > 0) {
+				if (sound.checkCap())
+					SoundRegistry.playSoundAtBlock(SoundRegistry.PNEUMATIC, world, x, y, z, 1.2F, 1);
+			}
 		}
 	}
 

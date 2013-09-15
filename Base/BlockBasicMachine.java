@@ -235,11 +235,15 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng == null)
 				return null;
+			if (eng.type == null)
+				return null;
 			return new ItemStack(RotaryCraft.engineitems.itemID, 1, eng.type.ordinal());
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 			meta = gbx.getBlockMetadata();
+			if (gbx.type == null)
+				return null;
 			int dmg = gbx.type.ordinal();
 			switch(gbx.ratio) {
 			case 4:

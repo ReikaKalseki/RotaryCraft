@@ -38,9 +38,9 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 
 		int c = 0;
-		if (blast.temperature >= 1000)
+		if (blast.getTemperature() >= 1000)
 			c = 1;
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.valueOf(blast.temperature)+"C", 17+c, 6, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.valueOf(blast.getTemperature())+"C", 17+c, 6, 4210752);
 	}
 
 	/**

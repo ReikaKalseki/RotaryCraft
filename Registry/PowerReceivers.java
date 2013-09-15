@@ -67,7 +67,7 @@ public enum PowerReceivers {
 	LINEBUILDER(1024, 1, 131072),
 	TERRAFORMER(),
 	FUELENHANCER(1, 1024, 1024),
-	ARROWGUN(32, 1, 1024);
+	ARROWGUN(1024);
 
 	private int minT;
 	private int minS;

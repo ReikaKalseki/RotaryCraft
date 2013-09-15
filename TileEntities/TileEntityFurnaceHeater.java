@@ -9,13 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -27,8 +25,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE {
-
-	public int temperature;
+	//give ability to heat blast furnace
+	private int temperature;
 	public int fx;
 	public int fy;
 	public int fz;
@@ -39,7 +37,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		if (this.hasFurnace(world) && power > 0) {
+		if ((this.hasFurnace(world) || this.hasBlastFurnace(world)) && power > 0) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
@@ -101,14 +99,29 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (torque < MINTORQUE)
 			return;
 		this.getFurnaceCoordinates(world, x, y, z, meta);
+
 		if (!this.hasFurnace(world)) {
+			if (this.hasBlastFurnace(world)) {
+				this.heatBlast(world);
+			}
 			return;
 		}
 		this.hijackFurnace(world, x, y, z, meta);
 	}
 
+	private void heatBlast(World world) {
+		TileEntityBlastFurnace te = (TileEntityBlastFurnace)world.getBlockTileEntity(fx, fy, fz);
+		int tdiff = temperature-te.getTemperature();
+		te.addTemperature(tdiff);
+	}
+
+	private boolean hasBlastFurnace(World world) {
+		return MachineRegistry.getMachine(world, fx, fy, fz) == MachineRegistry.BLASTFURNACE;
+	}
+
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
-		TileEntityFurnace tile = (TileEntityFurnace)world.getBlockTileEntity(fx, fy, fz);
+		TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+		TileEntityFurnace tile = (TileEntityFurnace)te;
 		tile.currentItemBurnTime = this.getBurnTimeFromTemperature();
 		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
 		this.smeltCalculation();
@@ -172,11 +185,14 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void meltFurnace(World world) {
+		if (world.getBlockId(fx, fy, fz) == 0)
+			return;
 		world.createExplosion(null, fx+0.5, fy+0.5, fz+0.5, 1F, false);
 		//world.setBlock(fx, fy, fz, Block.lavaMoving.blockID);
-		ItemStack cobb = new ItemStack(Block.cobblestone);
-		for (int i = 0; i < 8; i++)
-			ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
+		world.setBlock(fx, fy, fz, 0);
+		//ItemStack cobb = new ItemStack(Block.cobblestone);
+		//for (int i = 0; i < 8; i++)
+		//	ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
 	}
 
 	public boolean hasFurnace(World world) {

@@ -305,23 +305,23 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 			TileEntityBlastFurnace tile = (TileEntityBlastFurnace)te;
 			if (tile == null)
 				return;
-			int tempdiff = temperature-tile.temperature;
+			int tempdiff = temperature-tile.getTemperature();
 			if (tempdiff <= 0)
 				return;
 			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
+				tile.addTemperature(tempdiff/16);
 				//this.temperature -= tempdiff/16;
 			}
 			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
+				tile.addTemperature(tempdiff/8);
 				//this.temperature -= tempdiff/8;
 			}
 			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
+				tile.addTemperature(tempdiff/4);
 				//this.temperature -= tempdiff/4;
 			}
 			else {
-				tile.temperature += tempdiff;
+				tile.addTemperature(tempdiff);
 				//this.temperature -= tempdiff;
 			}
 		}

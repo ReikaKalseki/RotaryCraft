@@ -92,8 +92,8 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityBlastFurnace clicked = (TileEntityBlastFurnace)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Temperature: %dC.", clicked.temperature));
-			if (clicked.temperature < clicked.SMELTTEMP)
+			ReikaChatHelper.writeString(String.format("Temperature: %dC.", clicked.getTemperature()));
+			if (clicked.getTemperature() < clicked.SMELTTEMP)
 				ReikaChatHelper.writeString("Insufficient Temperature!");
 			return true;
 		}

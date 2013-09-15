@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements TemperatureTE, ISidedInventory {
 
-	public int temperature;
+	private int temperature;
 	public ItemStack[] inventory = new ItemStack[14];
 	public int meltTime = 0;
 
