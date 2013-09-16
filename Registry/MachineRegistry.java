@@ -283,10 +283,10 @@ public enum MachineRegistry {
 		if (mappedData.containsKey(blockClass)) {
 			boolean[] maps = mappedData.get(blockClass);
 			if (maps[meta])
-				throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
+				throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
 			else {
 				maps[meta] = true;
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+name);
+				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+this.getName());
 			}
 			mappedData.put(blockClass, maps);
 		}
@@ -294,7 +294,7 @@ public enum MachineRegistry {
 			boolean[] maps = new boolean[16];
 			maps[meta] = true;
 			mappedData.put(blockClass, maps);
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+name);
+			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+this.getName());
 		}
 	}
 
@@ -324,7 +324,7 @@ public enum MachineRegistry {
 
 	public String getRenderer() {
 		if (!hasRender)
-			throw new RuntimeException("Machine "+name+" has no render to call!");
+			throw new RuntimeException("Machine "+this.getName()+" has no render to call!");
 		return "Reika.RotaryCraft.Renders."+renderClass;
 	}
 
@@ -392,6 +392,12 @@ public enum MachineRegistry {
 	}
 
 	public String getName() {
+		//return LanguageRegistry.instance().getStringLocalization("rcmachine."+this.name().toLowerCase());
+		//StatCollector.translateToLocal(name);
+		return name;
+	}
+
+	public String getDefaultName() {
 		return name;
 	}
 
@@ -587,7 +593,7 @@ public enum MachineRegistry {
 
 	public String getMultiName(RotaryCraftTileEntity tile) {
 		if (!this.isMultiNamed())
-			throw new RuntimeException("Machine "+name+" has no multi name and yet was called for it!");
+			throw new RuntimeException("Machine "+this.getName()+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)tile;
 			return RotaryNames.gearboxItemNames[gbx.getBlockMetadata()/4*5+gbx.type.ordinal()];
@@ -613,7 +619,7 @@ public enum MachineRegistry {
 			else if (adv.getBlockMetadata() < 12)
 				return "Industrial Coil";
 		}
-		throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" has an unspecified multi name!");
+		throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" has an unspecified multi name!");
 	}
 
 	public boolean isMultiNamed() {
@@ -896,7 +902,7 @@ public enum MachineRegistry {
 
 	public APIRegistry getPrerequisite() {
 		if (!this.hasPrerequisite())
-			throw new RegistrationException(RotaryCraft.instance, name+" has no prerequisites and yet was called for them!");
+			throw new RegistrationException(RotaryCraft.instance, this.getName()+" has no prerequisites and yet was called for them!");
 		return requirement;
 	}
 

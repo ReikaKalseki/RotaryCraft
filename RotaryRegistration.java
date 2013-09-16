@@ -70,7 +70,7 @@ public class RotaryRegistration {
 
 	public static void addTileEntities() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			String label = "RC"+MachineRegistry.machineList[i].getName().toLowerCase().replaceAll("\\s","");
+			String label = "RC"+MachineRegistry.machineList[i].getDefaultName().toLowerCase().replaceAll("\\s","");
 			GameRegistry.registerTileEntity(MachineRegistry.machineList[i].getTEClass(), label);
 			ReikaJavaLibrary.initClass(MachineRegistry.machineList[i].getTEClass());
 		}

@@ -177,6 +177,8 @@ public class RotaryCraft extends DragonAPIMod {
 		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
 
 		this.setupClassFiles();
+
+		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});
 	}
 
 	@Override
@@ -195,8 +197,6 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryAchievements.registerAcheivements();
 		RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
-
-		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});
 
 		RotaryRecipes.addRecipes();
 
