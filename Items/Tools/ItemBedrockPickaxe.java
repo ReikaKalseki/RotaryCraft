@@ -21,10 +21,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
@@ -221,4 +223,9 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return Item.pickaxeStone.getIconFromDamage(0);
+	}
 }

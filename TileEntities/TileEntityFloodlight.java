@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -26,7 +25,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
 
 	public int distancelimit = ConfigRegistry.FLOODLIGHTRANGE.getValue();
-	public int lightlevel;
 	public boolean beammode = false;
 
 	/** Used to detect if floodlight just turned off */
@@ -50,10 +48,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	}
 
 	public void getPower() {
-		super.getPower(false, true);
+		super.getPower(false, true);/*
 		lightlevel = ReikaMathLibrary.extrema(-1+(int)power/FALLOFF, 0, "max");
-		lightlevel = ReikaMathLibrary.extrema(lightlevel, 15, "absmin");
-		if (lightlevel >= 15)
+		lightlevel = ReikaMathLibrary.extrema(lightlevel, 15, "absmin");*/
+		if (power > MINPOWER)
 			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 	}
 
@@ -62,23 +60,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		//boolean blocked = false;
 		int range = this.getRange();
 		//1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
-		/*
-			wentdark = false;
-			for (int i = 1; (i < range || range == -1) && !blocked && !Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)] && (!beammode || y+ystep*i <= 125);i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightblock.blockID; i++) {
-				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
-				if (idview == 0 || ((idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID) && world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i) != lightlevel)) { //Only overwrite air blocks or wrong-value light blocks
-					if (beammode && lightlevel >= 15)
-						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.beamblock.blockID);
-					else if (!beammode)
-						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightblock.blockID, lightlevel, 3);
-					world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
-				}
-				if (Block.opaqueCubeLookup[idview])
-					blocked = true;
-			}
-		}
-		else if (!wentdark)
-			this.lightsOut(world, x, y, z);*/
+
 		if (markUpdate) {
 			beam.clear();
 			markUpdate = false;
@@ -96,7 +78,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		for (int i = 0; i < size; i++) {
 			int[] xyz = beam.getNthBlock(i);
 			if (pow) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, lightlevel, 3);
+				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
 			}
 			else {
 				if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == RotaryCraft.lightblock.blockID)
@@ -119,7 +101,6 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("light", lightlevel);
 		NBT.setBoolean("beam", beammode);
 	}
 
@@ -130,7 +111,6 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		lightlevel = NBT.getInteger("light");
 		beammode = NBT.getBoolean("beam");
 	}
 

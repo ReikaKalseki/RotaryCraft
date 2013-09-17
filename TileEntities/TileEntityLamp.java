@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,8 +74,48 @@ public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInven
 		}
 
 		if (light.isEmpty()) {
-			light.addSphere(world, x, y, z, 0, this.getRange());
-			light.addSphere(world, x, y, z, RotaryCraft.lightblock.blockID, this.getRange());
+			for (int i = 1; i <= this.getRange(); i++) {
+				if (this.canEditAt(world, x+i, y, z))
+					light.addBlockCoordinate(x+i, y, z);
+				if (this.canEditAt(world, x, y+i, z))
+					light.addBlockCoordinate(x, y+i, z);
+				if (this.canEditAt(world, x, y, z+i))
+					light.addBlockCoordinate(x, y, z+i);
+				if (this.canEditAt(world, x-i, y, z))
+					light.addBlockCoordinate(x-i, y, z);
+				if (this.canEditAt(world, x, y-i, z))
+					light.addBlockCoordinate(x, y-i, z);
+				if (this.canEditAt(world, x, y, z-i))
+					light.addBlockCoordinate(x, y, z-i);
+			}
+			for (int r = 2; r <= this.getRange()*0.8; r += 2) {
+				if (this.canEditAt(world, x+r, y, z+r))
+					light.addBlockCoordinate(x+r, y, z+r);
+				if (this.canEditAt(world, x-r, y, z+r))
+					light.addBlockCoordinate(x-r, y, z+r);
+				if (this.canEditAt(world, x+r, y, z-r))
+					light.addBlockCoordinate(x+r, y, z-r);
+				if (this.canEditAt(world, x-r, y, z-r))
+					light.addBlockCoordinate(x-r, y, z-r);
+
+				if (this.canEditAt(world, x+r, y+r, z+r))
+					light.addBlockCoordinate(x+r, y+r, z+r);
+				if (this.canEditAt(world, x-r, y+r, z+r))
+					light.addBlockCoordinate(x-r, y+r, z+r);
+				if (this.canEditAt(world, x+r, y+r, z-r))
+					light.addBlockCoordinate(x+r, y+r, z-r);
+				if (this.canEditAt(world, x-r, y+r, z-r))
+					light.addBlockCoordinate(x-r, y+r, z-r);
+
+				if (this.canEditAt(world, x+r, y-r, z+r))
+					light.addBlockCoordinate(x+r, y-r, z+r);
+				if (this.canEditAt(world, x-r, y-r, z+r))
+					light.addBlockCoordinate(x-r, y-r, z+r);
+				if (this.canEditAt(world, x+r, y-r, z-r))
+					light.addBlockCoordinate(x+r, y-r, z-r);
+				if (this.canEditAt(world, x-r, y-r, z-r))
+					light.addBlockCoordinate(x-r, y-r, z-r);
+			}
 			return;
 		}
 		//int[] xyz = light.getNextAndMoveOn();
@@ -84,6 +125,11 @@ public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInven
 				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
 			worldObj.updateAllLightTypes(xyz[0], xyz[1], xyz[2]);
 		}
+	}
+
+	public boolean canEditAt(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		return id == 0 || Block.blocksList[id].isAirBlock(world, x, y, z);
 	}
 
 	private void goDark() {
@@ -120,7 +166,7 @@ public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInven
 
 	@Override
 	public int getRange() {
-		return 4;
+		return 8;
 	}
 
 	@Override

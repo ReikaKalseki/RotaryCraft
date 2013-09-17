@@ -12,8 +12,10 @@ package Reika.RotaryCraft.Items.Tools;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -71,4 +73,9 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) {
+		return Item.axeStone.getIconFromDamage(0);
+	}
 }

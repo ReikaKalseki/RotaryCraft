@@ -12,8 +12,10 @@ package Reika.RotaryCraft.Items.Tools;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
@@ -67,4 +69,9 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) {
+		return Item.shovelStone.getIconFromDamage(0);
+	}
 }

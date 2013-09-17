@@ -93,7 +93,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 					else
 						a = 1;
 					int id = world.getBlockId(x+a*i, y+j, z+b*i);
-					if (!ReikaWorldHelper.softBlocks(id))
+					if (!ReikaWorldHelper.softBlocks(world, x+a*i, y+j, z+b*i))
 						return false;
 					if (id != 0) {
 						int meta = world.getBlockMetadata(x+a*i, y+j, z+b*i);

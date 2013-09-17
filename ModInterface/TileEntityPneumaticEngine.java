@@ -152,7 +152,7 @@ PowerGenerator, GuiController {
 		if (!world.isRemote)
 			storedpower = (int)pp.getEnergyStored();
 		if (storedpower < 0)
-			storedpower = 0;
+			storedpower = pp.getMaxEnergyStored();
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 

@@ -12,8 +12,10 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
@@ -57,5 +59,11 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final void registerIcons(IconRegister ico) {}
+
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) {
+		return Item.plateIron.getIconFromDamage(0);
+	}
 
 }
