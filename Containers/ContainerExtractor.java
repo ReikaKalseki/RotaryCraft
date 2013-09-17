@@ -17,7 +17,7 @@ import Reika.RotaryCraft.Auxiliary.SlotExtractor2;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor3;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor4;
 import Reika.RotaryCraft.Auxiliary.SlotMachineOut;
-import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 
 public class ContainerExtractor extends CoreContainer
 {

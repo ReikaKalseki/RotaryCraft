@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 
 public class GuiSpyCam extends GuiNonPoweredMachine
 {

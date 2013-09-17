@@ -14,7 +14,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerJet;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiJet extends GuiNonPoweredMachine
 {

@@ -25,7 +25,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class BlockEngine extends BlockModelledMachine {
 

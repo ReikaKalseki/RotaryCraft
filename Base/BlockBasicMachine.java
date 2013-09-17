@@ -43,12 +43,12 @@ import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
 public abstract class BlockBasicMachine extends BlockContainer implements SidedTextureIndex {

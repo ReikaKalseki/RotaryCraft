@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelFan;
-import Reika.RotaryCraft.TileEntities.TileEntityFan;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 
 public class RenderFan extends RotaryTERenderer
 {

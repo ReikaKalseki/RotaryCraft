@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelCave;
-import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 
 public class RenderCaveFinder extends RotaryTERenderer {
 

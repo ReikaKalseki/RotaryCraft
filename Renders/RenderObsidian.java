@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelObsidian;
-import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
 public class RenderObsidian extends RotaryTERenderer
 {

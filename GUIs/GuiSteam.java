@@ -12,7 +12,7 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerSteam;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiSteam extends GuiNonPoweredMachine
 {

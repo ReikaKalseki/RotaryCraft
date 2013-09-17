@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 
 public class BlockContainment extends BlockWIP {
 

@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelSplitter;
 import Reika.RotaryCraft.Models.ModelSplitter2;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public class RenderSplitter extends RotaryTERenderer implements MultiModel
 {

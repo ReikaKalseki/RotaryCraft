@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelSolar;
-import Reika.RotaryCraft.TileEntities.TileEntitySolar;
+import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 
 public class RenderSolar extends RotaryTERenderer
 {

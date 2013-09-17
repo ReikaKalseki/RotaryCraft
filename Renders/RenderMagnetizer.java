@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelMagnetizer;
-import Reika.RotaryCraft.TileEntities.TileEntityMagnetizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
 
 public class RenderMagnetizer extends RotaryTERenderer
 {

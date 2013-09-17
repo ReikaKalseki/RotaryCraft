@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelBaitBox;
-import Reika.RotaryCraft.TileEntities.TileEntityBaitBox;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 
 public class RenderBaitBox extends RotaryTERenderer
 {

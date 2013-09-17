@@ -20,7 +20,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
 
 public class GuiBevel extends GuiNonPoweredMachine
 {

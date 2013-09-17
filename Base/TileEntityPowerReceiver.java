@@ -21,8 +21,8 @@ import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 

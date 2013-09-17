@@ -14,7 +14,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiEthanol extends GuiNonPoweredMachine
 {

@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class ContainerJet extends CoreContainer {
 

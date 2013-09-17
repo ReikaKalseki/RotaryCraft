@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelExtractor;
-import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 
 public class RenderExtractor extends RotaryTERenderer
 {

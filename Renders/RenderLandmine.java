@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelLandmine;
-import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
 public class RenderLandmine extends RotaryTERenderer
 {

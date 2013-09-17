@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 
 public class EntityRailGunShot extends EntityTurretShot {
 

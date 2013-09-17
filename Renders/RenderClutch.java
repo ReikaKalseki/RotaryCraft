@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelClutch;
-import Reika.RotaryCraft.TileEntities.TileEntityClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 
 public class RenderClutch extends RotaryTERenderer
 {

@@ -24,7 +24,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerHeater;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityHeater;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelSpyCam;
-import Reika.RotaryCraft.TileEntities.TileEntitySpyCam;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 
 public class RenderSpyCam extends RotaryTERenderer
 {

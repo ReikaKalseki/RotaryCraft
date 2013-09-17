@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
-import Reika.RotaryCraft.TileEntities.TileEntityWorktable;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
 public class GuiWorktable extends GuiNonPoweredMachine {
 

@@ -16,7 +16,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemBasic;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
 public class ItemTarget extends ItemBasic {
 

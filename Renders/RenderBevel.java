@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelBevel;
-import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
 
 public class RenderBevel extends RotaryTERenderer
 {

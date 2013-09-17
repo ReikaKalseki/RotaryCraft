@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerPurifier;
-import Reika.RotaryCraft.TileEntities.TileEntityPurifier;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
 
 public class GuiPurifier extends GuiMachine
 {

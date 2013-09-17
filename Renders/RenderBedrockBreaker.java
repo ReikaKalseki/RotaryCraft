@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
-import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 
 public class RenderBedrockBreaker extends RotaryTERenderer implements MultiModel
 {

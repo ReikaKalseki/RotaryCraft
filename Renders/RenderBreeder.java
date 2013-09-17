@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelBreeder;
-import Reika.RotaryCraft.TileEntities.TileEntityAutoBreeder;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 
 public class RenderBreeder extends RotaryTERenderer
 {

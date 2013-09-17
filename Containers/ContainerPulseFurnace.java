@@ -14,7 +14,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
 public class ContainerPulseFurnace extends CoreContainer {
 	private TileEntityPulseFurnace pulseFurnace;

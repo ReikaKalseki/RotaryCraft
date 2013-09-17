@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 
 public class RenderMirror extends RotaryTERenderer {
 

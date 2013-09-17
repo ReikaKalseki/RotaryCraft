@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelMonitor;
-import Reika.RotaryCraft.TileEntities.TileEntityMonitor;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 
 public class RenderMonitor extends RotaryTERenderer
 {

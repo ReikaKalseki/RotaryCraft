@@ -19,7 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityGPR;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
 public class BlockGPR extends BlockBasicMachine {
 

@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Models.ModelPerformance;
 import Reika.RotaryCraft.Models.ModelSteam;
 import Reika.RotaryCraft.Models.ModelWind;
 import Reika.RotaryCraft.Registry.EnumEngineType;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

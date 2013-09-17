@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelEMP;
-import Reika.RotaryCraft.TileEntities.TileEntityEMP;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 
 public class RenderEMP extends RotaryTERenderer
 {

@@ -27,7 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

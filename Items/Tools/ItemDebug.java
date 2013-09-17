@@ -20,22 +20,22 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntityExtractor;
-import Reika.RotaryCraft.TileEntities.TileEntityFan;
-import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
-import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
-import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
-import Reika.RotaryCraft.TileEntities.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
 public class ItemDebug extends ItemRotaryTool {
 

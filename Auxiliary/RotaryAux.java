@@ -26,8 +26,8 @@ import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 

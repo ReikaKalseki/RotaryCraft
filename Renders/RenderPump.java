@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelPump;
-import Reika.RotaryCraft.TileEntities.TileEntityPump;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class RenderPump extends RotaryTERenderer
 {

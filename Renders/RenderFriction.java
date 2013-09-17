@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelFriction;
-import Reika.RotaryCraft.TileEntities.TileEntityFurnaceHeater;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 
 public class RenderFriction extends RotaryTERenderer
 {

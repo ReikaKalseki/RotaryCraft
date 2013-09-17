@@ -29,7 +29,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityGPR;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelSonicWeapon;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 
 public class RenderSonic extends RotaryTERenderer
 {

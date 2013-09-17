@@ -16,7 +16,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public class GuiSplitter extends GuiNonPoweredMachine
 {

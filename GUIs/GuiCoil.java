@@ -21,7 +21,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
 public class GuiCoil extends GuiNonPoweredMachine
 {

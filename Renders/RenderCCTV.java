@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelCCTV;
-import Reika.RotaryCraft.TileEntities.TileEntityCCTV;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 
 public class RenderCCTV extends RotaryTERenderer {
 

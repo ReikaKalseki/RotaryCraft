@@ -52,20 +52,20 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
-import Reika.RotaryCraft.TileEntities.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
-import Reika.RotaryCraft.TileEntities.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
-import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
-import Reika.RotaryCraft.TileEntities.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
 public abstract class BlockBasicMultiTE extends Block {
 

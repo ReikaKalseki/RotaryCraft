@@ -23,7 +23,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

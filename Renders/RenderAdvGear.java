@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelCVT;
 import Reika.RotaryCraft.Models.ModelCoil;
 import Reika.RotaryCraft.Models.ModelWorm;
-import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
 public class RenderAdvGear extends RotaryTERenderer implements MultiModel
 {

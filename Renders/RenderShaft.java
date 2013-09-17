@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelCross;
 import Reika.RotaryCraft.Models.ModelShaft;
 import Reika.RotaryCraft.Models.ModelShaftV;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class RenderShaft extends RotaryTERenderer implements MultiModel
 {

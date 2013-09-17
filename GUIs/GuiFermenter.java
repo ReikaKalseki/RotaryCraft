@@ -18,7 +18,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 
 public class GuiFermenter extends GuiMachine
 {

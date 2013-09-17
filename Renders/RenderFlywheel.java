@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelFlywheel;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 
 public class RenderFlywheel extends RotaryTERenderer implements MultiModel
 {

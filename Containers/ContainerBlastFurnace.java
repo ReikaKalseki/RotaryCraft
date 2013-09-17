@@ -17,7 +17,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.TileEntityBlastFurnace;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 
 public class ContainerBlastFurnace extends CoreContainer
 {

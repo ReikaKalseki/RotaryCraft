@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityMobRadar;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 
 public class GuiMobRadar extends GuiPowerOnlyMachine
 {

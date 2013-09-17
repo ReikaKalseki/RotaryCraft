@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Models.ModelGearbox;
 import Reika.RotaryCraft.Models.ModelGearbox16;
 import Reika.RotaryCraft.Models.ModelGearbox4;
 import Reika.RotaryCraft.Models.ModelGearbox8;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class RenderGearbox extends RotaryTERenderer implements MultiModel
 {

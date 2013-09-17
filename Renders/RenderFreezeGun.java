@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelFreezeGun;
-import Reika.RotaryCraft.TileEntities.TileEntityFreezeGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 
 public class RenderFreezeGun extends RotaryTERenderer {
 

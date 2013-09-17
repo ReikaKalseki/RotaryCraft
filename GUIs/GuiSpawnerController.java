@@ -23,7 +23,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntitySpawnerController;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 
 public class GuiSpawnerController extends GuiPowerOnlyMachine
 {

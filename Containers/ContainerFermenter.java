@@ -18,7 +18,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 
 public class ContainerFermenter extends CoreContainer
 {

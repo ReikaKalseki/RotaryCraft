@@ -20,11 +20,11 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
-import Reika.RotaryCraft.TileEntities.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class ItemMachineRenderer implements IItemRenderer {
 

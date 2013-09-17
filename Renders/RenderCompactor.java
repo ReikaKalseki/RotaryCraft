@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelCompactor;
-import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
 public class RenderCompactor extends RotaryTERenderer
 {

@@ -20,9 +20,9 @@ import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class IORenderer {
 	private static double par2;

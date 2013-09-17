@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerObsidian;
-import Reika.RotaryCraft.TileEntities.TileEntityObsidianMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
 public class GuiObsidian extends GuiMachine
 {

@@ -16,6 +16,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class TileEntityPipe extends TileEntityPiping {
 

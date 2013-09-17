@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class BlockGearbox extends BlockModelledMachine {
 

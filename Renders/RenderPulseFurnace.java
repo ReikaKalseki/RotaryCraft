@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelPulseFurnace;
-import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
 public class RenderPulseFurnace extends RotaryTERenderer
 {

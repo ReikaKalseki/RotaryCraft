@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelForce;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityForceField;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 
 public class RenderForceField extends RotaryTERenderer
 {

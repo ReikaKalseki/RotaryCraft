@@ -23,8 +23,8 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Models.ModelCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityBlockCannon;
-import Reika.RotaryCraft.TileEntities.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
 public class RenderCannon extends RotaryTERenderer
 {

@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelFraction;
-import Reika.RotaryCraft.TileEntities.TileEntityFractionator;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 
 public class RenderFraction extends RotaryTERenderer
 {

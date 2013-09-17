@@ -14,7 +14,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
-import Reika.RotaryCraft.TileEntities.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class GuiGearbox extends GuiNonPoweredMachine
 {

@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelForce;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 
 public class RenderContainment extends RotaryTERenderer
 {

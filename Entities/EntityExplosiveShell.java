@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityRailGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 
 public class EntityExplosiveShell extends EntityTurretShot {
 

@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerGrinder;
-import Reika.RotaryCraft.TileEntities.TileEntityGrinder;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 
 public class GuiGrinder extends GuiMachine
 {

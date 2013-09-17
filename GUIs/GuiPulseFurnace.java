@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
-import Reika.RotaryCraft.TileEntities.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

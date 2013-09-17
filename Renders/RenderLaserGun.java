@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelLaserGun;
-import Reika.RotaryCraft.TileEntities.TileEntityLaserGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLaserGun;
 
 public class RenderLaserGun extends RotaryTERenderer {
 

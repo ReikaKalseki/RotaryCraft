@@ -20,8 +20,8 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityContainment;
-import Reika.RotaryCraft.TileEntities.TileEntityForceField;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 
 public class GuiBasicRange extends GuiPowerOnlyMachine
 {

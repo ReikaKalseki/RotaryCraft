@@ -23,7 +23,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 
 public class GuiMultiClutch extends GuiNonPoweredMachine {
 

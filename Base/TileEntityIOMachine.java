@@ -18,8 +18,8 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
-import Reika.RotaryCraft.TileEntities.TileEntityGearBevel;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 

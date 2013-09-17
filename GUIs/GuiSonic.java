@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicWeapon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 
 public class GuiSonic extends GuiPowerOnlyMachine
 {

@@ -12,7 +12,7 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerLandmine;
-import Reika.RotaryCraft.TileEntities.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
 public class GuiLandmine extends GuiNonPoweredMachine {
 

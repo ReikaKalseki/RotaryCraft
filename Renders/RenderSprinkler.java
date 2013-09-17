@@ -18,7 +18,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelSprinkler;
-import Reika.RotaryCraft.TileEntities.TileEntitySprinkler;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 
 public class RenderSprinkler extends RotaryTERenderer
 {

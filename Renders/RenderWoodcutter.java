@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelWoodcutter;
-import Reika.RotaryCraft.TileEntities.TileEntityWoodcutter;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
 
 public class RenderWoodcutter extends RotaryTERenderer
 {

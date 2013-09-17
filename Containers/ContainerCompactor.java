@@ -14,7 +14,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.Auxiliary.SlotMachineOut;
-import Reika.RotaryCraft.TileEntities.TileEntityCompactor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
 public class ContainerCompactor extends CoreContainer
 {

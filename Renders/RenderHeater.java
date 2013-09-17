@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelHeater;
-import Reika.RotaryCraft.TileEntities.TileEntityHeater;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 
 public class RenderHeater extends RotaryTERenderer
 {

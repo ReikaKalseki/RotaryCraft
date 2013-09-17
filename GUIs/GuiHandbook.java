@@ -42,8 +42,8 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
-import Reika.RotaryCraft.TileEntities.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiHandbook extends GuiScreen
 {

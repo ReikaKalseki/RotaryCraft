@@ -36,7 +36,7 @@ import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class BlockShaft extends BlockModelledMachine {
 

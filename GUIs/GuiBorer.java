@@ -26,7 +26,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityBorer;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;

@@ -15,6 +15,7 @@ import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 
 public class TileEntityHose extends TileEntityPiping {
 

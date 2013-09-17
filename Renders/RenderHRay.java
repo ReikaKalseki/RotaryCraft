@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelHRay;
-import Reika.RotaryCraft.TileEntities.TileEntityHeatRay;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
 public class RenderHRay extends RotaryTERenderer
 {

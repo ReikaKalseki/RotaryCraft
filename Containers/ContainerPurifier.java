@@ -14,7 +14,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.TileEntityPurifier;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
 
 public class ContainerPurifier extends CoreContainer
 {
