@@ -80,7 +80,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="release", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
@@ -285,7 +285,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public URL getDocumentationSite() {
 		try {
-			return new URL("http://www.minecraftforum.net/topic/1685078-");
+			return new URL("http://www.minecraftforum.net/topic/1969694-");
 		}
 		catch (MalformedURLException e) {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
@@ -300,7 +300,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public URL getWiki() {
 		try {
-			return new URL("http://rotary-craft.wikia.com/wiki/Rotary_Craft_Wiki");
+			return new URL("http://www.minecraftforum.net/topic/1969694-");
 		}
 		catch (MalformedURLException e) {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
@@ -314,6 +314,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public String getVersionName() {
-		return "Release";
+		return "Gamma";
 	}
 }
