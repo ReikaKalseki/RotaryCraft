@@ -65,9 +65,9 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			beam.clear();
 			markUpdate = false;
 		}
-		if (beam.isEmpty())
+		if (beam.isEmpty()) {
 			beam.addLineOfClear(world, x, y, z, range, xstep, ystep, zstep);
-		//ReikaJavaLibrary.pConsole(beam);
+		}
 		int size = beam.getSize();
 		wentdark = false;
 		boolean pow = power >= MINPOWER;

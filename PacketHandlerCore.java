@@ -22,6 +22,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
@@ -445,10 +446,23 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			if (control == 51)
 				eng.increment();
 		case JETPACK:
+			boolean move = floatdata > 100;
+			if (move) {
+				floatdata -= 100;
+				float retruster = 0.3F;
+				float forwardpower = floatdata * retruster * 2.0F;
+				if (forwardpower > 0.0F) {
+					ep.moveFlying(0.0F, forwardpower, 2F);
+				}
+			}
 			ep.motionY += floatdata*4.25;
 			if (ep.motionY > 0.6)
 				ep.motionY = 0.6;
-			ep.velocityChanged = true;
+			double vx = ep.motionX;
+			double vz = ep.motionZ;
+			if (DragonAPICore.isOnActualServer()) {
+				ep.velocityChanged = true;
+			}
 			//PacketDispatcher.sendPacketToAllInDimension(new Packet28EntityVelocity(ep), world.provider.dimensionId);
 			//ReikaJavaLibrary.pConsole(ep.motionY);
 			ep.fallDistance = 0.0F;

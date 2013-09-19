@@ -19,11 +19,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
+import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -56,37 +61,45 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 	{
 		int px = (int) Math.floor(player.posX);
 		int py = (int) Math.floor(player.posY);
+		double y = player.posY;
 		int pz = (int) Math.floor(player.posZ);
 
 		ItemStack jetpack = player.inventory.armorInventory[2];
 
-		if (this.getCharge(jetpack) == 0)
+		int chg = this.getCharge(jetpack);
+		if (chg == 0)
 			return false;
 		if (player.ridingEntity != null)
 			return false;
 
+		float power = 0.03875F;
+
+		double max = this.getMaxCharge(jetpack);
+
+		int hscale = 160;
+
+		if (this.getCharge(jetpack) <= max/6) {
+			hscale -= (max/6-chg)/(max/6)*160;
+		}
+		if (hscale < 10)
+			hscale = 10;
+		else if (hscale < 20)
+			hscale = 20;
+
+		int maxh = player.worldObj.getTopSolidOrLiquidBlock(px, pz)+hscale;
+		if (y > maxh)
+			power = 0.005F;
+		else if (maxh-y < 20) {
+			double factor = (maxh-y)/20D;
+			power = 0.005F+(float)(power*factor*factor);
+		}
+
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && Keyboard.isKeyDown(ReikaKeyHelper.getForwardKey())) {
+			//power += 100;
+		}
+
 		boolean electric = true;
 		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
-
-		float power = 0.03875F;/*
-		float dropPercentage = 0.05F;
-
-		if (this.getCharge(jetpack) / this.getMaxCharge(jetpack) <= dropPercentage) {
-			power *= this.getCharge(jetpack) / (this.getMaxCharge(jetpack) * dropPercentage);
-		}
-
-		int worldHeight = player.worldObj.provider.getHeight();
-		int maxFlightHeight = worldHeight*this.getCharge(jetpack)/this.getMaxCharge(jetpack);
-
-		double y = player.posY;
-
-		if (y > maxFlightHeight - 25) {
-			if (y > maxFlightHeight) y = maxFlightHeight;
-
-			power = (float)(power * ((maxFlightHeight - y) / 25.0D));
-		}
-
-		double prevmotion = player.motionY;*/
 
 		ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, PacketRegistry.JETPACK.getMinValue(), player.worldObj, px, py, pz, power);
 

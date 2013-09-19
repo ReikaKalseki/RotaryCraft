@@ -34,7 +34,6 @@ import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
@@ -304,23 +303,6 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString("Insufficient Power!");
 				return true;
 			}
-			if (m == MachineRegistry.FLOODLIGHT) {
-				TileEntityFloodlight clicked = (TileEntityFloodlight)world.getBlockTileEntity(x, y, z);
-				if (clicked == null)
-					return false;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Floodlight Receiving %.3f MW @ %d rad/s. Outputting light level 15.", power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Floodlight Receiving %.3f kW @ %d rad/s. Outputting light level %d.", power/1000.0D, omega, ReikaMathLibrary.extrema(ReikaMathLibrary.extrema(-1+(int)power/1024, 0, "max"), 15, "absmin")));
-				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Floodlight Receiving %.3f W @ %d rad/s. Insufficient power!", power, omega));
-				torque = omega = 0;
-				return true;
-			}
-
 			if (m == MachineRegistry.PUMP) {
 				TileEntityPump clicked = (TileEntityPump)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
