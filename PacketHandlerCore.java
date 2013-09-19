@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -25,6 +26,7 @@ import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Items.Tools.ItemJetPackChest;
 import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
@@ -103,6 +105,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		int len;
 		int[] data = new int[0];
 		long longdata = 0;
+		float floatdata = 0;
 		int x,y,z;
 		boolean readinglong = false;
 		String stringdata = null;
@@ -135,6 +138,11 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case UPDATE:
 				control = inputStream.readInt();
 				pack = PacketRegistry.getEnum(control);
+				break;
+			case FLOAT:
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
+				floatdata = inputStream.readFloat();
 				break;
 			}
 			x = inputStream.readInt();
@@ -436,6 +444,21 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				eng.decrement();
 			if (control == 51)
 				eng.increment();
+		case JETPACK:
+			ep.motionY += floatdata*4.25;
+			if (ep.motionY > 0.6)
+				ep.motionY = 0.6;
+			ep.velocityChanged = true;
+			//PacketDispatcher.sendPacketToAllInDimension(new Packet28EntityVelocity(ep), world.provider.dimensionId);
+			//ReikaJavaLibrary.pConsole(ep.motionY);
+			ep.fallDistance = 0.0F;
+			ep.distanceWalkedModified = 0.0F;
+			if (!ep.capabilities.isCreativeMode) {
+				ItemStack jet = ep.getCurrentArmor(2);
+				ItemJetPackChest i = (ItemJetPackChest)jet.getItem();
+				i.use(jet, 4);
+			}
+			break;
 		}
 	}
 }

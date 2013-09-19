@@ -155,7 +155,7 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 		return (par2*par1)/CAPACITY;
 	}
 
-	public int getPotion(int i) {
+	public int getPotion(int i) { //add mod potion support!
 		if (this.getStackInSlot(i) != null) {
 			if (this.getStackInSlot(i).stackSize > 0 && this.getStackInSlot(i).getItem() instanceof ItemPotion) {
 				int dmg = this.getStackInSlot(i).getItemDamage();
@@ -219,15 +219,7 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 			else
 				minz = z-i;
 		}
-		exit = false;/*
-		ReikaWorldHelper.legacySetBlockWithNotify(world, minx, miny, minz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, maxx, miny, minz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, minx, maxy, minz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, maxx, maxy, minz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, minx, miny, maxz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, maxx, miny, maxz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, minx, maxy, maxz, 49);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, maxx, maxy, maxz, 49);*/
+		exit = false;
 
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz);
 	}

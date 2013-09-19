@@ -13,27 +13,22 @@ import ic2.api.item.IElectricItem;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
-import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem {
-
-	private static boolean lastJetpackUsed = false;
+public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem { //does not work in smp!!
 
 	public ItemJetPackChest(int ID, int tex, int render, int type) {
 		super(ID, tex, render, type);
@@ -59,6 +54,10 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 
 	public boolean useJetpack(EntityPlayer player)
 	{
+		int px = (int) Math.floor(player.posX);
+		int py = (int) Math.floor(player.posY);
+		int pz = (int) Math.floor(player.posZ);
+
 		ItemStack jetpack = player.inventory.armorInventory[2];
 
 		if (this.getCharge(jetpack) == 0)
@@ -69,22 +68,11 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		boolean electric = true;
 		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
-		float power = 0.03875F;
+		float power = 0.03875F;/*
 		float dropPercentage = 0.05F;
 
 		if (this.getCharge(jetpack) / this.getMaxCharge(jetpack) <= dropPercentage) {
 			power *= this.getCharge(jetpack) / (this.getMaxCharge(jetpack) * dropPercentage);
-		}
-
-		if (Keyboard.isKeyDown(ReikaKeyHelper.getForwardKey())) {
-			float retruster = 0.30F;
-
-			float forwardpower = power * retruster * 2.0F;
-
-			if (forwardpower > 0.0F) {
-				player.moveFlying(0.0F, 0.4F * forwardpower, 0.02F);
-			}
-
 		}
 
 		int worldHeight = player.worldObj.provider.getHeight();
@@ -98,20 +86,11 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 			power = (float)(power * ((maxFlightHeight - y) / 25.0D));
 		}
 
-		double prevmotion = player.motionY;
-		player.motionY = Math.min(player.motionY + power * 0.2F, 0.6000000238418579D);
+		double prevmotion = player.motionY;*/
 
-		int consume = 4;
+		ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, PacketRegistry.JETPACK.getMinValue(), player.worldObj, px, py, pz, power);
 
-		if (player.capabilities.isCreativeMode)
-			consume = 0;
-
-		this.use(jetpack, consume);
-
-		player.fallDistance = 0.0F;
-		player.distanceWalkedModified = 0.0F;
-
-		//IC2.platform.resetPlayerInAirTime(player);
+		//player.motionY = Math.min(player.motionY + power * 0.2F, 0.6000000238418579D);
 
 		return true;
 	}
@@ -125,7 +104,9 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		if (Keyboard.isKeyDown(ReikaKeyHelper.getJumpKey())) {
+		boolean bool = player.isJumping;
+		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
+		if (bool) {
 			jetpackUsed = this.useJetpack(player);
 		}
 
@@ -134,14 +115,6 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 
 			nbtData.setByte("toggleTimer", toggleTimer);
 		}
-
-		if ((FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) && (player == Minecraft.getMinecraft().thePlayer)) {
-			if (lastJetpackUsed != jetpackUsed) {
-				lastJetpackUsed = jetpackUsed;
-			}
-		}
-
-		if (jetpackUsed) player.inventoryContainer.detectAndSendChanges();
 	}
 
 	@Override

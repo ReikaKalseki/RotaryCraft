@@ -37,7 +37,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	@Override
 	public final boolean isValidArmor(ItemStack stack, int type) {
-		return true;
+		return armorType == type;
 	}
 
 	@Override

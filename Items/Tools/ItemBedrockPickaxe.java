@@ -175,7 +175,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (par2Block.blockID == ThaumBlockHandler.getInstance().totemID)
 			return 48F;
 		if (TwilightBlockHandler.getInstance().isMazeStone(par2Block))
-			return 48F;
+			return 60F;
 
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == par2Block)

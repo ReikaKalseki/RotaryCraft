@@ -73,22 +73,6 @@ public class RotaryRecipes {
 				e.printStackTrace();
 			}
 		}
-		if (APIRegistry.INDUSTRIALCRAFT.conditionsMet()) {
-			try {
-				ItemStack ic2jet = ic2.api.item.Items.getItem("electricJetpack");
-				int maxd = ic2jet.getItem().getMaxDamage();
-				for (int i = 0; i <= maxd; i++) {
-					ItemStack jet = new ItemStack(ic2jet.itemID, 1, maxd);
-					ItemStack chest = ItemRegistry.BEDCHEST.getEnchantedStack();
-					ItemRegistry.JETCHEST.addShapelessEnchantedRecipe(Enchantment.blastProtection, 4, chest, jet);
-				}
-				RotaryCraft.logger.log("Adding bedrock jetpack recipe.");
-			}
-			catch (NullPointerException e) {
-				RotaryCraft.logger.logError("Could not add bedrock jetpack recipe!");
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private static void addMachines() {

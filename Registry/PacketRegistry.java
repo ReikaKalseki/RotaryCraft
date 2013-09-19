@@ -42,7 +42,8 @@ public enum PacketRegistry {
 	REDGEAR(46),
 	TERRAFORMER(47),
 	LIQUID(48, 49),
-	PNEUMATIC(50, 51),;
+	PNEUMATIC(50, 51),
+	JETPACK(52);
 
 	private int min;
 	private int max;

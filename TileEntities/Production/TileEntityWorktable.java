@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -30,6 +31,8 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.chargeTools();
+		if (APIRegistry.INDUSTRIALCRAFT.conditionsMet())
+			this.makeJetplate();
 	}
 
 	@Override
@@ -82,6 +85,21 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 			}
 		}
 		return -1;
+	}
+
+	private void makeJetplate() {
+		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inventory);
+		int jetslot = ReikaInventoryHelper.locateInInventory(ic2.api.item.Items.getItem("electricJetpack").itemID, inventory);
+		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
+			int original = (int)(((float)(inventory[jetslot].getMaxDamage()-inventory[jetslot].getItemDamage()))/(inventory[jetslot].getMaxDamage()-1)*30000);
+			inventory[jetslot] = null;
+			inventory[plateslot] = null;
+			ItemStack is = ItemRegistry.JETCHEST.getEnchantedStack();
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setInteger("charge", original);
+			inventory[9] = is;
+		}
 	}
 
 	@Override
