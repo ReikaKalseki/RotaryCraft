@@ -44,50 +44,36 @@ public class RenderCaveFinder extends RotaryTERenderer {
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelCave var14;
+		var14 = caveModel;
+		//ModelBlockV var15;
+		//var14 = this.caveModelV;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cavetex.png");
 
-			{
-				//((BlockCaveFinderBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
-		}
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
 
-		if (true)
-		{
-			ModelCave var14;
-			var14 = caveModel;
-			//ModelBlockV var15;
-			//var14 = this.caveModelV;
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cavetex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
+		// if (tile.getBlockMetadata() < 4)
 
-			var14.renderAll(null, 0);
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		var14.renderAll(null, 0);
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

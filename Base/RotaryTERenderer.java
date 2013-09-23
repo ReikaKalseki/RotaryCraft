@@ -12,12 +12,10 @@ package Reika.RotaryCraft.Base;
 import java.awt.Color;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.GLListData;
@@ -26,7 +24,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class RotaryTERenderer extends TileEntitySpecialRenderer implements TextureFetcher {
+public abstract class RotaryTERenderer extends TileEntityRenderBase implements TextureFetcher {
 
 	//public abstract void createLists();
 
@@ -43,11 +41,9 @@ public abstract class RotaryTERenderer extends TileEntitySpecialRenderer impleme
 		}
 	}
 
-	public final boolean isValidMachineRenderpass(TileEntityBase te) {
-		if (!te.isInWorld())
-			return true;
-		int pass = MinecraftForgeClient.getRenderPass();
-		return (te.shouldRenderInPass(pass));
+	@Override
+	public final String getTextureFolder() {
+		return "/Reika/RotaryCraft/Textures/TileEntityTex/";
 	}
 
 	protected void renderFaceColors(TileEntityIOMachine te, double p2, double p4, double p6) {

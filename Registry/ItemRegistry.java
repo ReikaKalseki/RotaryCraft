@@ -272,10 +272,10 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	public String getUnlocalizedName() {
 		return ReikaStringParser.stripSpaces(name).toLowerCase();
 	}
-	/*
+
 	public int getID() {
-		return RotaryCraft.config.getItemID(this.ordinal());;
-	}*/
+		return RotaryCraft.config.getItemID(this.ordinal());
+	}
 
 	public int getShiftedID() {
 		return RotaryCraft.config.getItemID(this.ordinal())+256;
@@ -504,5 +504,10 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this.isDummiedOut())
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean overwritingItem() {
+		return false;
 	}
 }

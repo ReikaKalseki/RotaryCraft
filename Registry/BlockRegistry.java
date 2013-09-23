@@ -209,4 +209,13 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	public boolean isDummiedOut() {
 		return block == null;
 	}
+
+	public int getID() {
+		return this.getBlockID();
+	}
+
+	@Override
+	public boolean overwritingItem() {
+		return false;
+	}
 }
