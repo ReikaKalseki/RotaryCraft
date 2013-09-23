@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
 public enum MaterialRegistry {
@@ -99,11 +100,25 @@ public enum MaterialRegistry {
 			case STONE:
 				return true;
 			case STEEL:
-				return TinkerToolHandler.getInstance().isStoneOrBetterPick(tool);
+				return TinkerToolHandler.getInstance().isStoneOrBetter(tool);
 			case DIAMOND:
-				return TinkerToolHandler.getInstance().isIronOrBetterPick(tool);
+				return TinkerToolHandler.getInstance().isIronOrBetter(tool);
 			case BEDROCK:
-				return TinkerToolHandler.getInstance().isDiamondOrBetterPick(tool);
+				return TinkerToolHandler.getInstance().isDiamondOrBetter(tool);
+			default:
+				return false;
+			}
+		}
+		if (MekanismHandler.getInstance().isPaxel(tool)) {
+			switch(this) {
+			case STONE:
+				return true;
+			case STEEL:
+				return tool.getItem().canHarvestBlock(Block.oreIron, tool);
+			case DIAMOND:
+				return tool.getItem().canHarvestBlock(Block.oreDiamond, tool);
+			case BEDROCK:
+				return tool.getItem().canHarvestBlock(Block.obsidian, tool);
 			default:
 				return false;
 			}

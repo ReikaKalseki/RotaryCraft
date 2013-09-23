@@ -47,6 +47,9 @@ import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
+import Reika.RotaryCraft.Items.Tools.ItemSteelPick;
+import Reika.RotaryCraft.Items.Tools.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.ItemStunGun;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
 import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
@@ -91,7 +94,10 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
-	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, APIRegistry.INDUSTRIALCRAFT);
+	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, APIRegistry.INDUSTRIALCRAFT),
+	STEELPICK(13, true,			"HSLA Steel Pickaxe",		ItemSteelPick.class),
+	STEELAXE(14, true,			"HSLA Steel Axe",			ItemSteelAxe.class),
+	STEELSHOVEL(15, true,		"HSLA Steel Shovel",		ItemSteelShovel.class);
 
 	private int index;
 	private boolean hasSubtypes;
