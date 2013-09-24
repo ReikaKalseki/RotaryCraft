@@ -349,6 +349,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				break;
 			}
 		}
+		??;
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
 		if (itemstack == null) {
 			return false;
