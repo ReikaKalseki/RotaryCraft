@@ -21,7 +21,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import Reika.DragonAPI.ModInteract.MekanismHandler;
+import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -188,7 +188,7 @@ public class RotaryAux {
 			return false;
 		if (TinkerToolHandler.getInstance().isPick(eitem) && TinkerToolHandler.getInstance().isStoneOrBetter(eitem))
 			return true;
-		if (MekanismHandler.getInstance().isPaxel(eitem))
+		if (MekToolHandler.getInstance().isPickTypeTool(eitem))
 			return true;
 		if (!(eitem.getItem() instanceof ItemPickaxe))
 			return false;

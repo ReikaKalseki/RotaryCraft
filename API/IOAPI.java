@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import net.minecraft.tileentity.TileEntity;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class IOAPI {
 
@@ -26,11 +25,11 @@ public class IOAPI {
 			render = io.getMethod("renderIO", TileEntity.class, double.class, double.class, double.class);
 		}
 		catch (ClassNotFoundException e) {
-			ReikaJavaLibrary.pConsole("RotaryCraft IORenderer class not found!");
+			System.out.println("RotaryCraft IORenderer class not found!");
 			e.printStackTrace();
 		}
 		catch (NoSuchMethodException e) {
-			ReikaJavaLibrary.pConsole("Could not find renderIO method in IORenderer class!");
+			System.out.println("Could not find renderIO method in IORenderer class!");
 			e.printStackTrace();
 		}
 		catch (SecurityException e) {

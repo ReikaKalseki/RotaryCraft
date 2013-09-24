@@ -62,6 +62,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
@@ -247,6 +248,16 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropItemFromInventory();
 			return true;
+		}
+		if (m == MachineRegistry.EXTRACTOR) {
+			TileEntityExtractor ex = (TileEntityExtractor)te;
+			if (ex.waterLevel+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
+				ex.waterLevel += RotaryConfig.MILLIBUCKET;
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
 		}
 		if (m == MachineRegistry.EMP) {
 			TileEntityEMP tp = (TileEntityEMP)te;

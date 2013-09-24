@@ -18,6 +18,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
@@ -75,6 +76,7 @@ public class BlockGPR extends BlockBasicMachine {
 
 	public static int getBiomeDesign(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
 		if (biome == BiomeGenBase.forest || biome == BiomeGenBase.forestHills || biome == BiomeGenBase.plains)
 			return 0;
 		else if (biome == BiomeGenBase.mushroomIsland || biome == BiomeGenBase.mushroomIslandShore)
@@ -97,8 +99,35 @@ public class BlockGPR extends BlockBasicMachine {
 			return 9;
 		else if (biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.frozenRiver)
 			return 10;
-		else
-			return 0;
+		else {
+			for (int i = 0; i < types.length; i++) {
+				if (types[i] == BiomeDictionary.Type.NETHER)
+					return 7;
+				if (types[i] == BiomeDictionary.Type.END)
+					return 8;
+				if (types[i] == BiomeDictionary.Type.SWAMP)
+					return 9;
+				if (types[i] == BiomeDictionary.Type.MUSHROOM)
+					return 1;
+				if (types[i] == BiomeDictionary.Type.FROZEN)
+					return 6;
+				if (types[i] == BiomeDictionary.Type.DESERT)
+					return 5;
+				if (types[i] == BiomeDictionary.Type.BEACH)
+					return 5;
+				if (types[i] == BiomeDictionary.Type.JUNGLE)
+					return 2;
+				if (types[i] == BiomeDictionary.Type.WATER)
+					return 4;
+				if (types[i] == BiomeDictionary.Type.MOUNTAIN)
+					return 3;
+				if (types[i] == BiomeDictionary.Type.PLAINS)
+					return 0;
+				if (types[i] == BiomeDictionary.Type.FOREST)
+					return 0;
+			}
+		}
+		return 0;
 	}
 
 	@Override

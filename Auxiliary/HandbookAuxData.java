@@ -19,16 +19,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 
 public final class HandbookAuxData {
 	/** One GuiHandbook.SECOND in nanoGuiHandbook.SECONDs. */
@@ -153,14 +158,47 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.obsidianglass), dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.YEAST) {
-			int k = (int)((System.nanoTime()/2000000000)%(PlantMaterials.plantList.length+1));
-			ItemStack out = ItemRegistry.YEAST.getStackOf();
-			ItemStack[] in = {new ItemStack(Item.sugar), new ItemStack(Item.bucketWater), new ItemStack(Block.dirt)};
-			if (k != 0) {
-				out = ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[k-1].getPlantValue());
-				in = new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[k-1].getPlantItemForIcon(), new ItemStack(Item.bucketWater)};
+			ArrayList<ItemStack> out = new ArrayList<ItemStack>();
+			ArrayList<ItemStack[]> in = new ArrayList<ItemStack[]>();
+			out.add(ItemRegistry.YEAST.getStackOf());
+			in.add(new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Item.bucketWater), new ItemStack(Block.dirt)});
+
+			for (int i = 0; i < PlantMaterials.plantList.length; i++) {
+				if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
+					for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
+						ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
+						out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
+						in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon, new ItemStack(Item.bucketWater)});
+					}
+				}
+				else {
+					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon(), new ItemStack(Item.bucketWater)});
+				}
 			}
-			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in, dx+159, dy+32, out);
+
+			for (int i = 0; i < ModWoodList.woodList.length; i++) {
+				if (ModWoodList.woodList[i].getParentMod().conditionsMet()) {
+					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
+
+					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf(), new ItemStack(Item.bucketWater)});
+				}
+			}
+
+			if (APIRegistry.DYETREES.conditionsMet()) {
+				for (int j = 0; j < 16; j++) {
+					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), TreeGetter.getDyeSapling(j), new ItemStack(Item.bucketWater)});
+
+					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), TreeGetter.getDyeLeaf(j), new ItemStack(Item.bucketWater)});
+				}
+			}
+
+			int k = (int)((System.nanoTime()/2000000000)%(in.size()));
+			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in.get(k), dx+159, dy+32, out.get(k));
 		}
 		else if (h == HandbookRegistry.NETHERDUST) {
 			if ((System.nanoTime()/2000000000)%2 == 0) {

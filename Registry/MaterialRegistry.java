@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.ModInteract.MekanismHandler;
+import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
 public enum MaterialRegistry {
@@ -109,7 +109,7 @@ public enum MaterialRegistry {
 				return false;
 			}
 		}
-		if (MekanismHandler.getInstance().isPaxel(tool)) {
+		if (MekToolHandler.getInstance().isPickTypeTool(tool)) {
 			switch(this) {
 			case STONE:
 				return true;

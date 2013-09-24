@@ -211,6 +211,15 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return Item.pickaxeStone.getIconFromDamage(0);
+	}
+
+	@Override
 	public final int getItemEnchantability()
 	{
 		return 0;
@@ -221,14 +230,5 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		ItemStack is = ei.getEntityItem();
 		this.forceSilkTouch(is);
 		return false;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public final void registerIcons(IconRegister ico) {}
-
-	@Override
-	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
-		return Item.pickaxeStone.getIconFromDamage(0);
 	}
 }

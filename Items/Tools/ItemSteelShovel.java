@@ -1,18 +1,36 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemSteelShovel extends ItemSpade {
+public class ItemSteelShovel extends ItemSpade implements IndexedItemSprites {
 
-	public ItemSteelShovel(int ID) {
+	private int index;
+
+	public ItemSteelShovel(int ID, int tex) {
 		super(ID, EnumToolMaterial.IRON);
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
+		this.setIndex(tex);
 	}
 
 	@Override
@@ -25,6 +43,27 @@ public class ItemSteelShovel extends ItemSpade {
 	public float getStrVsBlock(ItemStack stack, Block block, int meta)
 	{
 		return super.getStrVsBlock(stack, block, meta)*1.2F;
+	}
+
+	public String getTextureFile() {
+		return "/Reika/RotaryCraft/Textures/GUI/items.png"; //return the block texture where the block texture is saved in
+	}
+
+	public int getItemSpriteIndex(ItemStack item) {
+		return index;
+	}
+
+	public void setIndex(int a) {
+		index = a;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final void registerIcons(IconRegister ico) {}
+
+	@Override
+	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return Item.pickaxeStone.getIconFromDamage(0);
 	}
 
 }

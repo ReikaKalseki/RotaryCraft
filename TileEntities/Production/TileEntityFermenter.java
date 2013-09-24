@@ -16,10 +16,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -80,10 +83,35 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	private int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
+		if (TreeGetter.isDyeSapling(is))
+			return PlantMaterials.SAPLING.getPlantValue();
+		if (TreeGetter.isDyeLeaf(is))
+			return PlantMaterials.LEAVES.getPlantValue();
+		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
+		if (sap != null) {
+			return PlantMaterials.SAPLING.getPlantValue()*this.getModSaplingValue(sap);
+		}
+		ModWoodList leaf = ModWoodList.getModWoodFromLeaf(is);
+		if (leaf != null) {
+			return PlantMaterials.LEAVES.getPlantValue()*this.getModSaplingValue(leaf);
+		}
 		PlantMaterials plant = PlantMaterials.getPlantEntry(is);
 		if (plant == null)
 			return 0;
 		return plant.getPlantValue();
+	}
+
+	public static int getModSaplingValue(ModWoodList wood) {
+		if (wood == null)
+			return 0;
+		if (wood == ModWoodList.SILVERWOOD)
+			return 16;
+		APIRegistry mod = wood.getParentMod();
+		if (mod == APIRegistry.THAUMCRAFT)
+			return 4;
+		if (mod == APIRegistry.TWILIGHT)
+			return 3;
+		return 1;
 	}
 
 	private float getFermentRate() {
@@ -185,7 +213,6 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 
 	private void make(ItemStack product) {
 		if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(this.getMultiplyRate()));
 			if (slots[3] == null)
 				slots[3] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 			else if (slots[3].itemID == ItemRegistry.YEAST.getShiftedID()) {
@@ -203,9 +230,8 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 				ReikaInventoryHelper.decrStack(2, slots);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(this.getFermentRate()));
 			if (slots[3] == null)
-				slots[3] = new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
+				slots[3] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[1]), ItemStacks.sludge.getItemDamage());
 			else if (slots[3].itemID == ItemStacks.sludge.itemID && slots[3].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
 				if (slots[3].stackSize < slots[3].getMaxStackSize())
 					slots[3].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[1]), slots[3].getMaxStackSize()-slots[3].stackSize, "min");

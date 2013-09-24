@@ -304,7 +304,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			temperature += 4;
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != -1)
 			temperature += 2;
-		if (biome == BiomeGenBase.hell)	//Fire is 50% hotter in the nether
+		if (Tamb == 300)	//Fire is 50% hotter in the nether
 			temperature++;
 
 		int a = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
