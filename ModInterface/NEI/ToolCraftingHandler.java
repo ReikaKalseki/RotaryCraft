@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package Reika.RotaryCraft.ModInterface.NEI;
+
+import java.util.ArrayList;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.RotaryCraft.GUIs.GuiWorktable;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.GuiCraftingRecipe;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
+public class ToolCraftingHandler extends TemplateRecipeHandler {
+
+	private boolean isWorktable = false;
+
+	public class CraftingRecipe extends CachedRecipe {
+
+		private final ItemStack[] ingredients;
+		private final ItemStack product;
+
+		public CraftingRecipe(ItemStack tool, ItemStack... items) {
+			ingredients = items;
+			product = tool;
+		}
+
+		@Override
+		public PositionedStack getResult() {
+			return new PositionedStack(product, 93, 6);
+		}
+
+		@Override
+		public ArrayList<PositionedStack> getIngredients()
+		{
+			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+			ItemStack[] in = new ItemStack[9];
+			for (int i = 0; i < 9 && i < ingredients.length; i++) {
+				in[i] = ingredients[i];
+			}
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					ItemStack is = in[i*3+j];
+					int dx = 21+18*j;
+					int dy = 6+18*i;
+					if (is != null) {
+						PositionedStack pos = new PositionedStack(is, dx, dy);
+						stacks.add(pos);
+					}
+				}
+			}
+			return stacks;
+		}
+	}
+
+	@Override
+	public void loadCraftingRecipes(ItemStack result) {
+		isWorktable = false;
+		ItemRegistry ir = ItemRegistry.getEntry(result);
+		if (result.getItemDamage() > 0) {
+			if (ir != null && ir.isCharged()) {
+				GuiCraftingRecipe.openRecipeGui("item", ir.getStackOf());
+			}
+		}
+		else if (ir == ItemRegistry.JETCHEST && APIRegistry.INDUSTRIALCRAFT.conditionsMet()) {
+			ItemStack jet = ic2.api.item.Items.getItem("electricJetpack");
+			arecipes.add(new CraftingRecipe(ir.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
+			isWorktable = true;
+		}
+	}
+
+	@Override
+	public void loadUsageRecipes(ItemStack ingredient) {
+		isWorktable = false;
+		if (ingredient != null && ingredient.itemID == ItemRegistry.BEDCHEST.getShiftedID() && APIRegistry.INDUSTRIALCRAFT.conditionsMet()) {
+			ItemStack jet = ic2.api.item.Items.getItem("electricJetpack");
+			arecipes.add(new CraftingRecipe(ItemRegistry.JETCHEST.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
+			isWorktable = true;
+		}
+	}
+
+	@Override
+	public String getRecipeName() {
+		return isWorktable ? "Tool Crafting" : "Shaped Crafting";
+	}
+
+	@Override
+	public Class<? extends GuiContainer> getGuiClass() {
+		return isWorktable ? GuiWorktable.class : GuiCrafting.class;
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return isWorktable ? "/Reika/RotaryCraft/Textures/GUI/worktablegui.png" : "/gui/crafting.png";
+	}
+
+}

@@ -226,7 +226,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			if (itemList[i].getShiftedID() == id)
 				return itemList[i];
 		}
-		throw new RegistrationException(RotaryCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
+		//throw new RegistrationException(RotaryCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
+		return null;
 	}
 
 	public static ItemRegistry getEntry(ItemStack is) {
@@ -302,7 +303,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public boolean isCharged() {
-		return ItemChargedTool.class.isAssignableFrom(itemClass);
+		return ItemChargedTool.class.isAssignableFrom(itemClass) || this == NVG;
 	}
 
 	public boolean isBedrockTool() {

@@ -16,6 +16,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesExtractor
@@ -92,7 +93,10 @@ public class RecipesExtractor
 	{
 		if (item == null)
 			return null;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
+		ReikaOreHelper ore = ReikaOreHelper.getEntryByOreDict(item);
+		if (ore != null) {
+			item = ore.getOreBlock();
+		}
 		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
 		if (ret != null)
 			return ret;

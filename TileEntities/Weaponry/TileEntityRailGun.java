@@ -64,7 +64,8 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 			return;
 		tickcount = 0;
 		if (target[3] == 1) {
-			this.fire(world, target);
+			if (!world.isRemote)
+				this.fire(world, target);
 		}
 	}
 

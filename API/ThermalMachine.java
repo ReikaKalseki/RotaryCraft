@@ -31,4 +31,7 @@ public interface ThermalMachine {
 	/** Actions to take on overheat */
 	public void onOverheat(World world, int x, int y, int z);
 
+	/** Can the friction heater heat this machine */
+	public boolean canBeFrictionHeated();
+
 }

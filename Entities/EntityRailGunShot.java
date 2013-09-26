@@ -29,6 +29,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -60,18 +61,18 @@ public class EntityRailGunShot extends EntityTurretShot {
 	public void onUpdate() {
 		ticksExisted++;
 		boolean hit = false;
-		int id = worldObj.getBlockId((int)posX, (int)posY, (int)posZ);
+		int id = worldObj.getBlockId((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ));
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
 		List mobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, this.getBoundingBox().expand(1, 1, 1));
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
-		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(id)));
+		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ))));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
 		if (ReikaWorldHelper.softBlocks(id) && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, id) && ConfigRegistry.BLOCKDAMAGE.getState())
-			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, (int)posX, (int)posY, (int)posZ, id, -1, (int)posX, (int)posY, (int)posZ, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), id, -1, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), 4);
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
 			this.onImpact(null);
-			if (power < 15)
+			if (power < 15 || true)
 				this.setDead();
 			return;
 		}
@@ -140,21 +141,20 @@ public class EntityRailGunShot extends EntityTurretShot {
 		double x = posX;
 		double y = posY;
 		double z = posZ;
-		int x0 = (int)x;
-		int y0 = (int)y;
-		int z0 = (int)z;
+		int x0 = (int)Math.floor(x);
+		int y0 = (int)Math.floor(y);
+		int z0 = (int)Math.floor(z);
 		EntityLiving el;
 		Entity ent;
-		//ReikaChatHelper.writeCoords(world, x, y, z);
-		//ReikaChatHelper.writeBlockAtCoords(world, x0, y0, z0);
 		world.spawnParticle("hugeexplosion", x0, y0, z0, 0, 0, 0);
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {
 				for (int k = -3; k <= 3; k++) {
 					if (i*j*k < 9 && i*j*k > -9) {
+						//ReikaJavaLibrary.pConsole(ConfigRegistry.BLOCKDAMAGE.getState()+" with "+power+" on "+FMLCommonHandler.instance().getEffectiveSide());
 						if (ConfigRegistry.BLOCKDAMAGE.getState()) {
 							int id = world.getBlockId(x0+i, y0+j, z0+k);
-							if (ReikaWorldHelper.softBlocks(id) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
+							if (ReikaWorldHelper.softBlocks(world, x0+i, y0+j, z0+k) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
 								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 5);
 							if (power >= 1) {
 								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, Block.leaves.blockID, -1, x0+i, y0+j, z0+k, 5);
@@ -199,18 +199,19 @@ public class EntityRailGunShot extends EntityTurretShot {
 								//ReikaWorldHelper.recursiveFillWithinSphere(world, x0+i, y0+j-7, z0+k, Block.grass.blockID, -1, Block.dirt.blockID, 0, x0+i, y0+j-7, z0+k, 5);
 								if (id == Block.grass.blockID) {
 									if (power >= 5) {
-										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+										int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
+										ReikaItemHelper.dropItems(world, x0+i, y0+j, z0+k, Block.blocksList[id].getBlockDropped(world, x0+i, y0+j, z0+k, meta, 0));
+										world.setBlock(x0+i, y0+j, z0+k, 0);
 									}
 									else
-										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.dirt.blockID);
+										world.setBlock(x0+i, y0+j, z0+k, Block.dirt.blockID);
 								}
 								world.markBlockForUpdate(x0+i, y0+j, z0+k);
 								if (id == Block.dirt.blockID) {
 									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
 									if (meta >= 3 || (meta > 3-(power-6) && power > 6)) {
-										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+										ReikaItemHelper.dropItems(world, x0+i, y0+j, z0+k, Block.blocksList[id].getBlockDropped(world, x0+i, y0+j, z0+k, meta, 0));
+										world.setBlock(x0+i, y0+j, z0+k, 0);
 									}
 									else
 										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
@@ -221,10 +222,11 @@ public class EntityRailGunShot extends EntityTurretShot {
 									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
 									if (meta >= 2 || (meta > 2-(power-8) && power > 8)) {
 										if (power <= 12)
-											ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, Block.cobblestone.blockID);
+											world.setBlock(x0+i, y0+j, z0+k, Block.cobblestone.blockID);
 										else {
-											Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-											ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+											ReikaItemHelper.dropItems(world, x0+i, y0+j, z0+k, Block.blocksList[id].getBlockDropped(world, x0+i, y0+j, z0+k, meta, 0));
+											//Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, meta, 0);
+											world.setBlock(x0+i, y0+j, z0+k, 0);
 										}
 									}
 									else
@@ -233,25 +235,23 @@ public class EntityRailGunShot extends EntityTurretShot {
 								if (id == Block.cobblestone.blockID || id == Block.cobblestoneWall.blockID || id == Block.cobblestoneMossy.blockID) {
 									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
 									if (meta >= 3 || (meta > 3-(power-8) && power > 8)) {
-										Block.blocksList[id].dropBlockAsItem(world, x0+i, y0+j, z0+k, 0, 0);
-										ReikaWorldHelper.legacySetBlockWithNotify(world, x0+i, y0+j, z0+k, 0);
+										ReikaItemHelper.dropItems(world, x0+i, y0+j, z0+k, Block.blocksList[id].getBlockDropped(world, x0+i, y0+j, z0+k, meta, 0));
+										world.setBlock(x0+i, y0+j, z0+k, 0);
 									}
 									else
 										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
 								}
 							}
 							if (power == 14) {
-								for (int n = 1; n < Block.blocksList.length; n++) {
-									if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
-										ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 3);
-									}
+								int n = id;
+								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
+									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 3);
 								}
 							}
 							if (power == 15) {
-								for (int n = 1; n < Block.blocksList.length; n++) {
-									if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
-										ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 6);
-									}
+								int n = id;
+								if (Block.blocksList[n] != null && n != MachineRegistry.RAILGUN.getBlockID() && ReikaMathLibrary.isValueOutsideBounds(7, 11, n)) {
+									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, n, -1, x0+i, y0+j, z0+k, 6);
 								}
 							}
 						}

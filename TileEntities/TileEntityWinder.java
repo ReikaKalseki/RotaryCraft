@@ -98,8 +98,8 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	public int getMaxWind() {
 		int max = torque;
-		if (max > 65535) //metadata limit
-			return 65535;
+		if (max > 30000) //technical limit
+			return 30000;
 		return max;
 	}
 

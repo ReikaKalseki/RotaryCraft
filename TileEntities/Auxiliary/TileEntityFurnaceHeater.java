@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -104,6 +105,19 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (!this.hasFurnace(world)) {
 			if (this.hasBlastFurnace(world)) {
 				this.heatBlast(world);
+			}
+			else {
+				TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+				if (te instanceof ThermalMachine) {
+					ThermalMachine tm = (ThermalMachine)te;
+					if (tm.canBeFrictionHeated()) {
+						int tdiff = temperature-tm.getTemperature();
+						tm.addTemperature(tdiff);
+						if (tm.getTemperature() > tm.getMaxTemperature()) {
+							tm.onOverheat(world, fx, fy, fz);
+						}
+					}
+				}
 			}
 			return;
 		}

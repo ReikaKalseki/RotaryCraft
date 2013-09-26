@@ -96,7 +96,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		//this.setValues();
 	}
 
-	private void refresh() {
+	private void refreshContainer() {
 		int lastx = x;
 		int lasty = y;
 		mc.thePlayer.closeScreen();

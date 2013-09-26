@@ -430,6 +430,10 @@ public class RotaryRecipes {
 		ItemRegistry.BEDAXE.addRecipe("BB ", "BS ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 		ItemRegistry.BEDSHOVEL.addRecipe(" B ", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 
+		ItemRegistry.STEELPICK.addRecipe("BBB", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
+		ItemRegistry.STEELAXE.addRecipe("BB ", "BS ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
+		ItemRegistry.STEELSHOVEL.addRecipe(" B ", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
+
 		ItemRegistry.BEDHELM.addEnchantedRecipe(Enchantment.projectileProtection, 4, "III", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDBOOTS.addEnchantedRecipe(Enchantment.featherFalling, 4, "I I", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDCHEST.addEnchantedRecipe(Enchantment.blastProtection, 4, "I I", "III", "III", 'I', ItemStacks.bedingot);

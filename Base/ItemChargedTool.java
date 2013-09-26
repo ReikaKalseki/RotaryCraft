@@ -39,7 +39,7 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	@SideOnly(Side.CLIENT)
 	public final void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
-		par3List.add(new ItemStack(par1, 1, 32768));
+		par3List.add(new ItemStack(par1, 1, 24000));
 	}
 
 	protected void noCharge() {
