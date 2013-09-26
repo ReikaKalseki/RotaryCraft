@@ -39,125 +39,113 @@ public class RenderMonitor extends RotaryTERenderer
 		if (!tile.isInWorld())
 			var9 = 0;
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
+		ModelMonitor var14;
+		var14 = MonitorModel;
+		//ModelMonitorV var15;
+		//var14 = this.MonitorModelV;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/monitortex.png");
 
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
 
-			{
-				//((BlockMonitorBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		if (tile.isInWorld()) {
+			switch(tile.getBlockMetadata()) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 			}
+
+			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+
 		}
 
-		if (true)
-		{
-			ModelMonitor var14;
-			var14 = MonitorModel;
-			//ModelMonitorV var15;
-			//var14 = this.MonitorModelV;
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/monitortex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			if (tile.isInWorld()) {
-
-				switch(tile.getBlockMetadata()) {
-				case 0:
-					var11 = 0;
-					break;
-				case 1:
-					var11 = 180;
-					break;
-				case 2:
-					var11 = 90;
-					break;
-				case 3:
-					var11 = 270;
-					break;
-				}
-
-				GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-
-			}
-
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
+		// if (tile.getBlockMetadata() < 4)
 
 
-			var14.renderAll(null, 0);
-			if (tile.isInWorld()) {
-				//  GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				FontRenderer var17 = this.getFontRenderer();
-				float var10 = 0.6666667F*1.2F;
-				GL11.glScalef(var10, -var10, -var10);
-				var11 = (int)(0.016666668F * var10);
-				float var112 = 0.016666668F * var10;
-				GL11.glTranslatef(0.0F, 0.5F * var10, 0.07F * var10);
-				GL11.glScalef(var112, -var112, var112);
-				//GL11.glNormal3f(0.0F, 0.0F, -1.0F * var11);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDepthMask(false);
-				GL11.glTranslatef(5, -48, 37);
-				String var15;
+		var14.renderAll(null, 0);
+		if (tile.isInWorld()) {
+			//  GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			FontRenderer var17 = this.getFontRenderer();
+			float var10 = 0.6666667F*1.2F;
+			GL11.glScalef(var10, -var10, -var10);
+			var11 = (int)(0.016666668F * var10);
+			float var112 = 0.016666668F * var10;
+			GL11.glTranslatef(0.0F, 0.5F * var10, 0.07F * var10);
+			GL11.glScalef(var112, -var112, var112);
+			//GL11.glNormal3f(0.0F, 0.0F, -1.0F * var11);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glDepthMask(false);
+			GL11.glTranslatef(5, -48, 37);
+			String var15;
 
-				for (int i = 0; i < 2; i++) {
-					GL11.glTranslatef(-10*i, 0, -37*2*i-9*i);
-					if (i == 1)
-						GL11.glScalef(-1, 1, 1);
-					var17.drawString("Power:", -37, 140, 0xffffff);
-					long power = tile.power;
-					if (power < 1000)
-						var15 = String.format("%dW", tile.power);
-					else if (power < 1000000)
-						var15 = String.format("%.3fkW", tile.power/1000D);
-					else
-						var15 = String.format("%.3fMW", tile.power/1000000D);
-					var17.drawString(var15, -28, 148, 0xffffff);
+			for (int i = 0; i < 2; i++) {
+				GL11.glTranslatef(-10*i, 0, -37*2*i-9*i);
+				if (i == 1)
+					GL11.glScalef(-1, 1, 1);
+				var17.drawString("Power:", -37, 140, 0xffffff);
+				long power = tile.power;
+				if (power < 1000)
+					var15 = String.format("%dW", tile.power);
+				else if (power < 1000000)
+					var15 = String.format("%.3fkW", tile.power/1000D);
+				else if (power < 1000000000)
+					var15 = String.format("%.3fMW", tile.power/1000000D);
+				else
+					var15 = String.format("%.3fGW", tile.power/1000000000D);
+				var17.drawString(var15, -28, 148, 0xffffff);
 
-					var17.drawString("Torque:", -37, 164, 0xffffff);
-					int torque = tile.torque;
-					if (torque < 1000)
-						var15 = String.format("%d Nm", tile.torque);
-					else if (torque < 1000000)
-						var15 = String.format("%.3f kNm", tile.torque/1000D);
-					else
-						var15 = String.format("%.3f MNm", tile.torque/1000000D);
-					var17.drawString(var15, -28, 172, 0xffffff);
+				var17.drawString("Torque:", -37, 164, 0xffffff);
+				int torque = tile.torque;
+				if (torque < 1000)
+					var15 = String.format("%d Nm", tile.torque);
+				else if (torque < 1000000)
+					var15 = String.format("%.3f kNm", tile.torque/1000D);
+				else
+					var15 = String.format("%.3f MNm", tile.torque/1000000D);
+				var17.drawString(var15, -28, 172, 0xffffff);
 
-					var17.drawString("Speed:", -37, 188, 0xffffff);
-					int omega = tile.omega;
-					if (omega < 1000)
-						var15 = String.format("%d rad/s", tile.omega);
-					else if (omega < 1000000)
-						var15 = String.format("%d krad/s", tile.omega/1000);
-					else
-						var15 = String.format("%d Mrad/s", tile.omega/1000000);
-					var17.drawString(var15, -28, 196, 0xffffff);
+				var17.drawString("Speed:", -37, 188, 0xffffff);
+				int omega = tile.omega;
+				if (omega < 1000)
+					var15 = String.format("%d rad/s", tile.omega);
+				else if (omega < 1000000)
+					var15 = String.format("%d krad/s", tile.omega/1000);
+				else
+					var15 = String.format("%d Mrad/s", tile.omega/1000000);
+				var17.drawString(var15, -28, 196, 0xffffff);
 
-				}
-
-				GL11.glDepthMask(true);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				// GL11.glEnable(GL11.GL_TEXTURE_2D);
 			}
 
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glDepthMask(true);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			// GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
+
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
