@@ -143,4 +143,8 @@ public class ExtractorModOres {
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
 		}
 	}
+
+	public static ModOreList getOreFromExtract(ItemStack item) {
+		return ModOreList.oreList[(item.getItemDamage()/4)];
+	}
 }

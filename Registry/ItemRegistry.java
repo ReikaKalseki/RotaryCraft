@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Interfaces.RegistrationList;
@@ -94,7 +94,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
-	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, APIRegistry.INDUSTRIALCRAFT),
+	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, ModList.INDUSTRIALCRAFT),
 	STEELPICK(13, true,			"HSLA Steel Pickaxe",		ItemSteelPick.class),
 	STEELAXE(14, true,			"HSLA Steel Axe",			ItemSteelAxe.class),
 	STEELSHOVEL(15, true,		"HSLA Steel Shovel",		ItemSteelShovel.class);
@@ -104,7 +104,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	private String name;
 	private Class itemClass;
 	private int texturesheet;
-	private APIRegistry condition;
+	private ModList condition;
 
 	private int maxindex;
 
@@ -112,7 +112,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		this(tex, sub, n, iCl, null);
 	}
 
-	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl, APIRegistry api) {
+	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl, ModList api) {
 		texturesheet = 1;
 		if (tex < 0) {
 			tex = -tex;
@@ -424,7 +424,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public boolean isDummiedOut() {
-		if (this.hasPrerequisite() && !this.getPrerequisite().conditionsMet())
+		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
 		return itemClass == null;
 	}
@@ -433,7 +433,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		return condition != null;
 	}
 
-	private APIRegistry getPrerequisite() {
+	private ModList getPrerequisite() {
 		return condition;
 	}
 

@@ -126,4 +126,8 @@ public class RecipesExtractor
 			return false;
 		return is.getItemDamage() < 32 && is.getItemDamage() >= 24 || ReikaItemHelper.matchStacks(is, ItemStacks.silverflakes);
 	}
+
+	public static ReikaOreHelper getOreFromExtract(ItemStack item) {
+		return ReikaOreHelper.oreList[(item.getItemDamage()-24)/8];
+	}
 }

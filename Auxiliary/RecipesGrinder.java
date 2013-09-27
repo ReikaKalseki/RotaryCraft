@@ -9,12 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesGrinder {
@@ -23,11 +25,12 @@ public class RecipesGrinder {
 	/** The list of smelting results. */
 	private Map GrinderList = new HashMap();
 	private Map GrinderExperience = new HashMap();
+	private ArrayList<ItemStack> products = new ArrayList();
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
 	 */
-	public static final RecipesGrinder smelting()
+	public static final RecipesGrinder getRecipes()
 	{
 		return GrinderBase;
 	}
@@ -85,6 +88,7 @@ public class RecipesGrinder {
 	{
 		GrinderList.put(Integer.valueOf(id), itemStack);
 		GrinderExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(experience));
+		products.add(itemStack);
 	}
 
 	/**
@@ -103,5 +107,13 @@ public class RecipesGrinder {
 	public float getExperience(int par1)
 	{
 		return GrinderExperience.containsKey(Integer.valueOf(par1)) ? ((Float)GrinderExperience.get(Integer.valueOf(par1))).floatValue() : 0.0F;
+	}
+
+	public boolean isGrindable(ItemStack item) {
+		return this.getSmeltingResult(item.itemID) != null;
+	}
+
+	public boolean isProduct(ItemStack item) {
+		return ReikaItemHelper.listContainsItemStack(products, item);
 	}
 }

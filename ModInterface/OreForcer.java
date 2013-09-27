@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.EnumTag;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
@@ -30,9 +30,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public final class OreForcer {
 
 	public static void forceCompatibility() {
-		for (int i = 0; i < APIRegistry.apiList.length; i++) {
-			APIRegistry mod = APIRegistry.apiList[i];
-			if (mod.conditionsMet()) {
+		for (int i = 0; i < ModList.modList.length; i++) {
+			ModList mod = ModList.modList[i];
+			if (mod.isLoaded()) {
 				try {
 					force(mod);
 				}
@@ -61,8 +61,8 @@ public final class OreForcer {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private static void force(APIRegistry api) {
-		if (api != APIRegistry.ROTARYCRAFT)
+	private static void force(ModList api) {
+		if (api != ModList.ROTARYCRAFT)
 			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
 		case APPLIEDENERGISTICS:

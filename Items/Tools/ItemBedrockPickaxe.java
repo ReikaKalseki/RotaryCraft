@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
@@ -100,7 +100,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack block = new ItemStack(id, 1, meta);
-		if (APIRegistry.THAUMCRAFT.conditionsMet() && ThaumOreHandler.getInstance().isThaumOre(block) && ConfigRegistry.MODORES.getState() && ThaumOreHandler.getInstance().isShardOre(block)) {
+		if (ModList.THAUMCRAFT.isLoaded() && ThaumOreHandler.getInstance().isThaumOre(block) && ConfigRegistry.MODORES.getState() && ThaumOreHandler.getInstance().isShardOre(block)) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -109,7 +109,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;
 		}
-		if (APIRegistry.DARTCRAFT.conditionsMet() && DartOreHandler.getInstance().isDartOre(block) && ConfigRegistry.MODORES.getState()) {
+		if (ModList.DARTCRAFT.isLoaded() && DartOreHandler.getInstance().isDartOre(block) && ConfigRegistry.MODORES.getState()) {
 			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {

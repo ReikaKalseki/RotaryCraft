@@ -22,7 +22,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -224,8 +224,8 @@ public enum MachineRegistry {
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9, "RenderFin"),
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			6),
-	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", APIRegistry.BUILDCRAFTENERGY),
-	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", APIRegistry.BUILDCRAFTENERGY),
+	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", ModList.BUILDCRAFTENERGY),
+	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", ModList.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
@@ -234,7 +234,7 @@ public enum MachineRegistry {
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
-	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", APIRegistry.BUILDCRAFTENERGY),
+	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
 	ARROWGUN(			"Arrow Gun",				BlockDMachine.class,		TileEntityMachineGun.class,			1);
 
 
@@ -246,7 +246,7 @@ public enum MachineRegistry {
 	private boolean hasRender = false;
 	private String renderClass;
 	private int rollover;
-	private APIRegistry requirement;
+	private ModList requirement;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -261,7 +261,7 @@ public enum MachineRegistry {
 		//this.updateMappingRegistry();
 	}
 
-	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, APIRegistry a) {
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList a) {
 		this(n, b, tile, m);
 		requirement = a;
 	}
@@ -272,7 +272,7 @@ public enum MachineRegistry {
 		renderClass = r;
 	}
 
-	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, APIRegistry a) {
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, ModList a) {
 		this(n, b, tile, m, r);
 		requirement = a;
 	}
@@ -891,7 +891,7 @@ public enum MachineRegistry {
 			return true;
 		if (this == CHUNKLOADER)
 			return true;
-		if (this.hasPrerequisite() && !this.getPrerequisite().conditionsMet())
+		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
 		return false;
 	}
@@ -900,7 +900,7 @@ public enum MachineRegistry {
 		return requirement != null;
 	}
 
-	public APIRegistry getPrerequisite() {
+	public ModList getPrerequisite() {
 		if (!this.hasPrerequisite())
 			throw new RegistrationException(RotaryCraft.instance, this.getName()+" has no prerequisites and yet was called for them!");
 		return requirement;
@@ -909,7 +909,7 @@ public enum MachineRegistry {
 	public boolean preReqSatisfied() {
 		if (!this.hasPrerequisite())
 			return true;
-		return this.getPrerequisite().conditionsMet();
+		return this.getPrerequisite().isLoaded();
 	}
 
 	public boolean renderInPass1() {

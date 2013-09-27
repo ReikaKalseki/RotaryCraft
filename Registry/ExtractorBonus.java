@@ -13,7 +13,7 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
@@ -23,14 +23,14 @@ public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
-	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), APIRegistry.INDUSTRIALCRAFT),
+	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), ModList.INDUSTRIALCRAFT),
 	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.ironoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.FERROUS), 0.25F),
 	NETHERGOLD(ExtractorModOres.getSolutionProduct(ModOreList.NETHERGOLD), ItemStacks.silverflakes, 0.125F),
 	NETHERIRON(ExtractorModOres.getSolutionProduct(ModOreList.NETHERIRON), ItemStacks.aluminumpowder, 0.125F),
-	SILVER(ExtractorModOres.getSolutionProduct(ModOreList.SILVER), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.01F, APIRegistry.INDUSTRIALCRAFT),
-	PLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.PLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.0625F, APIRegistry.INDUSTRIALCRAFT),
-	NETHERPLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.NETHERPLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.125F, APIRegistry.INDUSTRIALCRAFT);
+	SILVER(ExtractorModOres.getSolutionProduct(ModOreList.SILVER), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.01F, ModList.INDUSTRIALCRAFT),
+	PLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.PLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.0625F, ModList.INDUSTRIALCRAFT),
+	NETHERPLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.NETHERPLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.125F, ModList.INDUSTRIALCRAFT);
 
 	private static final ExtractorBonus[] bonusList = ExtractorBonus.values();
 
@@ -39,11 +39,11 @@ public enum ExtractorBonus {
 	private float probability;
 	private boolean hasMod = false;
 	private ItemStack modBonus;
-	private APIRegistry modReq;
+	private ModList modReq;
 	private boolean hasReq = false;
-	private APIRegistry bonusReq;
+	private ModList bonusReq;
 
-	private ExtractorBonus(ItemStack in, ItemStack is, float chance, APIRegistry req) {
+	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ModList req) {
 		bonusItem = is.copy();
 		sourceItem = in.copy();
 		probability = chance;
@@ -57,7 +57,7 @@ public enum ExtractorBonus {
 		this(in, is, chance, null);
 	}
 
-	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ItemStack mod, APIRegistry condition) {
+	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ItemStack mod, ModList condition) {
 		bonusItem = is.copy();
 		sourceItem = in.copy();
 		probability = chance;
@@ -76,10 +76,10 @@ public enum ExtractorBonus {
 	}
 
 	public ItemStack getBonus() {
-		if (hasReq && !bonusReq.conditionsMet())
+		if (hasReq && !bonusReq.isLoaded())
 			return null;
 		if (hasMod) {
-			if (modReq.conditionsMet())
+			if (modReq.isLoaded())
 				return modBonus.copy();
 		}
 		return bonusItem.copy();

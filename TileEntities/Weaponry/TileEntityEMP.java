@@ -32,7 +32,7 @@ import thaumcraft.api.EnumTag;
 import thaumcraft.api.ObjectTags;
 import thaumcraft.api.aura.AuraNode;
 import thaumcraft.api.aura.EnumNodeType;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -236,7 +236,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			TileEntity te = blocks.get(i);
 			this.shutdownTE(te);
 		}
-		if (APIRegistry.THAUMCRAFT.conditionsMet())
+		if (ModList.THAUMCRAFT.isLoaded())
 			this.affectNearNodes(world, x, y, z);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		world.setBlock(x, y, z, 0);

@@ -23,7 +23,7 @@ import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thermalexpansion.api.crafting.CraftingManagers;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -62,7 +62,7 @@ public class RotaryRecipes {
 	}
 
 	public static void addModInterface() {
-		if (APIRegistry.THERMAL.conditionsMet()) {
+		if (ModList.THERMAL.isLoaded()) {
 			LiquidStack ethanol = RotaryCraft.ethanolStack.copy();
 			ethanol.amount = LiquidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {

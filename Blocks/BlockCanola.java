@@ -51,7 +51,7 @@ public class BlockCanola extends BlockBasic {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ItemRegistry.CANOLA.getShiftedID(), 1, 0);
+		return ItemRegistry.CANOLA.getStackOf();
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class BlockCanola extends BlockBasic {
 
 	public ItemStack getDrops(int metadata) {
 		int ndrops = 2+rand.nextInt(8)+rand.nextInt(5);
-		if (metadata != 9)
+		if (metadata < 9)
 			ndrops = 1;
 		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
 		return items;

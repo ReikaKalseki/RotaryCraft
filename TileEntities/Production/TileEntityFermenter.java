@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -106,10 +106,10 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			return 0;
 		if (wood == ModWoodList.SILVERWOOD)
 			return 16;
-		APIRegistry mod = wood.getParentMod();
-		if (mod == APIRegistry.THAUMCRAFT)
+		ModList mod = wood.getParentMod();
+		if (mod == ModList.THAUMCRAFT)
 			return 4;
-		if (mod == APIRegistry.TWILIGHT)
+		if (mod == ModList.TWILIGHT)
 			return 3;
 		return 1;
 	}

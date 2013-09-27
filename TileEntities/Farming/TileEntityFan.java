@@ -21,14 +21,16 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Models.ModelFan;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
@@ -226,76 +228,30 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			return;
 		if (id == Block.fire.blockID && omega < FIRESPEED)
 			return;
-		if ((id == Block.crops.blockID || id == Block.potato.blockID || id == Block.carrot.blockID ||
-				id == RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) && omega < HARVESTSPEED)
+		if ((ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id)) && omega < HARVESTSPEED)
 			return;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", id, world.getBlockMetadata(x, y, z), x, y, z));
-		if (id == Block.crops.blockID || id == Block.potato.blockID || id == Block.carrot.blockID || id == RotaryCraft.canola.blockID || id == Block.netherStalk.blockID) {
+
+		if (ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id)) {
 			this.harvest(world, x, y, z, this.getBlockMetadata(), id);
 			return;
 		}
 		this.dropBlocks(world, x, y, z, id, world.getBlockMetadata(x, y, z));
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		world.setBlock(x, y, z, 0);
 	}
 
 	private void harvest(World world, int x, int y, int z, int meta, int id) {
-		if (world.isRemote)
-			return;
-		int itemid = -1;
-		int itemmeta = -1;
-		int itemsize = -1;
-		int itemid2 = -1;
-		int itemmeta2 = -1;
-		int itemsize2 = -1;
-
-		if (id == Block.crops.blockID && world.getBlockMetadata(x, y, z) == 7) {
-			itemid = Item.wheat.itemID;
-			itemmeta = 0;
-			itemsize = 1;
-			itemid2 = Item.seeds.itemID;
-			itemmeta2 = 0;
-			itemsize2 = par5Random.nextInt(3);
+		ModCropList mod = ModCropList.getModCrop(id);
+		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
+		int metato = 0;
+		if (mod != null) {
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, mod.getDrops(world, x, y, z, 0));
+			metato = mod.harvestedMeta;
 		}
-		if (id == Block.potato.blockID && world.getBlockMetadata(x, y, z) == 7) {
-			itemid = Item.potato.itemID;
-			itemmeta = 0;
-			itemsize = 1+par5Random.nextInt(4);
-			if (par5Random.nextInt(100) < 2) {	//2% chance of poison potato
-				itemid2 = Item.poisonousPotato.itemID;
-				itemmeta2 = 0;
-				itemsize2 = 1;
-			}
+		if (crop != null) {
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
+			metato = crop.harvestedMeta;
 		}
-		if (id == Block.netherStalk.blockID && world.getBlockMetadata(x, y, z) == 3) {
-			itemid = Item.netherStalkSeeds.itemID;
-			itemmeta = 0;
-			itemsize = 2+par5Random.nextInt(3); // 2-4
-		}
-		if (id == Block.carrot.blockID && world.getBlockMetadata(x, y, z) == 7) {
-			itemid = Item.carrot.itemID;
-			itemmeta = 0;
-			itemsize = 1+par5Random.nextInt(4);
-		}
-		if (id == RotaryCraft.canola.blockID && world.getBlockMetadata(x, y, z) == 9) {
-			itemid = ItemRegistry.CANOLA.getShiftedID();
-			itemmeta = 0;
-			itemsize = 1+par5Random.nextInt(6)+par5Random.nextInt(3);
-		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", id, world.getBlockMetadata(x, y, z), x, y, z));
-		if (itemid != 1 && itemmeta != -1 && itemsize != -1) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("Dropping Item 1: ItemStack(%d, %d, %d)", itemid, itemsize, itemmeta));
-			EntityItem item1 = new EntityItem(world, x, y, z, new ItemStack(itemid, itemsize, itemmeta));
-			item1.delayBeforeCanPickup = 10;
-			world.spawnEntityInWorld(item1);
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
-		}
-		if (itemid2 != 1 && itemmeta2 != -1 && itemsize2 != -1) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("Dropping Item 1: ItemStack(%d, %d, %d)", itemid2, itemsize2, itemmeta2));
-			EntityItem item2 = new EntityItem(world, x, y, z, new ItemStack(itemid2, itemsize2, itemmeta2));
-			item2.delayBeforeCanPickup = 10;
-			world.spawnEntityInWorld(item2);
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
-		}
+		ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 	}
 
 	public void dropBlocks(World world, int x, int y, int z, int id, int meta) {

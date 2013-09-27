@@ -244,7 +244,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return (lubricant < MAXLUBE-9);
 		}
 
-		ItemStack itemstack = RecipesGrinder.smelting().getSmeltingResult(inventory[0].getItem().itemID);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0].getItem().itemID);
 
 		if (itemstack == null)
 		{
@@ -295,7 +295,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return;
 		}
 
-		ItemStack itemstack = RecipesGrinder.smelting().getSmeltingResult(inventory[0].getItem().itemID);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0].getItem().itemID);
 		if (inventory[1] == null)
 		{
 			inventory[1] = itemstack.copy();
@@ -352,7 +352,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return false;
 		if (slot == 2)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return RecipesGrinder.smelting().getSmeltingResult(is.itemID) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
+		return RecipesGrinder.getRecipes().getSmeltingResult(is.itemID) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
 	}
 
 	@Override

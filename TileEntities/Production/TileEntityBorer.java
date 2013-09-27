@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -238,7 +238,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
-		if (APIRegistry.TWILIGHT.conditionsMet() && id == TwilightBlockHandler.getInstance().mazeStoneID)
+		if (ModList.TWILIGHT.isLoaded() && id == TwilightBlockHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 		if (tile instanceof RotaryCraftTileEntity)

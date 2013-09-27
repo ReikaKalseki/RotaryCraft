@@ -19,7 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -178,7 +178,7 @@ public final class HandbookAuxData {
 			}
 
 			for (int i = 0; i < ModWoodList.woodList.length; i++) {
-				if (ModWoodList.woodList[i].getParentMod().conditionsMet()) {
+				if (ModWoodList.woodList[i].getParentMod().isLoaded()) {
 					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
 					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
 
@@ -187,7 +187,7 @@ public final class HandbookAuxData {
 				}
 			}
 
-			if (APIRegistry.DYETREES.conditionsMet()) {
+			if (ModList.DYETREES.isLoaded()) {
 				for (int j = 0; j < 16; j++) {
 					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
 					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), TreeGetter.getDyeSapling(j), new ItemStack(Item.bucketWater)});

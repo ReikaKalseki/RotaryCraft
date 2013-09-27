@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.APIRegistry;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -31,7 +31,7 @@ public class TileEntityWorktable extends RotaryCraftTileEntity implements ISided
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.chargeTools();
-		if (APIRegistry.INDUSTRIALCRAFT.conditionsMet())
+		if (ModList.INDUSTRIALCRAFT.isLoaded())
 			this.makeJetplate();
 	}
 
