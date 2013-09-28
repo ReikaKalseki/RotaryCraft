@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -20,6 +23,7 @@ import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
@@ -61,6 +65,34 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		return i == 3;
 	}
 
+	public static List<ItemStack> getAllValidPlants() {
+		List<ItemStack> in = new ArrayList();
+		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
+			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
+				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
+					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
+					in.add(icon);
+				}
+			}
+			else {
+				in.add(PlantMaterials.plantList[i].getPlantItem());
+			}
+		}
+		for (int i = 0; i < ModWoodList.woodList.length; i++) {
+			if (ModWoodList.woodList[i].getParentMod().isLoaded()) {
+				in.add(ModWoodList.woodList[i].getCorrespondingSapling());
+				in.add(ModWoodList.woodList[i].getCorrespondingLeaf());
+			}
+		}
+		if (ModList.DYETREES.isLoaded()) {
+			for (int j = 0; j < 16; j++) {
+				in.add(TreeGetter.getDyeSapling(j));
+				in.add(TreeGetter.getDyeLeaf(j));
+			}
+		}
+		return in;
+	}
+
 	// Return the itemstack product from the input items.
 	private ItemStack getRecipe() {
 		for (int i = 0; i < 3; i++)
@@ -80,7 +112,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		return null;
 	}
 
-	private int getPlantValue(ItemStack is) {
+	public static int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
 		if (TreeGetter.isDyeSapling(is))
@@ -89,11 +121,11 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			return PlantMaterials.LEAVES.getPlantValue();
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
-			return PlantMaterials.SAPLING.getPlantValue()*this.getModSaplingValue(sap);
+			return PlantMaterials.SAPLING.getPlantValue()*getModSaplingValue(sap);
 		}
 		ModWoodList leaf = ModWoodList.getModWoodFromLeaf(is);
 		if (leaf != null) {
-			return PlantMaterials.LEAVES.getPlantValue()*this.getModSaplingValue(leaf);
+			return PlantMaterials.LEAVES.getPlantValue()*getModSaplingValue(leaf);
 		}
 		PlantMaterials plant = PlantMaterials.getPlantEntry(is);
 		if (plant == null)

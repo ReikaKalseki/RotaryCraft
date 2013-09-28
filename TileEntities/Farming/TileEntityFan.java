@@ -14,9 +14,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -25,7 +22,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
@@ -215,8 +211,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	public void rip2(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
-		if (id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID && id != Block.fire.blockID &&
-				id != Block.crops.blockID && id != Block.potato.blockID && id != Block.carrot.blockID && id != RotaryCraft.canola.blockID && id != Block.netherStalk.blockID)
+		int meta = world.getBlockMetadata(x, y, z);
+		if (id != Block.snow.blockID && id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID && id != Block.fire.blockID &&
+				!ReikaCropHelper.isCrop(id) && !ModCropList.isModCrop(id, meta))
 			return;
 		if ((par5Random.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (par5Random.nextInt(200) > 0 && id == Block.tallGrass.blockID))
 			return;
@@ -228,10 +225,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			return;
 		if (id == Block.fire.blockID && omega < FIRESPEED)
 			return;
-		if ((ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id)) && omega < HARVESTSPEED)
+		if (id == Block.snow.blockID && omega < FIRESPEED)
 			return;
-
-		if (ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id)) {
+		if ((ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta)) && omega < HARVESTSPEED)
+			return;
+		if (ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta)) {
 			this.harvest(world, x, y, z, this.getBlockMetadata(), id);
 			return;
 		}
@@ -240,70 +238,25 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	private void harvest(World world, int x, int y, int z, int meta, int id) {
-		ModCropList mod = ModCropList.getModCrop(id);
+		ModCropList mod = ModCropList.getModCrop(id, world.getBlockMetadata(x, y, z));
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
-		if (mod != null) {
+		if (mod != null && mod.isRipe(world.getBlockMetadata(x, y, z))) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, mod.getDrops(world, x, y, z, 0));
 			metato = mod.harvestedMeta;
+			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 		}
-		if (crop != null) {
+		if (crop != null && crop.isRipe(world.getBlockMetadata(x, y, z))) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
 			metato = crop.harvestedMeta;
+			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 		}
-		ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 	}
 
 	public void dropBlocks(World world, int x, int y, int z, int id, int meta) {
-		if (id == Block.fire.blockID)
-			return;
-		int iddrop = 0;
-		int metadrop = 0;
-		boolean dropchance = false;
-		boolean dropapple = false;
-		if (id == Block.web.blockID) {
-			iddrop = Item.silk.itemID;
-			metadrop = 0;
-			dropchance = true;
-		}
-		if (id == Block.leaves.blockID) {
-			iddrop = Block.sapling.blockID;
-			metadrop = meta;
-			dropchance = false;
-			if (par5Random.nextInt(20) == 0 && meta != 3) //Most saplings have 5% drop rate
-				dropchance = true;
-			if (par5Random.nextInt(40) == 0 && meta == 3) //Jungle saplings have 2.5% chance
-				dropchance = true;
-			if (meta == 0 && par5Random.nextInt(200) == 0) //0.5% chance of apple from oak
-				dropapple = true;
-		}
-		if (id == Block.tallGrass.blockID) {
-			iddrop = Item.seeds.itemID;
-			metadrop = 0;
-			dropchance = false;
-			if (par5Random.nextInt(2) == 0) //50% drop rate
-				dropchance = true;
-		}
-		if (dropapple) {
-			ItemStack apple = new ItemStack(Item.appleRed.itemID, 1, 0);
-			EntityItem itemdrop = new EntityItem(world, x+0.5D, y+0.5D, z+0.5D, apple);
-			itemdrop.motionX = -0.1+0.2*par5Random.nextFloat();
-			itemdrop.motionY = 0.2*par5Random.nextFloat();
-			itemdrop.motionZ = -0.1+0.2*par5Random.nextFloat();
-			itemdrop.delayBeforeCanPickup = 10;
-			world.spawnEntityInWorld(itemdrop);
-		}
-		if (!dropchance)
-			return;
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
-		ItemStack todrop = new ItemStack(iddrop, 1, metadrop);
-		EntityItem itemdrop = new EntityItem(world, x+0.5D, y+0.5D, z+0.5D, todrop);
-		itemdrop.motionX = -0.1+0.2*par5Random.nextFloat();
-		itemdrop.motionY = 0.2*par5Random.nextFloat();
-		itemdrop.motionZ = -0.1+0.2*par5Random.nextFloat();
-		itemdrop.delayBeforeCanPickup = 10;
-		world.spawnEntityInWorld(itemdrop);
-
+		if (id != 0)
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, Block.blocksList[id].getBlockDropped(world, x, y, z, meta, 0));
+		world.setBlock(x, y, z, 0);
 	}
 
 	public AxisAlignedBB getBlowZone(int meta, int step) {

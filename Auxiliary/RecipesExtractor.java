@@ -128,6 +128,6 @@ public class RecipesExtractor
 	}
 
 	public static ReikaOreHelper getOreFromExtract(ItemStack item) {
-		return ReikaOreHelper.oreList[(item.getItemDamage()-24)/8];
+		return ReikaOreHelper.oreList[item.getItemDamage()%8];
 	}
 }

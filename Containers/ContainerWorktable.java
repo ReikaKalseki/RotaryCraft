@@ -48,13 +48,7 @@ public class ContainerWorktable extends CoreContainer {
 			for (int j = 0; j < 3; j++) {
 				this.addSlotToContainer(new SlotFurnace(player, te, 9+i*3+j, dx+26+j*18, 17+i*18));
 			}
-		}/*
-		dx = 0;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				this.addSlotToContainer(new Slot(craftMatrix, i*3+j, dx+26+j*18, 17+i*18));
-			}
-		}*/
+		}
 
 		this.updateCraftMatrix();
 

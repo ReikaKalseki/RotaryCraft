@@ -18,10 +18,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -270,6 +273,20 @@ public class RotaryCraft extends DragonAPIMod {
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Post event) {
 		RotaryRegistration.setupLiquidIcons();
+	}
+
+	@ForgeSubscribe
+	public void bonemealEvent (BonemealEvent event)
+	{
+		if (!event.world.isRemote)  {
+			if (event.ID == canola.blockID) {
+				World world = event.world;
+				int x = event.X;
+				int y = event.Y;
+				int z = event.Z;
+				event.setResult(Event.Result.DENY);
+			}
+		}
 	}
 
 	@Override

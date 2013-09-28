@@ -73,7 +73,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 				else
 					return 1; //75% chance of doubling -> 1.75^4 = 9.3
 			}
-			if (ore == ModOreList.PLATINUM || ore == ModOreList.NETHERPLATINUM || ore == ModOreList.IRIDIUM) {
+			if (ore.isRare()) {
 				if (ReikaMathLibrary.doWithChance(oreCopyRare/100D))
 					return 2;
 				else

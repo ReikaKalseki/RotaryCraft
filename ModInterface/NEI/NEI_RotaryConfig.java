@@ -22,6 +22,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final BlastFurnaceHandler blastFurnace = new BlastFurnaceHandler();
 	private static final GrinderHandler grinder = new GrinderHandler();
 	private static final ExtractorHandler extractor = new ExtractorHandler();
+	private static final FermenterHandler fermenter = new FermenterHandler();
 
 	@Override
 	public void loadConfig() {
@@ -38,10 +39,18 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		API.registerUsageHandler(grinder);
 		API.registerRecipeHandler(extractor);
 		API.registerUsageHandler(extractor);
+		API.registerRecipeHandler(fermenter);
+		API.registerUsageHandler(fermenter);
 
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++)
 			API.hideItem(BlockRegistry.blockList[i].getBlockID());
+
+		API.hideItem(RotaryCraft.lightblock.blockID);
+		API.hideItem(RotaryCraft.lightbridge.blockID);
+		API.hideItem(RotaryCraft.beamblock.blockID);
+		API.hideItem(RotaryCraft.canola.blockID);
+		API.hideItem(RotaryCraft.miningpipe.blockID);
 	}
 
 	@Override

@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
@@ -22,20 +21,23 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	public class GrinderRecipe extends CachedRecipe {
 
 		private ItemStack input;
+		private ItemStack output;
+
 
 		public GrinderRecipe(ItemStack in) {
 			input = in;
+			output = RecipesGrinder.getRecipes().getSmeltingResult(in.itemID);
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(RecipesGrinder.getRecipes().getSmeltingResult(input.itemID), 0, 0);
+			return new PositionedStack(output, 131, 24);
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input, 0, 0);
+			return new PositionedStack(input, 71, 24);
 		}
 	}
 
@@ -52,7 +54,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (RecipesGrinder.getRecipes().isProduct(result)) {
-			arecipes.add(new GrinderRecipe(new ItemStack(Block.cobblestone)));
+			arecipes.add(new GrinderRecipe(RecipesGrinder.getRecipes().getSources(result)));
 		}
 	}
 

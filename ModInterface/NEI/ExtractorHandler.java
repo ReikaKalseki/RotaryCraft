@@ -23,6 +23,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.GUIs.GuiExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.forge.GuiContainerManager;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -33,6 +34,8 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 		private List<ItemStack> oreBlock;
 		private int extractID;
+		public ModOreList modore;
+		public ReikaOreHelper ore;
 
 		public ExtractorRecipe(ModOreList modore, ReikaOreHelper ore, ItemStack block) {
 			if (modore != null) {
@@ -40,48 +43,62 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 					oreBlock = ReikaJavaLibrary.makeListFrom(block.copy());
 				else
 					oreBlock = modore.getAllOreBlocks();
+				if (oreBlock.isEmpty()) {
+					oreBlock.add(new ItemStack(Block.fire));
+				}
 				extractID = RotaryCraft.modextracts.itemID;
 			}
 			else {
 				oreBlock = ReikaJavaLibrary.makeListFrom(ore.getOreBlock());
 				extractID = RotaryCraft.extracts.itemID;
 			}
+			this.ore = ore;
+			this.modore = modore;
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(this.getFlakes(), 0, 0);
+			return new PositionedStack(this.getFlakes(), 129, 44);
 		}
 
 		private ItemStack getDust() {
-			return new ItemStack(Block.fire);
+			if (modore != null)
+				return ExtractorModOres.getDustProduct(modore);
+			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal());
 		}
 
 		private ItemStack getSlurry() {
-			return new ItemStack(Block.fire);
+			if (modore != null)
+				return ExtractorModOres.getSlurryProduct(modore);
+			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+8);
 		}
 
 		private ItemStack getSolution() {
-			return new ItemStack(Block.fire);
+			if (modore != null)
+				return ExtractorModOres.getSolutionProduct(modore);
+			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+16);
 		}
 
 		private ItemStack getFlakes() {
-			return new ItemStack(Block.fire);
+			if (modore != null)
+				return ExtractorModOres.getFlakeProduct(modore);
+			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+24);
 		}
 
 		@Override
 		public ArrayList<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			int dx = 0;
-			int dy = 0;
-			int vx = 0;
-			int vy = 0;
+			int dx = 21;
+			int dy = 2;
+			int vx = 36;
+			int vy = 42;
 
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 4; j++) {
 					PositionedStack pos = new PositionedStack(this.getItem(j, i), dx+vx*j, dy+vy*i);
-					stacks.add(pos);
+					if (!(i == 1 && j == 3))
+						stacks.add(pos);
 				}
 			}
 
@@ -89,9 +106,21 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		}
 
 		private Object getItem(int x, int y) {
-			if (x == 0 && y == 0)
+			switch(x+y*4) {
+			case 0:
 				return oreBlock;
-			return new ItemStack(Block.fire);
+			case 1:
+			case 4:
+				return this.getDust();
+			case 2:
+			case 5:
+				return this.getSlurry();
+			case 3:
+			case 6:
+				return this.getSolution();
+			default:
+				return new ItemStack(Block.fire);
+			}
 		}
 
 		private int getSizeAt(int x, int y) {
@@ -115,6 +144,8 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			if (result.itemID == RotaryCraft.extracts.itemID && !RecipesExtractor.isFlakes(result))
 				return;
 			ModOreList ore = ExtractorModOres.getOreFromExtract(result);
+			if (ore != null && !ore.hasLoadedOres())
+				return;
 			ReikaOreHelper van = RecipesExtractor.getOreFromExtract(result);
 			arecipes.add(new ExtractorRecipe(ore, van, null));
 		}
@@ -126,7 +157,11 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			ModOreList ore = ModOreList.getModOreFromOre(ingredient);
 			if (ingredient.itemID == RotaryCraft.modextracts.itemID)
 				ore = ExtractorModOres.getOreFromExtract(ingredient);
+			if (ore != null && !ore.hasLoadedOres())
+				return;
 			ReikaOreHelper van = ReikaOreHelper.getEntryByOreDict(ingredient);
+			if (van == null)
+				van = RecipesExtractor.getOreFromExtract(ingredient);
 			arecipes.add(new ExtractorRecipe(ore, van, ingredient));
 		}
 	}
@@ -139,11 +174,20 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void drawExtras(GuiContainerManager gui, int recipe) {
-		gui.drawText(0, 0, String.format("%d%s Duplication Chance", this.getDupeChance(recipe), "%%"));
+		int chance = this.getDupeChance(recipe);
+		gui.drawText(-2, 65, String.format("%d%s duplication chance per stage", chance, "%"), 0x333333, false);
+		gui.drawText(9, 76, String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 0x333333, false);
 	}
 
 	public int getDupeChance(int recipe) {
-		return 50;
+		ExtractorRecipe ir = (ExtractorRecipe)arecipes.get(recipe);
+		if (ir != null && ir.modore != null) {
+			if (ir.modore.isNetherOres())
+				return TileEntityExtractor.oreCopyNether;
+			if (ir.modore.isRare())
+				return TileEntityExtractor.oreCopyRare;
+		}
+		return TileEntityExtractor.oreCopy;
 	}
 
 }
