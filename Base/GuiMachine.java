@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
@@ -26,6 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiCannon;
 import Reika.RotaryCraft.GUIs.GuiCoil;
 import Reika.RotaryCraft.GUIs.GuiSpyCam;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
@@ -134,5 +136,14 @@ public abstract class GuiMachine extends GuiContainer {
 
 	public void drawHelpTab(int j, int k) {
 		fontRenderer.drawString("?", -10, ySize/2-4, 0xffffff);
+	}
+
+	@Override
+	protected void drawSlotInventory(Slot slot) {
+		super.drawSlotInventory(slot);
+		if (ConfigRegistry.DEBUGMODE.getState()) {
+			mc.renderEngine.bindTexture("/font/glyph_AA.png");
+			fontRenderer.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
+		}
 	}
 }

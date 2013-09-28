@@ -14,9 +14,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -104,7 +105,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 						if (foundid == Block.fire.blockID) {
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", ytop));
 							world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*par5Random.nextFloat(), 0.5F+0.5F*par5Random.nextFloat());
-							ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, k, z+j, 0);
+							world.setBlock(x+i, k, z+j, 0);
 						}
 						if (foundid != 0) {
 							if (Block.blocksList[foundid].isOpaqueCube()) {
@@ -120,11 +121,13 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 						int foundid = world.getBlockId(x+i, k, z+j);
 						int meta2 = world.getBlockMetadata(x+i, k, z+j);
 						if (par5Random.nextInt(20) == 0) {
-							if (foundid == Block.crops.blockID || foundid == Block.potato.blockID || foundid == Block.carrot.blockID || foundid == RotaryCraft.canola.blockID) {
-								if (foundid != RotaryCraft.canola.blockID && meta2 < 7)
-									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
-								if (foundid == RotaryCraft.canola.blockID && meta2 < 9)
-									ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
+							ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
+							ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
+							if (crop != null && !crop.isRipe(meta2)) {
+								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
+							}
+							if (modcrop != null && !modcrop.isRipe(meta2)) {
+								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
 							}
 						}
 						if (foundid == Block.tilledField.blockID) {

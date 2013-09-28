@@ -142,7 +142,7 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 				double dz = e.posZ-z-0.5;
 				double dd = ReikaMathLibrary.py3d(dx, dy, dz);
 				e.attackEntityFrom(DamageSource.generic, (int)(10D/Math.sqrt(dd)));
-				ReikaEntityHelper.spawnParticlesAround("crit", world, e, 8);
+				ReikaEntityHelper.spawnParticlesAround("crit", e, 8);
 			}
 		}/*
 		for (int i = -8; i <= 8; i++) {

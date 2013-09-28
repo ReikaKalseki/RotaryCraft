@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -136,7 +137,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 				worldObj.createExplosion(this, posX, posY, posZ, 3F, false);
 				for (int var19 = 0; var19 < 4; ++var19) {
 					float var18 = 0.25F;
-					worldObj.spawnParticle("bubble", posX - motionX * var18, posY - motionY * var18, posZ - motionZ * var18, motionX, motionY, motionZ);
+					ReikaParticleHelper.BUBBLE.spawnAt(worldObj, posX - motionX * var18, posY - motionY * var18, posZ - motionZ * var18, motionX, motionY, motionZ);
 				}
 			}
 			this.setPosition(posX, posY, posZ);

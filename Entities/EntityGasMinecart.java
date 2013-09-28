@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -77,7 +78,7 @@ public class EntityGasMinecart extends EntityMinecart {
 		//this.setMinecartPowered(fuel > 0);
 
 		if (this.isMinecartPowered() && rand.nextInt(4) == 0)
-			worldObj.spawnParticle("largesmoke", posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
+			ReikaParticleHelper.SMOKE.spawnAt(worldObj, posX, posY + 0.8D, posZ);
 	}
 
 	@Override

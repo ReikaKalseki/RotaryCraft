@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver implements ITankContainer {
@@ -93,7 +94,7 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		if (convert && bctank.getLiquid() != null && bctank.getLiquid().amount >= 8*factor && this.hasItems()) {
 			LiquidStack drain = bctank.drain(8*factor, true);
 			jettank.fill(LiquidDictionary.getLiquid("Jet Fuel", factor), true);
-			if (par5Random.nextInt(12*(1+LiquidContainerRegistry.BUCKET_VOLUME/factor)) == 0)
+			if (DifficultyEffects.CONSUMEFRAC.testChance() && DifficultyEffects.CONSUMEFRAC.testChance()) //chance^2
 				this.consumeItems();
 		}
 	}

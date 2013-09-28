@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -122,7 +123,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 				worldObj.createExplosion(this, posX, posY, posZ, 3F, false);
 				for (int var19 = 0; var19 < 4; ++var19) {
 					float var18 = 0.25F;
-					worldObj.spawnParticle("bubble", posX - motionX * var18, posY - motionY * var18, posZ - motionZ * var18, motionX, motionY, motionZ);
+					ReikaParticleHelper.BUBBLE.spawnAt(worldObj, posX - motionX * var18, posY - motionY * var18, posZ - motionZ * var18, motionX, motionY, motionZ);
 				}
 			}
 			this.setPosition(posX, posY, posZ);
@@ -146,7 +147,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 		int z0 = (int)Math.floor(z);
 		EntityLiving el;
 		Entity ent;
-		world.spawnParticle("hugeexplosion", x0, y0, z0, 0, 0, 0);
+		ReikaParticleHelper.EXPLODE.spawnAt(world, x0, y0, z0);
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {
 				for (int k = -3; k <= 3; k++) {
@@ -270,8 +271,9 @@ public class EntityRailGunShot extends EntityTurretShot {
 						}
 					}
 					for (int m = 0; m < 2; m++) {
-						world.spawnParticle("lava", x-1+2*rand.nextFloat()+i, y-1.5+rand.nextFloat()+j, z-1+2*rand.nextFloat()+k, 0, 0, 0);
+						ReikaParticleHelper.LAVA.spawnAt(world, x-1+2*rand.nextFloat()+i, y-1.5+rand.nextFloat()+j, z-1+2*rand.nextFloat()+k);
 					}
+
 				}
 			}
 		}

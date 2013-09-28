@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -28,7 +29,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements TemperatureTE, ISidedInventory {
+public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements TemperatureTE, ISidedInventory, XPProducer {
 
 	private int temperature;
 	public ItemStack[] inventory = new ItemStack[14];
@@ -138,9 +139,13 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 		return xp;
 	}
 
+	public void clearXP() {
+		xp = 0;
+	}
+
 	public void addXPToPlayer(EntityPlayer ep) {
 		ep.addExperience((int)xp);
-		xp = 0;
+		this.clearXP();
 	}
 
 	private boolean checkSpreadFit(int num) {
@@ -222,6 +227,14 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 			temperature++;
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
+		if (temperature > 100) {
+			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+		}
 	}
 
 	/**

@@ -121,7 +121,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Block.mobSpawner.blockID) {
 			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
 			if (ConfigRegistry.SPAWNERLEAK.getState())
-				ReikaSpawnerHelper.forceSpawn(spw, world, 12+itemRand.nextInt(25));
+				ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
 			ItemStack item = new ItemStack(RotaryCraft.spawner);
 			ReikaSpawnerHelper.addMobNBTToItem(item, spw);
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);

@@ -105,7 +105,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
 		for (int i = 0; i < ingredients.length; i++) {
-			if (DifficultyEffects.CONSUMEFRAC.testChance())
+			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
 		fuel += DifficultyEffects.PRODUCEFRAC.getInt();
@@ -253,7 +253,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 			return is.itemID == Item.bucketEmpty.itemID;
 		if (slot == ingredients.length)
 			return is.itemID == Item.ghastTear.itemID;
-		return ReikaInventoryHelper.checkForItem(is.itemID, ingredients);
+		return ReikaInventoryHelper.locateInInventory(is.itemID, is.getItemDamage(), ingredients) == slot;
 	}
 
 	@Override
