@@ -127,7 +127,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
-		if (m == MachineRegistry.PNEUENGINE) {
+		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE) {
 			te.setBlockMetadata(BlockBCEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;
 		}

@@ -14,6 +14,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class SlotExtractor1 extends Slot {
 
@@ -33,6 +35,8 @@ public class SlotExtractor1 extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack is)
 	{
+		RotaryCraft.logger.debug("Mod ore: "+ModOreList.getModOreFromOre(is));
+		RotaryCraft.logger.debug(ModOreList.OSMIUM.getAllOreBlocks());
 		return ReikaBlockHelper.isOre(is);
 	}
 

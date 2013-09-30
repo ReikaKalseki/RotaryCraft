@@ -7,10 +7,11 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Renders;
+package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 
 import org.lwjgl.opengl.GL11;
@@ -20,24 +21,22 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
-import Reika.RotaryCraft.Models.ModelFuelConverter;
 import buildcraft.core.render.LiquidRenderer;
 
-public class RenderFuelConverter extends RotaryTERenderer
+public class RenderBoiler extends RotaryTERenderer
 {
 
-	private ModelFuelConverter FuelConverterModel = new ModelFuelConverter();
+	private ModelBoiler BoilerModel = new ModelBoiler();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityFuelConverterAt(TileEntityFuelConverter tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityBoilerAt(TileEntityBoiler tile, double par2, double par4, double par6, float par8)
 	{
-		ModelFuelConverter var14;
-		var14 = FuelConverterModel;
+		ModelBoiler var14;
+		var14 = BoilerModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fuelconverttex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/boilertex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -62,19 +61,20 @@ public class RenderFuelConverter extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityFuelConverterAt((TileEntityFuelConverter)tile, par2, par4, par6, par8);
+			this.renderTileEntityBoilerAt((TileEntityBoiler)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderFuels((TileEntityFuelConverter)tile, par2, par4, par6, ((TileEntityFuelConverter)tile).BC_FUEL);
-			this.renderFuels((TileEntityFuelConverter)tile, par2, par4, par6, ((TileEntityFuelConverter)tile).JET_FUEL);
+			this.renderWater((TileEntityBoiler)tile, par2, par4, par6);
 		}
 	}
 
-	private void renderFuels(TileEntityFuelConverter tile, double par2, double par4, double par6, LiquidStack liquid) {
-
-		int amount = tile.getFuel(liquid);
+	private void renderWater(TileEntityBoiler tile, double par2, double par4, double par6) {
+		LiquidStack liquid = LiquidDictionary.getCanonicalLiquid("Water");
+		int amount = tile.getWater();
 		if (amount == 0)
 			return;
+		if (amount > tile.CAPACITY)
+			amount = tile.CAPACITY;
 
 		int[] displayList = LiquidRenderer.getLiquidDisplayLists(liquid, tile.worldObj, false);
 
@@ -93,10 +93,10 @@ public class RenderFuelConverter extends RotaryTERenderer
 
 		GL11.glTranslated(par2, par4, par6);
 
-		GL11.glTranslated(0, tile.getLiquidModelOffset(liquid), 0);
+		GL11.glTranslated(0, 0.0625, 0);
 
 		GL11.glTranslated(0, 0.001, 0);
-		GL11.glScaled(1, 1/3D, 1);
+		GL11.glScaled(1, 0.95, 1);
 		GL11.glScaled(0.99, 0.95, 0.99);
 
 		GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (LiquidRenderer.DISPLAY_STAGES - 1))]);
@@ -107,6 +107,6 @@ public class RenderFuelConverter extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "fuelconverttex.png";
+		return "boilertex.png";
 	}
 }

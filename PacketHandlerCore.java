@@ -445,6 +445,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				eng.decrement();
 			if (control == 51)
 				eng.increment();
+			break;
 		case JETPACK:
 			boolean move = floatdata > 100;
 			if (move) {

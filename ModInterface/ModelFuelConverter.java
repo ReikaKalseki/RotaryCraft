@@ -13,7 +13,7 @@
 // Keep in mind that you still need to fill in some blanks
 // - ZeuX
 
-package Reika.RotaryCraft.Models;
+package Reika.RotaryCraft.ModInterface;
 
 import java.util.List;
 
