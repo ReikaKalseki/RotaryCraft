@@ -9,6 +9,40 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-public class TileEntityFertilizer { //calls updateTick on world blocks around it if they are crops/saplings/etc
+import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
+public class TileEntityFertilizer extends TileEntityPowerReceiver {
+
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.FERTILIZER.ordinal();
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+
+	}
 }

@@ -97,6 +97,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;

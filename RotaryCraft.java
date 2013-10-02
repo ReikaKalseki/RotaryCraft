@@ -301,12 +301,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public URL getDocumentationSite() {
-		try {
-			return new URL("http://www.minecraftforum.net/topic/1969694-");
-		}
-		catch (MalformedURLException e) {
-			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
-		}
+		return DragonAPICore.getReikaForumPage(instance);
 	}
 
 	@Override
