@@ -426,6 +426,12 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 		int[] pos = this.getWaterColumnPos();
 		int id = world.getBlockId(pos[0], y, pos[1]);
+		if (id == Block.lavaMoving.blockID || id == Block.lavaStill.blockID) {
+			if (ReikaMathLibrary.doWithChance(2)) {
+				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2, true);
+				world.setBlock(x, y, z, 0);
+			}
+		}
 		if (id != Block.waterStill.blockID && id != Block.waterMoving.blockID)
 			return false;
 		if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
