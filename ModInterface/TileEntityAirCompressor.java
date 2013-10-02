@@ -111,7 +111,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		if (power > 0) {
 			float fudge = 1F;
 			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
-			if (tile != null && tile instanceof IPowerReceptor) {
+			if (tile instanceof IPowerReceptor) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
 				IPowerProvider pp = rc.getPowerProvider();
 				if (pp == null)

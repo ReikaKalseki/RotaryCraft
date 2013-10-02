@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.IInventory;
@@ -45,6 +46,8 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+
+	private static List<Integer> silkTouchBlacklist = new ArrayList<Integer>();
 
 	private int pipemeta2 = 0;
 
@@ -306,11 +309,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean canSilk(int id, int meta) {
 		if (id == 0)
 			return false;
-		if (Block.blocksList[id].blockMaterial == Material.water)
+		Block b = Block.blocksList[id];
+		if (b.blockMaterial == Material.water)
 			return false;
-		if (Block.blocksList[id].blockMaterial == Material.lava)
+		if (b.blockMaterial == Material.lava)
+			return false;
+		if (id == RotaryCraft.miningpipe.blockID)
 			return false;
 		if (BlockRegistry.isMachineBlock(id))
+			return false;
+		if (b instanceof BlockFluid)
+			return false;
+		if (b.hasTileEntity(meta))
+			return false;
+		if (silkTouchBlacklist.contains(id))
 			return false;
 		return true;
 	}
@@ -524,5 +536,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (power < reqpow)
 			return 15;
 		return 0;
+	}
+
+	static {
+
 	}
 }
