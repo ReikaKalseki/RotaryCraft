@@ -55,8 +55,7 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	TRANS(BlockTrans.class, Material.iron),
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
-	BCENGINE(BlockBCEngine.class, Material.iron),
-	DEADMACHINE(BlockDeadMachine.class, Material.wood);
+	BCENGINE(BlockBCEngine.class, Material.iron);
 
 	private Class block;
 	private Material mat;

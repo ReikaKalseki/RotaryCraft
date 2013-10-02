@@ -139,16 +139,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		return 15*0.2F*phase;
 	}
 
-	private void adjustAim(World world, int x, int y, int z, int meta) {/*
-		if (phi >= 360)
-			phi -= 360;
-		if (phi < 0)
-			phi += 360;
-		if (theta >= 360)
-			theta -= 360;
-		if (theta < 0)
-			theta += 360;*/
-
+	private void adjustAim(World world, int x, int y, int z, int meta) {
 		if (targetloc == null || targetloc.length == 0)
 			return;
 		if (targetloc[0] == targetloc[1] && targetloc[0] == targetloc[2] && targetloc[0] == Integer.MIN_VALUE)
@@ -157,11 +148,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		float finaltheta;
 
 		int time = (int)(world.getWorldTime()%12000);
-		float sunphi = (float)(90*Math.cos(Math.toRadians(time*90D/6000D)));
-		sunphi = 90;
-		float suntheta = 0.5F*(float)(90*Math.sin(Math.toRadians(time*90D/6000D)));
+		float sunphi = 90;
+		float suntheta = ReikaWorldHelper.getSunAngle(world);
 		if (time >= 6000) {
-			sunphi = (float)(-90*Math.cos(Math.toRadians((time-6000)*90D/6000D)));
 			sunphi = -90;
 		}
 

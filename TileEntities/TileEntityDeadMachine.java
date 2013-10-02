@@ -22,7 +22,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityDeadMachine extends RotaryCraftTileEntity implements ISidedInventory, InertIInv {
 
@@ -83,7 +82,7 @@ public class TileEntityDeadMachine extends RotaryCraftTileEntity implements ISid
 
 	@Override
 	public int getMachineIndex() {
-		return MachineRegistry.DEAD.ordinal();
+		return 0;//MachineRegistry.DEAD.ordinal();
 	}
 
 	@Override
