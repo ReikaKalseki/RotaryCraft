@@ -17,7 +17,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
+import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,7 +48,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	public float getStrVsBlock(ItemStack is, Block par2Block) {
 		if (par2Block == null)
 			return 0;
-		if (TwilightBlockHandler.getInstance().isTowerWood(par2Block))
+		if (TwilightForestHandler.getInstance().isTowerWood(par2Block))
 			return 30F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == par2Block)

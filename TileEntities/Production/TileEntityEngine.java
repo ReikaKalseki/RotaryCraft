@@ -34,6 +34,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
@@ -1139,7 +1140,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
 	}
 
-	private void playSounds(World world, int x, int y, int z, float pit) {
+	private void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
 		soundtick++;
 		if (type.jetNoise() && FOD > 0 && par5Random.nextInt(2*(9-FOD)) == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+par5Random.nextFloat(), 1F);
@@ -1147,33 +1148,56 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		if (!ConfigRegistry.ENGINESOUNDS.getState())
 			return;
-		if (soundtick < type.getSoundLength(FOD, 1F/pit) && soundtick < 2000)
+		float volume = 1;
+		if (this.isMuffled(world, x, y, z)) {
+			volume = 0.3125F;
+		}
+		if (soundtick < type.getSoundLength(FOD, 1F/pitchMultiplier) && soundtick < 2000)
 			return;
 		soundtick = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F*volume, 1F*pitchMultiplier);
 		if (type.turbineNoise()) {
-			float volume = 0.125F;
 			float pitch = 1F;
 			if (type.jetNoise()) {
-				volume = 1F;
 				pitch = 1F/(0.125F*FOD+1);
 			}
+			else {
+				volume *= 0.125F;
+			}
 			if (type.jetNoise())
-				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pit);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pitchMultiplier);
 			else
-				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pit);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pitchMultiplier);
 		}
 		if (type.steamNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F*volume, 1F*pitchMultiplier);
 		if (type.carNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F*volume, 0.9F*pitchMultiplier);
 		if (type.waterNoise() && (this.isFrontOfArray() || !this.isPartOfArray()))
-			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F*volume, 0.9F*pitchMultiplier);
 		if (type.windNoise()) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F*volume, 1F*pitchMultiplier);
 		}
+	}
+
+	private boolean isMuffled(World world, int x, int y, int z) {
+		ForgeDirection[] dirs = ForgeDirection.values();
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (dir != ForgeDirection.DOWN) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if ((dx != readx && dz != readz) && (dx != writex && dz != writez) || dir == ForgeDirection.UP) {
+					int id = world.getBlockId(dx, dy, dz);
+					if (id != Block.cloth.blockID)
+						return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override

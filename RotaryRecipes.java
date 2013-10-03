@@ -23,8 +23,8 @@ import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thermalexpansion.api.crafting.CraftingManagers;
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -234,6 +234,10 @@ public class RotaryRecipes {
 		MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', ItemStacks.basepanel, 'n', Item.netherStar, 'G', ItemStacks.goldcoil, 'D', Block.blockDiamond, 's', ItemStacks.shaftcore);
 
 		MachineRegistry.ARROWGUN.addCrafting("SSS", "BDB", "SBS", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Block.dispenser);
+
+		MachineRegistry.STEAMTURBINE.addCrafting("SPS", "GTG", "SPS", 'G', Block.glass, 'S', ItemStacks.steelingot, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel);
+
+		MachineRegistry.BOILER.addCrafting("SPS", "G G", "SIS", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.pipe, 'G', Block.glass);
 	}
 
 	private static void addCraftItems() {

@@ -183,6 +183,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, this.yCoord+1, readz, 76);
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, writex, this.yCoord, writez, 4);
 		ready = yCoord;
+		writey = yCoord;
 	}
 
 	public void process(World world, int x, int y, int z) {

@@ -178,7 +178,7 @@ public final class HandbookAuxData {
 			}
 
 			for (int i = 0; i < ModWoodList.woodList.length; i++) {
-				if (ModWoodList.woodList[i].getParentMod().isLoaded()) {
+				if (ModWoodList.woodList[i].exists()) {
 					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
 					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
 

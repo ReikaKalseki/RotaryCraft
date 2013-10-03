@@ -14,9 +14,13 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.EnumTag;
 import Reika.DragonAPI.Auxiliary.ModList;
+import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -79,12 +83,19 @@ public final class OreForcer {
 		case MFFS:
 			intercraftForcicium();
 			break;
+		case MEKANISM:
+			registerOsmium();
+			break;
 		case DARTCRAFT:
 			if (ConfigRegistry.MODORES.getState())
 				registerDart();
 			breakForceWrench();
 			break;
 		}
+	}
+
+	private static void registerOsmium() {
+		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, 0));
 	}
 
 	private static void addThaumAspects() {
@@ -186,60 +197,15 @@ public final class OreForcer {
 	}
 
 	private static void intercraftQuartz() {
-		try {
-			Class ae = Class.forName("appeng.api.Materials");
-			Field item = ae.getField("matQuartz");
-			ItemStack quartz = (ItemStack)item.get(null);
-			GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
-			RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("AppliedEnergistics Item class not found! Cannot read its items for compatibility forcing!");
-		}
-		catch (NoSuchFieldException e) {
-			RotaryCraft.logger.logError("AppliedEnergistics item field not found! "+e.getMessage());
-		}
-		catch (SecurityException e) {
-			RotaryCraft.logger.logError("Cannot read AppliedEnergistics items (Security Exception)! Certus Quartz not convertible!"+e.getMessage());
-			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e) {
-			RotaryCraft.logger.logError("Illegal argument for reading AppliedEnergistics items!");
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			RotaryCraft.logger.logError("Illegal access exception for reading AppliedEnergistics items!");
-			e.printStackTrace();
-		}
+		ItemStack quartz = AppEngHandler.getInstance().getCertusQuartz();
+		GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
+		RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
 	}
 
 	private static void intercraftApatite() {
-		try {
-			Class forest = Class.forName("forestry.core.config.ForestryItem");
-			Field apa = forest.getField("apatite");
-			Item item = (Item)apa.get(null);
-			ItemStack apatite = new ItemStack(item.itemID, 1, 0);
-			GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
-			RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("Forestry Config class not found! Cannot read its items for compatibility forcing!");
-		}
-		catch (NoSuchFieldException e) {
-			RotaryCraft.logger.logError("Forestry config field not found! "+e.getMessage());
-		}
-		catch (SecurityException e) {
-			RotaryCraft.logger.logError("Cannot read Forestry config (Security Exception)! Apatite not convertible!"+e.getMessage());
-			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e) {
-			RotaryCraft.logger.logError("Illegal argument for reading Forestry config!");
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			RotaryCraft.logger.logError("Illegal access exception for reading Forestry config!");
-			e.printStackTrace();
-		}
+		ItemStack apatite = new ItemStack(ForestryHandler.getInstance().apatiteID, 1, 0);
+		GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
+		RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
 	}
 
 	private static void registerThaumcraft() {

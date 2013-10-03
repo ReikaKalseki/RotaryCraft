@@ -87,6 +87,7 @@ public enum HandbookRegistry {
 	BORER(MachineRegistry.BORER),
 	PUMP(MachineRegistry.PUMP),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
+	STEAMTURB(MachineRegistry.STEAMTURBINE),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -99,6 +100,7 @@ public enum HandbookRegistry {
 	FURNACEHEATER(MachineRegistry.FRICTION),
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	CONVERTER(MachineRegistry.LIQUIDCONVERTER),
+	BOILER(MachineRegistry.BOILER),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -107,6 +109,7 @@ public enum HandbookRegistry {
 	SPRINKLER(MachineRegistry.SPRINKLER),
 	WOODCUTTER(MachineRegistry.WOODCUTTER),
 	HARVESTER(MachineRegistry.MOBHARVESTER),
+	FERTILIZER(MachineRegistry.FERTILIZER),
 
 	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	HEATER(MachineRegistry.HEATER),
@@ -164,6 +167,7 @@ public enum HandbookRegistry {
 	LAMP(MachineRegistry.LAMP),
 	TERRA(MachineRegistry.TERRAFORMER),
 	LINE(MachineRegistry.LINEBUILDER),
+	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

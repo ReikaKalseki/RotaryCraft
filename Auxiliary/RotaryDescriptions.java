@@ -15,11 +15,13 @@ import java.util.List;
 
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import Reika.DragonAPI.Instantiable.XMLInterface;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -162,7 +164,13 @@ public final class RotaryDescriptions {
 
 			if (m.isDummiedOut()) {
 				desc += "\nThis machine is currently unavailable.";
+				if (m.hasPrerequisite() && !m.getPrerequisite().isLoaded())
+					desc += "\nThis machine depends on another mod.";
 				aux += "\nNote: Dummied Out";
+			}
+			if (m.hasPrerequisite()) {
+				String sg = m.getPrerequisite().getModLabel().replaceAll("[|]", "");
+				aux += "\nDependencies: "+ReikaStringParser.splitCamelCase(sg).replaceAll(" Craft", "Craft");
 			}
 
 			addEntry(h, desc);
@@ -371,5 +379,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.ECU, TileEntityEngineController.getSettingsAsString());
 		addNotes(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELT_XP);
 		addNotes(MachineRegistry.ARROWGUN, PowerReceivers.ARROWGUN.getMinPower(), PowerReceivers.ARROWGUN.getMinTorque());
+		addNotes(MachineRegistry.STEAMTURBINE, TileEntitySteam.GEN_OMEGA, TileEntitySteam.MAX_TORQUE);
+		addNotes(MachineRegistry.FERTILIZER, PowerReceivers.FERTILIZER.getMinPower());
 	}
 }

@@ -79,7 +79,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 			}
 		}
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
-			if (ModWoodList.woodList[i].getParentMod().isLoaded()) {
+			if (ModWoodList.woodList[i].exists()) {
 				in.add(ModWoodList.woodList[i].getCorrespondingSapling());
 				in.add(ModWoodList.woodList[i].getCorrespondingLeaf());
 			}
@@ -115,10 +115,12 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	public static int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
-		if (TreeGetter.isDyeSapling(is))
-			return PlantMaterials.SAPLING.getPlantValue();
-		if (TreeGetter.isDyeLeaf(is))
-			return PlantMaterials.LEAVES.getPlantValue();
+		if (ModList.DYETREES.isLoaded()) {
+			if (TreeGetter.isDyeSapling(is))
+				return PlantMaterials.SAPLING.getPlantValue();
+			if (TreeGetter.isDyeLeaf(is))
+				return PlantMaterials.LEAVES.getPlantValue();
+		}
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
 			return PlantMaterials.SAPLING.getPlantValue()*getModSaplingValue(sap);
@@ -137,7 +139,7 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 		if (wood == null)
 			return 0;
 		if (wood == ModWoodList.SILVERWOOD)
-			return 16;
+			return 32;
 		ModList mod = wood.getParentMod();
 		if (mod == ModList.THAUMCRAFT)
 			return 4;
