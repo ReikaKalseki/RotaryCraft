@@ -315,6 +315,8 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 			return false;
 		if (inv[i+4] != null && inv[i+4].stackSize+1 >= inv[i+4].getMaxStackSize())
 			return false;
+		if (inv[8] != null && inv[8].stackSize+1 > inv[8].getMaxStackSize())
+			return false;
 		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 		if (inv[i].itemID == RotaryCraft.modextracts.itemID || ModOreList.isModOre(inv[i])) {
 			switch (i) {
@@ -443,6 +445,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 					ItemStack is = ExtractorModOres.getFlakeProduct(m);
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
+						this.bonusItems(inv[i]);
 					}
 					return true;
 				}
