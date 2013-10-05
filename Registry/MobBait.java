@@ -14,7 +14,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -55,7 +55,7 @@ public enum MobBait {
 	BLAZE(EntityBlaze.class, 61, Item.fireballCharge.itemID, Item.bucketWater.itemID),
 	PIGZOMBIE(EntityPigZombie.class, 57, Item.appleRed.itemID, Item.blazeRod.itemID),
 	LAVASLIME(EntityMagmaCube.class, 62, Item.blazePowder.itemID, Item.snowball.itemID),
-	GHAST(EntityGhast.class, 56, Item.lightStoneDust.itemID, Item.bow.itemID),
+	GHAST(EntityGhast.class, 56, Item.glowstone.itemID, Item.bow.itemID),
 	SILVERFISH(EntitySilverfish.class, 60, Block.stoneBrick.blockID, Item.pickaxeWood.itemID),
 	VILLAGER(EntityVillager.class, 120, Item.emerald.itemID, Block.cactus.blockID),
 	IRONGOLEM(EntityIronGolem.class, 99, ReikaItemHelper.redWool.itemID, ReikaItemHelper.redWool.getItemDamage(), Item.bucketLava.itemID, -1),
@@ -79,7 +79,7 @@ public enum MobBait {
 
 	public static final MobBait[] baitList = MobBait.values();
 
-	private MobBait(Class<? extends EntityLiving> cl, int id, int a, int r) {
+	private MobBait(Class<? extends EntityLivingBase> cl, int id, int a, int r) {
 		entityClass = cl;
 		attractorID = a;
 		repellentID = r;
@@ -88,7 +88,7 @@ public enum MobBait {
 		entityID = id;
 	}
 
-	private MobBait(Class<? extends EntityLiving> cl, int id, int a, int am, int r, int rm) {
+	private MobBait(Class<? extends EntityLivingBase> cl, int id, int a, int am, int r, int rm) {
 		entityClass = cl;
 		attractorID = a;
 		repellentID = r;
@@ -97,7 +97,7 @@ public enum MobBait {
 		entityID = id;
 	}
 
-	public static MobBait getEntryFromEntity(EntityLiving e) {
+	public static MobBait getEntryFromEntity(EntityLivingBase e) {
 		Class c = e.getClass();
 		for (int i = 0; i < baitList.length; i++) {
 			if (c == baitList[i].entityClass)
@@ -135,14 +135,14 @@ public enum MobBait {
 		return new ItemStack(repellentID, 1, 0);
 	}
 
-	public static ItemStack getEntityAttractor(EntityLiving e) {
+	public static ItemStack getEntityAttractor(EntityLivingBase e) {
 		MobBait mb = getEntryFromEntity(e);
 		if (mb.isMetadataValuedAttractor())
 			return new ItemStack(mb.attractorID, 1, mb.attractorMetadata);
 		return new ItemStack(mb.attractorID, 1, 0);
 	}
 
-	public static ItemStack getEntityRepellent(EntityLiving e) {
+	public static ItemStack getEntityRepellent(EntityLivingBase e) {
 		MobBait mb = getEntryFromEntity(e);
 		if (mb.isMetadataValuedRepellent())
 			return new ItemStack(mb.repellentID, 1, mb.repellentMetadata);
@@ -179,21 +179,21 @@ public enum MobBait {
 		return (att.contains(is) || rep.contains(is));
 	}
 
-	public static boolean hasRepelItem(EntityLiving e, ItemStack[] inv) {
+	public static boolean hasRepelItem(EntityLivingBase e, ItemStack[] inv) {
 		if (!isAffectableEntity(e))
 			return false;
 		ItemStack is = getEntityRepellent(e);
 		return ReikaInventoryHelper.checkForItemStack(is, inv, false);
 	}
 
-	public static boolean hasAttractItem(EntityLiving e, ItemStack[] inv) {
+	public static boolean hasAttractItem(EntityLivingBase e, ItemStack[] inv) {
 		if (!isAffectableEntity(e))
 			return false;
 		ItemStack is = getEntityAttractor(e);
 		return ReikaInventoryHelper.checkForItemStack(is, inv, false);
 	}
 
-	public static boolean isAffectableEntity(EntityLiving e) {
+	public static boolean isAffectableEntity(EntityLivingBase e) {
 		Class c = e.getClass();
 		for (int i = 0; i < baitList.length; i++) {
 			if (c == baitList[i].entityClass)

@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -26,7 +27,6 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -107,7 +107,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		}
 	}
 
-	private void dropHeldItemAndRun(World world, int x, int y, int z, EntityLiving ent) {
+	private void dropHeldItemAndRun(World world, int x, int y, int z, EntityLivingBase ent) {
 		ItemStack held = ent.getHeldItem();
 		ent.setCurrentItemOrArmor(0, null);
 		if (held != null && !world.isRemote) {
@@ -120,15 +120,15 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		}
 	}
 
-	private boolean canRepel(EntityLiving ent) {
+	private boolean canRepel(EntityLivingBase ent) {
 		return MobBait.hasRepelItem(ent, inventory);
 	}
 
-	private boolean canAttract(EntityLiving ent) {
+	private boolean canAttract(EntityLivingBase ent) {
 		return MobBait.hasAttractItem(ent, inventory);
 	}
 
-	private int[] getRepelTo(World world, int x, int y, int z, EntityLiving ent) {
+	private int[] getRepelTo(World world, int x, int y, int z, EntityLivingBase ent) {
 		int[] machinecoords = {x, y, z};
 		int[] entitycoords = {(int)ent.posX, (int)ent.posY, (int)ent.posZ};
 		int[] repelcoords = new int[3];
@@ -150,7 +150,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 			xyz = this.getRepelTo(world, x, y, z, ent);
 			this.dropHeldItemAndRun(world, x, y, z, ent);
 		}
-		if (!(ent instanceof EntityPlayer || (ent instanceof EntityTameable && ((EntityTameable)ent).isSitting()))) { //Do not affect players
+		if (!((ent instanceof EntityTameable && ((EntityTameable)ent).isSitting()))) {
 			ent.getNavigator().clearPathEntity();
 			if (attract) {
 				path = ent.getNavigator().getPathToXYZ(x, y, z);
@@ -366,7 +366,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
 	}
 

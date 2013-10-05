@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Renders;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -112,7 +112,7 @@ public class RenderFreezeGun extends RotaryTERenderer {
 		Tessellator v5 = new Tessellator();
 		int[] rgb = {255,255,255};
 		for (int i = 0; i < tile.frozen.size(); i++) {
-			EntityLiving e = tile.frozen.get(i);
+			EntityLivingBase e = tile.frozen.get(i);
 			ReikaJavaLibrary.pConsole(e.getEntityName());
 			double dx = e.posX-tile.xCoord;
 			double dy = e.posY-tile.yCoord;

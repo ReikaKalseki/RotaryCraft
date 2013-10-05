@@ -48,7 +48,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 
 		for (int i = 0; i < li.size(); i++) {
 			BiomeGenBase b = li.get(i);
-			buttonList.add(new ImagedGuiButton(i, j+8, k+17+39*i, 32, 32, 32*(b.biomeID%8), 32*(b.biomeID/8), tex, b.biomeName, 0xffffff, false));
+			buttonList.add(new ImagedGuiButton(i, j+8, k+17+39*i, 32, 32, 32*(b.biomeID%8), 32*(b.biomeID/8), tex, b.biomeName, 0xffffff, false, RotaryCraft.class));
 		}
 	}
 

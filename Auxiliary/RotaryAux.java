@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 import java.awt.Color;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -84,7 +84,7 @@ public class RotaryAux {
 		return false;
 	}
 
-	public static int get4SidedMetadataFromPlayerLook(EntityLiving ep) {
+	public static int get4SidedMetadataFromPlayerLook(EntityLivingBase ep) {
 		int i = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
 		while (i > 3)
 			i -= 4;
@@ -103,7 +103,7 @@ public class RotaryAux {
 		return -1;
 	}
 
-	public static int get6SidedMetadataFromPlayerLook(EntityLiving ep) {
+	public static int get6SidedMetadataFromPlayerLook(EntityLivingBase ep) {
 		if (MathHelper.abs(ep.rotationPitch) < 60) {
 			int i = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
 			while (i > 3)
@@ -130,7 +130,7 @@ public class RotaryAux {
 		return -1;
 	}
 
-	public static int get2SidedMetadataFromPlayerLook(EntityLiving ep) {
+	public static int get2SidedMetadataFromPlayerLook(EntityLivingBase ep) {
 		int i = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
 		while (i > 3)
 			i -= 4;

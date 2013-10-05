@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.getItem() instanceof ItemBlock || is.itemID == Item.bucketLava.itemID || is.itemID == Item.bucketWater.itemID; //Blocks only
 	}
 

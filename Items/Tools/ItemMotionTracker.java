@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Items.Tools;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -64,7 +64,7 @@ public class ItemMotionTracker extends ItemChargedTool {
 			look.yCoord *= i;
 			look.zCoord *= i;
 			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(dx+look.xCoord-0.5, dy+look.yCoord-0.5, dz+look.zCoord-0.5, dx+look.xCoord+0.5, dy+look.yCoord+0.5, dz+look.zCoord+0.5);
-			List infov = world.getEntitiesWithinAABB(EntityLiving.class, fov);
+			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
 			if (infov.size() > 0) {
 				String mob;
 				if (infov.size() > 1)
@@ -73,7 +73,7 @@ public class ItemMotionTracker extends ItemChargedTool {
 					mob = "Mob";
 				//ReikaChatHelper.write(infov.size()+String.format(" %s", mob)+" Detected:");
 				for (int k = 0; k < infov.size(); k++) {
-					EntityLiving ent = (EntityLiving)infov.get(k);
+					EntityLivingBase ent = (EntityLivingBase)infov.get(k);
 					double dist = ReikaMathLibrary.py3d(dx-ent.posX, dy-ent.posY-ent.getEyeHeight(), dz-ent.posZ);
 					EnumChatFormatting color;
 					String mobname = ent.getEntityName();

@@ -18,6 +18,9 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+
 public class GuiCalculator extends GuiScreen {
 
 	private int mx;
@@ -73,7 +76,7 @@ public class GuiCalculator extends GuiScreen {
 	{
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/calcgui.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2 - 8;

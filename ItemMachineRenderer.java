@@ -10,7 +10,6 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -111,7 +111,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
 			else {
 				RenderBlocks rb = new RenderBlocks();
-				Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+				ReikaTextureHelper.bindTerrainTexture();
 				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlockVariable(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
 			}
 		}

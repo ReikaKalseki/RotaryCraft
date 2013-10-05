@@ -123,7 +123,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
 		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
 		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inventory);
-		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.lightStoneDust.itemID, inventory);
+		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inventory);
 		if (sawdust && (isRain || isThunder)) {
 			rainmode = 1;
 			is = ItemStacks.sawdust;
@@ -137,7 +137,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			}
 			else if (glowdust) {
 				rainmode = 4;
-				is2 = new ItemStack(Item.lightStoneDust.itemID, 1, 0);
+				is2 = new ItemStack(Item.glowstone.itemID, 1, 0);
 			}
 		}
 		else
@@ -167,7 +167,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		case 4:
 			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
 			ReikaInventoryHelper.decrStack(slot, inventory);
-			slot = ReikaInventoryHelper.locateInInventory(Item.lightStoneDust.itemID, inventory);
+			slot = ReikaInventoryHelper.locateInInventory(Item.glowstone.itemID, inventory);
 			ReikaInventoryHelper.decrStack(slot, inventory);
 			return;
 		}
@@ -180,7 +180,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			return true;
 		if (is.itemID == Item.redstone.itemID)
 			return true;
-		if (is.itemID == Item.lightStoneDust.itemID)
+		if (is.itemID == Item.glowstone.itemID)
 			return true;
 		return false;
 	}
@@ -274,7 +274,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return this.isValidWeatherItem(is);
 	}
 

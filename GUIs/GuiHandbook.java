@@ -12,7 +12,6 @@ package Reika.RotaryCraft.GUIs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -31,8 +30,10 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -102,9 +103,9 @@ public class GuiHandbook extends GuiScreen
 		int k = (height - ySize) / 2 - 8;
 
 		String file = HandbookRegistry.TOC.getTabImageFile();
-		buttonList.add(new ImagedGuiButton(10, j-20, 17+k+163, 20, 20, "-", 220, 0, 0, false, file)); //Prev Page
-		buttonList.add(new ImagedGuiButton(11, j-20, 17+k+143, 20, 20, "+", 220, 20, 0, false, file));	//Next page
-		buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, "<<", 220, 20, 0, false, file));	//Next page
+		buttonList.add(new ImagedGuiButton(10, j-20, 17+k+163, 20, 20, "-", 220, 0, 0, false, file, RotaryCraft.class)); //Prev Page
+		buttonList.add(new ImagedGuiButton(11, j-20, 17+k+143, 20, 20, "+", 220, 20, 0, false, file, RotaryCraft.class));	//Next page
+		buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, "<<", 220, 20, 0, false, file, RotaryCraft.class));	//Next page
 		buttonList.add(new GuiButton(12, j+xSize-27, k+6, 20, 20, "X"));	//Close gui button
 
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
@@ -359,7 +360,7 @@ public class GuiHandbook extends GuiScreen
 			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is2, posX+162, posY+27+18);
 			String var4 = "/Reika/RotaryCraft/Textures/GUI/mobicons.png";
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			mc.renderEngine.bindTexture(var4);
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 			int UNIT = 4;
 			this.drawTexturedModalRect(posX+88-UNIT/2, posY+41-UNIT/2, u, v, UNIT*2, UNIT*2);
 			fontRenderer.drawString("Attractor", posX+110, posY+30, 0);
@@ -372,7 +373,7 @@ public class GuiHandbook extends GuiScreen
 			int time = 2000000000;
 			int k = (int)((System.nanoTime()/time)%transforms.size());
 			String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
-			mc.renderEngine.bindTexture(tex);
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
 			Object[] data = transforms.get(k);
 			BiomeGenBase from = (BiomeGenBase)data[0];
 			BiomeGenBase from_ = from;
@@ -461,7 +462,7 @@ public class GuiHandbook extends GuiScreen
 			break;
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2 - 8;
@@ -568,7 +569,7 @@ public class GuiHandbook extends GuiScreen
 					GL11.glRotatef(renderq, 1, 0, 0);
 					GL11.glRotatef(r, 0, 1, 0);
 					RenderBlocks rb = new RenderBlocks();
-					Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+					ReikaTextureHelper.bindTerrainTexture();
 					rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
 					GL11.glRotatef(-r, 0, 1, 0);
 					GL11.glRotatef(-renderq, 1, 0, 0);

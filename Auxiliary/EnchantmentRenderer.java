@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class EnchantmentRenderer {
 
@@ -51,7 +52,7 @@ public abstract class EnchantmentRenderer {
 		//var5.setBrightness(255);
 
 		if (textured) {
-			Minecraft.getMinecraft().renderEngine.bindTexture("/Reika/RotaryCraft/Textures/Misc/glint.png");
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/glint.png");
 			GL11.glEnable(GL11.GL_BLEND);
 			double off = ((System.nanoTime()/50000000)%25)/25D;
 			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 0+off);

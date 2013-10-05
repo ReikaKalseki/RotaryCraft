@@ -170,7 +170,7 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 		return false;
 	}
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 

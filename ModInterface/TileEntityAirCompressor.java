@@ -20,11 +20,12 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 
-public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerReceptor, IPipeConnection, PressureTE {
+public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerEmitter, PressureTE {
 
 	private int pressure;
 
@@ -32,16 +33,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	public static final int MAXPRESSURE = 1000;
 
-	public CompressorPowerProvider prov;
-
 	private ForgeDirection facingDir;
-
-	public TileEntityAirCompressor()
-	{
-		super();
-		prov = new CompressorPowerProvider();
-		prov.configure();
-	}
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -106,22 +98,18 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
-		//ReikaJavaLibrary.pConsole(ReikaBuildCraftHelper.getWattsPerMJ());
 
 		if (power > 0) {
 			float fudge = 1F;
 			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
 			if (tile instanceof IPowerReceptor) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
-				IPowerProvider pp = rc.getPowerProvider();
+				PowerReceiver pp = rc.getPowerReceiver(facingDir);
 				if (pp == null)
 					return;
 				float mj = (float)(power/ReikaBuildCraftHelper.getWattsPerMJ())/fudge;
-				pp.receiveEnergy(mj, facingDir);
+				float used = pp.receiveEnergy(PowerHandler.Type.ENGINE, mj, facingDir);
 			}
-		}
-		else {
-			prov.setEnergyStored(0);
 		}
 
 		if (tickcount < 20)
@@ -172,43 +160,22 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		}
 	}
 
-	@Override
 	public boolean isPipeConnected(ForgeDirection with) {
 		switch(this.getBlockMetadata()) {
-		case 0:
+		case 4:
 			return with == ForgeDirection.NORTH;
-		case 1:
+		case 5:
 			return with == ForgeDirection.WEST;
 		case 2:
 			return with == ForgeDirection.SOUTH;
 		case 3:
 			return with == ForgeDirection.EAST;
-		case 4:
+		case 0:
 			return with == ForgeDirection.UP;
-		case 5:
+		case 1:
 			return with == ForgeDirection.DOWN;
 		}
 		return false;
-	}
-
-	@Override
-	public void setPowerProvider(IPowerProvider provider) {
-
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider() {
-		return prov;
-	}
-
-	@Override
-	public void doWork() {
-
-	}
-
-	@Override
-	public int powerRequest(ForgeDirection from) {
-		return 0;
 	}
 
 	@Override
@@ -255,6 +222,16 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 		for (int i = 0; i < 6; i++)
 			world.createExplosion(null, x+0.5-1+par5Random.nextDouble()*2, y+0.5-1+par5Random.nextDouble()*2, z+0.5-1+par5Random.nextDouble()*2, 3F, ConfigRegistry.BLOCKDAMAGE.getState());
+	}
+	/*
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		return this.isPipeConnected(with) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+	}*/
+
+	@Override
+	public boolean canEmitPowerFrom(ForgeDirection side) {
+		return this.isPipeConnected(side);
 	}
 
 }

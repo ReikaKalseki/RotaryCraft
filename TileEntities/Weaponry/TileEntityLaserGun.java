@@ -12,7 +12,8 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -47,11 +48,11 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
-		List inrange = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
 		for (int i = 0; i < inrange.size(); i++) {
-			EntityLiving ent = (EntityLiving)inrange.get(i);
+			EntityLivingBase ent = (EntityLivingBase)inrange.get(i);
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
@@ -69,7 +70,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 		}
 		if (i_at_min == -1)
 			return xyzb;
-		EntityLiving ent = (EntityLiving)inrange.get(i_at_min);
+		EntityLivingBase ent = (EntityLivingBase)inrange.get(i_at_min);
 		closestMob = ent;
 		xyzb[0] = ent.posX+this.randomOffset();
 		xyzb[1] = ent.posY+ent.getEyeHeight()*0.25+this.randomOffset();
@@ -87,9 +88,9 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			double dy = i*Math.sin(Math.toRadians(theta));
 			double dz = i*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-phi+90));
 			AxisAlignedBB light = AxisAlignedBB.getAABBPool().getAABB(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(1, 1, 1);
-			List in = world.getEntitiesWithinAABB(EntityLiving.class, light);
+			List in = world.getEntitiesWithinAABB(EntityLivingBase.class, light);
 			for (int k = 0; k < in.size(); k++) {
-				EntityLiving e = (EntityLiving)in.get(k);
+				EntityLivingBase e = (EntityLivingBase)in.get(k);
 				e.attackEntityFrom(DamageSource.lava, 4);
 				e.setFire(7);
 			}
@@ -212,7 +213,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLiving ent) {
+	protected boolean isValidTarget(EntityLivingBase ent) {
 		return this.isMobOrUnlistedPlayer(ent);
 	}
 

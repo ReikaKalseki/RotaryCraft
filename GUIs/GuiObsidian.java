@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerObsidian;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
@@ -70,7 +72,7 @@ public class GuiObsidian extends GuiMachine
 	protected void drawPowerTab(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
 		long frac = (obs.power*29L)/obs.MINPOWER;

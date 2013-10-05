@@ -11,7 +11,8 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -73,9 +74,9 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	private void burnMobs(World world, int x, int y, int z) {
 		int r = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
-		List<EntityLiving> inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving e = inbox.get(i);
+			EntityLivingBase e = inbox.get(i);
 			if (ReikaEntityHelper.burnsInSun(e)) {
 				e.setFire(10);
 			}

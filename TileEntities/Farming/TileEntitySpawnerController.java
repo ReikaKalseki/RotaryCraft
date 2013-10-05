@@ -77,7 +77,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
 		if (tile == null)
 			return;
-		MobSpawnerBaseLogic lgc = tile.func_98049_a();
+		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		lgc.field_98287_c = 0;
 		lgc.field_98284_d = 0;
 		lgc.spawnDelay = 5;
@@ -102,7 +102,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
 		if (tile == null)
 			return;
-		MobSpawnerBaseLogic lgc = tile.func_98049_a();
+		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		lgc.spawnDelay = 5; //Disable "real" spawner
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", lgc.spawnDelay));
 		if (disable) {
@@ -125,7 +125,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
 		if (tile == null)
 			return false;
-		MobSpawnerBaseLogic lgc = tile.func_98049_a();
+		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		String mobname = lgc.getEntityNameToSpawn();
 		Entity ent = EntityList.createEntityByName(mobname, world);
 		int num = this.getNumberSpawns(world, x, y, z, ent);
@@ -137,7 +137,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
 		if (tile == null)
 			return -1;
-		MobSpawnerBaseLogic lgc = tile.func_98049_a();
+		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		return lgc.spawnDelay;
 	}
 
@@ -157,7 +157,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	private void hijackSpawn(World world, int x, int y, int z, TileEntityMobSpawner tile) //y = y-1, since spawner below
 	{
-		MobSpawnerBaseLogic lgc = tile.func_98049_a();
+		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		double var5;
 
 		if (world.isRemote)

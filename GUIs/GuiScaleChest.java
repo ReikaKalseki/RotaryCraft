@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
@@ -158,7 +159,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		}
 		String var4 = this.getGuiTexture();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		int var5 = (width - xSize) / 2;
 		int var6 = (height - ySize) / 2;
 		this.drawTexturedModalRect(var5, var6, 0, 0, xSize, scale.MAXROWS*18 + 17);

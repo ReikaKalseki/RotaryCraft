@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -134,13 +134,13 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public void dealDamage(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(0.5, 2, 0.5);
-		List killed = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List killed = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < killed.size(); i++) {
-			EntityLiving el = (EntityLiving)killed.get(i);
+			EntityLivingBase el = (EntityLivingBase)killed.get(i);
 			if (el != null) {
-				int dmg = el.getMaxHealth()*el.getTotalArmorValue();
+				float dmg = el.getMaxHealth()*el.getTotalArmorValue();
 				if (dmg <= 0)
-					dmg = Integer.MAX_VALUE;
+					dmg = Float.MAX_VALUE;
 				el.attackEntityFrom(DamageSource.inWall, dmg); //will kill anything
 			}
 		}

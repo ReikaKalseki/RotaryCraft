@@ -506,7 +506,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 4)
 			return false;
 		return (is.itemID == Item.coal.itemID || is.itemID == RotaryCraft.compacts.itemID);

@@ -20,7 +20,6 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
-import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -319,8 +318,8 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return p == MachineRegistry.PIPE && side != EnumLook.UP && side != EnumLook.DOWN;
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection dir) {
+		return p == MachineRegistry.PIPE && dir.offsetY == 0;
 	}
 
 }

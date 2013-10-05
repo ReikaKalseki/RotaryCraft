@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
@@ -161,7 +162,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 		if (!hasPower) {
 			String i = "/Reika/RotaryCraft/Textures/GUI/spawnercontrollergui.png";
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			mc.renderEngine.bindTexture(i);
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
 			this.drawTexturedModalRect(j, k, 0, ySize, xSize, ySize);
 		}
 

@@ -11,7 +11,8 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -103,9 +104,9 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 
 	private void ignite(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+2, z+1);
-		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving hot = (EntityLiving)inbox.get(i);
+			EntityLivingBase hot = (EntityLivingBase)inbox.get(i);
 			hot.setFire(temperature/50);
 		}
 	}
@@ -470,7 +471,7 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return TileEntityFurnace.getItemBurnTime(is) > 0;
 	}
 

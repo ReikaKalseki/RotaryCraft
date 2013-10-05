@@ -19,6 +19,7 @@ import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.GLListData;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,6 +45,11 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 	@Override
 	public final String getTextureFolder() {
 		return "/Reika/RotaryCraft/Textures/TileEntityTex/";
+	}
+
+	@Override
+	protected Class getModClass() {
+		return RotaryCraft.class;
 	}
 
 	protected void renderFaceColors(TileEntityIOMachine te, double p2, double p4, double p6) {

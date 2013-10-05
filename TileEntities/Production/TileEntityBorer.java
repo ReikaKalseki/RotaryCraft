@@ -32,7 +32,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
-import Reika.DragonAPI.ModInteract.TwilightBlockHandler;
+import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -174,7 +174,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	private boolean isLabyBedrock(World world, int x, int y, int z) {
-		return y > 4 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.TWILIGHT_ID;
+		return y > 4 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID();
 	}
 
 	public void calcReqPower(World world, int x, int y, int z, int metadata) {
@@ -241,7 +241,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
-		if (ModList.TWILIGHT.isLoaded() && id == TwilightBlockHandler.getInstance().mazeStoneID)
+		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
 		if (tile instanceof RotaryCraftTileEntity)

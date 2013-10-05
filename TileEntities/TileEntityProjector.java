@@ -251,7 +251,7 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == ItemRegistry.SLIDE.getShiftedID();
 	}
 

@@ -217,7 +217,7 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
 	}
 

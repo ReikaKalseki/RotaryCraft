@@ -13,9 +13,13 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class RenderIceBlock extends Render {
 
@@ -28,7 +32,7 @@ public class RenderIceBlock extends Render {
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslated(par2, par4, par6);
-		this.loadTexture("/Reika/RotaryCraft/Textures/Entity/ice.png");
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Entity/ice.png");
 		Tessellator var11 = new Tessellator();
 		int var19 = e.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
@@ -90,6 +94,11 @@ public class RenderIceBlock extends Render {
 	{
 		//ReikaChatHelper.write("Rendering.");
 		this.renderIce((EntityIceBlock)par1Entity, par2, par4, par6, par8, par9);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
 	}
 
 }

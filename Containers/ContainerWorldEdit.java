@@ -43,8 +43,8 @@ public class ContainerWorldEdit extends Container
 	}
 
 	@Override
-	public void onCraftGuiClosed(EntityPlayer par1EntityPlayer) {
-		super.onCraftGuiClosed(par1EntityPlayer);
+	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
+		super.onContainerClosed(par1EntityPlayer);
 		ItemStack var3 = craftMatrix.getStackInSlotOnClosing(0);
 		if (var3 != null) {
 			if (!ReikaInventoryHelper.addToIInv(var3, par1EntityPlayer.inventory)) {

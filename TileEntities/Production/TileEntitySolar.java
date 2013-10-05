@@ -11,12 +11,13 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -127,9 +128,9 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 				if (ConfigRegistry.BLOCKDAMAGE.getState())
 					ReikaWorldHelper.temperatureEnvironment(world, x+i, y, z+j, temp);
 				AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
-				List in = world.getEntitiesWithinAABB(EntityLiving.class, above);
+				List in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 				for (int k = 0; k < in.size(); k++) {
-					EntityLiving e = (EntityLiving)in.get(k);
+					EntityLivingBase e = (EntityLivingBase)in.get(k);
 					if (temp > 400)
 						e.setFire(3);
 				}
@@ -283,7 +284,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return true;
 	}
 

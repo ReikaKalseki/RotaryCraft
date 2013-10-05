@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -529,7 +529,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot != 0)
 			return false;
 		return RecipesPulseFurnace.smelting().getSmeltingResult(is) != null;
@@ -553,8 +553,8 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return side != EnumLook.DOWN;
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side.offsetY == 0;
 	}
 
 	@Override

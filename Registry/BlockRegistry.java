@@ -22,7 +22,6 @@ import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
-import Reika.RotaryCraft.Blocks.BlockDeadMachine;
 import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
@@ -55,14 +54,15 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	TRANS(BlockTrans.class, Material.iron),
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
-	BCENGINE(BlockBCEngine.class, Material.iron);
+	BCENGINE(BlockBCEngine.class, Material.iron),
+	MODEL2(BlockMMachine.class, Material.iron);
 
 	private Class block;
 	private Material mat;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface", "Disabled Machine"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface", "M-Machines 2"
 	};
 
 	private BlockRegistry(Class cl, Material m) {

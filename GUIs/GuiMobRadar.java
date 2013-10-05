@@ -15,6 +15,8 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 
@@ -79,7 +81,7 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 	private void drawMobIcon(int a, int b, int px, int py, int id, int i, int j) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/mobicons.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		int v = 2*UNIT*(id/16);
 		int u = 2*UNIT*(id-(v/UNIT/2)*16);
 		if (id == -1) {

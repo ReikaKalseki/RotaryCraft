@@ -355,7 +355,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
 	}
 

@@ -12,7 +12,8 @@ package Reika.RotaryCraft.Entities;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -59,7 +60,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 		int x0 = (int)x;
 		int y0 = (int)y;
 		int z0 = (int)z;
-		EntityLiving el;
+		EntityLivingBase el;
 		Entity ent;
 		//ReikaChatHelper.writeCoords(world, x, y, z);
 		//ReikaChatHelper.writeBlockAtCoords(world, x0, y0, z0);
@@ -74,7 +75,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLiving el) {
+	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
 
 	}
 
@@ -84,7 +85,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 		boolean hit = false;
 		int id = worldObj.getBlockId((int)posX, (int)posY, (int)posZ);
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
-		List mobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, this.getBoundingBox().expand(1, 1, 1));
+		List mobs = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().expand(1, 1, 1));
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
 		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(id)));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
@@ -103,7 +104,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 			this.onEntityUpdate();
 			Vec3 var15 = worldObj.getWorldVec3Pool().getVecFromPool(posX, posY, posZ);
 			Vec3 var2 = worldObj.getWorldVec3Pool().getVecFromPool(posX + motionX, posY + motionY, posZ + motionZ);
-			MovingObjectPosition var3 = worldObj.rayTraceBlocks(var15, var2);
+			MovingObjectPosition var3 = worldObj.clip(var15, var2);
 			var15 = worldObj.getWorldVec3Pool().getVecFromPool(posX, posY, posZ);
 			var2 = worldObj.getWorldVec3Pool().getVecFromPool(posX + motionX, posY + motionY, posZ + motionZ);
 			if (var3 != null)

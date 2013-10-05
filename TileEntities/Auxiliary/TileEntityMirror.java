@@ -219,7 +219,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	public void breakMirror(World world, int x, int y, int z) {
 		broken = true;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlockVariable(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}));
+			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlockVariable(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 1, 1);
 	}

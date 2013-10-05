@@ -269,7 +269,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			td.setColor(ReikaDyeHelper.getColorFromItem(is));
 			return true;
 		}
-		if (m == MachineRegistry.DISPLAY && is != null && is.itemID == Item.lightStoneDust.itemID) {
+		if (m == MachineRegistry.DISPLAY && is != null && is.itemID == Item.glowstone.itemID) {
 			TileEntityDisplay td = (TileEntityDisplay)te;
 			td.setColorToArgon();
 			return true;

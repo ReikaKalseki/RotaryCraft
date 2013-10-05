@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Items.Tools;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -53,9 +53,9 @@ public class ItemStunGun extends ItemChargedTool {
 			double[] look = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			//ReikaChatHelper.writeString(String.format("%.3f", look.xCoord)+" "+String.format("%.3f", look.yCoord)+" "+String.format("%.3f", look.zCoord));
 			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(look[0]-0.5, look[1]-0.5, look[2]-0.5, look[0]+0.5, look[1]+0.5, look[2]+0.5);
-			List infov = world.getEntitiesWithinAABB(EntityLiving.class, fov);
+			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
 			for (int k = 0; k < infov.size(); k++) {
-				EntityLiving ent = (EntityLiving)infov.get(k);
+				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
 				if (!(ent instanceof EntityPlayer) && ep.canEntityBeSeen(ent)) {
 					for (int f = 0; i < 64; i++)
 						world.spawnParticle("magicCrit", ent.posX-0.5+par5Random.nextFloat(), ent.posY-0.5+par5Random.nextFloat(), ent.posZ-0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());

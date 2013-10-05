@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Blocks;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 
@@ -20,7 +20,7 @@ public class BlockBCEngine extends BlockModelledMultiTE {
 		super(id, mat);
 	}
 
-	public static int getDirectionMetadataFromPlayerLook(EntityLiving ep) {
+	public static int getDirectionMetadataFromPlayerLook(EntityLivingBase ep) {
 		int i = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
 		while (i > 3)
 			i -= 4;

@@ -12,7 +12,7 @@ package Reika.RotaryCraft.TileEntities.Farming;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -257,7 +257,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return side == EnumLook.DOWN;
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side == ForgeDirection.DOWN;
 	}
 }

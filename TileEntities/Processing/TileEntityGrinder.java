@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -347,7 +347,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 1)
 			return false;
 		if (slot == 2)
@@ -368,8 +368,8 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return side != EnumLook.DOWN;
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side != ForgeDirection.DOWN;
 	}
 
 	@Override

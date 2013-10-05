@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,10 +56,10 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		//return;
 		//this.tickcount = 0;
 		AxisAlignedBB box = this.getBox();
-		inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving ent = (EntityLiving)inbox.get(i);
-			if (!(ent instanceof EntityPlayer || ent instanceof EntityVillager)) {
+			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
+			if (!(ent instanceof EntityVillager)) {
 				//this.laser = true;
 				world.markBlockForRenderUpdate(x, y, z);
 				if (ep != null && this.getDamage() > 0) {

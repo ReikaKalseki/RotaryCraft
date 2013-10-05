@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -45,6 +45,6 @@ public abstract class EntityTurretShot extends EntityFireball {
 
 	protected abstract int getAttackDamage();
 
-	protected abstract void applyAttackEffectsToEntity(World world, EntityLiving el);
+	protected abstract void applyAttackEffectsToEntity(World world, EntityLivingBase el);
 
 }

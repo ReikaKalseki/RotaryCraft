@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -505,7 +505,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (itemstack == null)
 			return false;
 		return (itemstack.itemID == ItemStacks.lubebucket.itemID && itemstack.getItemDamage() == ItemStacks.lubebucket.getItemDamage());
@@ -532,8 +532,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return side != EnumLook.DOWN;
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side != ForgeDirection.DOWN;
 	}
 
 	@Override

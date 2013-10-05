@@ -13,7 +13,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,9 +62,9 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 		if (power < MINPOWER)
 			return;
 		this.spawnParticles(world, x, y, z);
-		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, this.getRangedBox());
+		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getRangedBox());
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving e = (EntityLiving)inbox.get(i);
+			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
 			e.attackEntityFrom(DamageSource.cactus, 0); //to prevent some despawns
 			if (ReikaEntityHelper.isHostile(e) && !(e instanceof EntityDragon || e instanceof EntityWither)) {
 				double dx = e.posX-x-0.5;

@@ -407,7 +407,7 @@ public class TileEntityDisplay extends RotaryCraftTileEntity implements ISidedIn
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		return is.itemID == ItemRegistry.SPRING.getShiftedID();
 	}
 

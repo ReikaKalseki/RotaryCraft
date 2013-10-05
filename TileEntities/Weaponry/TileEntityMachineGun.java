@@ -11,7 +11,8 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -45,7 +46,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 
 		if (tickcount >= this.getFireRate() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
-			List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
+			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
 				this.fire(world, x, y, z, meta);
 			}
@@ -92,7 +93,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		return is.itemID == Item.arrow.itemID;
 	}
 

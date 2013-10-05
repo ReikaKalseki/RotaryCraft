@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Surveying;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -136,7 +136,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
 			return;
 		Minecraft mc = Minecraft.getMinecraft();
-		EntityLiving e = mc.renderViewEntity;
+		EntityLivingBase e = mc.renderViewEntity;
 		if (e == null)
 			return;
 		playerCam[0] = e.posX;
@@ -163,7 +163,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
 			return;
 		Minecraft mc = Minecraft.getMinecraft();
-		EntityLiving e = mc.renderViewEntity;
+		EntityLivingBase e = mc.renderViewEntity;
 		if (toPlayer) {
 			e.posX = playerCam[0];
 			e.posY = playerCam[1]+e.getEyeHeight();

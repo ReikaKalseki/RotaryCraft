@@ -11,7 +11,8 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,11 +74,11 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
 		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
-		List inrange = world.getEntitiesWithinAABB(EntityLiving.class, range);
+		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, range);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
 		for (int i = 0; i < inrange.size(); i++) {
-			EntityLiving ent = (EntityLiving)inrange.get(i);
+			EntityLivingBase ent = (EntityLivingBase)inrange.get(i);
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
@@ -95,7 +96,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		}
 		if (i_at_min == -1)
 			return xyzb;
-		EntityLiving ent = (EntityLiving)inrange.get(i_at_min);
+		EntityLivingBase ent = (EntityLivingBase)inrange.get(i_at_min);
 		closestMob = ent;
 		xyzb[0] = ent.posX+this.randomOffset();
 		xyzb[1] = ent.posY+ent.getEyeHeight()*0.25+this.randomOffset();
@@ -149,7 +150,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		return 164;
 	}
 
-	public EntityLiving getClosestMob() {
+	public EntityLivingBase getClosestMob() {
 		return closestMob;
 	}
 
@@ -295,7 +296,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == ItemRegistry.RAILGUN.getShiftedID();
 	}
 
@@ -315,7 +316,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLiving ent) {
+	protected boolean isValidTarget(EntityLivingBase ent) {
 		return this.isMobOrUnlistedPlayer(ent);
 	}
 

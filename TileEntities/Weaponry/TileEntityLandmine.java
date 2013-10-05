@@ -12,7 +12,8 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,9 +58,9 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 
 	private boolean checkForPlayer(World world, int x, int y, int z) {
 		AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x, y+1, z, x+1, y+3, z+1);
-		List in = world.getEntitiesWithinAABB(EntityLiving.class, above);
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving e = (EntityLiving)in.get(i);
+			EntityLivingBase e = (EntityLivingBase)in.get(i);
 			if (e.onGround && !e.isSneaking())
 				return true;
 		}
@@ -111,9 +112,9 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 		else if (!world.isRemote)
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, power, true);
 		AxisAlignedBB region = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(2, 2, 2);
-		List in = world.getEntitiesWithinAABB(EntityLiving.class, region);
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, region);
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving e = (EntityLiving)in.get(i);
+			EntityLivingBase e = (EntityLivingBase)in.get(i);
 			boolean invuln = false;
 			if (e instanceof EntityPlayer) {
 				if (((EntityPlayer)e).capabilities.isCreativeMode)
@@ -134,9 +135,9 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 		}
 		if (shrapnel) {
 			AxisAlignedBB region2 = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
-			List in2 = world.getEntitiesWithinAABB(EntityLiving.class, region);
+			List in2 = world.getEntitiesWithinAABB(EntityLivingBase.class, region);
 			for (int i = 0; i < in.size(); i++) {
-				EntityLiving e = (EntityLiving)in.get(i);
+				EntityLivingBase e = (EntityLivingBase)in.get(i);
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;
 				double dz = e.posZ-z-0.5;
@@ -248,7 +249,7 @@ public class TileEntityLandmine extends RotaryCraftTileEntity implements ISidedI
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		switch (i) {
 		case 0:
 			return is.itemID == ItemRegistry.SPRING.getShiftedID();

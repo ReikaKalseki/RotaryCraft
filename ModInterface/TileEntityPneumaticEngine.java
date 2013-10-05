@@ -24,16 +24,18 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor, IPipeConnection, SimpleProvider,
 PowerGenerator, GuiController {
 
 	private int MJ;
 
-	private IPowerProvider pp;
+	private PowerHandler pp;
 
 	private ForgeDirection facingDir;
 
@@ -53,8 +55,9 @@ PowerGenerator, GuiController {
 	public TileEntityPneumaticEngine()
 	{
 		super();
-		pp = new CompressorPowerProvider();
-		pp.configure(0, 0, maxMJ, 0, maxMJ);
+		pp = new PowerHandler(this, PowerHandler.Type.MACHINE);
+		pp.configure(0, maxMJ, 0, maxMJ);
+		pp.configurePowerPerdition(0, 0);
 		sound.setTick(sound.getCap());
 	}
 
@@ -148,10 +151,13 @@ PowerGenerator, GuiController {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 
+		if (pp.getEnergyStored() > 0)
+			pp.addEnergy(0.01F); //To nullify the mandatory power loss... why the HELL was that added?
+
 		if (!world.isRemote)
 			storedpower = (int)pp.getEnergyStored();
 		if (storedpower < 0)
-			storedpower = pp.getMaxEnergyStored();
+			storedpower = (int)pp.getMaxEnergyStored();
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 
@@ -182,29 +188,11 @@ PowerGenerator, GuiController {
 		}
 	}
 
-	@Override
-	public void setPowerProvider(IPowerProvider provider) {
-
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider() {
-		return pp;
-	}
-
-	@Override
-	public void doWork() {
-
-	}
-
-	@Override
 	public int powerRequest(ForgeDirection from) {
-		IPowerProvider p = this.getPowerProvider();
-		float needed = p.getMaxEnergyStored() - p.getEnergyStored();
-		return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));
+		float needed = pp.getMaxEnergyStored() - pp.getEnergyStored();
+		return (int) Math.ceil(Math.min(pp.getMaxEnergyReceived(), needed));
 	}
 
-	@Override
 	public boolean isPipeConnected(ForgeDirection with) {
 		switch(this.getBlockMetadata()) {
 		case 0:
@@ -255,10 +243,12 @@ PowerGenerator, GuiController {
 		return new PowerSourceList().addSource(this);
 	}
 
+	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored());
 	}
 
+	@Override
 	public long getCurrentPower() {
 		return power;
 	}
@@ -285,6 +275,26 @@ PowerGenerator, GuiController {
 		base = NBT.getInteger("tier");
 		storedpower = NBT.getInteger("storage");
 		pp.readFromNBT(NBT);
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		return this.isPipeConnected(with) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+	}
+
+	@Override
+	public PowerReceiver getPowerReceiver(ForgeDirection side) {
+		return pp.getPowerReceiver();
+	}
+
+	@Override
+	public void doWork(PowerHandler workProvider) {
+
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
 	}
 
 }

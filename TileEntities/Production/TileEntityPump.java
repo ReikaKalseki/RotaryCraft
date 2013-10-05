@@ -12,12 +12,13 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -122,9 +123,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	private void suckUpMobs(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y-1, z, x+1, y, z+1);
-		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving e = (EntityLiving)inbox.get(i);
+			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
 			e.attackEntityFrom(DamageSource.generic, 5);
 		}
 		if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))
@@ -288,8 +289,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
-		return !side.isTopOrBottom();
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return side.offsetY == 0;
 	}
 
 	@Override

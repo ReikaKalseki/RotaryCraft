@@ -57,7 +57,6 @@ import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
-import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
@@ -235,12 +234,12 @@ public enum MachineRegistry {
 	BEAMMIRROR(			"Beam Mirror",				BlockDMMachine.class,		TileEntityBeamMirror.class,			11),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
-	LIQUIDCONVERTER(	"Pressure Balancer",		BlockMachine.class,			TileEntityLiquidConverter.class,	7),
+	UNUSED(				"Unused",					BlockMachine.class,			TileEntityCCTV.class,				7),
 	FUELENHANCER(		"Fuel Enhancer",			BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
 	ARROWGUN(			"Arrow Gun",				BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"Friction Boiler", 			BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"Steam Turbine", 			BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
-	FERTILIZER(			"Fertilizer",				BlockMMachine.class,		TileEntityFertilizer.class,			16);
+	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19);
 
 
 	private String name;

@@ -14,7 +14,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
@@ -34,7 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -480,9 +481,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		else
 			a = 1;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(a, 1, b);
-		List in = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
+		List in = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving ent = (EntityLiving)in.get(i);
+			EntityLivingBase ent = (EntityLivingBase)in.get(i);
 			ent.attackEntityFrom(DamageSource.generic, 1);
 		}
 	}
@@ -510,9 +511,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 			break;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord+c, yCoord, zCoord+d, xCoord+1+c, yCoord+1, zCoord+1+d).expand(a, 1, b);
-		List in = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
+		List in = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving ent = (EntityLiving)in.get(i);
+			EntityLivingBase ent = (EntityLivingBase)in.get(i);
 			ent.attackEntityFrom(DamageSource.generic, 1);
 		}
 	}
@@ -1047,11 +1048,11 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
 						}
-						else if (caught instanceof EntityLiving && !(caught instanceof EntityPlayer && immune)) {
+						else if (caught instanceof EntityLivingBase && !(caught instanceof EntityPlayer && immune)) {
 							caught.setFire(2);
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
 							//ReikaChatHelper.writeInt(FOD);
-							if (!worldObj.isRemote && ((EntityLiving)caught).getHealth() > 0 && !(caught instanceof EntityChicken) && !(caught instanceof EntityBat) && !(caught instanceof EntitySilverfish) && !(caught instanceof EntityItem) && !(caught instanceof EntityXPOrb))
+							if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && !(caught instanceof EntityChicken) && !(caught instanceof EntityBat) && !(caught instanceof EntitySilverfish) && !(caught instanceof EntityItem) && !(caught instanceof EntityXPOrb))
 								FOD++;
 							if (FOD > 8)
 								FOD = 8;
@@ -1139,7 +1140,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
 	}
 
-	private void playSounds(World world, int x, int y, int z, float pit) {
+	private void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
 		soundtick++;
 		if (type.jetNoise() && FOD > 0 && par5Random.nextInt(2*(9-FOD)) == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+par5Random.nextFloat(), 1F);
@@ -1147,33 +1148,56 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 		}
 		if (!ConfigRegistry.ENGINESOUNDS.getState())
 			return;
-		if (soundtick < type.getSoundLength(FOD, 1F/pit) && soundtick < 2000)
+		float volume = 1;
+		if (this.isMuffled(world, x, y, z)) {
+			volume = 0.3125F;
+		}
+		if (soundtick < type.getSoundLength(FOD, 1F/pitchMultiplier) && soundtick < 2000)
 			return;
 		soundtick = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F*volume, 1F*pitchMultiplier);
 		if (type.turbineNoise()) {
-			float volume = 0.125F;
 			float pitch = 1F;
 			if (type.jetNoise()) {
-				volume = 1F;
 				pitch = 1F/(0.125F*FOD+1);
 			}
+			else {
+				volume *= 0.125F;
+			}
 			if (type.jetNoise())
-				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pit);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pitchMultiplier);
 			else
-				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pit);
+				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pitchMultiplier);
 		}
 		if (type.steamNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F*volume, 1F*pitchMultiplier);
 		if (type.carNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F, 0.9F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F*volume, 0.9F*pitchMultiplier);
 		if (type.waterNoise() && (this.isFrontOfArray() || !this.isPartOfArray()))
-			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F, 0.9F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F*volume, 0.9F*pitchMultiplier);
 		if (type.windNoise()) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F, 1F*pit);
+			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F*volume, 1F*pitchMultiplier);
 		}
+	}
+
+	private boolean isMuffled(World world, int x, int y, int z) {
+		ForgeDirection[] dirs = ForgeDirection.values();
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (dir != ForgeDirection.DOWN) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if ((dx != readx && dz != readz) && (dx != writex && dz != writez) || dir == ForgeDirection.UP) {
+					int id = world.getBlockId(dx, dy, dz);
+					if (id != Block.cloth.blockID)
+						return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -1358,7 +1382,7 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (!type.isValidFuel(is))
 			return false;
 		switch(type) {
@@ -1451,9 +1475,9 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 
 	public void jetEngineDetonation(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB zone = this.getFlameZone();
-		List in = world.getEntitiesWithinAABB(EntityLiving.class, zone);
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving e = (EntityLiving)in.get(i);
+			EntityLivingBase e = (EntityLivingBase)in.get(i);
 			e.setFire(2);
 		}
 		double vx = (x-backx)/2D;
@@ -1604,20 +1628,20 @@ public class TileEntityEngine extends TileEntityIOMachine implements ISidedInven
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		if (type == null)
 			return false;
 		if (type.isJetFueled())
-			return p == MachineRegistry.FUELLINE && side == EnumLook.UP;
+			return p == MachineRegistry.FUELLINE && side == ForgeDirection.UP;
 		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {
 			switch(side) {
-			case PLUSX:
+			case EAST:
 				return this.getBlockMetadata() == 1;
-			case PLUSZ:
+			case SOUTH:
 				return this.getBlockMetadata() == 3;
-			case MINX:
+			case WEST:
 				return this.getBlockMetadata() == 0;
-			case MINZ:
+			case NORTH:
 				return this.getBlockMetadata() == 2;
 			default:
 				return false;

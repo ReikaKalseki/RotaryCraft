@@ -388,7 +388,7 @@ public class TileEntityBlastFurnace extends RotaryCraftTileEntity implements Tem
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (is == null)
 			return false;
 		if (i == 0)

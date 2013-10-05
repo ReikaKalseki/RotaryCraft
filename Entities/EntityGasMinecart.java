@@ -187,7 +187,7 @@ public class EntityGasMinecart extends EntityMinecart {
 	 * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
 	 */
 	@Override
-	public boolean interact(EntityPlayer par1EntityPlayer)
+	public boolean interactFirst(EntityPlayer par1EntityPlayer)
 	{
 		if(MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, par1EntityPlayer)))
 		{

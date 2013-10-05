@@ -88,7 +88,7 @@ public abstract class RemoteControlMachine extends RotaryCraftTileEntity impleme
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack is) {
+	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
 			return is.itemID == ItemRegistry.SPRING.getShiftedID();
 		return is.itemID == Item.dyePowder.itemID;

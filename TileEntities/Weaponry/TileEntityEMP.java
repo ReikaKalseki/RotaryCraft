@@ -28,15 +28,9 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
-import thaumcraft.api.EnumTag;
-import thaumcraft.api.ObjectTags;
-import thaumcraft.api.aura.AuraNode;
-import thaumcraft.api.aura.EnumNodeType;
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -236,8 +230,6 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			TileEntity te = blocks.get(i);
 			this.shutdownTE(te);
 		}
-		if (ModList.THAUMCRAFT.isLoaded())
-			this.affectNearNodes(world, x, y, z);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		world.setBlock(x, y, z, 0);
 		if (ReikaMathLibrary.doWithChance(50)) {
@@ -253,49 +245,6 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 		else {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+par5Random.nextInt(16)));
-		}
-	}
-
-	private void affectNearNodes(World world, int x, int y, int z) {
-		List<AuraNode> nodes = ReikaThaumHelper.getAllNodeCopiesNear(world, x+0.5, y+0.5, z+0.5, this.getRange());
-		if (nodes == null)
-			return;
-		ObjectTags flux = new ObjectTags();
-		flux.add(EnumTag.DESTRUCTION, 100);
-		flux.add(EnumTag.FLUX, 200);
-		flux.add(EnumTag.MECHANISM, 100);
-		flux.add(EnumTag.POWER, 400);
-
-		for (int i = 0; i < nodes.size(); i++) {
-			AuraNode au = nodes.get(i);
-			if (au != null) {
-				int base = au.baseLevel;
-				switch(au.type) {
-				case NORMAL:
-					ReikaThaumHelper.affectNode(au, 0, par5Random.nextInt(base/2), false, flux, 0, 0, 0);
-					if (par5Random.nextInt(100) == 0) {
-						ReikaThaumHelper.setNodeType(au, EnumNodeType.UNSTABLE);
-					}
-					break;
-				case PURE:
-					ReikaThaumHelper.affectNode(au, 0, -base/2, false, flux, 0, 0, 0);
-					break;
-				case UNSTABLE:
-					ReikaThaumHelper.affectNode(au, 0, base/2, false, flux, 0, 0, 0);
-					if (par5Random.nextInt(50) == 0) {
-						ReikaThaumHelper.setNodeType(au, EnumNodeType.DARK);
-					}
-					break;
-				case DARK:
-					ReikaThaumHelper.affectNode(au, 0, -base/2+par5Random.nextInt(base)+1, false, flux, 0, 0, 0);
-					if (par5Random.nextInt(1000) == 0) {
-						ReikaThaumHelper.setNodeType(	au, EnumNodeType.PURE);
-					}
-					break;
-				default:
-					break;
-				}
-			}
 		}
 	}
 

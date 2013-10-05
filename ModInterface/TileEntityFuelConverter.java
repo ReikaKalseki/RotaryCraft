@@ -129,7 +129,7 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return ReikaInventoryHelper.checkForItemStack(is, ingredients, false);
 	}
 

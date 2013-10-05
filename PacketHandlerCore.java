@@ -21,17 +21,13 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemJetPackChest;
-import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
-import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
@@ -84,10 +80,8 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityAimedCannon aimed;
 	private TileEntityEngine engine;
 	private TileEntityDisplay display;
-	private TileEntityPressureBalancer balancer;
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
-	private TileEntityLiquidConverter liq;
 	private TileEntityPneumaticEngine eng;
 
 	protected PacketRegistry pack;
@@ -415,15 +409,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			//ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			//ReikaJavaLibrary.pConsole("Opening gui for "+ep+" on "+FMLCommonHandler.instance().getEffectiveSide());
 			break;
-		case BALANCER:
-			balancer = (TileEntityPressureBalancer)world.getBlockTileEntity(x, y, z);
-			if (control == 44) {
-				balancer.incrementStateOnSide(ForgeDirection.values()[data[0]]);
-			}
-			if (control == 45) {
-				balancer.swapConversion(data[0]);
-			}
-			break;
 		case REDGEAR:
 			redgear = (TileEntityMultiClutch)world.getBlockTileEntity(x, y, z);
 			redgear.setSideOfState(data[0], data[1]);
@@ -431,13 +416,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		case TERRAFORMER:
 			terra = (TileEntityTerraformer)world.getBlockTileEntity(x, y, z);
 			terra.setTarget(BiomeGenBase.biomeList[data[0]]);
-			break;
-		case LIQUID:
-			liq = (TileEntityLiquidConverter)world.getBlockTileEntity(x, y, z);
-			if (control == 48)
-				liq.setLiquid(LiquidRegistry.liquidList[data[0]]);
-			if (control == 49)
-				liq.setToForge(data[0] > 0);
 			break;
 		case PNEUMATIC:
 			eng = (TileEntityPneumaticEngine)world.getBlockTileEntity(x, y, z);

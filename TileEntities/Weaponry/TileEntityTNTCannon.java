@@ -190,7 +190,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == Block.tnt.blockID;
 	}
 

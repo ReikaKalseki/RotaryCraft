@@ -147,7 +147,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public boolean canInsertItem(int i, ItemStack is, int side) {
 		if (this instanceof InertIInv)
 			return false;
-		return ((IInventory)this).isStackValidForSlot(i, is);
+		return ((IInventory)this).isItemValidForSlot(i, is);
 	}
 	/*
 	public String getName() {

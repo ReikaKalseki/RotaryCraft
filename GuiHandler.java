@@ -28,7 +28,6 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
-import Reika.RotaryCraft.Containers.ContainerBalancer;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
@@ -105,12 +104,8 @@ import Reika.RotaryCraft.GUIs.GuiWinder;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
 import Reika.RotaryCraft.ModInterface.ContainerPneumatic;
-import Reika.RotaryCraft.ModInterface.GuiLiquidConverter;
 import Reika.RotaryCraft.ModInterface.GuiPneumatic;
-import Reika.RotaryCraft.ModInterface.GuiPressureBalancer;
-import Reika.RotaryCraft.ModInterface.TileEntityLiquidConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityPressureBalancer;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -261,9 +256,6 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new ContainerLandmine(player, (TileEntityLandmine)te);
-		}
-		if (te instanceof TileEntityPressureBalancer) {
-			return new ContainerBalancer(player, (TileEntityPressureBalancer)te);
 		}
 		if (te instanceof TileEntityTerraformer) {
 			return new ContainerTerraformer(player, (TileEntityTerraformer)te);
@@ -436,17 +428,11 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityDisplay) {
 			return new GuiStringBuilder(player, te.worldObj, te.xCoord, te.yCoord, te.zCoord, RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue(), TileEntityDisplay.displayWidth, TileEntityDisplay.displayHeight, ((TileEntityDisplay) te).getMessageAsBigString());
 		}
-		if (te instanceof TileEntityPressureBalancer) {
-			return new GuiPressureBalancer(player, (TileEntityPressureBalancer)te);
-		}
 		if (te instanceof TileEntityMultiClutch) {
 			return new GuiMultiClutch(player, (TileEntityMultiClutch)te);
 		}
 		if (te instanceof TileEntityTerraformer) {
 			return new GuiTerraformer(player, (TileEntityTerraformer)te);
-		}
-		if (te instanceof TileEntityLiquidConverter) {
-			return new GuiLiquidConverter(player, (TileEntityLiquidConverter)te);
 		}
 		if (te instanceof TileEntityPneumaticEngine) {
 			return new GuiPneumatic(player, (TileEntityPneumaticEngine)te);

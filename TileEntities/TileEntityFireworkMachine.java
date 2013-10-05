@@ -275,7 +275,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		int shape = this.getShape(); //Shape modifiers - Fire charge, gold nugget, feather, head, or nothing
 		ItemStack gunpowder = new ItemStack(Item.gunpowder.itemID, 1, 64);
 		ItemStack diamond = new ItemStack(Item.diamond.itemID, 1, 0);
-		ItemStack glowstone = new ItemStack(Item.lightStoneDust.itemID, 1, 0);
+		ItemStack glowstone = new ItemStack(Item.glowstone.itemID, 1, 0);
 
 		ItemStack[] inputitems = new ItemStack[5];
 		if (dyeColor != -1)
@@ -293,7 +293,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 				hasDiamond = true;
 		}
 		if (par5Random.nextInt(2) == 0) {
-			if (this.getIngredient(Item.lightStoneDust.itemID, this.consumeChance()))
+			if (this.getIngredient(Item.glowstone.itemID, this.consumeChance()))
 				hasGlowstone = true;
 		}
 		if (hasDiamond)
@@ -371,7 +371,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 				{
 					++var3;
 				}
-				else if (var10.itemID == Item.lightStoneDust.itemID)
+				else if (var10.itemID == Item.glowstone.itemID)
 				{
 					++var7;
 				}
@@ -456,7 +456,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 						{
 							var12.add(Integer.valueOf(ItemDye.dyeColors[var14.getItemDamage()]));
 						}
-						else if (var14.itemID == Item.lightStoneDust.itemID)
+						else if (var14.itemID == Item.glowstone.itemID)
 						{
 							var18.setBoolean("Flicker", true);
 						}
@@ -659,7 +659,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return ReikaItemHelper.isFireworkIngredient(is.itemID);
 	}
 

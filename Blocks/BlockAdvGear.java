@@ -52,46 +52,6 @@ public class BlockAdvGear extends BlockModelledMachine {
 	{
 		return new TileEntityAdvancedGear();
 	}
-	/*
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack is)		//Directional code
-	{
-		int prevmeta = world.getBlockMetadata(x, y, z);
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", prevmeta));
-
-		int i = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4F) / 360F + 0.5D);
-		while (i > 3)
-			i -= 4;
-		while (i < 0)
-			i += 4;
-
-		switch (i) {
-		case 0:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+2);
-			break;
-		case 1:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+1);
-			break;
-		case 2:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+3);
-			break;
-		case 3:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+0);
-			break;
-		}
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, int a, int b) {
-		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
-		int meta = adv.getBlockMetadata();
-		ItemStack todrop = new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
-		EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-		item.delayBeforeCanPickup = 10;
-		if (!world.isRemote)
-			world.spawnEntityInWorld(item);
-		super.breakBlock(world, x, y, z, a, b);
-	}*/
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)

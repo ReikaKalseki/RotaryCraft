@@ -283,7 +283,7 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
 	}
 

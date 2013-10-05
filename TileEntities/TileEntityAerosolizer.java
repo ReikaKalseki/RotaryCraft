@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
@@ -229,12 +229,12 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 			List effects = Item.potion.getEffects(potionDamage[i]);
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionDamage[i]));
 			if (effects != null && !effects.isEmpty()) {
-				List inroom = worldObj.getEntitiesWithinAABB(EntityLiving.class, room);
+				List inroom = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, room);
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inroom.size()));
 				if (inroom != null && !inroom.isEmpty()) {
 					Iterator iter = inroom.iterator();
 					while (iter.hasNext()) {
-						EntityLiving mob = (EntityLiving)iter.next();
+						EntityLivingBase mob = (EntityLivingBase)iter.next();
 						Iterator potioneffects = effects.iterator();
 						while (potioneffects.hasNext()) {
 							PotionEffect effect = (PotionEffect)potioneffects.next();
@@ -384,7 +384,7 @@ public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == Item.potion.itemID;
 	}
 

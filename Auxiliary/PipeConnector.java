@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public interface PipeConnector {
@@ -17,6 +17,6 @@ public interface PipeConnector {
 	public boolean canConnectToPipe(MachineRegistry m);
 
 	/** Side is relative to the piping block (so DOWN means the block is below the pipe); p is the pipe type */
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side);
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side);
 
 }

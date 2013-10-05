@@ -12,7 +12,7 @@ package Reika.RotaryCraft.TileEntities.Surveying;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -28,7 +28,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
 	/// Too RAM intensive
-	//public EntityLiving[][] mobs = new EntityLiving[49][49];
+	//public EntityLivingBase[][] mobs = new EntityLivingBase[49][49];
 
 	public int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
 	public int[][] mobs = new int[49][49];
@@ -66,9 +66,9 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 		mobs = ReikaArrayHelper.fillMatrix(mobs, 0);
 		int range = this.getRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, 255, z+1+range);
-		inzone = world.getEntitiesWithinAABB(EntityLiving.class, zone);
+		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (int i = 0; i < inzone.size(); i++) {
-			EntityLiving ent = (EntityLiving)inzone.get(i);
+			EntityLivingBase ent = (EntityLivingBase)inzone.get(i);
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;

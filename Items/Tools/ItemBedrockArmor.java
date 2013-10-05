@@ -33,7 +33,6 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 
 	}
 
-	@Override
 	public String getArmorTextureFile(ItemStack is) {
 		ItemRegistry item = ItemRegistry.getEntry(is);
 		switch(item) {

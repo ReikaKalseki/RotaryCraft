@@ -10,310 +10,47 @@
 package Reika.RotaryCraft.Renders;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
-import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
 public class PipeRenderer extends RotaryTERenderer {
 
-	@SuppressWarnings("unused")
-	public void renderPipe(TileEntityPiping te, MachineRegistry m, double p2, double p4, double p6) {
-		GL11.glDisable(GL11.GL_CULL_FACE);
+	public void renderPipe(TileEntityPiping tile, MachineRegistry m, double par2, double par4, double par6) {
+
+		//		this.bindTextureByName("/Reika/RotaryCraft/Textures/terrain/piping.png");
+
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef((float)p2-0.5F, (float)p4 + 1.5F, (float)p6 + 1.5F);
+		GL11.glTranslatef((float)par2, (float)par4 + 1.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		Tessellator v5 = new Tessellator();
-		double t = 0.0625;
-		double mx = 0.33; double my = 0.33; double mz = 0.33;
-		double nx = 0.67; double ny = 0.67; double nz = 0.67;
-		double dx = 0; double dy = 0;
-		double dd = 0.45*(nx-mx)*3; double dd2 = 0.45*(ny-my)*3; double dd3 = 0.45*(nz-mz)*3;
-		switch(te.getMachine()) {
-		case HOSE:
-			dx = 0;
-			dy = 0;
-			break;
-		case PIPE:
-			dx = 0.5;
-			dy = 0;
-			break;
-		case FUELLINE:
-			dx = 0;
-			dy = 0.5;
-			break;
-		case SPILLER:
-			dx = 0.5;
-			dy = 0.5;
-			break;
-		default:
-			break;
+		int var11 = 0;
+		float var13;
+
+		for (int i = 0; i < 6; i++) {
+			this.renderFace(tile, par2, par4, par6, dirs[i]);
 		}
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/piping.png");
-		if (te.isConnectionValidForIDAndSide(EnumLook.UP))
-			my = 0;
-		if (te.isConnectionValidForIDAndSide(EnumLook.DOWN))
-			ny = 1;
-		if (te.isConnectionValidForIDAndSide(EnumLook.PLUSX))
-			nx = 1;
-		if (te.isConnectionValidForIDAndSide(EnumLook.MINZ))
-			nz = 1;
-		if (te.isConnectionValidForIDAndSide(EnumLook.MINX))
-			mx = 0;
-		if (te.isConnectionValidForIDAndSide(EnumLook.PLUSZ))
-			mz = 0;
-		v5.startDrawingQuads();
-		if (MinecraftForgeClient.getRenderPass() == 0) {
-			//ReikaJavaLibrary.pConsole(my);
-			RenderHelper.disableStandardItemLighting();
-			if (true || mz > 0) {
-				if (true) {
-					v5.addVertexWithUV(mx, my+t, mz, dx, dy+dd2);
-					v5.addVertexWithUV(nx, my+t, mz, dx+dd, dy+dd2);
-					v5.addVertexWithUV(nx, my, mz, dx+dd, dy);
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, ny, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, mz, dx+dd, dy);
-					v5.addVertexWithUV(nx, ny-t, mz, dx+dd, dy);
-					v5.addVertexWithUV(mx, ny-t, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-					v5.addVertexWithUV(mx, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(mx+t, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(mx+t, my, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, my, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(nx-t, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(nx-t, my, mz, dx, dy);
-				}
-			}
-			if (true || nz < 1) {
-				if (true) {
-					v5.addVertexWithUV(mx, ny-t, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny-t, nz, dx+dd, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx+dd, dy);
-					v5.addVertexWithUV(mx, ny, nz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx, my, nz, dx+dd, dy);
-					v5.addVertexWithUV(nx, my+t, nz, dx+dd, dy);
-					v5.addVertexWithUV(mx, my+t, nz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(mx, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(mx+t, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(mx+t, my, nz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(nx-t, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(nx-t, my, nz, dx, dy);
-				}
-			}
-			if (true || my > 0) {
-				if (true) {
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-					v5.addVertexWithUV(nx, my, mz, dx+dd, dy);
-					v5.addVertexWithUV(nx, my, mz+t, dx+dd, dy);
-					v5.addVertexWithUV(mx, my, mz+t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx, my, nz, dx+dd, dy);
-					v5.addVertexWithUV(nx, my, nz-t, dx+dd, dy);
-					v5.addVertexWithUV(mx, my, nz-t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(mx+t, my, nz, dx, dy);
-					v5.addVertexWithUV(mx+t, my, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, my, mz, dx, dy);
-					v5.addVertexWithUV(nx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx-t, my, nz, dx, dy);
-					v5.addVertexWithUV(nx-t, my, mz, dx, dy);
-				}
-			}
-			if (true || ny < 1) {
-				if (true) {
-					v5.addVertexWithUV(mx, ny, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, mz, dx+dd, dy);
-					v5.addVertexWithUV(nx, ny, mz+t, dx+dd, dy);
-					v5.addVertexWithUV(mx, ny, mz+t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, ny, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx+dd, dy);
-					v5.addVertexWithUV(nx, ny, nz-t, dx+dd, dy);
-					v5.addVertexWithUV(mx, ny, nz-t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, ny, mz, dx, dy);
-					v5.addVertexWithUV(mx, ny, nz, dx, dy);
-					v5.addVertexWithUV(mx+t, ny, nz, dx, dy);
-					v5.addVertexWithUV(mx+t, ny, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, ny, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx, dy);
-					v5.addVertexWithUV(nx-t, ny, nz, dx, dy);
-					v5.addVertexWithUV(nx-t, ny, mz, dx, dy);
-				}
-			}
-			if (true || mx > 0) {
-				if (true) {
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(mx, my+t, nz, dx, dy);
-					v5.addVertexWithUV(mx, my+t, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, ny, mz, dx, dy);
-					v5.addVertexWithUV(mx, ny, nz, dx, dy);
-					v5.addVertexWithUV(mx, ny-t, nz, dx, dy);
-					v5.addVertexWithUV(mx, ny-t, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, mz, dx, dy);
-					v5.addVertexWithUV(mx, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(mx, ny, mz+t, dx, dy+dd2);
-					v5.addVertexWithUV(mx, my, mz+t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(mx, my, nz, dx, dy);
-					v5.addVertexWithUV(mx, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(mx, ny, nz-t, dx, dy+dd2);
-					v5.addVertexWithUV(mx, my, nz-t, dx, dy);
-				}
-			}
-			if (true || nx < 1) {
-				if (true) {
-					v5.addVertexWithUV(nx, my, mz, dx, dy);
-					v5.addVertexWithUV(nx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx, my+t, nz, dx, dy);
-					v5.addVertexWithUV(nx, my+t, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, ny, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny-t, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny-t, mz, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, my, mz, dx, dy);
-					v5.addVertexWithUV(nx, ny, mz, dx, dy+dd2);
-					v5.addVertexWithUV(nx, ny, mz+t, dx, dy+dd2);
-					v5.addVertexWithUV(nx, my, mz+t, dx, dy);
-				}
-				if (true) {
-					v5.addVertexWithUV(nx, my, nz, dx, dy);
-					v5.addVertexWithUV(nx, ny, nz, dx, dy+dd2);
-					v5.addVertexWithUV(nx, ny, nz-t, dx, dy+dd2);
-					v5.addVertexWithUV(nx, my, nz-t, dx, dy);
-				}
-			}
-		}
-		else {
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/Terrain/liquids.png");
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			int a = 255;
-			boolean liq = false;
-			switch(te.getMachine()) {
-			case HOSE:
-				TileEntityHose h = (TileEntityHose)te;
-				if (h.lubricant > 0)
-					liq = true;
-				break;
-			case PIPE:
-				TileEntityPipe p = (TileEntityPipe)te;
-				if (p.liquidLevel > 0)
-					liq = true;
-				if (p.liquidID == Block.lavaStill.blockID || p.liquidID == Block.lavaMoving.blockID)
-					dy = 0.5;
-				break;
-			case FUELLINE:
-				TileEntityFuelLine f = (TileEntityFuelLine)te;
-				if (f.fuel > 0)
-					liq = true;
-				break;
-			case SPILLER:
-				dy = 0;
-				TileEntityFlooder s = (TileEntityFlooder)te;
-				if (s.liquidLevel > 0)
-					liq = true;
-				if (s.liquidID == Block.lavaStill.blockID || s.liquidID == Block.lavaMoving.blockID)
-					dy = 0.5;
-				break;
-			default:
-				break;
-			}
-			if (liq) {
-				RenderHelper.disableStandardItemLighting();
-				v5.addVertexWithUV(mx+t, my+t, mz, dx, dy);
-				v5.addVertexWithUV(mx+t, ny-t, mz, dx, dy+dd2);
-				v5.addVertexWithUV(nx-t, ny-t, mz, dx+dd, dy+dd2);
-				v5.addVertexWithUV(nx-t, my+t, mz, dx+dd, dy);
+		this.renderLiquid(tile, par2, par4, par6);
 
-				v5.addVertexWithUV(nx-t, my+t, nz, dx+dd, dy);
-				v5.addVertexWithUV(nx-t, ny-t, nz, dx+dd, dy+dd2);
-				v5.addVertexWithUV(mx+t, ny-t, nz, dx, dy+dd2);
-				v5.addVertexWithUV(mx+t, my+t, nz, dx, dy);
-
-				v5.addVertexWithUV(mx+t, my, mz+t, dx, dy);
-				v5.addVertexWithUV(nx-t, my, mz+t, dx+dd, dy);
-				v5.addVertexWithUV(nx-t, my, nz-t, dx+dd, dy+dd3);
-				v5.addVertexWithUV(mx+t, my, nz-t, dx, dy+dd3);
-
-				v5.addVertexWithUV(mx+t, ny, nz-t, dx, dy+dd3);
-				v5.addVertexWithUV(nx-t, ny, nz-t, dx+dd, dy+dd3);
-				v5.addVertexWithUV(nx-t, ny, mz+t, dx+dd, dy);
-				v5.addVertexWithUV(mx+t, ny, mz+t, dx, dy);
-
-				v5.addVertexWithUV(mx, my+t, nz-t, dx, dy+dd3);
-				v5.addVertexWithUV(mx, ny-t, nz-t, dx+dd2, dy+dd3);
-				v5.addVertexWithUV(mx, ny-t, mz+t, dx+dd2, dy);
-				v5.addVertexWithUV(mx, my+t, mz+t, dx, dy);
-
-				v5.addVertexWithUV(nx, my+t, mz+t, dx, dy);
-				v5.addVertexWithUV(nx, ny-t, mz+t, dx+dd2, dy);
-				v5.addVertexWithUV(nx, ny-t, nz-t, dx+dd2, dy+dd3);
-				v5.addVertexWithUV(nx, my+t, nz-t, dx, dy+dd3);
-			}
-		}
-		v5.draw();
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		if (te.isInWorld())
+		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderHelper.enableStandardItemLighting();
+	}
+
+	private void renderLiquid(TileEntityPiping tile, double par2, double par4, double par6) {
+
 	}
 
 	@Override
@@ -321,59 +58,604 @@ public class PipeRenderer extends RotaryTERenderer {
 		return null;
 	}
 
-	public void renderTileEntityPipingAt(TileEntityPiping tile, double par2, double par4, double par6, float par8)
-	{
-		int var9;
-
-		if (!tile.isInWorld())
-		{
-			var9 = 0;
-		}
-		else
-		{
-
-			var9 = tile.getBlockMetadata();
-
-
-			{
-				//((BlockVacuumBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
-		}
-
-		if (true)
-		{
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/vactex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;
-			float var13;
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-			Tessellator v5 = new Tessellator();
-			v5.startDrawingQuads();
-			v5.addVertexWithUV(par2+0, par4+0, par6+0, 0, 0);
-			v5.addVertexWithUV(par2+1, par4+0, par6+0, 1, 0);
-			v5.addVertexWithUV(par2+1, par4+1, par6+0, 1, 1);
-			v5.addVertexWithUV(par2+0, par4+1, par6+0, 0, 1);
-			v5.draw();
-		}
-	}
-
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			//this.renderTileEntityPipingAt((TileEntityPiping)tile, par2, par4, par6, par8);
 			this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
 	}
 
+	private void renderFace(TileEntityPiping tile, double par2, double par4, double par6, ForgeDirection dir) {
+		float size = 0.75F/2F;
+		float window = 0.5F/2F;
+		float dl = size-window;
+		float dd = 0.5F-size;
+
+		Icon ico = tile.getBlockIcon();
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float u2 = ico.getMaxU();
+		float v2 = ico.getMaxV();
+
+		float ddu = u2-u;
+		float ddv = v2-v;
+		float uo = u;
+		float vo = v;
+		float u2o = u2;
+		float v2o = v2;
+
+		u += ddu*(1-size)/5;
+		v += ddv*(1-size)/5;
+		u2 -= ddu*(1-size)/5;
+		v2 -= ddv*(1-size)/5;
+
+		float du = ddu*dd;
+		float dv = ddv*dd;
+
+		float lx = dd+dl;
+		float ly = dd+dl;
+		float mx = 1-dd-dl;
+		float my = 1-dd-dl;
+
+		Icon gico = Block.glass.getIcon(0, 0);
+		float gu = gico.getMinU();
+		float gv = gico.getMinV();
+		float gu2 = gico.getMaxU();
+		float gv2 = gico.getMaxV();
+		float dgu = gu2-gu;
+		float dgv = gv2-gv;
+
+		float guu = gu+dgu*dl;
+		float gvv = gv+dgv*dl;
+
+		gu += dgu/8;
+		gv += dgv/8;
+		gu2 -= dgu/8;
+		gv2 -= dgv/8;
+
+		Tessellator v5 = new Tessellator();
+		v5.startDrawingQuads();
+
+		int dx = tile.xCoord+dir.offsetX;
+		int dy = tile.yCoord+dir.offsetY;
+		int dz = tile.zCoord+dir.offsetZ;
+		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+		v5.setBrightness(br);
+
+		if (tile.isInWorld() && tile.isConnectionValidForSide(dir)) {
+			switch(dir) {
+			case DOWN:
+				this.faceBrightness(ForgeDirection.SOUTH, v5);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size+dd, 	0.5+size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size+dd, 	0.5+size, 	u2-du, vo);
+				/*
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size-dd, 	0.5+size, 	gu, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size-dd, 	0.5+size, 	gu+dgu*size*2, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	1, 				0.5+size, 	gu+dgu*size*2, gv+dgv*size);
+				v5.addVertexWithUV(0.5-size+dd, 	1, 				0.5+size, 	gu, gv+dgv*size);*/
+
+				this.faceBrightness(ForgeDirection.EAST, v5);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5-size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.WEST, v5);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5+size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5+size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5-size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.NORTH, v5);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size+dd, 	0.5-size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size+dd, 	0.5-size, 	u2-du, vo);
+				/*
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size-dd, 	0.5-size, 	gu, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size-dd, 	0.5-size, 	gu+dgu*size*2, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	1, 				0.5-size, 	gu+dgu*size*2, gv+dgv*size);
+				v5.addVertexWithUV(0.5-size+dd, 	1, 				0.5-size, 	gu, gv+dgv*size);*/
+				break;
+			case EAST:
+				this.faceBrightness(ForgeDirection.DOWN, v5);
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5+window, 	u2o, 	v+dv);
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5+size, 		u2o, 	v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 		u2, 	v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+window, 	u2, 	v+dv);
+
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5-window, 	u2o, 	v2-dv);
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5-size, 		u2o, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5-size, 		u2, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5-window, 	u2, 	v2-dv);
+
+				this.faceBrightness(ForgeDirection.SOUTH, v5);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5+size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5+size-dd, 	0.5+size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size+dd, 	0.5-size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5-size+dd, 	0.5+size, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.UP, v5);
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5+window, 	u2o, 	v+dv);
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5+size, 		u2o, 	v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+size, 		u2, 	v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+window, 	u2, 	v+dv);
+
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5-window, 	u2o, 	v2-dv);
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5-size, 		u2o, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-size, 		u2, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-window, 	u2, 	v2-dv);
+
+				this.faceBrightness(ForgeDirection.NORTH, v5);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5+size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5+size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5+size-dd, 	0.5-size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5-size+dd, 	0.5-size, 	u2-du, vo);
+				break;
+			case NORTH:
+				this.faceBrightness(ForgeDirection.DOWN, v5);
+				v5.addVertexWithUV(0.5-window, 	0.5+size, 	0.5+size, 	u2-du, v2);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5+size, 	u2, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	1, 			u2, 	v2o);
+				v5.addVertexWithUV(0.5-window, 	0.5+size, 	1, 			u2-du, v2o);
+
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0.5+size, 	u+du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 	u, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	1, 			u, vo);
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	1, 			u+du, vo);
+
+				this.faceBrightness(ForgeDirection.EAST, v5);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5+size+dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5+size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.WEST, v5);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5+size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5+size+dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5+size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.UP, v5);
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	1, 			u2, vo);
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	1, 			u2-du, vo);
+
+				v5.addVertexWithUV(0.5+window, 	0.5-size, 	0.5+size, 	u+du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+size, 	u, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	1, 			u, vo);
+				v5.addVertexWithUV(0.5+window, 	0.5-size, 	1, 			u+du, vo);
+				break;
+			case SOUTH:
+				this.faceBrightness(ForgeDirection.DOWN, v5);
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0, 			u2-du, 	v2o);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0, 			u2, 	v2o);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5-size, 	u2, 	v2);
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0.5-size, 	u2-du, 	v2);
+
+				v5.addVertexWithUV(0.5-window, 	0.5+size, 	0, 			u+du, 	v2o);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0, 			u, 		v2o);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-size, 	u, 		v2);
+				v5.addVertexWithUV(0.5-window, 	0.5+size, 	0.5-size, 	u+du, 	v2);
+
+				this.faceBrightness(ForgeDirection.EAST, v5);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5-size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5-size-dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.WEST, v5);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5-size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5-size-dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.UP, v5);
+				v5.addVertexWithUV(0.5+window, 	0.5-size, 	0, 			u2-du, 	v2o);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0, 			u2, 	v2o);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-size, 	u2, 	v2);
+				v5.addVertexWithUV(0.5+window, 	0.5-size, 	0.5-size, 	u2-du, 	v2);
+
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0, 			u+du, 	v2o);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0, 			u, 		v2o);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5-size, 	u, 		v2);
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0.5-size, 	u+du, 	v2);
+				break;
+			case UP:
+				this.faceBrightness(ForgeDirection.SOUTH, v5);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size-dd, 	0.5+size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size-dd, 	0.5+size, 	u2-du, vo);
+				/*
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size+dd, 	0.5+size, 	gu+dgu*size*2, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size+dd, 	0.5+size, 	gu, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0, 				0.5+size, 	gu, gv+dgv*size);
+				v5.addVertexWithUV(0.5-size+dd, 	0, 				0.5+size, 	gu+dgu*size*2, gv+dgv*size);*/
+
+				this.faceBrightness(ForgeDirection.EAST, v5);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5+size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5-size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.WEST, v5);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size-dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5+size-dd, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size+dd, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5-size+dd, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.NORTH, v5);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size-dd, 	0.5-size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size-dd, 	0.5-size, 	u2-du, vo);
+				/*
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size+dd, 	0.5-size, 	gu+dgu*size*2, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size+dd, 	0.5-size, 	gu, gv);
+				v5.addVertexWithUV(0.5+size-dd, 	0, 				0.5-size, 	gu, gv+dgv*size);
+				v5.addVertexWithUV(0.5-size+dd, 	0, 				0.5-size, 	gu+dgu*size*2, gv+dgv*size);*/
+				break;
+			case WEST:
+				this.faceBrightness(ForgeDirection.DOWN, v5);
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5+window, 	u2o, 	v2-dv);
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5+size, 		u2o, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5+size, 		u2, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5+window, 	u2, 	v2-dv);
+
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5-window, 	u2o, 	v+dv);
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5-size, 		u2o, 	v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-size, 		u2, 	v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-window, 	u2, 	v+dv);
+
+				this.faceBrightness(ForgeDirection.SOUTH, v5);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5+size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5+size-dd, 	0.5+size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size-dd, 	0.5-size, 		0.5+size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5-size+dd, 	0.5+size, 	u2-du, vo);
+
+				this.faceBrightness(ForgeDirection.UP, v5);
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5+window, 	u2o, 	v2-dv);
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5+size, 		u2o, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 		u2, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+window, 	u2, 	v2-dv);
+
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5-window, 	u2o, 	v+dv);
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5-size, 		u2o, 	v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5-size, 		u2, 	v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5-window, 	u2, 	v+dv);
+
+				this.faceBrightness(ForgeDirection.NORTH, v5);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5+size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5+size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5+size-dd, 	0.5-size, 	u2-du, vo);
+
+				v5.addVertexWithUV(0.5-size-dd, 	0.5-size, 		0.5-size, 	u2-du, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size, 		0.5-size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5-size+dd, 	0.5-size, 	u2-du, vo);
+				break;
+			default:
+				break;
+			}
+		}
+		else {
+			this.faceBrightness(dir, v5);
+			switch(dir) {
+			case DOWN:
+				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd-dl, 1-dd, 	1-dd, 		u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd+dl, 		u2, 	v2-dv);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd+dl, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u, 		v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd-dl, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+				}
+
+				v5.addVertexWithUV(mx, 1-dd, ly, gu2, gv);
+				v5.addVertexWithUV(lx, 1-dd, ly, gu, gv);
+				v5.addVertexWithUV(lx, 1-dd, my, gu, gv2);
+				v5.addVertexWithUV(mx, 1-dd, my, gu2, gv2);
+				break;
+			case NORTH:
+				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v2);
+					v5.addVertexWithUV(dd+dl, 	dd, 	1-dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(1-dd-dl, dd, 	1-dd, 		u2-du, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd-dl, 1-dd, 	1-dd, 		u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd+dl, 	1-dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(dd, 		dd+dl, 	1-dd, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(dd, 		1-dd-dl, 	1-dd, 	u, 		v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd-dl, 	1-dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 		1-dd, 	u2, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 		1-dd, 	u, 		v);
+				}
+
+				v5.addVertexWithUV(mx, ly, 1-dd, gu2, gv);
+				v5.addVertexWithUV(lx, ly, 1-dd, gu, gv);
+				v5.addVertexWithUV(lx, my, 1-dd, gu, gv2);
+				v5.addVertexWithUV(mx, my, 1-dd, gu2, gv2);
+				break;
+			case EAST:
+				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	dd+dl, 		u+du, 	v2);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	dd+dl, 		u+du, 	v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(1-dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 		1-dd, 		1-dd, 	u2, 	v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 		dd, 	u, 		v);
+				}
+
+				v5.addVertexWithUV(1-dd, ly, mx, gu2, gv);
+				v5.addVertexWithUV(1-dd, ly, lx, gu, gv);
+				v5.addVertexWithUV(1-dd, my, lx, gu, gv2);
+				v5.addVertexWithUV(1-dd, my, mx, gu2, gv2);
+				break;
+			case WEST:
+				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(dd, 		dd, 	dd+dl, 		u+du, 	v2);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd+dl, 		u+du, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+					v5.addVertexWithUV(dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(dd, 		1-dd, 		1-dd, 	u2, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 		dd, 	u, 		v);
+				}
+
+				v5.addVertexWithUV(dd, ly, mx, gu2, gv);
+				v5.addVertexWithUV(dd, ly, lx, gu, gv);
+				v5.addVertexWithUV(dd, my, lx, gu, gv2);
+				v5.addVertexWithUV(dd, my, mx, gu2, gv2);
+				break;
+			case UP:
+				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd+dl, 	dd, 	1-dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd-dl, dd, 	1-dd, 		u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd+dl, 		u2, 	v2-dv);
+					v5.addVertexWithUV(dd, 		dd, 	dd+dl, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(dd, 		dd, 	1-dd-dl, 	u, 		v+dv);
+					v5.addVertexWithUV(1-dd, 	dd, 	1-dd-dl, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v);
+				}
+
+				v5.addVertexWithUV(mx, dd, ly, gu2, gv);
+				v5.addVertexWithUV(lx, dd, ly, gu, gv);
+				v5.addVertexWithUV(lx, dd, my, gu, gv2);
+				v5.addVertexWithUV(mx, dd, my, gu2, gv2);
+				break;
+			case SOUTH:
+				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 	dd+dl, 	dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+				}
+
+				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd-dl, 	dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 		dd, 		u2, 	v);
+					v5.addVertexWithUV(dd, 		1-dd, 		dd, 		u, 		v);
+				}
+
+				v5.addVertexWithUV(mx, ly, dd, gu2, gv);
+				v5.addVertexWithUV(lx, ly, dd, gu, gv);
+				v5.addVertexWithUV(lx, my, dd, gu, gv2);
+				v5.addVertexWithUV(mx, my, dd, gu2, gv2);
+				break;
+			default:
+				break;
+			}
+		}
+		v5.draw();
+	}
+
+	private void faceBrightness(ForgeDirection dir, Tessellator v5) {
+		float f = 1;
+		switch(dir) {
+		case DOWN:
+			f = 0.4F;
+			break;
+		case EAST:
+			f = 0.5F;
+			break;
+		case NORTH:
+			f = 0.65F;
+			break;
+		case SOUTH:
+			f = 0.65F;
+			break;
+		case UP:
+			f = 1F;
+			break;
+		case WEST:
+			f = 0.5F;
+			break;
+		default:
+			break;
+		}
+		v5.setColorOpaque_F(f, f, f);
+	}
 }

@@ -25,6 +25,8 @@ import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -73,9 +75,9 @@ public class GuiBorer extends GuiMachine
 				if (i == 3 && l == 4)
 					u = 36;
 				if (dig[i][l])
-					buttonList.add(new ImagedGuiButton(50+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u, 0, 0, false, file));
+					buttonList.add(new ImagedGuiButton(50+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u, 0, 0, false, file, RotaryCraft.class));
 				else
-					buttonList.add(new ImagedGuiButton(10+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u+18, 0, 0, false, file));
+					buttonList.add(new ImagedGuiButton(10+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u+18, 0, 0, false, file, RotaryCraft.class));
 			}
 
 		buttonList.add(new GuiButton(8, j+14, -1+k+116, 72, 20, "Reset Pos'n"));
@@ -211,7 +213,7 @@ public class GuiBorer extends GuiMachine
 	protected void drawPowerTab(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5-13, var6, 127, 4, 42, ySize);
 
 		long frac = ((borer.power*29L)/borer.MINPOWER);

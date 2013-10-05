@@ -12,7 +12,8 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -82,9 +83,9 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		}
 		if (temperature < ANIMALIGNITION)
 			return;
-		List in = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spread, yspread, spread));
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spread, yspread, spread));
 		for (int i = 0; i < in.size(); i++) {
-			EntityLiving ent = (EntityLiving)in.get(i);
+			EntityLivingBase ent = (EntityLivingBase)in.get(i);
 			ent.setFire(1);
 		}
 	}
@@ -296,7 +297,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return this.isValidFuel(is);
 	}
 

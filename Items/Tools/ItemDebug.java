@@ -78,7 +78,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (world.getBlockId(x, y, z) == Block.mobSpawner.blockID) {
 			TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				MobSpawnerBaseLogic lgc = tile.func_98049_a();
+				MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 				lgc.spawnDelay = 0;
 			}
 		}

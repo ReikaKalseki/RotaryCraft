@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Entities;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -21,13 +21,13 @@ public class EntityIceBlock extends Entity {
 	public double yWidth;
 	public double zWidth;
 
-	private EntityLiving target;
+	private EntityLivingBase target;
 
 	public EntityIceBlock(World world) {
 		super(world);
 	}
 
-	public EntityIceBlock(World world, EntityLiving t) {
+	public EntityIceBlock(World world, EntityLivingBase t) {
 		super(world);
 		if (t == null) {
 			this.setDead();

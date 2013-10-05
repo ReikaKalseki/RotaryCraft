@@ -87,6 +87,7 @@ public enum HandbookRegistry {
 	BORER(MachineRegistry.BORER),
 	PUMP(MachineRegistry.PUMP),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
+	STEAMTURB(MachineRegistry.STEAMTURBINE),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -98,7 +99,7 @@ public enum HandbookRegistry {
 	MAGNET(MachineRegistry.MAGNETIZER),
 	FURNACEHEATER(MachineRegistry.FRICTION),
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
-	CONVERTER(MachineRegistry.LIQUIDCONVERTER),
+	BOILER(MachineRegistry.BOILER),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -107,6 +108,7 @@ public enum HandbookRegistry {
 	SPRINKLER(MachineRegistry.SPRINKLER),
 	WOODCUTTER(MachineRegistry.WOODCUTTER),
 	HARVESTER(MachineRegistry.MOBHARVESTER),
+	FERTILIZER(MachineRegistry.FERTILIZER),
 
 	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	HEATER(MachineRegistry.HEATER),
@@ -164,6 +166,7 @@ public enum HandbookRegistry {
 	LAMP(MachineRegistry.LAMP),
 	TERRA(MachineRegistry.TERRAFORMER),
 	LINE(MachineRegistry.LINEBUILDER),
+	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
@@ -544,7 +547,7 @@ public enum HandbookRegistry {
 		int id = 0;
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen) {
-				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0*tabList[i].getTabColumn(), 0*tabList[i].getTabRow(), tabList[i].getTabImageFile()));
+				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0*tabList[i].getTabColumn(), 0*tabList[i].getTabRow(), tabList[i].getTabImageFile(), RotaryCraft.class));
 				//ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
 				id++;
 			}

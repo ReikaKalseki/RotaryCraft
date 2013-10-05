@@ -82,29 +82,6 @@ public class BlockBedrockSlice extends Block
 		return false;
 	}
 
-	/*
-    public boolean blockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer)
-    {
-        int metadata = world.getBlockMetadata(x, y, z);
-        if (metadata < 15) {
-        	metadata++;
-        	ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z, this.blockID, metadata);
-        	this.getCollisionBoundingBoxFromPool(world, x, y, z);
-        }
-        else {
-        	ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);/*
-			float var6 = 0.7F;
-        	double var7 = (double)(world.rand.nextFloat() * var6) + (double)(1.0F - var6) * 0.5D;
-        	double var9 = (double)(world.rand.nextFloat() * var6) + (double)(1.0F - var6) * 0.5D;
-        	double var11 = (double)(world.rand.nextFloat() * var6) + (double)(1.0F - var6) * 0.5D;
-        	EntityItem var13 = new EntityItem(world, (double)x + var7, (double)y + var9, (double)z + var11, new ItemStack(mod_MineralTools.bedrockdust, 1, 0));
-        	var13.delayBeforeCanPickup = 0;
-        	world.spawnEntityInWorld(var13);*//*
-        }
-        return true;
-
-    }*/
-
 	/**
 	 * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
 	 */
@@ -146,11 +123,6 @@ public class BlockBedrockSlice extends Block
 	public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int x, int y, int z, int par5)
 	{
 		return par5 == 1 ? true : super.shouldSideBeRendered(par1IBlockAccess, x, y, z, par5);
-	}
-
-
-	public String getTextureFile(){
-		return "/terrain.png"; //return the block texture where the block texture is saved in
 	}
 
 	@Override

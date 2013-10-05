@@ -24,6 +24,7 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -117,7 +118,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		boolean bool = player.isJumping;
+		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, "isJumping");
 		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
 		if (bool) {
 			jetpackUsed = this.useJetpack(player);

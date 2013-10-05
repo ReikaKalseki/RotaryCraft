@@ -46,7 +46,7 @@ public class RecipesGrinder {
 		this.addSmelting(Block.sandStone, new ItemStack(Block.sand.blockID, 1, 0), 0.2F);
 		this.addSmelting(Block.stairsSandStone, new ItemStack(Block.sand.blockID, 6, 0), 0.2F);
 		this.addSmelting(Block.stone, new ItemStack(Block.cobblestone.blockID, 1, 0), 0.2F);
-		this.addSmelting(Block.glowStone, new ItemStack(Item.lightStoneDust.itemID, 4, 0), 0F);
+		this.addSmelting(Block.glowStone, new ItemStack(Item.glowstone.itemID, 4, 0), 0F);
 		this.addSmelting(Block.stoneBrick, new ItemStack(Block.cobblestone.blockID, 1, 0), 0.2F);
 		this.addSmelting(Block.furnaceIdle, new ItemStack(Block.cobblestone.blockID, 8, 0), 0.2F);
 		this.addSmelting(Block.brick, new ItemStack(Item.clay.itemID, 4, 0), 0.2F);

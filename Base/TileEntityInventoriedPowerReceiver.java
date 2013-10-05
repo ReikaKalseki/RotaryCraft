@@ -81,7 +81,7 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 		return false;
 	}
 
-	public abstract boolean isStackValidForSlot(int slot, ItemStack is);
+	public abstract boolean isItemValidForSlot(int slot, ItemStack is);
 
 	public final ItemStack decrStackSize(int par1, int par2) {
 		return ReikaInventoryHelper.decrStackSize(this, par1, par2);

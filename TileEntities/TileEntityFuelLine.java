@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -152,7 +154,12 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return true;
+	}
+
+	@Override
+	public Icon getBlockIcon() {
+		return Block.obsidian.getIcon(0, 0);
 	}
 }

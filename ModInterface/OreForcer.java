@@ -14,9 +14,13 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thaumcraft.api.EnumTag;
+import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.Auxiliary.ModList;
+import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -79,6 +83,9 @@ public final class OreForcer {
 		case MFFS:
 			intercraftForcicium();
 			break;
+		case MEKANISM:
+			registerOsmium();
+			break;
 		case DARTCRAFT:
 			if (ConfigRegistry.MODORES.getState())
 				registerDart();
@@ -87,27 +94,29 @@ public final class OreForcer {
 		}
 	}
 
+	private static void registerOsmium() {
+		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, 0));
+	}
+
 	private static void addThaumAspects() {
-		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), EnumTag.EXCHANGE, 2, EnumTag.CROP, 1, EnumTag.MECHANISM, 1);
-		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), EnumTag.EXCHANGE, 4, EnumTag.FUNGUS, 4);
+		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
+		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4, 4);
 
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), EnumTag.TOOL, 24);
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), EnumTag.TOOL, 24);
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), EnumTag.TOOL, 18);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 24);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 24);
+		ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 18);
 
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.MOTION, 2, EnumTag.MECHANISM, 2);
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.FIRE, 3, EnumTag.POWER, 12);
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), EnumTag.VOID, 1, EnumTag.METAL, 13, EnumTag.POWER, 7, EnumTag.PLANT, 3);
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);
+		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.ENERGY, 7, Aspect.PLANT, 3);
 
-		ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), EnumTag.DESTRUCTION, 12, EnumTag.FIRE, 8);
+		ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), 12, Aspect.FIRE, 8);
 
-		ReikaThaumHelper.addAspects(ItemStacks.steelingot, EnumTag.METAL, 10, EnumTag.MECHANISM, 6);
-		ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, EnumTag.FIRE, 4);
-		ReikaThaumHelper.addAspects(ItemStacks.sludge, EnumTag.POWER, 1);
-		ReikaThaumHelper.addAspects(ItemStacks.sawdust, EnumTag.WOOD, 1);
-		ReikaThaumHelper.addAspects(ItemStacks.nitrate, EnumTag.FLUX, 1);
-		ReikaThaumHelper.addAspects(ItemStacks.anthracite, EnumTag.FIRE, 2, EnumTag.POWER, 2);
-		ReikaThaumHelper.addAspects(ItemStacks.lonsda, EnumTag.VALUABLE, 4);
+		ReikaThaumHelper.addAspects(ItemStacks.steelingot, Aspect.METAL, 10, Aspect.MECHANISM, 6);
+		ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, Aspect.FIRE, 4);
+		ReikaThaumHelper.addAspects(ItemStacks.sludge, Aspect.ENERGY, 1);
+		ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
+		ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 2, Aspect.ENERGY, 2);
 
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
@@ -186,60 +195,15 @@ public final class OreForcer {
 	}
 
 	private static void intercraftQuartz() {
-		try {
-			Class ae = Class.forName("appeng.api.Materials");
-			Field item = ae.getField("matQuartz");
-			ItemStack quartz = (ItemStack)item.get(null);
-			GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
-			RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("AppliedEnergistics Item class not found! Cannot read its items for compatibility forcing!");
-		}
-		catch (NoSuchFieldException e) {
-			RotaryCraft.logger.logError("AppliedEnergistics item field not found! "+e.getMessage());
-		}
-		catch (SecurityException e) {
-			RotaryCraft.logger.logError("Cannot read AppliedEnergistics items (Security Exception)! Certus Quartz not convertible!"+e.getMessage());
-			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e) {
-			RotaryCraft.logger.logError("Illegal argument for reading AppliedEnergistics items!");
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			RotaryCraft.logger.logError("Illegal access exception for reading AppliedEnergistics items!");
-			e.printStackTrace();
-		}
+		ItemStack quartz = AppEngHandler.getInstance().getCertusQuartz();
+		GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
+		RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
 	}
 
 	private static void intercraftApatite() {
-		try {
-			Class forest = Class.forName("forestry.core.config.ForestryItem");
-			Field apa = forest.getField("apatite");
-			Item item = (Item)apa.get(null);
-			ItemStack apatite = new ItemStack(item.itemID, 1, 0);
-			GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
-			RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("Forestry Config class not found! Cannot read its items for compatibility forcing!");
-		}
-		catch (NoSuchFieldException e) {
-			RotaryCraft.logger.logError("Forestry config field not found! "+e.getMessage());
-		}
-		catch (SecurityException e) {
-			RotaryCraft.logger.logError("Cannot read Forestry config (Security Exception)! Apatite not convertible!"+e.getMessage());
-			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e) {
-			RotaryCraft.logger.logError("Illegal argument for reading Forestry config!");
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			RotaryCraft.logger.logError("Illegal access exception for reading Forestry config!");
-			e.printStackTrace();
-		}
+		ItemStack apatite = new ItemStack(ForestryHandler.getInstance().apatiteID, 1, 0);
+		GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
+		RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
 	}
 
 	private static void registerThaumcraft() {

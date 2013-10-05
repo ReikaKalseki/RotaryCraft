@@ -73,11 +73,11 @@ public class GuiMusic extends GuiNonPoweredMachine
 		if (!ReikaMathLibrary.isValueInsideBoundsIncl(0, 4, noteLength))
 			noteLength = 0;
 		offset[noteLength] = 80;
-		buttonList.add(new ImagedGuiButton(LENGTHSTART, j+xSize/2-52, -1+k+30, 16, 16, 0+offset[0], 32, note));
-		buttonList.add(new ImagedGuiButton(LENGTHSTART+1, j+xSize/2-36, -1+k+30, 16, 16, 16+offset[1], 32, note));
-		buttonList.add(new ImagedGuiButton(LENGTHSTART+2, j+xSize/2-20, -1+k+30, 16, 16, 32+offset[2], 32, note));
-		buttonList.add(new ImagedGuiButton(LENGTHSTART+3, j+xSize/2-4, -1+k+30, 16, 16, 48+offset[3], 32, note));
-		buttonList.add(new ImagedGuiButton(LENGTHSTART+4, j+xSize/2+12, -1+k+30, 16, 16, 64+offset[4], 32, note));
+		buttonList.add(new ImagedGuiButton(LENGTHSTART, j+xSize/2-52, -1+k+30, 16, 16, 0+offset[0], 32, note, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(LENGTHSTART+1, j+xSize/2-36, -1+k+30, 16, 16, 16+offset[1], 32, note, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(LENGTHSTART+2, j+xSize/2-20, -1+k+30, 16, 16, 32+offset[2], 32, note, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(LENGTHSTART+3, j+xSize/2-4, -1+k+30, 16, 16, 48+offset[3], 32, note, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(LENGTHSTART+4, j+xSize/2+12, -1+k+30, 16, 16, 64+offset[4], 32, note, RotaryCraft.class));
 
 		for (int i = 0; i < ROWWIDTH; i++) {
 			for (int m = 0; m < ROWHEIGHT; m++) {
@@ -87,7 +87,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 					u = 18;
 					color = 0xffffff;
 				}
-				buttonList.add(new ImagedGuiButton(NOTESTART+i+ROWWIDTH*m, 11+j+i*18, -36+k+ySize/2+m*18+8*m, 18, 18, ReikaMIDIReader.NOTE_NAMES[i%12], u, 18, color, false, put));
+				buttonList.add(new ImagedGuiButton(NOTESTART+i+ROWWIDTH*m, 11+j+i*18, -36+k+ySize/2+m*18+8*m, 18, 18, ReikaMIDIReader.NOTE_NAMES[i%12], u, 18, color, false, put, RotaryCraft.class));
 			}
 		}
 

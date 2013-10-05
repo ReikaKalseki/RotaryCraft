@@ -13,7 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -54,17 +54,17 @@ public class ItemGravelGun extends ItemChargedTool {
 		if (mov != null) {
 			if (mov.typeOfHit == EnumMovingObjectType.ENTITY) {
 				Entity ent = mov.entityHit;
-				if (ent instanceof EntityLiving)
-					this.fire(is, world, ep, (EntityLiving)ent);
+				if (ent instanceof EntityLivingBase)
+					this.fire(is, world, ep, (EntityLivingBase)ent);
 			}
 		}*/
 		for (float i = 1; i <= 128; i += 0.5) {
 			Vec3 look = ep.getLookVec();
 			double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(looks[0]-0.5, looks[1]-0.5, looks[2]-0.5, looks[0]+0.5, looks[1]+0.5, looks[2]+0.5);
-			List infov = world.getEntitiesWithinAABB(EntityLiving.class, fov);
+			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
 			for (int k = 0; k < infov.size(); k++) {
-				EntityLiving ent = (EntityLiving)infov.get(k);
+				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
 				if (!(ent instanceof EntityPlayer) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
 					double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
 					ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);

@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiCannon;
@@ -58,8 +59,8 @@ public abstract class GuiMachine extends GuiContainer {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
-		buttonList.add(new ImagedGuiButton(24000, j-17, k+4, 18, ySize-12, 72, 0, file, "Info", 0xffffff, false));
-		buttonList.add(new ImagedGuiButton(24001, j-17, k+ySize-8, 18, 4, 72, 252, file, "Info", 0xffffff, false));
+		buttonList.add(new ImagedGuiButton(24000, j-17, k+4, 18, ySize-12, 72, 0, file, "Info", 0xffffff, false, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(24001, j-17, k+ySize-8, 18, 4, 72, 252, file, "Info", 0xffffff, false, RotaryCraft.class));
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
-		mc.renderEngine.bindTexture("/font/glyph_AA.png");
+		ReikaTextureHelper.bindFontTexture();
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
@@ -122,12 +123,12 @@ public abstract class GuiMachine extends GuiContainer {
 
 		String i = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
 		this.drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		if (tile instanceof TileEntityPowerReceiver)
 			this.drawPowerTab(j, k);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(i);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
 		if (ep == null && !(this instanceof GuiOneSlotInv))
 			ReikaJavaLibrary.pConsole("Gui for "+tile.getMultiValuedName()+" did not set player entity!");
 	}
@@ -142,7 +143,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected void drawSlotInventory(Slot slot) {
 		super.drawSlotInventory(slot);
 		if (ConfigRegistry.DEBUGMODE.getState()) {
-			mc.renderEngine.bindTexture("/font/glyph_AA.png");
+			ReikaTextureHelper.bindFontTexture();
 			fontRenderer.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
 		}
 	}

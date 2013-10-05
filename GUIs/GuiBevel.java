@@ -60,19 +60,19 @@ public class GuiBevel extends GuiNonPoweredMachine
 		int px = 176;
 		for (int i = 0; i < 6; i++) {
 			if (in == i)
-				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px+18, i*18, file));
+				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px+18, i*18, file, RotaryCraft.class));
 			else
-				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px, i*18, file));
+				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px, i*18, file, RotaryCraft.class));
 		}
 		for (int i = 0; i < 6; i++) {
 			if (isValid[i]) {
 				if (out == i)
-					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px+18, i*18, file));
+					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px+18, i*18, file, RotaryCraft.class));
 				else
-					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px, i*18, file));
+					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px, i*18, file, RotaryCraft.class));
 			}
 			else
-				buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, 212, 0, file));
+				buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, 212, 0, file, RotaryCraft.class));
 		}
 	}
 

@@ -13,10 +13,13 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,7 +36,7 @@ public class RenderFreezeGunShot extends Render
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		this.loadTexture("/Reika/RotaryCraft/Textures/Entity/freezegun.png");
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Entity/freezegun.png");
 		Tessellator var11 = new Tessellator();
 		float var16 = 1.0F;
 		float var17 = 0.5F;
@@ -76,5 +79,10 @@ public class RenderFreezeGunShot extends Render
 	{
 		//ReikaChatHelper.write("Rendering.");
 		this.renderTheFreezeGunShot((EntityFreezeGunShot)par1Entity, par2, par4, par6, par8, par9);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
 	}
 }

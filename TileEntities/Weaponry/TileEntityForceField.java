@@ -17,7 +17,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
@@ -173,11 +173,11 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 					List var2 = Item.potion.getEffects(((EntityPotion)threat).getPotionDamage());
 					if (var2 != null && !var2.isEmpty()) {
 						AxisAlignedBB var3 = ((EntityPotion)threat).boundingBox.expand(4.0D, 2.0D, 4.0D);
-						List var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLiving.class, var3);
+						List var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLivingBase.class, var3);
 						if (var4 != null && !var4.isEmpty()) {
 							Iterator var5 = var4.iterator();
 							while (var5.hasNext()) {
-								EntityLiving var6 = (EntityLiving)var5.next();
+								EntityLivingBase var6 = (EntityLivingBase)var5.next();
 								double var7 = ((EntityPotion)threat).getDistanceSqToEntity(var6);
 								if (var7 < 16.0D) {
 									double var9 = 1.0D - Math.sqrt(var7) / 4.0D;

@@ -68,7 +68,8 @@ public enum PowerReceivers {
 	TERRAFORMER(),
 	FUELENHANCER(1, 1024, 1024),
 	ARROWGUN(1024),
-	BOILER();
+	BOILER(),
+	FERTILIZER(1024);
 
 	private int minT;
 	private int minS;

@@ -16,12 +16,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
-import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {
@@ -67,7 +64,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 		ret.add(new ItemStack(RotaryCraft.pipeplacer.itemID, 1, metadata));
 		return ret;
 	}
-
+	/*
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
 		this.setBlockBounds(0.33F, 0.33F, 0.33F, 0.67F, 0.67F, 0.67F);
@@ -93,7 +90,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
 	}
-
+	 */
 	@Override
 	public boolean renderAsNormalBlock()
 	{

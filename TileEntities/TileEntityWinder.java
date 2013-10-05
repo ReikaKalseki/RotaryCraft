@@ -205,7 +205,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == ItemRegistry.SPRING.getShiftedID();
 	}
 

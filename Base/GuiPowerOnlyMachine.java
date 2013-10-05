@@ -14,6 +14,8 @@ import net.minecraft.inventory.Container;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class GuiPowerOnlyMachine extends GuiMachine {
 
@@ -28,7 +30,7 @@ public abstract class GuiPowerOnlyMachine extends GuiMachine {
 	protected final void drawPowerTab(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, 24);
 		this.drawTexturedModalRect(xSize+var5, var6+4+23, 0, 157, 42, 6);
 

@@ -16,6 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class GuiBasicStorage extends GuiMachine {
@@ -38,7 +40,7 @@ public class GuiBasicStorage extends GuiMachine {
 	protected final void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 		String var4 = this.getGuiTexture();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		int var5 = (width - xSize) / 2;
 		int var6 = (height - ySize) / 2;
 		this.drawTexturedModalRect(var5, var6, 0, 0, xSize, inventoryRows * 18 + 17);
@@ -53,7 +55,7 @@ public class GuiBasicStorage extends GuiMachine {
 	protected final void drawPowerOnly(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, 24);
 		this.drawTexturedModalRect(xSize+var5, var6+4+23, 0, 157, 42, 6);
 
@@ -80,7 +82,7 @@ public class GuiBasicStorage extends GuiMachine {
 		}
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(var4);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, u, 4, 42, 145);
 		this.drawTexturedModalRect(xSize+var5, var6+4+145, u, 157, 42, 6);
 		//this.drawTexturedModalRect(this.xSize+var5, var6+156, 0, this.ySize-12, 42, 8);

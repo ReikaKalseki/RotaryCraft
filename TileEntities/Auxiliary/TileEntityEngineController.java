@@ -11,7 +11,7 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -255,7 +255,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return true;
 	}
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -53,7 +53,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				return false;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
-		List inblock = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		List inblock = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		if (inblock.size() > 0)
 			return false;
 		if (!ep.canPlayerEdit(x, y, z, 0, is))

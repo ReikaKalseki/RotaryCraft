@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
@@ -17,14 +18,12 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IArmorTextureProvider;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@SuppressWarnings("deprecation")
-public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites, IArmorTextureProvider {
+public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites {
 
 	private int index;
 
@@ -36,7 +35,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	}
 
 	@Override
-	public final boolean isValidArmor(ItemStack stack, int type) {
+	public final boolean isValidArmor(ItemStack stack, int type, Entity e) {
 		return armorType == type;
 	}
 

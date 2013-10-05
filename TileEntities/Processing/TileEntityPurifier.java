@@ -125,7 +125,7 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 0)
 			return is.itemID == Item.gunpowder.itemID;
 		if (slot == 6)

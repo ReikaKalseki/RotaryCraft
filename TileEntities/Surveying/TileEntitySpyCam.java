@@ -12,7 +12,8 @@ package Reika.RotaryCraft.TileEntities.Surveying;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -86,9 +87,9 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		int range = this.getRange();
 		int maxrange = this.getMaxRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, y+1, z+1+range);
-		inzone = world.getEntitiesWithinAABB(EntityLiving.class, zone);
+		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (int i = 0; i < inzone.size(); i++) {
-			EntityLiving ent = (EntityLiving)inzone.get(i);
+			EntityLivingBase ent = (EntityLivingBase)inzone.get(i);
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;

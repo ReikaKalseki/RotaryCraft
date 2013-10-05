@@ -16,6 +16,7 @@ import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -130,7 +131,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		mc.renderEngine.bindTexture("/font/glyph_AA.png");
+		ReikaTextureHelper.bindFontTexture();
 
 		fontRenderer.drawString("Output Speed", xSize/2-82, 22, 4210752);
 		fontRenderer.drawString("Output Torque", xSize/2-82, 52, 4210752);

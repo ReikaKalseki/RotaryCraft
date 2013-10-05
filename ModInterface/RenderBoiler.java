@@ -18,10 +18,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import buildcraft.core.render.LiquidRenderer;
 
 public class RenderBoiler extends RotaryTERenderer
 {
@@ -76,7 +76,7 @@ public class RenderBoiler extends RotaryTERenderer
 		if (amount > tile.CAPACITY)
 			amount = tile.CAPACITY;
 
-		int[] displayList = LiquidRenderer.getLiquidDisplayLists(liquid, tile.worldObj, false);
+		int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
 
 		if (displayList == null) {
 			return;
@@ -89,7 +89,7 @@ public class RenderBoiler extends RotaryTERenderer
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		this.bindTextureByName(LiquidRenderer.getLiquidSheet(liquid));
+		this.bindTextureByName(ReikaLiquidRenderer.getLiquidSheet(liquid));
 
 		GL11.glTranslated(par2, par4, par6);
 
@@ -99,7 +99,7 @@ public class RenderBoiler extends RotaryTERenderer
 		GL11.glScaled(1, 0.95, 1);
 		GL11.glScaled(0.99, 0.95, 0.99);
 
-		GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (LiquidRenderer.DISPLAY_STAGES - 1))]);
+		GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (ReikaLiquidRenderer.LEVELS - 1))]);
 
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();

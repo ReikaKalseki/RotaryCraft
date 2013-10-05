@@ -20,10 +20,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Instantiable.ColumnArray;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.ObjectWeb;
@@ -72,7 +72,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
 	}
 
@@ -193,7 +193,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, EnumLook side) {
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return p == MachineRegistry.PIPE;
 	}
 
