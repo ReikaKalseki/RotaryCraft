@@ -14,6 +14,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -31,7 +37,7 @@ import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
-public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -42,10 +48,11 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	/** The number of ticks that the current item has been cooking for */
 	public int[] extractorCookTime = new int[4];
 
-	public int waterLevel = 0;
 	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
 
 	public boolean idle = false;
+
+	private HybridTank tank = new HybridTank("extractor", CAPACITY);
 
 	public void testIdle() {
 		for (int i = 0; i < 4; i++)
@@ -102,53 +109,18 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 
 	public void getLiq(World world, int x, int y, int z, int metadata) {
 		int oldLevel = 0;
-		if (waterLevel < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (tank.getLevel() < CAPACITY) {
+				int level = tank.getLevel();
+				if (MachineRegistry.getMachine(world, x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ);
+					if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						int newlevel = ReikaMathLibrary.extrema(level+oldLevel/4+1, 0, "max");
+						tank.setContents(newlevel, FluidRegistry.WATER);
+					}
 				}
 			}
 		}
@@ -207,7 +179,8 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		}
 
 		extractorCookTime = NBT.getIntArray("CookTime");
-		waterLevel = NBT.getInteger("water");
+
+		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -218,7 +191,9 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	{
 		super.writeToNBT(NBT);
 		NBT.setIntArray("CookTime", extractorCookTime);
-		NBT.setInteger("water", waterLevel);
+
+		tank.writeToNBT(NBT);
+
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inv.length; i++)
@@ -308,7 +283,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	{
 		if (power < machine.getMinPower(i) || omega < machine.getMinSpeed(i) || torque < machine.getMinTorque(i))
 			return false;
-		if ((i == 1 || i == 2) && waterLevel < 1)
+		if ((i == 1 || i == 2) && tank.isEmpty())
 			return false;
 
 		if (inv[i] == null)
@@ -388,7 +363,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 		inv[i].stackSize--;
 		if (par5Random.nextInt(8) == 0)
 			if (i == 1 || i == 2)
-				waterLevel -= RotaryConfig.MILLIBUCKET; //millis
+				tank.removeLiquid(RotaryConfig.MILLIBUCKET); //millis
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;/*
@@ -428,7 +403,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						if (par5Random.nextInt(8) == 0)
-							waterLevel -= RotaryConfig.MILLIBUCKET;
+							tank.removeLiquid(RotaryConfig.MILLIBUCKET);
 					}
 					return true;
 				}
@@ -437,7 +412,7 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						if (par5Random.nextInt(8) == 0)
-							waterLevel -= RotaryConfig.MILLIBUCKET;
+							tank.removeLiquid(RotaryConfig.MILLIBUCKET);
 					}
 					return true;
 				}
@@ -502,5 +477,45 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return side.offsetY == 0;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
+		return tank.fill(resource, doFill);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from.offsetY == 0 && fluid.equals(FluidRegistry.WATER);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	public int getWater() {
+		return tank.getLevel();
+	}
+
+	public void addWater(int amt) {
+		tank.addLiquid(amt, FluidRegistry.WATER);
 	}
 }

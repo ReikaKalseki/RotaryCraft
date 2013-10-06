@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.ControlledConfig;
@@ -45,7 +45,7 @@ public class RotaryConfig extends ControlledConfig {
 	public static final EnumDifficulty EASIEST = EnumDifficulty.EASY;
 	public static final EnumDifficulty HARDEST = EnumDifficulty.HARD;
 
-	public static final int MILLIBUCKET = LiquidContainerRegistry.BUCKET_VOLUME;
+	public static final int MILLIBUCKET = FluidContainerRegistry.BUCKET_VOLUME;
 
 	//Initialization of the config
 	@Override

@@ -11,7 +11,8 @@ package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -68,7 +69,9 @@ public class RenderFuelConverter extends RotaryTERenderer
 		}
 	}
 
-	private void renderFuels(TileEntityFuelConverter tile, double par2, double par4, double par6, LiquidStack liquid) {
+	private void renderFuels(TileEntityFuelConverter tile, double par2, double par4, double par6, Fluid fuel) {
+
+		FluidStack liquid = new FluidStack(fuel, 1);
 
 		int amount = tile.getFuel(liquid);
 		if (amount == 0)
@@ -87,7 +90,8 @@ public class RenderFuelConverter extends RotaryTERenderer
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		this.bindTextureByName(ReikaLiquidRenderer.getLiquidSheet(liquid));
+		ReikaLiquidRenderer.bindFluidTexture(liquid);
+		ReikaLiquidRenderer.setFluidColor(liquid);
 
 		GL11.glTranslated(par2, par4, par6);
 

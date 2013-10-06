@@ -25,7 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
@@ -112,9 +112,9 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item lubricant;
 	public static Item ethanol;
 
-	public static LiquidStack jetFuelStack;
-	public static LiquidStack lubeStack;
-	public static LiquidStack ethanolStack;
+	public static final Fluid jetFuelFluid = new Fluid("jet fuel").setDensity(810).setViscosity(800);
+	public static final Fluid lubeFluid = new Fluid("lubricant").setDensity(750).setViscosity(1200);
+	public static final Fluid ethanolFluid = new Fluid("rc ethanol").setDensity(789).setViscosity(950);
 
 	public static Item shaftcraft;
 	public static Item enginecraft;

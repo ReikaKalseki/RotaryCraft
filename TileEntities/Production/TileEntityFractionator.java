@@ -40,7 +40,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 
 	public boolean idle = false;
 
-	public static final ItemStack[] ingredients =
+	private static final ItemStack[] ingredients =
 		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(Item.coal.itemID, 1, 0),
 		new ItemStack(RotaryCraft.powders.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 1),
 		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream.itemID, 1, 0)};

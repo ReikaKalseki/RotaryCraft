@@ -18,11 +18,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import thermalexpansion.api.crafting.CraftingManagers;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
@@ -62,11 +62,11 @@ public class RotaryRecipes {
 	}
 
 	public static void addModInterface() {
-		if (ModList.THERMAL.isLoaded()) {
-			LiquidStack ethanol = RotaryCraft.ethanolStack.copy();
-			ethanol.amount = LiquidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
+		if (ModList.THERMALEXPANSION.isLoaded()) {
+			FluidStack ethanol = FluidRegistry.getFluidStack("RC Ethanol", 80);
+			ethanol.amount = FluidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {
-				CraftingManagers.crucibleManager.addRecipe(80, ItemRegistry.ETHANOL.getStackOf(), ethanol);
+				//CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
 			}
 			catch (NullPointerException e) {
 				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");

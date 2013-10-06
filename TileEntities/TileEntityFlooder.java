@@ -14,6 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
@@ -158,5 +160,15 @@ public class TileEntityFlooder extends TileEntityPiping {
 	@Override
 	public Icon getBlockIcon() {
 		return Block.cloth.getIcon(0, 15);
+	}
+
+	@Override
+	public boolean hasLiquid() {
+		return true;
+	}
+
+	@Override
+	public Fluid getLiquidType() {
+		return FluidRegistry.WATER;
 	}
 }

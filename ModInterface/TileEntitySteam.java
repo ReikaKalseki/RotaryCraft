@@ -13,10 +13,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -115,7 +115,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	}
 
 	public int getGenTorque() {
-		return steamLevel > 0 ? 8*steamLevel/LiquidContainerRegistry.BUCKET_VOLUME : 0;
+		return steamLevel > 0 ? 8*steamLevel/FluidContainerRegistry.BUCKET_VOLUME : 0;
 	}
 
 	public int getGenOmega() {
@@ -123,12 +123,12 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	}
 
 	private void getSteam(World world, int dx, int dy, int dz) {
-		if (steamLevel <= CAPACITY-LiquidContainerRegistry.BUCKET_VOLUME) {
+		if (steamLevel <= CAPACITY-FluidContainerRegistry.BUCKET_VOLUME) {
 			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-			if (te instanceof ITankContainer) {
-				ITankContainer ic = (ITankContainer)te;
-				LiquidStack liq = ic.drain(facingDir.getOpposite(), LiquidContainerRegistry.BUCKET_VOLUME, true);
-				if (liq != null && liq.amount > 0 && liq.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Steam")))
+			if (te instanceof IFluidHandler) {
+				IFluidHandler ic = (IFluidHandler)te;
+				FluidStack liq = ic.drain(facingDir.getOpposite(), FluidContainerRegistry.BUCKET_VOLUME, true);
+				if (liq != null && liq.amount > 0 && liq.getFluid().equals(FluidRegistry.getFluid("steam")))
 					steamLevel += liq.amount;
 			}
 		}

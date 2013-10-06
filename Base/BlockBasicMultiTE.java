@@ -32,8 +32,8 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Auxiliary.EnumLook;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -251,8 +251,8 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
-			if (ex.waterLevel+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
-				ex.waterLevel += RotaryConfig.MILLIBUCKET;
+			if (ex.getWater()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
+				ex.addWater(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}

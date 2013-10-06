@@ -14,7 +14,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
@@ -161,5 +163,15 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	@Override
 	public Icon getBlockIcon() {
 		return Block.obsidian.getIcon(0, 0);
+	}
+
+	@Override
+	public boolean hasLiquid() {
+		return true;
+	}
+
+	@Override
+	public Fluid getLiquidType() {
+		return RotaryCraft.jetFuelFluid;
 	}
 }

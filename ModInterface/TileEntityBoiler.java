@@ -14,12 +14,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -31,7 +32,7 @@ import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
-public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankContainer, TemperatureTE, PipeConnector {
+public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidHandler, TemperatureTE, PipeConnector {
 
 	private int temperature;
 	private int waterLevel;
@@ -40,8 +41,8 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 	public static final int CAPACITY = 27000;
 	public static final int MAXTEMP = 500;
 
-	private LiquidTank tank = new LiquidTank(27000);
-	private LiquidTank watertank = new LiquidTank(CAPACITY);
+	private HybridTank tank = new HybridTank("boilersteam", 27000);
+	private HybridTank watertank = new HybridTank("boilerwater", CAPACITY);
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -85,8 +86,8 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 		if (temperature > 100)
 			storedEnergy += power*6000;
 
-		if (watertank.getLiquid() != null && watertank.getLiquid().amount > 0) {
-			int amount = watertank.drain(watertank.getLiquid().amount, true).amount;
+		if (watertank.getFluid() != null && watertank.getFluid().amount > 0) {
+			int amount = watertank.drain(watertank.getFluid().amount, true).amount;
 			waterLevel += amount;
 		}
 		this.getPipeWater(world, x, y, z);
@@ -96,25 +97,25 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 			this.makeSteam();
 
 		TileEntity te = world.getBlockTileEntity(x, y+1, z);
-		if (te instanceof ITankContainer) {
-			ITankContainer ic = (ITankContainer)te;
-			if (tank.getLiquid() != null) {
-				ic.fill(ForgeDirection.DOWN, tank.getLiquid(), true);
-				tank.drain(tank.getLiquid().amount, true);
+		if (te instanceof IFluidHandler) {
+			IFluidHandler ic = (IFluidHandler)te;
+			if (tank.getFluid() != null) {
+				ic.fill(ForgeDirection.DOWN, tank.getFluid(), true);
+				tank.drain(tank.getFluid().amount, true);
 			}
 		}
 	}
 
 	private void makeSteam() {
-		if (waterLevel >= LiquidContainerRegistry.BUCKET_VOLUME && (tank.getLiquid() == null || tank.getLiquid().amount < tank.getCapacity())) {
-			waterLevel -= LiquidContainerRegistry.BUCKET_VOLUME;
-			tank.fill(LiquidDictionary.getLiquid("Steam", LiquidContainerRegistry.BUCKET_VOLUME), true);
+		if (waterLevel >= FluidContainerRegistry.BUCKET_VOLUME && (tank.getFluid() == null || tank.getFluid().amount < tank.getCapacity())) {
+			waterLevel -= FluidContainerRegistry.BUCKET_VOLUME;
+			tank.fill(FluidRegistry.getFluidStack("steam", FluidContainerRegistry.BUCKET_VOLUME), true);
 			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy();
 		}
 	}
 
 	public int getSteam() {
-		return tank.getLiquid() != null ? tank.getLiquid().amount : 0;
+		return tank.getFluid() != null ? tank.getFluid().amount : 0;
 	}
 
 	public void getPipeWater(World world, int x, int y, int z) {
@@ -173,51 +174,47 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 
 	public int getWater() {
 		int level = waterLevel;
-		level += watertank.getLiquid() != null ? watertank.getLiquid().amount : 0;
+		level += watertank.getFluid() != null ? watertank.getFluid().amount : 0;
 		return level;
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		if (from == ForgeDirection.UP)
 			return 0;
-		if (!resource.isLiquidEqual(LiquidDictionary.getCanonicalLiquid("Water")))
+		if (!resource.getFluid().equals(FluidRegistry.WATER))
 			return 0;
-		return this.fill(0, resource, doFill);
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
 		return watertank.fill(resource, doFill);
 	}
 
 	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		if (from == ForgeDirection.UP)
-			return this.drain(0, maxDrain, doDrain);
+			return tank.drain(maxDrain, doDrain);
 		else
 			return null;
 	}
 
 	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return this.drain(from, resource.amount, doDrain);
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection from) {
-		if (from == ForgeDirection.UP)
-			return new ILiquidTank[]{tank};
-		else
-			return new ILiquidTank[]{watertank};
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from.offsetY == 0 && fluid.equals(FluidRegistry.WATER);
 	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection from, LiquidStack type) {
-		if (from == ForgeDirection.UP)
-			return tank;
-		else
-			return watertank;
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return from == ForgeDirection.UP;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo(), watertank.getInfo()};
 	}
 
 	@Override
@@ -277,13 +274,8 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 		NBT.setInteger("waterl", waterLevel);
 		NBT.setLong("energy", storedEnergy);
 
-		if (watertank.getLiquid() != null) {
-			NBT.setTag("watertank", watertank.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
-
-		if (tank.getLiquid() != null) {
-			NBT.setTag("watertank", tank.getLiquid().writeToNBT(new NBTTagCompound()));
-		}
+		tank.writeToNBT(NBT);
+		watertank.writeToNBT(NBT);
 	}
 
 	/**
@@ -297,19 +289,8 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements ITankCo
 		storedEnergy = NBT.getLong("energy");
 		waterLevel = NBT.getInteger("waterl");
 
-		if (NBT.hasKey("steaminternalLiquid")) {
-			tank.setLiquid(new LiquidStack(NBT.getInteger("steamliquidId"), NBT.getInteger("steaminternalLiquid")));
-		}
-		else if (NBT.hasKey("steamtank")) {
-			tank.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("steamtank")));
-		}
-
-		if (NBT.hasKey("waterinternalLiquid")) {
-			watertank.setLiquid(new LiquidStack(NBT.getInteger("waterliquidId"), NBT.getInteger("waterinternalLiquid")));
-		}
-		else if (NBT.hasKey("watertank")) {
-			watertank.setLiquid(LiquidStack.loadLiquidStackFromNBT(NBT.getCompoundTag("watertank")));
-		}
+		tank.readFromNBT(NBT);
+		watertank.readFromNBT(NBT);
 	}
 
 	@Override

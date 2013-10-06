@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Instantiable.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -316,7 +316,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE);
 		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
 		addData(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2));
-		addData(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY/LiquidContainerRegistry.BUCKET_VOLUME);
+		addData(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY/FluidContainerRegistry.BUCKET_VOLUME);
 		addData(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), TileEntityFan.MAXPOWER);
 		addData(MachineRegistry.COMPACTOR, TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP);
 		addData(MachineRegistry.WINDER, TileEntityWinder.UNWINDTORQUE, TileEntityWinder.UNWINDSPEED);

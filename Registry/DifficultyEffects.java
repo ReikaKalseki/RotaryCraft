@@ -116,7 +116,7 @@ public enum DifficultyEffects {
 		}
 	}
 
-	private float getChance() {
+	public float getChance() {
 		switch(getDifficulty()) {
 		case EASY:
 			return easyChance;

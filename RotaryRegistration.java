@@ -11,10 +11,9 @@ package Reika.RotaryCraft;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.liquids.LiquidContainerData;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -111,32 +110,23 @@ public class RotaryRegistration {
 		LanguageRegistry.addName(RotaryCraft.lubricant, "Lubricant");
 		LanguageRegistry.addName(RotaryCraft.ethanol, "Ethanol");
 
-		RotaryCraft.jetFuelStack = new LiquidStack(RotaryCraft.jetFuel, LiquidContainerRegistry.BUCKET_VOLUME);
-		RotaryCraft.lubeStack = new LiquidStack(RotaryCraft.lubricant, LiquidContainerRegistry.BUCKET_VOLUME);
-		RotaryCraft.ethanolStack = new LiquidStack(RotaryCraft.ethanol, LiquidContainerRegistry.BUCKET_VOLUME);
+		FluidRegistry.registerFluid(RotaryCraft.ethanolFluid);
+		FluidRegistry.registerFluid(RotaryCraft.jetFuelFluid);
+		FluidRegistry.registerFluid(RotaryCraft.lubeFluid);
 
-		LiquidDictionary.getOrCreateLiquid("Jet Fuel", RotaryCraft.jetFuelStack);
-		LiquidDictionary.getOrCreateLiquid("Lubricant", RotaryCraft.lubeStack);
-		LiquidDictionary.getOrCreateLiquid("RC Ethanol", RotaryCraft.ethanolStack);
+		//ReikaJavaLibrary.spamConsole(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME)+":"+LiquidRegistry.ETHANOL.getHeldItemFor()+":"+new ItemStack(Item.bucketEmpty));
 
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Lubricant", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.LUBRICANT.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Jet Fuel", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.JETFUEL.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("RC Ethanol", LiquidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.ETHANOL.getHeldItemFor(), new ItemStack(Item.bucketEmpty)));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.LUBRICANT.getHeldItemFor(), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.JETFUEL.getHeldItemFor(), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), LiquidRegistry.ETHANOL.getHeldItemFor(), new ItemStack(Item.bucketEmpty));
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void setupLiquidIcons() {
 		RotaryCraft.logger.log("Loading Liquid Icons");
 
-		LiquidDictionary.getCanonicalLiquid("Jet Fuel").setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
-		LiquidDictionary.getCanonicalLiquid("Lubricant").setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));
-		LiquidDictionary.getCanonicalLiquid("RC Ethanol").setRenderingIcon(RotaryCraft.ethanol.getIconFromDamage(0));
-
-		RotaryCraft.jetFuelStack.canonical().setRenderingIcon(RotaryCraft.jetFuel.getIconFromDamage(0));
-		RotaryCraft.jetFuelStack.canonical().setTextureSheet("/gui/items.png");
-		RotaryCraft.lubeStack.canonical().setRenderingIcon(RotaryCraft.lubricant.getIconFromDamage(0));
-		RotaryCraft.lubeStack.canonical().setTextureSheet("/gui/items.png");
-		RotaryCraft.ethanolStack.canonical().setRenderingIcon(RotaryCraft.ethanol.getIconFromDamage(0));
-		RotaryCraft.ethanolStack.canonical().setTextureSheet("/gui/items.png");
+		RotaryCraft.jetFuelFluid.setIcons(RotaryCraft.jetFuel.getIconFromDamage(0));
+		RotaryCraft.lubeFluid.setIcons(RotaryCraft.lubricant.getIconFromDamage(0));
+		RotaryCraft.ethanolFluid.setIcons(RotaryCraft.ethanol.getIconFromDamage(0));
 	}
 }

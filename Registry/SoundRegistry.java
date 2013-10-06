@@ -162,7 +162,7 @@ public enum SoundRegistry implements SoundList {
 			double z = in.readDouble();
 			float v = in.readFloat();
 			float p = in.readFloat();
-			Minecraft.getMinecraft().theWorld.playSound(x, y, z, name, v, p, false);
+			Minecraft.getMinecraft().theWorld.playSoundEffect(x, y, z, name, v, p);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

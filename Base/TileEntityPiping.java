@@ -14,6 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements PipeConnector {
@@ -52,4 +53,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public final void onEMP() {}
 
 	public abstract Icon getBlockIcon();
+
+	public abstract boolean hasLiquid();
+
+	public abstract Fluid getLiquidType();
 }

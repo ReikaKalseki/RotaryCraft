@@ -13,12 +13,17 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -29,6 +34,7 @@ public class PipeRenderer extends RotaryTERenderer {
 	public void renderPipe(TileEntityPiping tile, MachineRegistry m, double par2, double par4, double par6) {
 
 		//		this.bindTextureByName("/Reika/RotaryCraft/Textures/terrain/piping.png");
+		ReikaTextureHelper.bindTerrainTexture();
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -41,7 +47,6 @@ public class PipeRenderer extends RotaryTERenderer {
 		for (int i = 0; i < 6; i++) {
 			this.renderFace(tile, par2, par4, par6, dirs[i]);
 		}
-		this.renderLiquid(tile, par2, par4, par6);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -50,7 +55,97 @@ public class PipeRenderer extends RotaryTERenderer {
 	}
 
 	private void renderLiquid(TileEntityPiping tile, double par2, double par4, double par6) {
+		float size = 0.75F/2F;
+		float window = 0.5F/2F;
 
+		if (!tile.hasLiquid() && !tile.isInWorld())
+			return;
+		Fluid fluid = tile.getLiquidType();
+		FluidStack liquid = new FluidStack(fluid, 1);
+
+		int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
+
+		if (displayList == null) {
+			return;
+		}
+
+		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		ReikaLiquidRenderer.bindFluidTexture(liquid);
+		ReikaLiquidRenderer.setFluidColor(liquid);
+
+		GL11.glTranslated(par2, par4, par6);
+
+		GL11.glTranslated(size/3, size/3, size/3);
+		GL11.glScaled(size*2, size*2, size*2);
+		GL11.glScaled(0.99, 0.99, 0.99);
+		GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+
+		for (int i = 0; i < 6; i++) {
+			if (tile.isConnectionValidForSide(dirs[i])) {
+				double dy = 0;
+				switch(dirs[i]) {
+				case DOWN:
+					dy = size*2-size*2-(size-window)-0.06;
+					GL11.glTranslated(0, dy, 0);
+					GL11.glScaled(0.99, (size-window)*1.5, 0.99);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/0.99, 1D/((size-window)*1.4), 1D/0.99);
+					GL11.glTranslated(0, -dy, 0);
+					break;
+				case EAST:
+					dy = size/3+size*2+(size-window)-0.01;
+					GL11.glTranslated(dy, 0, 0);
+					GL11.glScaled((size-window)*1.5, 0.99, 0.99);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/((size-window)*1.4), 1D/0.99, 1D/0.99);
+					GL11.glTranslated(-dy, 0, 0);
+					break;
+				case NORTH:
+					dy = size*2-size*2-(size-window)-0.04;
+					GL11.glTranslated(0, 0, dy);
+					GL11.glScaled(0.99, 0.99, (size-window)*1.5);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/0.99, 1D/0.99, 1D/((size-window)*1.4));
+					GL11.glTranslated(0, 0, -dy);
+					break;
+				case SOUTH:
+					dy = size/3+size*2+(size-window)-0.01;
+					GL11.glTranslated(0, 0, dy);
+					GL11.glScaled(0.99, 0.99, (size-window)*1.5);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/0.99, 1D/0.99, 1D/((size-window)*1.4));
+					GL11.glTranslated(0, 0, -dy);
+					break;
+				case UP:
+					dy = size/3+size*2+(size-window);
+					GL11.glTranslated(0, dy-0.01, 0);
+					GL11.glScaled(0.99, (size-window)*1.5, 0.99);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/0.99, 1D/((size-window)*1.4), 1D/0.99);
+					GL11.glTranslated(0, -dy, 0);
+					break;
+				case WEST:
+					dy = size*2-size*2-(size-window)-0.05;
+					GL11.glTranslated(dy, 0, 0);
+					GL11.glScaled((size-window)*1.5, 0.99, 0.99);
+					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+					GL11.glScaled(1D/((size-window)*1.4), 1D/0.99, 1D/0.99);
+					GL11.glTranslated(-dy, 0, 0);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		GL11.glPopAttrib();
+		GL11.glPopMatrix();
 	}
 
 	@Override
@@ -61,8 +156,12 @@ public class PipeRenderer extends RotaryTERenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile)) {
 			this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
+			if (MinecraftForgeClient.getRenderPass() == 1) {
+				this.renderLiquid((TileEntityPiping) tile, par2, par4, par6);
+			}
+		}
 	}
 
 	private void renderFace(TileEntityPiping tile, double par2, double par4, double par6, ForgeDirection dir) {
