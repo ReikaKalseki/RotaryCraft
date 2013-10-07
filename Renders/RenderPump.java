@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -58,7 +59,7 @@ public class RenderPump extends RotaryTERenderer
 			var14 = PumpModel;
 			//ModelPumpV var15;
 			//var14 = this.PumpModelV;
-			if (tile.liquidID == 8 || tile.liquidID == 9)
+			if (FluidRegistry.WATER.equals(tile.getLiquid()))
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pumptex2.png");
 			else
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pumptex.png");
@@ -93,7 +94,7 @@ public class RenderPump extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 			// if (tile.getBlockMetadata() < 4)
 			Object[] pars = new Object[3];
-			pars[0] = tile.liquidLevel > 0 && MinecraftForgeClient.getRenderPass() == 1;
+			pars[0] = tile.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
 			pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
 			pars[2] = tile.damage > 400;
 			var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), -tile.phi);
@@ -119,7 +120,7 @@ public class RenderPump extends RotaryTERenderer
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityPump tp = (TileEntityPump)te;
-		if (tp.liquidID == 8 || tp.liquidID == 9)
+		if (FluidRegistry.WATER.equals(tp.getLiquid()))
 			return "pumptex.png";
 		return "pumptex2.png";
 	}

@@ -31,8 +31,6 @@ public class TileEntityPipe extends TileEntityPiping {
 	public int fluidPressure = 0;
 	public int fluidrho;
 
-
-
 	public static final int HORIZLOSS = 1*0;	// all are 1(friction)+g (10m) * delta h (0 or 1m)
 	public static final int UPLOSS = 1*0;
 	public static final int DOWNLOSS = -1*0;
@@ -78,10 +76,6 @@ public class TileEntityPipe extends TileEntityPiping {
 			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x-1, y, z);
 			this.transferFromPump(tile);
 		}
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PUMP) {
-			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y+1, z);
-			this.transferFromPump(tile);
-		}
 		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PUMP) {
 			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y, z+1);
 			this.transferFromPump(tile);
@@ -94,10 +88,10 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	private void transferFromPump(TileEntityPump tile) {
 		if (tile != null) {
-			if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-				liquidID = tile.liquidID;
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+			if (tile.getLevel() > liquidLevel && (tile.getLiquid().getID() == liquidID || liquidID == -1) && tile.getLevel() > 0) {
+				liquidID = tile.getLiquid().getID();
+				oldLevel = tile.getLevel();
+				tile.setLiquid(ReikaMathLibrary.extrema(tile.getLevel()-tile.getLevel()/4-1, 0, "max"));
 				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
 			}
 			fluidPressure = tile.liquidPressure;

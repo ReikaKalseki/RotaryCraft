@@ -91,10 +91,10 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.PUMP) {
 			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.liquidID, tile.liquidLevel));
-				if (player.isSneaking() && tile.liquidID != -1) {
+				ReikaChatHelper.write(String.format("%d  %d", tile.getLiquid().getID(), tile.getLevel()));
+				if (player.isSneaking() && tile.getLevel() > 0) {
 					ReikaChatHelper.write("Filled to capacity.");
-					tile.liquidLevel = tile.CAPACITY;
+					tile.setLiquid(tile.CAPACITY);
 				}
 			}
 		}

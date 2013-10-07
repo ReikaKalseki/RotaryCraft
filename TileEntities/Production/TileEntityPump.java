@@ -11,15 +11,22 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -32,10 +39,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 
-public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector {
-
-	public int liquidID = -1;
-	public int liquidLevel;
+public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private BlockArray blocks = new BlockArray();
 
@@ -43,8 +47,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	public int damage = 0;
 
-
 	public final static int CAPACITY = 24*RotaryConfig.MILLIBUCKET;
+
+	private HybridTank tank = new HybridTank("pump", CAPACITY);
 
 	public int liquidPressure = 0;
 
@@ -70,7 +75,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			return;
 		if (!ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, world.getBlockId(x, y-1, z)))
 			return;
-		if (blocks.isEmpty() || liquidLevel == 0) {
+		if (blocks.isEmpty() || tank.isEmpty()) {
 			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
 			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
 			blocks.reverseBlockOrder();
@@ -104,15 +109,12 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
 			}
 			else if (tile != null) {
-				tile.liquidLevel--;
-				liquidID = tile.liquidID;
-				liquidLevel++;
+				//	tile.liquidLevel--;
+				//	liquidID = tile.liquidID;
+				//	liquidLevel++;
 			}
 		}
-		if (liquidLevel <= 0) {
-			liquidID = -1;
-			liquidLevel = 0;
-		}
+
 		if (power > MINPOWER && soundtick >= 100) {
 			soundtick = 0;
 			SoundRegistry.playSoundAtBlock(SoundRegistry.PUMP, world, x, y, z, 0.5F, 1);
@@ -140,7 +142,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//	ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), ItemStacks.scrap);
 	}
 
-	private boolean checkForReservoir(World world, int x, int y, int z, int meta) {
+	private boolean checkForReservoir(World world, int x, int y, int z, int meta) {/*
 		MachineRegistry id = MachineRegistry.getMachine(world, x, y-1, z);
 		if (id == MachineRegistry.RESERVOIR) {
 			tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
@@ -149,7 +151,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			if (tile.liquidID != liquidID && liquidID != -1)
 				return false;
 			return (tile.liquidLevel > 0);
-		}
+		}*/
 		return false;
 	}
 
@@ -158,12 +160,14 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			return;
 		if (!this.isSource(world, loc[0], loc[1], loc[2]))
 			return;
-		if (liquidLevel >= CAPACITY)
+		if (tank.getLevel() >= CAPACITY)
 			return;
+		int liqid = world.getBlockId(loc[0], loc[1], loc[2]);
+		Fluid fluid = FluidRegistry.getFluid(liqid);
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
 			world.setBlock(loc[0], loc[1], loc[2], 0);
-		liquidLevel += RotaryConfig.MILLIBUCKET;
+		tank.addLiquid(RotaryConfig.MILLIBUCKET, fluid);
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}
 
@@ -172,17 +176,17 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 49);
 		boolean dmg0 = (world.getBlockMetadata(x, y, z) == 0);
 		int liqid = world.getBlockId(x, y, z);
-		if (liqid == 10 || liqid == 8)
-			liqid++;
-		boolean liq = (liqid == liquidID);
-		if (liquidID == -1 && world.getBlockId(x, y, z) > 7 && world.getBlockId(x, y, z) < 12) {
-			liq = true;
-			liquidID = world.getBlockId(x, y, z);
-			if (liquidID == 10)
-				liquidID = 11;
-			if (liquidID == 8)
-				liquidID = 9;
-		}
+
+		if (liqid == 0)
+			return false;
+		Block b = Block.blocksList[liqid];
+		if (!(b instanceof BlockFluid))
+			return false;
+		Fluid f2 = FluidRegistry.getFluid(liqid);
+		Fluid f = tank.getActualFluid();
+		if (f2 == null)
+			return false;
+		boolean liq = (f2.equals(f) || f == null);
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(liq)+"  "+String.valueOf(dmg0));
 		return (dmg0 && liq);
 	}
@@ -233,8 +237,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("liquidLevel", liquidLevel);
-		NBT.setInteger("liquid", liquidID);
+
+		tank.writeToNBT(NBT);
+
 		NBT.setInteger("pressure", liquidPressure);
 		NBT.setInteger("dmg", damage);
 	}
@@ -246,8 +251,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		liquidLevel = NBT.getInteger("liquidLevel");
-		liquidID = NBT.getInteger("liquid");
+
+		tank.readFromNBT(NBT);
+
 		liquidPressure = NBT.getInteger("pressure");
 		damage = NBT.getInteger("dmg");
 	}
@@ -295,4 +301,52 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return this.drain(from, resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (from.offsetY != 0)
+			return null;
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
+	}
+
+	public Fluid getLiquid() {
+		return tank.getActualFluid();
+	}
+
+	public void removeLiquid(int amt) {
+		tank.removeLiquid(amt);
+	}
+
+	public void setLiquid(int amt) {
+		tank.setLevel(amt);
+	}
 }
