@@ -1,19 +1,12 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2013
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 
-public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
+public abstract class TileEntityLiquidInventoryReceiver extends TileEntityLiquidPowered implements IFluidHandler, PipeConnector, ISidedInventory {
 
 	public void openChest() {
 
@@ -42,4 +35,5 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 	public final ItemStack getStackInSlotOnClosing(int par1) {
 		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
 	}
+
 }

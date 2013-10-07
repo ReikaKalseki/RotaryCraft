@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -201,6 +200,10 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		inv[i] = itemstack;
+	}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
 	}
 
 }

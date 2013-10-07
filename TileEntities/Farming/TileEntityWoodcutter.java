@@ -491,4 +491,8 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public void onEMP() {}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 }

@@ -267,4 +267,8 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 		NBT.setTag("Items", nbttaglist);
 	}
 
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
 }

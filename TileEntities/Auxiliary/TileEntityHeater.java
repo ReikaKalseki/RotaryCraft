@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -408,7 +407,7 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT, inventory);
+		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];
 
@@ -432,7 +431,7 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT, inventory);
+		super.writeToNBT(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBTTagList nbttaglist = new NBTTagList();
 

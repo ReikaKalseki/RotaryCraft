@@ -237,4 +237,8 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		return jettank.getLevel();
 	}
 
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
 }

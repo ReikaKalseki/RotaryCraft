@@ -16,10 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -28,16 +24,15 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
-public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -51,8 +46,6 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
 
 	public boolean idle = false;
-
-	private HybridTank tank = new HybridTank("extractor", CAPACITY);
 
 	public void testIdle() {
 		for (int i = 0; i < 4; i++)
@@ -470,52 +463,22 @@ public class TileEntityExtractor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	@Override
+	public Fluid getInputFluid() {
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection dir) {
+		return dir.offsetY == 0;
+	}
+
+	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE;
-	}
-
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side.offsetY == 0;
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (!this.canFill(from, resource.getFluid()))
-			return 0;
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0 && fluid.equals(FluidRegistry.WATER);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{tank.getInfo()};
-	}
-
-	public int getWater() {
-		return tank.getLevel();
-	}
-
-	public void addWater(int amt) {
-		tank.addLiquid(amt, FluidRegistry.WATER);
 	}
 }

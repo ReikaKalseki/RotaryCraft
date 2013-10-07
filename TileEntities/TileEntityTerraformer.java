@@ -398,4 +398,8 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 		}
 		return li;
 	}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 }

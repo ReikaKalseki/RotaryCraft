@@ -13,7 +13,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -249,7 +248,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT, inv);
+		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
 
@@ -273,7 +272,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT, inv);
+		super.writeToNBT(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBTTagList nbttaglist = new NBTTagList();
 

@@ -319,4 +319,8 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 
 	@Override
 	public void onEMP() {}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 }

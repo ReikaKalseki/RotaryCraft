@@ -109,4 +109,8 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal) || is.itemID == ForestryHandler.getInstance().apatiteID;
 	}
+
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
 }
