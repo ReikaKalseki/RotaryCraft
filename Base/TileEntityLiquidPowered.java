@@ -6,12 +6,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityLiquidPowered extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector {
 
-	protected HybridTank tank = new HybridTank(this.getTEName().toLowerCase(), this.getCapacity());
+	protected HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()), this.getCapacity());
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {

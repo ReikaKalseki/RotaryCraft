@@ -48,7 +48,7 @@ public class GuiFractionator extends GuiMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+138, j+145, k+17, k+68)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", fct.fuel, fct.CAPACITY), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", fct.getLevel(), fct.CAPACITY), mx-j, my-k);
 		}
 	}
 

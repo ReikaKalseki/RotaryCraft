@@ -15,12 +15,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -28,9 +32,8 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver implements PipeConnector {
 
-	public int fuel;
 	public int mixTime;
 	public int storeTime;
 
@@ -58,7 +61,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 
 	public int getFuelScaled(int par1)
 	{
-		return (fuel*par1)/CAPACITY;
+		return (tank.getLevel()*par1)/CAPACITY;
 	}
 
 	public int getStorageScaled(int par1)
@@ -77,10 +80,10 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		super.updateTileEntity();
 		this.getPowerBelow();
 		power = omega * torque;
-		if (inv[ingredients.length+1] != null && fuel >= ItemFuelLubeBucket.JET_VALUE) {
+		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket;
-				fuel -= ItemFuelLubeBucket.JET_VALUE;
+				tank.removeLiquid(ItemFuelLubeBucket.JET_VALUE);
 			}
 		}
 		if (power < MINPOWER || omega < MINSPEED)
@@ -98,8 +101,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		else {
 			mixTime = 0;
 		}
-		if (fuel < 0)
-			fuel = 0;
 	}
 
 	public void make() {
@@ -108,13 +109,11 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
-		fuel += DifficultyEffects.PRODUCEFRAC.getInt();
-		if (fuel > CAPACITY)
-			fuel = CAPACITY;
+		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt()*RotaryConfig.MILLIBUCKET, RotaryCraft.jetFuelFluid);
 	}
 
 	public boolean process() {
-		if (fuel >= CAPACITY)
+		if (tank.getLevel() >= CAPACITY)
 			return false;
 		boolean allitems = this.getAllIngredients();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));
@@ -183,7 +182,9 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("fuel", fuel);
+
+		tank.writeToNBT(NBT);
+
 		NBT.setInteger("mix", mixTime);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -209,7 +210,9 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		fuel = NBT.getInteger("fuel");
+
+		tank.readFromNBT(NBT);
+
 		mixTime = NBT.getInteger("mix");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
@@ -260,7 +263,7 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public int getRedstoneOverride() {
 		if (!this.getAllIngredients())
 			return 15;
-		return 15*fuel/CAPACITY;
+		return 15*tank.getLevel()/CAPACITY;
 	}
 
 	@Override
@@ -271,5 +274,51 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return side == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return null;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return false;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (!this.canDrain(from, resource.getFluid()))
+			return null;
+		return tank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (from != ForgeDirection.UP)
+			return null;
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("jet fuel"));
+	}
+
+	public int getFuelLevel() {
+		return tank.getLevel();
+	}
+
+	public void setEmpty() {
+		tank.empty();
+	}
+
+	public void setFuelLevel(int amt) {
+		tank.setContents(amt, RotaryCraft.jetFuelFluid);
 	}
 }

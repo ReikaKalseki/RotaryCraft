@@ -17,8 +17,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -35,13 +42,15 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.TileEntityHose;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector, IFluidHandler {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
-	public int lubricant;
+
 	public int damage = 0;
 	public static final int MAXLUBE = 24000;
 	public ItemStack[] inv = new ItemStack[1];
+
+	private HybridTank tank = new HybridTank("gear", MAXLUBE);
 
 	public MaterialRegistry type;
 
@@ -129,10 +138,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			this.getLube(world, x, y, z, this.getBlockMetadata());
 			tickcount = 0;
 		}
-		if (inv[0] != null && lubricant < MAXLUBE) {
+		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE <= MAXLUBE) {
 			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
 				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				lubricant += ItemFuelLubeBucket.LUBE_VALUE;
+				tank.addLiquid(ItemFuelLubeBucket.LUBE_VALUE, RotaryCraft.lubeFluid);
 			}
 		}
 
@@ -141,10 +150,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public void getLube(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
-		if (lubricant < 0)
-			lubricant = 0;
+
 		if (par5Random.nextInt(3) == 0) {
-			if (lubricant == 0 && omega > 0 && par5Random.nextInt(16*omega/ratio+1) != 0) {
+			if (tank.isEmpty() && omega > 0 && par5Random.nextInt(16*omega/ratio+1) != 0) {
 				switch(type) {
 				case WOOD:
 					damage += 6;	//2x original steel
@@ -176,57 +184,25 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				}
 			}
 			else if (type.consumesLubricant()) {
-				if (lubricant > 0 && omega > 0)
-					lubricant = ReikaMathLibrary.extrema((int)(lubricant-ReikaMathLibrary.logbase(omega, 2)), lubricant, "min");
+				if (!tank.isEmpty() && omega > 0)
+					tank.removeLiquid((int)ReikaMathLibrary.logbase(omega, 2));
 			}
 		}
-		if (lubricant < MAXLUBE) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null) {
-					oldlube = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-					lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
+		if (tank.getLevel() < MAXLUBE) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				if (dir != ForgeDirection.UP) {
+					int dx = x+dir.offsetX;
+					int dy = y+dir.offsetY;
+					int dz = z+dir.offsetZ;
+					if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
+						TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
+						if (tile != null) {
+							oldlube = tile.lubricant;
+							tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
+							tank.addLiquid(oldlube/4, RotaryCraft.lubeFluid);
+						}
+					}
 				}
 			}
 		}
@@ -333,7 +309,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public int getLubricantScaled(int par1)
 	{
-		return (lubricant*par1)/MAXLUBE;
+		return (tank.getLevel()*par1)/MAXLUBE;
 	}
 
 	/**
@@ -345,7 +321,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		super.writeToNBT(NBT);
 		NBT.setBoolean("reduction", reduction);
 		NBT.setInteger("damage", damage);
-		NBT.setInteger("lube", lubricant);
+
+		tank.writeToNBT(NBT);
+
 		NBT.setInteger("type", type.ordinal());
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -372,7 +350,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		super.readFromNBT(NBT);
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
-		lubricant = NBT.getInteger("lube");
+
+		tank.readFromNBT(NBT);
+
 		type = MaterialRegistry.setType(NBT.getInteger("type"));
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
@@ -523,7 +503,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*lubricant/MAXLUBE;
+		return 15*tank.getLevel()/MAXLUBE;
 	}
 
 	@Override
@@ -538,4 +518,42 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from != ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("lubricant"));
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	public void setLubricant(int amt) {
+		tank.setContents(amt, RotaryCraft.lubeFluid);
+	}
+
+	public int getLubricant() {
+		return tank.getLevel();
+	}
 }

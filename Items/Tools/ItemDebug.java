@@ -92,10 +92,6 @@ public class ItemDebug extends ItemRotaryTool {
 			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d", tile.getLiquid().getID(), tile.getLevel()));
-				if (player.isSneaking() && tile.getLevel() > 0) {
-					ReikaChatHelper.write("Filled to capacity.");
-					tile.setLiquid(tile.CAPACITY);
-				}
 			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {
@@ -119,11 +115,11 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.OBSIDIAN) {
 			TileEntityObsidianMaker tile = (TileEntityObsidianMaker)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d  %d", tile.waterLevel, tile.lavaLevel, tile.temperature));
+				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getWater(), tile.getLava(), tile.temperature));
 			}
 			if (player.isSneaking()) {
-				tile.lavaLevel = tile.CAPACITY;
-				tile.waterLevel = tile.CAPACITY;
+				tile.setLava(tile.CAPACITY);
+				tile.setWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
 			}
 		}
@@ -145,10 +141,10 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.PULSEJET) {
 			TileEntityPulseFurnace tile = (TileEntityPulseFurnace)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.waterLevel, tile.temperature));
+				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getWater(), tile.temperature, tile.getFuel()));
 				if (player.isSneaking()) {
-					tile.fuelLevel = tile.MAXFUEL;
-					tile.waterLevel = tile.CAPACITY;
+					tile.setFuel(tile.MAXFUEL);
+					tile.setWater(tile.CAPACITY);
 					ReikaChatHelper.write("Filled to capacity.");
 				}
 			}
@@ -156,7 +152,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d", tile.fuel));
+				ReikaChatHelper.write(String.format("%d", tile.getFuelLevel()));
 			}
 		}
 		if (m == MachineRegistry.FAN) {
@@ -168,13 +164,12 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.ENGINE) {
 			TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.waterLevel, tile.temperature));
+				ReikaChatHelper.write(String.format("%d  %d", tile.getWater(), tile.temperature));
 			}
 			if (player.isSneaking()) {
-				tile.jetfuels = tile.FUELCAP;
-				tile.ethanols = tile.FUELCAP;
-				tile.additives = tile.FUELCAP;
-				tile.waterLevel = tile.CAPACITY;
+				tile.addFuel(tile.FUELCAP);
+				tile.additives = tile.FUELCAP/1000;
+				tile.addWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
 			}
 		}
@@ -188,7 +183,7 @@ public class ItemDebug extends ItemRotaryTool {
 			TileEntityGearbox tile = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 			if (player.isSneaking()) {
 				tile.damage = 0;
-				tile.lubricant = tile.MAXLUBE;
+				tile.setLubricant(tile.MAXLUBE);
 				ReikaChatHelper.write("Filled to capacity.");
 			}
 		}

@@ -19,6 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,12 +33,12 @@ import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 
-public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver implements TemperatureTE
+public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver implements TemperatureTE
 {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -100,16 +103,26 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 				return null;
 
 		if (slots[0].itemID == Item.sugar.itemID) {
-			if (slots[1].itemID == Item.bucketWater.itemID)
+			if (this.hasWater(1))
 				if(slots[2].itemID == Block.dirt.blockID)
 					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
 		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
 			if (this.getPlantValue(slots[1]) > 0)
-				if (slots[2].itemID == Item.bucketWater.itemID)
+				if (this.hasWater(2))
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
 		}
 		return null;
+	}
+
+	private boolean hasWater(int slot) {
+		if (slots[slot].itemID == Item.bucketWater.itemID)
+			return true;
+		if (slots[slot].itemID == Item.bucketWater.itemID)
+			return true;
+		if (!tank.isEmpty())
+			return true;
+		return false;
 	}
 
 	public static int getPlantValue(ItemStack is) {
@@ -493,5 +506,25 @@ public class TileEntityFermenter extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public void overheat(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return true;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 3000;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return true;
 	}
 }

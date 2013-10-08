@@ -12,13 +12,18 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -35,15 +40,16 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 
-public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator {
+public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler {
 
 	private BlockArray solarBlocks = new BlockArray();
 	private int numberMirrors = 0;
 
-	private int waterLevel = 0;
 	private float lightMultiplier = 0;
 
 	public static final int GENOMEGA = 1024;
+
+	private HybridTank tank = new HybridTank("solar", 4000);
 
 	@Override
 	public boolean canProvidePower() {
@@ -68,52 +74,19 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	public void getLiq(World world, int x, int y, int z, int metadata) {
 		int oldLevel = 0;
-		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-			}
-		}
-		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-				waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+
+			if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+					oldLevel = tile.liquidLevel;
+					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+					tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+				}
 			}
 		}
 	}
@@ -177,14 +150,14 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		omega = GENOMEGA;
 		torque = (int)(2*this.getArrayOverallBrightness()*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1));
-		if (this.getArraySize() <= 0 || torque == 0 || waterLevel <= 0) {
+		if (this.getArraySize() <= 0 || torque == 0 || tank.isEmpty()) {
 			omega = 0;
 			torque = 0;
 		}
 		power = omega*torque;
 		if (par5Random.nextInt(20) == 0)
-			if (waterLevel > 0)
-				waterLevel -= RotaryConfig.MILLIBUCKET;
+			if (tank.getLevel() > 0)
+				tank.removeLiquid(RotaryConfig.MILLIBUCKET);
 	}
 
 	public int getTowerHeight() {
@@ -239,15 +212,15 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	public void getTowerWater(World world, int x, int y, int z) {
-		int water = waterLevel;
+		int water = tank.getLevel();
 		int cy = y+1;
 		while (MachineRegistry.getMachine(world, x, cy, z) == MachineRegistry.SOLARTOWER) {
 			TileEntitySolar tile = (TileEntitySolar)(world.getBlockTileEntity(x, cy, z));
-			water += tile.waterLevel;
-			tile.waterLevel = 0;
+			water += tile.tank.getLevel();
+			tile.tank.empty();
 			cy++;
 		}
-		waterLevel = water;
+		tank.setContents(water, FluidRegistry.WATER);
 	}
 
 	/**
@@ -257,7 +230,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("water", waterLevel);
+
+		tank.writeToNBT(NBT);
 	}
 
 	/**
@@ -267,7 +241,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		waterLevel = NBT.getInteger("water");
+
+		tank.readFromNBT(NBT);
 	}
 
 	public int getBottomOfTower() {
@@ -302,6 +277,38 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	public long getCurrentPower() {
 		return power;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (!this.canFill(from, resource.getFluid()))
+			return 0;
+		return tank.fill(resource, doFill);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return fluid.equals(FluidRegistry.WATER);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 }

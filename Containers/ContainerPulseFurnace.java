@@ -49,11 +49,12 @@ public class ContainerPulseFurnace extends CoreContainer {
 		for (int i = 0; i < crafters.size(); i++)
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
+			icrafting.sendProgressBarUpdate(this, 0, pulseFurnace.pulseFurnaceCookTime);
 			icrafting.sendProgressBarUpdate(this, 1, pulseFurnace.temperature);
 			icrafting.sendProgressBarUpdate(this, 2, pulseFurnace.smelttick);
-			icrafting.sendProgressBarUpdate(this, 3, pulseFurnace.fuelLevel);
+			icrafting.sendProgressBarUpdate(this, 3, pulseFurnace.getFuel());
 			icrafting.sendProgressBarUpdate(this, 4, pulseFurnace.omega);
-			icrafting.sendProgressBarUpdate(this, 0, pulseFurnace.pulseFurnaceCookTime);
+			icrafting.sendProgressBarUpdate(this, 5, pulseFurnace.getWater());
 		}
 	}
 
@@ -64,8 +65,9 @@ public class ContainerPulseFurnace extends CoreContainer {
 		case 0: pulseFurnace.pulseFurnaceCookTime = par2; break;
 		case 1: pulseFurnace.temperature = par2; break;
 		case 2: pulseFurnace.smelttick = par2; break;
-		case 3: pulseFurnace.fuelLevel = par2; break;
+		case 3: pulseFurnace.setFuel(par2); break;
 		case 4: pulseFurnace.omega = par2; break;
+		case 5: pulseFurnace.setWater(par2); break;
 		}
 	}
 }

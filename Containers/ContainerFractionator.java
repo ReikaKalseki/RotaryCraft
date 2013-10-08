@@ -43,28 +43,28 @@ public class ContainerFractionator extends CoreContainer
 	/**
 	 * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
 	 */
-	 @Override
-	 public void detectAndSendChanges()
-	 {
-		 super.detectAndSendChanges();
+	@Override
+	public void detectAndSendChanges()
+	{
+		super.detectAndSendChanges();
 
-		 for (int i = 0; i < crafters.size(); i++)
-		 {
-			 ICrafting icrafting = (ICrafting)crafters.get(i);
+		for (int i = 0; i < crafters.size(); i++)
+		{
+			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			 icrafting.sendProgressBarUpdate(this, 1, Fraction.fuel);
-			 icrafting.sendProgressBarUpdate(this, 2, Fraction.mixTime);
-			 icrafting.sendProgressBarUpdate(this, 3, Fraction.storeTime);
-		 }
-	 }
+			icrafting.sendProgressBarUpdate(this, 1, Fraction.getFuelLevel());
+			icrafting.sendProgressBarUpdate(this, 2, Fraction.mixTime);
+			icrafting.sendProgressBarUpdate(this, 3, Fraction.storeTime);
+		}
+	}
 
-	 @Override
-	 public void updateProgressBar(int par1, int par2)
-	 {
-		 switch(par1) {
-		 case 1: Fraction.fuel = par2; break;
-		 case 2: Fraction.mixTime = par2; break;
-		 case 3: Fraction.storeTime = par2; break;
-		 }
-	 }
+	@Override
+	public void updateProgressBar(int par1, int par2)
+	{
+		switch(par1) {
+		case 1: Fraction.setFuelLevel(par2); break;
+		case 2: Fraction.mixTime = par2; break;
+		case 3: Fraction.storeTime = par2; break;
+		}
+	}
 }

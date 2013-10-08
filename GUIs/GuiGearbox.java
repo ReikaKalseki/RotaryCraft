@@ -73,7 +73,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", gearboxInventory.lubricant, gearboxInventory.MAXLUBE), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", gearboxInventory.getLubricant(), gearboxInventory.MAXLUBE), mx-j, my-k);
 		}
 	}
 

@@ -45,33 +45,33 @@ public class ContainerObsidian extends CoreContainer
 	/**
 	 * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
 	 */
-	 @Override
-	 public void detectAndSendChanges()
-	 {
-		 super.detectAndSendChanges();
+	@Override
+	public void detectAndSendChanges()
+	{
+		super.detectAndSendChanges();
 
-		 for (int i = 0; i < crafters.size(); i++)
-		 {
-			 ICrafting icrafting = (ICrafting)crafters.get(i);
+		for (int i = 0; i < crafters.size(); i++)
+		{
+			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			 if (lastObsidianCookTime != obsidian.mixTime)
-			 {
-				 icrafting.sendProgressBarUpdate(this, 0, obsidian.mixTime);
-			 }
-			 icrafting.sendProgressBarUpdate(this, 1, obsidian.waterLevel);
-			 icrafting.sendProgressBarUpdate(this, 2, obsidian.lavaLevel);
-		 }
+			if (lastObsidianCookTime != obsidian.mixTime)
+			{
+				icrafting.sendProgressBarUpdate(this, 0, obsidian.mixTime);
+			}
+			icrafting.sendProgressBarUpdate(this, 1, obsidian.getWater());
+			icrafting.sendProgressBarUpdate(this, 2, obsidian.getLava());
+		}
 
-		 lastObsidianCookTime = obsidian.mixTime;
-	 }
+		lastObsidianCookTime = obsidian.mixTime;
+	}
 
-	 @Override
-	 public void updateProgressBar(int par1, int par2)
-	 {
-		 switch(par1) {
-		 case 0: obsidian.mixTime = par2; break;
-		 case 1: obsidian.waterLevel = par2; break;
-		 case 2: obsidian.lavaLevel = par2; break;
-		 }
-	 }
+	@Override
+	public void updateProgressBar(int par1, int par2)
+	{
+		switch(par1) {
+		case 0: obsidian.mixTime = par2; break;
+		case 1: obsidian.setWater(par2); break;
+		case 2: obsidian.setLava(par2); break;
+		}
+	}
 }

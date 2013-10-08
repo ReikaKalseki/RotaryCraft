@@ -21,8 +21,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ColumnArray;
 import Reika.DragonAPI.Instantiable.ItemReq;
@@ -33,24 +34,20 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SelectableTiles;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver implements PipeConnector, SelectableTiles {
+public class TileEntityTerraformer extends TileEntityLiquidInventoryReceiver implements SelectableTiles {
 
 	private static final ObjectWeb transforms = new ObjectWeb(BiomeGenBase.class);
 	private static final HashMap<List<BiomeGenBase>, List<ItemReq>> itemReqs = new HashMap<List<BiomeGenBase>, List<ItemReq>>();
 	private static final HashMap<List<BiomeGenBase>, Integer> powerReqs = new HashMap<List<BiomeGenBase>, Integer>();
-	private static final HashMap<List<BiomeGenBase>, LiquidStack> liquidReqs = new HashMap<List<BiomeGenBase>, LiquidStack>();
+	private static final HashMap<List<BiomeGenBase>, FluidStack> liquidReqs = new HashMap<List<BiomeGenBase>, FluidStack>();
 
 	private ItemStack[] inv = new ItemStack[54];
-
-	private int waterLevel = 0;
-	private int oldLevel;
 
 	private ColumnArray coords = new ColumnArray();
 
@@ -149,9 +146,9 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	private void interPipe(World world, int x, int y, int z) {
 		TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 		if (tile != null && (tile.liquidID == 9 && tile.liquidLevel > 0)) {
-			oldLevel = tile.liquidLevel;
+			int oldLevel = tile.liquidLevel;
 			tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-			waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+			tank.setContents(ReikaMathLibrary.extrema(tank.getLevel()+oldLevel/4+1, 0, "max"), FluidRegistry.WATER);
 		}
 	}
 
@@ -201,9 +198,9 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 		return transforms.isDirectionallyConnectedTo(from, target);
 	}
 
-	public LiquidStack getReqLiquidForTransform(BiomeGenBase from, BiomeGenBase to) {
+	public FluidStack getReqLiquidForTransform(BiomeGenBase from, BiomeGenBase to) {
 		List<BiomeGenBase> li = ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from, to});
-		LiquidStack liq = liquidReqs.get(li);
+		FluidStack liq = liquidReqs.get(li);
 		return liq;
 	}
 
@@ -220,14 +217,14 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	private boolean getReqsForTransform(BiomeGenBase from, BiomeGenBase to) { //test and consume resources
 		List<BiomeGenBase> li = ReikaJavaLibrary.makeListFromArray(new BiomeGenBase[]{from, to});
 		int min = powerReqs.get(li);
-		LiquidStack liq = liquidReqs.get(li);
+		FluidStack liq = liquidReqs.get(li);
 		List<ItemReq> items = itemReqs.get(li);
 
 		if (power < min)
 			return false;
 
 		if (liq != null) {
-			if (waterLevel < liq.amount)
+			if (tank.getLevel() < liq.amount)
 				return false;
 		}
 
@@ -246,11 +243,11 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 			}
 		}
 		if (liq != null)
-			waterLevel -= liq.amount;
+			tank.removeLiquid(liq.amount);
 		return true;
 	}
 
-	private static void addBiomeTransformation(BiomeGenBase from, BiomeGenBase to, int power, LiquidStack liq, ItemReq... items) {
+	private static void addBiomeTransformation(BiomeGenBase from, BiomeGenBase to, int power, FluidStack liq, ItemReq... items) {
 		List<BiomeGenBase> li = ReikaBiomeHelper.getAllAssociatedBiomes(from);
 		for (int i = 0; i < li.size(); i++) {
 			BiomeGenBase from_ = li.get(i);
@@ -262,12 +259,12 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	}
 
 	static {
-		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.plains, 65536, LiquidDictionary.getLiquid("Water", 30), new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.forest, 131072, LiquidDictionary.getLiquid("Water", 10), new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.jungle, 262144, LiquidDictionary.getLiquid("Water", 50), new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 0, 0.6F), new ItemReq(Block.tallGrass.blockID, 2, 0.3F));
+		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.plains, 65536, FluidRegistry.getFluidStack("water", 30), new ItemReq(Block.tallGrass.blockID, 1, 0.8F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.forest, 131072, FluidRegistry.getFluidStack("water", 10), new ItemReq(Block.sapling.blockID, 0, 0.5F), new ItemReq(Block.sapling.blockID, 2, 0.2F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.jungle, 262144, FluidRegistry.getFluidStack("water", 50), new ItemReq(Block.sapling.blockID, 0, 0.4F), new ItemReq(Block.sapling.blockID, 0, 0.6F), new ItemReq(Block.tallGrass.blockID, 2, 0.3F));
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.swampland, 32768, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F));
-		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.ocean, 131072, LiquidDictionary.getLiquid("Water", 500));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.swampland, 32768, FluidRegistry.getFluidStack("water", 100), new ItemReq(Block.sapling.blockID, 0, 0.1F), new ItemReq(Block.mushroomRed, 0.05F), new ItemReq(Block.mushroomBrown, 0.15F));
+		addBiomeTransformation(BiomeGenBase.swampland, BiomeGenBase.ocean, 131072, FluidRegistry.getFluidStack("water", 500));
 		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.frozenOcean, 0, null, new ItemReq(Block.ice, 1));
 
 		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.extremeHills, 65536, null, new ItemReq(Block.sapling.blockID, 0, 0.05F));
@@ -281,7 +278,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 131072, null, new ItemReq(Block.blockSnow, 0.3F), new ItemReq(Block.sapling.blockID, 1, 0.25F));
 		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.icePlains, 65536, null, new ItemReq(Block.blockSnow, 1), new ItemReq(Block.sapling.blockID, 0, 0.05F));
-		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.frozenOcean, 32768, LiquidDictionary.getLiquid("Water", 100), new ItemReq(Block.ice, 1));
+		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.frozenOcean, 32768, FluidRegistry.getFluidStack("water", 100), new ItemReq(Block.ice, 1));
 
 
 		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.desert, 131072, null, new ItemReq(Block.sand, 1), new ItemReq(Block.sandStone, 0.5F), new ItemReq(Block.cactus, 0.1F));
@@ -333,7 +330,8 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
-		waterLevel = NBT.getInteger("water");
+
+		tank.readFromNBT(NBT);
 
 		int tg = NBT.getInteger("tg");
 		if (tg != -1)
@@ -347,7 +345,8 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("water", waterLevel);
+
+		tank.writeToNBT(NBT);
 
 		if (target != null)
 			NBT.setInteger("tg", target.biomeID);
@@ -376,7 +375,7 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 	 * O[0] = Start Biome<br>
 	 * O[1] = Target Biome<br>
 	 * O[2] = Required Power<br>
-	 * O[3] = Required Liquid (as LiquidStack)<br>
+	 * O[3] = Required Liquid (as FluidStack)<br>
 	 * O[4] = Required items (as List of ItemReq) */
 	public static ArrayList<Object[]> getTransformList() {
 		ArrayList<Object[]> li = new ArrayList<Object[]>();
@@ -401,5 +400,20 @@ public class TileEntityTerraformer extends TileEntityInventoriedPowerReceiver im
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 24000;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return true;
 	}
 }

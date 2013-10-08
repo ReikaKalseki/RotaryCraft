@@ -11,6 +11,8 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum EnumEngineType {
@@ -252,6 +254,46 @@ public enum EnumEngineType {
 			return false;
 		default:
 			return true;
+		}
+	}
+
+	public boolean canReceiveFluid(Fluid fluid) {
+		switch(this) {
+		case STEAM:
+			if (fluid.equals(FluidRegistry.WATER))
+				return true;
+			break;
+		case GAS:
+			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+				return true;
+			break;
+		case SPORT:
+			if (fluid.equals(FluidRegistry.WATER))
+				return true;
+			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+				return true;
+			break;
+		case MICRO:
+		case JET:
+			if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
+				return true;
+			break;
+		default:
+			return false;
+		}
+		return false;
+	}
+
+	public Fluid getFuelType() {
+		switch(this) {
+		case GAS:
+		case SPORT:
+			return FluidRegistry.getFluid("rc ethanol");
+		case MICRO:
+		case JET:
+			return FluidRegistry.getFluid("jet fuel");
+		default:
+			return null;
 		}
 	}
 }

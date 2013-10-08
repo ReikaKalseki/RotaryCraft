@@ -113,6 +113,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
@@ -239,7 +240,8 @@ public enum MachineRegistry {
 	ARROWGUN(			"Arrow Gun",				BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"Friction Boiler", 			BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"Steam Turbine", 			BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
-	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19);
+	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19),
+	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20);
 
 
 	private String name;

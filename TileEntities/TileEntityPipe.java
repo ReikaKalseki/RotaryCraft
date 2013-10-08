@@ -90,9 +90,11 @@ public class TileEntityPipe extends TileEntityPiping {
 		if (tile != null) {
 			if (tile.getLevel() > liquidLevel && (tile.getLiquid().getID() == liquidID || liquidID == -1) && tile.getLevel() > 0) {
 				liquidID = tile.getLiquid().getID();
-				oldLevel = tile.getLevel();
-				tile.setLiquid(ReikaMathLibrary.extrema(tile.getLevel()-tile.getLevel()/4-1, 0, "max"));
-				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
+				//oldLevel = tile.getLevel();
+				//tile.setLiquid(ReikaMathLibrary.extrema(tile.getLevel()-tile.getLevel()/4-1, 0, "max"));
+				//liquidLevel = tileReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
+				liquidLevel = tile.getLevel();
+				tile.setEmpty();
 			}
 			fluidPressure = tile.liquidPressure;
 		}

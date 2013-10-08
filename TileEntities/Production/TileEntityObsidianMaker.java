@@ -15,6 +15,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -29,10 +35,8 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
-public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector {
+public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
 
-	public int waterLevel;
-	public int lavaLevel;
 	public int mixTime;
 
 	public int temperature;
@@ -49,6 +53,9 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public static final int MAXTEMP = 1000;
 
 	public ItemStack[] inventory = new ItemStack[9];
+
+	private HybridTank lava = new HybridTank("lavamix", CAPACITY);
+	private HybridTank water = new HybridTank("watermix", CAPACITY);
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -67,7 +74,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 			this.updateTemperature(world, x, y, z, meta);
 			temptick = 0;
 		}
-		if (power < MINPOWER || omega < MINSPEED || waterLevel <= 0 || lavaLevel <= 0)
+		if (power < MINPOWER || omega < MINSPEED || water.isEmpty() || lava.isEmpty())
 			return;
 		this.testIdle();
 		if (this.operationComplete(tickcount, 0)) {
@@ -78,7 +85,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 
 	public void testIdle() {
 		boolean noliq = false;
-		if (waterLevel <= 0 || lavaLevel <= 0)
+		if (water.isEmpty() || lava.isEmpty())
 			noliq = true;
 		boolean full = (this.getNonFullStack() == -1);
 		idle = (full || noliq);
@@ -99,7 +106,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 				temperature++;
 			}
 
-			if (lavaLevel > 0 && waterLevel <= 0)
+			if (!lava.isEmpty() && water.isEmpty())
 				temperature += 3;
 		}
 
@@ -125,8 +132,8 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		int slot = this.getNonFullStack();
 		if (slot == -1)
 			return;
-		lavaLevel -= RotaryConfig.MILLIBUCKET;
-		waterLevel -= RotaryConfig.MILLIBUCKET;
+		lava.removeLiquid(RotaryConfig.MILLIBUCKET);
+		water.removeLiquid(RotaryConfig.MILLIBUCKET);
 		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inventory, slot);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*par5Random.nextFloat(), 0.7F+0.3F*par5Random.nextFloat());
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);
@@ -153,56 +160,30 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 
 	public int getWaterScaled(int par1)
 	{
-		return (waterLevel*par1)/CAPACITY;
+		return (water.getLevel()*par1)/CAPACITY;
 	}
 
 	public int getLavaScaled(int par1)
 	{
-		return (lavaLevel*par1)/CAPACITY;
+		return (lava.getLevel()*par1)/CAPACITY;
 	}
 
 	public void getLava(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Lava!");
 		int oldLevel = 0;
-		if (lavaLevel < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
+		if (lava.getLevel() < CAPACITY) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						lava.addLiquid(oldLevel/4+1, FluidRegistry.LAVA);
+					}
 				}
 			}
 		}
@@ -211,53 +192,19 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public void getWater(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
 		int oldLevel = 0;
-		if (waterLevel < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+		if (water.getLevel() < CAPACITY) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						water.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+					}
 				}
 			}
 		}
@@ -307,8 +254,10 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("waterLevel", waterLevel);
-		NBT.setInteger("lavaLevel", lavaLevel);
+
+		lava.writeToNBT(NBT);
+		water.writeToNBT(NBT);
+
 		NBT.setInteger("mix", mixTime);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -334,8 +283,10 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		waterLevel = NBT.getInteger("waterLevel");
-		lavaLevel = NBT.getInteger("lavaLevel");
+
+		water.readFromNBT(NBT);
+		lava.readFromNBT(NBT);
+
 		mixTime = NBT.getInteger("mix");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
@@ -387,9 +338,9 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public int getRedstoneOverride() {
 		if (this.getNonFullStack() == -1)
 			return 15;
-		if (lavaLevel <= 0)
+		if (lava.isEmpty())
 			return 15;
-		if (waterLevel <= 0)
+		if (water.isEmpty())
 			return 15;
 		return 0;
 	}
@@ -412,5 +363,60 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	@Override
 	public int getTemperature() {
 		return temperature;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		Fluid f = resource.getFluid();
+		if (!this.canFill(from, f))
+			return 0;
+		if (f.equals(FluidRegistry.WATER))
+			return water.fill(resource, doFill);
+		if (f.equals(FluidRegistry.LAVA))
+			return lava.fill(resource, doFill);
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		if (from.offsetY != 0)
+			return false;
+		return fluid.equals(FluidRegistry.WATER) || fluid.equals(FluidRegistry.LAVA);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{lava.getInfo(), water.getInfo()};
+	}
+
+	public int getWater() {
+		return water.getLevel();
+	}
+
+	public int getLava() {
+		return lava.getLevel();
+	}
+
+	public void setLava(int amt) {
+		lava.setContents(amt, FluidRegistry.LAVA);
+	}
+
+	public void setWater(int amt) {
+		water.setContents(amt, FluidRegistry.WATER);
 	}
 }

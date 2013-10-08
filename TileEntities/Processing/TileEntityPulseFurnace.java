@@ -16,7 +16,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -37,22 +43,21 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
-public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector {
-	private ItemStack inv[];
+public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
+
+	private ItemStack inv[] = new ItemStack[3];
 
 	/** The number of ticks that the current item has been cooking for */
 	public int pulseFurnaceCookTime;
 
-	public static final int CAPACITY = 64;
-	public static final int MAXFUEL = 64;
+	public static final int CAPACITY = 3000;
+	public static final int MAXFUEL = 500;
 	public static final int MAXTEMP = 1000; //1370C = melting steel, 800C = 90% strength loss
 	public static final int SMELTTICKS = 100;
 
 	public boolean idle = false;
 
-	public int fuelLevel;
-	public int waterLevel;
-	public int temperature = 0;	//damage player, start fires, etc
+	public int temperature;	//damage player, start fires, etc
 
 
 	private int tickcount2 = 0;
@@ -61,17 +66,9 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	private int soundtick = 2000;
 
 	boolean flag2 = false;
-	/*
-	    Minecraft m = Minecraft.getMinecraft();
-	    WorldServer ws = m.getIntegratedServer().worldServerForDimension(m.thePlayer.dimension);*/
 
-	public TileEntityPulseFurnace()
-	{
-		inv = new ItemStack[3];
-		pulseFurnaceCookTime = 0;
-		//SMELTTEMPS.put(new ItemStack(Item.ingotIron.itemID, 1, 0), Integer.valueOf(900));//900C for steelmaking
-		//SMELTTEMPS.put(new ItemStack(Block.obsidian.blockID, 1, 0), Integer.valueOf(800)); //650-900C melting obsidian
-	}
+	private HybridTank fuel = new HybridTank("fuel", MAXFUEL);
+	private HybridTank water = new HybridTank("water", CAPACITY);
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -84,45 +81,19 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public void drawFuel(World world, int x, int y, int z, int metadata) {
 		int oldLevel = 0;
-		if (fuelLevel < MAXFUEL) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
+		if (fuel.getLevel() < MAXFUEL) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.FUELLINE) {
+					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.fuel > 0) {
+						oldLevel = tile.fuel;
+						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
+						fuel.addLiquid(oldLevel/4+1, RotaryCraft.jetFuelFluid);
+					}
 				}
 			}
 		}
@@ -130,45 +101,19 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public void getLiq(World world, int x, int y, int z, int metadata) {
 		int oldLevel = 0;
-		if (waterLevel < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+		if (water.getLevel() < CAPACITY) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						water.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+					}
 				}
 			}
 		}
@@ -242,8 +187,10 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 		}
 
 		pulseFurnaceCookTime = NBT.getShort("CookTime");
-		waterLevel = NBT.getInteger("water");
-		fuelLevel = NBT.getInteger("fuel");
+
+		water.readFromNBT(NBT);
+		fuel.writeToNBT(NBT);
+
 		temperature = NBT.getInteger("temp");
 	}
 
@@ -255,8 +202,10 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	{
 		super.writeToNBT(NBT);
 		NBT.setShort("CookTime", (short)pulseFurnaceCookTime);
-		NBT.setInteger("water", waterLevel);
-		NBT.setInteger("fuel", fuelLevel);
+
+		water.writeToNBT(NBT);
+		fuel.writeToNBT(NBT);
+
 		NBT.setInteger("temp", temperature);
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -285,7 +234,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public int getFuelScaled(int par1)
 	{
-		return (fuelLevel * par1) / MAXFUEL;
+		return (fuel.getLevel() * par1) / MAXFUEL;
 	}
 
 	public int getTempScaled(int par1)
@@ -295,7 +244,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public int getWaterScaled(int par1)
 	{
-		return (waterLevel * par1) / CAPACITY;
+		return (water.getLevel() * par1) / CAPACITY;
 	}
 
 	public int getFireScaled(int par1)
@@ -305,21 +254,19 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public void getFuel(World world, int x, int y, int z, int meta) {
 		if (tickcount2 >= 100) {
-			fuelLevel--;
+			fuel.removeLiquid(RotaryConfig.MILLIBUCKET);
 			tickcount2 = 0;
 		}
 	}
 
 	public void heatAmbient(World world, int x, int y, int z, int meta) {
-		if (fuelLevel > 0 && this.canSmelt())
+		if (fuel.getLevel() > 0 && this.canSmelt())
 			temperature += ReikaMathLibrary.extrema((MAXTEMP-temperature)/8, 4, "max");
 
-		if (waterLevel > 0) {
+		if (water.getLevel() > 0) {
 			if (par5Random.nextInt(3) == 0)
-				waterLevel -= (temperature*2/MAXTEMP)*RotaryConfig.MILLIBUCKET;
+				water.removeLiquid((temperature*2/MAXTEMP)*RotaryConfig.MILLIBUCKET);
 			temperature -= temperature/64;
-			if (waterLevel <= 0)
-				waterLevel = 0;
 		}
 		if (temperature < 0)
 			temperature = 0;
@@ -569,5 +516,66 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 
 	public void overheat(World world, int x, int y, int z) {
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.5F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 12F);
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		Fluid fluid = resource.getFluid();
+		if (!this.canFill(from, fluid))
+			return 0;
+		if (fluid.equals(FluidRegistry.WATER)) {
+			return water.fill(resource, doFill);
+		}
+		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+			return fuel.fill(resource, doFill);
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		if (fluid.equals(FluidRegistry.WATER)) {
+			return from.offsetY == 0;
+		}
+		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+			return from.offsetY == 0;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{water.getInfo(), fuel.getInfo()};
+	}
+
+	public int getWater() {
+		return water.getLevel();
+	}
+
+	public int getFuel() {
+		return fuel.getLevel();
+	}
+
+	public void setFuel(int amt) {
+		fuel.setContents(amt, RotaryCraft.jetFuelFluid);
+	}
+
+	public void setWater(int amt) {
+		water.setContents(amt, FluidRegistry.WATER);
 	}
 }

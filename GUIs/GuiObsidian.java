@@ -42,12 +42,12 @@ public class GuiObsidian extends GuiMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+47, j+55, k+16, k+71)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Water: %d", obs.waterLevel/1000), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Water: %d", obs.getWater()/1000), mx-j, my-k);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+119, j+127, k+16, k+71)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Lava: %d", obs.waterLevel/1000), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Lava: %d", obs.getLava()/1000), mx-j, my-k);
 		}
 	}
 

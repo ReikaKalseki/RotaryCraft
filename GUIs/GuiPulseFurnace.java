@@ -45,7 +45,7 @@ public class GuiPulseFurnace extends GuiMachine {
 		if (ReikaGuiAPI.instance.isMouseInBox(j+90, j+96, k+17, k+68)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", puls.fuelLevel, puls.MAXFUEL), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", puls.getFuel(), puls.MAXFUEL), mx-j, my-k);
 		}
 		if (ReikaGuiAPI.instance.isMouseInBox(j+20, j+30, k+15, k+70)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();

@@ -12,8 +12,15 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -21,10 +28,11 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
-public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector {
+public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
-	public int fuelLevel = 0;
-	public static final int FUELCAP = 300;
+	public static final int FUELCAP = 3000;
+
+	private HybridTank tank = new HybridTank("ecu", FUELCAP);
 
 	private EngineSettings setting = EngineSettings.FULL;
 
@@ -120,83 +128,41 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.drawFuel(world, x, y, z, meta);
-		if (fuelLevel <= 0)
+		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			setting = EngineSettings.SHUTDOWN;
+		if (tank.isEmpty())
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
 			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
-			setting = EngineSettings.SHUTDOWN;
 	}
 
 	private void transferToEngine(TileEntityEngine te) {
-		int currentFuel = fuelLevel;
-		if (!te.type.isJetFueled())
+		FluidStack liq = tank.getFluid();
+		Fluid f = te.type.getFuelType();
+		if (f == null || liq == null || !f.equals(liq.getFluid()))
 			return;
-		if (te.jetfuels >= te.FUELCAP)
+		if (te.getFuelLevel()+liq.amount > te.FUELCAP)
 			return;
-		te.jetfuels += currentFuel/4+1;
-		fuelLevel -= currentFuel/4+1;
+		te.addFuel(liq.amount/4+1);
+		tank.removeLiquid(liq.amount/4+1);
 	}
 
 	private void drawFuel(World world, int x, int y, int z, int metadata) {
 		int oldfuel;
-		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x+1, y, z);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x-1, y, z);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z+1);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
-				}
-			}
-		}
-		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z-1);
-			if (tile != null) {
-				if (tile.fuel > fuelLevel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldfuel, 0, "max");
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == MachineRegistry.FUELLINE) {
+				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
+				if (tile != null) {
+					if (tile.fuel > tank.getLevel()) {
+						oldfuel = tile.fuel;
+						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
+						tank.addLiquid(oldfuel, RotaryCraft.jetFuelFluid);
+					}
 				}
 			}
 		}
@@ -224,7 +190,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("fuel", fuelLevel);
+
+		tank.writeToNBT(NBT);
+
 		NBT.setInteger("lvl", setting.ordinal());
 	}
 
@@ -235,7 +203,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		fuelLevel = NBT.getInteger("fuel");
+
+		tank.readFromNBT(NBT);
+
 		setting = EngineSettings.list[NBT.getInteger("lvl")];
 	}
 
@@ -274,5 +244,43 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 				sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (this.canFill(from, resource.getFluid()))
+			return tank.fill(resource, doFill);
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		if (fluid.equals(FluidRegistry.LAVA))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+			return true;
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 }

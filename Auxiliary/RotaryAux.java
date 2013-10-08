@@ -188,7 +188,7 @@ public class RotaryAux {
 			return false;
 		if (TinkerToolHandler.getInstance().isPick(eitem) && TinkerToolHandler.getInstance().isStoneOrBetter(eitem))
 			return true;
-		if (MekToolHandler.getInstance().isPickTypeTool(eitem))
+		if (MekToolHandler.getInstance().isPickTypeTool(eitem) && !MekToolHandler.getInstance().isWood(eitem))
 			return true;
 		if (!(eitem.getItem() instanceof ItemPickaxe))
 			return false;

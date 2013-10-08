@@ -14,11 +14,14 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerTerraformer;
@@ -76,9 +79,11 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 
 		for (int i = 0; i < li.size(); i++) {
 			BiomeGenBase to = li.get(i);
-			LiquidStack liq = terra.getReqLiquidForTransform(from, to);
+			FluidStack liq = terra.getReqLiquidForTransform(from, to);
 			if (liq != null) {
-				ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, liq.asItemStack(), 48, 17+i*39);
+				ReikaLiquidRenderer.bindFluidTexture(liq);
+				Icon ico = liq.getFluid().getIcon();
+				this.drawTexturedModelRectFromIcon(48, 17+i*39, ico, 16, 16);
 				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), 56, 21+i*39, 0);
 			}
 			else {
@@ -96,6 +101,8 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 				ReikaGuiAPI.instance.drawLine(16+48, 18+17+i*39, 48, 18+16+17+i*39, 0);
 			}
 		}
+		String tex = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
 	}
 
 	@Override

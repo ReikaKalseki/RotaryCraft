@@ -41,11 +41,8 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y-1, z);
 			if (tile != null) {
-				if (tile.fuel > fuel) {
-					oldfuel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-					fuel = ReikaMathLibrary.extrema(fuel+oldfuel, 0, "max");
-				}
+				fuel = tile.getFuelLevel();
+				tile.setEmpty();
 			}
 		}
 	}

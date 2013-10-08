@@ -45,7 +45,7 @@ public class ContainerGearbox extends CoreContainer
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 1, gearbox.lubricant);
+			icrafting.sendProgressBarUpdate(this, 1, gearbox.getLubricant());
 			icrafting.sendProgressBarUpdate(this, 2, gearbox.damage);
 			icrafting.sendProgressBarUpdate(this, 3, gearbox.omega);
 			icrafting.sendProgressBarUpdate(this, 4, gearbox.torque);
@@ -56,7 +56,7 @@ public class ContainerGearbox extends CoreContainer
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: gearbox.lubricant = par2; break;
+		case 1: gearbox.setLubricant(par2); break;
 		case 2: gearbox.damage = par2; break;
 		case 3: gearbox.omega = par2; break;
 		case 4: gearbox.torque = par2; break;

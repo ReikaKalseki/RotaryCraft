@@ -59,11 +59,11 @@ public class RenderObsidian extends RotaryTERenderer
 			var14 = ObsidianModel;
 			//ModelObsidianV var15;
 			//var14 = this.ObsidianModelV;
-			if (tile.waterLevel > 0 && tile.lavaLevel > 0)
+			if (tile.getWater() > 0 && tile.getLava() > 0)
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/obsidiantex.png");
-			else if (tile.waterLevel <= 0)
+			else if (tile.getWater() <= 0)
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/obsidiantexlava.png");
-			else if (tile.lavaLevel <= 0)
+			else if (tile.getLava() <= 0)
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/obsidiantexwater.png");
 
 			GL11.glPushMatrix();
@@ -81,7 +81,7 @@ public class RenderObsidian extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 			// if (tile.getBlockMetadata() < 4)
 			Object[] pars = new Object[2];
-			pars[0] = (MinecraftForgeClient.getRenderPass() == 1 && (tile.waterLevel > 0 || tile.lavaLevel > 0));
+			pars[0] = (MinecraftForgeClient.getRenderPass() == 1 && (tile.getWater() > 0 || tile.getLava() > 0));
 			pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
 			var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), 0);
 			// else
@@ -106,11 +106,11 @@ public class RenderObsidian extends RotaryTERenderer
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityObsidianMaker teo = (TileEntityObsidianMaker)te;
-		if (teo.waterLevel > 0 && teo.lavaLevel > 0)
+		if (teo.getWater() > 0 && teo.getLava() > 0)
 			return "obsidiantex.png";
-		else if (teo.waterLevel <= 0)
+		else if (teo.getWater() <= 0)
 			return "obsidiantexlava.png";
-		else if (teo.lavaLevel <= 0)
+		else if (teo.getLava() <= 0)
 			return "obsidiantexwater.png";
 		return null;
 	}

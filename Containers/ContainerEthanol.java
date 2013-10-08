@@ -43,7 +43,7 @@ public class ContainerEthanol extends CoreContainer
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 1, Engine.ethanols);
+			icrafting.sendProgressBarUpdate(this, 1, Engine.getFuelLevel());
 		}
 	}
 
@@ -51,7 +51,7 @@ public class ContainerEthanol extends CoreContainer
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: Engine.ethanols = par2; break;
+		case 1: Engine.setFuelLevel(par2); break;
 		}
 	}
 }

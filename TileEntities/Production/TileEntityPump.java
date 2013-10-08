@@ -346,7 +346,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		tank.removeLiquid(amt);
 	}
 
-	public void setLiquid(int amt) {
-		tank.setLevel(amt);
+	public void setEmpty() {
+		tank.empty();
 	}
 }

@@ -257,7 +257,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("Obsidian Factory Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("Obsidian Factory Receiving %.3f W @ %d rad/s.", power, omega));
-				ReikaChatHelper.writeString(String.format("Water: %dkL. Lava: %dkL.", clicked.waterLevel, clicked.lavaLevel));
+				ReikaChatHelper.writeString(String.format("Water: %dkL. Lava: %dkL.", clicked.getWater(), clicked.getLava()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					ReikaChatHelper.writeString("Insufficient Power!");
@@ -442,7 +442,7 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				ratioclicked = clicked.ratio;
 				damage = clicked.damage;
-				lube = clicked.lubricant;
+				lube = clicked.getLubricant();
 				reductionclicked = clicked.reduction;
 				if (reductionclicked)
 					geartype = "Reduction";
