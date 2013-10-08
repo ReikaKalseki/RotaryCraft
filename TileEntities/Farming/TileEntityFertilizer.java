@@ -48,7 +48,7 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public int getRedstoneOverride() {
-		return 0;
+		return this.hasFertilizer() ? 0 : 15;
 	}
 
 	@Override
@@ -56,7 +56,8 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 		this.getSummativeSidedPower();
 
 		if (!world.isRemote) {
-			for (int i = 0; i < this.getUpdatesPerTick(); i++)
+			int n = this.getUpdatesPerTick();
+			for (int i = 0; i < n; i++)
 				this.tickBlock(world, x, y, z);
 		}
 	}
@@ -82,17 +83,22 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public int getRange() {
-		return 6;
+		if (torque <= 0)
+			return 0;
+		int r = 2*(int)ReikaMathLibrary.logbase(torque, 2);
+		if (r > this.getMaxRange())
+			return this.getMaxRange();
+		return r;
 	}
 
 	@Override
 	public int getMaxRange() {
-		return 6;
+		return 32;
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return 9;
+		return inv.length;
 	}
 
 	@Override
@@ -107,10 +113,28 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal) || is.itemID == ForestryHandler.getInstance().apatiteID;
+		return this.isValidFertilizer(is);
 	}
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
+	public boolean isValidFertilizer(ItemStack is) {
+		if (ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal))
+			return true;
+		if (is.itemID == ForestryHandler.getInstance().apatiteID)
+			return true;
+		return false;
+	}
+
+	public boolean hasFertilizer() {
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				if (this.isValidFertilizer(inv[i]))
+					return true;
+			}
+		}
 		return false;
 	}
 }

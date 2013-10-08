@@ -69,7 +69,9 @@ public enum PowerReceivers {
 	FUELENHANCER(1, 1024, 1024),
 	ARROWGUN(1024),
 	BOILER(),
-	FERTILIZER(1024);
+	FERTILIZER(1024),
+	LAVAMAKER();
+
 
 	private int minT;
 	private int minS;

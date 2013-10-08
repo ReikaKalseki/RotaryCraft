@@ -15,28 +15,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 
 	public ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
 
-	public int waterLevel = 0;
-	public int lavaLevel = 0;
-	public int lubeLevel = 0;
-	public int fuelLevel = 0;
-
-	public static final int CAPACITY = 24;
+	public static final int CAPACITY = 24000;
 
 	public void getLava(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Lava!");
@@ -44,30 +39,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 		if (lavaLevel < CAPACITY) {
 			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
 				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
@@ -89,30 +60,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
 				}
 			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-			}
 		}
 	}
 
@@ -128,30 +75,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
 				}
 			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
-				}
-			}
 		}
 	}
 
@@ -161,30 +84,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 		if (lubeLevel < CAPACITY) {
 			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
 				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.lubricant > 0) {
-					oldLevel = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-					lubeLevel = ReikaMathLibrary.extrema(lubeLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.lubricant > 0) {
-					oldLevel = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-					lubeLevel = ReikaMathLibrary.extrema(lubeLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.lubricant > 0) {
-					oldLevel = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-					lubeLevel = ReikaMathLibrary.extrema(lubeLevel+oldLevel/4+1, 0, "max");
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z-1);
 				if (tile != null && tile.lubricant > 0) {
 					oldLevel = tile.lubricant;
 					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
@@ -293,56 +192,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 	private void fillBuckets() {
 		int slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
 		if (slot == -1)
-			return;/*
-		if (waterLevel > 0 && lavaLevel > 0) {
-			if (par5Random.nextBoolean()) {
-				if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketLava), this))
-					return;
-				lavaLevel--;
-			}
-			else {
-				if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketWater), this))
-					return;
-				waterLevel--;
-			}
-			ReikaInventoryHelper.decrStack(slot, inv);
-			//ReikaJavaLibrary.pConsole(inv);
-		}*/
-		if (waterLevel > 0) {
-			if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketWater), this)) {
-				//ReikaJavaLibrary.pConsole(false);
-				return;
-			}
-			waterLevel--;
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
-		slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
-		if (slot == -1)
 			return;
-		if (lavaLevel > 0) {
-			if (!ReikaInventoryHelper.addToIInv(new ItemStack(Item.bucketLava), this))
-				return;
-			lavaLevel--;
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
-		slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
-		if (slot == -1)
-			return;
-		if (lubeLevel >= ItemFuelLubeBucket.LUBE_VALUE) {
-			if (!ReikaInventoryHelper.addToIInv(ItemStacks.lubebucket.copy(), this))
-				return;
-			lubeLevel -= ItemFuelLubeBucket.LUBE_VALUE;
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
-		slot = ReikaInventoryHelper.locateInInventory(Item.bucketEmpty.itemID, inv);
-		if (slot == -1)
-			return;
-		if (fuelLevel >= ItemFuelLubeBucket.JET_VALUE) {
-			if (!ReikaInventoryHelper.addToIInv(ItemStacks.fuelbucket.copy(), this))
-				return;
-			fuelLevel -= ItemFuelLubeBucket.JET_VALUE;
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
 
 	}
 
@@ -372,10 +222,8 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 			if (byte0 >= 0 && byte0 < inv.length)
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 		}
-		waterLevel = NBT.getInteger("water");
-		lavaLevel = NBT.getInteger("lava");
-		lubeLevel = NBT.getInteger("lube");
-		fuelLevel = NBT.getInteger("fuel");
+
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -392,10 +240,7 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 		}
 		NBT.setTag("Items", nbttaglist);
 
-		NBT.setInteger("water", waterLevel);
-		NBT.setInteger("lava", lavaLevel);
-		NBT.setInteger("lube", lubeLevel);
-		NBT.setInteger("fuel", fuelLevel);
+		tank.writeToNBT(NBT);
 	}
 
 	@Override
@@ -413,6 +258,10 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return side.offsetY == 0;
+	}
+
+	public boolean canAccept(Fluid f) {
+		return tank.isEmpty() || f.equals(tank.getActualFluid());
 	}
 
 }

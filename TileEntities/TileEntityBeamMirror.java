@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -64,11 +63,30 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getDirection(meta);
+
 		this.adjustAim(world, x, y, z);
 
 		this.setLight(world, x, y, z);
 
 		this.burnMobs(world, x, y, z);
+	}
+
+	private void getDirection(int meta) {
+		switch(meta) {
+		case 0:
+			facingDir = ForgeDirection.EAST;
+			break;
+		case 1:
+			facingDir = ForgeDirection.WEST;
+			break;
+		case 2:
+			facingDir = ForgeDirection.SOUTH;
+			break;
+		case 3:
+			facingDir = ForgeDirection.NORTH;
+			break;
+		}
 	}
 
 	private void burnMobs(World world, int x, int y, int z) {

@@ -72,6 +72,10 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 
 	@Override
 	public int getRedstoneOverride() {
+		if (bctank.isEmpty())
+			return 15;
+		if (jettank.isFull())
+			return 15;
 		return 0;
 	}
 

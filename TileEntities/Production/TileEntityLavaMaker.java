@@ -1,7 +1,12 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -10,22 +15,70 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver implements IFluidHandler, PipeConnector {
+public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver implements IFluidHandler, PipeConnector, TemperatureTE {
 
 	private ItemStack[] inv = new ItemStack[9];
 
-	public static final int CAPACITY = 16000;
+	public static final int CAPACITY = 64000;
 
 	private HybridTank tank = new HybridTank("lavamaker", CAPACITY);
 
+	public static final int MELT_ENERGY = 880000; //approx
+
+	public static final int MAXTEMP = 1500;
+
+	private long energy;
+
+	private int temperature;
+
+	private StepTimer timer = new StepTimer(20);
+
+	private static final HashMap<Integer, FluidStack> recipes = new HashMap();
+	private static final List<Integer> fuels = new ArrayList();
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getPowerBelow();
+		energy += power;
 
+		timer.update();
+		if (timer.checkCap())
+			this.updateTemperature(world, x, y, z, meta);
+
+		if (energy/20 >= MELT_ENERGY) {
+			for (int i = 0; i < fuels.size(); i++) {
+				int id = fuels.get(i);
+				int slot = ReikaInventoryHelper.locateIDInInventory(id, this);
+				if (slot != -1) {
+					if (this.melt(slot))
+						return;
+				}
+			}
+		}
+
+	}
+
+	private boolean melt(int slot) {
+		if (inv[slot] == null)
+			return false;
+		int id = inv[slot].itemID;
+		FluidStack liq = recipes.get(id);
+		if (tank.getLevel()+liq.amount > tank.getCapacity())
+			return false;
+		tank.addLiquid(liq.amount, FluidRegistry.LAVA);
+		ReikaInventoryHelper.decrStack(slot, inv);
+		energy -= MELT_ENERGY*20;
+		return true;
 	}
 
 	@Override
@@ -92,7 +145,7 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == Block.stone.blockID || is.itemID == Block.cobblestone.blockID || is.itemID == Block.stoneBrick.blockID || is.itemID == Block.netherrack.blockID;
+		return fuels.contains(is.itemID);
 	}
 
 	@Override
@@ -117,7 +170,104 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public int getRedstoneOverride() {
+		if (tank.isFull())
+			return 15;
+		if (!this.canMake())
+			return 15;
 		return 0;
+	}
+
+	private boolean canMake() {
+		for (int i = 0; i < fuels.size(); i++) {
+			int id = fuels.get(i);
+			int slot = ReikaInventoryHelper.locateIDInInventory(id, this);
+			if (slot != -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static void addFuel(Block b, int amt) {
+		fuels.add(b.blockID);
+		recipes.put(b.blockID, new FluidStack(FluidRegistry.LAVA, amt));
+	}
+
+	static {
+		addFuel(Block.stone, 1000);
+		addFuel(Block.cobblestone, 500);
+		addFuel(Block.netherrack, 2000);
+		addFuel(Block.stoneBrick, 1000);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		tank.readFromNBT(NBT);
+
+		energy = NBT.getLong("e");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		tank.writeToNBT(NBT);
+
+		NBT.setLong("e", energy);
+	}
+
+	@Override
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		if (power > 0) {
+			temperature += 2.5*ReikaMathLibrary.logbase(power, 2);
+		}
+		if (temperature > Tamb) {
+			temperature -= (temperature-Tamb)/5;
+		}
+		else {
+			temperature += (temperature-Tamb)/5;
+		}
+		if (temperature - Tamb <= 4 && temperature > Tamb)
+			temperature--;
+		if (temperature > MAXTEMP) {
+			temperature = MAXTEMP;
+			this.overheat(world, x, y, z);
+		}
+		if (temperature > 50) {
+			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+			if (side != -1)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+		}
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, false);
+		if (tank.isEmpty())
+			world.setBlock(x, y, z, 0);
+		else
+			world.setBlock(x, y, z, Block.lavaMoving.blockID);
 	}
 
 }

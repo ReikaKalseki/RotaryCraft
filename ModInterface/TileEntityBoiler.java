@@ -72,6 +72,10 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 
 	@Override
 	public int getRedstoneOverride() {
+		if (tank.isFull())
+			return 15;
+		if (watertank.isEmpty())
+			return 15;
 		return 0;
 	}
 
