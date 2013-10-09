@@ -16,7 +16,9 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -106,7 +108,12 @@ public abstract class BlockBasicMultiTE extends Block {
 
 	@Override
 	public final Icon getIcon(int s, int meta) {
-		return icons[meta][0][s][0];
+		try {
+			return icons[meta][0][s][0];
+		}
+		catch (NullPointerException e) {
+			return ((TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
+		}
 	}
 
 	public final AxisAlignedBB getBlockAABB() {
