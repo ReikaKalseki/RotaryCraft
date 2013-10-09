@@ -42,6 +42,10 @@ public abstract class TileEntityLiquidPowered extends TileEntityPowerReceiver im
 		return tank.getLevel();
 	}
 
+	public Fluid getContainedFluid() {
+		return tank.getActualFluid();
+	}
+
 	public void addLiquid(int amt) {
 		tank.addLiquid(amt, this.getInputFluid());
 	}

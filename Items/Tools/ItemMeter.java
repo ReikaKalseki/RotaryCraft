@@ -102,7 +102,7 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
-			ReikaChatHelper.writeString(String.format("Reservoir contains %d m^3 of %s.", clicked.liquidLevel/RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase()));
+			ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
@@ -297,7 +297,7 @@ public class ItemMeter extends ItemRotaryTool
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("Bucket Filler Receiving %.3f W @ %d rad/s.", power, omega));
 				if (power >= clicked.MINPOWER)
-					ReikaChatHelper.writeString(String.format("Liquid Contents:\nWater: %d m^3\nLava: %d m^3\nLubricant: %d L\nJet Fuel: %d L", clicked.waterLevel, clicked.lavaLevel, clicked.lubeLevel, clicked.fuelLevel));
+					ReikaChatHelper.writeString(String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					ReikaChatHelper.writeString("Insufficient Power!");

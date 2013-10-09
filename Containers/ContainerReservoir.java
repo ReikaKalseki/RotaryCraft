@@ -39,8 +39,8 @@ public class ContainerReservoir extends CoreContainer
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 1, Reservoir.liquidID);
-			icrafting.sendProgressBarUpdate(this, 2, Reservoir.liquidLevel);
+			//icrafting.sendProgressBarUpdate(this, 1, Reservoir.get);
+			icrafting.sendProgressBarUpdate(this, 2, Reservoir.getLevel());
 		}
 	}
 
@@ -48,8 +48,8 @@ public class ContainerReservoir extends CoreContainer
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: Reservoir.liquidID = par2; break;
-		case 2: Reservoir.liquidLevel = par2; break;
+		//case 1: Reservoir.liquidID = par2; break;
+		case 2: Reservoir.setLevel(par2); break;
 		}
 	}
 }

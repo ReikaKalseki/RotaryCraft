@@ -15,6 +15,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -84,9 +85,11 @@ public class TileEntityHose extends TileEntityPiping {
 
 	private void fromFiller(TileEntityBucketFiller tile) {
 		if (tile != null) {
-			if (tile.lubeLevel > lubricant) {
-				oldlube = tile.lubeLevel;
-				tile.lubeLevel = ReikaMathLibrary.extrema(tile.lubeLevel-(tile.lubeLevel-lubricant), 0, "max");
+			if (tile.filling)
+				return;
+			if (tile.getContainedFluid() != null && tile.getContainedFluid().equals(FluidRegistry.getFluid("lubricant")) && tile.getLevel() > lubricant) {
+				oldlube = tile.getLevel();
+				tile.setEmpty();
 				lubricant = ReikaMathLibrary.extrema(lubricant+(oldlube-lubricant), 0, "max");
 			}
 		}

@@ -41,15 +41,20 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 
 	public void getLava(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Lava!");
-		ForgeDir!
 		int oldLevel = 0;
-		if (this.canAccept(LAVA) && tank.getLevel()  < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					lavaLevel = ReikaMathLibrary.extrema(lavaLevel+oldLevel/4+1, 0, "max");
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			if (this.canAccept(LAVA) && tank.getLevel() < CAPACITY) {
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						tank.addLiquid(oldLevel/4+1, FluidRegistry.LAVA);
+					}
 				}
 			}
 		}
@@ -58,13 +63,19 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	public void getWater(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
 		int oldLevel = 0;
-		if (this.canAccept(WATER) && tank.getLevel()  < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			if (this.canAccept(WATER) && tank.getLevel()  < CAPACITY) {
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
+						oldLevel = tile.liquidLevel;
+						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+					}
 				}
 			}
 		}
@@ -73,13 +84,19 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	public void getFuel(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
 		int oldLevel = 0;
-		if (this.canAccept(JETFUEL) && tank.getLevel()  < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuelLevel = ReikaMathLibrary.extrema(fuelLevel+oldLevel/4+1, 0, "max");
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			if (this.canAccept(JETFUEL) && tank.getLevel()  < CAPACITY) {
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.FUELLINE) {
+					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.fuel > 0) {
+						oldLevel = tile.fuel;
+						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
+						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("jet fuel"));
+					}
 				}
 			}
 		}
@@ -88,13 +105,19 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	public void getLube(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
 		int oldLevel = 0;
-		if (this.canAccept(LUBRICANT) && tank.getLevel() < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
-				TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.lubricant > 0) {
-					oldLevel = tile.lubricant;
-					tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-					lubeLevel = ReikaMathLibrary.extrema(lubeLevel+oldLevel/4+1, 0, "max");
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			if (this.canAccept(LUBRICANT) && tank.getLevel() < CAPACITY) {
+				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.HOSE) {
+					TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
+					if (tile != null && tile.lubricant > 0) {
+						oldLevel = tile.lubricant;
+						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
+						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("lubricant"));
+					}
 				}
 			}
 		}
@@ -166,7 +189,7 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 				FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(slot);
 				if (fluid != null) {
 					if (this.canAccept(fluid.getFluid())) {
-						if (tank.getLevel()+tank.getCapacity() >= fluid.amount) {
+						if (tank.getCapacity() >= fluid.amount+tank.getLevel()) {
 							ReikaInventoryHelper.decrStack(i, inv);
 							if (!ReikaInventoryHelper.addToIInv(is, this))
 								ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
@@ -186,6 +209,7 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 				ItemStack is = FluidContainerRegistry.fillFluidContainer(tank.getFluid(), slot);
 				if (is != null) {
 					tank.removeLiquid(FluidContainerRegistry.getFluidForFilledItem(is).amount);
+					ReikaInventoryHelper.decrStack(i, inv);
 					if (!ReikaInventoryHelper.addToIInv(is, this))
 						ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 				}
@@ -259,5 +283,48 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 
 	public boolean canAccept(Fluid f) {
 		return tank.isEmpty() || f.equals(tank.getActualFluid());
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return null;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return this.canReceiveFrom(from) && filling;
+	}
+
+	public void setEmpty() {
+		tank.empty();
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (!this.canDrain(from, resource.getFluid()))
+			return null;
+		return tank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (filling || from.offsetY != 0)
+			return null;
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return !filling && from.offsetY == 0;
 	}
 }

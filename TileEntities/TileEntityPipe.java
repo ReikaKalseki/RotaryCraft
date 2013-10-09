@@ -88,13 +88,17 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	private void transferFromPump(TileEntityPump tile) {
 		if (tile != null) {
-			if (tile.getLevel() > liquidLevel && (tile.getLiquid().getID() == liquidID || liquidID == -1) && tile.getLevel() > 0) {
-				liquidID = tile.getLiquid().getID();
+			if (tile.getLevel() > liquidLevel && (tile.getLiquid().getBlockID() == liquidID || liquidID == -1) && tile.getLevel() > 0) {
+				Fluid f = tile.getLiquid();
+				if (f == null)
+					return;
+				liquidID = f.getBlockID();
 				//oldLevel = tile.getLevel();
 				//tile.setLiquid(ReikaMathLibrary.extrema(tile.getLevel()-tile.getLevel()/4-1, 0, "max"));
 				//liquidLevel = tileReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
-				liquidLevel = tile.getLevel();
+				liquidLevel = tile.getLevel()-1;
 				tile.setEmpty();
+				tile.addLiquid(1, f);
 			}
 			fluidPressure = tile.liquidPressure;
 		}
@@ -102,17 +106,21 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	private void transferFromFiller(TileEntityBucketFiller tile) {
 		if (tile != null && !tile.filling) {
-			if (tile.waterLevel > liquidLevel && (liquidID == 9 || liquidID == -1) && tile.waterLevel > 0) {
+			if (tile.getContainedFluid() == null)
+				return;
+			boolean water = tile.getContainedFluid().equals(FluidRegistry.WATER);
+			boolean lava = tile.getContainedFluid().equals(FluidRegistry.LAVA);
+			if (tile.getLevel() > liquidLevel && (liquidID == 9 || liquidID == -1) && water) {
 				liquidID = 9;
-				oldLevel = tile.waterLevel;
-				tile.waterLevel = ReikaMathLibrary.extrema(tile.waterLevel-tile.waterLevel/4-1, 0, "max");
-				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
+				oldLevel = tile.getLevel();
+				tile.setEmpty();
+				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
 			}
-			else if (tile.lavaLevel > liquidLevel && (liquidID == 11 || liquidID == -1) && tile.lavaLevel > 0) {
+			else if (tile.getLevel() > liquidLevel && (liquidID == 11 || liquidID == -1) && lava) {
 				liquidID = 11;
-				oldLevel = tile.lavaLevel;
-				tile.lavaLevel = ReikaMathLibrary.extrema(tile.lavaLevel-tile.lavaLevel/4-1, 0, "max");
-				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
+				oldLevel = tile.getLevel();
+				tile.setEmpty();
+				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
 			}
 		}
 	}

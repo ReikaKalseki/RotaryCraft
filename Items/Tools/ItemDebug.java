@@ -97,7 +97,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.liquidID, tile.liquidLevel));
+				ReikaChatHelper.write(String.format("%s  %d", tile.getFluid().getLocalizedName(), tile.getLevel()));
 			}
 		}
 		if (m == MachineRegistry.EXTRACTOR) {

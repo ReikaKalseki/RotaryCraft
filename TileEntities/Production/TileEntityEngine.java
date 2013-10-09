@@ -715,7 +715,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
 		if (type == EnumEngineType.SPORT) {
-			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 27, true, 1.5F, true, true, 6F);
+			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
 		}
 		else if (type == EnumEngineType.STEAM) {
 			world.setBlockToAir(x, y, z);
@@ -1605,7 +1605,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public int getFuelDuration() {
 		if (!type.burnsFuel())
 			return -1;
-		int fuel = this.getFuelLevel();
+		int fuel = this.getFuelLevel()/RotaryConfig.MILLIBUCKET;
 		float burnprogress = 0;
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;

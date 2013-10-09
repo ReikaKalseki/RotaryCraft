@@ -47,6 +47,7 @@ import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Items.Tools.ItemSteelArmor;
 import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
 import Reika.RotaryCraft.Items.Tools.ItemSteelPick;
 import Reika.RotaryCraft.Items.Tools.ItemSteelShovel;
@@ -97,7 +98,11 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, ModList.INDUSTRIALCRAFT),
 	STEELPICK(13, true,			"HSLA Steel Pickaxe",		ItemSteelPick.class),
 	STEELAXE(14, true,			"HSLA Steel Axe",			ItemSteelAxe.class),
-	STEELSHOVEL(15, true,		"HSLA Steel Shovel",		ItemSteelShovel.class);
+	STEELSHOVEL(15, true,		"HSLA Steel Shovel",		ItemSteelShovel.class),
+	STEELHELMET(17, false,		"HSLA Steel Helmet",		ItemSteelArmor.class),
+	STEELCHEST(18, false,		"HSLA Steel Chestplate",	ItemSteelArmor.class),
+	STEELLEGS(19, false,		"HSLA Steel Leggings",		ItemSteelArmor.class),
+	STEELBOOTS(20, false,		"HSLA Steel Boots",			ItemSteelArmor.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -155,7 +160,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 
 	public Class[] getConstructorParamTypes() {
 		if (this.isArmor()) {
-			if (this.isBedrockArmor())
+			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
 			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
 		}
@@ -179,7 +184,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 
 	public Object[] getConstructorParams() {
 		if (this.isArmor()) {
-			if (this.isBedrockArmor())
+			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
 			else
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
@@ -191,14 +196,18 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	private int getArmorType() {
 		switch(this) {
 		case BEDBOOTS:
+		case STEELBOOTS:
 			return 3;
 		case BEDCHEST:
+		case STEELCHEST:
 			return 1;
 		case JETCHEST:
 			return 1;
 		case BEDHELM:
+		case STEELHELMET:
 			return 0;
 		case BEDLEGS:
+		case STEELLEGS:
 			return 2;
 		default:
 			return 0;
@@ -273,7 +282,21 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return RotaryCraft.proxy.NVHelmet;
 		if (this.isBedrockArmor())
 			return RotaryCraft.proxy.BedArmor;
+		if (this.isSteelArmor())
+			return RotaryCraft.proxy.BedArmor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
+	}
+
+	private boolean isSteelArmor() {
+		if (this == STEELHELMET)
+			return true;
+		if (this == STEELCHEST)
+			return true;
+		if (this == STEELLEGS)
+			return true;
+		if (this == STEELBOOTS)
+			return true;
+		return false;
 	}
 
 	public String getUnlocalizedName() {
@@ -346,6 +369,10 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case BEDLEGS:
 		case BEDBOOTS:
 		case JETCHEST:
+		case STEELHELMET:
+		case STEELCHEST:
+		case STEELLEGS:
+		case STEELBOOTS:
 			return true;
 		default:
 			return false;

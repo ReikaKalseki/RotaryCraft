@@ -32,6 +32,10 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -50,7 +54,6 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
@@ -200,20 +203,20 @@ public abstract class BlockBasicMultiTE extends Block {
 			if (!tr.isUseableByPlayer(ep))
 				return false;
 			if (is != null) {
-				if (LiquidRegistry.isLiquidItem(is)) {
-					LiquidRegistry liq = LiquidRegistry.getLiquidFromIDAndMetadata(is.itemID, 0);
-					if (liq.hasBlock()) {
+				if (FluidContainerRegistry.isFilledContainer(is)) {
+					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (f != null) {
+						Fluid fluid = f.getFluid();
 						int size = is.stackSize;
-						if (tr.liquidLevel+size <= tr.CAPACITY) {
-							if (tr.liquidID == -1) {
-								tr.liquidID = liq.getLiquidBlockID();
-								tr.liquidLevel += size*RotaryConfig.MILLIBUCKET;
+						if (tr.getLevel()+(size-1)*f.amount <= tr.CAPACITY) {
+							if (tr.isEmpty()) {
+								tr.addLiquid(size*f.amount, fluid);
 								if (!ep.capabilities.isCreativeMode)
 									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
 								return true;
 							}
-							else if (tr.liquidID == liq.getLiquidBlockID()) {
-								tr.liquidLevel += size*RotaryConfig.MILLIBUCKET;
+							else if (f.getFluid().equals(tr.getFluid())) {
+								tr.addLiquid(size*f.amount, fluid);
 								if (!ep.capabilities.isCreativeMode)
 									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
 								return true;
@@ -221,18 +224,22 @@ public abstract class BlockBasicMultiTE extends Block {
 						}
 					}
 				}
-				else if (is.itemID == Item.bucketEmpty.itemID) {
+				else if (FluidContainerRegistry.isEmptyContainer(is) && !tr.isEmpty()) {
 					int size = is.stackSize;
-					if (tr.liquidLevel >= size) {
-						LiquidRegistry liq = LiquidRegistry.getLiquidFromBlock(tr.liquidID);
-						tr.liquidLevel -= size*RotaryConfig.MILLIBUCKET;
-						ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(liq.getHeldItemFor(), size));
+					FluidStack stack = tr.getContents();
+					ItemStack ret = FluidContainerRegistry.fillFluidContainer(stack, is);
+					if (ret != null) {
+						int amt = FluidContainerRegistry.getFluidForFilledItem(ret).amount;
+						ReikaJavaLibrary.pConsole(amt);
+						tr.removeLiquid(amt);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(ret, size));
 						return true;
 					}
 				}
 				else if (is.itemID == Item.glassBottle.itemID) {
 					int size = is.stackSize;
-					if (tr.liquidID == LiquidRegistry.WATER.getLiquidBlockID()) {
+					if (tr.getLevel() > 0 && tr.getFluid().equals(FluidRegistry.WATER)) {
 						ep.setCurrentItemOrArmor(0, new ItemStack(Item.potion.itemID, size, 0));
 						return true;
 					}

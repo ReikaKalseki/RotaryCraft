@@ -15,6 +15,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
@@ -106,9 +107,11 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	private void fromFiller(TileEntityBucketFiller tile) {
 		if (tile != null) {
-			if (tile.fuelLevel > fuel) {
-				oldfuel = tile.fuelLevel;
-				tile.fuelLevel = ReikaMathLibrary.extrema(tile.fuelLevel-(tile.fuelLevel-fuel), 0, "max");
+			if (tile.filling)
+				return;
+			if (tile.getContainedFluid() != null && tile.getContainedFluid().equals(FluidRegistry.getFluid("jet fuel")) && tile.getLevel() > fuel) {
+				oldfuel = tile.getLevel();
+				tile.setEmpty();
 				fuel = ReikaMathLibrary.extrema(fuel+(oldfuel-fuel), 0, "max");
 			}
 		}

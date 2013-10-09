@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Renders;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -57,7 +58,7 @@ public class RenderReservoir extends RotaryTERenderer
 			var14 = ReservoirModel;
 			//ModelReservoirV var15;
 			//var14 = this.ReservoirModelV;
-			if (tile.liquidID == 8 || tile.liquidID == 9)
+			if (FluidRegistry.WATER.equals(tile.getFluid()))
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/reservoirtex.png");
 			else /*if (tile.liquidID == 10 || tile.liquidID == 11)*/
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/reservoirtex2.png");
@@ -126,7 +127,7 @@ public class RenderReservoir extends RotaryTERenderer
 
 	private Object[] getConditions(TileEntityReservoir te) {
 		Object[] vals = new Object[3];
-		vals[0] = te.liquidLevel > 0 && MinecraftForgeClient.getRenderPass() == 1;
+		vals[0] = te.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
 		vals[1] = te.getLiquidScaled(14);
 		vals[2] = (te.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !te.isInWorld();
 		return vals;
@@ -135,7 +136,7 @@ public class RenderReservoir extends RotaryTERenderer
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityReservoir tr = (TileEntityReservoir)te;
-		if (tr.liquidID == 8 || tr.liquidID == 9)
+		if (FluidRegistry.WATER.equals(tr.getFluid()))
 			return "reservoirtex.png";
 		return "reservoirtex2.png";
 	}

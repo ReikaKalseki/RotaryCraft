@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
@@ -32,7 +33,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		xSize = 176;
 		ySize = 96;
 		ep = p5ep;
-		water = (te.liquidID == 8 || te.liquidID == 9);
+		water = (FluidRegistry.WATER.equals(Reservoir.getFluid()));
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+83, j+92, k+25, k+70)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.liquidLevel/1000, Reservoir.CAPACITY/1000), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
 		}
 	}
 
