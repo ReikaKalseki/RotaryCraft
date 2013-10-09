@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemSteelArmor extends ItemRotaryArmor {
 
 	public ItemSteelArmor(int ID, int tex, int render, int type) {
-		super(ID, RotaryCraft.BEDROCK, render, type, tex);
+		super(ID, RotaryCraft.HSLA, render, type, tex);
 	}
 
 	@Override

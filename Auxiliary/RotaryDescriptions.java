@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -71,14 +72,15 @@ public final class RotaryDescriptions {
 
 	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
-	private static final XMLInterface parents = new XMLInterface(RotaryCraft.class, PARENT+"categories.xml");
-	private static final XMLInterface machines = new XMLInterface(RotaryCraft.class, PARENT+"machines.xml");
-	private static final XMLInterface trans = new XMLInterface(RotaryCraft.class, PARENT+"trans.xml");
-	private static final XMLInterface engines = new XMLInterface(RotaryCraft.class, PARENT+"engines.xml");
-	private static final XMLInterface tools = new XMLInterface(RotaryCraft.class, PARENT+"tools.xml");
-	private static final XMLInterface resources = new XMLInterface(RotaryCraft.class, PARENT+"resource.xml");
-	private static final XMLInterface miscs = new XMLInterface(RotaryCraft.class, PARENT+"misc.xml");
-	private static final XMLInterface infos = new XMLInterface(RotaryCraft.class, PARENT+"info.xml");
+	private static final boolean mustLoad = !DragonAPICore.isDeObfEnvironment();
+	private static final XMLInterface parents = new XMLInterface(RotaryCraft.class, PARENT+"categories.xml", mustLoad);
+	private static final XMLInterface machines = new XMLInterface(RotaryCraft.class, PARENT+"machines.xml", mustLoad);
+	private static final XMLInterface trans = new XMLInterface(RotaryCraft.class, PARENT+"trans.xml", mustLoad);
+	private static final XMLInterface engines = new XMLInterface(RotaryCraft.class, PARENT+"engines.xml", mustLoad);
+	private static final XMLInterface tools = new XMLInterface(RotaryCraft.class, PARENT+"tools.xml", mustLoad);
+	private static final XMLInterface resources = new XMLInterface(RotaryCraft.class, PARENT+"resource.xml", mustLoad);
+	private static final XMLInterface miscs = new XMLInterface(RotaryCraft.class, PARENT+"misc.xml", mustLoad);
+	private static final XMLInterface infos = new XMLInterface(RotaryCraft.class, PARENT+"info.xml", mustLoad);
 
 	public static void addCategory(HandbookRegistry h) {
 		categories.add(h);

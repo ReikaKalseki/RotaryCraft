@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -189,11 +189,14 @@ public final class HandbookAuxData {
 
 			if (ModList.DYETREES.isLoaded()) {
 				for (int j = 0; j < 16; j++) {
+					Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
+					Method sapling = tree.getMethod("getDyeSapling", int.class);
+					Method leaf = tree.getMethod("getDyeLeaf", int.class);
 					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), TreeGetter.getDyeSapling(j), new ItemStack(Item.bucketWater)});
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(j), new ItemStack(Item.bucketWater)});
 
 					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), TreeGetter.getDyeLeaf(j), new ItemStack(Item.bucketWater)});
+					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(j), new ItemStack(Item.bucketWater)});
 				}
 			}
 

@@ -18,6 +18,7 @@ public class CommonProxy
 	public static int NVHelmet;
 
 	public static int BedArmor;
+	public static int SteelArmor;
 
 	/**
 	 * Client side only register stuff...
