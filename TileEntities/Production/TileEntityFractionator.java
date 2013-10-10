@@ -22,7 +22,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
@@ -32,7 +31,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver implements PipeConnector {
+public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 
 	public int mixTime;
 	public int storeTime;

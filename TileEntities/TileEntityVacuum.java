@@ -14,7 +14,6 @@ import java.util.List;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,7 +28,7 @@ import Reika.RotaryCraft.Models.ModelVacuum;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
+public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
 	public ItemStack[] inventory = new ItemStack[54];
 	public int experience = 0;

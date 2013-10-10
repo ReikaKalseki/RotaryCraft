@@ -11,11 +11,9 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 
-public abstract class TileEntityLiquidInventoryReceiver extends TileEntityLiquidPowered implements IFluidHandler, PipeConnector, ISidedInventory {
+public abstract class TileEntityLiquidInventoryReceiver extends TileEntityLiquidPowered implements ISidedInventory {
 
 	public void openChest() {
 

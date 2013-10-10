@@ -58,6 +58,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -489,6 +490,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityLamp) {
 			((TileEntityLamp)te).clearAll();
+		}
+		if (te instanceof TileEntityBeamMirror) {
+			((TileEntityBeamMirror)te).lightsOut();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

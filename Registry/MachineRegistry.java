@@ -729,6 +729,7 @@ public enum MachineRegistry {
 		case MULTICLUTCH:
 		case ARROWGUN:
 		case STEAMTURBINE:
+		case BEAMMIRROR:
 			return true;
 		default:
 			return false;

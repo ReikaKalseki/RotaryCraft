@@ -9,14 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
@@ -55,7 +62,7 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getSummativeSidedPower();
 
-		if (!world.isRemote) {
+		if (!world.isRemote && this.hasFertilizer()) {
 			int n = this.getUpdatesPerTick();
 			for (int i = 0; i < n; i++)
 				this.tickBlock(world, x, y, z);
@@ -65,7 +72,7 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 	private int getUpdatesPerTick() {
 		if (power < MINPOWER)
 			return 0;
-		return (int)ReikaMathLibrary.logbase(omega, 2);
+		return 4*(int)ReikaMathLibrary.logbase(omega, 2);
 	}
 
 	private void tickBlock(World world, int x, int y, int z) {
@@ -73,12 +80,34 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 		int dy = ReikaRandomHelper.getRandomPlusMinus(y, this.getRange());
 		int dz = ReikaRandomHelper.getRandomPlusMinus(z, this.getRange());
 		int id = world.getBlockId(dx, dy, dz);
+		int meta = world.getBlockMetadata(dx, dy, dz);
 		if (id != 0 && ReikaMathLibrary.py3d(x-dx, y-dy, z-dz) <= this.getRange()) {
 			Block b = Block.blocksList[id];
 			b.updateTick(world, dx, dy, dz, par5Random);
 			ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, dx, dy, z, 2, 0.0625);
 			world.markBlockForUpdate(dx, dy, dz);
+			if (this.didSomething(world, dx, dy, dz))
+				this.consumeItem();
 		}
+	}
+
+	private void consumeItem() {
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				ReikaInventoryHelper.decrStack(i, inv);
+				return;
+			}
+		}
+	}
+
+	private boolean didSomething(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
+		ModCropList mod = ModCropList.getModCrop(id, meta);
+		ModWoodList sapling = ModWoodList.getModWoodFromSapling(new ItemStack(id, 1, meta));
+		and more like sugar cane
+		return false;
 	}
 
 	@Override
@@ -121,11 +150,12 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	public boolean isValidFertilizer(ItemStack is) {
+		List<ItemStack> li = OreDictionary.getOres("gemApatite");
 		if (ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal))
 			return true;
 		if (is.itemID == ForestryHandler.getInstance().apatiteID)
 			return true;
-		return false;
+		return ReikaItemHelper.listContainsItemStack(li, is);
 	}
 
 	public boolean hasFertilizer() {

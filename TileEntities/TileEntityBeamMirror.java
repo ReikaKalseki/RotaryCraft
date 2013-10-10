@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBeamMirror extends RotaryCraftTileEntity implements RangedEffect {
 
@@ -48,7 +49,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 
 	@Override
 	public int getMachineIndex() {
-		return 0;
+		return MachineRegistry.BEAMMIRROR.ordinal();
 	}
 
 	@Override
@@ -90,8 +91,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	}
 
 	private void burnMobs(World world, int x, int y, int z) {
-		int r = this.getRange();
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		AxisAlignedBB box = this.getBurningBox(world, x, y, z);
 		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLivingBase e = inbox.get(i);
@@ -101,18 +101,46 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		}
 	}
 
+	private AxisAlignedBB getBurningBox(World world, int x, int y, int z) {
+		int r = this.getRange();
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1);
+		switch(facingDir) {
+		case EAST:
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1+r, y+1, z+1);
+		case NORTH:
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z-r, x+1, y+1, z+1);
+		case SOUTH:
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1+r);
+		case WEST:
+			return AxisAlignedBB.getAABBPool().getAABB(x-r, y, z, x+1, y+1, z+1);
+		default:
+			return box;
+		}
+	}
+
 	private void setLight(World world, int x, int y, int z) {
+		//ReikaJavaLibrary.pConsole(this.getRange(), Side.SERVER);
 		if (lastRange != this.getRange()) {
 			for (int i = 0; i < light.getSize(); i++) {
 				int[] xyz = light.getNthBlock(i);
 				int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 				if (id == RotaryCraft.lightblock.blockID) {
-					world.setBlock(x, y, z, 0);
+					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
 				}
 			}
 			if (this.getRange() > 0 && world.canBlockSeeTheSky(x, y+1, z))
-				light.addLineOfClear(world, x, y, z, this.getRange(), facingDir.offsetX, 0, facingDir.offsetZ);
+				light.addLineOfClear(world, x+facingDir.offsetX, y, z+facingDir.offsetZ, this.getRange(), facingDir.offsetX, 0, facingDir.offsetZ);
+			else
+				light.clear();
 			lastRange = this.getRange();
+		}
+
+		for (int i = 0; i < light.getSize(); i++) {
+			int[] xyz = light.getNthBlock(i);
+			if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == 0)
+				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
+			world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
 		}
 	}
 
@@ -129,6 +157,8 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 
 	@Override
 	public int getRange() {
+		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord+1, zCoord))
+			return 0;
 		int r = ReikaMathLibrary.intpow2(2, (int)(7*ReikaWorldHelper.getSunIntensity(worldObj)));
 		if (r > this.getMaxRange())
 			return this.getMaxRange();
@@ -138,6 +168,18 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	@Override
 	public int getMaxRange() {
 		return ConfigRegistry.FLOODLIGHTRANGE.getValue();
+	}
+
+	public void lightsOut() {
+		World world = worldObj;
+		for (int i = 0; i < light.getSize(); i++) {
+			int[] xyz = light.getNthBlock(i);
+			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			if (id == RotaryCraft.lightblock.blockID) {
+				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
+			}
+		}
 	}
 
 }
