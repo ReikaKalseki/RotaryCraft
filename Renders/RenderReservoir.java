@@ -15,7 +15,6 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -126,7 +125,7 @@ public class RenderReservoir extends RotaryTERenderer
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
 		if (!tr.isEmpty() && tr.isInWorld()) {
 			Fluid f = tr.getFluid();
-			ReikaLiquidRenderer.bindFluidTexture(new FluidStack(f, 1));
+			ReikaLiquidRenderer.bindFluidTexture(f);
 			Icon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();

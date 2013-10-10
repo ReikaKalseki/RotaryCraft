@@ -11,7 +11,6 @@ package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,7 +49,7 @@ public class GuiFermenter extends GuiMachine
 		fontRenderer.drawString("Target", 119, 10, 0);
 
 		GL11.glColor4f(1, 1, 1, 1);
-		ReikaLiquidRenderer.bindFluidTexture(new FluidStack(FluidRegistry.WATER, 1));
+		ReikaLiquidRenderer.bindFluidTexture(FluidRegistry.WATER);
 		int h = 16*ferm.getLevel()/ferm.CAPACITY;
 		int dy = red ? 18 : 0;
 		dy = 0;

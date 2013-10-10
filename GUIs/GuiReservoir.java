@@ -54,7 +54,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 			int x = xSize/2-4;
 			int y = ySize/2-13-i2+35;
 			Icon ico = Reservoir.getFluid().getStillIcon();
-			ReikaLiquidRenderer.bindFluidTexture(Reservoir.getContents());
+			ReikaLiquidRenderer.bindFluidTexture(Reservoir.getFluid());
 			this.drawTexturedModelRectFromIcon(x, y, ico, 8, i2);
 		}
 	}
