@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -16,22 +17,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
 	private ItemStack[] inv = new ItemStack[9];
+
+	private static final ArrayList<Integer> fertilizables = new ArrayList();
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -84,10 +89,12 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 		if (id != 0 && ReikaMathLibrary.py3d(x-dx, y-dy, z-dz) <= this.getRange()) {
 			Block b = Block.blocksList[id];
 			b.updateTick(world, dx, dy, dz, par5Random);
-			ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, dx, dy, z, 2, 0.0625);
+			//ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, dx, dy, z, 2, 0.0625);
 			world.markBlockForUpdate(dx, dy, dz);
-			if (this.didSomething(world, dx, dy, dz))
+			if (this.didSomething(world, dx, dy, dz)) {
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);
 				this.consumeItem();
+			}
 		}
 	}
 
@@ -106,7 +113,15 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		ModCropList mod = ModCropList.getModCrop(id, meta);
 		ModWoodList sapling = ModWoodList.getModWoodFromSapling(new ItemStack(id, 1, meta));
-		and more like sugar cane
+		boolean fert = fertilizables.contains(id);
+		if (crop != null)
+			return true;
+		if (mod != null)
+			return true;
+		if (sapling != null)
+			return true;
+		if (fert)
+			return true;
 		return false;
 	}
 
@@ -166,5 +181,19 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 			}
 		}
 		return false;
+	}
+
+	static {
+		addFertilizable(Block.sapling);
+		addFertilizable(Block.cactus);
+		addFertilizable(Block.reed);
+		addFertilizable(Block.mycelium);
+		addFertilizable(Block.melonStem);
+		addFertilizable(Block.pumpkinStem);
+		addFertilizable(Block.vine);
+	}
+
+	private static void addFertilizable(Block b) {
+		fertilizables.add(b.blockID);
 	}
 }

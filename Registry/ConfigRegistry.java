@@ -57,7 +57,8 @@ public enum ConfigRegistry implements ConfigList {
 	TABLEMACHINES("Crafting Table can Make Machines", false),
 	EMPLOAD("EMP Charging Speed", 4),
 	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false),
-	RAILGUNDAMAGE("Railgun Block Damage", true);
+	RAILGUNDAMAGE("Railgun Block Damage", true),
+	GRAVELPLAYER("Allow Gravel Gun PvP", true);
 
 	private String label;
 	private boolean defaultState;
