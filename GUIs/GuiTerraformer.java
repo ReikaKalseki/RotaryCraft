@@ -17,6 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
@@ -81,6 +84,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 			BiomeGenBase to = li.get(i);
 			FluidStack liq = terra.getReqLiquidForTransform(from, to);
 			if (liq != null) {
+				GL11.glColor4f(1, 1, 1, 1);
 				ReikaLiquidRenderer.bindFluidTexture(liq);
 				Icon ico = liq.getFluid().getIcon();
 				this.drawTexturedModelRectFromIcon(48, 17+i*39, ico, 16, 16);

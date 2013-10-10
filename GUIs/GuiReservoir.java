@@ -10,15 +10,15 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.util.Icon;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 
 public class GuiReservoir extends GuiNonPoweredMachine
 {
-	boolean water = false;
 
 	private TileEntityReservoir Reservoir;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
@@ -33,7 +33,6 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		xSize = 176;
 		ySize = 96;
 		ep = p5ep;
-		water = (FluidRegistry.WATER.equals(Reservoir.getFluid()));
 	}
 
 	@Override
@@ -49,6 +48,15 @@ public class GuiReservoir extends GuiNonPoweredMachine
 			int my = ReikaGuiAPI.instance.getMouseRealY();
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
 		}
+
+		if (!Reservoir.isEmpty()) {
+			int i2 = Reservoir.getLiquidScaled(44);
+			int x = xSize/2-4;
+			int y = ySize/2-13-i2+35;
+			Icon ico = Reservoir.getFluid().getStillIcon();
+			ReikaLiquidRenderer.bindFluidTexture(Reservoir.getContents());
+			this.drawTexturedModelRectFromIcon(x, y, ico, 8, i2);
+		}
 	}
 
 	/**
@@ -58,20 +66,6 @@ public class GuiReservoir extends GuiNonPoweredMachine
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-
-		int i2 = Reservoir.getLiquidScaled(44);
-		if (i2 > 44)
-			i2 = 44;
-		int i3 = 0;
-		if (i2 != 0)
-			i3 = 1;
-		int i4 = 0;
-		if (!water)
-			i4 = 8;
-		this.drawTexturedModalRect(j +xSize/2-4, ySize/2+k-13-i2+35, 176+i4, 0, 8, i2);
 	}
 
 	@Override

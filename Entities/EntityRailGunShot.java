@@ -153,7 +153,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 				for (int k = -3; k <= 3; k++) {
 					if (i*j*k < 9 && i*j*k > -9) {
 						//ReikaJavaLibrary.pConsole(ConfigRegistry.BLOCKDAMAGE.getState()+" with "+power+" on "+FMLCommonHandler.instance().getEffectiveSide());
-						if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+						if (ConfigRegistry.BLOCKDAMAGE.getState() && ConfigRegistry.RAILGUNDAMAGE.getState()) {
 							int id = world.getBlockId(x0+i, y0+j, z0+k);
 							if (ReikaWorldHelper.softBlocks(world, x0+i, y0+j, z0+k) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
 								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 5);

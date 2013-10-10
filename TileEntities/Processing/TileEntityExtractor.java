@@ -36,9 +36,9 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 
 	private ItemStack inv[] = new ItemStack[9];
 
-	public static final int oreCopy = 50;
-	public static final int oreCopyNether = 75;
-	public static final int oreCopyRare = 90;
+	public static final int oreCopy = 50; //50% chance of doubling -> 1.5^4 = 5.1
+	public static final int oreCopyNether = 75; //75% chance of doubling -> 1.75^4 = 9.3
+	public static final int oreCopyRare = 90; //90% chance of doubling -> 1.9^4 = 13.1
 
 	/** The number of ticks that the current item has been cooking for */
 	public int[] extractorCookTime = new int[4];
@@ -71,7 +71,7 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 				if (ReikaMathLibrary.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
-					return 1; //75% chance of doubling -> 1.75^4 = 9.3
+					return 1;
 			}
 			if (ore.isRare()) {
 				if (ReikaMathLibrary.doWithChance(oreCopyRare/100D))
@@ -283,8 +283,17 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 			return false;
 		if (inv[i+4] != null && inv[i+4].stackSize+1 >= inv[i+4].getMaxStackSize())
 			return false;
-		if (inv[8] != null && inv[8].stackSize+1 > inv[8].getMaxStackSize())
-			return false;
+		if (inv[8] != null) {
+			if (inv[8].stackSize+1 > inv[8].getMaxStackSize())
+				return false;
+			if (inv[3] != null) {
+				ItemStack bonus = ExtractorBonus.getBonusForIngredient(inv[3]).getBonus();
+				if (bonus != null) {
+					if (!ReikaItemHelper.matchStacks(bonus, inv[8]))
+						return false;
+				}
+			}
+		}
 		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 		if (inv[i].itemID == RotaryCraft.modextracts.itemID || ModOreList.isModOre(inv[i])) {
 			switch (i) {

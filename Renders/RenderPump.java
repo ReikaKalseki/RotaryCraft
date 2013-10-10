@@ -9,14 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -28,7 +33,6 @@ public class RenderPump extends RotaryTERenderer
 {
 
 	private ModelPump PumpModel = new ModelPump();
-	//private ModelPumpV PumpModelV = new ModelPumpV();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -38,74 +42,48 @@ public class RenderPump extends RotaryTERenderer
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelPump var14;
+		var14 = PumpModel;
 
-			{
-				//((BlockPumpBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pumptex.png");
+
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		if (tile.isInWorld()) {
+			switch(tile.getBlockMetadata()) {
+			case 0:
+				var11 = 90;
+				break;
+			case 1:
+				var11 = 0;
+				break;
 			}
+
+			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+
 		}
 
-		if (true)
-		{
-			ModelPump var14;
-			var14 = PumpModel;
-			//ModelPumpV var15;
-			//var14 = this.PumpModelV;
-			if (FluidRegistry.WATER.equals(tile.getLiquid()))
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pumptex2.png");
-			else
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pumptex.png");
+		float var13;
+		Object[] pars = new Object[3];
+		pars[0] = tile.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
+		pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
+		pars[2] = tile.damage > 400;
+		var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), -tile.phi);
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			if (tile.isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-				GL11.glEnable(GL11.GL_BLEND);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			if (tile.isInWorld()) {
-				switch(tile.getBlockMetadata()) {
-				case 0:
-					var11 = 90;
-					break;
-				case 1:
-					var11 = 0;
-					break;
-				}
-
-				GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-
-			}
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
-			Object[] pars = new Object[3];
-			pars[0] = tile.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
-			pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
-			pars[2] = tile.damage > 400;
-			var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), -tile.phi);
-			// else
-			//var15.renderAll();
-			if (tile.isInWorld() || MinecraftForgeClient.getRenderPass() == 1)
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		if (tile.isInWorld() || MinecraftForgeClient.getRenderPass() == 1)
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -113,15 +91,49 @@ public class RenderPump extends RotaryTERenderer
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityPumpAt((TileEntityPump)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			this.renderLiquid(tile, par2, par4, par6);
 			IORenderer.renderIO(tile, par2, par4, par6);
+		}
+	}
+
+	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glColor3f(1, 1, 1);
+		GL11.glTranslated(par2, par4, par6);
+		TileEntityPump tr = (TileEntityPump)tile;
+		if (tr.getLevel() > 0 && tr.isInWorld()) {
+			Fluid f = tr.getLiquid();
+			ReikaLiquidRenderer.bindFluidTexture(new FluidStack(f, 1));
+			Icon ico = f.getIcon();
+			float u = ico.getMinU();
+			float v = ico.getMinV();
+			float du = ico.getMaxU();
+			float dv = ico.getMaxV();
+			double inset = 0.125;
+			double offset = inset*(du-u);
+			u += offset;
+			v += offset;
+			du -= offset;
+			dv -= offset;
+			double h = 0.625;
+			Tessellator v5 = new Tessellator();
+			if (f.getLuminosity() > 0)
+				ReikaRenderHelper.disableLighting();
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(inset, h, inset, u, v);
+			v5.addVertexWithUV(1-inset, h, inset, du, v);
+			v5.addVertexWithUV(1-inset, h, 1-inset, du, dv);
+			v5.addVertexWithUV(inset, h, 1-inset, u, dv);
+			v5.draw();
+			ReikaRenderHelper.enableLighting();
+		}
+		GL11.glTranslated(-par2, -par4, -par6);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		TileEntityPump tp = (TileEntityPump)te;
-		if (FluidRegistry.WATER.equals(tp.getLiquid()))
-			return "pumptex.png";
-		return "pumptex2.png";
+		return "pumptex.png";
 	}
 }

@@ -35,7 +35,10 @@ public class ContainerFermenter extends CoreContainer
 		lastFermenterItemBurnTime = 0;
 		fermenter = par2TileEntityFermenter;
 		this.addSlotToContainer(new Slot(par2TileEntityFermenter, 0, 55, 17));
-		this.addSlotToContainer(new Slot(par2TileEntityFermenter, 1, 55, 35));
+		//this.addSlotToContainer(new Slot(par2TileEntityFermenter, 1, 55, 35));
+		//if (tile.worldObj.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
+		//this.addSlotToContainer(new Slot(par2TileEntityFermenter, 1, 55, 35));
+		//else
 		this.addSlotToContainer(new Slot(par2TileEntityFermenter, 2, 55, 53));
 		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityFermenter, 3, 116, 35));
 
@@ -57,6 +60,7 @@ public class ContainerFermenter extends CoreContainer
 			if (lastFermenterCookTime != fermenter.fermenterCookTime)
 			{
 				icrafting.sendProgressBarUpdate(this, 0, fermenter.fermenterCookTime);
+				icrafting.sendProgressBarUpdate(this, 1, fermenter.getLevel());
 			}
 		}
 
@@ -69,6 +73,10 @@ public class ContainerFermenter extends CoreContainer
 		if (par1 == 0)
 		{
 			fermenter.fermenterCookTime = par2;
+		}
+		if (par1 == 1)
+		{
+			fermenter.setLiquid(par2);
 		}
 	}
 

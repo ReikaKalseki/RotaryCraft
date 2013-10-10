@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,155 @@ public final class HandbookAuxData {
 		return WorktableRecipes.getInstance().getRecipeListCopy();
 	}
 
+	private static final ArrayList<Object[][]> extracts = new ArrayList();
+	private static final ArrayList<ItemStack> flakes = new ArrayList();
+	private static final ArrayList<ItemStack[]> fermenter = new ArrayList();
+
+	static {
+		load();
+	}
+
+	private static void load() {
+		addFlakes();
+		addExtracts();
+		addPlants();
+	}
+
+	public static void reload() {
+		load();
+	}
+
+	private static void addFlakes() {
+		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+			flakes.add(ReikaOreHelper.oreList[i].getResource());
+		}
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			flakes.add(ItemStacks.getModOreIngot(ModOreList.oreList[i]));
+		}
+	}
+
+	private static void addExtracts() {
+		ArrayList<ItemStack> modores = ModOreList.getAllRegisteredOreBlocks();
+		int num = ReikaOreHelper.oreList.length+modores.size();
+		for (int k = 0; k < num; k++) {
+			boolean van = k < ReikaOreHelper.oreList.length;
+			String oreName;
+			ItemStack[] in = new ItemStack[4];
+			ItemStack[] out = new ItemStack[4];
+			if (van) {
+				in[0] = ReikaOreHelper.oreList[k].getOreBlock();
+				in[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
+				in[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
+				in[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
+
+				out[0] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
+				out[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
+				out[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
+				out[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+24);
+
+				oreName = ReikaOreHelper.oreList[k].getName();
+			}
+			else {
+				int i = k-ReikaOreHelper.oreList.length;
+				//ReikaJavaLibrary.pConsoleIf(modores.get(i)+" at "+i+" ("+""+")");
+				ModOreList ore = ModOreList.getModOreFromOre(modores.get(i));
+				in[0] = modores.get(i);
+				in[1] = ExtractorModOres.getDustProduct(ore);
+				in[2] = ExtractorModOres.getSlurryProduct(ore);
+				in[3] = ExtractorModOres.getSolutionProduct(ore);
+
+				out[0] = ExtractorModOres.getDustProduct(ore);
+				out[1] = ExtractorModOres.getSlurryProduct(ore);
+				out[2] = ExtractorModOres.getSolutionProduct(ore);
+				out[3] = ExtractorModOres.getFlakeProduct(ore);
+
+				oreName = ore.getName();
+			}
+			Object[][] obj = {in, out, new String[]{oreName}};
+			extracts.add(obj);
+			//RotaryCraft.logger.log("Adding extractor entry to handbook: "+oreName+" "+Arrays.toString(in)+";"+Arrays.toString(out));
+		}
+	}
+
+	private static void addPlants() {
+		ItemStack out;
+		ItemStack[] in = new ItemStack[3];
+		ItemStack[] args;
+		out = (ItemRegistry.YEAST.getStackOf());
+		in = (new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Item.bucketWater), new ItemStack(Block.dirt)});
+		args = new ItemStack[]{out, in[0], in[1], in[2]};
+		fermenter.add(args);
+
+		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
+			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
+				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
+					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
+					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon, new ItemStack(Item.bucketWater)});
+					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					fermenter.add(args);
+				}
+			}
+			else {
+				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon(), new ItemStack(Item.bucketWater)});
+				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				fermenter.add(args);
+			}
+		}
+
+		for (int i = 0; i < ModWoodList.woodList.length; i++) {
+			if (ModWoodList.woodList[i].exists()) {
+				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
+				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				fermenter.add(args);
+
+				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf(), new ItemStack(Item.bucketWater)});
+				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				fermenter.add(args);
+			}
+		}
+
+		if (ModList.DYETREES.isLoaded()) {
+			try {
+				Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
+				Method sapling = tree.getMethod("getDyeSapling", int.class);
+				Method leaf = tree.getMethod("getDyeLeaf", int.class);
+				for (int j = 0; j < 16; j++) {
+					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(null, j), new ItemStack(Item.bucketWater)});
+					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					fermenter.add(args);
+
+					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(null, j), new ItemStack(Item.bucketWater)});
+					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					fermenter.add(args);
+				}
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			catch (SecurityException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+			catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static void drawPage(FontRenderer f, int screen, int page, int subpage, int dx, int dy) {
 		RenderItem ri = new RenderItem();
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
@@ -73,42 +223,12 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawSmelting(ri, f, out, dx+87, dy+36, dx+141, dy+32);
 		}
 		else if (h == HandbookRegistry.EXTRACTS) {
-			ArrayList<ItemStack> modores = ModOreList.getAllRegisteredOreBlocks();
 			int time = 1000000000;
-			int k = (int)((System.nanoTime()/time)%(ReikaOreHelper.oreList.length+modores.size()));
-			boolean van = k < ReikaOreHelper.oreList.length;
-			ItemStack[] in = new ItemStack[4];
-			ItemStack[] out = new ItemStack[4];
-			String oreName;
-			if (van) {
-				in[0] = ReikaOreHelper.oreList[k].getOreBlock();
-				in[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
-				in[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
-				in[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
-
-				out[0] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
-				out[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
-				out[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
-				out[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+24);
-
-				oreName = ReikaOreHelper.oreList[k].getName();
-			}
-			else {
-				int i = k-ReikaOreHelper.oreList.length;
-				//ReikaJavaLibrary.pConsoleIf(modores.get(i)+" at "+i+" ("+""+")");
-				ModOreList ore = ModOreList.getModOreFromOre(modores.get(i));
-				in[0] = modores.get(i);
-				in[1] = ExtractorModOres.getDustProduct(ore);
-				in[2] = ExtractorModOres.getSlurryProduct(ore);
-				in[3] = ExtractorModOres.getSolutionProduct(ore);
-
-				out[0] = ExtractorModOres.getDustProduct(ore);
-				out[1] = ExtractorModOres.getSlurryProduct(ore);
-				out[2] = ExtractorModOres.getSolutionProduct(ore);
-				out[3] = ExtractorModOres.getFlakeProduct(ore);
-
-				oreName = ore.getName();
-			}
+			int k = (int)((System.nanoTime()/time)%(extracts.size()));
+			Object[][] obj = extracts.get(k);
+			ItemStack[] in = (ItemStack[])obj[0];
+			ItemStack[] out = (ItemStack[])obj[1];
+			String oreName = (String)obj[2][0];
 
 			ReikaGuiAPI.instance.drawExtractor(ri, f, dx+66, dy+17, in, dx+66, dy+59, out);
 			String[] words = oreName.split(" ");
@@ -116,15 +236,8 @@ public final class HandbookAuxData {
 				f.drawString(words[i], dx+194, dy+60+f.FONT_HEIGHT*i-words.length*f.FONT_HEIGHT/2, 0);
 		}
 		else if (h == HandbookRegistry.FLAKES) {
-			ArrayList<ItemStack> li = new ArrayList<ItemStack>();
-			for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
-				li.add(ReikaOreHelper.oreList[i].getResource());
-			}
-			for (int i = 0; i < ModOreList.oreList.length; i++) {
-				li.add(ItemStacks.getModOreIngot(ModOreList.oreList[i]));
-			}
 			ItemStack in;
-			int time = (int)((System.nanoTime()/1000000000)%li.size());
+			int time = (int)((System.nanoTime()/1000000000)%flakes.size());
 			boolean van = time < ReikaOreHelper.oreList.length;
 			int i = time-ReikaOreHelper.oreList.length;
 			String oreName;
@@ -137,7 +250,7 @@ public final class HandbookAuxData {
 				oreName = ModOreList.oreList[i].getName();
 			}
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, in, dx+87, dy+28);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, li.get(time), dx+145, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, flakes.get(time), dx+145, dy+28);
 
 			String[] words = oreName.split(" ");
 			for (int k = 0; k < words.length; k++)
@@ -158,50 +271,11 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.obsidianglass), dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.YEAST) {
-			ArrayList<ItemStack> out = new ArrayList<ItemStack>();
-			ArrayList<ItemStack[]> in = new ArrayList<ItemStack[]>();
-			out.add(ItemRegistry.YEAST.getStackOf());
-			in.add(new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Item.bucketWater), new ItemStack(Block.dirt)});
-
-			for (int i = 0; i < PlantMaterials.plantList.length; i++) {
-				if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
-					for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
-						ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
-						out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-						in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon, new ItemStack(Item.bucketWater)});
-					}
-				}
-				else {
-					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon(), new ItemStack(Item.bucketWater)});
-				}
-			}
-
-			for (int i = 0; i < ModWoodList.woodList.length; i++) {
-				if (ModWoodList.woodList[i].exists()) {
-					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
-
-					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf(), new ItemStack(Item.bucketWater)});
-				}
-			}
-
-			if (ModList.DYETREES.isLoaded()) {
-				for (int j = 0; j < 16; j++) {
-					Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
-					Method sapling = tree.getMethod("getDyeSapling", int.class);
-					Method leaf = tree.getMethod("getDyeLeaf", int.class);
-					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(j), new ItemStack(Item.bucketWater)});
-
-					out.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
-					in.add(new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(j), new ItemStack(Item.bucketWater)});
-				}
-			}
-
-			int k = (int)((System.nanoTime()/2000000000)%(in.size()));
-			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in.get(k), dx+159, dy+32, out.get(k));
+			int k = (int)((System.nanoTime()/1000000000)%fermenter.size());
+			ItemStack[] args = fermenter.get(k);
+			ItemStack[] in = new ItemStack[]{args[1], args[2], args[3]};
+			ItemStack out = args[0];
+			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in, dx+159, dy+32, out);
 		}
 		else if (h == HandbookRegistry.NETHERDUST) {
 			if ((System.nanoTime()/2000000000)%2 == 0) {

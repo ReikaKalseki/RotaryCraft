@@ -32,6 +32,7 @@ import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
+import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -165,7 +166,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					if (tile.type.isEthanolFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.ETHANOL_VALUE) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket);
-							tile.subtractFuel(ItemFuelLubeBucket.ETHANOL_VALUE);
+							tile.subtractFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -176,7 +177,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					if (tile.type.isJetFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.JET_VALUE) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket);
-							tile.subtractFuel(ItemFuelLubeBucket.JET_VALUE);
+							tile.subtractFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -190,7 +191,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.JET_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(ItemFuelLubeBucket.JET_VALUE);
+							tile.addFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -204,7 +205,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.ETHANOL_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(ItemFuelLubeBucket.ETHANOL_VALUE);
+							tile.addFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();

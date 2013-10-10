@@ -10,10 +10,13 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -46,6 +49,12 @@ public class GuiFermenter extends GuiMachine
 		}
 		fontRenderer.drawString("Target", 119, 10, 0);
 
+		GL11.glColor4f(1, 1, 1, 1);
+		ReikaLiquidRenderer.bindFluidTexture(new FluidStack(FluidRegistry.WATER, 1));
+		int h = 16*ferm.getLevel()/ferm.CAPACITY;
+		int dy = red ? 18 : 0;
+		dy = 0;
+		this.drawTexturedModelRectFromIcon(55, 35+16-h+dy, FluidRegistry.WATER.getIcon(), 16, h);
 	}
 
 	/**

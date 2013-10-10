@@ -280,4 +280,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			return;
 		tank.setContents(level, this.getFluid());
 	}
+
+	public boolean isConnectedOnSide(ForgeDirection dir) {
+		int dx = xCoord+dir.offsetX;
+		int dy = yCoord+dir.offsetY;
+		int dz = zCoord+dir.offsetZ;
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, dx, dy, dz);
+		return m == MachineRegistry.RESERVOIR;
+	}
 }

@@ -56,7 +56,8 @@ public enum ConfigRegistry implements ConfigList {
 	DYNAMICHANDBOOK("Reload Handbook Data on Open", true),
 	TABLEMACHINES("Crafting Table can Make Machines", false),
 	EMPLOAD("EMP Charging Speed", 4),
-	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false);
+	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false),
+	RAILGUNDAMAGE("Railgun Block Damage", true);
 
 	private String label;
 	private boolean defaultState;

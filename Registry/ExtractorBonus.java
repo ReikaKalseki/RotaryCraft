@@ -14,7 +14,6 @@ import java.util.Random;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Auxiliary.ModList;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
@@ -77,7 +76,7 @@ public enum ExtractorBonus {
 	public static ExtractorBonus getBonusForIngredient(ItemStack is) {
 		for (int i = 0; i < bonusList.length; i++) {
 			ItemStack in = bonusList[i].sourceItem;
-			ReikaJavaLibrary.pConsole(bonusList[i]+" > "+in+"  >:<  "+is);
+			//ReikaJavaLibrary.pConsole(bonusList[i]+" > "+in+"  >:<  "+is);
 			if (ReikaItemHelper.matchStacks(is, in))
 				return bonusList[i];
 		}

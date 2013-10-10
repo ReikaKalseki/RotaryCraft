@@ -52,6 +52,9 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 	public static final int OPTFERMENTTEMP = 35;
 	public static final int MAXTEMP = 60;
 
+	public static final int CAPACITY = 3000;
+	public static final int CONSUME_WATER = 50;
+
 	public int temperature;
 
 	public boolean idle = false;
@@ -99,16 +102,15 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 	// Return the itemstack product from the input items.
 	private ItemStack getRecipe() {
 		for (int i = 0; i < 3; i++)
-			if (slots[i] == null)
+			if (slots[i] == null && i != 1)
 				return null;
-
 		if (slots[0].itemID == Item.sugar.itemID) {
 			if (this.hasWater(1))
 				if(slots[2].itemID == Block.dirt.blockID)
 					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
 		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
-			if (this.getPlantValue(slots[1]) > 0)
+			if (this.getPlantValue(slots[2]) > 0)
 				if (this.hasWater(2))
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
 		}
@@ -117,9 +119,9 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 
 	private boolean hasWater(int slot) {
 		if (slots[slot].itemID == Item.bucketWater.itemID)
-			return true;
+			;//return true;
 		if (slots[slot].itemID == Item.bucketWater.itemID)
-			return true;
+			;//return true;
 		if (!tank.isEmpty())
 			return true;
 		return false;
@@ -278,10 +280,10 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
 			if (slots[3] == null)
-				slots[3] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[1]), ItemStacks.sludge.getItemDamage());
+				slots[3] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[2]), ItemStacks.sludge.getItemDamage());
 			else if (slots[3].itemID == ItemStacks.sludge.itemID && slots[3].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
 				if (slots[3].stackSize < slots[3].getMaxStackSize())
-					slots[3].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[1]), slots[3].getMaxStackSize()-slots[3].stackSize, "min");
+					slots[3].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[2]), slots[3].getMaxStackSize()-slots[3].stackSize, "min");
 				else
 					return;
 			}
@@ -289,11 +291,12 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 				fermenterCookTime = 0;
 				return;
 			}
-			ReikaInventoryHelper.decrStack(1, slots);
+			ReikaInventoryHelper.decrStack(2, slots);
 			if (par5Random.nextInt(2) == 0)
 				ReikaInventoryHelper.decrStack(0, slots);
 		}
 		this.onInventoryChanged();
+		tank.removeLiquid(CONSUME_WATER);
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -520,11 +523,15 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 
 	@Override
 	public int getCapacity() {
-		return 3000;
+		return CAPACITY;
 	}
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
 		return true;
+	}
+
+	public void setLiquid(int amt) {
+		tank.setContents(amt, FluidRegistry.WATER);
 	}
 }

@@ -54,6 +54,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Blocks.BlockPiping;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -62,6 +63,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
@@ -69,6 +71,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
@@ -112,6 +116,9 @@ public abstract class BlockBasicMultiTE extends Block {
 			return icons[meta][0][s][0];
 		}
 		catch (NullPointerException e) {
+			return ((TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
 			return ((TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
 		}
 	}
@@ -211,6 +218,7 @@ public abstract class BlockBasicMultiTE extends Block {
 				return false;
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
+					boolean bucket = FluidContainerRegistry.isBucket(is);
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
 					if (f != null) {
 						Fluid fluid = f.getFluid();
@@ -218,14 +226,22 @@ public abstract class BlockBasicMultiTE extends Block {
 						if (tr.getLevel()+(size-1)*f.amount <= tr.CAPACITY) {
 							if (tr.isEmpty()) {
 								tr.addLiquid(size*f.amount, fluid);
-								if (!ep.capabilities.isCreativeMode)
-									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+								if (!ep.capabilities.isCreativeMode) {
+									if (bucket)
+										ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+									else
+										ep.setCurrentItemOrArmor(0, null);
+								}
 								return true;
 							}
 							else if (f.getFluid().equals(tr.getFluid())) {
 								tr.addLiquid(size*f.amount, fluid);
-								if (!ep.capabilities.isCreativeMode)
-									ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+								if (!ep.capabilities.isCreativeMode) {
+									if (bucket)
+										ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty.itemID, size, 0));
+									else
+										ep.setCurrentItemOrArmor(0, null);
+								}
 								return true;
 							}
 						}
@@ -273,10 +289,37 @@ public abstract class BlockBasicMultiTE extends Block {
 				return true;
 			}
 		}
+		if (m == MachineRegistry.FERMENTER) {
+			TileEntityFermenter ex = (TileEntityFermenter)te;
+			if (ex.getLevel()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
+				ex.addLiquid(RotaryConfig.MILLIBUCKET);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
+		}
 		if (m == MachineRegistry.EMP) {
 			TileEntityEMP tp = (TileEntityEMP)te;
 			tp.updateListing();
 			return true;
+		}
+		if (m == MachineRegistry.FUELENHANCER) {
+			TileEntityFuelConverter tf = (TileEntityFuelConverter)te;
+			if (is != null) {
+				FluidStack liq = FluidContainerRegistry.getFluidForFilledItem(is);
+				if (liq != null && liq.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
+					boolean bucket = FluidContainerRegistry.isBucket(is);
+					tf.fill(ForgeDirection.UP, liq, true);
+					if (!ep.capabilities.isCreativeMode) {
+						if (bucket)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						else
+							ep.setCurrentItemOrArmor(0, null);
+					}
+					return true;
+				}
+			}
 		}
 		if (m == MachineRegistry.DISPLAY && ReikaDyeHelper.isDyeItem(is)) {
 			TileEntityDisplay td = (TileEntityDisplay)te;
@@ -479,6 +522,25 @@ public abstract class BlockBasicMultiTE extends Block {
 				e.setFire(6);
 			}
 		}
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tr = (TileEntityReservoir)tile;
+			if (!tr.isEmpty()) {
+				if (tr.getFluid().equals(FluidRegistry.LAVA)) {
+					e.attackEntityFrom(DamageSource.lava, 4);
+					e.setFire(12);
+				}
+				else if (tr.getFluid().equals(FluidRegistry.WATER)) {
+					e.extinguish();
+				}
+				else {
+					Fluid f = tr.getFluid();
+					if (f.canBePlacedInWorld()) {
+						Block b = Block.blocksList[f.getBlockID()];
+						b.onEntityCollidedWithBlock(world, x, y, z, e);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -523,6 +585,41 @@ public abstract class BlockBasicMultiTE extends Block {
 			tl.detonate(world, x, y, z);
 		}
 		super.onBlockExploded(world, x, y, z, explosion);
+	}
+
+	@Override
+	public int isProvidingWeakPower(IBlockAccess iba, int x, int y, int z, int par5)
+	{
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
+		if (!(te instanceof TileEntityPlayerDetector))
+			return 0;
+		TileEntityPlayerDetector tp = (TileEntityPlayerDetector)te;
+		if (tp.isActive)
+			return 15;
+		else
+			return 0;
+	}
+
+	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.FORCEFIELD || m == MachineRegistry.CONTAINMENT)
+			return 15;
+		if (m == MachineRegistry.DISPLAY)
+			return 15;
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir te = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
+			if (te.isEmpty())
+				return 0;
+			return te.getFluid().getLuminosity(te.getContents());
+		}
+		if (m == MachineRegistry.PUMP) {
+			TileEntityPump te = (TileEntityPump)world.getBlockTileEntity(x, y, z);
+			if (te.getLevel() <= 0)
+				return 0;
+			return te.getLiquid().getLuminosity();
+		}
+		return 0;
 	}
 
 }

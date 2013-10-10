@@ -158,7 +158,6 @@ public class ModelPump extends RotaryModelBase
 	public void renderAll(List li, float phi)
 	{
 		this.setRenderPass();
-		boolean full = (Boolean)li.get(0);
 		boolean solid = (Boolean)li.get(1);
 		boolean broken = (Boolean)li.get(2);
 		//solid = pass == 0;
@@ -189,8 +188,6 @@ public class ModelPump extends RotaryModelBase
 			Shape14.render(f5);
 			Shape15.render(f5);
 		}
-		if (full)
-			Shape16.render(f5);
 		if (solid)
 			Shape17.render(f5);
 	}
