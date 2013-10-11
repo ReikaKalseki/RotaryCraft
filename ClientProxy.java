@@ -53,6 +53,8 @@ public class ClientProxy extends CommonProxy
 	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();
 
+	public static PipeBodyRenderer pipe;
+
 	@Override
 	public void registerSounds() {
 		//RotarySounds.addSounds();
@@ -61,6 +63,10 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerRenderers() {
+		pipeRender = RenderingRegistry.getNextAvailableRenderId();
+		pipe = new PipeBodyRenderer(pipeRender);
+		RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+
 		this.loadModels();
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityRailGunShot.class, new RenderRailGunShot());

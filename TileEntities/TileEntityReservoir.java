@@ -286,6 +286,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, dx, dy, dz);
-		return m == MachineRegistry.RESERVOIR;
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir te = (TileEntityReservoir)worldObj.getBlockTileEntity(dx, dy, dz);
+			return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
+		}
+		return false;
 	}
 }

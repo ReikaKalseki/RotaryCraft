@@ -20,6 +20,8 @@ public class CommonProxy
 	public static int BedArmor;
 	public static int SteelArmor;
 
+	public static int pipeRender;
+
 	/**
 	 * Client side only register stuff...
 	 */

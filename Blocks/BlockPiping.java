@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
+import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {
@@ -37,7 +38,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	@Override
 	public final int getRenderType() {
-		return -1;
+		return RotaryCraft.proxy.pipeRender;
 	}
 
 	@Override
@@ -111,5 +112,11 @@ public class BlockPiping extends BlockBasicMultiTE {
 			icons[MachineRegistry.FUELLINE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:fuelline");
 			icons[MachineRegistry.SPILLER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:spiller");
 		}
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, int id) {
+		TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
+		te.recomputeConnections(world, x, y, z);
 	}
 }

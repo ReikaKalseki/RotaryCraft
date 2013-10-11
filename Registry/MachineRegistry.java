@@ -391,7 +391,7 @@ public enum MachineRegistry {
 
 	/** A convenience feature */
 	public static MachineRegistry getMachine(World world, double x, double y, double z) {
-		return getMachine(world, (int)x, (int)y, (int)z);
+		return getMachine(world, (int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z));
 	}
 
 	public static MachineRegistry getMachineFromIDandMetadata(int id, int metad) {

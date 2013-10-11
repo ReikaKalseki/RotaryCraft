@@ -6,13 +6,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
-	add marker array to TileEntityPiping - cache connectivity of each side, maybe even
-	update with onNeighborBlockChange in BlockPiping
+	//add marker array to TileEntityPiping - cache connectivity of each side, maybe even
+	//update with onNeighborBlockChange in BlockPiping
 
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
@@ -45,7 +48,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		return renderID;
 	}
 
-	private void renderFace(TileEntityPiping tile, double par2, double par4, double par6, ForgeDirection dir) {
+	private void renderFace(TileEntityPiping tile, int x, int y, int z, ForgeDirection dir) {
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -94,6 +98,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		gv2 -= dgv/8;
 
 		Tessellator v5 = Tessellator.instance;
+		v5.addTranslation(x, y, z);
 
 		int dx = tile.xCoord+dir.offsetX;
 		int dy = tile.yCoord+dir.offsetY;
@@ -608,6 +613,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				break;
 			}
 		}
+		v5.addTranslation(-x, -y, -z);
 	}
 
 	private void faceBrightness(ForgeDirection dir, Tessellator v5) {

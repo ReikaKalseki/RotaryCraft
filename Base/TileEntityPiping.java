@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
@@ -21,6 +22,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public abstract void draw(World world, int x, int y, int z);
 	public abstract void transfer(World world, int x, int y, int z);
+
+	private boolean[] connections = new boolean[6];
 
 	@Override
 	public final RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -37,11 +40,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	/** Direction is relative to the piping block (so DOWN means the block is below the pipe) */
 	public boolean isConnectionValidForSide(ForgeDirection dir) {
-		TileEntity tile = worldObj.getBlockTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
-		if (!(tile instanceof PipeConnector))
-			return false;
-		PipeConnector pc = (PipeConnector)tile;
-		return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir);
+		return connections[dir.ordinal()];
 	}
 
 	@Override
@@ -57,4 +56,42 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public abstract boolean hasLiquid();
 
 	public abstract Fluid getLiquidType();
+
+	public void recomputeConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			connections[i] = this.isConnected(dirs[i]);
+			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
+		}
+		world.markBlockForRenderUpdate(x, y, z);
+	}
+	private boolean isConnected(ForgeDirection dir) {
+		TileEntity tile = worldObj.getBlockTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
+		if (!(tile instanceof PipeConnector))
+			return false;
+		PipeConnector pc = (PipeConnector)tile;
+		return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < 6; i++) {
+			NBT.setBoolean("conn"+i, connections[i]);
+		}
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		for (int i = 0; i < 6; i++) {
+			connections[i] = NBT.getBoolean("conn"+i);
+		}
+	}
 }
