@@ -76,17 +76,17 @@ public class PipeRenderer extends RotaryTERenderer {
 
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glEnable(GL11.GL_BLEND);
-		//GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		Tessellator v5 = new Tessellator();
 		this.faceBrightness(dir, v5);
 		if (!tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
 			case UP:
 				v5.startDrawingQuads();
-				v5.addVertexWithUV(in2, in, in2, u, v);
-				v5.addVertexWithUV(in, in, in2, u2, v);
-				v5.addVertexWithUV(in, in, in, u2, v2);
 				v5.addVertexWithUV(in2, in, in, u, v2);
+				v5.addVertexWithUV(in, in, in, u2, v2);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in, in2, u, v);
 				v5.draw();
 				break;
 			case DOWN:
@@ -107,18 +107,18 @@ public class PipeRenderer extends RotaryTERenderer {
 				break;
 			case NORTH:
 				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, in2, u, v);
-				v5.addVertexWithUV(in2, in, in2, u2, v);
-				v5.addVertexWithUV(in2, in2, in2, u2, v2);
 				v5.addVertexWithUV(in, in2, in2, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u2, v2);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in, in, in2, u, v);
 				v5.draw();
 				break;
 			case EAST:
 				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, in, u, v);
-				v5.addVertexWithUV(in, in, in2, u2, v);
-				v5.addVertexWithUV(in, in2, in2, u2, v2);
 				v5.addVertexWithUV(in, in2, in, u, v2);
+				v5.addVertexWithUV(in, in2, in2, u2, v2);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, in, in, u, v);
 				v5.draw();
 				break;
 			case WEST:
@@ -163,35 +163,35 @@ public class PipeRenderer extends RotaryTERenderer {
 				v5.addVertexWithUV(in, 0, in, u, v2);
 				v5.draw();
 				break;
-			case UP:
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in2, in, in, u, v);
-				v5.addVertexWithUV(in2, in, in2, u2, v);
-				v5.addVertexWithUV(in2, 1, in2, u2, v2);
-				v5.addVertexWithUV(in2, 1, in, u, v2);
-				v5.draw();
+			case UP: need to add !render if connected and some texture side fixing S/W here
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(in2, in, in, u, v);
+			v5.addVertexWithUV(in2, in, in2, u2, v);
+			v5.addVertexWithUV(in2, 1, in2, u2, v2);
+			v5.addVertexWithUV(in2, 1, in, u, v2);
+			v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, in, u, v);
-				v5.addVertexWithUV(in, in, in2, u2, v);
-				v5.addVertexWithUV(in, 1, in2, u2, v2);
-				v5.addVertexWithUV(in, 1, in, u, v2);
-				v5.draw();
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(in, in, in, u, v);
+			v5.addVertexWithUV(in, in, in2, u2, v);
+			v5.addVertexWithUV(in, 1, in2, u2, v2);
+			v5.addVertexWithUV(in, 1, in, u, v2);
+			v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, in2, u, v);
-				v5.addVertexWithUV(in2, in, in2, u2, v);
-				v5.addVertexWithUV(in2, 1, in2, u2, v2);
-				v5.addVertexWithUV(in, 1, in2, u, v2);
-				v5.draw();
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(in, in, in2, u, v);
+			v5.addVertexWithUV(in2, in, in2, u2, v);
+			v5.addVertexWithUV(in2, 1, in2, u2, v2);
+			v5.addVertexWithUV(in, 1, in2, u, v2);
+			v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, in, u, v);
-				v5.addVertexWithUV(in2, in, in, u2, v);
-				v5.addVertexWithUV(in2, 1, in, u2, v2);
-				v5.addVertexWithUV(in, 1, in, u, v2);
-				v5.draw();
-				break;
+			v5.startDrawingQuads();
+			v5.addVertexWithUV(in, in, in, u, v);
+			v5.addVertexWithUV(in2, in, in, u2, v);
+			v5.addVertexWithUV(in2, 1, in, u2, v2);
+			v5.addVertexWithUV(in, 1, in, u, v2);
+			v5.draw();
+			break;
 			case EAST:
 				v5.startDrawingQuads();
 				v5.addVertexWithUV(1, in, in, u, v);
@@ -340,7 +340,7 @@ public class PipeRenderer extends RotaryTERenderer {
 
 	private void faceBrightness(ForgeDirection dir, Tessellator v5) {
 		float f = 1;
-		switch(dir) {
+		switch(dir.getOpposite()) {
 		case DOWN:
 			f = 0.6F;
 			break;

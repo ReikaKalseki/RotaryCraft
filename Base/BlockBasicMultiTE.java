@@ -498,6 +498,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (te instanceof TileEntityBeamMirror) {
 			((TileEntityBeamMirror)te).lightsOut();
 		}
+		if (te instanceof TileEntityPiping) {
+			((TileEntityPiping)te).deleteFromAdjacentConnections(world, x, y, z);
+		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

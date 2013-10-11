@@ -249,13 +249,13 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return liquidID > 0 && liquidLevel > 0;
+		return liquidID > 0 && liquidLevel > 0 || true;
 	}
 
 	@Override
 	public Fluid getLiquidType() {
 		if (liquidID <= 0)
-			return FluidRegistry.WATER;
+			return FluidRegistry.LAVA;
 		return FluidRegistry.lookupFluidForBlock(Block.blocksList[liquidID]);
 	}
 }

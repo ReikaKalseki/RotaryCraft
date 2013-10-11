@@ -14,9 +14,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements PipeConnector {
 
@@ -40,7 +42,16 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	/** Direction is relative to the piping block (so DOWN means the block is below the pipe) */
 	public boolean isConnectionValidForSide(ForgeDirection dir) {
-		return connections[dir.ordinal()];
+		if (dir.offsetX == 0 && MinecraftForgeClient.getRenderPass() != 1)
+			dir = dir.getOpposite();
+		return connections[dir.ordinal()];/*
+		int dx = xCoord+dir.offsetX;
+		int dy = yCoord+dir.offsetY;
+		int dz = zCoord+dir.offsetZ;
+		World world = worldObj;
+		int id = world.getBlockId(dx, dy, dz);
+		int meta = world.getBlockMetadata(dx, dy, dz);
+		return*/
 	}
 
 	@Override
@@ -64,6 +75,37 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		}
 		world.markBlockForRenderUpdate(x, y, z);
 	}
+
+	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = x+dir.offsetY;
+			int dz = x+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == this.getMachine()) {
+				TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(dx, dy, dz);
+				te.connections[dir.getOpposite().ordinal()] = false;
+				world.markBlockForRenderUpdate(dx, dy, dz);
+			}
+		}
+	}
+
+	public void addToAdjacentConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = x+dir.offsetY;
+			int dz = x+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == this.getMachine()) {
+				TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(dx, dy, dz);
+				te.connections[dir.getOpposite().ordinal()] = true;
+				world.markBlockForRenderUpdate(dx, dy, dz);
+			}
+		}
+	}
+
 	private boolean isConnected(ForgeDirection dir) {
 		TileEntity tile = worldObj.getBlockTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
 		if (!(tile instanceof PipeConnector))

@@ -119,4 +119,11 @@ public class BlockPiping extends BlockBasicMultiTE {
 		TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
 		te.recomputeConnections(world, x, y, z);
 	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
+		te.addToAdjacentConnections(world, x, y, z);
+		te.recomputeConnections(world, x, y, z);
+	}
 }

@@ -104,7 +104,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		int dy = tile.yCoord+dir.offsetY;
 		int dz = tile.zCoord+dir.offsetZ;
 		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		v5.setBrightness(br);
+		//v5.setBrightness(br);
 
 		if (tile.isInWorld() && tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
@@ -618,7 +618,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	private void faceBrightness(ForgeDirection dir, Tessellator v5) {
 		float f = 1;
-		switch(dir) {
+		switch(dir.getOpposite()) {
 		case DOWN:
 			f = 0.4F;
 			break;

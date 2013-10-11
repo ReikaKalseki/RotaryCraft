@@ -359,7 +359,7 @@ public abstract class IORenderer {
 			var5.draw();
 		}
 
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		//GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		ReikaRenderHelper.exitGeoDraw();
