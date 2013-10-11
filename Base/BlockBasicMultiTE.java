@@ -21,10 +21,13 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -64,6 +67,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -536,6 +540,19 @@ public abstract class BlockBasicMultiTE extends Block {
 				else if (tr.getFluid().equals(FluidRegistry.WATER)) {
 					e.extinguish();
 				}
+				else if (tr.getFluid().equals(FluidRegistry.getFluid("rc ethanol"))) {
+					if (e instanceof EntityLivingBase) {
+						EntityLivingBase eb = (EntityLivingBase)e;
+						PotionEffect eff = eb.getActivePotionEffect(Potion.confusion);
+						int dura = 1;
+						if (eff != null) {
+							dura = eff.duration+1;
+						}
+						if (dura > 600)
+							dura = 600;
+						eb.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
+					}
+				}
 				else {
 					Fluid f = tr.getFluid();
 					if (f.canBePlacedInWorld()) {
@@ -622,6 +639,13 @@ public abstract class BlockBasicMultiTE extends Block {
 			if (te.getLevel() <= 0)
 				return 0;
 			return te.getLiquid().getLuminosity();
+		}
+		if (m == MachineRegistry.PIPE) {
+			TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
+			if (te.liquidLevel <= 0 || te.liquidID <= 0)
+				return 0;
+			Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[te.liquidID]);
+			return f.getLuminosity();
 		}
 		return 0;
 	}

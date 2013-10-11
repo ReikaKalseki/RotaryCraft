@@ -195,7 +195,7 @@ public class TileEntityHose extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return true;
+		return lubricant > 0;
 	}
 
 	@Override

@@ -13,13 +13,13 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SoundList;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -58,7 +58,7 @@ public enum SoundRegistry implements SoundList {
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
-	private static final String SOUND_FOLDER = "Reika/RotaryCraft/Sounds/";
+	public static final String SOUND_FOLDER = "Reika/RotaryCraft/Sounds/";
 	private static final String SOUND_PREFIX = "Reika.RotaryCraft.Sounds.";
 	private static final String SOUND_DIR = "Sounds/";
 	private static final String SOUND_EXT = ".ogg";
@@ -115,7 +115,7 @@ public enum SoundRegistry implements SoundList {
 	}
 
 	public String getName() {
-		return name;
+		return this.name();
 	}
 
 	public String getPath() {
@@ -162,7 +162,7 @@ public enum SoundRegistry implements SoundList {
 			double z = in.readDouble();
 			float v = in.readFloat();
 			float p = in.readFloat();
-			Minecraft.getMinecraft().theWorld.playSoundEffect(x, y, z, name, v, p);
+			FMLClientHandler.instance().getClient().sndManager.playSound(name, (float)x, (float)y, (float)z, v, p);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

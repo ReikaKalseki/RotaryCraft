@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -248,11 +249,13 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return true;
+		return liquidID > 0 && liquidLevel > 0;
 	}
 
 	@Override
 	public Fluid getLiquidType() {
-		return FluidRegistry.WATER;
+		if (liquidID <= 0)
+			return FluidRegistry.WATER;
+		return FluidRegistry.lookupFluidForBlock(Block.blocksList[liquidID]);
 	}
 }

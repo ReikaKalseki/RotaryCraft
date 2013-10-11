@@ -32,7 +32,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	@Override
 	public final boolean hasModelTransparency() {
-		return true;
+		return false;
 	}
 
 	/** Direction is relative to the piping block (so DOWN means the block is below the pipe) */

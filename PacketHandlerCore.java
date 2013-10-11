@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
@@ -455,13 +456,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 		case FERTILIZER:
 			if (world.isRemote)
-				ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, x, y, z, 6, 0.0625);
+				ReikaParticleHelper.BONEMEAL.spawnAroundBlock(world, x, y, z, 4);
 			break;
 		case GRAVELGUN:
-			ReikaParticleHelper.EXPLODE.spawnAt(world, x, y, z);
-			world.playSoundAtEntity(ent, "random.explode", 1, 1);
+			ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
+			ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
+			world.playSoundEffect(x, y, z, "random.explode", 1, 1F);
+			break;
 		}
-		break;
 	}
-}
 }

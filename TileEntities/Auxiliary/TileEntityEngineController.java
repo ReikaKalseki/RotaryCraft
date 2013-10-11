@@ -71,6 +71,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	public boolean canProducePower() {
+		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+			return false;
 		return setting.speedFactor != 0;
 	}
 
@@ -128,8 +130,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.drawFuel(world, x, y, z, meta);
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
-			setting = EngineSettings.SHUTDOWN;
 		if (tank.isEmpty())
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)

@@ -26,12 +26,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -61,7 +59,7 @@ public class ItemGravelGun extends ItemChargedTool {
 			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
 			for (int k = 0; k < infov.size(); k++) {
 				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
-				if (this.isEntityAttackable(ent) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
+				if (!ep.equals(ent) && this.isEntityAttackable(ent) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
 					double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
 					ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);
 					EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, fl);
@@ -75,8 +73,10 @@ public class ItemGravelGun extends ItemChargedTool {
 						world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
 						world.spawnEntityInWorld(ei);
 					}
-					if (is.getItemDamage() > 4096) //approx the 1-hit kill of a 10-heart mob
-						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, world, ent.posX, ent.posY, ent.posZ);
+					if (is.getItemDamage() > 4096) { //approx the 1-hit kill of a 10-heart mob
+						//ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.GRAVELGUN.getMinValue(), world, (int)ent.posX, (int)ent.posY, (int)ent.posZ);
+						//world.playSoundAtEntity(ep, "random.explode", 0.25F, 1F);
+					}
 					if (ent instanceof EntityDragon) {
 						EntityDragon ed = (EntityDragon)ent;
 						ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));

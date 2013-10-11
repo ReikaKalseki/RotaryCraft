@@ -67,11 +67,8 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.FingerprintWarning;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -163,14 +160,14 @@ public class RotaryCraft extends DragonAPIMod {
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
-	@FingerprintWarning
+	@EventHandler
 	public void invalidFingerprint(final FMLFingerprintViolationEvent event)
 	{
 		//throw new RuntimeException("This is an illegitimate copy of RotaryCraft! You must download the mod from the forum thread!");
 	}
 
 	@Override
-	@PreInit
+	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -187,7 +184,7 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	@Override
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		proxy.addArmorRenders();
 		proxy.registerRenderers();
@@ -211,7 +208,7 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	@Override
-	@PostInit // Like the modsLoaded thing from ModLoader
+	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
 		//LoadAux.texMsg();
 		if (Loader.isModLoaded("OptiFine")) {
@@ -329,5 +326,10 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public String getVersionName() {
 		return "Gamma";
+	}
+
+	@Override
+	public ModLogger getModLogger() {
+		return logger;
 	}
 }

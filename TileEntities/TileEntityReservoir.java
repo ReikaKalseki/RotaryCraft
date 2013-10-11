@@ -98,9 +98,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 							tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 						}
-						else {
+						else if (tile.liquidID > 0) {
 							Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[tile.liquidID]);
-							if (f != null) {
+							if (f != null && this.canAcceptFluid(f)) {
 								tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 								tank.addLiquid(oldLevel/4+1, f);
 							}
