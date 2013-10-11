@@ -195,8 +195,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					int dx = x+dir.offsetX;
 					int dy = y+dir.offsetY;
 					int dz = z+dir.offsetZ;
-					if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.HOSE) {
-						TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x+1, y, z);
+					if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.HOSE) {
+						TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
 						if (tile != null) {
 							oldlube = tile.lubricant;
 							tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");

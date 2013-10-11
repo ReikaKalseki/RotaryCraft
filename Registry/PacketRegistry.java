@@ -42,7 +42,8 @@ public enum PacketRegistry {
 	TERRAFORMER(47),
 	PNEUMATIC(50, 51),
 	JETPACK(52),
-	FERTILIZER(53);
+	FERTILIZER(53),
+	GRAVELGUN(54);
 
 	private int min;
 	private int max;

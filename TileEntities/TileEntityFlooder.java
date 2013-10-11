@@ -164,11 +164,11 @@ public class TileEntityFlooder extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return true;
+		return liquidLevel > 0 && liquidID > 0;
 	}
 
 	@Override
 	public Fluid getLiquidType() {
-		return FluidRegistry.WATER;
+		return liquidID == 9 ? FluidRegistry.WATER : liquidID == 1 ? FluidRegistry.LAVA : null;
 	}
 }

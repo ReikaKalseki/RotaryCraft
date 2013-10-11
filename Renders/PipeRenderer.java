@@ -16,13 +16,13 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -51,101 +51,273 @@ public class PipeRenderer extends RotaryTERenderer {
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		//GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderLiquid(TileEntityPiping tile, double par2, double par4, double par6) {
+	private void renderLiquid(TileEntityPiping tile, double par2, double par4, double par6, ForgeDirection dir) {
+		if (!tile.hasLiquid())
+			return;
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
+		float dl = size-window;
+		float dd = 0.5F-size;
+		double in = 0.5+size-0.01;
+		double in2 = 0.5-size+0.01;
+		double dd2 = in-in2;
 
-		if (!tile.hasLiquid() && !tile.isInWorld())
-			return;
-		Fluid fluid = tile.getLiquidType();
-		FluidStack liquid = new FluidStack(fluid, 1);
-
-		int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
-
-		if (displayList == null) {
-			return;
-		}
-
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-		ReikaLiquidRenderer.bindFluidTexture(fluid);
-		ReikaLiquidRenderer.setFluidColor(liquid);
+		Fluid f = tile.getLiquidType();
+		Icon ico = tile.getLiquidType().getIcon();
+		ReikaLiquidRenderer.bindFluidTexture(f);
+		if (f.getLuminosity() > 0)
+			ReikaRenderHelper.disableLighting();
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float u2 = ico.getMaxU();
+		float v2 = ico.getMaxV();
+		double du = dd2*(u2-u);
 
 		GL11.glTranslated(par2, par4, par6);
+		GL11.glEnable(GL11.GL_BLEND);
+		//GL11.glEnable(GL11.GL_CULL_FACE);
+		Tessellator v5 = new Tessellator();
+		this.faceBrightness(dir, v5);
+		if (!tile.isConnectionValidForSide(dir)) {
+			switch(dir) {
+			case UP:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in, in2, u, v);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, in, in, u2, v2);
+				v5.addVertexWithUV(in2, in, in, u, v2);
+				v5.draw();
+				break;
+			case DOWN:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in2, in2, u, v);
+				v5.addVertexWithUV(in, in2, in2, u2, v);
+				v5.addVertexWithUV(in, in2, in, u2, v2);
+				v5.addVertexWithUV(in2, in2, in, u, v2);
+				v5.draw();
+				break;
+			case SOUTH:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u2, v);
+				v5.addVertexWithUV(in2, in2, in, u2, v2);
+				v5.addVertexWithUV(in, in2, in, u, v2);
+				v5.draw();
+				break;
+			case NORTH:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v2);
+				v5.addVertexWithUV(in, in2, in2, u, v2);
+				v5.draw();
+				break;
+			case EAST:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, in2, in2, u2, v2);
+				v5.addVertexWithUV(in, in2, in, u, v2);
+				v5.draw();
+				break;
+			case WEST:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v2);
+				v5.addVertexWithUV(in2, in2, in, u, v2);
+				v5.draw();
+			default:
+				break;
+			}
+		}
+		else { //is connected on side
+			switch(dir) {
+			case DOWN:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in2, in, u, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v);
+				v5.addVertexWithUV(in2, 0, in2, u2, v2);
+				v5.addVertexWithUV(in2, 0, in, u, v2);
+				v5.draw();
 
-		GL11.glTranslated(size/3, size/3, size/3);
-		GL11.glScaled(size*2, size*2, size*2);
-		GL11.glScaled(0.99, 0.99, 0.99);
-		GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, in, u, v);
+				v5.addVertexWithUV(in, in2, in2, u2, v);
+				v5.addVertexWithUV(in, 0, in2, u2, v2);
+				v5.addVertexWithUV(in, 0, in, u, v2);
+				v5.draw();
 
-		for (int i = 0; i < 6; i++) {
-			if (tile.isConnectionValidForSide(dirs[i])) {
-				double dy = 0;
-				switch(dirs[i]) {
-				case DOWN:
-					dy = size*2-size*2-(size-window)-0.06;
-					GL11.glTranslated(0, dy, 0);
-					GL11.glScaled(0.99, (size-window)*1.5, 0.99);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/0.99, 1D/((size-window)*1.4), 1D/0.99);
-					GL11.glTranslated(0, -dy, 0);
-					break;
-				case EAST:
-					dy = size/3+size*2+(size-window)-0.01;
-					GL11.glTranslated(dy, 0, 0);
-					GL11.glScaled((size-window)*1.5, 0.99, 0.99);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/((size-window)*1.4), 1D/0.99, 1D/0.99);
-					GL11.glTranslated(-dy, 0, 0);
-					break;
-				case NORTH:
-					dy = size*2-size*2-(size-window)-0.04;
-					GL11.glTranslated(0, 0, dy);
-					GL11.glScaled(0.99, 0.99, (size-window)*1.5);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/0.99, 1D/0.99, 1D/((size-window)*1.4));
-					GL11.glTranslated(0, 0, -dy);
-					break;
-				case SOUTH:
-					dy = size/3+size*2+(size-window)-0.01;
-					GL11.glTranslated(0, 0, dy);
-					GL11.glScaled(0.99, 0.99, (size-window)*1.5);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/0.99, 1D/0.99, 1D/((size-window)*1.4));
-					GL11.glTranslated(0, 0, -dy);
-					break;
-				case UP:
-					dy = size/3+size*2+(size-window);
-					GL11.glTranslated(0, dy-0.01, 0);
-					GL11.glScaled(0.99, (size-window)*1.5, 0.99);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/0.99, 1D/((size-window)*1.4), 1D/0.99);
-					GL11.glTranslated(0, -dy, 0);
-					break;
-				case WEST:
-					dy = size*2-size*2-(size-window)-0.05;
-					GL11.glTranslated(dy, 0, 0);
-					GL11.glScaled((size-window)*1.5, 0.99, 0.99);
-					GL11.glCallList(displayList[ReikaLiquidRenderer.LEVELS-1]);
-					GL11.glScaled(1D/((size-window)*1.4), 1D/0.99, 1D/0.99);
-					GL11.glTranslated(-dy, 0, 0);
-					break;
-				default:
-					break;
-				}
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, in2, u, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v);
+				v5.addVertexWithUV(in2, 0, in2, u2, v2);
+				v5.addVertexWithUV(in, 0, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, in, u, v);
+				v5.addVertexWithUV(in2, in2, in, u2, v);
+				v5.addVertexWithUV(in2, 0, in, u2, v2);
+				v5.addVertexWithUV(in, 0, in, u, v2);
+				v5.draw();
+				break;
+			case UP:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, 1, in2, u2, v2);
+				v5.addVertexWithUV(in2, 1, in, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, 1, in2, u2, v2);
+				v5.addVertexWithUV(in, 1, in, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, 1, in2, u2, v2);
+				v5.addVertexWithUV(in, 1, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u2, v);
+				v5.addVertexWithUV(in2, 1, in, u2, v2);
+				v5.addVertexWithUV(in, 1, in, u, v2);
+				v5.draw();
+				break;
+			case EAST:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(1, in, in, u, v);
+				v5.addVertexWithUV(in, in, in, u+du/4, v);
+				v5.addVertexWithUV(in, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(1, in2, in, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(1, in, in2, u, v);
+				v5.addVertexWithUV(in, in, in2, u+du/4, v);
+				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(1, in, in, u, v);
+				v5.addVertexWithUV(in, in, in, u+du/4, v);
+				v5.addVertexWithUV(in, in, in2, u+du/4, v2);
+				v5.addVertexWithUV(1, in, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(1, in2, in, u, v);
+				v5.addVertexWithUV(in, in2, in, u+du/4, v);
+				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
+				v5.draw();
+				break;
+			case NORTH:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in, 0, u, v);
+				v5.addVertexWithUV(in2, in, in2, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(in2, in2, 0, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, 0, u, v);
+				v5.addVertexWithUV(in, in, in2, u+du/4, v);
+				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(in, in2, 0, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, 0, u, v);
+				v5.addVertexWithUV(in, in, in2, u+du/4, v);
+				v5.addVertexWithUV(in2, in, in2, u+du/4, v2);
+				v5.addVertexWithUV(in2, in, 0, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, 0, u, v);
+				v5.addVertexWithUV(in, in2, in2, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(in2, in2, 0, u, v2);
+				v5.draw();
+				break;
+			case SOUTH:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in, 1, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(in2, in2, 1, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, 1, u, v);
+				v5.addVertexWithUV(in, in, in, u+du/4, v);
+				v5.addVertexWithUV(in, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(in, in2, 1, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in, 1, u, v);
+				v5.addVertexWithUV(in, in, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in, in, u+du/4, v2);
+				v5.addVertexWithUV(in2, in, 1, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, 1, u, v);
+				v5.addVertexWithUV(in, in2, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(in2, in2, 1, u, v2);
+				v5.draw();
+				break;
+			case WEST:
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(0, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(0, in2, in, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(0, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(0, in2, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(0, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in, in2, u+du/4, v2);
+				v5.addVertexWithUV(0, in, in2, u, v2);
+				v5.draw();
+
+				v5.startDrawingQuads();
+				v5.addVertexWithUV(0, in2, in, u, v);
+				v5.addVertexWithUV(in2, in2, in, u+du/4, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(0, in2, in2, u, v2);
+				v5.draw();
+				break;
+			default:
+				break;
 			}
 		}
 
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
+		ReikaRenderHelper.enableLighting();
+		GL11.glTranslated(-par2, -par4, -par6);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override
@@ -157,9 +329,13 @@ public class PipeRenderer extends RotaryTERenderer {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile)) {
-			this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
-			if (MinecraftForgeClient.getRenderPass() == 1) {
-				this.renderLiquid((TileEntityPiping) tile, par2, par4, par6);
+			if (MinecraftForgeClient.getRenderPass() == 0) {
+				this.renderPipe((TileEntityPiping)tile, ((RotaryCraftTileEntity)tile).getMachine(), par2, par4, par6);
+			}
+		}
+		if (MinecraftForgeClient.getRenderPass() == 1) {
+			for (int i = 0; i < 6; i++) {
+				this.renderLiquid((TileEntityPiping) tile, par2, par4, par6, dirs[i]);
 			}
 		}
 	}
@@ -213,13 +389,14 @@ public class PipeRenderer extends RotaryTERenderer {
 		gv2 -= dgv/8;
 
 		Tessellator v5 = new Tessellator();
+		//GL11.glTranslated(par2, par4, par6);
 		v5.startDrawingQuads();
 
 		int dx = tile.xCoord+dir.offsetX;
 		int dy = tile.yCoord+dir.offsetY;
 		int dz = tile.zCoord+dir.offsetZ;
 		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		v5.setBrightness(br);
+		//v5.setBrightness(br);
 
 		if (tile.isInWorld() && tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
@@ -729,28 +906,29 @@ public class PipeRenderer extends RotaryTERenderer {
 			}
 		}
 		v5.draw();
+		//GL11.glTranslated(-par2, -par4, -par6);
 	}
 
 	private void faceBrightness(ForgeDirection dir, Tessellator v5) {
 		float f = 1;
 		switch(dir) {
 		case DOWN:
-			f = 0.4F;
+			f = 0.6F;
 			break;
 		case EAST:
-			f = 0.5F;
+			f = 0.7F;
 			break;
 		case NORTH:
-			f = 0.65F;
+			f = 0.85F;
 			break;
 		case SOUTH:
-			f = 0.65F;
+			f = 0.85F;
 			break;
 		case UP:
 			f = 1F;
 			break;
 		case WEST:
-			f = 0.5F;
+			f = 0.7F;
 			break;
 		default:
 			break;

@@ -11,6 +11,8 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -322,5 +324,50 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+	}
+
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 }

@@ -47,6 +47,8 @@ public abstract class IORenderer {
 		par6 = p6;
 		if (teb instanceof TileEntityIOMachine) {
 			TileEntityIOMachine te = (TileEntityIOMachine)teb;
+			if (te.iotick <= 0)
+				return;
 			if (teb instanceof TileEntitySplitter) {
 				TileEntitySplitter ts = (TileEntitySplitter)teb;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d > %d %d", ts.splitmode, ts.writex, ts.writez));
@@ -170,6 +172,8 @@ public abstract class IORenderer {
 			if (teb instanceof ShaftPowerReceiver) {
 				ShaftPowerReceiver sr = (ShaftPowerReceiver)teb;
 				int io = sr.getIORenderAlpha();
+				if (io <= 0)
+					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
 					int dx = dir.offsetX+sr.getMachineX();
@@ -183,6 +187,8 @@ public abstract class IORenderer {
 			if (teb instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter se = (ShaftPowerEmitter)teb;
 				int io = se.getIORenderAlpha();
+				if (io <= 0)
+					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
 					int dx = dir.offsetX+se.getMachineX();
@@ -353,7 +359,7 @@ public abstract class IORenderer {
 			var5.draw();
 		}
 
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		ReikaRenderHelper.exitGeoDraw();

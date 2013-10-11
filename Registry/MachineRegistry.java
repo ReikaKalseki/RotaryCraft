@@ -935,6 +935,8 @@ public enum MachineRegistry {
 			return true;
 		if (this == DISPLAY)
 			return true;
+		if (this.isPipe())
+			return true;
 		return false;
 	}
 

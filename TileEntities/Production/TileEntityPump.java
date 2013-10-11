@@ -69,37 +69,39 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		soundtick++;
-		int idbelow = world.getBlockId(x, y-1, z);
-		if (idbelow == 0)
-			return;
-		Block b = Block.blocksList[idbelow];
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
-		if (f == null)
-			return;
-		if (blocks.isEmpty() || tank.isEmpty()) {
-			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
-			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
-			blocks.reverseBlockOrder();
-			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
-			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
-			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-32, 0, z-32, x+32, y-1, z+32);
-		}
-		boolean res = false;
-		tile = null;
 		tickcount++;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
 		this.getPower(true, false);
 		power = omega*torque;
-		if (damage > 400)
-			power = 0;
-		this.getPressure();
+		int idbelow = world.getBlockId(x, y-1, z);
+		boolean res = false;
 		if (this.checkForReservoir(world, x, y, z, meta)) {
 			tile = (TileEntityReservoir)world.getBlockTileEntity(x, y-1, z);
 			res = true;
 		}
-		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
-		if (blocks.isEmpty())
-			return;
+		if (!res) {
+			if (idbelow == 0)
+				return;
+			Block b = Block.blocksList[idbelow];
+			Fluid f = FluidRegistry.lookupFluidForBlock(b);
+			if (f == null)
+				return;
+			if (blocks.isEmpty() || tank.isEmpty()) {
+				blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
+				blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.reverseBlockOrder();
+				//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
+				//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
+				//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-32, 0, z-32, x+32, y-1, z+32);
+			}
+			tile = null;
+			if (damage > 400)
+				power = 0;
+			this.getPressure();
+			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
+			if (blocks.isEmpty())
+				return;
+		}
 		if (this.operationComplete(tickcount, 0) && power >= MINPOWER && this.getLevel() < CAPACITY) {
 			if (!res) {
 				//int loc[] = this.findSourceBlock(world, x, y, z);
@@ -110,8 +112,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
 			}
 			else if (tile != null) {
-				tile.removeLiquid(1);
-				tank.setContents(tank.getLevel()+1, tile.getFluid());
+				int amt = tile.getLevel()/2+1;
+				tile.removeLiquid(amt);
+				tank.setContents(tank.getLevel()+amt, tile.getFluid());
 			}
 		}
 
@@ -150,7 +153,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 				return false;
 			if (tile.getFluid() == null)
 				return false;
-			if (tile.getFluid() != null && tank.getFluid() != null && !tile.getFluid().equals(tank.getFluid()))
+			if (tile.getFluid() != null && tank.getActualFluid() != null && !tile.getFluid().equals(tank.getActualFluid()))
 				return false;
 			return (tile.getLevel() > 0);
 		}
@@ -169,7 +172,18 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
 			world.setBlock(loc[0], loc[1], loc[2], 0);
-		tank.addLiquid(RotaryConfig.MILLIBUCKET, fluid);
+		int mult = 1;
+		if (power/MINPOWER >= 16)
+			mult++;
+		if (power/MINPOWER >= 64)
+			mult++;
+		if (power/MINPOWER >= 256)
+			mult++;
+		if (power/MINPOWER >= 1024)
+			mult++;
+		if (power/MINPOWER >= 4096)
+			mult++;
+		tank.addLiquid(RotaryConfig.MILLIBUCKET*mult, fluid);
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}
 
@@ -259,7 +273,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	@Override
 	public boolean hasModelTransparency() {
-		return true;
+		return false;
 	}
 
 	@Override

@@ -167,7 +167,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return true;
+		return fuel > 0;
 	}
 
 	@Override

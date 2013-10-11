@@ -21,6 +21,7 @@ import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.TreeReader;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
@@ -139,16 +141,27 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
-				//if (xyz[1] == edity) {
-				if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
-					ItemStack plant = this.getPlantedSapling();
-					if (plant != null) {
-						if (inv[0] != null)
-							ReikaInventoryHelper.decrStack(0, inv);
-						world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+				if (xyz[1] == edity) {
+					int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
+					int root = TwilightForestHandler.getInstance().rootID;
+					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+						ItemStack plant = this.getPlantedSapling();
+						if (plant != null) {
+							if (inv[0] != null)
+								ReikaInventoryHelper.decrStack(0, inv);
+							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+						}
+					}
+					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == 0)) {
+						ItemStack plant = this.getPlantedSapling();
+						if (plant != null) {
+							if (inv[0] != null)
+								ReikaInventoryHelper.decrStack(0, inv);
+							world.setBlock(xyz[0], xyz[1]-1, xyz[2], Block.dirt.blockID);
+							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+						}
 					}
 				}
-				//}
 			}
 			else {
 				boolean fall = BlockSand.canFallBelow(world, xyz[0], xyz[1]-1, xyz[2]);
@@ -173,11 +186,22 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+par5Random.nextFloat(), 1F);
 
 					if (xyz[1] == edity) {
+						int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
+						int root = TwilightForestHandler.getInstance().rootID;
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
 								if (inv[0] != null)
 									ReikaInventoryHelper.decrStack(0, inv);
+								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+							}
+						}
+						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == 0)) {
+							ItemStack plant = this.getPlantedSapling();
+							if (plant != null) {
+								if (inv[0] != null)
+									ReikaInventoryHelper.decrStack(0, inv);
+								world.setBlock(xyz[0], xyz[1]-1, xyz[2], Block.dirt.blockID);
 								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
 							}
 						}
@@ -474,6 +498,21 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
 			}
 		}
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
@@ -485,6 +524,20 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
 				enchantments.put(Enchantment.enchantmentsList[i], lvl);
+			}
+		}
+
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 	}
