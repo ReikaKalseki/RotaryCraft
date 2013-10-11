@@ -163,7 +163,7 @@ public class PipeRenderer extends RotaryTERenderer {
 				v5.addVertexWithUV(in, 0, in, u, v2);
 				v5.draw();
 				break;
-			case UP: need to add !render if connected and some texture side fixing S/W here
+			case UP: need to add !render if connected and some texture side fixing (S/W here)
 			v5.startDrawingQuads();
 			v5.addVertexWithUV(in2, in, in, u, v);
 			v5.addVertexWithUV(in2, in, in2, u2, v);

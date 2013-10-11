@@ -11,6 +11,8 @@ package Reika.RotaryCraft;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -136,11 +138,16 @@ public class RotaryRegistration {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void setupLiquidIcons() {
+	public static void setupLiquidIcons(TextureStitchEvent.Pre event) {
 		RotaryCraft.logger.log("Loading Liquid Icons");
 
-		RotaryCraft.jetFuelFluid.setIcons(RotaryCraft.jetFuel.getIconFromDamage(0));
-		RotaryCraft.lubeFluid.setIcons(RotaryCraft.lubricant.getIconFromDamage(0));
-		RotaryCraft.ethanolFluid.setIcons(RotaryCraft.ethanol.getIconFromDamage(0));
+		if (event.map.textureType == 0) {
+			Icon jeticon = event.map.registerIcon("RotaryCraft:jetfuel");
+			Icon lubeicon = event.map.registerIcon("RotaryCraft:lubricant");
+			Icon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol");
+			RotaryCraft.jetFuelFluid.setIcons(jeticon);
+			RotaryCraft.lubeFluid.setIcons(lubeicon);
+			RotaryCraft.ethanolFluid.setIcons(ethanolicon);
+		}
 	}
 }

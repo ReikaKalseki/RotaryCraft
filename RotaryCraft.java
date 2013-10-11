@@ -270,8 +270,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@ForgeSubscribe
 	@SideOnly(Side.CLIENT)
-	public void textureHook(TextureStitchEvent.Post event) {
-		RotaryRegistration.setupLiquidIcons();
+	public void textureHook(TextureStitchEvent.Pre event) {
+		RotaryRegistration.setupLiquidIcons(event);
 	}
 
 	@ForgeSubscribe
