@@ -249,7 +249,7 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return liquidID > 0 && liquidLevel > 0 || true;
+		return liquidID > 0 && liquidLevel > 0;
 	}
 
 	@Override

@@ -136,4 +136,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			connections[i] = NBT.getBoolean("conn"+i);
 		}
 	}
+
+	public boolean isConnectedToNonSelf(ForgeDirection dir) {
+		if (!this.isConnectionValidForSide(dir))
+			return false;
+		if (dir.offsetX == 0 && MinecraftForgeClient.getRenderPass() != 1)
+			dir = dir.getOpposite();
+		int dx = xCoord+dir.offsetX;
+		int dy = yCoord+dir.offsetY;
+		int dz = zCoord+dir.offsetZ;
+		World world = worldObj;
+		int id = world.getBlockId(dx, dy, dz);
+		int meta = world.getBlockMetadata(dx, dy, dz);
+		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
+	}
 }

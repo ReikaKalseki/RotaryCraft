@@ -72,62 +72,55 @@ public class PipeRenderer extends RotaryTERenderer {
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
 		float v2 = ico.getMaxV();
-		double du = dd2*(u2-u);
+		double du = dd2*(u2-u)/4D;
 
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor3f(1, 1, 1);
+
 		Tessellator v5 = new Tessellator();
-		this.faceBrightness(dir, v5);
+		v5.startDrawingQuads();
+		v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
+		//this.faceBrightness(ForgeDirection.DOWN, v5);
 		if (!tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
 			case UP:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in2, in, in, u, v2);
 				v5.addVertexWithUV(in, in, in, u2, v2);
 				v5.addVertexWithUV(in, in, in2, u2, v);
 				v5.addVertexWithUV(in2, in, in2, u, v);
-				v5.draw();
 				break;
 			case DOWN:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in2, in2, in2, u, v);
 				v5.addVertexWithUV(in, in2, in2, u2, v);
 				v5.addVertexWithUV(in, in2, in, u2, v2);
 				v5.addVertexWithUV(in2, in2, in, u, v2);
-				v5.draw();
 				break;
 			case SOUTH:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in, in, in, u, v);
 				v5.addVertexWithUV(in2, in, in, u2, v);
 				v5.addVertexWithUV(in2, in2, in, u2, v2);
 				v5.addVertexWithUV(in, in2, in, u, v2);
-				v5.draw();
 				break;
 			case NORTH:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in, in2, in2, u, v2);
 				v5.addVertexWithUV(in2, in2, in2, u2, v2);
 				v5.addVertexWithUV(in2, in, in2, u2, v);
 				v5.addVertexWithUV(in, in, in2, u, v);
-				v5.draw();
 				break;
 			case EAST:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in, in2, in, u, v2);
 				v5.addVertexWithUV(in, in2, in2, u2, v2);
 				v5.addVertexWithUV(in, in, in2, u2, v);
 				v5.addVertexWithUV(in, in, in, u, v);
-				v5.draw();
 				break;
 			case WEST:
-				v5.startDrawingQuads();
 				v5.addVertexWithUV(in2, in, in, u, v);
 				v5.addVertexWithUV(in2, in, in2, u2, v);
 				v5.addVertexWithUV(in2, in2, in2, u2, v2);
 				v5.addVertexWithUV(in2, in2, in, u, v2);
-				v5.draw();
 			default:
 				break;
 			}
@@ -135,184 +128,204 @@ public class PipeRenderer extends RotaryTERenderer {
 		else { //is connected on side
 			switch(dir) {
 			case DOWN:
-				v5.startDrawingQuads();
+				v5.setNormal(-1, 0, 0);
 				v5.addVertexWithUV(in2, in2, in, u, v);
 				v5.addVertexWithUV(in2, in2, in2, u2, v);
-				v5.addVertexWithUV(in2, 0, in2, u2, v2);
-				v5.addVertexWithUV(in2, 0, in, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in2, 0, in2, u2, v+du);
+				v5.addVertexWithUV(in2, 0, in, u, v+du);
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in2, in, u, v);
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, 0, in, u, v+du);
+				v5.addVertexWithUV(in, 0, in2, u2, v+du);
 				v5.addVertexWithUV(in, in2, in2, u2, v);
-				v5.addVertexWithUV(in, 0, in2, u2, v2);
-				v5.addVertexWithUV(in, 0, in, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in, in2, in, u, v);
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in2, in2, u, v);
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(in, 0, in2, u, v+du);
+				v5.addVertexWithUV(in2, 0, in2, u2, v+du);
 				v5.addVertexWithUV(in2, in2, in2, u2, v);
-				v5.addVertexWithUV(in2, 0, in2, u2, v2);
-				v5.addVertexWithUV(in, 0, in2, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in, in2, in2, u, v);
 
-				v5.startDrawingQuads();
+				v5.setNormal(0, 0, 1);
 				v5.addVertexWithUV(in, in2, in, u, v);
 				v5.addVertexWithUV(in2, in2, in, u2, v);
-				v5.addVertexWithUV(in2, 0, in, u2, v2);
-				v5.addVertexWithUV(in, 0, in, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in2, 0, in, u2, v+du);
+				v5.addVertexWithUV(in, 0, in, u, v+du);
 				break;
-			case UP: need to add !render if connected and some texture side fixing (S/W here)
-			v5.startDrawingQuads();
-			v5.addVertexWithUV(in2, in, in, u, v);
-			v5.addVertexWithUV(in2, in, in2, u2, v);
-			v5.addVertexWithUV(in2, 1, in2, u2, v2);
-			v5.addVertexWithUV(in2, 1, in, u, v2);
-			v5.draw();
+			case UP:
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, 1, in, u, v+du);
+				v5.addVertexWithUV(in2, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in, in, u, v);
 
-			v5.startDrawingQuads();
-			v5.addVertexWithUV(in, in, in, u, v);
-			v5.addVertexWithUV(in, in, in2, u2, v);
-			v5.addVertexWithUV(in, 1, in2, u2, v2);
-			v5.addVertexWithUV(in, 1, in, u, v2);
-			v5.draw();
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in, 1, in, u, v+du);
 
-			v5.startDrawingQuads();
-			v5.addVertexWithUV(in, in, in2, u, v);
-			v5.addVertexWithUV(in2, in, in2, u2, v);
-			v5.addVertexWithUV(in2, 1, in2, u2, v2);
-			v5.addVertexWithUV(in, 1, in2, u, v2);
-			v5.draw();
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(in, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in, 1, in2, u, v+du);
 
-			v5.startDrawingQuads();
-			v5.addVertexWithUV(in, in, in, u, v);
-			v5.addVertexWithUV(in2, in, in, u2, v);
-			v5.addVertexWithUV(in2, 1, in, u2, v2);
-			v5.addVertexWithUV(in, 1, in, u, v2);
-			v5.draw();
-			break;
-			case EAST:
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(1, in, in, u, v);
-				v5.addVertexWithUV(in, in, in, u+du/4, v);
-				v5.addVertexWithUV(in, in2, in, u+du/4, v2);
-				v5.addVertexWithUV(1, in2, in, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(1, in, in2, u, v);
-				v5.addVertexWithUV(in, in, in2, u+du/4, v);
-				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
-				v5.addVertexWithUV(1, in2, in2, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(1, in, in, u, v);
-				v5.addVertexWithUV(in, in, in, u+du/4, v);
-				v5.addVertexWithUV(in, in, in2, u+du/4, v2);
-				v5.addVertexWithUV(1, in, in2, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(1, in2, in, u, v);
-				v5.addVertexWithUV(in, in2, in, u+du/4, v);
-				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
-				v5.addVertexWithUV(1, in2, in2, u, v2);
-				v5.draw();
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(in, 1, in, u, v+du);
+				v5.addVertexWithUV(in2, 1, in, u2, v+du);
+				v5.addVertexWithUV(in2, in, in, u2, v);
+				v5.addVertexWithUV(in, in, in, u, v);
 				break;
 			case NORTH:
-				v5.startDrawingQuads();
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, in2, 0, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in2, in, in2, u+du, v);
 				v5.addVertexWithUV(in2, in, 0, u, v);
-				v5.addVertexWithUV(in2, in, in2, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
-				v5.addVertexWithUV(in2, in2, 0, u, v2);
-				v5.draw();
 
-				v5.startDrawingQuads();
+				v5.setNormal(1, 0, 0);
 				v5.addVertexWithUV(in, in, 0, u, v);
-				v5.addVertexWithUV(in, in, in2, u+du/4, v);
-				v5.addVertexWithUV(in, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
 				v5.addVertexWithUV(in, in2, 0, u, v2);
-				v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, 0, u, v);
-				v5.addVertexWithUV(in, in, in2, u+du/4, v);
-				v5.addVertexWithUV(in2, in, in2, u+du/4, v2);
+				v5.setNormal(0, 1, 0);
 				v5.addVertexWithUV(in2, in, 0, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in2, in, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(in, in, 0, u, v);
 
-				v5.startDrawingQuads();
+				v5.setNormal(0, -1, 0);
 				v5.addVertexWithUV(in, in2, 0, u, v);
-				v5.addVertexWithUV(in, in2, in2, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.addVertexWithUV(in, in2, in2, u+du, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
 				v5.addVertexWithUV(in2, in2, 0, u, v2);
-				v5.draw();
 				break;
 			case SOUTH:
-				v5.startDrawingQuads();
+				v5.setNormal(-1, 0, 0);
 				v5.addVertexWithUV(in2, in, 1, u, v);
-				v5.addVertexWithUV(in2, in, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
 				v5.addVertexWithUV(in2, in2, 1, u, v2);
-				v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in, 1, u, v);
-				v5.addVertexWithUV(in, in, in, u+du/4, v);
-				v5.addVertexWithUV(in, in2, in, u+du/4, v2);
+				v5.setNormal(1, 0, 0);
 				v5.addVertexWithUV(in, in2, 1, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
+				v5.addVertexWithUV(in, in2, in, u+du, v2);
+				v5.addVertexWithUV(in, in, in, u+du, v);
 				v5.addVertexWithUV(in, in, 1, u, v);
-				v5.addVertexWithUV(in, in, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in, in, u+du/4, v2);
-				v5.addVertexWithUV(in2, in, 1, u, v2);
-				v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(in, in2, 1, u, v);
-				v5.addVertexWithUV(in, in2, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(in, in, 1, u, v);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in, in, u+du, v2);
+				v5.addVertexWithUV(in2, in, 1, u, v2);
+
+				v5.setNormal(0, -1, 0);
 				v5.addVertexWithUV(in2, in2, 1, u, v2);
-				v5.draw();
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
+				v5.addVertexWithUV(in, in2, in, u+du, v);
+				v5.addVertexWithUV(in, in2, 1, u, v);
+				break;
+			case EAST:
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(1, in, in, u, v);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(in, in2, in, u+du, v2);
+				v5.addVertexWithUV(1, in2, in, u, v2);
+
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(1, in, in2, u, v);
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(1, in, in2, u, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(1, in, in, u, v);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(1, in2, in, u, v);
+				v5.addVertexWithUV(in, in2, in, u+du, v);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
 				break;
 			case WEST:
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(0, in, in, u, v);
-				v5.addVertexWithUV(in2, in, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in, u+du/4, v2);
+				v5.setNormal(0, 0, 1);
 				v5.addVertexWithUV(0, in2, in, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(0, in, in2, u, v);
-				v5.addVertexWithUV(in2, in, in2, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
-				v5.addVertexWithUV(0, in2, in2, u, v2);
-				v5.draw();
-
-				v5.startDrawingQuads();
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
 				v5.addVertexWithUV(0, in, in, u, v);
-				v5.addVertexWithUV(in2, in, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in, in2, u+du/4, v2);
-				v5.addVertexWithUV(0, in, in2, u, v2);
-				v5.draw();
 
-				v5.startDrawingQuads();
-				v5.addVertexWithUV(0, in2, in, u, v);
-				v5.addVertexWithUV(in2, in2, in, u+du/4, v);
-				v5.addVertexWithUV(in2, in2, in2, u+du/4, v2);
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(0, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u+du, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
 				v5.addVertexWithUV(0, in2, in2, u, v2);
-				v5.draw();
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(0, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in, in2, u+du, v2);
+				v5.addVertexWithUV(0, in, in2, u, v2);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(0, in2, in2, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in2, in2, in, u+du, v);
+				v5.addVertexWithUV(0, in2, in, u, v);
 				break;
 			default:
 				break;
 			}
-		}
 
+		}
+		if (tile.isConnectedToNonSelf(dir)) {
+			v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
+			switch(dir) {
+			case UP:
+				v5.addVertexWithUV(in2, 0.99, in, u, v2);
+				v5.addVertexWithUV(in, 0.99, in, u2, v2);
+				v5.addVertexWithUV(in, 0.99, in2, u2, v);
+				v5.addVertexWithUV(in2, 0.99, in2, u, v);
+				break;
+			case DOWN:
+				v5.addVertexWithUV(in2, 0.01, in2, u, v);
+				v5.addVertexWithUV(in, 0.01, in2, u2, v);
+				v5.addVertexWithUV(in, 0.01, in, u2, v2);
+				v5.addVertexWithUV(in2, 0.01, in, u, v2);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(in, in, 0.99, u, v);
+				v5.addVertexWithUV(in2, in, 0.99, u2, v);
+				v5.addVertexWithUV(in2, in2, 0.99, u2, v2);
+				v5.addVertexWithUV(in, in2, 0.99, u, v2);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(in, in2, 0.01, u, v2);
+				v5.addVertexWithUV(in2, in2, 0.01, u2, v2);
+				v5.addVertexWithUV(in2, in, 0.01, u2, v);
+				v5.addVertexWithUV(in, in, 0.01, u, v);
+				break;
+			case EAST:
+				v5.addVertexWithUV(0.99, in2, in, u, v2);
+				v5.addVertexWithUV(0.99, in2, in2, u2, v2);
+				v5.addVertexWithUV(0.99, in, in2, u2, v);
+				v5.addVertexWithUV(0.99, in, in, u, v);
+				break;
+			case WEST:
+				v5.addVertexWithUV(0.01, in, in, u, v);
+				v5.addVertexWithUV(0.01, in, in2, u2, v);
+				v5.addVertexWithUV(0.01, in2, in2, u2, v2);
+				v5.addVertexWithUV(0.01, in2, in, u, v2);
+			default:
+				break;
+			}
+		}
+		v5.draw();
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		ReikaRenderHelper.enableLighting();
 		GL11.glTranslated(-par2, -par4, -par6);
 		GL11.glDisable(GL11.GL_BLEND);

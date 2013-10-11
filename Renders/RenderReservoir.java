@@ -101,7 +101,7 @@ public class RenderReservoir extends RotaryTERenderer
 			var14.renderAll(null, 0);
 		}
 
-		if (tile.isInWorld() || MinecraftForgeClient.getRenderPass() == 1)
+		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
@@ -136,10 +136,10 @@ public class RenderReservoir extends RotaryTERenderer
 			if (f.getLuminosity(tr.getContents()) > 0)
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
-			v5.addVertexWithUV(0, h, 0, u, v);
-			v5.addVertexWithUV(1, h, 0, du, v);
-			v5.addVertexWithUV(1, h, 1, du, dv);
 			v5.addVertexWithUV(0, h, 1, u, dv);
+			v5.addVertexWithUV(1, h, 1, du, dv);
+			v5.addVertexWithUV(1, h, 0, du, v);
+			v5.addVertexWithUV(0, h, 0, u, v);
 			v5.draw();
 			ReikaRenderHelper.enableLighting();
 		}

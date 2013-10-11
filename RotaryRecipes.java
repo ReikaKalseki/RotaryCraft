@@ -621,14 +621,14 @@ public class RotaryRecipes {
 		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.JET.ordinal(), new Object[]{"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
 		if (ConfigRegistry.ROTATEHOSE.getState()) {
-			MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, DifficultyEffects.PIPECRAFT.getInt()), new Object[]{"WWW", "   ", "WWW", 'W', ExpandedOreRecipe.getWoodList()}));
-			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"SSS", "   ", "SSS", 'S', ItemStacks.steelingot});
-			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"OOO", "   ", "OOO", 'O', Block.obsidian});
+			MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, DifficultyEffects.PIPECRAFT.getInt()), new Object[]{"WWW", "GGG", "WWW", 'G', Block.glass, 'W', ExpandedOreRecipe.getWoodList()}));
+			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"SSS", "GGG", "SSS", 'S', ItemStacks.steelingot, 'G', Block.glass});
+			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"OOO", "GGG", "OOO", 'O', Block.obsidian, 'G', Block.glass});
 		}
 		else {
-			MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, DifficultyEffects.PIPECRAFT.getInt()), new Object[]{"W W", "W W", "W W", 'W', ExpandedOreRecipe.getWoodList()}));
-			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"S S", "S S", "S S", 'S', ItemStacks.steelingot});
-			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"O O", "O O", "O O", 'O', Block.obsidian});
+			MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, DifficultyEffects.PIPECRAFT.getInt()), new Object[]{"WGW", "WGW", "WGW", 'G', Block.glass, 'W', ExpandedOreRecipe.getWoodList()}));
+			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"SGS", "SGS", "SGS", 'S', ItemStacks.steelingot, 'G', Block.glass});
+			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), new Object[]{"OGO", "OGO", "OGO", 'O', Block.obsidian, 'G', Block.glass});
 		}
 
 		ItemStack gear;

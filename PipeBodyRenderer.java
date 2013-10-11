@@ -6,9 +6,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
@@ -49,7 +46,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	private void renderFace(TileEntityPiping tile, int x, int y, int z, ForgeDirection dir) {
-		GL11.glDisable(GL11.GL_CULL_FACE);
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -104,7 +100,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		int dy = tile.yCoord+dir.offsetY;
 		int dz = tile.zCoord+dir.offsetZ;
 		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-		//v5.setBrightness(br);
+		v5.setBrightness(br);
 
 		if (tile.isInWorld() && tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
@@ -115,10 +111,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5+size+dd, 	0.5+size, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5+size, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
-				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size+dd, 	0.5+size+dd, 	0.5+size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5+size, 	u2-du, v);
 				/*
 				v5.addVertexWithUV(0.5-size+dd, 	0.5+size-dd, 	0.5+size, 	gu, gv);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5+size-dd, 	0.5+size, 	gu+dgu*size*2, gv);
@@ -126,10 +122,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size+dd, 	1, 				0.5+size, 	gu, gv+dgv*size);*/
 
 				this.faceBrightness(ForgeDirection.EAST, v5);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size-dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size-dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size-dd, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size+dd, 	u2-du, v);
 				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5-size, 		u2, v);
@@ -142,16 +138,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5+size-dd, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size+dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
-				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5-size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5-size+dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size+dd, 	u2-du, v);
 
 				this.faceBrightness(ForgeDirection.NORTH, v5);
-				v5.addVertexWithUV(0.5+size-dd, 	0.5+size, 		0.5-size, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
-				v5.addVertexWithUV(0.5+size, 		0.5+size+dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5+size+dd, 	0.5-size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5+size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5+size, 		0.5-size, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5-size, 	u2-du, v);
 				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5-size, 	u2, v);
@@ -165,10 +161,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				break;
 			case EAST:
 				this.faceBrightness(ForgeDirection.DOWN, v5);
-				v5.addVertexWithUV(1, 			0.5+size, 	0.5+window, 	u2o, 	v+dv);
-				v5.addVertexWithUV(1, 			0.5+size, 	0.5+size, 		u2o, 	v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 		u2, 	v);
 				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+window, 	u2, 	v+dv);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 		u2, 	v);
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5+size, 		u2o, 	v);
+				v5.addVertexWithUV(1, 			0.5+size, 	0.5+window, 	u2o, 	v+dv);
 
 				v5.addVertexWithUV(1, 			0.5+size, 	0.5-window, 	u2o, 	v2-dv);
 				v5.addVertexWithUV(1, 			0.5+size, 	0.5-size, 		u2o, 	v2);
@@ -181,10 +177,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 		0.5+size-dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size+dd, 	0.5+size-dd, 	0.5+size, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5+size+dd, 	0.5-size, 		0.5+size, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
-				v5.addVertexWithUV(0.5+size, 		0.5-size+dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size+dd, 	0.5-size+dd, 	0.5+size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5-size+dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5-size, 		0.5+size, 	u2-du, v);
 
 				this.faceBrightness(ForgeDirection.UP, v5);
 				v5.addVertexWithUV(1, 			0.5-size, 	0.5+window, 	u2o, 	v+dv);
@@ -192,16 +188,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+size, 		u2, 	v);
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+window, 	u2, 	v+dv);
 
-				v5.addVertexWithUV(1, 			0.5-size, 	0.5-window, 	u2o, 	v2-dv);
-				v5.addVertexWithUV(1, 			0.5-size, 	0.5-size, 		u2o, 	v2);
-				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-size, 		u2, 	v2);
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-window, 	u2, 	v2-dv);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-size, 		u2, 	v2);
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5-size, 		u2o, 	v2);
+				v5.addVertexWithUV(1, 			0.5-size, 	0.5-window, 	u2o, 	v2-dv);
 
 				this.faceBrightness(ForgeDirection.NORTH, v5);
-				v5.addVertexWithUV(0.5+size+dd, 	0.5+size, 		0.5-size, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
-				v5.addVertexWithUV(0.5+size, 		0.5+size-dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size+dd, 	0.5+size-dd, 	0.5-size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5+size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5+size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5+size+dd, 	0.5+size, 		0.5-size, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5+size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
 				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5-size, 	u2, v);
@@ -215,16 +211,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 	0.5+size, 	1, 			u2, 	v2o);
 				v5.addVertexWithUV(0.5-window, 	0.5+size, 	1, 			u2-du, v2o);
 
-				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0.5+size, 	u+du, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 	u, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 	1, 			u, vo);
 				v5.addVertexWithUV(0.5+window, 	0.5+size, 	1, 			u+du, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	1, 			u, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5+size, 	u, v);
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0.5+size, 	u+du, v);
 
 				this.faceBrightness(ForgeDirection.EAST, v5);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size+dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
-				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5+size+dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 		0.5+size+dd, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size+dd, 	u2-du, v);
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5+size, 		u2, v);
@@ -237,16 +233,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5+size+dd, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size+dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5+size+dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size+dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size+dd, 	u2-du, v);
 
 				this.faceBrightness(ForgeDirection.UP, v5);
-				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0.5+size, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 	u2, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 	1, 			u2, vo);
 				v5.addVertexWithUV(0.5-window, 	0.5-size, 	1, 			u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	1, 			u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0.5+size, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5+window, 	0.5-size, 	0.5+size, 	u+du, v);
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5+size, 	u, v);
@@ -255,10 +251,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				break;
 			case SOUTH:
 				this.faceBrightness(ForgeDirection.DOWN, v5);
-				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0, 			u2-du, 	v2o);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0, 			u2, 	v2o);
-				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5-size, 	u2, 	v2);
 				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0.5-size, 	u2-du, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0.5-size, 	u2, 	v2);
+				v5.addVertexWithUV(0.5+size, 	0.5+size, 	0, 			u2, 	v2o);
+				v5.addVertexWithUV(0.5+window, 	0.5+size, 	0, 			u2-du, 	v2o);
 
 				v5.addVertexWithUV(0.5-window, 	0.5+size, 	0, 			u+du, 	v2o);
 				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0, 			u, 		v2o);
@@ -271,16 +267,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5-size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5+size-dd, 	0.5-size-dd, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size-dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
-				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5-size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5-size-dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size+dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size-dd, 	u2-du, v);
 
 				this.faceBrightness(ForgeDirection.WEST, v5);
-				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size-dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
-				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5-size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5-size-dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 		0.5-size-dd, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size-dd, 	u2-du, v);
 				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size, 		u2, v);
@@ -293,17 +289,17 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 	0.5-size, 	0.5-size, 	u2, 	v2);
 				v5.addVertexWithUV(0.5+window, 	0.5-size, 	0.5-size, 	u2-du, 	v2);
 
-				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0, 			u+du, 	v2o);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0, 			u, 		v2o);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5-size, 	u, 		v2);
 				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0.5-size, 	u+du, 	v2);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5-size, 	u, 		v2);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0, 			u, 		v2o);
+				v5.addVertexWithUV(0.5-window, 	0.5-size, 	0, 			u+du, 	v2o);
 				break;
 			case UP:
 				this.faceBrightness(ForgeDirection.SOUTH, v5);
-				v5.addVertexWithUV(0.5+size-dd, 	0.5-size, 		0.5+size, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
-				v5.addVertexWithUV(0.5+size, 		0.5-size-dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5-size-dd, 	0.5+size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5-size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5+size, 		0.5-size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5+size-dd, 	0.5-size, 		0.5+size, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5+size, 	u2-du, v);
 				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5+size, 	u2, v);
@@ -321,16 +317,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5+size-dd, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size+dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
-				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5-size, 		u2, vo);
 				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5-size+dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size-dd, 	0.5-size, 		u2, vo);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size, 		u2, v);
+				v5.addVertexWithUV(0.5+size, 	0.5-size, 		0.5-size+dd, 	u2-du, v);
 
 				this.faceBrightness(ForgeDirection.WEST, v5);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size-dd, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
-				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5+size, 		u2, vo);
 				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5+size-dd, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size-dd, 	0.5+size, 		u2, vo);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size, 		u2, v);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5+size-dd, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size+dd, 	u2-du, v);
 				v5.addVertexWithUV(0.5-size, 	0.5-size, 		0.5-size, 		u2, v);
@@ -343,10 +339,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5+size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5-size-dd, 	0.5-size, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
-				v5.addVertexWithUV(0.5-size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size+dd, 	0.5-size-dd, 	0.5-size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
 				/*
 				v5.addVertexWithUV(0.5-size+dd, 	0.5-size+dd, 	0.5-size, 	gu+dgu*size*2, gv);
 				v5.addVertexWithUV(0.5+size-dd, 	0.5-size+dd, 	0.5-size, 	gu, gv);
@@ -360,16 +356,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5+size, 		u2, 	v2);
 				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5+window, 	u2, 	v2-dv);
 
-				v5.addVertexWithUV(0, 			0.5+size, 	0.5-window, 	u2o, 	v+dv);
-				v5.addVertexWithUV(0, 			0.5+size, 	0.5-size, 		u2o, 	v);
-				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-size, 		u2, 	v);
 				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-window, 	u2, 	v+dv);
+				v5.addVertexWithUV(0.5-size, 	0.5+size, 	0.5-size, 		u2, 	v);
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5-size, 		u2o, 	v);
+				v5.addVertexWithUV(0, 			0.5+size, 	0.5-window, 	u2o, 	v+dv);
 
 				this.faceBrightness(ForgeDirection.SOUTH, v5);
-				v5.addVertexWithUV(0.5-size-dd, 	0.5+size, 		0.5+size, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
-				v5.addVertexWithUV(0.5-size, 		0.5+size-dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size-dd, 	0.5+size-dd, 	0.5+size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5+size-dd, 	0.5+size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5+size, 		0.5+size, 	u2-du, v);
 
 				v5.addVertexWithUV(0.5-size-dd, 	0.5-size, 		0.5+size, 	u2-du, v);
 				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5+size, 	u2, v);
@@ -377,10 +373,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size-dd, 	0.5-size+dd, 	0.5+size, 	u2-du, vo);
 
 				this.faceBrightness(ForgeDirection.UP, v5);
-				v5.addVertexWithUV(0, 			0.5-size, 	0.5+window, 	u2o, 	v2-dv);
-				v5.addVertexWithUV(0, 			0.5-size, 	0.5+size, 		u2o, 	v2);
-				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 		u2, 	v2);
 				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+window, 	u2, 	v2-dv);
+				v5.addVertexWithUV(0.5-size, 	0.5-size, 	0.5+size, 		u2, 	v2);
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5+size, 		u2o, 	v2);
+				v5.addVertexWithUV(0, 			0.5-size, 	0.5+window, 	u2o, 	v2-dv);
 
 				v5.addVertexWithUV(0, 			0.5-size, 	0.5-window, 	u2o, 	v+dv);
 				v5.addVertexWithUV(0, 			0.5-size, 	0.5-size, 		u2o, 	v);
@@ -393,10 +389,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 		0.5+size-dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size-dd, 	0.5+size-dd, 	0.5-size, 	u2-du, vo);
 
-				v5.addVertexWithUV(0.5-size-dd, 	0.5-size, 		0.5-size, 	u2-du, v);
-				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
-				v5.addVertexWithUV(0.5-size, 		0.5-size+dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size-dd, 	0.5-size+dd, 	0.5-size, 	u2-du, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5-size+dd, 	0.5-size, 	u2, vo);
+				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
+				v5.addVertexWithUV(0.5-size-dd, 	0.5-size, 		0.5-size, 	u2-du, v);
 				break;
 			default:
 				break;
@@ -407,31 +403,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			switch(dir) {
 			case DOWN:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
-					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v2);
-					v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
 					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
-					v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v2);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
 					v5.addVertexWithUV(1-dd-dl, 1-dd, 	1-dd, 		u2-du, 	v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
-					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	dd+dl, 		u2, 	v2-dv);
 					v5.addVertexWithUV(dd, 		1-dd, 	dd+dl, 		u, 		v2-dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd+dl, 		u2, 	v2-dv);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
-					v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u, 		v+dv);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd-dl, 	u2, 	v+dv);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
 					v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd-dl, 	u2, 	v+dv);
+					v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u, 		v+dv);
 				}
 
 				v5.addVertexWithUV(mx, 1-dd, ly, gu2, gv);
@@ -468,38 +464,38 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 					v5.addVertexWithUV(dd, 		1-dd, 		1-dd, 	u, 		v);
 				}
 
-				v5.addVertexWithUV(mx, ly, 1-dd, gu2, gv);
-				v5.addVertexWithUV(lx, ly, 1-dd, gu, gv);
-				v5.addVertexWithUV(lx, my, 1-dd, gu, gv2);
 				v5.addVertexWithUV(mx, my, 1-dd, gu2, gv2);
+				v5.addVertexWithUV(lx, my, 1-dd, gu, gv2);
+				v5.addVertexWithUV(lx, ly, 1-dd, gu, gv);
+				v5.addVertexWithUV(mx, ly, 1-dd, gu2, gv);
 				break;
 			case EAST:
 				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
-					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(1-dd, 		dd, 	dd+dl, 		u+du, 	v2);
-					v5.addVertexWithUV(1-dd, 		1-dd, 	dd+dl, 		u+du, 	v);
 					v5.addVertexWithUV(1-dd, 		1-dd, 	dd, 		u, 		v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	dd+dl, 		u+du, 	v);
+					v5.addVertexWithUV(1-dd, 		dd, 	dd+dl, 		u+du, 	v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
-					v5.addVertexWithUV(1-dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
-					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd, 		u2, 	v);
 					v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
-					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
 					v5.addVertexWithUV(1-dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+					v5.addVertexWithUV(1-dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
-					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
-					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
-					v5.addVertexWithUV(1-dd, 		1-dd, 		1-dd, 	u2, 	v);
 					v5.addVertexWithUV(1-dd, 		1-dd, 		dd, 	u, 		v);
+					v5.addVertexWithUV(1-dd, 		1-dd, 		1-dd, 	u2, 	v);
+					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(1-dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
 				}
 
 				v5.addVertexWithUV(1-dd, ly, mx, gu2, gv);
@@ -536,10 +532,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 					v5.addVertexWithUV(dd, 		1-dd, 		dd, 	u, 		v);
 				}
 
-				v5.addVertexWithUV(dd, ly, mx, gu2, gv);
-				v5.addVertexWithUV(dd, ly, lx, gu, gv);
-				v5.addVertexWithUV(dd, my, lx, gu, gv2);
 				v5.addVertexWithUV(dd, my, mx, gu2, gv2);
+				v5.addVertexWithUV(dd, my, lx, gu, gv2);
+				v5.addVertexWithUV(dd, ly, lx, gu, gv);
+				v5.addVertexWithUV(dd, ly, mx, gu2, gv);
 				break;
 			case UP:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
@@ -570,44 +566,176 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 					v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v);
 				}
 
-				v5.addVertexWithUV(mx, dd, ly, gu2, gv);
-				v5.addVertexWithUV(lx, dd, ly, gu, gv);
-				v5.addVertexWithUV(lx, dd, my, gu, gv2);
 				v5.addVertexWithUV(mx, dd, my, gu2, gv2);
+				v5.addVertexWithUV(lx, dd, my, gu, gv2);
+				v5.addVertexWithUV(lx, dd, ly, gu, gv);
+				v5.addVertexWithUV(mx, dd, ly, gu2, gv);
 				break;
 			case SOUTH:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
-					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
-					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v);
 					v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v);
+					v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v);
+					v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.EAST)) {
-					v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
-					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v);
 					v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.UP)) {
-					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
-					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
-					v5.addVertexWithUV(1-dd, 	dd+dl, 	dd, 		u2, 	v2-dv);
 					v5.addVertexWithUV(dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+					v5.addVertexWithUV(1-dd, 	dd+dl, 	dd, 		u2, 	v2-dv);
+					v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+					v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
 				}
 
 				if (!tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
-					v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
-					v5.addVertexWithUV(1-dd, 	1-dd-dl, 	dd, 	u2, 	v+dv);
-					v5.addVertexWithUV(1-dd, 	1-dd, 		dd, 		u2, 	v);
 					v5.addVertexWithUV(dd, 		1-dd, 		dd, 		u, 		v);
+					v5.addVertexWithUV(1-dd, 	1-dd, 		dd, 		u2, 	v);
+					v5.addVertexWithUV(1-dd, 	1-dd-dl, 	dd, 	u2, 	v+dv);
+					v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
 				}
 
 				v5.addVertexWithUV(mx, ly, dd, gu2, gv);
 				v5.addVertexWithUV(lx, ly, dd, gu, gv);
 				v5.addVertexWithUV(lx, my, dd, gu, gv2);
 				v5.addVertexWithUV(mx, my, dd, gu2, gv2);
+				break;
+			default:
+				break;
+			}
+		}
+		if (tile.isConnectedToNonSelf(dir)) {
+			switch(dir) {
+			case DOWN:
+				v5.addVertexWithUV(dd, 		1, 	1-dd, 		u, 		v);
+				v5.addVertexWithUV(dd+dl, 	1, 	1-dd, 		u+du, 	v);
+				v5.addVertexWithUV(dd+dl, 	1, 	dd, 		u+du, 	v2);
+				v5.addVertexWithUV(dd, 		1, 	dd, 		u, 		v2);
+
+				v5.addVertexWithUV(1-dd-dl, 1, 	1-dd, 		u2-du, 	v);
+				v5.addVertexWithUV(1-dd, 	1, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(1-dd, 	1, 	dd, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd-dl, 1, 	dd, 		u2-du, 	v2);
+
+				v5.addVertexWithUV(dd, 		1, 	dd+dl, 		u, 		v2-dv);
+				v5.addVertexWithUV(1-dd, 	1, 	dd+dl, 		u2, 	v2-dv);
+				v5.addVertexWithUV(1-dd, 	1, 	dd, 		u2, 	v2);
+				v5.addVertexWithUV(dd, 		1, 	dd, 		u, 		v2);
+
+				v5.addVertexWithUV(dd, 		1, 	1-dd, 		u, 		v);
+				v5.addVertexWithUV(1-dd, 	1, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(1-dd, 	1, 	1-dd-dl, 	u2, 	v+dv);
+				v5.addVertexWithUV(dd, 		1, 	1-dd-dl, 	u, 		v+dv);
+				break;
+			case UP:
+				v5.addVertexWithUV(dd, 		0, 	dd, 		u, 		v2);
+				v5.addVertexWithUV(dd+dl, 	0, 	dd, 		u+du, 	v2);
+				v5.addVertexWithUV(dd+dl, 	0, 	1-dd, 		u+du, 	v);
+				v5.addVertexWithUV(dd, 		0, 	1-dd, 		u, 		v);
+
+				v5.addVertexWithUV(1-dd-dl, 0, 	dd, 		u2-du, 	v2);
+				v5.addVertexWithUV(1-dd, 	0, 	dd, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd, 	0, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(1-dd-dl, 0, 	1-dd, 		u2-du, 	v);
+
+				v5.addVertexWithUV(dd, 		0, 	dd, 		u, 		v2);
+				v5.addVertexWithUV(1-dd, 	0, 	dd, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd, 	0, 	dd+dl, 		u2, 	v2-dv);
+				v5.addVertexWithUV(dd, 		0, 	dd+dl, 		u, 		v2-dv);
+
+				v5.addVertexWithUV(dd, 		0, 	1-dd-dl, 	u, 		v+dv);
+				v5.addVertexWithUV(1-dd, 	0, 	1-dd-dl, 	u2, 	v+dv);
+				v5.addVertexWithUV(1-dd, 	0, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(dd, 		0, 	1-dd, 		u, 		v);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(dd, 		1-dd, 	0, 		u, 		v);
+				v5.addVertexWithUV(dd+dl, 	1-dd, 	0, 		u+du, 	v);
+				v5.addVertexWithUV(dd+dl, 	dd, 	0, 		u+du, 	v2);
+				v5.addVertexWithUV(dd, 		dd, 	0, 		u, 		v2);
+
+				v5.addVertexWithUV(1-dd-dl, 1-dd, 	0, 		u2-du, 	v);
+				v5.addVertexWithUV(1-dd, 	1-dd, 	0, 		u2, 	v);
+				v5.addVertexWithUV(1-dd, 	dd, 	0, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd-dl, dd, 	0, 		u2-du, 	v2);
+
+				v5.addVertexWithUV(dd, 		dd+dl, 	0, 		u, 		v2-dv);
+				v5.addVertexWithUV(1-dd, 	dd+dl, 	0, 		u2, 	v2-dv);
+				v5.addVertexWithUV(1-dd, 	dd, 	0, 		u2, 	v2);
+				v5.addVertexWithUV(dd, 		dd, 	0, 		u, 		v2);
+
+				v5.addVertexWithUV(dd, 		1-dd, 		0, 		u, 		v);
+				v5.addVertexWithUV(1-dd, 	1-dd, 		0, 		u2, 	v);
+				v5.addVertexWithUV(1-dd, 	1-dd-dl, 	0, 	u2, 	v+dv);
+				v5.addVertexWithUV(dd, 		1-dd-dl, 	0, 	u, 		v+dv);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(dd, 		dd, 	1, 		u, 		v2);
+				v5.addVertexWithUV(dd+dl, 	dd, 	1, 		u+du, 	v2);
+				v5.addVertexWithUV(dd+dl, 	1-dd, 	1, 		u+du, 	v);
+				v5.addVertexWithUV(dd, 		1-dd, 	1, 		u, 		v);
+
+				v5.addVertexWithUV(1-dd-dl, dd, 	1, 		u2-du, 	v2);
+				v5.addVertexWithUV(1-dd, 	dd, 	1, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd, 	1-dd, 	1, 		u2, 	v);
+				v5.addVertexWithUV(1-dd-dl, 1-dd, 	1, 		u2-du, 	v);
+
+				v5.addVertexWithUV(dd, 		dd, 	1, 		u, 		v2);
+				v5.addVertexWithUV(1-dd, 	dd, 	1, 		u2, 	v2);
+				v5.addVertexWithUV(1-dd, 	dd+dl, 	1, 		u2, 	v2-dv);
+				v5.addVertexWithUV(dd, 		dd+dl, 	1, 		u, 		v2-dv);
+
+				v5.addVertexWithUV(dd, 		1-dd-dl, 	1, 	u, 		v+dv);
+				v5.addVertexWithUV(1-dd, 	1-dd-dl, 	1, 	u2, 	v+dv);
+				v5.addVertexWithUV(1-dd, 	1-dd, 		1, 	u2, 	v);
+				v5.addVertexWithUV(dd, 		1-dd, 		1, 	u, 		v);
+				break;
+			case EAST:
+				v5.addVertexWithUV(1, 		1-dd, 	dd, 		u, 		v);
+				v5.addVertexWithUV(1, 		1-dd, 	dd+dl, 		u+du, 	v);
+				v5.addVertexWithUV(1, 		dd, 	dd+dl, 		u+du, 	v2);
+				v5.addVertexWithUV(1, 		dd, 	dd, 		u, 		v2);
+
+				v5.addVertexWithUV(1,		1-dd, 	1-dd-dl, 	u2-du, 	v);
+				v5.addVertexWithUV(1,		1-dd, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(1,		dd, 	1-dd, 		u2, 	v2);
+				v5.addVertexWithUV(1,		dd, 	1-dd-dl, 	u2-du, 	v2);
+
+				v5.addVertexWithUV(1,		dd+dl, 	dd, 		u, 		v2-dv);
+				v5.addVertexWithUV(1,		dd+dl, 	1-dd, 		u2, 	v2-dv);
+				v5.addVertexWithUV(1,		dd, 	1-dd, 		u2, 	v2);
+				v5.addVertexWithUV(1,		dd, 	dd, 		u, 		v2);
+
+				v5.addVertexWithUV(1,		1-dd, 		dd, 	u, 		v);
+				v5.addVertexWithUV(1,		1-dd, 		1-dd, 	u2, 	v);
+				v5.addVertexWithUV(1,		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+				v5.addVertexWithUV(1,		1-dd-dl, 	dd, 	u, 		v+dv);
+				break;
+			case WEST:
+				v5.addVertexWithUV(0, 		dd, 	dd, 		u, 		v2);
+				v5.addVertexWithUV(0, 		dd, 	dd+dl, 		u+du, 	v2);
+				v5.addVertexWithUV(0, 		1-dd, 	dd+dl, 		u+du, 	v);
+				v5.addVertexWithUV(0, 		1-dd, 	dd, 		u, 		v);
+
+				v5.addVertexWithUV(0, 		dd, 	1-dd-dl, 	u2-du, 	v2);
+				v5.addVertexWithUV(0, 		dd, 	1-dd, 		u2, 	v2);
+				v5.addVertexWithUV(0, 		1-dd, 	1-dd, 		u2, 	v);
+				v5.addVertexWithUV(0, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+
+				v5.addVertexWithUV(0, 		dd, 	dd, 		u, 		v2);
+				v5.addVertexWithUV(0, 		dd, 	1-dd, 		u2, 	v2);
+				v5.addVertexWithUV(0, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+				v5.addVertexWithUV(0, 		dd+dl, 	dd, 		u, 		v2-dv);
+
+				v5.addVertexWithUV(0, 		1-dd-dl, 	dd, 	u, 		v+dv);
+				v5.addVertexWithUV(0, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+				v5.addVertexWithUV(0, 		1-dd, 		1-dd, 	u2, 	v);
+				v5.addVertexWithUV(0, 		1-dd, 		dd, 	u, 		v);
 				break;
 			default:
 				break;
