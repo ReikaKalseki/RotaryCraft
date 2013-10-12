@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
-import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
@@ -135,7 +134,7 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return LiquidRegistry.isLiquidItem(is) || is.itemID == Item.bucketEmpty.itemID;
+		return FluidContainerRegistry.isContainer(is);
 	}
 
 	@Override
@@ -267,8 +266,8 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		if (filling)
-			return j == 0 && LiquidRegistry.isLiquidItem(itemstack);
-		return j == 0 && itemstack.itemID == Item.bucketEmpty.itemID;
+			return j == 0 && FluidContainerRegistry.isFilledContainer(itemstack);
+		return j == 0 && FluidContainerRegistry.isEmptyContainer(itemstack);
 	}
 
 	@Override

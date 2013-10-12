@@ -31,8 +31,22 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	//Whether in wind or unwind mode
 	public boolean winding = true;
-	public static final int UNWINDTORQUE = 4;
-	public static final int UNWINDSPEED = 2048;
+
+	public int getUnwindTorque() {
+		if (inslot[0] == null)
+			return 0;
+		if (inslot[0].itemID == ItemRegistry.STRONGCOIL.getShiftedID())
+			return 64;
+		return 8;
+	}
+
+	public int getUnwindSpeed() {
+		if (inslot[0] == null)
+			return 0;
+		if (inslot[0].itemID == ItemRegistry.STRONGCOIL.getShiftedID())
+			return 8192;
+		return 1024;
+	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -82,8 +96,8 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 				return;
 			tickcount = 0;
 			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()-1);
-			omega = UNWINDSPEED;
-			torque = UNWINDTORQUE;
+			omega = this.getUnwindSpeed();
+			torque = this.getUnwindTorque();
 			power = omega;
 			writex = readx;
 			writez = readz;

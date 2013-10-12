@@ -387,6 +387,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
+		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
+			return null;
 		return new ItemStack(this.getShiftedID(), amt, 0);
 	}
 
@@ -508,22 +510,22 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public ItemStack getEnchantedStack() {
-		ItemStack is;
+		ItemStack is = this.getStackOf();
+		if (is == null)
+			return is;
 		switch(this) {
 		case BEDBOOTS:
 		case BEDCHEST:
 		case BEDHELM:
 		case BEDLEGS:
 		case JETCHEST:
-			is = this.getStackOf();
 			is.addEnchantment(((ItemBedrockArmor)is.getItem()).getDefaultEnchantment(), 4);
 			return is;
 		case BEDPICK:
-			is = this.getStackOf();
 			is.addEnchantment(Enchantment.silkTouch, 1);
 			return is;
 		default:
-			return this.getStackOf();
+			return is;
 		}
 	}
 

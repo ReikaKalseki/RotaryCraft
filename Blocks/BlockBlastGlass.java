@@ -39,7 +39,7 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 	}
 
 	@Override
-	public boolean canDragonDestroy(World world, int x, int y, int z)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
 	{
 		return false;
 	}

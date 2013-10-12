@@ -20,9 +20,10 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -30,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
@@ -392,10 +394,15 @@ public class GuiHandbook extends GuiScreen
 				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, words2[i], posX+97, posY+57+i*fontRenderer.FONT_HEIGHT, 0);
 			}
 			fontRenderer.drawString(String.format("%.3f kW", (Integer)data[2]/1000D), posX+116, posY+22, 0);
-			LiquidStack liq = (LiquidStack)data[3];
+			FluidStack liq = (FluidStack)data[3];
 			if (liq != null) {
-				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);
-				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
+				GL11.glColor4f(1, 1, 1, 1);
+				ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
+				Icon ico = liq.getFluid().getIcon();
+				this.drawTexturedModelRectFromIcon(posX+116, posY+38, ico, 16, 16);
+				this.drawTexturedModelRectFromIcon(posX+116+16, posY+38, ico, 16, 16);
+				//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);
+				//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
 				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
 			}
 			List<ItemReq> li = (List<ItemReq>)data[4];

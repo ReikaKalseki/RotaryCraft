@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
@@ -37,7 +36,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
+public class TileEntityAerosolizer extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
 	public static final int MAXRANGE = ConfigRegistry.AERORANGE.getValue();
 	public static final int CAPACITY = 64;

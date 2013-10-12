@@ -19,7 +19,6 @@ import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 
-@SuppressWarnings("deprecation")
 public class ItemIOGoggles extends ItemRotaryArmor {
 
 	public ItemIOGoggles(int ID, int tex, int render) {

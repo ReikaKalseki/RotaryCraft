@@ -13,13 +13,12 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemFuelLubeBucket extends ItemRotaryTool implements IndexedItemSprites {
+public class ItemFuelLubeBucket extends ItemRotaryTool {
 
 	public static final int LUBE_VALUE = 64;
 	public static final int JET_VALUE = 8;

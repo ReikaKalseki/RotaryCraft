@@ -14,6 +14,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -33,7 +34,7 @@ public class BlockBedrockSlice extends Block
 	}
 
 	@Override
-	public boolean canDragonDestroy(World world, int x, int y, int z)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
 	{
 		return false;
 	}

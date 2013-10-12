@@ -21,13 +21,12 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex {
+public class BlockObsidianGlass extends BlockBasic {
 
 	public BlockObsidianGlass(int ID) {
 		super(ID, Material.glass);
@@ -46,7 +45,7 @@ public class BlockObsidianGlass extends BlockBasic implements SidedTextureIndex 
 	}
 
 	@Override
-	public boolean canDragonDestroy(World world, int x, int y, int z)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
 	{
 		return false;
 	}

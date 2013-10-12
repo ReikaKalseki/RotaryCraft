@@ -9,10 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -32,7 +34,6 @@ import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.EnumEngineType;
-import Reika.RotaryCraft.Registry.LiquidRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
@@ -113,7 +114,7 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString("Pipe contains no liquid.");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("Pipe contains %.3f m^3 of %s, with pressure %d kPa.", clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, LiquidRegistry.getLiquidFromBlock(clicked.liquidID).getName().toLowerCase(), clicked.fluidPressure));
+			ReikaChatHelper.writeString(String.format("Pipe contains %.3f m^3 of %s, with pressure %d kPa.", clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, FluidRegistry.lookupFluidForBlock(Block.blocksList[clicked.liquidID]).getLocalizedName().toLowerCase(), clicked.fluidPressure));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {

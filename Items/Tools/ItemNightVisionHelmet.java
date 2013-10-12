@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
-@SuppressWarnings("deprecation")
 public class ItemNightVisionHelmet extends ItemRotaryArmor {
 
 	public ItemNightVisionHelmet(int ID, int tex, int render) {

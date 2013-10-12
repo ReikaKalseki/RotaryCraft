@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.EnumLook;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
@@ -104,7 +104,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 		src[2] = z;
 	}
 
-	public void moveSrc(int num, EnumLook dir) {
+	public void moveSrc(int num, ForgeDirection dir) {
 		switch(dir) {
 		case DOWN:
 			src[1] -= num;
@@ -112,17 +112,19 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 		case UP:
 			src[1] += num;
 			break;
-		case MINX:
+		case WEST:
 			src[0] -= num;
 			break;
-		case PLUSX:
+		case EAST:
 			src[0] += num;
 			break;
-		case MINZ:
+		case NORTH:
 			src[2] -= num;
 			break;
-		case PLUSZ:
+		case SOUTH:
 			src[2] += num;
+			break;
+		default:
 			break;
 		}
 	}

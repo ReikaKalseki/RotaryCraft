@@ -442,6 +442,11 @@ public class RotaryRecipes {
 		ItemRegistry.BEDCHEST.addEnchantedRecipe(Enchantment.blastProtection, 4, "I I", "III", "III", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDLEGS.addEnchantedRecipe(Enchantment.fireProtection, 4, "III", "I I", "I I", 'I', ItemStacks.bedingot);
 
+		ItemRegistry.STEELHELMET.addRecipe("III", "I I", 'I', ItemStacks.steelingot);
+		ItemRegistry.STEELBOOTS.addRecipe("I I", "I I", 'I', ItemStacks.steelingot);
+		ItemRegistry.STEELCHEST.addRecipe("I I", "III", "III", 'I', ItemStacks.steelingot);
+		ItemRegistry.STEELLEGS.addRecipe("III", "I I", "I I", 'I', ItemStacks.steelingot);
+
 		ItemRegistry.NVH.addShapelessRecipe(Item.helmetDiamond, ItemRegistry.NVG.getStackOf());
 
 		ItemRegistry.ULTRASOUND.addRecipe(" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'n', ItemStacks.sonar);

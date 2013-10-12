@@ -14,7 +14,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +31,7 @@ import Reika.RotaryCraft.Models.ModelBreeder;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
+public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
 	public ItemStack[] inventory = new ItemStack[18];
 

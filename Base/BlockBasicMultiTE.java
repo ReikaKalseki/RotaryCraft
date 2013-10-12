@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -41,9 +42,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Auxiliary.EnumLook;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -170,12 +171,6 @@ public abstract class BlockBasicMultiTE extends Block {
 	public int quantityDropped(Random par1Random)
 	{
 		return 1;
-	}
-
-	@Override
-	public final void addCreativeItems(ArrayList list)
-	{
-		list.add(new ItemStack(this));
 	}
 
 	@Override
@@ -381,7 +376,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (m == MachineRegistry.CAVESCANNER) {
 			TileEntityCaveFinder tc = (TileEntityCaveFinder)te;
-			EnumLook dir = EnumLook.getLookDir(ep, true);
+			ForgeDirection dir = ReikaPlayerAPI.getDirectionFromPlayerLook(ep, true);
 			int mov = tc.getRange()/4;
 			if (ep.isSneaking())
 				mov *= -1;
@@ -429,9 +424,9 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	@Override
-	public boolean canDragonDestroy(World world, int x, int y, int z)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
 	{
-		return true;
+		return e instanceof EntityDragon;
 	}
 
 	@Override

@@ -27,7 +27,6 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -45,7 +44,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
-public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implements RangedEffect, IInventory {
+public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
 	public ItemStack[] inventory = new ItemStack[27]; //ReikaMathLibrary.extrema(ReikaMathLibrary.nextMultiple(9, ReikaEntityHelper.getNumberMobsInMC(this.worldObj)), 54, "absmin")
 	public boolean[] attractive = new boolean[inventory.length];

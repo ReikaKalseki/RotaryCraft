@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -171,6 +172,7 @@ public enum HandbookRegistry {
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
 	SPRING(ItemRegistry.SPRING),
+	STRONGSPRING(ItemRegistry.STRONGCOIL),
 	ULTRA(ItemRegistry.ULTRASOUND),
 	MOTION(ItemRegistry.MOTION),
 	VAC(ItemRegistry.VACUUM),
@@ -188,6 +190,8 @@ public enum HandbookRegistry {
 	MINECART(ItemRegistry.MINECART),
 	TILESELECT(ItemRegistry.TILESELECTOR),
 	JETPACK(ItemRegistry.JETCHEST),
+	STEELTOOLS("Steel Tools"),
+	STEELARMOR("Steel Armor"),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
@@ -616,7 +620,7 @@ public enum HandbookRegistry {
 			return RotaryNames.advGearItemNames[offset];
 		if (this.getParent() == TRANSDESC)
 			return machine.getName();
-		if (this.getParent() == TOOLDESC && this != BEDTOOLS && this != BEDARMOR)
+		if (this.getParent() == TOOLDESC && item != null)
 			return item.getBasicName();
 		return title;
 	}
@@ -662,6 +666,8 @@ public enum HandbookRegistry {
 			return false;
 		if (this == SILVERINGOT)
 			return false;
+		if (this == JETPACK)
+			return ModList.INDUSTRIALCRAFT.isLoaded();
 		return true;
 	}
 
@@ -741,6 +747,21 @@ public enum HandbookRegistry {
 			li.add(ItemRegistry.BEDCHEST.getStackOf());
 			li.add(ItemRegistry.BEDLEGS.getStackOf());
 			li.add(ItemRegistry.BEDBOOTS.getStackOf());
+			return li;
+		}
+		if (this == STEELTOOLS) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			li.add(ItemRegistry.STEELPICK.getStackOf());
+			li.add(ItemRegistry.STEELSHOVEL.getStackOf());
+			li.add(ItemRegistry.STEELAXE.getStackOf());
+			return li;
+		}
+		if (this == STEELARMOR) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			li.add(ItemRegistry.STEELHELMET.getStackOf());
+			li.add(ItemRegistry.STEELCHEST.getStackOf());
+			li.add(ItemRegistry.STEELLEGS.getStackOf());
+			li.add(ItemRegistry.STEELBOOTS.getStackOf());
 			return li;
 		}
 		if (this == SOLAR)
@@ -859,6 +880,10 @@ public enum HandbookRegistry {
 			return ItemRegistry.BEDPICK.getEnchantedStack();
 		if (this == BEDARMOR)
 			return ItemRegistry.BEDHELM.getEnchantedStack();
+		if (this == STEELTOOLS)
+			return ItemRegistry.STEELPICK.getEnchantedStack();
+		if (this == STEELARMOR)
+			return ItemRegistry.STEELHELMET.getEnchantedStack();
 		if (this == JETPACK)
 			return ItemRegistry.JETCHEST.getEnchantedStack();
 		if (this.isCrafting())

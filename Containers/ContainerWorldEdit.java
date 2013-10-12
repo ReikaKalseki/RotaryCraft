@@ -17,9 +17,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
-import Reika.RotaryCraft.Registry.LiquidRegistry;
 
 public class ContainerWorldEdit extends Container
 {
@@ -52,10 +53,10 @@ public class ContainerWorldEdit extends Container
 				if (!worldObj.isRemote)
 					par1EntityPlayer.dropPlayerItem(var3);
 			}
-			if (LiquidRegistry.isLiquidItem(var3)) {
-				LiquidRegistry liq = LiquidRegistry.getLiquidFromIDAndMetadata(var3.itemID, var3.getItemDamage());
-				if (liq.hasBlock())
-					WorldEditHelper.addCommand(par1EntityPlayer, liq.getLiquidBlockID(), 0);
+			if (FluidContainerRegistry.isFilledContainer(var3)) {
+				Fluid liq = FluidContainerRegistry.getFluidForFilledItem(var3).getFluid();
+				if (liq.canBePlacedInWorld())
+					WorldEditHelper.addCommand(par1EntityPlayer, liq.getBlockID(), 0);
 				return;
 			}
 			if (!(var3.getItem() instanceof ItemBlock))

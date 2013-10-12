@@ -8,12 +8,13 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -105,12 +106,6 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	public final int idDropped(int par1, Random par2Random, int par3)
 	{
 		return 0;
-	}
-
-	@Override
-	public final void addCreativeItems(ArrayList list)
-	{
-		list.add(new ItemStack(this));
 	}
 
 	@Override
@@ -303,9 +298,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	}
 
 	@Override
-	public boolean canDragonDestroy(World world, int x, int y, int z)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
 	{
-		return true;
+		return e instanceof EntityDragon;
 	}
 
 	@Override
