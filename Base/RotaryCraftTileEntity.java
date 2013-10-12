@@ -46,6 +46,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	protected StepTimer second = new StepTimer(20);
 
+	protected boolean isFlipped = false;
+
 	@Override
 	public final boolean canUpdate() {
 		return true;
@@ -218,5 +220,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	protected int getActiveTexture() {
 		return 0;
+	}
+
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
+
+	public boolean isFlipped() {
+		return isFlipped;
 	}
 }

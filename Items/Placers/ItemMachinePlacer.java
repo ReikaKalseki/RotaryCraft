@@ -127,6 +127,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
+		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
 		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE) {
 			te.setBlockMetadata(BlockBCEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;
@@ -177,7 +178,6 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
 			}
 		}
-
 		return true;
 	}
 

@@ -81,6 +81,9 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
 		sha.placer = ep.getEntityName();
+		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+			sha.setFlipped(true);
+		}
 		return true;
 	}
 

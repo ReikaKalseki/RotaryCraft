@@ -489,4 +489,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		if (!coil && !worm)
 			super.onEMP();
 	}
+
+	@Override
+	public boolean isFlipped() {
+		return isFlipped;
+	}
+
+	@Override
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
 }

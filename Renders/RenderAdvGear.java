@@ -42,105 +42,82 @@ public class RenderAdvGear extends RotaryTERenderer implements MultiModel
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelWorm var14 = wormModel;
+		ModelCVT var15 = cvtModel;
+		ModelCoil var16 = coilModel;
 
-			{
-				//((BlockAdvGearBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
+
+		this.setupGL(tile, par2, par4, par6);
+
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		if (tile.isInWorld()) {
+
+			switch(tile.getBlockMetadata()%4) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 			}
+
+			GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
+
 		}
-
-		if (true)
-		{
-			ModelWorm var14 = wormModel;
-			ModelCVT var15 = cvtModel;
-			ModelCoil var16 = coilModel;
-
-			if (true)
-			{
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-			}
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			if (tile.isInWorld()) {
-
-				switch(tile.getBlockMetadata()%4) {
-				case 0:
-					var11 = 0;
-					break;
-				case 1:
-					var11 = 180;
-					break;
-				case 2:
-					var11 = 90;
-					break;
-				case 3:
-					var11 = 270;
-					break;
-				}
-
-				GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
-
-			}
-			else {
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
-				GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-				switch(itemMetadata) {
-				case 1:
-					var14.renderAll(null, 0);
-					break;
-				case 2:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-					var15.renderAll(null, 0);
-					break;
-				case 3:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-					var16.renderAll(null, 0);
-					break;
-				}
-				if (tile.isInWorld())
-					GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-				GL11.glPopMatrix();
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				return;
-			}
-
-			//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-			if (tile.getBlockMetadata() < 4)
-				var14.renderAll(null, tile.phi);
-			else if (tile.getBlockMetadata() < 8) {
+		else {
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
+			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
+			switch(itemMetadata) {
+			case 1:
+				var14.renderAll(null, 0);
+				break;
+			case 2:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-				var15.renderAll(null, tile.phi);
-			}
-			else if (tile.getBlockMetadata() < 12) {
+				var15.renderAll(null, 0);
+				break;
+			case 3:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-				var16.renderAll(null, tile.phi);
+				var16.renderAll(null, 0);
+				break;
 			}
 			if (tile.isInWorld())
 				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			return;
 		}
+
+		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
+
+            var12 = 1.0F - var12;
+            var12 = 1.0F - var12 * var12 * var12;*/
+		if (tile.getBlockMetadata() < 4)
+			var14.renderAll(null, tile.phi);
+		else if (tile.getBlockMetadata() < 8) {
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
+			var15.renderAll(null, tile.phi);
+		}
+		else if (tile.getBlockMetadata() < 12) {
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
+			var16.renderAll(null, tile.phi);
+		}
+
+		this.closeGL(tile);
 	}
 
 	@Override

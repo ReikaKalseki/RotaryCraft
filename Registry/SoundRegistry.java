@@ -51,7 +51,7 @@ public enum SoundRegistry implements SoundList {
 	HIPLING("plinghi"),
 	FRICTION("#friction"),
 	CRAFT("#craft"),
-	AIRCOMP("#aircomp"),
+	AIRCOMP("#compress"),
 	PNEUMATIC("#pneu"),
 	LINEBUILDER("linebuild"),
 	JETPACK("pack");

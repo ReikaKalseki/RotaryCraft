@@ -69,6 +69,9 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		adv.setBlockMetadata(4*is.getItemDamage()+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		adv.placer = ep.getEntityName();
+		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+			adv.setFlipped(true);
+		}
 		return true;
 	}
 	@Override

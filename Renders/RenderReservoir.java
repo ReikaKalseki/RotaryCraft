@@ -114,7 +114,7 @@ public class RenderReservoir extends RotaryTERenderer
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityReservoirAt((TileEntityReservoir)tile, par2, par4, par6, par8);
 
-		if (MinecraftForgeClient.getRenderPass() == 1) {
+		if (MinecraftForgeClient.getRenderPass() == 0) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
 	}
@@ -136,6 +136,7 @@ public class RenderReservoir extends RotaryTERenderer
 			if (f.getLuminosity(tr.getContents()) > 0)
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
 			v5.addVertexWithUV(0, h, 1, u, dv);
 			v5.addVertexWithUV(1, h, 1, du, dv);
 			v5.addVertexWithUV(1, h, 0, du, v);

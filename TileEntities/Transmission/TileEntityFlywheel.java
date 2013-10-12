@@ -367,4 +367,14 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
 	}
+
+	@Override
+	public boolean isFlipped() {
+		return isFlipped;
+	}
+
+	@Override
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
 }

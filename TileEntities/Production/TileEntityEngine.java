@@ -1819,4 +1819,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public int getWater() {
 		return water.getLevel();
 	}
+
+	@Override
+	public boolean isFlipped() {
+		return isFlipped;
+	}
+
+	@Override
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
 }

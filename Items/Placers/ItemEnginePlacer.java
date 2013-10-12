@@ -76,6 +76,9 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				eng.type = EnumEngineType.setType(is.getItemDamage());
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				eng.placer = ep.getEntityName();
+				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+					eng.setFlipped(true);
+				}
 			}
 		}
 		return true;

@@ -21,6 +21,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
@@ -194,6 +195,15 @@ public class RotaryAux {
 			return false;
 		if (eitem.getItem().canHarvestBlock(Block.oreIron, eitem))
 			return true;
+		return false;
+	}
+
+	public static boolean shouldSetFlipped(World world, int x, int y, int z) {
+		boolean softBelow = ReikaWorldHelper.softBlocks(world, x, y-1, z);
+		boolean softAbove = ReikaWorldHelper.softBlocks(world, x, y+1, z);
+		if (!softAbove && softBelow) {
+			return true;
+		}
 		return false;
 	}
 }

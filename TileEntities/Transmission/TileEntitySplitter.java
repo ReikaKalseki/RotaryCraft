@@ -695,4 +695,14 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 			return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
 		}
 	}
+
+	@Override
+	public boolean isFlipped() {
+		return isFlipped;
+	}
+
+	@Override
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
 }

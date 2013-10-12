@@ -586,4 +586,14 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		else
 			return super.getPowerSources(io, caller);
 	}
+
+	@Override
+	public boolean isFlipped() {
+		return isFlipped;
+	}
+
+	@Override
+	public void setFlipped(boolean set) {
+		isFlipped = set;
+	}
 }

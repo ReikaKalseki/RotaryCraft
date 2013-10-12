@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -38,117 +37,94 @@ public class RenderSplitter extends RotaryTERenderer implements MultiModel
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelSplitter var14 = SplitterModel;
+		ModelSplitter2 var15 = SplitterModel2;
 
-			{
-				//((BlockSplitterBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
-		}
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
 
-		if (true)
-		{
+		this.setupGL(tile, par2, par4, par6);
 
-			ModelSplitter var14 = SplitterModel;
-			ModelSplitter2 var15 = SplitterModel2;
+		int var11 = 0;	 //used to rotate the model about metadata
+		int dir = 1;
+		int meta;
+		if (tile.isInWorld()) {
 
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
+			meta = tile.getBlockMetadata();
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-			int dir = 1;
-			int meta;
-			if (tile.isInWorld()) {
-
-				meta = tile.getBlockMetadata();
-
-				switch(meta) {
-				case 0:
-					var11 = -90;
-					break;
-				case 1:
-					var11 = 0;
-					break;
-				case 2:
-					var11 = 90;
-					break;
-				case 3:
-					var11 = 180;
-					break;
-				case 4:
-					var11 = -90;
-					break;
-				case 5:
-					var11 = 0;
-					break;
-				case 6:
-					var11 = 90;
-					break;
-				case 7:
-					var11 = 180;
-					break;
-
-				case 8:
-					var11 = 270;
-					break;
-				case 9:
-					var11 = 0;
-					break;
-				case 10:
-					var11 = 90;
-					break;
-				case 11:
-					var11 = 180;
-					break;
-				case 12:
-					var11 = -90;
-					break;
-				case 13:
-					var11 = 0;
-					break;
-				case 14:
-					var11 = 90;
-					break;
-				case 15: //good
+			switch(meta) {
+			case 0:
+				var11 = -90;
+				break;
+			case 1:
+				var11 = 0;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
 				var11 = 180;
 				break;
-				}
+			case 4:
+				var11 = -90;
+				break;
+			case 5:
+				var11 = 0;
+				break;
+			case 6:
+				var11 = 90;
+				break;
+			case 7:
+				var11 = 180;
+				break;
 
-
-
-				GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
+			case 8:
+				var11 = 270;
+				break;
+			case 9:
+				var11 = 0;
+				break;
+			case 10:
+				var11 = 90;
+				break;
+			case 11:
+				var11 = 180;
+				break;
+			case 12:
+				var11 = -90;
+				break;
+			case 13:
+				var11 = 0;
+				break;
+			case 14:
+				var11 = 90;
+				break;
+			case 15: //good
+				var11 = 180;
+				break;
 			}
-			else {
-				meta = 0;
-				GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
-			}
-			//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+
+			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
+		}
+		else {
+			meta = 0;
+			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+		}
+		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			if (meta < 4 || (meta >= 8 && meta < 12))
-				var14.renderAll(null, -tile.phi*dir);
-			else
-				var15.renderAll(null, -tile.phi*dir);
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		if (meta < 4 || (meta >= 8 && meta < 12))
+			var14.renderAll(null, -tile.phi*dir);
+		else
+			var15.renderAll(null, -tile.phi*dir);
+
+		this.closeGL(tile);
 	}
 
 	@Override

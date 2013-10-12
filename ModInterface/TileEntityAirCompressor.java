@@ -20,6 +20,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
@@ -42,9 +43,9 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-		if (omega == 0 || !this.hasOutputTile()) {
+		if (omega <= 1 || !this.hasOutputTile()) {
 			if (phi > 0) {
-				double speed = 0.0625;
+				double speed = 0.0125;
 				if (isOut)
 					phi += speed;
 				else
@@ -56,20 +57,29 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 			}
 			return;
 		}
-		double speed = ReikaMathLibrary.logbase(omega, 2)*0.05/6D;
+		double speed = ReikaMathLibrary.logbase(omega, 2)*0.025/6D;
 		if (speed > 0.125)
 			speed = 0.125;
 
-		if (isOut)
+		if (isOut) {
 			phi += speed;
+			if (phi <= 0.095)
+				this.playSound(world, x, y, z);
+		}
 		else
 			phi -= speed;
 		if (phi <= 0) {
 			isOut = true;
 			phi = 0;
 		}
-		if (phi >= 0.5)
+		if (phi >= 0.5) {
 			isOut = false;
+		}
+	}
+
+	private void playSound(World world, int x, int y, int z) {
+		int p = (int)(ReikaMathLibrary.logbase(omega, 2)/8);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.AIRCOMP, world, x, y, z, 0.5F, p);
 	}
 
 	private boolean hasOutputTile() {
