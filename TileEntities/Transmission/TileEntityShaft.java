@@ -23,7 +23,6 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -372,7 +371,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		TileEntity te1 = worldObj.getBlockTileEntity(readx, ready, readz);
 		TileEntity te2 = worldObj.getBlockTileEntity(readx2, ready2, readz2);
 		if (this.isProvider(te1) && this.isIDTEMatch(world, readx, ready, readz)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te1)).getMachineIndex()];
+			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, yCoord, readz);
 				if (devicein.getBlockMetadata() >= 6) {
@@ -408,7 +407,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			}
 		}
 		if (this.isProvider(te2) && this.isIDTEMatch(world, readx2, ready2, readz2)) {
-			MachineRegistry m2 = MachineRegistry.machineList[((RotaryCraftTileEntity)(te2)).getMachineIndex()];
+			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
 			if (m2 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein2 = (TileEntityShaft)world.getBlockTileEntity(readx2, yCoord, readz2);
 				if (devicein2.getBlockMetadata() >= 6) {
@@ -462,7 +461,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			power = 0;
 			return;
 		}
-		MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
 			if (world.getBlockMetadata(readx, ready, readz) >= 6) {

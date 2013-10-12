@@ -759,20 +759,17 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (m == MachineRegistry.FIREWORK) {
 			time = 300-(int)(16*ReikaMathLibrary.logbase(omegap, 2));
 		}
-		if (m == MachineRegistry.WINDER) {
-			time = 1-(int)(16*ReikaMathLibrary.logbase(1, 2));
-		}
 		if (m == MachineRegistry.MAGNETIZER) {
-			time = (400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+			time = (400-(int)(20*ReikaMathLibrary.logbase(omegap, 2)));
 		}
 		if (m == MachineRegistry.PURIFIER) {
-			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omegap, 2)));
 		}
 		if (m == MachineRegistry.BUCKETFILLER) {
-			time = 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			time = 200-(int)(20*ReikaMathLibrary.logbase(omegap, 2));
 		}
 		if (m == MachineRegistry.TERRAFORMER) {
-			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+			time = 2*(400-(int)(20*ReikaMathLibrary.logbase(omegap, 2)));
 		}
 		if (m != null && time == -1) {
 			ReikaChatHelper.write(String.format("Non-speed m called operationTime! Coords %d %d %d", m, xCoord, yCoord, zCoord));

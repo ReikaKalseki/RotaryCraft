@@ -102,7 +102,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	STEELHELMET(17, false,		"HSLA Steel Helmet",		ItemSteelArmor.class),
 	STEELCHEST(18, false,		"HSLA Steel Chestplate",	ItemSteelArmor.class),
 	STEELLEGS(19, false,		"HSLA Steel Leggings",		ItemSteelArmor.class),
-	STEELBOOTS(20, false,		"HSLA Steel Boots",			ItemSteelArmor.class);
+	STEELBOOTS(20, false,		"HSLA Steel Boots",			ItemSteelArmor.class),
+	STRONGCOIL(99, true,		"#High-Strength Spring",	ItemCoil.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -262,6 +263,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			throw new RuntimeException("Item "+name+" was called for a multi-name, yet does not have one!");
 		if (this == SPRING)
 			return "Wind Spring ("+String.format("%d", dmg)+" kJ)";
+		if (this == STRONGCOIL)
+			return "High-Strength Spring ("+String.format("%d", dmg)+" kJ)";
 		if (this == BUCKET)
 			return RotaryNames.bucketNames[dmg];
 		if (this == RAILGUN)
@@ -348,15 +351,19 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	public int getNumberMetadatas() {
 		if (!hasSubtypes)
 			return 1;
-		if (this == SPRING)
+		switch(this) {
+		case SPRING:
+		case STRONGCOIL:
 			return 65536;
-		if (this == RAILGUN)
-			return 16;
-		if (this == BUCKET)
-			return RotaryNames.bucketNames.length;
-		if (this == SLIDE)
+		case SLIDE:
 			return 24;
-		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
+		case RAILGUN:
+			return 16;
+		case BUCKET:
+			return RotaryNames.bucketNames.length;
+		default:
+			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
+		}
 	}
 
 	public boolean isArmor() {

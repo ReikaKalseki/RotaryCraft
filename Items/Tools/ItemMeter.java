@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -169,17 +170,9 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("Temperature: %dC", clicked.temperature));
 				}
 				if (clicked.type.burnsFuel()) {
-					float time = clicked.getFuelDuration();
-					if (time < 60)
-						ReikaChatHelper.writeString(String.format("Engine has %d seconds of fuel in tank.", (int)time));
-					else if (time < 3600) {
-						time /= 60F;
-						ReikaChatHelper.writeString(String.format("Engine has %.2f minutes of fuel in tank.", time));
-					}
-					else {
-						time /= 3600F;
-						ReikaChatHelper.writeString(String.format("Engine has %.2f hours of fuel in tank.", time));
-					}
+					int time = clicked.getFuelDuration();
+					String sg = String.format("Fuel Remaining: %s", ReikaFormatHelper.getSecondsAsClock(time));
+					ReikaChatHelper.writeString(sg);
 				}
 				return true;
 			}

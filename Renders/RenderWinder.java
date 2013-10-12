@@ -15,13 +15,12 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Models.ModelWinder;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 
 public class RenderWinder extends RotaryTERenderer
@@ -78,17 +77,9 @@ public class RenderWinder extends RotaryTERenderer
 					GL11.glTranslatef(0F, 0F, -2F);
 			}
 		}
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
-
-
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItem(ItemRegistry.SPRING.getShiftedID(), tile.inslot)), -tile.phi);
-		// else
-		//var15.renderAll();
+		boolean hasSpring = tile.inslot[0] != null && tile.inslot[0].getItem() instanceof ItemCoil;
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi);
 
 		this.closeGL(tile);
 	}

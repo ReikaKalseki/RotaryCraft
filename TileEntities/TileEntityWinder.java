@@ -14,14 +14,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Models.ModelWinder;
-import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityWinder extends TileEntityInventoriedPowerReceiver implements OneSlotMachine, SimpleProvider {
 
@@ -40,6 +42,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		this.getPower(false, false);
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
 		if (inslot[0] == null) {
@@ -49,7 +52,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			}
 			return;
 		}
-		if (inslot[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
+		if (!(inslot[0].getItem() instanceof ItemCoil)) {
 			if (!winding) {
 				torque = 0;
 				omega = 0;
@@ -57,14 +60,13 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			return;
 		}
 		if (winding) {
-			this.getPower(false, false);
 			if (tickcount < this.getWindTime())
 				return;
 			tickcount = 0;
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
 				return;
-			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()+1);
-			if (par5Random.nextInt(DifficultyEffects.BREAKCOIL.getInt()*(65536-inslot[0].getItemDamage())) == 0) {
+			inslot[0] = new ItemStack(inslot[0].itemID, 1, inslot[0].getItemDamage()+1);
+			if (!world.isRemote && this.breakCoil()) {
 				inslot[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
 			}
@@ -90,14 +92,35 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	}
 
+	private boolean breakCoil() {
+		if (inslot[0] == null)
+			return false;
+		if (inslot[0].itemID != ItemRegistry.SPRING.getShiftedID())
+			return false;
+		int dmg = inslot[0].getItemDamage();
+		float diff = (float)dmg/65536*0.05F;
+		boolean rand = ReikaMathLibrary.doWithChance(diff);
+		if (rand)
+			ReikaJavaLibrary.pConsole(dmg, Side.SERVER);
+		return rand;
+	}
+
 	private int getWindTime() {
 		int base = (int)ReikaMathLibrary.logbase(inslot[0].getItemDamage(), 2);
-		int factor = this.operationTime(omega, 0);
-		return base*factor/8;
+		double factor = 1D/(int)(ReikaMathLibrary.logbase(omega, 2));
+		//ReikaJavaLibrary.pConsole(factor);
+		return (int)(base*factor);
 	}
 
 	public int getMaxWind() {
-		int max = torque;
+		if (inslot[0] == null)
+			return 0;
+		int id = inslot[0].itemID;
+		int max = 0;
+		if (id == ItemRegistry.SPRING.getShiftedID())
+			max = torque;
+		else if (id == ItemRegistry.STRONGCOIL.getShiftedID())
+			max = torque/16;
 		if (max > 30000) //technical limit
 			return 30000;
 		return max;
@@ -206,7 +229,11 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.SPRING.getShiftedID();
+		if (is.itemID == ItemRegistry.SPRING.getShiftedID())
+			return true;
+		if (is.itemID == ItemRegistry.STRONGCOIL.getShiftedID())
+			return true;
+		return false;
 	}
 
 	@Override

@@ -839,15 +839,27 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		timer.setCap("fuel", type.getFuelUnitDuration());
 		timer.setCap("sound", type.getSoundLength(FOD, 1));
 
-		if (this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
+		boolean on = true;
+		if (type.isECUControllable()) {
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord);
+			if (m == MachineRegistry.ECU) {
+				TileEntityEngineController ecu = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+				on = ecu.canProducePower();
+			}
+		}
+
+		if (on && this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
 			isOn = true;
+			int speed;
 			switch (type) {
 			case DC:
-				omega = EnumEngineType.DC.getSpeed();
+				//omega = EnumEngineType.DC.getSpeed();
+				this.updateSpeed(EnumEngineType.DC.getSpeed(), true);
 				torque = EnumEngineType.DC.getTorque();
 				break;
 			case WIND:
-				omega = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				speed = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				this.updateSpeed(speed, true);
 				torque = EnumEngineType.WIND.getTorque();
 				if (omega == 0) {
 					isOn = false;
@@ -857,29 +869,30 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					this.dealBladeDamage();
 				break;
 			case STEAM:
-				omega = EnumEngineType.STEAM.getSpeed();
+				this.updateSpeed(EnumEngineType.STEAM.getSpeed(), true);
 				torque = EnumEngineType.STEAM.getTorque();
 				break;
 			case GAS:
-				omega = EnumEngineType.GAS.getSpeed();
+				this.updateSpeed(EnumEngineType.GAS.getSpeed(), true);
 				torque = EnumEngineType.GAS.getTorque();
 				break;
 			case AC:
-				omega = EnumEngineType.AC.getSpeed();
+				this.updateSpeed(EnumEngineType.AC.getSpeed(), true);
 				torque = EnumEngineType.AC.getTorque();
 				break;
 			case SPORT:
 				if (!starvedengine) {
-					omega = EnumEngineType.SPORT.getSpeed();
+					this.updateSpeed(EnumEngineType.SPORT.getSpeed(), true);
 					torque = EnumEngineType.SPORT.getTorque();
 				}
 				else {
-					omega = EnumEngineType.GAS.getSpeed();
+					this.updateSpeed(EnumEngineType.GAS.getSpeed(), true);
 					torque = EnumEngineType.GAS.getTorque();
 				}
 				break;
 			case HYDRO:
-				omega = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				speed = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				this.updateSpeed(speed, true);
 				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
@@ -889,12 +902,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					this.dealPanelDamage();
 				break;
 			case MICRO:
-				omega = EnumEngineType.MICRO.getSpeed();
+				this.updateSpeed(EnumEngineType.MICRO.getSpeed(), true);
 				torque = EnumEngineType.MICRO.getTorque();
 				break;
 			case JET:
 				this.checkJetFailure();
-				omega = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				speed = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				this.updateSpeed(speed, true);
 				torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
 				if (omega == 0) {
 					isOn = false;
@@ -915,11 +929,31 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		else {
 			isOn = false;
-			omega = 0;
-			torque = 0;
+			this.updateSpeed(0, false);
+			//omega = 0;
+			if (omega == 0)
+				torque = 0;
 			if (soundtick == 0)
 				soundtick = 2000;
 			timer.resetTicker("fuel");
+		}
+	}
+
+	private void updateSpeed(int maxspeed, boolean revup) {
+		if (revup) {
+			if (omega < maxspeed) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
+				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed, 2);
+				timer.setCap("fuel", type.getFuelUnitDuration()/4); //4x fuel burn while spinning up
+				if (omega > maxspeed)
+					omega = maxspeed;
+			}
+		}
+		else {
+			if (omega > 0) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Side.SERVER);
+				omega -= omega/256+1;
+			}
 		}
 	}
 
@@ -1233,9 +1267,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 						timer.setCap("temperature", tempcap);
 					}
 					else {
-						omega = 0;
-						torque = 0;
-						power = 0;
+						//this.updateSpeed(0, false);
+						if (omega == 0)
+							torque = 0;
+						power = omega*torque;
 						if (type.hasTemperature()) {
 							if (timer.checkCap("temperature")) {
 								this.updateTemperature(world, x, y, z, meta);
@@ -1437,7 +1472,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			phi = 0;
 			return;
 		}
-		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
+		double pow = 1.05;
+		if (type == EnumEngineType.JET)
+			pow = 1.1;
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), pow);
 	}
 
 	@Override
@@ -1609,7 +1647,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		float burnprogress = 0;
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
-		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20;
+		int factor = type.getFuelUnitDuration()/timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
+		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20/factor;
 	}
 
 	/** In seconds */

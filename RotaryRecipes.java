@@ -410,6 +410,7 @@ public class RotaryRecipes {
 
 	private static void addToolItems() {
 		ItemRegistry.SPRING.addSizedRecipe(4, " S ", "S S", " S ", 'S', ItemStacks.steelingot);
+		ItemRegistry.STRONGCOIL.addRecipe("SDS", "BCB", "SDS", 'S', ItemStacks.steelingot, 'C', ItemRegistry.SPRING.getStackOf(), 'B', ItemStacks.bedrockdust, 'D', Item.diamond);
 
 		ItemRegistry.TARGET.addRecipe(" E ", "SRS", "SLS", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'E', Item.enderPearl, 'L', ReikaItemHelper.lapisDye);
 

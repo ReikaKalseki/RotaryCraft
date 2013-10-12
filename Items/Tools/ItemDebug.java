@@ -171,6 +171,7 @@ public class ItemDebug extends ItemRotaryTool {
 				tile.additives = tile.FUELCAP/1000;
 				tile.addWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
+				tile.omega = tile.type.getSpeed();
 			}
 		}
 		if (m == MachineRegistry.SHAFT) {

@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.HashMap;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
