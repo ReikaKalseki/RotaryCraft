@@ -165,7 +165,11 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -298,6 +302,14 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 			world.setBlock(x, y, z, 0);
 		else
 			world.setBlock(x, y, z, Block.lavaMoving.blockID);
+	}
+
+	public boolean isEmpty() {
+		return tank.isEmpty();
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
 	}
 
 }

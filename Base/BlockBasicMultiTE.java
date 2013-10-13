@@ -592,7 +592,7 @@ public abstract class BlockBasicMultiTE extends Block {
 
 	@Override
 	public void fillWithRain(World par1World, int par2, int par3, int par4) {
-
+		//fill reservoir - get real rain rate
 	}
 
 	@Override

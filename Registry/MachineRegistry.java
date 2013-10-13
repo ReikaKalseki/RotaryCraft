@@ -232,7 +232,7 @@ public enum MachineRegistry {
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
 	LINEBUILDER(		"Block Ram",				BlockDMIMachine.class,		TileEntityLineBuilder.class,		7, "RenderLineBuilder"),
-	BEAMMIRROR(			"Beam Mirror",				BlockDMMachine.class,		TileEntityBeamMirror.class,			11),
+	BEAMMIRROR(			"Beam Mirror",				BlockDMMachine.class,		TileEntityBeamMirror.class,			11, "RenderBeamMirror"),
 	MULTICLUTCH(		"Multi-Directional Clutch",	BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"Terraformer",				BlockMachine.class,			TileEntityTerraformer.class,		6),
 	UNUSED(				"Unused",					BlockMachine.class,			TileEntityCCTV.class,				7),
@@ -241,7 +241,7 @@ public enum MachineRegistry {
 	BOILER(				"Friction Boiler", 			BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"Steam Turbine", 			BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19),
-	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20);
+	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter");
 
 
 	private String name;

@@ -28,7 +28,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBeamMirror extends RotaryCraftTileEntity implements RangedEffect {
 
-	private float theta;
+	public float theta;
 
 	private BlockArray light = new BlockArray();
 	private int lastRange = 0;
@@ -119,20 +119,21 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	}
 
 	private void setLight(World world, int x, int y, int z) {
-		//ReikaJavaLibrary.pConsole(this.getRange(), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(lastRange+":"+this.getRange(), Side.SERVER);
 		if (lastRange != this.getRange()) {
+			//ReikaJavaLibrary.pConsole(light);
 			for (int i = 0; i < light.getSize(); i++) {
 				int[] xyz = light.getNthBlock(i);
 				int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
 				if (id == RotaryCraft.lightblock.blockID) {
+					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 					world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
 				}
 			}
+			light.clear();
 			if (this.getRange() > 0 && world.canBlockSeeTheSky(x, y+1, z))
 				light.addLineOfClear(world, x+facingDir.offsetX, y, z+facingDir.offsetZ, this.getRange(), facingDir.offsetX, 0, facingDir.offsetZ);
-			else
-				light.clear();
 			lastRange = this.getRange();
 		}
 
@@ -145,8 +146,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	}
 
 	private void adjustAim(World world, int x, int y, int z) {
-		float suntheta = ReikaWorldHelper.getSunAngle(world);
-
+		float suntheta = ReikaWorldHelper.getSunAngle(world)/2+12.5F;
 		float movespeed = 0.5F;
 
 		if (theta < suntheta)
@@ -159,10 +159,14 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	public int getRange() {
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord+1, zCoord))
 			return 0;
-		int r = ReikaMathLibrary.intpow2(2, (int)(7*ReikaWorldHelper.getSunIntensity(worldObj)));
+		int time = (int)(worldObj.getWorldTime()%24000);
+		if (time > 13500 && time < 22500)
+			return 0;
+		double r = ReikaMathLibrary.doubpow(2, 7*ReikaWorldHelper.getSunIntensity(worldObj));
+		//ReikaJavaLibrary.pConsole(r);
 		if (r > this.getMaxRange())
 			return this.getMaxRange();
-		return r;
+		return (int)r;
 	}
 
 	@Override

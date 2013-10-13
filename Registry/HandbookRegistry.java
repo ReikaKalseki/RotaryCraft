@@ -89,6 +89,7 @@ public enum HandbookRegistry {
 	PUMP(MachineRegistry.PUMP),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
 	STEAMTURB(MachineRegistry.STEAMTURBINE),
+	LAVAMAKER(MachineRegistry.LAVAMAKER),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
