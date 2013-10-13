@@ -20,7 +20,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
-import Reika.RotaryCraft.Auxiliary.ItemLiquid;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
@@ -29,12 +28,10 @@ import Reika.RotaryCraft.Entities.EntityIceBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -117,13 +114,6 @@ public class RotaryRegistration {
 
 	public static void setupLiquids() {
 		RotaryCraft.logger.log("Loading And Registering Liquids");
-		RotaryCraft.jetFuel = new ItemLiquid(ExtraConfigIDs.JETFUEL.getValue()).setUnlocalizedName("jetfuel");
-		RotaryCraft.lubricant = new ItemLiquid(ExtraConfigIDs.LUBE.getValue()).setUnlocalizedName("lubricant");
-		RotaryCraft.ethanol = new ItemLiquid(ExtraConfigIDs.ETHANOL.getValue()).setUnlocalizedName("ethanol");
-
-		LanguageRegistry.addName(RotaryCraft.jetFuel, "Jet Fuel");
-		LanguageRegistry.addName(RotaryCraft.lubricant, "Lubricant");
-		LanguageRegistry.addName(RotaryCraft.ethanol, "Ethanol");
 
 		FluidRegistry.registerFluid(RotaryCraft.ethanolFluid);
 		FluidRegistry.registerFluid(RotaryCraft.jetFuelFluid);

@@ -18,6 +18,9 @@ package Reika.RotaryCraft.Models;
 import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelMonitor extends RotaryModelBase
@@ -150,8 +153,6 @@ public class ModelMonitor extends RotaryModelBase
 		Shape2.render(f5);
 		Shape3.render(f5);
 		Shape4.render(f5);
-		Shape12.render(f5);
-		Shape13.render(f5);
 		Shape6.render(f5);
 		Shape6a.render(f5);
 		Shape4a.render(f5);
@@ -162,5 +163,14 @@ public class ModelMonitor extends RotaryModelBase
 		Shape4c.render(f5);
 		Shape6b.render(f5);
 		Shape6c.render(f5);
+
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+		Shape12.render(f5);
+		Shape13.render(f5);
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(-phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
 	}
 }

@@ -23,6 +23,8 @@ import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
+import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -324,6 +326,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELTTEMP);
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
+		addData(MachineRegistry.GENERATOR, TileEntityGenerator.OUTPUT_VOLTAGE);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());
@@ -382,5 +385,10 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.ARROWGUN, PowerReceivers.ARROWGUN.getMinPower(), PowerReceivers.ARROWGUN.getMinTorque());
 		addNotes(MachineRegistry.STEAMTURBINE, TileEntitySteam.GEN_OMEGA, TileEntitySteam.MAX_TORQUE);
 		addNotes(MachineRegistry.FERTILIZER, PowerReceivers.FERTILIZER.getMinPower());
+		addNotes(MachineRegistry.ELECTRICMOTOR,
+				TileEntityElectricMotor.Tier.LOW.inputVoltage, TileEntityElectricMotor.Tier.LOW.inputCurrent, TileEntityElectricMotor.Tier.LOW.outputTorque, TileEntityElectricMotor.Tier.LOW.outputSpeed, TileEntityElectricMotor.Tier.LOW.getPowerForDisplay(),
+				TileEntityElectricMotor.Tier.MEDIUM.inputVoltage, TileEntityElectricMotor.Tier.MEDIUM.inputCurrent, TileEntityElectricMotor.Tier.MEDIUM.outputTorque, TileEntityElectricMotor.Tier.MEDIUM.outputSpeed, TileEntityElectricMotor.Tier.MEDIUM.getPowerForDisplay(),
+				TileEntityElectricMotor.Tier.HIGH.inputVoltage, TileEntityElectricMotor.Tier.HIGH.inputCurrent, TileEntityElectricMotor.Tier.HIGH.outputTorque, TileEntityElectricMotor.Tier.HIGH.outputSpeed, TileEntityElectricMotor.Tier.HIGH.getPowerForDisplay()
+				);
 	}
 }

@@ -82,7 +82,7 @@ public class RenderMonitor extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(null, 0);
+		var14.renderAll(null, -tile.phi);
 		if (tile.isInWorld()) {
 			//  GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glDisable(GL11.GL_LIGHTING);

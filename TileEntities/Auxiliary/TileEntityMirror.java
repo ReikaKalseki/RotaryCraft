@@ -87,6 +87,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
 					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this);
 					e.attackEntityFrom(DamageSource.cactus, 1);
+					this.breakMirror(world, x, y, z);
 				}
 			}
 		}

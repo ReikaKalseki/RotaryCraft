@@ -107,10 +107,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block blastglass;
 	public static Block obsidianglass;
 
-	public static Item jetFuel;
-	public static Item lubricant;
-	public static Item ethanol;
-
 	public static final Fluid jetFuelFluid = new Fluid("jet fuel").setDensity(810).setViscosity(800);
 	public static final Fluid lubeFluid = new Fluid("lubricant").setDensity(750).setViscosity(1200);
 	public static final Fluid ethanolFluid = new Fluid("rc ethanol").setDensity(789).setViscosity(950);

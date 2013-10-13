@@ -14,9 +14,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 
-public class BlockBCEngine extends BlockModelledMultiTE {
+public class BlockModEngine extends BlockModelledMultiTE {
 
-	public BlockBCEngine(int id, Material mat) {
+	public BlockModEngine(int id, Material mat) {
 		super(id, mat);
 	}
 

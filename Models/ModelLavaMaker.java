@@ -273,9 +273,6 @@ public class ModelLavaMaker extends RotaryModelBase
 		Shape3.render(f5);
 		Shape4.render(f5);
 		Shape6.render(f5);
-		Shape5.render(f5);
-		Shape5a.render(f5);
-		Shape5b.render(f5);
 		Shape7.render(f5);
 		Shape7a.render(f5);
 		Shape7b.render(f5);
@@ -291,6 +288,9 @@ public class ModelLavaMaker extends RotaryModelBase
 		GL11.glRotatef(-phi, 0, 1, 0);
 
 		if ((Boolean)li.get(0)) {
+			Shape5.render(f5);
+			Shape5a.render(f5);
+			Shape5b.render(f5);
 			Shape5c.render(f5);
 			Shape5d.render(f5);
 			Shape5e.render(f5);

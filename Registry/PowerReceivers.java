@@ -70,7 +70,8 @@ public enum PowerReceivers {
 	ARROWGUN(1024),
 	BOILER(),
 	FERTILIZER(1024),
-	LAVAMAKER();
+	LAVAMAKER(),
+	GENERATOR();
 
 
 	private int minT;

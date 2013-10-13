@@ -26,7 +26,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Blocks.BlockBCEngine;
+import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -128,8 +128,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			return true;
 		}
 		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
-		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE) {
-			te.setBlockMetadata(BlockBCEngine.getDirectionMetadataFromPlayerLook(ep));
+		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR) {
+			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;
 		}
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {

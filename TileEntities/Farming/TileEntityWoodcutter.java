@@ -135,7 +135,7 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 
 		if (drop != 0) {
 			Material mat = world.getBlockMaterial(xyz[0], xyz[1], xyz[2]);
-			if (ConfigRegistry.INSTACUT.getState()) {
+			if (ConfigRegistry.INSTACUT.getState() || true) {
 
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);

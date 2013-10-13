@@ -90,6 +90,7 @@ public enum HandbookRegistry {
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
 	STEAMTURB(MachineRegistry.STEAMTURBINE),
 	LAVAMAKER(MachineRegistry.LAVAMAKER),
+	MOTOR(MachineRegistry.ELECTRICMOTOR),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -102,6 +103,7 @@ public enum HandbookRegistry {
 	FURNACEHEATER(MachineRegistry.FRICTION),
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	BOILER(MachineRegistry.BOILER),
+	GENERATOR(MachineRegistry.GENERATOR),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),

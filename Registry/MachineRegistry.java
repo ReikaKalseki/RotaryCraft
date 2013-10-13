@@ -38,7 +38,6 @@ import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
-import Reika.RotaryCraft.Blocks.BlockBCEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -50,13 +49,16 @@ import Reika.RotaryCraft.Blocks.BlockIMachine;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
 import Reika.RotaryCraft.Blocks.BlockMachine;
+import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
+import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
@@ -226,8 +228,8 @@ public enum MachineRegistry {
 	SELFDESTRUCT(		"Self Destruct Mechanism",	BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"Cooling Fin",				BlockDMMachine.class,		TileEntityCoolingFin.class,			9, "RenderFin"),
 	WORKTABLE(			"WorkTable",				BlockIMachine.class,		TileEntityWorktable.class,			6),
-	COMPRESSOR(			"Air Compressor", 			BlockBCEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", ModList.BUILDCRAFTENERGY),
-	PNEUENGINE(			"Pneumatic Engine",			BlockBCEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", ModList.BUILDCRAFTENERGY),
+	COMPRESSOR(			"Air Compressor", 			BlockModEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", ModList.BUILDCRAFTENERGY),
+	PNEUENGINE(			"Pneumatic Engine",			BlockModEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", ModList.BUILDCRAFTENERGY),
 	DISPLAY(			"Display Screen",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"Bright Lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"EMP Machine",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
@@ -241,7 +243,9 @@ public enum MachineRegistry {
 	BOILER(				"Friction Boiler", 			BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"Steam Turbine", 			BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
-	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter");
+	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
+	GENERATOR(			"Electric Generator",		BlockModEngine.class,		TileEntityGenerator.class,			2),
+	ELECTRICMOTOR(		"Electric Motor",			BlockModEngine.class,		TileEntityElectricMotor.class,		3);
 
 
 	private String name;
@@ -525,6 +529,8 @@ public enum MachineRegistry {
 			return 0.9375F;
 		if (this == EMP)
 			return 0.5F;
+		if (this == FERTILIZER)
+			return 0.875F;
 		return 1;
 	}
 
@@ -730,6 +736,8 @@ public enum MachineRegistry {
 		case ARROWGUN:
 		case STEAMTURBINE:
 		case BEAMMIRROR:
+		case GENERATOR:
+		case ELECTRICMOTOR:
 			return true;
 		default:
 			return false;

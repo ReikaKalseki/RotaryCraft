@@ -58,6 +58,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Blocks.BlockPiping;
+import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -270,10 +271,17 @@ public abstract class BlockBasicMultiTE extends Block {
 				}
 			}
 		}
-		//if (m == MachineRegistry.ELECTRICMOTOR) {
-		//	TileEntityElectricMotor tc = (TileEntityElectricMotor)te;
-		// tc.addCoil();
-		//}
+		if (m == MachineRegistry.ELECTRICMOTOR) {
+			if (ReikaItemHelper.matchStacks(is, ItemStacks.goldcoil)) {
+				TileEntityElectricMotor tc = (TileEntityElectricMotor)te;
+				if (tc.addCoil()) {
+					if (!ep.capabilities.isCreativeMode) {
+						is.stackSize--;
+					}
+				}
+				return true;
+			}
+		}
 		if (m == MachineRegistry.SCALECHEST) {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
@@ -500,6 +508,12 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityPiping) {
 			((TileEntityPiping)te).deleteFromAdjacentConnections(world, x, y, z);
+		}
+		if (te instanceof TileEntityElectricMotor) {
+			int num = ((TileEntityElectricMotor)te).getNumberCoils();
+			for (int i = 0; i < num; i++) {
+				ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.goldcoil.copy());
+			}
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

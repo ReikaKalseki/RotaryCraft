@@ -18,7 +18,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
-import Reika.RotaryCraft.Blocks.BlockBCEngine;
+import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -54,7 +54,7 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 	TRANS(BlockTrans.class, Material.iron),
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
-	BCENGINE(BlockBCEngine.class, Material.iron),
+	BCENGINE(BlockModEngine.class, Material.iron),
 	MODEL2(BlockMMachine.class, Material.iron);
 
 	private Class block;
