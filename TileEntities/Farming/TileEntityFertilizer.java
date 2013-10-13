@@ -36,7 +36,7 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver implements RangedEffect {
 
-	private ItemStack[] inv = new ItemStack[9];
+	private ItemStack[] inv = new ItemStack[18];
 
 	private static final ArrayList<Integer> fertilizables = new ArrayList();
 
@@ -47,7 +47,11 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -67,7 +71,7 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.getSummativeSidedPower();
+		this.getPowerBelow();
 
 		if (!world.isRemote && this.hasFertilizer()) {
 			int n = this.getUpdatesPerTick();
@@ -83,12 +87,17 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	private void tickBlock(World world, int x, int y, int z) {
-		int dx = ReikaRandomHelper.getRandomPlusMinus(x, this.getRange());
-		int dy = ReikaRandomHelper.getRandomPlusMinus(y, this.getRange());
-		int dz = ReikaRandomHelper.getRandomPlusMinus(z, this.getRange());
+		int r = this.getRange();
+		int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);
+		int dy = ReikaRandomHelper.getRandomPlusMinus(y, r);
+		int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);
 		int id = world.getBlockId(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		if (id != 0 && ReikaMathLibrary.py3d(x-dx, y-dy, z-dz) <= this.getRange()) {
+		int ddx = dx-x;
+		int ddy = dy-y;
+		int ddz = dz-z;
+		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
+		if (id != 0 && dd <= this.getRange()) {
 			Block b = Block.blocksList[id];
 			b.updateTick(world, dx, dy, dz, par5Random);
 			//ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, dx, dy, z, 2, 0.0625);

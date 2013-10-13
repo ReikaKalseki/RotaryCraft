@@ -9,7 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-public class TileEntityElectricMotor {
+import net.minecraft.world.World;
+import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Base.TileEntityIOMachine;
+
+public class TileEntityElectricMotor extends TileEntityIOMachine {
 
 	public enum Tier {
 		LOW(240, 36, 32, 256),
@@ -29,6 +35,50 @@ public class TileEntityElectricMotor {
 			outputSpeed = speed;
 			outputTorque = torque;
 		}
+	}
+
+	@Override
+	public boolean canProvidePower() {
+		return false;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		return null;
+	}
+
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public int getMachineIndex() {
+		return 0;
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
+	}
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+
+	}
+
+	public void addCoil() {
+
 	}
 
 }

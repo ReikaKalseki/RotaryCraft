@@ -455,8 +455,9 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			}
 			break;
 		case FERTILIZER:
-			if (world.isRemote)
+			if (world.isRemote) {
 				ReikaParticleHelper.BONEMEAL.spawnAroundBlock(world, x, y, z, 4);
+			}
 			break;
 		case GRAVELGUN:
 			ReikaJavaLibrary.pConsole(x+", "+y+", "+z);

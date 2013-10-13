@@ -129,8 +129,6 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.jetFuelFluid);
 		FluidRegistry.registerFluid(RotaryCraft.lubeFluid);
 
-		//ReikaJavaLibrary.spamConsole(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME)+":"+LiquidRegistry.ETHANOL.getHeldItemFor()+":"+new ItemStack(Item.bucketEmpty));
-
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Item.bucketEmpty));
@@ -141,9 +139,9 @@ public class RotaryRegistration {
 		RotaryCraft.logger.log("Loading Liquid Icons");
 
 		if (event.map.textureType == 0) {
-			Icon jeticon = event.map.registerIcon("RotaryCraft:jetfuel");
-			Icon lubeicon = event.map.registerIcon("RotaryCraft:lubricant");
-			Icon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol");
+			Icon jeticon = event.map.registerIcon("RotaryCraft:jetfuel_anim");
+			Icon lubeicon = event.map.registerIcon("RotaryCraft:lubricant_anim");
+			Icon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol_anim");
 			RotaryCraft.jetFuelFluid.setIcons(jeticon);
 			RotaryCraft.lubeFluid.setIcons(lubeicon);
 			RotaryCraft.ethanolFluid.setIcons(ethanolicon);

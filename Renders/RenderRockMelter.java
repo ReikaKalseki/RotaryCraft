@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelLavaMaker;
@@ -61,7 +62,6 @@ public class RenderRockMelter extends RotaryTERenderer
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		if (tile.isInWorld()) {
-
 			switch(tile.getBlockMetadata()) {
 			case 0:
 				var11 = 0;
@@ -89,7 +89,7 @@ public class RenderRockMelter extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(null, -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.hasStone()), -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -110,7 +110,6 @@ public class RenderRockMelter extends RotaryTERenderer
 	}
 
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
-		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityLavaMaker tr = (TileEntityLavaMaker)tile;
 		if (!tr.isEmpty() && tr.isInWorld()) {
@@ -121,8 +120,8 @@ public class RenderRockMelter extends RotaryTERenderer
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
-			double h = 0.0625+14D/16D*tr.getLevel()/tr.CAPACITY;
-			Tessellator v5 = new Tessellator();
+			double h = 0.1875+12D/16D*tr.getLevel()/tr.CAPACITY;
+			Tessellator v5 = Tessellator.instance;
 			ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
@@ -134,7 +133,6 @@ public class RenderRockMelter extends RotaryTERenderer
 			ReikaRenderHelper.enableLighting();
 		}
 		GL11.glTranslated(-par2, -par4, -par6);
-		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override

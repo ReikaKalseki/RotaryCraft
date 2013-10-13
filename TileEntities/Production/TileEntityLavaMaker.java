@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver implements IFluidHandler, PipeConnector, TemperatureTE {
 
@@ -59,7 +60,16 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getPowerBelow();
+		tickcount++;
 		energy += power;
+
+		if (omega > 0 && power > 0) {
+			if (tickcount > 98) {
+				SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 0.5F);
+				tickcount = 0;
+			}
+			world.spawnParticle("crit", x+par5Random.nextDouble(), y, z+par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+		}
 
 		timer.update();
 		if (timer.checkCap())
@@ -75,7 +85,6 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 				}
 			}
 		}
-
 	}
 
 	private boolean melt(int slot) {
@@ -310,6 +319,10 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 
 	public int getLevel() {
 		return tank.getLevel();
+	}
+
+	public boolean hasStone() {
+		return !ReikaInventoryHelper.isEmpty(inv);
 	}
 
 }

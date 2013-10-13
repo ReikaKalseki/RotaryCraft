@@ -44,7 +44,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getLiq(world, x, y, z, meta);
 		this.transferBetween(world, x, y, z);
-		//ReikaJavaLibrary.pConsole(tank);
+
+		if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
+			if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
+				this.addLiquid(25, FluidRegistry.WATER);
+			}
+		}
 	}
 
 	private void transferBetween(World world, int x, int y, int z) {

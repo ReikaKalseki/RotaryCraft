@@ -15,6 +15,7 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -114,17 +115,19 @@ public class RenderReservoir extends RotaryTERenderer
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityReservoirAt((TileEntityReservoir)tile, par2, par4, par6, par8);
 
-		if (MinecraftForgeClient.getRenderPass() == 0) {
+		if (MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
 	}
 
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
-		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
 		if (!tr.isEmpty() && tr.isInWorld()) {
 			Fluid f = tr.getFluid();
+			if (!f.equals(FluidRegistry.LAVA)) {
+				GL11.glEnable(GL11.GL_BLEND);
+			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			Icon ico = f.getIcon();
 			float u = ico.getMinU();
@@ -132,7 +135,7 @@ public class RenderReservoir extends RotaryTERenderer
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
 			double h = 0.0625+14D/16D*tr.getLevel()/tr.CAPACITY;
-			Tessellator v5 = new Tessellator();
+			Tessellator v5 = Tessellator.instance;
 			if (f.getLuminosity(tr.getContents()) > 0)
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();

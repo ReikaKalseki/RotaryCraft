@@ -290,21 +290,23 @@ public class ModelLavaMaker extends RotaryModelBase
 		Shape9c.render(f5);
 		GL11.glRotatef(-phi, 0, 1, 0);
 
-		Shape5c.render(f5);
-		Shape5d.render(f5);
-		Shape5e.render(f5);
-		Shape5f.render(f5);
-		Shape5g.render(f5);
-		Shape5h.render(f5);
-		Shape5i.render(f5);
-		Shape5j.render(f5);
-		Shape5k.render(f5);
-		Shape5l.render(f5);
-		Shape5m.render(f5);
-		Shape5n.render(f5);
-		Shape5o.render(f5);
-		Shape5p.render(f5);
-		Shape5q.render(f5);
+		if ((Boolean)li.get(0)) {
+			Shape5c.render(f5);
+			Shape5d.render(f5);
+			Shape5e.render(f5);
+			Shape5f.render(f5);
+			Shape5g.render(f5);
+			Shape5h.render(f5);
+			Shape5i.render(f5);
+			Shape5j.render(f5);
+			Shape5k.render(f5);
+			Shape5l.render(f5);
+			Shape5m.render(f5);
+			Shape5n.render(f5);
+			Shape5o.render(f5);
+			Shape5p.render(f5);
+			Shape5q.render(f5);
+		}
 	}
 
 	@Override

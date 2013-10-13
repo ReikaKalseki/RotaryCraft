@@ -78,6 +78,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
@@ -269,6 +270,10 @@ public abstract class BlockBasicMultiTE extends Block {
 				}
 			}
 		}
+		//if (m == MachineRegistry.ELECTRICMOTOR) {
+		//	TileEntityElectricMotor tc = (TileEntityElectricMotor)te;
+		// tc.addCoil();
+		//}
 		if (m == MachineRegistry.SCALECHEST) {
 			TileEntityScaleableChest tc = (TileEntityScaleableChest)te;
 			if (!tc.isUseableByPlayer(ep))
@@ -591,8 +596,8 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	@Override
-	public void fillWithRain(World par1World, int par2, int par3, int par4) {
-		//fill reservoir - get real rain rate
+	public void fillWithRain(World world, int x, int y, int z) {
+		//MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 	}
 
 	@Override
@@ -637,6 +642,12 @@ public abstract class BlockBasicMultiTE extends Block {
 			if (te.getLevel() <= 0)
 				return 0;
 			return te.getLiquid().getLuminosity();
+		}
+		if (m == MachineRegistry.LAVAMAKER) {
+			TileEntityLavaMaker te = (TileEntityLavaMaker)world.getBlockTileEntity(x, y, z);
+			if (te.getLevel() <= 0)
+				return 0;
+			return 15;
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
