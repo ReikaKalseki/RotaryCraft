@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -20,10 +19,10 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
-public class TileEntityDeadMachine extends RotaryCraftTileEntity implements ISidedInventory, InertIInv {
+public class TileEntityDeadMachine extends InventoriedRCTileEntity implements InertIInv {
 
 	private Icon[] tex = new Icon[6];
 	private String[] img = new String[6];

@@ -10,9 +10,6 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -20,12 +17,10 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -65,10 +60,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return RotaryRenderList.getRenderForMachine(this.getMachine());
 		else
 			return null;
-	}
-
-	public final String getInvName() {
-		return this.getMultiValuedName();
 	}
 
 	public final MachineRegistry getMachine() {
@@ -139,22 +130,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 		disabled = NBT.getBoolean("emp");
 	}
-
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		if (this instanceof InertIInv)
-			return new int[0];
-		return ReikaInventoryHelper.getWholeInventoryForISided((ISidedInventory)this);
-	}
-
-	public boolean canInsertItem(int i, ItemStack is, int side) {
-		if (this instanceof InertIInv)
-			return false;
-		return ((IInventory)this).isItemValidForSlot(i, is);
-	}
-	/*
-	public String getName() {
-		return Block.blocksList[this.getTileEntityBlockID()].getLocalizedName();
-	}*/
 
 	public boolean isSelfBlock() {
 		if (worldObj.getBlockId(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())

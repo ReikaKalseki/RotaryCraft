@@ -10,15 +10,18 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -498,5 +501,21 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public void setFlipped(boolean set) {
 		isFlipped = set;
+	}
+
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		if (this instanceof InertIInv)
+			return new int[0];
+		return ReikaInventoryHelper.getWholeInventoryForISided(this);
+	}
+
+	public boolean canInsertItem(int i, ItemStack is, int side) {
+		if (this instanceof InertIInv)
+			return false;
+		return ((IInventory)this).isItemValidForSlot(i, is);
+	}
+
+	public final String getInvName() {
+		return this.getMultiValuedName();
 	}
 }

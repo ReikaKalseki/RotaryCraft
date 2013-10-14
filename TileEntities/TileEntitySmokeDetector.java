@@ -10,21 +10,20 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelSmokeDetector;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements RangedEffect, IInventory, OneSlotMachine {
+public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements RangedEffect, OneSlotMachine {
 
 	//public static int MINPOWER = 16; //runs off of 4AAA's (max power = 4W) , so 16W (one DC engine can run 64, or 8 at max range)
 	//public static int BASESPEED = 0;
@@ -201,6 +200,10 @@ public class TileEntitySmokeDetector extends RotaryCraftTileEntity implements Ra
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return itemstack.getItemDamage() == 0;
 	}
 
 }

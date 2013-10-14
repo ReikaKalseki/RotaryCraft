@@ -224,7 +224,7 @@ public class GuiHandler implements IGuiHandler {
 			if (((TileEntityAdvancedGear) te).coil) {
 				return new CoreContainer(player, te);
 			}
-			else
+			else if (((TileEntityAdvancedGear) te).worm)
 				return new ContainerCVT(player, (TileEntityAdvancedGear) te);
 		}
 		if (te instanceof TileEntityLaunchCannon) {
@@ -371,7 +371,7 @@ public class GuiHandler implements IGuiHandler {
 			if (((TileEntityAdvancedGear) te).coil) {
 				return new GuiCoil(player, (TileEntityAdvancedGear) te);
 			}
-			else
+			else if (((TileEntityAdvancedGear) te).worm)
 				return new GuiCVT(player, (TileEntityAdvancedGear) te);
 		}
 		if (te instanceof TileEntityMobRadar) {

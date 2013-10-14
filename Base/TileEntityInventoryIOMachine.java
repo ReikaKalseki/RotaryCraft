@@ -15,35 +15,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 
-public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
-
-	public void openChest() {
-
-	}
-
-	public void closeChest() {
-
-	}
-
-	public int getInventoryStackLimit()
-	{
-		return 64;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	public abstract boolean isItemValidForSlot(int slot, ItemStack is);
-
-	public final ItemStack decrStackSize(int par1, int par2) {
-		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
-	}
-
-	public final ItemStack getStackInSlotOnClosing(int par1) {
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-	}
+public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine implements ISidedInventory {
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		if (this instanceof InertIInv)
@@ -60,4 +32,5 @@ public abstract class TileEntityInventoriedPowerReceiver extends TileEntityPower
 	public final String getInvName() {
 		return this.getMultiValuedName();
 	}
+
 }

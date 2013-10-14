@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,12 +20,12 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityLamp extends RotaryCraftTileEntity implements ISidedInventory, InertIInv, RangedEffect, OneSlotMachine {
+public class TileEntityLamp extends InventoriedRCTileEntity implements InertIInv, RangedEffect, OneSlotMachine {
 
 	private BlockArray light = new BlockArray();
 

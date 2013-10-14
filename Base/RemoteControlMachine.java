@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public abstract class RemoteControlMachine extends RotaryCraftTileEntity implements ISidedInventory {
+public abstract class RemoteControlMachine extends InventoriedRCTileEntity {
 
 	public int[] colors = new int[3];
 

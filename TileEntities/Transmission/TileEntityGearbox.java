@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,10 +24,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -565,5 +568,21 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	@Override
 	public void setFlipped(boolean set) {
 		isFlipped = set;
+	}
+
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		if (this instanceof InertIInv)
+			return new int[0];
+		return ReikaInventoryHelper.getWholeInventoryForISided(this);
+	}
+
+	public boolean canInsertItem(int i, ItemStack is, int side) {
+		if (this instanceof InertIInv)
+			return false;
+		return ((IInventory)this).isItemValidForSlot(i, is);
+	}
+
+	public final String getInvName() {
+		return this.getMultiValuedName();
 	}
 }

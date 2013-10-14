@@ -12,7 +12,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
@@ -318,6 +319,22 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	@Override
 	protected boolean isValidTarget(EntityLivingBase ent) {
 		return this.isMobOrUnlistedPlayer(ent);
+	}
+
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		if (this instanceof InertIInv)
+			return new int[0];
+		return ReikaInventoryHelper.getWholeInventoryForISided(this);
+	}
+
+	public boolean canInsertItem(int i, ItemStack is, int side) {
+		if (this instanceof InertIInv)
+			return false;
+		return ((IInventory)this).isItemValidForSlot(i, is);
+	}
+
+	public final String getInvName() {
+		return this.getMultiValuedName();
 	}
 
 }

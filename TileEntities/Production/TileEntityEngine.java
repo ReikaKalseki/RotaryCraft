@@ -23,7 +23,6 @@ import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,6 +62,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntityInventoryIOMachine;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelAC;
 import Reika.RotaryCraft.Models.ModelCombustion;
@@ -87,7 +87,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityEngine extends TileEntityIOMachine implements ISidedInventory, TemperatureTE, SimpleProvider,
+public class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
 PipeConnector, PowerGenerator, IFluidHandler {
 
 	/** Water capacity */
