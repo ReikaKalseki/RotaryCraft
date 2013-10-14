@@ -59,6 +59,7 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getPowerBelow();
 		tickcount++;
 		energy += power;

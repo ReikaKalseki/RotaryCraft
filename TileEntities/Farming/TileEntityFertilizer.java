@@ -71,8 +71,8 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getPowerBelow();
-
 		if (!world.isRemote && this.hasFertilizer()) {
 			int n = this.getUpdatesPerTick();
 			for (int i = 0; i < n; i++)
