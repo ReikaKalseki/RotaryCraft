@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+
 public enum PowerReceivers {
 
 	AEROSOLIZER(65536),
@@ -216,7 +218,9 @@ public enum PowerReceivers {
 				return e;
 			}
 		}
-		throw new RuntimeException("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+		//throw new RuntimeException("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+		ReikaJavaLibrary.pConsole("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+		return null;
 	}
 
 	public String getName() {

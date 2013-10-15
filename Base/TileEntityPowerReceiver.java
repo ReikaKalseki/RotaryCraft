@@ -37,8 +37,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public TileEntityPowerReceiver() {
 		//ReikaJavaLibrary.pConsole(this.getClass()+" goes to "+this.getMachineIndex());
 		machine = PowerReceivers.getEnumFromMachineIndex(this.getMachineIndex());
-		if (machine == null)
-			throw new RuntimeException("Machine "+this.getName()+" in "+this.getClass()+" has no enum! Case?");
+		if (machine == null) {
+			MINPOWER = 0;
+			MINSPEED = 0;
+			MINTORQUE = 0;
+			return;//throw new RuntimeException("Machine "+this.getName()+" in "+this.getClass()+" has no enum! Case?");
+		}
 		if (!machine.hasMultiValuedPower()) {
 			MINPOWER = machine.getMinPower();
 			MINSPEED = machine.getMinSpeed();

@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class TileEntityPipe extends TileEntityPiping {
@@ -102,6 +103,19 @@ public class TileEntityPipe extends TileEntityPiping {
 				tile.addLiquid(1, f);
 			}
 			fluidPressure = tile.liquidPressure;
+		}
+	}
+
+	private void transferFromLavamaker(TileEntityLavaMaker tile) {
+		if (tile != null) {
+			if (tile.getLevel() <= 0)
+				return;
+			else if (tile.getLevel() > liquidLevel && (liquidID == 11 || liquidID == -1)) {
+				liquidID = 11;
+				oldLevel = tile.getLevel();
+				tile.setEmpty();
+				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
+			}
 		}
 	}
 
