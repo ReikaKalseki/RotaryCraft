@@ -337,4 +337,17 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		return this.getMultiValuedName();
 	}
 
+	public void openChest() {}
+
+	public void closeChest() {}
+
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
 }

@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -22,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -37,7 +35,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISidedInventory {
 
 	private ItemStack[] inv = new ItemStack[27];
-	public List<EntityLivingBase> frozen = new ArrayList<EntityLivingBase>();
+	//public List<EntityLivingBase> frozen = new ArrayList<EntityLivingBase>();
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -59,11 +57,11 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 			this.fire(world, target);
 		}
 		//ReikaJavaLibrary.pConsole(frozen.size());
-		for (int i = 0; i < frozen.size(); i++) {
-			EntityLivingBase ent = frozen.get(i);
-			/**Used to reset mob age and prevent despawning (since entityAge is private); still does not prevent far-from despawn */
-			ent.attackEntityFrom(DamageSource.generic, 0);
-		}
+		//for (int i = 0; i < frozen.size(); i++) {
+		//	EntityLivingBase ent = frozen.get(i);
+		//	/**Used to reset mob age and prevent despawning (since entityAge is private); still does not prevent far-from despawn */
+		//	ent.attackEntityFrom(DamageSource.generic, 0);
+		//}
 	}
 
 	private void convertSnow() {
@@ -213,7 +211,7 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 		double dz = v[2]/dd;
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			EntityFreezeGunShot snow = new EntityFreezeGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], frozen);
+			EntityFreezeGunShot snow = new EntityFreezeGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2]);
 			world.spawnEntityInWorld(snow);
 		}
 	}
@@ -308,5 +306,18 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 
 	public final String getInvName() {
 		return this.getMultiValuedName();
+	}
+
+	public void openChest() {}
+
+	public void closeChest() {}
+
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+
+	public boolean isInvNameLocalized() {
+		return false;
 	}
 }

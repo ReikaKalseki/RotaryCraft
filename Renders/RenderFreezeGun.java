@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -18,8 +16,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -96,9 +92,9 @@ public class RenderFreezeGun extends RotaryTERenderer {
 			this.renderTileEntityFreezeGunAt((TileEntityFreezeGun)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
+			//this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
 		}
-	}
+	}/*
 
 	private void renderIce(TileEntityFreezeGun tile, double par2, double par4, double par6) {
 		if (tile == null)
@@ -126,7 +122,7 @@ public class RenderFreezeGun extends RotaryTERenderer {
 			v5.draw();
 		}
 		ReikaRenderHelper.exitGeoDraw();
-	}
+	}*/
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {

@@ -11,19 +11,27 @@ package Reika.RotaryCraft;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.DragonAPICore;
@@ -63,6 +71,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -79,6 +88,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 
 @Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
@@ -145,6 +155,18 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static Achievement[] achievements;
 	public static Entity fallblock;
+
+	private static HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
+
+	public static void addMachineMapping(int id, int meta, MachineRegistry m) {
+		List li = Arrays.asList(id, meta);
+		machineMappings.put(li, m);
+	}
+
+	public static MachineRegistry getMachineMapping(int id, int meta) {
+		List li = Arrays.asList(id, meta);
+		return machineMappings.get(li);
+	}
 
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
@@ -282,6 +304,14 @@ public class RotaryCraft extends DragonAPIMod {
 				event.setResult(Event.Result.DENY);
 			}
 		}
+	}
+
+	@ForgeSubscribe
+	public void disallowDespawn(AllowDespawn ad) {
+		EntityLivingBase e = ad.entityLiving;
+		PotionEffect pe = e.getActivePotionEffect(Potion.jump);
+		if (pe.getAmplifier() == -9 || pe.getAmplifier() == -29) //the two freeze gun call values
+			ad.setResult(Result.DENY);
 	}
 
 	@Override

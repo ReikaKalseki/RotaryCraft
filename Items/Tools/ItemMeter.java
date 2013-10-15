@@ -104,7 +104,10 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
-			ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
+			if (!clicked.isEmpty())
+				ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
+			else
+				ReikaChatHelper.writeString("Reservoir is empty.");
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);

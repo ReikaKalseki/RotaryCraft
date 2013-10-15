@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Registry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -252,7 +251,6 @@ public enum MachineRegistry {
 	private Class te;
 	private Class blockClass;
 	private int meta;
-	private static HashMap<Class,boolean[]> mappedData = new HashMap<Class,boolean[]>();
 	private boolean hasRender = false;
 	private String renderClass;
 	private int rollover;
@@ -268,7 +266,7 @@ public enum MachineRegistry {
 		if (meta > 15)
 			//	throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
 			rollover = m/16;
-		//this.updateMappingRegistry();
+		this.updateMappingRegistry();
 	}
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList a) {
@@ -287,7 +285,7 @@ public enum MachineRegistry {
 		requirement = a;
 	}
 
-	private void updateMappingRegistry() {
+	private void updateMappingRegistry() {/*
 		if (mappedData == null)
 			throw new RegistrationException(RotaryCraft.instance, "Mapped data has not yet been created!");
 		if (mappedData.containsKey(blockClass)) {
@@ -305,7 +303,8 @@ public enum MachineRegistry {
 			maps[meta] = true;
 			mappedData.put(blockClass, maps);
 			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+this.getName());
-		}
+		}*/
+		RotaryCraft.addMachineMapping(this.getBlockID(), this.getMachineMetadata(), this);
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int metad) {

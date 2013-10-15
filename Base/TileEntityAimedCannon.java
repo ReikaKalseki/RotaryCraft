@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -52,19 +51,6 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	public final double[] getTarget() {
 		return target;
-	}
-
-	public void openChest() {}
-
-	public void closeChest() {}
-
-	public int getInventoryStackLimit()
-	{
-		return 64;
-	}
-
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	protected void printSafeList() {
@@ -225,7 +211,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	protected abstract boolean isValidTarget(EntityLivingBase ent);
 
 	protected final boolean isMobOrUnlistedPlayer(EntityLivingBase ent) {
-		return (ReikaEntityHelper.isHostile(ent) || (targetPlayers && ent instanceof EntityPlayer && !this.playerIsSafe(((EntityPlayer)ent).getEntityName())));
+		return (ReikaEntityHelper.isHostile(ent) || (targetPlayers && ent instanceof EntityPlayer && !this.playerIsSafe(((EntityPlayer)ent))));
 	}
 
 	public void addPlayerToWhiteList(String name) {
@@ -249,10 +235,13 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		ReikaChatHelper.write(name+" removed from "+placer+"'s "+this.getName()+" whitelist.");
 	}
 
-	public boolean playerIsSafe(String name) {
+	public boolean playerIsSafe(EntityPlayer ep) {
+		if (ep.capabilities.isCreativeMode)
+			return true;
+		String name = ep.getEntityName();
 		if (name == null)
 			return true;
-		if (name.equals("Reika_Kalseki"))
+		if (name.equals("Reika_Kalseki")) //If you try...
 			return true;
 		if (this.getPlacer() == null)
 			return safePlayers.contains(name);

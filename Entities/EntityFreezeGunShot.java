@@ -27,20 +27,17 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class EntityFreezeGunShot extends EntityTurretShot {
 
-	private List frozen;
-
 	public EntityFreezeGunShot(World world) {
 		super(world);
 	}
 
-	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, List fr) {
+	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
-		frozen = fr;
 	}
 
 	@Override
@@ -72,12 +69,12 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 				el = (EntityLivingBase)ent;
 				//ReikaChatHelper.writeEntity(world, el);
 				this.applyAttackEffectsToEntity(world, el);
-				if (el != null) {
-					if (frozen != null)
-						frozen.add(el);
-					EntityIceBlock ice = new EntityIceBlock(world, el);
-					world.spawnEntityInWorld(ice);
-				}
+				//if (el != null) {
+				//	if (frozen != null)
+				//		frozen.add(el);
+				//	EntityIceBlock ice = new EntityIceBlock(world, el);
+				//	world.spawnEntityInWorld(ice);
+				//}
 			}
 		}
 

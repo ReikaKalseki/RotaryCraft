@@ -83,7 +83,7 @@ public class ItemCannonKey extends ItemRotaryTool {
 				ReikaChatHelper.write("The key is for "+owner+"'s machines, but this machine is owned by "+can.placer+"!");
 				return false;
 			}
-			if (can.playerIsSafe(name)) {
+			if (can.playerIsSafe(ep)) {
 				ReikaChatHelper.write(name+" is already on the whitelist!");
 				return false;
 			}

@@ -326,4 +326,8 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 		return !ReikaInventoryHelper.isEmpty(inv);
 	}
 
+	public void setEmpty() {
+		tank.empty();
+	}
+
 }

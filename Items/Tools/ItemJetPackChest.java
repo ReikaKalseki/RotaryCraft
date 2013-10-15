@@ -118,7 +118,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, "isJumping");
+		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, "isJumping", RotaryCraft.logger);
 		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
 		if (bool) {
 			jetpackUsed = this.useJetpack(player);
