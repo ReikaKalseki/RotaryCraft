@@ -20,11 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
@@ -285,26 +283,11 @@ public enum MachineRegistry {
 		requirement = a;
 	}
 
-	private void updateMappingRegistry() {/*
-		if (mappedData == null)
-			throw new RegistrationException(RotaryCraft.instance, "Mapped data has not yet been created!");
-		if (mappedData.containsKey(blockClass)) {
-			boolean[] maps = mappedData.get(blockClass);
-			if (maps[meta])
-				throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
-			else {
-				maps[meta] = true;
-				ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+this.getName());
-			}
-			mappedData.put(blockClass, maps);
-		}
-		else {
-			boolean[] maps = new boolean[16];
-			maps[meta] = true;
-			mappedData.put(blockClass, maps);
-			ReikaJavaLibrary.pConsole("ROTARYCRAFT: Block "+blockClass+" with metadata "+meta+" assigned to machine "+this.getName());
-		}*/
-		RotaryCraft.addMachineMapping(this.getBlockID(), this.getMachineMetadata(), this);
+	private void updateMappingRegistry() {
+		if (RotaryCraft.getMachineMapping(this.getBlockID(), this.getMachineMetadata()) != null)
+			throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
+		else
+			RotaryCraft.addMachineMapping(this.getBlockID(), this.getMachineMetadata(), this);
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int metad) {
@@ -367,33 +350,20 @@ public enum MachineRegistry {
 
 	public static int getMachineIndexFromIDandMetadata(int id, int metad) {
 		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
-		for (int i = 0; i < machineList.length; i++) {
-			MachineRegistry m = machineList[i];
-			if (m.getBlockID() == id && ReikaMathLibrary.isValueInsideBoundsIncl(m.getMachineMetadata(), m.getMachineMetadata()+m.getNumberMetadatas()-1, metad))
-				return i;
-		}
-		//throw new RegistrationException(RotaryCraft.instance, "ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
-		return -1;
-	}
-
-	public static MachineRegistry getMachine(World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (!(te instanceof RotaryCraftTileEntity))
-			return null;
-		RotaryCraftTileEntity tc = (RotaryCraftTileEntity)te;
-		return machineList[tc.getMachineIndex()];
+		MachineRegistry m = RotaryCraft.getMachineMapping(id, metad);
+		if (m == null)
+			return -1;
+		return m.ordinal();
 	}
 
 	public static MachineRegistry getMachine(IBlockAccess iba, int x, int y, int z) {
-		TileEntity te = iba.getBlockTileEntity(x, y, z);
-		if (!(te instanceof RotaryCraftTileEntity))
-			return null;
-		RotaryCraftTileEntity tc = (RotaryCraftTileEntity)te;
-		return machineList[tc.getMachineIndex()];
+		int id = iba.getBlockId(x, y, z);
+		int meta = iba.getBlockMetadata(x, y, z);
+		return RotaryCraft.getMachineMapping(id, meta);
 	}
 
 	/** A convenience feature */
-	public static MachineRegistry getMachine(World world, double x, double y, double z) {
+	public static MachineRegistry getMachine(IBlockAccess world, double x, double y, double z) {
 		return getMachine(world, (int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z));
 	}
 
@@ -555,10 +525,6 @@ public enum MachineRegistry {
 		default:
 			return false;
 		}
-	}
-
-	public int getNumberMetadatas() {
-		return 1;
 	}
 
 	public boolean isXFlipped() {

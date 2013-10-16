@@ -221,11 +221,14 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerObsidian(player, (TileEntityObsidianMaker) te);
 		}
 		if (te instanceof TileEntityAdvancedGear) {
-			if (((TileEntityAdvancedGear) te).coil) {
+			switch (((TileEntityAdvancedGear) te).getType()) {
+			case COIL:
 				return new CoreContainer(player, te);
-			}
-			else if (((TileEntityAdvancedGear) te).worm)
+			case CVT:
 				return new ContainerCVT(player, (TileEntityAdvancedGear) te);
+			default:
+				return null;
+			}
 		}
 		if (te instanceof TileEntityLaunchCannon) {
 			return new ContainerCannon(player, (TileEntityLaunchCannon) te);
@@ -368,11 +371,14 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiPlayerDetector(player, (TileEntityPlayerDetector) te);
 		}
 		if (te instanceof TileEntityAdvancedGear) {
-			if (((TileEntityAdvancedGear) te).coil) {
+			switch (((TileEntityAdvancedGear) te).getType()) {
+			case COIL:
 				return new GuiCoil(player, (TileEntityAdvancedGear) te);
-			}
-			else if (((TileEntityAdvancedGear) te).worm)
+			case CVT:
 				return new GuiCVT(player, (TileEntityAdvancedGear) te);
+			default:
+				return null;
+			}
 		}
 		if (te instanceof TileEntityMobRadar) {
 			return new GuiMobRadar(player, (TileEntityMobRadar) te);

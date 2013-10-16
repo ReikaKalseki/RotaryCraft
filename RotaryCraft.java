@@ -310,6 +310,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public void disallowDespawn(AllowDespawn ad) {
 		EntityLivingBase e = ad.entityLiving;
 		PotionEffect pe = e.getActivePotionEffect(Potion.jump);
+		if (pe == null)
+			return;
 		if (pe.getAmplifier() == -9 || pe.getAmplifier() == -29) //the two freeze gun call values
 			ad.setResult(Result.DENY);
 	}

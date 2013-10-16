@@ -323,7 +323,7 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				if (clicked.coil) {
+				if (clicked.getType() == TileEntityAdvancedGear.GearType.COIL) {
 					long energy = clicked.energy;
 					if (energy/20D >= 1000000000)
 						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
@@ -354,7 +354,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 				}
 
-				if (clicked.worm && power > 0) {
+				if (clicked.getType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
 					double loss = 0;
 					TileEntity read = world.getBlockTileEntity(clicked.readx, clicked.ready, clicked.readz);
 					if (read instanceof TileEntityIOMachine) {

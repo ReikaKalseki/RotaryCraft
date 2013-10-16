@@ -135,7 +135,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		if (worldObj.getBlockId(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
 			return false;
 		int meta = this.getMachine().getMachineMetadata();
-		return ReikaMathLibrary.isValueInsideBoundsIncl(meta, meta+this.getMachine().getNumberMetadatas()-1, worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+		return meta == worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
 	public abstract int getRedstoneOverride();

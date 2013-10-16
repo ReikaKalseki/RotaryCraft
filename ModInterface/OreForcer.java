@@ -120,7 +120,6 @@ public final class OreForcer {
 
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
-			int num = m.getNumberMetadatas();
 			ReikaThaumHelper.clearAspects(m.getCraftedProduct());
 		}
 	}

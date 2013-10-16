@@ -1182,6 +1182,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (this.isMuffled(world, x, y, z)) {
 			volume = 0.3125F;
 		}
+		//double speedFactor = Math.sqrt(omega/(float)type.getSpeed());
+		//ReikaJavaLibrary.pConsole(speedFactor, Side.SERVER);
+		//pitchMultiplier *= speedFactor;
 		if (soundtick < type.getSoundLength(FOD, 1F/pitchMultiplier) && soundtick < 2000)
 			return;
 		soundtick = 0;

@@ -10,13 +10,13 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
@@ -83,7 +83,8 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	{
 		String var4 = "/gui/container.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(GuiContainer.field_110408_a);
+		//mc.renderEngine.bindTexture(GuiContainer.field_110408_a);
+		ReikaTextureHelper.bindDirectTexture(RotaryCraft.class, this.getGuiTexture());
 		int var5 = (width - xSize) / 2;
 		int var6 = (height - ySize) / 2;
 		this.drawTexturedModalRect(var5, var6, 0, 0, xSize, inventoryRows * 18 + 17);

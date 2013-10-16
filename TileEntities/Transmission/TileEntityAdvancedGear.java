@@ -33,8 +33,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory {
 
-	public boolean worm = true;
-	public boolean coil = false;
 	boolean isReleasing = false;
 	public int releaseTorque = 0;
 	public int releaseOmega = 0;
@@ -45,6 +43,17 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public ItemStack[] belts = new ItemStack[31];
 
+	public enum GearType {
+		WORM(),
+		CVT(),
+		COIL();
+
+		public static final GearType[] list = values();
+	}
+
+	public GearType getType() {
+		return GearType.list[this.getBlockMetadata()/4];
+	}
 
 	//-ve ratio is torque mode for cvt
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
@@ -56,7 +65,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (worm || (!coil && ratio < 0)) {
+		if (this.getType() == GearType.WORM || this.getType() == GearType.CVT && ratio < 0) {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 				omega = (int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
@@ -119,9 +128,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	private double getEffectiveRatio() {
-		if (coil)
+		GearType type = this.getType();
+		if (type == GearType.COIL)
 			return 1;
-		if (worm)
+		if (type == GearType.WORM)
 			return WORMRATIO;
 		if (ratio < 0)
 			return -ratio;
@@ -129,14 +139,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	private double getPowerLossFraction(int speed) {
-		if (worm)
+		if (this.getType() == GearType.WORM)
 			return (128-4*ReikaMathLibrary.logbase(speed, 2))/100;
 		return 1;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		if (worm)
+		if (this.getType() == GearType.WORM)
 			return false;
 		return super.isUseableByPlayer(var1);
 	}
@@ -147,7 +157,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		this.getType();
-		if (!coil)
+		if (this.getType() != GearType.COIL)
 			this.transferPower(world, x, y, z, meta);
 		else
 			this.store(world, x, y, z, meta);
@@ -180,11 +190,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				power = 0;
 			}
 		}
-	}
-
-	private void getType() {
-		worm = (this.getBlockMetadata() < 4);
-		coil = ReikaMathLibrary.isValueInsideBoundsIncl(8, 12, this.getBlockMetadata());
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -238,18 +243,18 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public void readFromCross(TileEntityShaft cross) {
 		if (xCoord == cross.writex && zCoord == cross.writez) {
 			omega = cross.readomega[0];
-			if (worm)
+			if (this.getType() == GearType.WORM)
 				omega = (int)((((omega / WORMRATIO)*(100-4*ReikaMathLibrary.logbase(omega, 2)+28)))/100);
 			torque = cross.readtorque[0];
-			if (worm)
+			if (this.getType() == GearType.WORM)
 				torque = torque * WORMRATIO;
 		}
 		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
 			omega = cross.readomega[1];
-			if (worm)
+			if (this.getType() == GearType.WORM)
 				omega = (int)((((omega / WORMRATIO)*(100-4*ReikaMathLibrary.logbase(omega, 2)+28)))/100);
 			torque = cross.readtorque[1];
-			if (worm)
+			if (this.getType() == GearType.WORM)
 				torque = torque * WORMRATIO;
 		}
 		else
@@ -301,7 +306,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 		}
 
-		if (worm) {
+		if (this.getType() == GearType.WORM) {
 			omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
 			if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
 				torque = torquein * WORMRATIO;
@@ -311,7 +316,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 			}
 		}
-		else if (!coil){ //CVT
+		else if (this.getType() != GearType.COIL) { //CVT
 			boolean speed = true;
 			if (ratio > 0) {
 				if (omegain <= RotaryConfig.omegalimit/ratio)
@@ -334,7 +339,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				omega = omegain / -ratio;
 			}
 		}
-		else if (coil) {
+		else if (this.getType() == GearType.COIL) {
 
 		}
 	}
@@ -346,9 +351,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setBoolean("worm", worm);
 		NBT.setInteger("ratio", ratio);
-		NBT.setBoolean("coil", coil);
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
@@ -376,14 +379,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		worm = NBT.getBoolean("worm");
 		ratio = NBT.getInteger("ratio");
-		coil = NBT.getBoolean("coil");
 		energy = NBT.getLong("e");
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
-		//if (this.ratio > this.getMaxRatio())
-		//this.ratio = this.getMaxRatio();
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		belts = new ItemStack[this.getSizeInventory()];
@@ -489,8 +488,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public void onEMP() {
-		if (!coil && !worm)
-			super.onEMP();
+		//super.onEMP();
 	}
 
 	@Override
