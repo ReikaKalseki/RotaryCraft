@@ -105,26 +105,20 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 			if (slots[i] == null && i != 1)
 				return null;
 		if (slots[0].itemID == Item.sugar.itemID) {
-			if (this.hasWater(1))
+			if (this.hasWater())
 				if(slots[2].itemID == Block.dirt.blockID)
 					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
 		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
 			if (this.getPlantValue(slots[2]) > 0)
-				if (this.hasWater(2))
+				if (this.hasWater())
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
 		}
 		return null;
 	}
 
-	private boolean hasWater(int slot) {
-		if (slots[slot].itemID == Item.bucketWater.itemID)
-			;//return true;
-		if (slots[slot].itemID == Item.bucketWater.itemID)
-			;//return true;
-		if (!tank.isEmpty())
-			return true;
-		return false;
+	private boolean hasWater() {
+		return !tank.isEmpty();
 	}
 
 	public static int getPlantValue(ItemStack is) {
