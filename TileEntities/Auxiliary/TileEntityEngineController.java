@@ -19,8 +19,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -157,15 +155,20 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 			if (m == MachineRegistry.FUELLINE) {
 				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
-				if (tile != null) {
-					if (tile.fuel > tank.getLevel()) {
-						oldfuel = tile.fuel;
-						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel, 0, "max");
-						tank.addLiquid(oldfuel, RotaryCraft.jetFuelFluid);
+				if (tile != null && tile.fuel > 0) {
+					Fluid f = tile.getContainedFuel();
+					if (tile.fuel > tank.getLevel() && this.canIntakeFuel(f)) {
+						oldfuel = tile.fuel-1;
+						tile.fuel = 1;
+						tank.addLiquid(oldfuel, f);
 					}
 				}
 			}
 		}
+	}
+
+	private boolean canIntakeFuel(Fluid f) {
+		return tank.isEmpty() ? f != null : tank.getActualFluid().equals(f);
 	}
 
 	@Override

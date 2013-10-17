@@ -41,8 +41,8 @@ public class TileEntityHose extends TileEntityPiping {
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
 			if (tile != null && !tile.isEmpty() && tile.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
-				lubricant += tile.getLevel();
-				tile.setEmpty();
+				lubricant += tile.getLevel()/4+1;
+				tile.setLevel(tile.getLevel()-tile.getLevel()/4-1);
 			}
 		}
 	}

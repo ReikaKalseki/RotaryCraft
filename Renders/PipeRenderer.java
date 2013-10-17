@@ -64,6 +64,8 @@ public class PipeRenderer extends RotaryTERenderer {
 		double dd2 = in-in2;
 
 		Fluid f = tile.getLiquidType();
+		if (f == null)
+			return;
 		Icon ico = tile.getLiquidType().getIcon();
 		ReikaLiquidRenderer.bindFluidTexture(f);
 		if (f.getLuminosity() > 0)

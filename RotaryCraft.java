@@ -11,9 +11,6 @@ package Reika.RotaryCraft;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -71,7 +68,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -155,18 +151,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static Achievement[] achievements;
 	public static Entity fallblock;
-
-	private static HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
-
-	public static void addMachineMapping(int id, int meta, MachineRegistry m) {
-		List li = Arrays.asList(id, meta);
-		machineMappings.put(li, m);
-	}
-
-	public static MachineRegistry getMachineMapping(int id, int meta) {
-		List li = Arrays.asList(id, meta);
-		return machineMappings.get(li);
-	}
 
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();

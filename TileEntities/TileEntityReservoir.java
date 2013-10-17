@@ -50,6 +50,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				this.addLiquid(25, FluidRegistry.WATER);
 			}
 		}
+
+		if (tank.getActualFluid() == null || this.getLevel() <= 0)
+			tank.empty();
 	}
 
 	private void transferBetween(World world, int x, int y, int z) {

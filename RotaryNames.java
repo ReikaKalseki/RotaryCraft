@@ -118,7 +118,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] pipeNames = {
-		"Lubricant Hose", "Liquid Pipe", "Fuel Line", "Liquid Spiller"
+		"Lubricant Hose", "Liquid Pipe", "Fuel Line", "Liquid Spiller", "Valve Pipe"
 	};
 	/*
 	public static final String[] modOreNames = {

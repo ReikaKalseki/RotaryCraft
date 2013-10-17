@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Registry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -85,6 +87,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+import Reika.RotaryCraft.TileEntities.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -242,7 +245,8 @@ public enum MachineRegistry {
 	FERTILIZER(			"Fertilizer",				BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"Rock Melter",				BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
 	GENERATOR(			"Electric Generator",		BlockModEngine.class,		TileEntityGenerator.class,			2),
-	ELECTRICMOTOR(		"Electric Motor",			BlockModEngine.class,		TileEntityElectricMotor.class,		3);
+	ELECTRICMOTOR(		"Electric Motor",			BlockModEngine.class,		TileEntityElectricMotor.class,		3),
+	VALVE(				"Valve Pipe",				BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer");
 
 
 	private String name;
@@ -253,6 +257,7 @@ public enum MachineRegistry {
 	private String renderClass;
 	private int rollover;
 	private ModList requirement;
+	private static HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -264,7 +269,6 @@ public enum MachineRegistry {
 		if (meta > 15)
 			//	throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
 			rollover = m/16;
-		this.updateMappingRegistry();
 	}
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList a) {
@@ -281,13 +285,6 @@ public enum MachineRegistry {
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, ModList a) {
 		this(n, b, tile, m, r);
 		requirement = a;
-	}
-
-	private void updateMappingRegistry() {
-		if (RotaryCraft.getMachineMapping(this.getBlockID(), this.getMachineMetadata()) != null)
-			throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" tried to map into "+blockClass+" slot "+meta+" which is already occupied!");
-		else
-			RotaryCraft.addMachineMapping(this.getBlockID(), this.getMachineMetadata(), this);
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int metad) {
@@ -350,16 +347,16 @@ public enum MachineRegistry {
 
 	public static int getMachineIndexFromIDandMetadata(int id, int metad) {
 		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
-		MachineRegistry m = RotaryCraft.getMachineMapping(id, metad);
+		MachineRegistry m = getMachineMapping(id, metad);
 		if (m == null)
 			return -1;
 		return m.ordinal();
 	}
 
-	public static MachineRegistry getMachine(IBlockAccess iba, int x, int y, int z) {
-		int id = iba.getBlockId(x, y, z);
-		int meta = iba.getBlockMetadata(x, y, z);
-		return RotaryCraft.getMachineMapping(id, meta);
+	public static MachineRegistry getMachine(IBlockAccess world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		return getMachineMapping(id, meta);
 	}
 
 	/** A convenience feature */
@@ -1015,5 +1012,19 @@ public enum MachineRegistry {
 			}
 		}
 		return li;
+	}
+
+	public static MachineRegistry getMachineMapping(int id, int meta) {
+		List li = Arrays.asList(id, meta);
+		return machineMappings.get(li);
+	}
+
+	static {
+		for (int i = 0; i < machineList.length; i++) {
+			MachineRegistry m = machineList[i];
+			int id = m.getBlockID();
+			int meta = m.getMachineMetadata();
+			machineMappings.put(Arrays.asList(id, meta), m);
+		}
 	}
 }

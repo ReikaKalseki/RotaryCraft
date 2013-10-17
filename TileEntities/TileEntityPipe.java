@@ -74,9 +74,9 @@ public class TileEntityPipe extends TileEntityPiping {
 			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
 			if (tile != null && !tile.isEmpty()) {
 				if (tile.getFluid().getBlockID() == liquidID || liquidID == -1) {
-					liquidLevel += tile.getLevel();
+					liquidLevel += tile.getLevel()/4+1;
+					tile.setLevel(tile.getLevel()-tile.getLevel()/4-1);
 					liquidID = tile.getFluid().getBlockID();
-					tile.setEmpty();
 				}
 			}
 		}
