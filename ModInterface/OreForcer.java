@@ -66,7 +66,7 @@ public final class OreForcer {
 
 	@SuppressWarnings("incomplete-switch")
 	private static void force(ModList api) {
-		if (api != ModList.ROTARYCRAFT)
+		if (!api.isReikasMod())
 			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
 		case APPLIEDENERGISTICS:
@@ -167,14 +167,11 @@ public final class OreForcer {
 
 	private static void intercraftForcicium() {
 		try {
-			Class mf = Class.forName("mods.mffs.common.ModularForceFieldSystem");
+			Class mf = ModList.MFFS.getItemClass();
 			Field item = mf.getField("MFFSitemForcicium");
 			ItemStack forc = new ItemStack((Item)item.get(null));
 			GameRegistry.addShapelessRecipe(forc, ItemStacks.getModOreIngot(ModOreList.MONAZIT));
 			RotaryCraft.logger.log("RotaryCraft monazit can now be crafted into MFFS forcicium!");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("MFFS Item class not found! Cannot read its items for compatibility forcing!");
 		}
 		catch (NoSuchFieldException e) {
 			RotaryCraft.logger.logError("MFFS item field not found!");

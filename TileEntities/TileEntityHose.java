@@ -32,8 +32,19 @@ public class TileEntityHose extends TileEntityPiping {
 		this.draw(world, x, y, z);
 		this.transfer(world, x, y, z);
 		this.transferFromFiller(world, x, y, z);
+		this.drainReservoir(world, x, y, z);
 		if (lubricant < 0)
 			lubricant = 0;
+	}
+
+	private void drainReservoir(World world, int x, int y, int z) {
+		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
+			if (tile != null && !tile.isEmpty() && tile.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
+				lubricant += tile.getLevel();
+				tile.setEmpty();
+			}
+		}
 	}
 
 	@Override

@@ -933,7 +933,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			//omega = 0;
 			if (omega == 0)
 				torque = 0;
-			if (soundtick == 0)
+			if (soundtick == 0 && omega == 0)
 				soundtick = 2000;
 			timer.resetTicker("fuel");
 		}
@@ -953,6 +953,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (omega > 0) {
 				//ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Side.SERVER);
 				omega -= omega/256+1;
+				//soundtick = 2000;
 			}
 		}
 	}
@@ -1082,7 +1083,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 							caught.setFire(2);
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
 							//ReikaChatHelper.writeInt(FOD);
-							if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && !(caught instanceof EntityChicken) && !(caught instanceof EntityBat) && !(caught instanceof EntitySilverfish) && !(caught instanceof EntityItem) && !(caught instanceof EntityXPOrb))
+							if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
 								FOD++;
 							if (FOD > 8)
 								FOD = 8;
@@ -1102,6 +1103,20 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				}
 			}
 		}
+	}
+
+	private boolean canDamageEngine(Entity caught) {
+		if (caught instanceof EntityChicken)
+			return false;
+		if (caught instanceof EntityBat)
+			return false;
+		if (caught instanceof EntitySilverfish)
+			return false;
+		if (caught instanceof EntityItem)
+			return false;
+		if (caught instanceof EntityXPOrb)
+			return false;
+		return caught instanceof EntityLivingBase;
 	}
 
 	private AxisAlignedBB getSuctionZone(int meta, int step) {

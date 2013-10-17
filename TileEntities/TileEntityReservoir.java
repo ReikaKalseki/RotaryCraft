@@ -95,19 +95,19 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 					if (tile != null) {
 						if (tile.liquidID == 11 && this.canAcceptFluid(FluidRegistry.LAVA) && tile.liquidLevel > 0) {
 							oldLevel = tile.liquidLevel;
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-							tank.addLiquid(oldLevel/4+1, FluidRegistry.LAVA);
+							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
+							tank.addLiquid(oldLevel/4, FluidRegistry.LAVA);
 						}
 						else if (tile.liquidID == 9 && this.canAcceptFluid(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 							oldLevel = tile.liquidLevel;
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-							tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
+							tank.addLiquid(oldLevel/4, FluidRegistry.WATER);
 						}
 						else if (tile.liquidID > 0) {
 							Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[tile.liquidID]);
 							if (f != null && this.canAcceptFluid(f)) {
-								tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-								tank.addLiquid(oldLevel/4+1, f);
+								tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
+								tank.addLiquid(oldLevel/4, f);
 							}
 						}
 					}
@@ -116,16 +116,16 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 					TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
 					if (tile != null) {
 						oldLevel = tile.lubricant;
-						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("lubricant"));
+						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
+						tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("lubricant"));
 					}
 				}
 				if (m == MachineRegistry.FUELLINE) {
 					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
 					if (tile != null) {
 						oldLevel = tile.fuel;
-						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("jet fuel"));
+						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
+						tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("jet fuel"));
 					}
 				}
 			}
@@ -296,5 +296,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
 		}
 		return false;
+	}
+
+	public void setEmpty() {
+		tank.empty();
 	}
 }

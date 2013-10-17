@@ -33,8 +33,19 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		this.draw(world, x, y, z);
 		this.transfer(world, x, y, z);
 		this.transferFromFiller(world, x, y, z);
+		this.drainReservoir(world, x, y, z);
 		if (fuel < 0)
 			fuel = 0;
+	}
+
+	private void drainReservoir(World world, int x, int y, int z) {
+		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
+			if (tile != null && !tile.isEmpty() && tile.getFluid().equals(FluidRegistry.getFluid("jet fuel"))) {
+				fuel += tile.getLevel();
+				tile.setEmpty();
+			}
+		}
 	}
 
 	@Override
@@ -42,7 +53,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y-1, z);
 			if (tile != null) {
-				fuel = tile.getFuelLevel();
+				fuel += tile.getFuelLevel();
 				tile.setEmpty();
 			}
 		}

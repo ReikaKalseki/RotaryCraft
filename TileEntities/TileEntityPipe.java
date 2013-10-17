@@ -46,6 +46,7 @@ public class TileEntityPipe extends TileEntityPiping {
 		this.draw(world, x, y, z);
 		this.getDensity();
 		this.transfer(world, x, y, z);
+		this.drainReservoir(world, x, y, z);
 		this.getFromBucketFiller(world, x, y, z);
 		if (liquidLevel < 0)
 			liquidLevel = 0;
@@ -66,6 +67,19 @@ public class TileEntityPipe extends TileEntityPiping {
 			fluidrho = (int)ReikaEngLibrary.rhowater/100;
 		if (liquidID == -1)
 			fluidrho = 0;
+	}
+
+	private void drainReservoir(World world, int x, int y, int z) {
+		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
+			if (tile != null && !tile.isEmpty()) {
+				if (tile.getFluid().getBlockID() == liquidID || liquidID == -1) {
+					liquidLevel += tile.getLevel();
+					liquidID = tile.getFluid().getBlockID();
+					tile.setEmpty();
+				}
+			}
+		}
 	}
 
 	@Override
