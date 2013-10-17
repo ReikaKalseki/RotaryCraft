@@ -1424,6 +1424,11 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				fuelslot[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+
+		if (omega > type.getSpeed())
+			omega = type.getSpeed();
+		if (torque > type.getTorque())
+			torque = type.getTorque();
 	}
 
 	@Override

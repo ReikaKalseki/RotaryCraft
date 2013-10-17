@@ -25,8 +25,10 @@ import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerator, SimpleProvider {
+public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IPipeConnection {
 
 	private int steamLevel;
 
@@ -166,6 +168,11 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	{
 		super.readFromNBT(NBT);
 		steamLevel = NBT.getInteger("storage");
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection dir) {
+		return dir == facingDir.getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
 }

@@ -112,7 +112,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (sun > 0.21) {
 			return (int)(15*sun);
 		}
-		int moon = worldObj.getMoonPhase();
+		int moon = worldObj.provider.getMoonPhase(worldObj.getWorldInfo().getWorldTime());
 		float phase;
 		switch(moon) {
 		case 0:
