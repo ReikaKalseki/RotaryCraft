@@ -554,7 +554,7 @@ public enum MachineRegistry {
 	}
 
 	public boolean isPipe() {
-		return (this == HOSE || this == PIPE || this == FUELLINE || this == SPILLER);
+		return (this == HOSE || this == PIPE || this == FUELLINE || this == SPILLER || this == VALVE);
 	}
 
 	public boolean isTrans() {
@@ -775,6 +775,8 @@ public enum MachineRegistry {
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2);
 		if (this == SPILLER)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 3);
+		if (this == VALVE)
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 4);
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 

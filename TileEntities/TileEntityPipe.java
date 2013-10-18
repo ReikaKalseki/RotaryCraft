@@ -262,7 +262,7 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER;
 	}
 
 	@Override

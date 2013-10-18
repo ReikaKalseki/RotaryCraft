@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Auxiliary.ModList;
@@ -171,7 +172,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.SCALECHEST.addCrafting("sss", "scs", "sss", 'c', Block.chest, 's', ItemStacks.steelingot);
 
-		MachineRegistry.SPILLER.addCrafting(" p ", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot);
+		MachineRegistry.SPILLER.addSizedCrafting(4, " p ", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot);
 
 		MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Item.redstone, 'N', Block.music);
 
@@ -242,6 +243,8 @@ public class RotaryRecipes {
 		MachineRegistry.LAVAMAKER.addCrafting("SRS", "PGP", "SsS", 's', ItemStacks.shaftitem, 'S', ItemStacks.steelingot, 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'P', ItemStacks.basepanel, 'G', ItemStacks.steelgear);
 
 		MachineRegistry.BEAMMIRROR.addCrafting(" m ", " s ", " p ", 'p', ItemStacks.basepanel, 'm', ItemStacks.mirror, 's', ItemStacks.steelingot);
+
+		MachineRegistry.VALVE.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Item.redstone, 'G', Block.glass, 's', ItemStacks.steelingot});
 	}
 
 	private static void addCraftItems() {
@@ -344,14 +347,14 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.gearunit16, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit8});
 
-		GameRegistry.addRecipe(ItemStacks.wood2x, new Object[]{
-				" GB", "BG ", 'B', Item.stick, 'G', ItemStacks.woodgear});
-		GameRegistry.addRecipe(ItemStacks.wood4x, new Object[]{
-				" GB", "BG ", 'B', Item.stick, 'G', ItemStacks.wood2x});
-		GameRegistry.addRecipe(ItemStacks.wood8x, new Object[]{
-				" GB", "BG ", 'B', Item.stick, 'G', ItemStacks.wood4x});
-		GameRegistry.addRecipe(ItemStacks.wood16x, new Object[]{
-				" GB", "BG ", 'B', Item.stick, 'G', ItemStacks.wood8x});
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood2x, new Object[]{
+				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.woodgear}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood4x, new Object[]{
+				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood2x}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood8x, new Object[]{
+				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood4x}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood16x, new Object[]{
+				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood8x}));
 
 		GameRegistry.addRecipe(ItemStacks.stone2x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stonegear});
@@ -425,23 +428,23 @@ public class RotaryRecipes {
 		}
 		else {
 			ItemRegistry.SCREWDRIVER.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
-				"I  ", " S ", "  W", 'S', Item.stick, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
+				"I  ", " S ", "  W", 'S', "stickWood", 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
 			RotaryCraft.logger.log("HarvestCraft not found, loading iron screwdriver recipe.");
 		}
 
 		ItemRegistry.SCREWDRIVER.addRecipe(new ExpandedOreRecipe(ItemRegistry.SCREWDRIVER.getCraftedProduct(1), new Object[]{
-			"I  ", " S ", "  W", 'S', Item.stick, 'I', ItemStacks.steelingot, 'W', ExpandedOreRecipe.getWoodList()}));
+			"I  ", " S ", "  W", 'S', "stickWood", 'I', ItemStacks.steelingot, 'W', ExpandedOreRecipe.getWoodList()}));
 		ItemRegistry.METER.addRecipe(new ExpandedOreRecipe(ItemRegistry.METER.getCraftedProduct(1), new Object[]{
-			"WWW", "WEW", " S ", 'S', Item.stick, 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
+			"WWW", "WEW", " S ", 'S', "stickWood", 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', ExpandedOreRecipe.getWoodList()}));
 		ItemRegistry.HANDBOOK.addRecipe("RSR", "PPP", "PPP", 'R', Item.redstone, 'S', Item.ingotIron, 'P', Item.paper);
 
 		ItemRegistry.BEDPICK.addEnchantedRecipe(Enchantment.silkTouch, 1, "BBB", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 		ItemRegistry.BEDAXE.addRecipe("BB ", "BS ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 		ItemRegistry.BEDSHOVEL.addRecipe(" B ", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 
-		ItemRegistry.STEELPICK.addRecipe("BBB", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
-		ItemRegistry.STEELAXE.addRecipe("BB ", "BS ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
-		ItemRegistry.STEELSHOVEL.addRecipe(" B ", " S ", " S ", 'S', Item.stick, 'B', ItemStacks.steelingot);
+		ItemRegistry.STEELPICK.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELPICK.getStackOf(), "BBB", " S ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
+		ItemRegistry.STEELAXE.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELAXE.getStackOf(), "BB ", "BS ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
+		ItemRegistry.STEELSHOVEL.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELSHOVEL.getStackOf(), " B ", " S ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
 
 		ItemRegistry.BEDHELM.addEnchantedRecipe(Enchantment.projectileProtection, 4, "III", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDBOOTS.addEnchantedRecipe(Enchantment.featherFalling, 4, "I I", "I I", 'I', ItemStacks.bedingot);
@@ -616,7 +619,7 @@ public class RotaryRecipes {
 		MachineRegistry.FLYWHEEL.addMetaCrafting(2, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount});
 		MachineRegistry.FLYWHEEL.addMetaCrafting(3, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount});
 
-		MachineRegistry.SHAFT.addRecipe(new ExpandedOreRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{"BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', Item.stick}));
+		MachineRegistry.SHAFT.addRecipe(new ExpandedOreRecipe(MachineRegistry.SHAFT.getCraftedMetadataProduct(0), new Object[]{"BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', "stickWood"}));
 		MachineRegistry.SHAFT.addMetaCrafting(1, new Object[]{"sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod});
 		MachineRegistry.SHAFT.addMetaCrafting(2, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem});
 		MachineRegistry.SHAFT.addMetaCrafting(3, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft});

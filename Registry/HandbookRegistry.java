@@ -49,6 +49,7 @@ public enum HandbookRegistry {
 	SCREW("Screwdriver", ItemRegistry.SCREWDRIVER),
 	PIPE("Pipe", MachineRegistry.PIPE),
 	FUELLINE("Fuel Line", MachineRegistry.FUELLINE),
+	VALVE("Valve Pipe", MachineRegistry.VALVE),
 	ENCHANTING("Enchanting Machines"),
 	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------ENGINES--------------------//

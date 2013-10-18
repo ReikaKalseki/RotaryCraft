@@ -87,11 +87,11 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		return false;
 	}
 
-	private boolean canIntakeFluid(Fluid f) {
+	public boolean canIntakeFluid(Fluid f) {
 		return fuelType == Fuels.EMPTY || f.equals(FluidRegistry.getFluid(fuelType.fluidName));
 	}
 
-	private boolean canIntakeFluid(String f) {
+	public boolean canIntakeFluid(String f) {
 		return fuelType == Fuels.EMPTY || f.equals(fuelType.fluidName);
 	}
 
@@ -220,7 +220,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE;
 	}
 
 	@Override
@@ -245,6 +245,10 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	public Fuels getFuelType() {
 		return fuelType;
+	}
+
+	public void setFuelType(Fuels f) {
+		fuelType = f;
 	}
 
 	public Fluid getContainedFuel() {

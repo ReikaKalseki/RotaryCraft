@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -175,35 +176,49 @@ public class ItemMulti extends ItemBasic {
 	public String getUnlocalizedName(ItemStack is)
 	{
 		int d = is.getItemDamage();
+		String s = super.getUnlocalizedName();
 		switch(type) {
 		case 0:
-			return super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+			break;
 		case 1:
-			return super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+			break;
 		case 2:
-			return super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
+			break;
 		case 3:
-			return super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+			break;
 		case 4:
-			return super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+			break;
 		case 6:
-			return super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+			break;
 		case 7:
-			return super.getUnlocalizedName() + "." + RotaryNames.engineNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.engineNames[d];
+			break;
 		case 8:
-			return super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+			break;
 		case 9:
-			return super.getUnlocalizedName();// + "." + RotaryNames.spawnerNames[d];
+			s = super.getUnlocalizedName();// + "." + RotaryNames.spawnerNames[d];
+			break;
 		case 10:
-			return super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
+			break;
 		case 11:
-			return super.getUnlocalizedName() + "." + RotaryNames.shaftNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.shaftNames[d];
+			break;
 		case 12:
-			return super.getUnlocalizedName() + "." + RotaryNames.gearboxItemNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.gearboxItemNames[d];
+			break;
 		case 23:
-			return super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
+			break;
 		}
-		return super.getUnlocalizedName();
+		return ReikaStringParser.stripSpaces(s.toLowerCase());
 	}
 
 	public int getType() {

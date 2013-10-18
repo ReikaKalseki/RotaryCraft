@@ -28,6 +28,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelReservoir;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityFuelLine.Fuels;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
@@ -117,7 +118,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				}
 				if (m == MachineRegistry.HOSE) {
 					TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null) {
+					if (tile != null && this.canAcceptFluid(FluidRegistry.getFluid("lubricant"))) {
 						oldLevel = tile.lubricant;
 						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
 						tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("lubricant"));
@@ -125,10 +126,17 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				}
 				if (m == MachineRegistry.FUELLINE) {
 					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null) {
+					if (tile != null && tile.getContainedFuel() != null) {
+						Fuels f = tile.getFuelType();
 						oldLevel = tile.fuel;
-						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
-						tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("jet fuel"));
+						if (f == Fuels.JETFUEL && this.canAcceptFluid(FluidRegistry.getFluid("jet fuel"))) {
+							tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
+							tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("jet fuel"));
+						}
+						if (f == Fuels.ETHANOL && this.canAcceptFluid(FluidRegistry.getFluid("rc ethanol"))) {
+							tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
+							tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("rc ethanol"));
+						}
 					}
 				}
 			}
@@ -185,12 +193,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.PIPE || m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE;
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side != ForgeDirection.DOWN;
+		return (side != ForgeDirection.DOWN && p != MachineRegistry.VALVE) || (side == ForgeDirection.UP && p == MachineRegistry.VALVE);
 	}
 
 	@Override
