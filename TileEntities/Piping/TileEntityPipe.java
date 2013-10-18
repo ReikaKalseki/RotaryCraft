@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +21,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
@@ -48,6 +50,7 @@ public class TileEntityPipe extends TileEntityPiping {
 		this.transfer(world, x, y, z);
 		this.drainReservoir(world, x, y, z);
 		this.getFromBucketFiller(world, x, y, z);
+		this.drainLavaMaker(world, x, y, z);
 		if (liquidLevel < 0)
 			liquidLevel = 0;
 		if (liquidLevel == 0)
@@ -117,6 +120,28 @@ public class TileEntityPipe extends TileEntityPiping {
 				tile.addLiquid(1, f);
 			}
 			fluidPressure = tile.liquidPressure;
+		}
+	}
+
+	private void drainLavaMaker(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (dir != ForgeDirection.DOWN) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (liquidID == FluidRegistry.LAVA.getBlockID() || liquidID == -1) {
+					if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.LAVAMAKER) {
+						TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+						if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
+							oldLevel = tile.liquidLevel;
+							liquidID = FluidRegistry.LAVA.getBlockID();
+							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+							liquidLevel += oldLevel/4+1;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -244,8 +269,7 @@ public class TileEntityPipe extends TileEntityPiping {
 		liquidLevel = NBT.getInteger("level");
 		fluidPressure = NBT.getInteger("pressure");
 
-		if (liquidLevel < 0)
-		{
+		if (liquidLevel < 0) {
 			liquidLevel = 0;
 		}
 	}
@@ -262,12 +286,12 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER;
+		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS;
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return true;
+		return this.canConnectToPipe(p);
 	}
 
 	@Override

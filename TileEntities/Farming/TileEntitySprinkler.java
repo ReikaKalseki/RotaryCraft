@@ -26,7 +26,7 @@ import Reika.RotaryCraft.Models.ModelSprinkler;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect, PipeConnector {
 

@@ -81,9 +81,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 

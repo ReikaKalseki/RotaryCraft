@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +20,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 
 public class TileEntityHose extends TileEntityPiping {

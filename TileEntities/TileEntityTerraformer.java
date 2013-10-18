@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityTerraformer extends TileEntityLiquidInventoryReceiver implements SelectableTiles {
 

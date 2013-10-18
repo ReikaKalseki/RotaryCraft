@@ -25,6 +25,9 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 
