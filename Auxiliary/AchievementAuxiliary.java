@@ -51,7 +51,7 @@ public abstract class AchievementAuxiliary {
 		MachineRegistry.SPRINKLER.getCraftedProduct(),
 		MachineRegistry.FLOODLIGHT.getCraftedProduct(),
 		ItemStacks.scrap,
-		new ItemStack(RotaryCraft.gbxitems.itemID, 1, RotaryNames.gearboxItemNames.length-2),
+		new ItemStack(RotaryCraft.gbxitems.itemID, 1, RotaryNames.getNumberGearTypes()-2),
 		new ItemStack(Item.sugar),
 		new ItemStack(Block.blockRedstone),
 		MachineRegistry.TNTCANNON.getCraftedProduct(),

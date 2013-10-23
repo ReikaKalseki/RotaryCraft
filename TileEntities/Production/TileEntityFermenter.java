@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
+import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 
 public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver implements TemperatureTE
 {
@@ -192,6 +193,9 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 			temperaturetick = 0;
 			this.updateTemperature(world, x, y, z, meta);
 		}
+
+		this.getWater(world, x, y, z);
+
 		if (product == null) {
 			idle = true;
 			return;
@@ -234,6 +238,23 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 			fermenterCookTime = 0;
 		}
 
+	}
+
+	private void getWater(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == MachineRegistry.PIPE) {
+				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+				if (te != null && te.liquidID == 9) {
+					tank.addLiquid(te.liquidLevel/4+1, FluidRegistry.WATER);
+					te.liquidLevel -= te.liquidLevel/4+1;
+				}
+			}
+		}
 	}
 
 	private boolean canMake() {

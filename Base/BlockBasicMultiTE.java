@@ -197,7 +197,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
-			ep.attackEntityFrom(DamageSource.inWall, 4);
+			ep.attackEntityFrom(DamageSource.inWall, 2);
 			ReikaChatHelper.write("Your tool has shattered into a dozen pieces.");
 			return true;
 		}

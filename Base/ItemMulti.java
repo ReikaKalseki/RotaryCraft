@@ -125,7 +125,7 @@ public class ItemMulti extends ItemBasic {
 			j = RotaryNames.compactNames.length;
 			break;
 		case 7: //engines
-			j = RotaryNames.engineNames.length;
+			j = EnumEngineType.engineList.length;
 			break;
 		case 8: //powders
 			j = RotaryNames.powderNames.length;
@@ -137,10 +137,10 @@ public class ItemMulti extends ItemBasic {
 			j = RotaryNames.pipeNames.length;
 			break;
 		case 11: //shafts
-			j = RotaryNames.shaftItemNames.length;
+			j = RotaryNames.getNumberShaftTypes();
 			break;
 		case 12: //gearboxes
-			j = RotaryNames.gearboxItemNames.length;
+			j = RotaryNames.getNumberGearTypes();
 			break;
 		case 23: //gearunits
 			j = RotaryNames.gearUnitNames.length;
@@ -197,7 +197,7 @@ public class ItemMulti extends ItemBasic {
 			s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
 			break;
 		case 7:
-			s = super.getUnlocalizedName() + "." + RotaryNames.engineNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
 			break;
 		case 8:
 			s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
@@ -209,10 +209,10 @@ public class ItemMulti extends ItemBasic {
 			s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
 			break;
 		case 11:
-			s = super.getUnlocalizedName() + "." + RotaryNames.shaftNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
 			break;
 		case 12:
-			s = super.getUnlocalizedName() + "." + RotaryNames.gearboxItemNames[d];
+			s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
 			break;
 		case 23:
 			s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];

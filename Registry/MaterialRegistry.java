@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
@@ -29,6 +30,8 @@ public enum MaterialRegistry {
 	private double tensile;
 	private double shear;
 	private double rho;
+
+	public static final MaterialRegistry[] matList = values();
 
 	private MaterialRegistry(double E, double G, double TS, double S, double den) {
 		Emod = E;
@@ -124,5 +127,9 @@ public enum MaterialRegistry {
 			}
 		}
 		return false;
+	}
+
+	public String getName() {
+		return StatCollector.translateToLocal("material."+this.name().toLowerCase());
 	}
 }

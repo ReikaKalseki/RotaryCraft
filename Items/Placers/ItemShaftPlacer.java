@@ -62,7 +62,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			if (is.getItemDamage() == RotaryNames.shaftItemNames.length-1) {
+			if (is.getItemDamage() == RotaryNames.getNumberShaftTypes()-1) {
 				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.SHAFT.getBlockID());
 				TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 				if (sha != null) {
@@ -90,7 +90,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < RotaryNames.shaftItemNames.length; i++) {
+		for (int i = 0; i < RotaryNames.getNumberShaftTypes(); i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
 		}

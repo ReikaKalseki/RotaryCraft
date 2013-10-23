@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.IDRegistry;
@@ -61,49 +62,49 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements RegistrationList, IDRegistry {
 
-	SCREWDRIVER(0, false, 		"Screwdriver", 				ItemScrewdriver.class),
-	METER(16, false, 			"Angular Transducer", 		ItemMeter.class),
-	DEBUG(112, false, 			"Magic Wand", 				ItemDebug.class),
-	WORLDEDIT(114, 115, true, 	"WorldEdit Tool", 			ItemWorldEdit.class),
-	HANDBOOK(208, false, 		"RotaryCraft Handbook", 	ItemHandBook.class),
-	YEAST(32, false, 			"Yeast", 					ItemBasic.class),
-	ETHANOL(64, false, 			"Ethanol Crystals", 		ItemBasic.class),
-	CANOLA(80, true, 			"Canola Seeds", 			ItemCanolaSeed.class),
-	SPRING(96, true, 			"#Wind Spring", 			ItemCoil.class),
-	ULTRASOUND(128, true, 		"Ultrasound", 				ItemUltrasound.class),
-	MOTION(144, true, 			"Motion Tracker", 			ItemMotionTracker.class),
-	VACUUM(160, true, 			"Vacuum", 					ItemVacuum.class),
-	STUNGUN(192, true, 			"Knockback Gun", 			ItemStunGun.class),
-	GRAVELGUN(176, true, 		"Gravel Gun", 				ItemGravelGun.class),
-	FIREBALL(224, 232, true, 	"Fireball Launcher", 		ItemFireballLauncher.class),
-	BEDPICK(101, false, 		"Bedrock Pickaxe", 			ItemBedrockPickaxe.class),
-	BEDAXE(100, false, 			"Bedrock Axe", 				ItemBedrockAxe.class),
-	BEDSHOVEL(102, false, 		"Bedrock Shovel", 			ItemBedrockShovel.class),
-	NVG(97, true, 				"Night Vision Goggles", 	ItemNightVisionGoggles.class),
-	NVH(48, true, 				"Night Vision Helmet", 		ItemNightVisionHelmet.class),
-	HANDCRAFT(33, false, 		"Handheld Crafting Tool", 	ItemHandheldCrafting.class),
-	RAILGUN(113, true, 			"#Railgun Ammunition", 		ItemRailGunAmmo.class),
-	BUCKET(104, 106, true, 		"#Buckets", 				ItemFuelLubeBucket.class),
-	TARGET(98, false, 			"TNT Cannon Targeting Aid", ItemTarget.class),
-	IOGOGGLES(1, true, 			"I/O Goggles", 				ItemIOGoggles.class),
-	SLIDE(2, true, 				"#Projector Slides", 		ItemBasic.class),
-	KEY(4, false,				"Cannon Key",				ItemCannonKey.class),
-	SHELL(5, false,				"Explosive Shell",			ItemBasic.class),
-	MINECART(6, false,			"Ethanol Minecart",			ItemEthanolMinecart.class),
-	BEDHELM(7, false,			"Bedrock Helmet",			ItemBedrockArmor.class),
-	BEDCHEST(9, false,			"Bedrock Chestplate",		ItemBedrockArmor.class),
-	BEDLEGS(10, false,			"Bedrock Leggings",			ItemBedrockArmor.class),
-	BEDBOOTS(8, false,			"Bedrock Boots",			ItemBedrockArmor.class),
-	TILESELECTOR(11, false,		"Tile Selector",			ItemTileSelector.class),
-	JETCHEST(12, false,			"Bedrock Jetpack",			ItemJetPackChest.class, ModList.INDUSTRIALCRAFT),
-	STEELPICK(13, true,			"HSLA Steel Pickaxe",		ItemSteelPick.class),
-	STEELAXE(14, true,			"HSLA Steel Axe",			ItemSteelAxe.class),
-	STEELSHOVEL(15, true,		"HSLA Steel Shovel",		ItemSteelShovel.class),
-	STEELHELMET(17, false,		"HSLA Steel Helmet",		ItemSteelArmor.class),
-	STEELCHEST(18, false,		"HSLA Steel Chestplate",	ItemSteelArmor.class),
-	STEELLEGS(19, false,		"HSLA Steel Leggings",		ItemSteelArmor.class),
-	STEELBOOTS(20, false,		"HSLA Steel Boots",			ItemSteelArmor.class),
-	STRONGCOIL(99, true,		"#High-Strength Spring",	ItemCoil.class);
+	SCREWDRIVER(0, false, 		"item.screwdriver", 		ItemScrewdriver.class),
+	METER(16, false, 			"item.meter", 				ItemMeter.class),
+	DEBUG(112, false, 			"item.debug", 				ItemDebug.class),
+	WORLDEDIT(114, 115, true, 	"item.worldedit", 			ItemWorldEdit.class),
+	HANDBOOK(208, false, 		"item.handbook", 			ItemHandBook.class),
+	YEAST(32, false, 			"item.yeast", 				ItemBasic.class),
+	ETHANOL(64, false, 			"item.ethanol", 			ItemBasic.class),
+	CANOLA(80, true, 			"item.canola", 				ItemCanolaSeed.class),
+	SPRING(96, true, 			"#item.spring", 			ItemCoil.class),
+	ULTRASOUND(128, true, 		"item.ultrasound", 			ItemUltrasound.class),
+	MOTION(144, true, 			"item.motion", 				ItemMotionTracker.class),
+	VACUUM(160, true, 			"item.vacuum", 				ItemVacuum.class),
+	STUNGUN(192, true, 			"item.stungun", 			ItemStunGun.class),
+	GRAVELGUN(176, true, 		"item.gravelgun", 			ItemGravelGun.class),
+	FIREBALL(224, 232, true, 	"item.fireball", 			ItemFireballLauncher.class),
+	BEDPICK(101, false, 		"item.bedpick", 			ItemBedrockPickaxe.class),
+	BEDAXE(100, false, 			"item.bedaxe", 				ItemBedrockAxe.class),
+	BEDSHOVEL(102, false, 		"item.bedshovel", 			ItemBedrockShovel.class),
+	NVG(97, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
+	NVH(48, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
+	HANDCRAFT(33, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
+	RAILGUN(113, true, 			"#item.railgun", 			ItemRailGunAmmo.class),
+	BUCKET(104, 106, true, 		"#item.bucket", 			ItemFuelLubeBucket.class),
+	TARGET(98, false, 			"item.target", 				ItemTarget.class),
+	IOGOGGLES(1, true, 			"item.iogoggles", 			ItemIOGoggles.class),
+	SLIDE(2, true, 				"#item.slide", 				ItemBasic.class),
+	KEY(4, false,				"item.key",					ItemCannonKey.class),
+	SHELL(5, false,				"item.shell",				ItemBasic.class),
+	MINECART(6, false,			"item.ethacart",			ItemEthanolMinecart.class),
+	BEDHELM(7, false,			"item.bedhelm",				ItemBedrockArmor.class),
+	BEDCHEST(9, false,			"item.bedchest",			ItemBedrockArmor.class),
+	BEDLEGS(10, false,			"item.bedlegs",				ItemBedrockArmor.class),
+	BEDBOOTS(8, false,			"item.bedboots",			ItemBedrockArmor.class),
+	TILESELECTOR(11, false,		"item.tileselector",		ItemTileSelector.class),
+	JETCHEST(12, false,			"item.jetchest",			ItemJetPackChest.class, ModList.INDUSTRIALCRAFT),
+	STEELPICK(13, true,			"item.steelpick",			ItemSteelPick.class),
+	STEELAXE(14, true,			"item.steelaxe",			ItemSteelAxe.class),
+	STEELSHOVEL(15, true,		"item.steelshovel",			ItemSteelShovel.class),
+	STEELHELMET(17, false,		"item.steelhelmet",			ItemSteelArmor.class),
+	STEELCHEST(18, false,		"item.steelchest",			ItemSteelArmor.class),
+	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
+	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
+	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -253,24 +254,25 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public String getBasicName() {
+		String sg = name;
 		if (name.startsWith("#"))
-			return name.substring(1);
-		return name;
+			sg = name.substring(1);
+		return StatCollector.translateToLocal(sg);
 	}
 
 	public String getMultiValuedName(int dmg) {
 		if (!this.hasMultiValuedName())
 			throw new RuntimeException("Item "+name+" was called for a multi-name, yet does not have one!");
 		if (this == SPRING)
-			return "Wind Spring ("+String.format("%d", dmg)+" kJ)";
+			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
 		if (this == STRONGCOIL)
-			return "High-Strength Spring ("+String.format("%d", dmg)+" kJ)";
+			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
 		if (this == BUCKET)
-			return RotaryNames.bucketNames[dmg];
+			return RotaryNames.getBucketName(dmg);
 		if (this == RAILGUN)
-			return "RailGun Ammunition ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
+			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
 		if (this == SLIDE)
-			return "Projector Slide "+String.format("%d", dmg);
+			return this.getBasicName()+" "+String.format("%d", dmg);
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
 
@@ -360,7 +362,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case RAILGUN:
 			return 16;
 		case BUCKET:
-			return RotaryNames.bucketNames.length;
+			return 3;
 		default:
 			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
 		}

@@ -10,75 +10,69 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class RotaryNames {
 
-	public static final String[] engineNames = {
-		"DC Electric Engine", "Wind Turbine", "Steam Engine", "Gasoline Engine", "AC Electric Engine", "Performance Engine",
-		"Hydrokinetic Engine", "Microturbine", "Gas Turbine"
+	private static final String[] engineNames = {
+		"engine.dc", "engine.wind", "engine.steam", "engine.gas", "engine.ac", "engine.sport",
+		"engine.hydro", "engine.micro", "engine.jet"
 	};
 
-	public static final String[] gearboxNames = {
-		"2:1 Gearbox", "2:1 Gearbox", "2:1 Gearbox", "2:1 Gearbox", "4:1 Gearbox", "4:1 Gearbox",
-		"4:1 Gearbox", "4:1 Gearbox", "8:1 Gearbox", "8:1 Gearbox", "8:1 Gearbox", "8:1 Gearbox",
-		"16:1 Gearbox",	"16:1 Gearbox", "16:1 Gearbox", "16:1 Gearbox"
+	private static final String[] advGearItemNames = {
+		"advgear.worm", "advgear.cvt", "advgear.coil"
 	};
 
-	public static final String[] advGearNames = {
-		"Worm Gear", "Worm Gear", "Worm Gear", "Worm Gear", "CVT Unit", "CVT Unit",	"CVT Unit", "CVT Unit",
-		"Industrial Coil",  "Industrial Coil", "Industrial Coil", "Industrial Coil"
+	private static final String[] flywheelItemNames = {
+		"flywheel.wood", "flywheel.stone", "flywheel.iron", "flywheel.gold"
 	};
 
-	public static final String[] advGearItemNames = {
-		"Worm Gear", "CVT Unit", "Industrial Coil"
+	private static final String[] shaftItemNames = {
+		"shaft.wood", "shaft.stone", "shaft.steel", "shaft.diamond", "shaft.bedrock", "shaft.cross"
 	};
 
-	public static final String[] flywheelNames = {
-		"Wood Flywheel", "Wood Flywheel", "Wood Flywheel", "Wood Flywheel", "Stone Flywheel", "Stone Flywheel",
-		"Stone Flywheel", "Stone Flywheel", "Iron Flywheel", "Iron Flywheel", "Iron Flywheel", "Iron Flywheel",
-		"Gold Flywheel", "Gold Flywheel", "Gold Flywheel", "Gold Flywheel"
+	private static final String[] liquidNames = {
+		"liquid.lube", "liquid.jetfuel", "liquid.ethanol"
 	};
 
-	public static final String[] flywheelItemNames = {
-		"Wood Flywheel", "Stone Flywheel", "Iron Flywheel", "Gold Flywheel"
-	};
-
-	public static final String[] shaftNames = {
-		"Shaft", "Shaft", "Shaft", "Shaft", "Shaft", "Shaft", "Shaft Cross"
-	};
-
-	public static final String[] shaftItemNames = {
-		"Wood Shaft", "Stone Shaft", "Steel Shaft", "Diamond Shaft", "Bedrock Shaft", "Shaft Cross"
-	};
-
-	public static final String[] bucketNames = {
-		"Lubricant Bucket", "Jet Fuel Bucket", "Ethanol Bucket"
-	};
-
-	public static final String[] gearboxItemNames = {
+	//Never presented directly, not in .lang
+	private static final String[] gearboxItemNames = {
 		"Wooden 2:1 Gearbox", "Stone 2:1 Gearbox", "Steel 2:1 Gearbox", "Diamond 2:1 Gearbox", "Bedrock 2:1 Gearbox",
 		"Wooden 4:1 Gearbox", "Stone 4:1 Gearbox", "Steel 4:1 Gearbox", "Diamond 4:1 Gearbox", "Bedrock 4:1 Gearbox",
 		"Wooden 8:1 Gearbox", "Stone 8:1 Gearbox", "Steel 8:1 Gearbox", "Diamond 8:1 Gearbox", "Bedrock 8:1 Gearbox",
 		"Wooden 16:1 Gearbox", "Stone 16:1 Gearbox", "Steel 16:1 Gearbox", "Diamond 16:1 Gearbox", "Bedrock 16:1 Gearbox",
 	};
 
+	//Not to be edited
+	public static final String[] gearboxRatios = {
+		"2:1", "4:1", "8:1", "16:1"
+	};
+
+	//Not to be edited
+	public static final String[] gearUnitRatios = {
+		"2x", "4x", "8x", "16x"
+	};
+
 	public static final String[] enginePartNames = {
-		"Impeller", "Compressor", "Turbine", "Diffuser", "Combustor", "Cylinder", "Radiator", "Condenser", "Gold Coil", "Wood Gear",
-		"Stone Gear", "Diamond Gear", "Bedrock Gear", "Paddle Panel", "Shaft Core", "Ignition Unit"
+		"crafting.impeller", "crafting.compressor", "crafting.turbine", "crafting.diffuser", "crafting.combustor", "crafting.cylinder",
+		"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "crafting.woodgear", "crafting.stonegear", "crafting.diamondgear",
+		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition"
 	};
 
 	public static final String[] shaftPartNames = {
-		"Base Panel", "HSLA Steel Ingot", "Shaft Unit", "Mount", "HSLA Steel Gear", "2x Gear Unit",
-		"4x Gear Unit", "8x Gear Unit", "16x Gear Unit", "HSLA Steel Scrap", "Iron Scrap",
-		"Wood Flywheel Core", "Stone Flywheel Core", "Iron Flywheel Core", "Gold Flywheel Core", "Worm Gear"
+		"crafting.panel", "crafting.ingot", "crafting.shaft", "crafting.mount", "crafting.gear", "crafting.gear2",
+		"crafting.gear4", "crafting.gear8", "crafting.gear16", "crafting.scrap", "crafting.ironscrap",
+		"crafting.woodcore", "crafting.stonecore", "crafting.ironcore", "crafting.goldcore", "crafting.worm"
 	};
 
 	public static final String[] miscPartNames = {
-		"Heat Ray Barrel", "Lens", "Power Module", "Heat Ray Core", "Linear Induction Motor", "Propeller Blade", "Hub", "Mirror",
-		"Generator", "Railgun Accelerator", "Turret Base", "Turret Aiming Unit", "Compound Turbine"
+		"crafting.barrel", "crafting.lens", "crafting.power", "crafting.heatcore", "crafting.lim", "crafting.prop", "crafting.hub",
+		"crafting.mirror", "crafting.generator", "crafting.accel", "crafting.turretbase", "crafting.aiming", "crafting.compound"
 	};
 
 	public static final String[] gearUnitNames = {
@@ -89,84 +83,79 @@ public class RotaryNames {
 	};
 
 	public static final String[] borerPartNames = {
-		"Drill", "Pressure Head", "Radar Unit", "Sonar Unit", "Circuit Board", "Screen", "Mixer", "Saw", "Shaft Bearing", "Belt",
-		"Ball Bearing", "Brake Disc", "Tension Coil", "Stone Rod", "Diamond Shaft Unit", "Bedrock Shaft Unit"
+		"crafting.drill", "crafting.pressure", "crafting.radar", "crafting.sonar", "crafting.pcb", "crafting.screen", "crafting.mixer", "crafting.saw", "crafting.bearing",
+		"crafting.belt", "crafting.ballbearing", "crafting.brake", "crafting.coil",
+		"crafting.stoneshaft", "crafting.diamondshaft", "crafting.bedrockshaft"
 	};
 
 	public static final String[] blockNames = {
-		"Steel Block", "Anthracite Block", "Lonsdaleite Block"
+		"block.steel", "block.anthra", "block.lonsda"
 	};
 
 	public static final String[] powderNames = {
-		"Netherrack Dust", "Tar Sand", "Sludge", "Sawdust", "Bedrock Dust", "Salt", "Ammonium Nitrate" , "Silver Iodide",
-		"Aluminum Powder"
+		"misc.netherdust", "misc.tar", "misc.sludge", "misc.sawdust", "misc.beddust", "misc.salt", "misc.nh4" , "misc.agi",
+		"misc.alum"
 	};
 
 	public static final String[] extractNames = {
-		"Coal Ore Dust", "Iron Ore Dust", "Gold Ore Dust", "Redstone Ore Dust",
-		"Lapis Ore Dust", "Diamond Ore Dust", "Emerald Ore Dust", "Nether Quartz Dust",
-		"Coal Ore Slurry", "Iron Ore Slurry", "Gold Ore Slurry", "Redstone Ore Slurry",
-		"Lapis Ore Slurry", "Diamond Ore Slurry", "Emerald Ore Slurry", "Nether Quartz Slurry",
-		"Coal Solution", "Iron Solution", "Gold Solution", "Redstone Solution",
-		"Lapis Lazuli Solution", "Diamond Solution", "Emerald Solution", "Nether Quartz Solution",
-		"Coal Flakes", "Iron Flakes", "Gold Flakes", "Redstone Flakes",
-		"Lapis Lazuli Flakes", "Diamond Flakes", "Emerald Flakes", "Nether Quartz Flakes", "Silver Flakes"
+		"extract.coaldust", "extract.irondust", "extract.golddust", "extract.reddust",
+		"extract.bluedust", "extract.diadust", "extract.greendust", "extract.quartzdust",
+
+		"extract.coalslurry", "extract.ironslurry", "extract.goldslurry", "extract.redslurry",
+		"extract.blueslurry", "extract.diaslurry", "extract.greenslurry", "extract.quartzslurry",
+
+		"extract.coalsolu", "extract.ironsolu", "extract.goldsolu", "extract.redsolu",
+		"extract.bluesolu", "extract.diasolu", "extract.greensolu", "extract.quartzsolu",
+
+		"extract.coalflakes", "extract.ironflakes", "extract.goldflakes", "extract.redflakes",
+		"extract.blueflakes", "extract.diaflakes", "extract.greenflakes", "extract.quartzflakes", "extract.silverflakes"
 	};
 
 	public static final String[] compactNames = {
-		"Anthracite", "Prismane", "Lonsdaleite", "Bedrock Ingot", "Aluminum Ingot", "", "", "Silver Ingot"
+		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "", "", "misc.agingot"
 	};
 
 	public static final String[] pipeNames = {
-		"Lubricant Hose", "Liquid Pipe", "Fuel Line", "Liquid Spiller", "Valve Pipe"
+		"machine.hose", "machine.pipe", "machine.fuelline", "machine.spiller", "machine.valve"
 	};
-	/*
-	public static final String[] modOreNames = {
-		"Lead", "Copper", "Silver", "Titanium", "Tungsten", "Galena", "Tin", "Platinum", "Nickel", "Iridium", "Aluminum", "Sulfur",
-		"Cobalt", "Uranium", "Saltpeter", "Bauxite", "Ruby", "Sapphire", "Nikolite", "Cinnabar", "Green Sapphire", "Amethyst",
-		"Black Diamond", "Sitrine", "Cubic Zirconia", "Fuschia", "Jet" ,"Olivine", "Opal", "Smoky Quartz", "Sun", "Topaz", "Turquoise",
-		"White Alabaster", "Ardite", "Amber", "Pyrite", "Sphalerite", "Sodalite", "Sheldonite", "Certus Quartz"
-	};*/
 
 	public static void addNames() {
 
 		for (int i = 0; i < blockNames.length; i++) {
-			ItemStack machineStack = new ItemStack(RotaryCraft.decoblock, 1, i);
-			LanguageRegistry.addName(machineStack, blockNames[machineStack.getItemDamage()]);
+			ItemStack blockStack = new ItemStack(RotaryCraft.decoblock, 1, i);
+			LanguageRegistry.addName(blockStack, getName(blockNames[blockStack.getItemDamage()], false));
 		}
 
-		LanguageRegistry.addName(RotaryCraft.bedrockslice, "Bedrock Slice (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.bedrockslice, getName("block.bedrockslice", true));
 
-		LanguageRegistry.addName(RotaryCraft.blastglass, "Blast Glass Pane");
-		LanguageRegistry.addName(RotaryCraft.obsidianglass, "Blast Glass");
-		//LanguageRegistry.addName(RotaryCraft.gravlog, "Gravity Log Block (Technical Block)");
-		//LanguageRegistry.addName(RotaryCraft.gravleaves, "Gravity Leaf Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.blastglass, getName("block.blastpane", false));
+		LanguageRegistry.addName(RotaryCraft.obsidianglass, getName("block.blastglass", false));
 
-		LanguageRegistry.addName(RotaryCraft.canola, "Canola Plant (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.canola, getName("block.canola", true));
 
-		LanguageRegistry.addName(RotaryCraft.spawner, "Monster Spawner");
+		LanguageRegistry.addName(RotaryCraft.spawner, StatCollector.translateToLocal("item.spawner"));
 
-		LanguageRegistry.addName(RotaryCraft.miningpipe, "Mining Pipe (Technical Block)");
-		LanguageRegistry.addName(RotaryCraft.lightblock, "Light Block (Technical Block)");
-		LanguageRegistry.addName(RotaryCraft.beamblock, "Beam Block (Technical Block)");
-		LanguageRegistry.addName(RotaryCraft.lightbridge, "Bridge Block (Technical Block)");
+		LanguageRegistry.addName(RotaryCraft.miningpipe, getName("block.miningpipe", true));
+		LanguageRegistry.addName(RotaryCraft.lightblock, getName("block.light", true));
+		LanguageRegistry.addName(RotaryCraft.beamblock, getName("block.beam", true));
+		LanguageRegistry.addName(RotaryCraft.lightbridge, getName("block.bridge", true));
 
 		for (int i = 0; i < shaftPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), shaftPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), getName(shaftPartNames, i));
 		}
 		for (int i = 0; i < miscPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.misccraft, 1, i), miscPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.misccraft, 1, i), getName(miscPartNames, i));
 		}
 		for (int i = 0; i < enginePartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.enginecraft, 1, i), enginePartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.enginecraft, 1, i), getName(enginePartNames, i));
 		}
 		for (int i = 0; i < borerPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.borecraft, 1, i), borerPartNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.borecraft, 1, i), getName(borerPartNames, i));
 		}
 		for (int i = 0; i < extractNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), extractNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), getName(extractNames, i));
 		}
-		for (int i = 0; i < ModOreList.oreList.length; i++) {
+		for (int i = 0; i < ModOreList.oreList.length; i++) { //Need some way to parse
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), ModOreList.oreList[i].getName()+" Dust");
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].getName()+" Slurry");
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].getName()+" Solution");
@@ -174,53 +163,96 @@ public class RotaryNames {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].getName()+" "+ModOreList.oreList[i].getTypeName());
 		}
 		for (int i = 0; i < compactNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), compactNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), getName(compactNames, i));
 		}
 		for (int i = 0; i < engineNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.engineitems, 1, i), engineNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.engineitems, 1, i), getName(engineNames, i));
 		}
 		for (int i = 0; i < powderNames.length; i++) {
-			ItemStack jetfuelstack = new ItemStack(RotaryCraft.powders, 1, i);
-			LanguageRegistry.addName(jetfuelstack, powderNames[jetfuelstack.getItemDamage()]);
+			ItemStack powderstack = new ItemStack(RotaryCraft.powders, 1, i);
+			LanguageRegistry.addName(powderstack, getName(powderNames, powderstack.getItemDamage()));
 		}
 		for (int i = 0; i < pipeNames.length; i++) {
 			ItemStack pipestack = new ItemStack(RotaryCraft.pipeplacer, 1, i);
-			LanguageRegistry.addName(pipestack, pipeNames[pipestack.getItemDamage()]);
+			LanguageRegistry.addName(pipestack, getName(pipeNames, pipestack.getItemDamage()));
 		}
 		for (int i = 0; i < shaftItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), shaftItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), getName(shaftItemNames, i));
 		}
 		for (int i = 0; i < gearboxItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.gbxitems, 1, i), gearboxItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.gbxitems, 1, i), getGearboxName(i));
 		}
 		for (int i = 0; i < flywheelItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.flywheelitems, 1, i), flywheelItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.flywheelitems, 1, i), getName(flywheelItemNames, i));
 		}
 		for (int i = 0; i < advGearItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.advgearitems, 1, i), advGearItemNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.advgearitems, 1, i), getName(advGearItemNames, i));
 		}
 		for (int i = 0; i < gearUnitNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.gearunits, 1, i), gearUnitNames[i]);
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.gearunits, 1, i), getName(gearUnitNames, i));
 		}
 
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.machineplacer, 1, i), MachineRegistry.machineList[i].getName());
 		}
-		/*
-		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			LanguageRegistry.addName(BlockRegistry.blockList[i].getBlockVariable(), "TECHNICAL BLOCK "+BlockRegistry.blockList[i].getName(0));
-		}*/
-		/*
-		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-			ItemRegistry r = ItemRegistry.itemList[i];
-			if (r.hasMultiValuedName()) {
-				for (int j = 0; j < r.getNumberMetadatas(); j++) {
-					ItemStack is = new ItemStack(r.getShiftedID(), 1, j);
-					LanguageRegistry.addName(is, r.getMultiValuedName(j));
-				}
-			}
-			else
-				LanguageRegistry.addName(r.getItemInstance(), r.getBasicName());
-		}*/
+	}
+
+	private static String getName(String[] names, int i) {
+		return StatCollector.translateToLocal(names[i]);
+	}
+
+	public static String getGearboxName(int i) {
+		String mat = MaterialRegistry.matList[i%MaterialRegistry.matList.length].getName();
+		String ratio = gearboxRatios[i/5];
+		String name = MachineRegistry.GEARBOX.getName();
+		return mat+" "+ratio+" "+name;
+	}
+
+	public static String getGearUnitName(int i) {
+		MaterialRegistry[] mats = {MaterialRegistry.WOOD, MaterialRegistry.STONE, MaterialRegistry.DIAMOND, MaterialRegistry.BEDROCK};
+		String mat = mats[i%4].getName();
+		String ratio = gearUnitRatios[i/5];
+		return mat+" "+ratio+" "+StatCollector.translateToLocal("crafting.gearunit");
+	}
+
+	public static String getName(String tag, boolean tech) {
+		String sg = StatCollector.translateToLocal(tag);
+		if (tech && ConfigRegistry.DEBUGMODE.getState())
+			sg += " (Technical Block)";
+		return sg;
+	}
+
+	public static String getBucketName(int i) {
+		String liq = StatCollector.translateToLocal(liquidNames[i]);
+		String item = StatCollector.translateToLocal("item.bucket");
+		return liq+" "+item;
+	}
+
+	public static String getEngineName(int i) {
+		return getName(engineNames, i);
+	}
+
+	public static String getAdvGearName(int i) {
+		return getName(advGearItemNames, i);
+	}
+
+	public static String getShaftName(int i) {
+		return getName(shaftItemNames, i);
+	}
+
+	public static String getFlywheelName(int i) {
+		return getName(flywheelItemNames, i);
+	}
+
+	public static int getNumberShaftTypes() {
+		return shaftItemNames.length;
+	}
+
+	public static int getNumberGearTypes() {
+		return gearboxItemNames.length;
+	}
+
+	public static int getNumberFlywheelTypes() {
+		return flywheelItemNames.length;
 	}
 }

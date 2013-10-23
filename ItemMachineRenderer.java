@@ -93,7 +93,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 				a = -0.5F; b = -0.5F;
 			}
-			if (item.getItemDamage() == RotaryNames.shaftItemNames.length-1)
+			if (item.getItemDamage() == RotaryNames.getNumberShaftTypes()-1)
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -10000F);
 			else
 				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));

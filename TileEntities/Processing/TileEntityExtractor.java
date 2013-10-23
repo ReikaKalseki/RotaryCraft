@@ -363,9 +363,8 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 			this.bonusItems(inv[i]);
 
 		inv[i].stackSize--;
-		if (par5Random.nextInt(8) == 0)
-			if (i == 1 || i == 2)
-				tank.removeLiquid(RotaryConfig.MILLIBUCKET); //millis
+		if (i == 1 || i == 2)
+			tank.removeLiquid(RotaryConfig.MILLIBUCKET/8); //millis
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;/*
@@ -404,8 +403,7 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
-						if (par5Random.nextInt(8) == 0)
-							tank.removeLiquid(RotaryConfig.MILLIBUCKET);
+						tank.removeLiquid(RotaryConfig.MILLIBUCKET/8);
 					}
 					return true;
 				}
@@ -413,8 +411,7 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
-						if (par5Random.nextInt(8) == 0)
-							tank.removeLiquid(RotaryConfig.MILLIBUCKET);
+						tank.removeLiquid(RotaryConfig.MILLIBUCKET/8);
 					}
 					return true;
 				}

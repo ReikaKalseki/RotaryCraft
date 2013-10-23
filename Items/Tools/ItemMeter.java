@@ -26,7 +26,9 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
@@ -86,16 +88,16 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (tile instanceof ThermalMachine) {
 			ThermalMachine th = (ThermalMachine)tile;
-			ReikaChatHelper.writeString(String.format("%s Temperature: %dC", th.getName(), th.getTemperature()));
+			ReikaChatHelper.writeString(String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BLASTFURNACE) {
 			TileEntityBlastFurnace clicked = (TileEntityBlastFurnace)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Temperature: %dC.", clicked.getTemperature()));
+			ReikaChatHelper.writeString(String.format("%s: %dC.", Variables.TEMPERATURE, clicked.getTemperature()));
 			if (clicked.getTemperature() < clicked.SMELTTEMP)
-				ReikaChatHelper.writeString("Insufficient Temperature!");
+				RotaryAux.writeMessage("mintemp");
 			return true;
 		}
 		if (m == MachineRegistry.COOLINGFIN) {
@@ -107,31 +109,31 @@ public class ItemMeter extends ItemRotaryTool
 			if (!clicked.isEmpty())
 				ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
 			else
-				ReikaChatHelper.writeString("Reservoir is empty.");
+				RotaryAux.writeMessage("emptyres");
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
 			if (clicked.liquidID == -1 || clicked.liquidLevel <= 0) {
-				ReikaChatHelper.writeString("Pipe contains no liquid.");
+				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("Pipe contains %.3f m^3 of %s, with pressure %d kPa.", clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, FluidRegistry.lookupFluidForBlock(Block.blocksList[clicked.liquidID]).getLocalizedName().toLowerCase(), clicked.fluidPressure));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, FluidRegistry.lookupFluidForBlock(Block.blocksList[clicked.liquidID]).getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.fluidPressure));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine clicked = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Fuel line contains %.3f L of fuel.", clicked.fuel/(double)RotaryConfig.MILLIBUCKET));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f L of fuel.", m.getName(), clicked.fuel/(double)RotaryConfig.MILLIBUCKET));
 			return true;
 		}
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose clicked = (TileEntityHose)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("Hose contains %.3f L of lubricant.", clicked.lubricant/(double)RotaryConfig.MILLIBUCKET));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f L of lubricant.", m.getName(), clicked.lubricant/(double)RotaryConfig.MILLIBUCKET));
 			return true;
 		}
 		if (tile instanceof ShaftPowerEmitter) {
@@ -165,17 +167,17 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
 				torque = omega = 0;
 				if (clicked.type.isAirBreathing() && clicked.isDrowned(world, x, y, z))
-					ReikaChatHelper.write("Engine is Drowning!");
+					RotaryAux.writeMessage("drowning");
 				if (clicked.type == EnumEngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
-					ReikaChatHelper.write("Engine Intake is Blocked!");
+					RotaryAux.writeMessage("choke");
 				if (clicked.FOD >= 8)
-					ReikaChatHelper.writeString("Engine Destroyed from Animal Strikes!");
+					RotaryAux.writeMessage("fod");
 				if (clicked.type.isCooled() || clicked.isJetFailing) {
-					ReikaChatHelper.writeString(String.format("Temperature: %dC", clicked.temperature));
+					ReikaChatHelper.writeString(String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
 				}
 				if (clicked.type.burnsFuel()) {
 					int time = clicked.getFuelDuration();
-					String sg = String.format("Fuel Remaining: %s", ReikaFormatHelper.getSecondsAsClock(time));
+					String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
 					ReikaChatHelper.writeString(sg);
 				}
 				return true;
@@ -196,7 +198,7 @@ public class ItemMeter extends ItemRotaryTool
 				torque = omega = 0;
 				ReikaChatHelper.writeString(String.format("Maximum Range: %dm. Reaction Time: %.2fs", clicked.getMaxRange(), clicked.getReactionTime()/20F));
 				if (power < clicked.MINPOWER)
-					ReikaChatHelper.writeString("Insufficient Power!");
+					RotaryAux.writeMessage("minpower");
 				return true;
 
 			}
@@ -249,15 +251,15 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Obsidian Factory Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Obsidian Factory Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Obsidian Factory Receiving %.3f W @ %d rad/s.", power, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
 				ReikaChatHelper.writeString(String.format("Water: %dkL. Lava: %dkL.", clicked.getWater(), clicked.getLava()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
-					ReikaChatHelper.writeString("Insufficient Power!");
+					RotaryAux.writeMessage("minpower");
 				return true;
 			}
 			if (m == MachineRegistry.HEATRAY) {
@@ -268,16 +270,16 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Heat Ray Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Heat Ray Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Heat Ray Receiving %.3f W @ %d rad/s.", power, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
 				if (power >= clicked.MINPOWER)
-					ReikaChatHelper.writeString(String.format("Range %dm, dealing %ds of burn damage.", clicked.getRange(), clicked.getBurnTime()));
+					ReikaChatHelper.writeString(String.format("%s %dm, dealing %ds of burn damage.", Variables.RANGE.toString(), clicked.getRange(), clicked.getBurnTime()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
-					ReikaChatHelper.writeString("Insufficient Power!");
+					RotaryAux.writeMessage("minpower");
 				return true;
 			}
 			if (m == MachineRegistry.BUCKETFILLER) {
@@ -288,16 +290,16 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Bucket Filler Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Bucket Filler Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Bucket Filler Receiving %.3f W @ %d rad/s.", power, omega));
+					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
 				if (power >= clicked.MINPOWER)
 					ReikaChatHelper.writeString(String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
-					ReikaChatHelper.writeString("Insufficient Power!");
+					RotaryAux.writeMessage("minpower");
 				return true;
 			}
 			if (m == MachineRegistry.PUMP) {
@@ -315,7 +317,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("Pump Receiving %.3f W @ %d rad/s.", power, omega));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
-					ReikaChatHelper.writeString("Insufficient Power!");
+					RotaryAux.writeMessage("minpower");
 				ReikaChatHelper.writeString(String.format("Liquid Pressure at %d kPa.", clicked.liquidPressure));
 				return true;
 			}
@@ -452,12 +454,12 @@ public class ItemMeter extends ItemRotaryTool
 				omega = te.omega;
 				torque = te.torque;
 				if (power < te.MINPOWER)
-					ReikaChatHelper.write("Insufficient Power! "+name+" requires "+te.MINPOWER+" W.");
+					ReikaChatHelper.write(RotaryAux.getMessage("minpower")+" "+name+" requires "+te.MINPOWER+" W.");
 				if (!te.machine.isMinPowerOnly()) {
 					if (torque < te.MINTORQUE && !te.machine.hasNoDirectMinTorque())
-						ReikaChatHelper.write("Insufficient Torque! "+name+" requires "+te.MINTORQUE+" Nm.");
+						ReikaChatHelper.write(RotaryAux.getMessage("mintorque")+" "+name+" requires "+te.MINTORQUE+" Nm.");
 					if (omega < te.MINSPEED && !te.machine.hasNoDirectMinSpeed())
-						ReikaChatHelper.write("Insufficient Speed! "+name+" requires "+te.MINSPEED+" rad/s.");
+						ReikaChatHelper.write(RotaryAux.getMessage("minspeed")+" "+name+" requires "+te.MINSPEED+" rad/s.");
 				}
 			}
 
@@ -498,13 +500,13 @@ public class ItemMeter extends ItemRotaryTool
 		}
 
 		if (tile instanceof TemperatureTE) {
-			ReikaChatHelper.write("Temperature: "+((TemperatureTE)(tile)).getTemperature()+" C.");
+			ReikaChatHelper.write(Variables.TEMPERATURE+": "+((TemperatureTE)(tile)).getTemperature()+" C.");
 		}
 		if (tile instanceof PressureTE) {
-			ReikaChatHelper.write("Pressure: "+((PressureTE)(tile)).getPressure()+" kPa.");
+			ReikaChatHelper.write(Variables.PRESSURE+": "+((PressureTE)(tile)).getPressure()+" kPa.");
 		}
 		if (tile instanceof RangedEffect) {
-			ReikaChatHelper.write("Range: "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
+			ReikaChatHelper.write(Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
 		}
 		//ReikaChatHelper.writeString(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
 		if (tile instanceof TileEntityPowerReceiver) {

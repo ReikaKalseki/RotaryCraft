@@ -116,11 +116,11 @@ public final class HandbookAuxData {
 
 	private static void addPlants() {
 		ItemStack out;
-		ItemStack[] in = new ItemStack[3];
+		ItemStack[] in = new ItemStack[2];
 		ItemStack[] args;
 		out = (ItemRegistry.YEAST.getStackOf());
-		in = (new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Item.bucketWater), new ItemStack(Block.dirt)});
-		args = new ItemStack[]{out, in[0], in[1], in[2]};
+		in = (new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Block.dirt)});
+		args = new ItemStack[]{out, in[0], in[1]};
 		fermenter.add(args);
 
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
@@ -128,15 +128,15 @@ public final class HandbookAuxData {
 				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
 					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
 					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon, new ItemStack(Item.bucketWater)});
-					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon});
+					args = new ItemStack[]{out, in[0], in[1]};
 					fermenter.add(args);
 				}
 			}
 			else {
 				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon(), new ItemStack(Item.bucketWater)});
-				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon()});
+				args = new ItemStack[]{out, in[0], in[1]};
 				fermenter.add(args);
 			}
 		}
@@ -144,13 +144,13 @@ public final class HandbookAuxData {
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
 			if (ModWoodList.woodList[i].exists()) {
 				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling(), new ItemStack(Item.bucketWater)});
-				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling()});
+				args = new ItemStack[]{out, in[0], in[1]};
 				fermenter.add(args);
 
 				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf(), new ItemStack(Item.bucketWater)});
-				args = new ItemStack[]{out, in[0], in[1], in[2]};
+				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf()});
+				args = new ItemStack[]{out, in[0], in[1]};
 				fermenter.add(args);
 			}
 		}
@@ -162,13 +162,13 @@ public final class HandbookAuxData {
 				Method leaf = tree.getMethod("getDyeLeaf", int.class);
 				for (int j = 0; j < 16; j++) {
 					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(null, j), new ItemStack(Item.bucketWater)});
-					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(null, j)});
+					args = new ItemStack[]{out, in[0], in[1]};
 					fermenter.add(args);
 
 					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(null, j), new ItemStack(Item.bucketWater)});
-					args = new ItemStack[]{out, in[0], in[1], in[2]};
+					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(null, j)});
+					args = new ItemStack[]{out, in[0], in[1]};
 					fermenter.add(args);
 				}
 			}
@@ -273,7 +273,7 @@ public final class HandbookAuxData {
 		else if (h == HandbookRegistry.YEAST) {
 			int k = (int)((System.nanoTime()/1000000000)%fermenter.size());
 			ItemStack[] args = fermenter.get(k);
-			ItemStack[] in = new ItemStack[]{args[1], args[2], args[3]};
+			ItemStack[] in = new ItemStack[]{args[1], args[2]};
 			ItemStack out = args[0];
 			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in, dx+159, dy+32, out);
 		}

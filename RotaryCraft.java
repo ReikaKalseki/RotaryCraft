@@ -35,7 +35,6 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Instantiable.LanguageArray;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Resources.ItemSpawner;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
@@ -181,8 +180,6 @@ public class RotaryCraft extends DragonAPIMod {
 		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
 
 		this.setupClassFiles();
-
-		new LanguageArray("Reika/RotaryCraft/Language/", new String[]{"en_US"});
 	}
 
 	@Override
@@ -255,7 +252,7 @@ public class RotaryCraft extends DragonAPIMod {
 		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
 		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");
 
-		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner");
+		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner").setCreativeTab(tabSpawner);
 
 		RotaryRegistration.instantiateMachines();
 

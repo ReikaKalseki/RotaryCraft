@@ -13,8 +13,8 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,7 +33,7 @@ public class ItemFuelLubeBucket extends ItemRotaryTool {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
-		for (int i = 0; i < RotaryNames.bucketNames.length; i++)
+		for (int i = 0; i < ItemRegistry.BUCKET.getNumberMetadatas(); i++)
 			par3List.add(new ItemStack(par1, 1, i));
 	}
 

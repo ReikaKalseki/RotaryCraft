@@ -616,12 +616,12 @@ public enum HandbookRegistry {
 			if (this == SOLAR)
 				return MachineRegistry.SOLARTOWER.getName();
 			else
-				return RotaryNames.engineNames[offset];
+				return RotaryNames.getEngineName(offset);
 		}
 		if (this.isMachine())
 			return machine.getName();
 		if (machine == MachineRegistry.ADVANCEDGEARS)
-			return RotaryNames.advGearItemNames[offset];
+			return RotaryNames.getAdvGearName(offset);
 		if (this.getParent() == TRANSDESC)
 			return machine.getName();
 		if (this.getParent() == TOOLDESC && item != null)
@@ -871,7 +871,7 @@ public enum HandbookRegistry {
 		if (this == MISC)
 			return ItemRegistry.SCREWDRIVER.getStackOf();
 		if (this == TRANS)
-			return MachineRegistry.GEARBOX.getCraftedMetadataProduct(RotaryNames.gearboxItemNames.length-3);
+			return MachineRegistry.GEARBOX.getCraftedMetadataProduct(RotaryNames.getNumberGearTypes()-3);
 		if (this == MACHINES)
 			return MachineRegistry.RAILGUN.getCraftedProduct();
 		if (this == TOOLS)

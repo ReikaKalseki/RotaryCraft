@@ -87,15 +87,15 @@ public class RotaryRecipes {
 
 		MachineRegistry.FLOODLIGHT.addCrafting("ISO", "Ggd", "I#O", '#', ItemStacks.basepanel, 'I', Item.ingotIron, 'd', Item.ingotGold, 'S', ItemStacks.steelingot, 'G', Block.glass, 'g', Block.glowStone, 'O', Block.obsidian);
 
-		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.shaftItemNames.length-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
+		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.getNumberShaftTypes()-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
 
 		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks);
 
 		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
 
-		MachineRegistry.BEVELGEARS.addCrafting("ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit);
+		MachineRegistry.BEVELGEARS.addCrafting("ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
-		MachineRegistry.SPLITTER.addCrafting("ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.gearunit);
+		MachineRegistry.SPLITTER.addCrafting("ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
 		MachineRegistry.CLUTCH.addCrafting("S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone);
 		MachineRegistry.CLUTCH.addCrafting("S", "R", 'S', MachineRegistry.SHAFT.getCraftedMetadataProduct(2), 'R', Item.redstone);
@@ -343,45 +343,45 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.gearunit4, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit});
 		GameRegistry.addRecipe(ItemStacks.gearunit8, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit4});
+				" gB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit4, 'g', ItemStacks.gearunit});
 		GameRegistry.addRecipe(ItemStacks.gearunit16, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit8});
+				" gB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.gearunit8, 'g', ItemStacks.gearunit});
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood2x, new Object[]{
 				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.woodgear}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood4x, new Object[]{
 				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood2x}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood8x, new Object[]{
-				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood4x}));
+				" gB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood4x, 'g', ItemStacks.wood2x}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.wood16x, new Object[]{
-				" GB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood8x}));
+				" gB", "BG ", 'B', "stickWood", 'G', ItemStacks.wood8x, 'g', ItemStacks.wood2x}));
 
 		GameRegistry.addRecipe(ItemStacks.stone2x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stonegear});
 		GameRegistry.addRecipe(ItemStacks.stone4x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone2x});
 		GameRegistry.addRecipe(ItemStacks.stone8x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone4x});
+				" gB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone4x, 'g', ItemStacks.stone2x});
 		GameRegistry.addRecipe(ItemStacks.stone16x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone8x});
+				" gB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone8x, 'g', ItemStacks.stone2x});
 
 		GameRegistry.addRecipe(ItemStacks.diamond2x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamondgear});
 		GameRegistry.addRecipe(ItemStacks.diamond4x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamond2x});
 		GameRegistry.addRecipe(ItemStacks.diamond8x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamond4x});
+				" gB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamond4x, 'g', ItemStacks.diamond2x});
 		GameRegistry.addRecipe(ItemStacks.diamond16x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamond8x});
+				" gB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamond8x, 'g', ItemStacks.diamond2x});
 
 		GameRegistry.addRecipe(ItemStacks.bedrock2x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrockgear});
 		GameRegistry.addRecipe(ItemStacks.bedrock4x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrock2x});
 		GameRegistry.addRecipe(ItemStacks.bedrock8x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrock4x});
+				" gB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrock4x, 'g', ItemStacks.bedrock2x});
 		GameRegistry.addRecipe(ItemStacks.bedrock16x, new Object[]{
-				" GB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrock8x});
+				" gB", "BG ", 'B', ItemStacks.bedrockshaft, 'G', ItemStacks.bedrock8x, 'g', ItemStacks.bedrock2x});
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonerod, 2), new Object[]{
 			"  B", " B ", "B  ", 'B', Block.stone});

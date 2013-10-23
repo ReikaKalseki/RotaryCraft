@@ -537,7 +537,7 @@ public class GuiHandbook extends GuiScreen
 					p8 = -1000F*(mat+1);
 				}
 				if (h == HandbookRegistry.FLYWHEEL) {
-					int tick = (int)((System.nanoTime()/SECOND)%RotaryNames.flywheelItemNames.length);
+					int tick = (int)((System.nanoTime()/SECOND)%RotaryNames.getNumberFlywheelTypes());
 					p8 = 500-1000F*(tick+1);
 				}
 				if (h == HandbookRegistry.GEARBOX) {

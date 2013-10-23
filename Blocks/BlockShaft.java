@@ -210,7 +210,7 @@ public class BlockShaft extends BlockModelledMachine {
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);*/
-				ItemStack todrop = new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.shaftItemNames.length-1); //drop shaft cross
+				ItemStack todrop = new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.getNumberShaftTypes()-1); //drop shaft cross
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)

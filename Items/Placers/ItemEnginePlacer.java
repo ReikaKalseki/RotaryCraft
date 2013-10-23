@@ -21,7 +21,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.EnumEngineType;
@@ -267,7 +266,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < RotaryNames.engineNames.length; i++) {
+		for (int i = 0; i < EnumEngineType.engineList.length; i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
 		}

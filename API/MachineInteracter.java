@@ -22,10 +22,7 @@ public final class MachineInteracter {
 	static {
 		try {
 			core = Class.forName("Reika.RotaryCraft.RotaryCraft", false, MachineInteracter.class.getClassLoader());
-			blocks = Class.forName("Reika.RotaryCraft.Registry.BlockRegistry", false, MachineInteracter.class.getClassLoader());
-			items = Class.forName("Reika.RotaryCraft.Registry.ItemRegistry", false, MachineInteracter.class.getClassLoader());
-			machines = Class.forName("Reika.RotaryCraft.Registry.MachineRegistry", false, MachineInteracter.class.getClassLoader());
-			Block[] list = (Block[])core.getField("machineBlocks").get(null);
+			blockList = (Block[])core.getField("machineBlocks").get(null);
 		}
 		catch (ClassNotFoundException e) {
 			System.out.println("RotaryCraft class not found!");

@@ -20,7 +20,9 @@ import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
@@ -205,5 +207,13 @@ public class RotaryAux {
 			return true;
 		}
 		return false;
+	}
+
+	public static String getMessage(String tag) {
+		return StatCollector.translateToLocal("message."+tag);
+	}
+
+	public static void writeMessage(String tag) {
+		ReikaChatHelper.writeString(getMessage(tag));
 	}
 }
