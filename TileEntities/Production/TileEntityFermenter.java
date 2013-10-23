@@ -94,7 +94,7 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 		if (ModList.DYETREES.isLoaded()) {
 			for (int j = 0; j < 16; j++) {
 				in.add(TreeGetter.getDyeSapling(j));
-				in.add(TreeGetter.getDyeLeaf(j));
+				in.add(TreeGetter.getHeldDyeLeaf(j));
 			}
 		}
 		return in;

@@ -40,8 +40,8 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
 

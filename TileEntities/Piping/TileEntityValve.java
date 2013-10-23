@@ -1,13 +1,16 @@
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 
 public class TileEntityValve extends TileEntityPiping {
 
@@ -32,6 +35,28 @@ public class TileEntityValve extends TileEntityPiping {
 		if (level <= 0) {
 			level = 0;
 			fluid = null;
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("amount", level);
+
+		ReikaNBTHelper.writeFluidToNBT(NBT, fluid);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		level = NBT.getInteger("amount");
+
+		fluid = ReikaNBTHelper.getFluidFromNBT(NBT);
+
+		if (level < 0) {
+			level = 0;
 		}
 	}
 

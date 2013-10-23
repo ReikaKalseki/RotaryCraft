@@ -116,7 +116,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] pipeNames = {
-		"machine.hose", "machine.pipe", "machine.fuelline", "machine.spiller", "machine.valve"
+		"machine.hose", "machine.pipe", "machine.fuelline", "machine.spiller", "machine.valve", "machine.bypass", "machine.separation"
 	};
 
 	public static void addNames() {

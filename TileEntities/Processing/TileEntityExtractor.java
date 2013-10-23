@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 

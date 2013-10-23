@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {

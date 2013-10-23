@@ -43,7 +43,7 @@ import Reika.RotaryCraft.Models.ModelGearbox8;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector, IFluidHandler {
 

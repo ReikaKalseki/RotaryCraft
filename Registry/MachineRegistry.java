@@ -68,10 +68,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFireworkMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
-import Reika.RotaryCraft.TileEntities.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
@@ -79,7 +76,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -88,7 +84,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
-import Reika.RotaryCraft.TileEntities.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -104,6 +99,13 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityBypass;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFlooder;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
@@ -247,8 +249,9 @@ public enum MachineRegistry {
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
 	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2),
 	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3),
-	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer");
-
+	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer"),
+	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
+	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer");
 
 	private String name;
 	private Class te;
@@ -555,7 +558,7 @@ public enum MachineRegistry {
 	}
 
 	public boolean isPipe() {
-		return (this == HOSE || this == PIPE || this == FUELLINE || this == SPILLER || this == VALVE);
+		return BlockPiping.class.isAssignableFrom(blockClass);
 	}
 
 	public boolean isTrans() {
