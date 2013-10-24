@@ -37,7 +37,7 @@ import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
-import Reika.RotaryCraft.TileEntities.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver implements TemperatureTE
 {

@@ -140,7 +140,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public abstract int getRedstoneOverride();
 
-	public boolean isUseableByPlayer(EntityPlayer var1) {
+	public boolean isPlayerAccessible(EntityPlayer var1) {
 		if (ConfigRegistry.LOCKMACHINES.getState() && !var1.getEntityName().equals(placer)) {
 			ReikaChatHelper.write("This "+this.getName()+" is locked and can only be used by "+placer+"!");
 			return false;

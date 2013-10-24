@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -31,6 +32,10 @@ public abstract class InventoriedRCTileEntity extends RotaryCraftTileEntity impl
 
 	public final String getInvName() {
 		return this.getMultiValuedName();
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return this.isPlayerAccessible(var1);
 	}
 
 }

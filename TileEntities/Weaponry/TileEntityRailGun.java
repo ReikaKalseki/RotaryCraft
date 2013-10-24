@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -348,6 +349,10 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	public boolean isInvNameLocalized() {
 		return false;
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return this.isPlayerAccessible(var1);
 	}
 
 }

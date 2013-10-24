@@ -216,7 +216,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)te;
-			if (!tr.isUseableByPlayer(ep))
+			if (!tr.isPlayerAccessible(ep))
 				return false;
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
@@ -376,7 +376,7 @@ public abstract class BlockBasicMultiTE extends Block {
 				return true;
 			}
 		}*/
-		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isUseableByPlayer(ep)) {
+		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isPlayerAccessible(ep)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
 		}

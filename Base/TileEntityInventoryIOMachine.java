@@ -9,11 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine implements ISidedInventory {
 
@@ -31,6 +35,10 @@ public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine i
 
 	public final String getInvName() {
 		return this.getMultiValuedName();
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return this.isPlayerAccessible(var1);
 	}
 
 }

@@ -142,7 +142,7 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 			return false;
 		if (power < MINPOWER)
 			return false;
-		return super.isUseableByPlayer(ep);
+		return super.isPlayerAccessible(ep);
 	}
 
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)

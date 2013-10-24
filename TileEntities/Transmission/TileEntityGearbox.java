@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -584,5 +585,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public final String getInvName() {
 		return this.getMultiValuedName();
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return this.isPlayerAccessible(var1);
 	}
 }

@@ -148,7 +148,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public boolean isUseableByPlayer(EntityPlayer var1) {
 		if (this.getType() == GearType.WORM)
 			return false;
-		return super.isUseableByPlayer(var1);
+		return this.isPlayerAccessible(var1);
 	}
 
 	@Override
