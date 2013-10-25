@@ -96,11 +96,11 @@ public class RotaryRegistration {
 	}
 
 	public static void instantiateMachines() {
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks, RotaryCraft.logger.shouldLog());
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks);
 	}
 
 	public static void instantiateItems() {
-		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems, RotaryCraft.logger.shouldLog());
+		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems);
 	}
 
 	public static void loadOreDictionary() {
