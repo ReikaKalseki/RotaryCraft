@@ -116,7 +116,7 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 
 	private void spawnParticles(World world, int x, int y, int z) {
 		for (int i = 0; i < 4; i++) {
-			world.spawnParticle("portal", x+par5Random.nextDouble(), y+par5Random.nextDouble()-0.5, z+par5Random.nextDouble(), par5Random.nextDouble()-0.5, par5Random.nextDouble(), par5Random.nextDouble()-0.5);
+			world.spawnParticle("portal", x+rand.nextDouble(), y+rand.nextDouble()-0.5, z+rand.nextDouble(), rand.nextDouble()-0.5, rand.nextDouble(), rand.nextDouble()-0.5);
 		}
 	}
 

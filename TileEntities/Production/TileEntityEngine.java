@@ -321,7 +321,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			case SPORT:
 				if (fuel.getLevel() > 0)
 					fuel.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
-				if (par5Random.nextInt(6) == 0)
+				if (rand.nextInt(6) == 0)
 					if (additives > 0)
 						additives--;
 				break;
@@ -685,13 +685,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					temperature--;
 				}
 				if (temperature > MAXTEMP/2) {
-					if (par5Random.nextInt(10) == 0) {
+					if (rand.nextInt(10) == 0) {
 						world.spawnParticle("smoke", xCoord+0.5, yCoord+0.5, zCoord+0.5, 0, 0, 0);
 						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 					}
 				}
 				if (temperature > MAXTEMP/1.1) {
-					if (par5Random.nextInt(5) == 0) {
+					if (rand.nextInt(5) == 0) {
 						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 					}
 					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
@@ -961,7 +961,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	private void checkJetFailure() {
 		if (isJetFailing)
 			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
-		else if (FOD > 0 && par5Random.nextInt(DifficultyEffects.JETFAILURE.getInt()*(9-FOD)) == 0) {
+		else if (FOD > 0 && rand.nextInt(DifficultyEffects.JETFAILURE.getInt()*(9-FOD)) == 0) {
 			RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
 			isJetFailing = true;
 			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
@@ -1187,9 +1187,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	private void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
 		soundtick++;
-		if (type.jetNoise() && FOD > 0 && par5Random.nextInt(2*(9-FOD)) == 0) {
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+par5Random.nextFloat(), 1F);
-			world.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+		if (type.jetNoise() && FOD > 0 && rand.nextInt(2*(9-FOD)) == 0) {
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+rand.nextFloat(), 1F);
+			world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 		}
 		if (!ConfigRegistry.ENGINESOUNDS.getState())
 			return;
@@ -1546,7 +1546,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				part = "flame";
 			else
 				part = "smoke";
-			world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), vz-0.1+0.2*par5Random.nextDouble());
+			world.spawnParticle(part, x+0.25+0.5*rand.nextDouble(), y+0.25+0.5*rand.nextDouble(), z+0.25+0.5*rand.nextDouble(), vx-0.1+0.2*rand.nextDouble(), -0.1+0.2*rand.nextDouble(), vz-0.1+0.2*rand.nextDouble());
 		}
 		int dx = x-backx;
 		int dz = z-backz;
@@ -1555,20 +1555,20 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			if (fuel.getLevel() < FUELCAP/12 && par5Random.nextInt(10) == 0) {
+			if (fuel.getLevel() < FUELCAP/12 && rand.nextInt(10) == 0) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 				this.backFire(world, x, y, z);
 			}
-			if (fuel.getLevel() < FUELCAP/4 && par5Random.nextInt(20) == 0) {
+			if (fuel.getLevel() < FUELCAP/4 && rand.nextInt(20) == 0) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 				this.backFire(world, x, y, z);
 			}
-			else if (par5Random.nextInt(40) == 0) {
+			else if (rand.nextInt(40) == 0) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
 				this.backFire(world, x, y, z);
 			}
 		}
-		if (par5Random.nextInt(2) == 0)
+		if (rand.nextInt(2) == 0)
 			temperature++;
 
 		if (temperature >= 800) {
@@ -1582,14 +1582,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 						if (ConfigRegistry.BLOCKDAMAGE.getState())
 							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
 						world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
-						world.spawnParticle("lava", x+i, y+j, z+k, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5, par5Random.nextDouble()-0.5);
+						world.spawnParticle("lava", x+i, y+j, z+k, rand.nextDouble()-0.5, rand.nextDouble()-0.5, rand.nextDouble()-0.5);
 					}
 				}
 			}
 			if (!world.isRemote) {
 				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, ConfigRegistry.BLOCKDAMAGE.getState());
 				for (int m = 0; m < 6; m++)
-					world.newExplosion(null, x-4+par5Random.nextInt(5), y-4+par5Random.nextInt(5), z-4+par5Random.nextInt(5), 4F+par5Random.nextFloat(), true, ConfigRegistry.BLOCKDAMAGE.getState());
+					world.newExplosion(null, x-4+rand.nextInt(5), y-4+rand.nextInt(5), z-4+rand.nextInt(5), 4F+rand.nextFloat(), true, ConfigRegistry.BLOCKDAMAGE.getState());
 			}
 		}
 	}
@@ -1597,14 +1597,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public void backFire(World world, int x, int y, int z) {
 		double vx = (x-backx)/2D;
 		double vz = (z-backz)/2D;
-		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*par5Random.nextFloat(), false);
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*rand.nextFloat(), false);
 		for (int i = 0; i < 32; i++) {
 			String part;
 			if (i%2 == 0)
 				part = "flame";
 			else
 				part = "smoke";
-			world.spawnParticle(part, x+0.25+0.5*par5Random.nextDouble(), y+0.25+0.5*par5Random.nextDouble(), z+0.25+0.5*par5Random.nextDouble(), -vx-0.1+0.2*par5Random.nextDouble(), -0.1+0.2*par5Random.nextDouble(), -vz-0.1+0.2*par5Random.nextDouble());
+			world.spawnParticle(part, x+0.25+0.5*rand.nextDouble(), y+0.25+0.5*rand.nextDouble(), z+0.25+0.5*rand.nextDouble(), -vx-0.1+0.2*rand.nextDouble(), -0.1+0.2*rand.nextDouble(), -vz-0.1+0.2*rand.nextDouble());
 		}
 	}
 

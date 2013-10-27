@@ -63,7 +63,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 				world.markBlockForRenderUpdate(x, y, z);
 				if (ep != null && this.getDamage() > 0) {
 					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getDamage());
-					if (this.getEnchantment(Enchantment.silkTouch) > 0 && par5Random.nextInt(20) == 0)
+					if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)
 						ReikaEntityHelper.dropHead(ent);
 					if (this.getEnchantment(Enchantment.looting) > 0)
 						; //Needs some way to fetch drops from entity

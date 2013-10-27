@@ -191,7 +191,6 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryNames.addNames();
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
-		RotaryChests.addToChests();
 		RotaryRegistration.addEntities();
 		AchievementAuxiliary.loadDesc();
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ConfigRegistry.ACHIEVEMENTS.getState())
@@ -200,6 +199,7 @@ public class RotaryCraft extends DragonAPIMod {
 		//DemoMusic.addTracks();
 
 		RotaryRecipes.addRecipes();
+		RotaryChests.addToChests();
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);

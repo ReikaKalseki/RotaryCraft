@@ -59,12 +59,12 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 		tickcount++;
 		int n = 8;
 		int count = 32;
-		double rx = x+0.5+par5Random.nextInt(2*n+1)-n;
-		double ry = y+0.5+par5Random.nextInt(2*n+1)-n;
-		double rz = z+0.5+par5Random.nextInt(2*n+1)-n;
+		double rx = x+0.5+rand.nextInt(2*n+1)-n;
+		double ry = y+0.5+rand.nextInt(2*n+1)-n;
+		double rz = z+0.5+rand.nextInt(2*n+1)-n;
 		world.createExplosion(null, rx, ry, rz, 4F, tickcount > count);
 		for (int i = 0; i < 32; i++)
-			world.spawnParticle("lava", rx+par5Random.nextInt(7)-3, ry+par5Random.nextInt(7)-3, rz+par5Random.nextInt(7)-3, 0, 0, 0);
+			world.spawnParticle("lava", rx+rand.nextInt(7)-3, ry+rand.nextInt(7)-3, rz+rand.nextInt(7)-3, 0, 0, 0);
 		if (tickcount > count) {
 			world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
 			ReikaWorldHelper.temperatureEnvironment(world, x, y, z, 1000);

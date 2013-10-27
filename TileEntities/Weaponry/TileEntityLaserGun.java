@@ -13,7 +13,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -23,6 +22,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Models.ModelLaserGun;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityLaserGun extends TileEntityAimedCannon {
@@ -103,26 +103,28 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			int meta2 = this.getAffectedMetadata(id2, meta);
 			//ReikaJavaLibrary.pConsole(id+"  to  "+id2+"  @  "+x+", "+y+", "+z);
 			//ReikaJavaLibrary.pConsole(theta);
-			if (id2 != id || meta2 != meta) {
-				world.setBlock(x, y, z, id2, meta2, 3);
-				world.markBlockForUpdate(x, y, z);
-				this.setRange((int)i+1);
-				return;
-			}
-			if (id == Block.netherrack.blockID) {
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
-				world.markBlockForUpdate(x, y, z);
-				this.setRange((int)i+1);
-				return;
-			}
-			if (id == Block.tnt.blockID) {
-				world.setBlock(x, y, z, 0);
-				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D, null);
-				world.spawnEntityInWorld(var6);
-				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), 0, 0, 0);
-				this.setRange((int)i+1);
-				return;
+			if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+				if (id2 != id || meta2 != meta) {
+					world.setBlock(x, y, z, id2, meta2, 3);
+					world.markBlockForUpdate(x, y, z);
+					this.setRange((int)i+1);
+					return;
+				}
+				if (id == Block.netherrack.blockID) {
+					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
+					world.markBlockForUpdate(x, y, z);
+					this.setRange((int)i+1);
+					return;
+				}
+				if (id == Block.tnt.blockID) {
+					world.setBlock(x, y, z, 0);
+					EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D, null);
+					world.spawnEntityInWorld(var6);
+					world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
+					world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
+					this.setRange((int)i+1);
+					return;
+				}
 			}
 			if (id != 0 && Block.opaqueCubeLookup[id]) {
 				this.setRange((int)i+1);

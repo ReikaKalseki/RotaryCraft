@@ -178,9 +178,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", world.getBlockId(x, y-1, z)));
 		while (!this.isSource(world, loc[0], loc[1], loc[2]) && tries < 200 && !found) {
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
-			loc[0] += -1 + par5Random.nextInt(3);
-			loc[1] = y -6 + par5Random.nextInt(7);
-			loc[2] += -1 + par5Random.nextInt(3);
+			loc[0] += -1 + rand.nextInt(3);
+			loc[1] = y -6 + rand.nextInt(7);
+			loc[2] += -1 + rand.nextInt(3);
 			tries++;	// to prevent 1fps
 			if (ReikaMathLibrary.py3d(loc[0]-x, 0, loc[2]-z) > 16) {
 				loc[0] = x;

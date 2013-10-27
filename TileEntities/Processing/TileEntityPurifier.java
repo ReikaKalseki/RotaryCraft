@@ -85,7 +85,7 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 		if (count <= 0)
 			return;
 		ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, count, ItemStacks.steelingot.getItemDamage(), inv, 6);
-		if (par5Random.nextInt(5) == 0)
+		if (rand.nextInt(5) == 0)
 			ReikaInventoryHelper.decrStack(0, inv);
 	}
 

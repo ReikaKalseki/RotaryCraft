@@ -289,7 +289,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			if (inventory[0].getItemDamage() == 1)
 				num = 9;
 			inventory[0].stackSize -= num;
-			lubricant = ReikaMathLibrary.extrema(lubricant+(par5Random.nextInt(16)+1)*num, MAXLUBE, "min");
+			lubricant = ReikaMathLibrary.extrema(lubricant+(rand.nextInt(16)+1)*num, MAXLUBE, "min");
 			if (inventory[0].stackSize <= 0)
 				inventory[0] = null;
 			return;

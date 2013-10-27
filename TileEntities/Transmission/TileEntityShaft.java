@@ -66,9 +66,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				break;
 			}
 			EntityItem ei = new EntityItem(world, x+0.5, y+1.25, z+0.5, item);
-			ei.motionY = 0.4F+0.6F*par5Random.nextFloat();
-			ei.motionX = par5Random.nextFloat()/5;
-			ei.motionZ = par5Random.nextFloat()/5;
+			ei.motionY = 0.4F+0.6F*rand.nextFloat();
+			ei.motionX = rand.nextFloat()/5;
+			ei.motionZ = rand.nextFloat()/5;
 			if (world.isRemote)
 				return;
 			ei.velocityChanged = true;
@@ -95,9 +95,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				break;
 			}
 			EntityItem ei = new EntityItem(world, x+0.5, y+1, z+0.5, item);
-			ei.motionY = par5Random.nextFloat()/5;
-			ei.motionX = par5Random.nextFloat()/5;
-			ei.motionZ = par5Random.nextFloat()/5;
+			ei.motionY = rand.nextFloat()/5;
+			ei.motionX = rand.nextFloat()/5;
+			ei.motionZ = rand.nextFloat()/5;
 			if (world.isRemote)
 				return;
 			ei.velocityChanged = true;

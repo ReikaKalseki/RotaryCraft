@@ -98,13 +98,13 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		int range = this.getRange();
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
-				if (par5Random.nextInt(20) == 0) {
+				if (rand.nextInt(20) == 0) {
 					boolean top = false;
 					for (int k = y-1; k >= 0 && !top; k--) {
 						int foundid = world.getBlockId(x+i, k, z+j);
 						if (foundid == Block.fire.blockID) {
 							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", ytop));
-							world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*par5Random.nextFloat(), 0.5F+0.5F*par5Random.nextFloat());
+							world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*rand.nextFloat(), 0.5F+0.5F*rand.nextFloat());
 							world.setBlock(x+i, k, z+j, 0);
 						}
 						if (foundid != 0) {
@@ -115,12 +115,12 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 						}
 					}
 				}
-				if (par5Random.nextInt(240) == 0) {
+				if (rand.nextInt(240) == 0) {
 					boolean top = false;
 					for (int k = y-1; k >= 0 && !top; k--) {
 						int foundid = world.getBlockId(x+i, k, z+j);
 						int meta2 = world.getBlockMetadata(x+i, k, z+j);
-						if (par5Random.nextInt(20) == 0) {
+						if (rand.nextInt(20) == 0) {
 							ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
 							ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
 							if (crop != null && !crop.isRipe(meta2)) {
@@ -162,11 +162,11 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		double vel;
 		double r = this.getRange()/10D;
 
-		if (par5Random.nextInt(1) == 0) {
+		if (rand.nextInt(1) == 0) {
 			double py = y-0.1875D+0.5;
 			for (int i = 0; i < 4; i++) {
-				double px = x-1+2*par5Random.nextFloat();
-				double pz = z-1+2*par5Random.nextFloat();
+				double px = x-1+2*rand.nextFloat();
+				double pz = z-1+2*rand.nextFloat();
 				world.spawnParticle("splash", px+0.5, py, pz+0.5, 0, 0, 0);
 			}
 
@@ -176,12 +176,12 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		for (vel = 0; vel < r; vel += 0.1) {
 			double py = y-0.1875D+0.5;
 			for (int i = 0; i < 16; i++) {
-				double vx = vel*(-1+par5Random.nextFloat()*2);
+				double vx = vel*(-1+rand.nextFloat()*2);
 				vx *= 1.05;
-				double vz = vel*(-1+par5Random.nextFloat()*2);
+				double vz = vel*(-1+rand.nextFloat()*2);
 				vz *= 1.05;
-				double px = x-1+2*par5Random.nextFloat();
-				double pz = z-1+2*par5Random.nextFloat();
+				double px = x-1+2*rand.nextFloat();
+				double pz = z-1+2*rand.nextFloat();
 				world.spawnParticle("splash", px+0.5, py, pz+0.5, vx, 0, vz);
 			}
 		}

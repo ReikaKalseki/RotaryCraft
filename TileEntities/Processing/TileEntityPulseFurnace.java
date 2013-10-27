@@ -264,7 +264,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 			temperature += ReikaMathLibrary.extrema((MAXTEMP-temperature)/8, 4, "max");
 
 		if (water.getLevel() > 0) {
-			if (par5Random.nextInt(3) == 0)
+			if (rand.nextInt(3) == 0)
 				water.removeLiquid((temperature*2/MAXTEMP)*RotaryConfig.MILLIBUCKET);
 			temperature -= temperature/64;
 		}
@@ -292,7 +292,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		if (temperature > 915) {
 			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
-			world.spawnParticle("lava", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), 0, 0, 0);
+			world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
 		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
 		if (temperature > MAXTEMP) {

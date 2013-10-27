@@ -222,7 +222,7 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 		idle = false;
 		if (power < MINPOWER || omega < MINSPEED)
 			return;
-		if (tickcount >= 2+par5Random.nextInt(18)) {
+		if (tickcount >= 2+rand.nextInt(18)) {
 			this.testYeastKill();
 			tickcount = 0;
 		}
@@ -290,7 +290,7 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 				return;
 			}
 			ReikaInventoryHelper.decrStack(0, slots);
-			if (par5Random.nextInt(4) == 0)
+			if (rand.nextInt(4) == 0)
 				ReikaInventoryHelper.decrStack(2, slots);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
@@ -307,7 +307,7 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 				return;
 			}
 			ReikaInventoryHelper.decrStack(2, slots);
-			if (par5Random.nextInt(2) == 0)
+			if (rand.nextInt(2) == 0)
 				ReikaInventoryHelper.decrStack(0, slots);
 		}
 		this.onInventoryChanged();

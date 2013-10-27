@@ -155,8 +155,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public void getLube(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
 
-		if (par5Random.nextInt(3) == 0) {
-			if (tank.isEmpty() && omega > 0 && par5Random.nextInt(16*omega/ratio+1) != 0) {
+		if (rand.nextInt(3) == 0) {
+			if (tank.isEmpty() && omega > 0 && rand.nextInt(16*omega/ratio+1) != 0) {
 				switch(type) {
 				case WOOD:
 					damage += 6;	//2x original steel
@@ -171,7 +171,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					break;
 				case DIAMOND:
-					if (par5Random.nextInt(3) == 0) {
+					if (rand.nextInt(3) == 0) {
 						damage++;
 						RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 					}
@@ -182,8 +182,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					break;
 				}//other types do not get damaged
 				if (type.isDamageableGear()) {
-					world.spawnParticle("crit", xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-					if (par5Random.nextInt(1+damage/3) > 0)
+					world.spawnParticle("crit", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					if (rand.nextInt(1+damage/3) > 0)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
 			}
@@ -294,7 +294,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				torque = torquein * ratio;
 			else {
 				torque = RotaryConfig.torquelimit;
-				world.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 			}
 		}
@@ -303,7 +303,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				omega = omegain * ratio;
 			else {
 				omega = RotaryConfig.omegalimit;
-				world.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 			}
 			torque = torquein / ratio;

@@ -125,7 +125,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 
 	private void spawnParticles(World world, int x, int y, int z) {
 		for (int i = 0; i < 4; i++) {
-			world.spawnParticle("magicCrit", x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), par5Random.nextDouble()-0.5, par5Random.nextDouble(), par5Random.nextDouble()-0.5);
+			world.spawnParticle("magicCrit", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), rand.nextDouble()-0.5, rand.nextDouble(), rand.nextDouble()-0.5);
 		}
 	}
 
@@ -153,8 +153,8 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 						world.createExplosion(null, x, y, z, 2F, true);
 				}
 				if (((EntityFireball) threat).shootingEntity instanceof EntityBlaze) {
-					for (int k = 0; k < 6+par5Random.nextInt(7); k++)
-						world.spawnParticle("flame", x-0.2+0.4*par5Random.nextFloat(), y-0.2+0.4*par5Random.nextFloat(), z-0.2+0.4*par5Random.nextFloat(), 0, 0, 0);
+					for (int k = 0; k < 6+rand.nextInt(7); k++)
+						world.spawnParticle("flame", x-0.2+0.4*rand.nextFloat(), y-0.2+0.4*rand.nextFloat(), z-0.2+0.4*rand.nextFloat(), 0, 0, 0);
 					world.playAuxSFX(1008, (int)x, (int)y, (int)z, 1);
 				}
 				if (((EntityFireball)threat).shootingEntity instanceof EntityPlayer) {
@@ -204,19 +204,19 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			}
 			if (threat instanceof EntitySnowball) {
 				threat.setDead();
-				for (int j = 0; j < 3+par5Random.nextInt(3); j++)
-					world.spawnParticle("snowballpoof", x-0.2+0.4*par5Random.nextFloat(), y-0.2+0.4*par5Random.nextFloat(), z-0.2+0.4*par5Random.nextFloat(), 0, 0, 0);
+				for (int j = 0; j < 3+rand.nextInt(3); j++)
+					world.spawnParticle("snowballpoof", x-0.2+0.4*rand.nextFloat(), y-0.2+0.4*rand.nextFloat(), z-0.2+0.4*rand.nextFloat(), 0, 0, 0);
 				world.playSoundEffect(x, y, z, "dig.snow", 1F, 1F);
 				tickcount = 0;
 			}
 			if (threat instanceof EntityEgg) {
 				threat.setDead();
-				for (int j = 0; j < 3+par5Random.nextInt(3); j++)
-					world.spawnParticle("snowballpoof", x-0.2+0.4*par5Random.nextFloat(), y-0.2+0.4*par5Random.nextFloat(), z-0.2+0.4*par5Random.nextFloat(), 0, 0, 0);
+				for (int j = 0; j < 3+rand.nextInt(3); j++)
+					world.spawnParticle("snowballpoof", x-0.2+0.4*rand.nextFloat(), y-0.2+0.4*rand.nextFloat(), z-0.2+0.4*rand.nextFloat(), 0, 0, 0);
 				world.playSoundEffect(x, y, z, "random.glass", 1F, 5F);
-				if (!world.isRemote && par5Random.nextInt(8) == 0) {
+				if (!world.isRemote && rand.nextInt(8) == 0) {
 					byte var2 = 1;
-					if (par5Random.nextInt(32) == 0)
+					if (rand.nextInt(32) == 0)
 						var2 = 4;
 					for (int var3 = 0; var3 < var2; ++var3) {
 						EntityChicken var4 = new EntityChicken(world);
@@ -263,7 +263,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 				if (threat.onGround)
 					threat.motionY = mult*dy/dist/10;
 				threat.motionZ = mult*dz/dist/10;
-				threat.rotationYaw = threat.rotationYaw - 30 + par5Random.nextInt(61);
+				threat.rotationYaw = threat.rotationYaw - 30 + rand.nextInt(61);
 				//if (!world.isRemote)
 				threat.velocityChanged = true;
 			}
@@ -280,7 +280,7 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 					if (threat.onGround)
 						threat.motionY = mult*dy/dist/15;
 					threat.motionZ = mult*dz/dist/15;
-					threat.rotationYaw = par5Random.nextInt(360);
+					threat.rotationYaw = rand.nextInt(360);
 					//if (!world.isRemote)
 					threat.velocityChanged = true;
 				}

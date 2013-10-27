@@ -244,7 +244,11 @@ public class RotaryRecipes {
 
 		MachineRegistry.BEAMMIRROR.addCrafting(" m ", " s ", " p ", 'p', ItemStacks.basepanel, 'm', ItemStacks.mirror, 's', ItemStacks.steelingot);
 
-		MachineRegistry.VALVE.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Item.redstone, 'G', Block.glass, 's', ItemStacks.steelingot});
+		MachineRegistry.VALVE.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Block.blockRedstone, 'G', Block.glass, 's', ItemStacks.steelingot});
+
+		MachineRegistry.BYPASS.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Block.netherBrick, 'G', Block.glass, 's', ItemStacks.steelingot});
+
+		MachineRegistry.SEPARATION.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Block.blockLapis, 'G', Block.glass, 's', ItemStacks.steelingot});
 	}
 
 	private static void addCraftItems() {

@@ -69,7 +69,7 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 				SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 0.5F);
 				tickcount = 0;
 			}
-			world.spawnParticle("crit", x+par5Random.nextDouble(), y, z+par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+			world.spawnParticle("crit", x+rand.nextDouble(), y, z+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 		}
 
 		timer.update();

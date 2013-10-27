@@ -308,23 +308,23 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 				world.spawnParticle("splash", x+1, y-step2+1, z+0.5, 0.2, 0.4, 0);
 				world.spawnParticle("splash", x+1, y-step2+1, z+1, 0.2, 0.4, 0.2);
 
-				world.spawnParticle("splash", x, y-step2+1, z, -0.2+0.4*par5Random.nextFloat(), 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("splash", x+0.5, y-step2+1, z, 0, 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("splash", x+1, y-step2+1, z, 0.2-0.4*par5Random.nextFloat(), 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("splash", x, y-step2+1, z+0.5, -0.2+0.4*par5Random.nextFloat(), 0.4, 0);
-				world.spawnParticle("splash", x, y-step2+1, z+1, -0.2+0.4*par5Random.nextFloat(), 0.4, 0.2-0.4*par5Random.nextFloat());
-				world.spawnParticle("splash", x+0.5, y-step2+1, z+1, 0, 0.4, 0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("splash", x+1, y-step2+1, z+0.5, 0.2-0.4*par5Random.nextFloat(), 0.4, 0);
-				world.spawnParticle("splash", x+1, y-step2+1, z+1, 0.2-0.4*par5Random.nextFloat(), 0.4, 0.2-0.4*par5Random.nextFloat());
+				world.spawnParticle("splash", x, y-step2+1, z, -0.2+0.4*rand.nextFloat(), 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("splash", x+0.5, y-step2+1, z, 0, 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("splash", x+1, y-step2+1, z, 0.2-0.4*rand.nextFloat(), 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("splash", x, y-step2+1, z+0.5, -0.2+0.4*rand.nextFloat(), 0.4, 0);
+				world.spawnParticle("splash", x, y-step2+1, z+1, -0.2+0.4*rand.nextFloat(), 0.4, 0.2-0.4*rand.nextFloat());
+				world.spawnParticle("splash", x+0.5, y-step2+1, z+1, 0, 0.4, 0.2+0.4*rand.nextFloat());
+				world.spawnParticle("splash", x+1, y-step2+1, z+0.5, 0.2-0.4*rand.nextFloat(), 0.4, 0);
+				world.spawnParticle("splash", x+1, y-step2+1, z+1, 0.2-0.4*rand.nextFloat(), 0.4, 0.2-0.4*rand.nextFloat());
 
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("splash", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("splash", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.splash", 1F, 1F);
 			}
@@ -338,23 +338,23 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 				world.spawnParticle("lava", x+1, y-step2+1, z+0.5, 0.2, 0.4, 0);
 				world.spawnParticle("lava", x+1, y-step2+1, z+1, 0.2, 0.4, 0.2);
 
-				world.spawnParticle("lava", x, y-step2+1, z, -0.2+0.4*par5Random.nextFloat(), 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("lava", x+0.5, y-step2+1, z, 0, 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("lava", x+1, y-step2+1, z, 0.2-0.4*par5Random.nextFloat(), 0.4, -0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("lava", x, y-step2+1, z+0.5, -0.2+0.4*par5Random.nextFloat(), 0.4, 0);
-				world.spawnParticle("lava", x, y-step2+1, z+1, -0.2+0.4*par5Random.nextFloat(), 0.4, 0.2-0.4*par5Random.nextFloat());
-				world.spawnParticle("lava", x+0.5, y-step2+1, z+1, 0, 0.4, 0.2+0.4*par5Random.nextFloat());
-				world.spawnParticle("lava", x+1, y-step2+1, z+0.5, 0.2-0.4*par5Random.nextFloat(), 0.4, 0);
-				world.spawnParticle("lava", x+1, y-step2+1, z+1, 0.2-0.4*par5Random.nextFloat(), 0.4, 0.2-0.4*par5Random.nextFloat());
+				world.spawnParticle("lava", x, y-step2+1, z, -0.2+0.4*rand.nextFloat(), 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("lava", x+0.5, y-step2+1, z, 0, 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("lava", x+1, y-step2+1, z, 0.2-0.4*rand.nextFloat(), 0.4, -0.2+0.4*rand.nextFloat());
+				world.spawnParticle("lava", x, y-step2+1, z+0.5, -0.2+0.4*rand.nextFloat(), 0.4, 0);
+				world.spawnParticle("lava", x, y-step2+1, z+1, -0.2+0.4*rand.nextFloat(), 0.4, 0.2-0.4*rand.nextFloat());
+				world.spawnParticle("lava", x+0.5, y-step2+1, z+1, 0, 0.4, 0.2+0.4*rand.nextFloat());
+				world.spawnParticle("lava", x+1, y-step2+1, z+0.5, 0.2-0.4*rand.nextFloat(), 0.4, 0);
+				world.spawnParticle("lava", x+1, y-step2+1, z+1, 0.2-0.4*rand.nextFloat(), 0.4, 0.2-0.4*rand.nextFloat());
 
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
-				world.spawnParticle("lava", x+par5Random.nextFloat(), y-step2+1, z+par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat(), par5Random.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+				world.spawnParticle("lava", x+rand.nextFloat(), y-step2+1, z+rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.fizz", 1F, 1F);
 			}

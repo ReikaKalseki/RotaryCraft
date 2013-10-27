@@ -310,19 +310,19 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		int a = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
 		if (a != -1 && temperature > 600) {
 			temperature--;
-			if (par5Random.nextInt(4000) == 0)
+			if (rand.nextInt(4000) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0, 0);
 		}
 		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
 		if (iceside != -1 && temperature > 0) {
 			temperature -= 2;
-			if (par5Random.nextInt(200) == 0)
+			if (rand.nextInt(200) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
 		int snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
 		if (snowside != -1 && temperature > -5) {
 			temperature -= 2;
-			if (par5Random.nextInt(100) == 0)
+			if (rand.nextInt(100) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
@@ -486,7 +486,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 				return;
 		}
 		if (phi >= 1.5F || phi <= 0.5F)
-			if (par5Random.nextInt(40) > 0)
+			if (rand.nextInt(40) > 0)
 				return;
 		if (animdir)
 			phi += 0.03125F;

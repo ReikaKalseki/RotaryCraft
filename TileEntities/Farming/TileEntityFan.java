@@ -67,33 +67,33 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			int editz;
 			for (int i = 1; i <= range; i++) {
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 
 				editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 
 				editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
-				if (par5Random.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0)
 					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
 			}
 		}
@@ -215,7 +215,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (id != Block.snow.blockID && id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID && id != Block.fire.blockID &&
 				!ReikaCropHelper.isCrop(id) && !ModCropList.isModCrop(id, meta))
 			return;
-		if ((par5Random.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (par5Random.nextInt(200) > 0 && id == Block.tallGrass.blockID))
+		if ((rand.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (rand.nextInt(200) > 0 && id == Block.tallGrass.blockID))
 			return;
 		if (id == Block.web.blockID && omega < WEBSPEED)
 			return;

@@ -76,9 +76,9 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 					if (slot != -1)
 						star = this.getStackInSlot(slot);
 				}*/
-				int slot = par5Random.nextInt(inventory.length);
+				int slot = rand.nextInt(inventory.length);
 				while (inventory[slot] == null || inventory[slot].itemID != Item.fireworkCharge.itemID) {
-					slot = par5Random.nextInt(inventory.length);
+					slot = rand.nextInt(inventory.length);
 				}
 				star = this.getStackInSlot(slot);
 				if (this.consumeChance())
@@ -99,7 +99,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 
 		if (this.hasEnchantments()) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
+				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
 			}
 		}
 	}
@@ -113,7 +113,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		if (this.hasEnchantment(Enchantment.silkTouch))
 			return false;
 		int excess = (int)(power/MINPOWER);
-		int chance = par5Random.nextInt(excess/8);
+		int chance = rand.nextInt(excess/8);
 		return (chance == 0);
 	}
 
@@ -153,7 +153,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 	private ItemStack starToRocket(ItemStack star) {
 		ItemStack product = null;
 		ItemStack gunpowder = new ItemStack(Item.gunpowder.itemID, 1, 0);
-		int numgunpowder = par5Random.nextInt(3)+1; // 1-3
+		int numgunpowder = rand.nextInt(3)+1; // 1-3
 		ItemStack paper = new ItemStack(Item.paper.itemID, 1, 0);
 		ItemStack[] ingredients = new ItemStack[5];
 		if (this.getIngredient(Item.gunpowder.itemID, this.canMakeRocketFromStar() && this.consumeChance()))
@@ -184,9 +184,9 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		if (!hasDye)
 			return -1;
 		while (color == -1) {
-			int randcolor = par5Random.nextInt(16);
+			int randcolor = rand.nextInt(16);
 			while (!hasColors[randcolor])
-				randcolor = par5Random.nextInt(16);
+				randcolor = rand.nextInt(16);
 			for (int j = 0; j < inventory.length; j++) {
 				if (inventory[j] != null) {
 					if (inventory[j].itemID == Item.dyePowder.itemID && inventory[j].getItemDamage() == randcolor) {
@@ -217,7 +217,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 
 	private int getShape() {
 		boolean[] hasShape = new boolean[4];
-		int shape = par5Random.nextInt(4);
+		int shape = rand.nextInt(4);
 		if (ReikaInventoryHelper.checkForItem(Item.fireballCharge.itemID, inventory)) {
 			hasShape[0] = true;
 		}
@@ -242,7 +242,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		if (noShapes)
 			return -1;
 		while(!hasShape[shape]) {
-			shape = par5Random.nextInt(4);
+			shape = rand.nextInt(4);
 		}
 		int slot = -1;
 		int id = -1;
@@ -288,11 +288,11 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 			inputitems[0] = gunpowder;
 		if (inputitems[0] == null) // If missing gunpowder
 			return null;
-		if (par5Random.nextInt(2) == 0) {
+		if (rand.nextInt(2) == 0) {
 			if (this.getIngredient(Item.diamond.itemID, this.consumeChance()))
 				hasDiamond = true;
 		}
-		if (par5Random.nextInt(2) == 0) {
+		if (rand.nextInt(2) == 0) {
 			if (this.getIngredient(Item.glowstone.itemID, this.consumeChance()))
 				hasGlowstone = true;
 		}
@@ -323,7 +323,7 @@ public class TileEntityFireworkMachine extends TileEntityInventoriedPowerReceive
 		}*/
 
 		ItemStack output = this.setNBT(inputitems);
-		if (par5Random.nextInt(2) == 0) {
+		if (rand.nextInt(2) == 0) {
 			int dyeColor2 = this.pickRandomColor(this.consumeChance());
 			if (dyeColor2 == -1)
 				return output; //Bypass

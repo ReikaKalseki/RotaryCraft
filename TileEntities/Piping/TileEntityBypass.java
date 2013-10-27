@@ -138,7 +138,7 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public Icon getBlockIcon() {
-		return Block.blockEmerald.getIcon(0, 0);
+		return Block.netherBrick.getIcon(0, 0);
 	}
 
 	@Override

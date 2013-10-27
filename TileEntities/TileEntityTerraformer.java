@@ -119,7 +119,7 @@ public class TileEntityTerraformer extends TileEntityLiquidInventoryReceiver imp
 		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.operationComplete(tickcount, 0));
 
 		if (this.operationComplete(tickcount, 0)) {
-			int index = par5Random.nextInt(coords.getSize());
+			int index = rand.nextInt(coords.getSize());
 			int[] xz = coords.getNthColumn(index);
 			if (this.setBiome(world, xz[0], xz[1])) {
 				//ReikaJavaLibrary.pConsole("Removing "+x+", "+z);

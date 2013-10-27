@@ -105,13 +105,13 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return;
 		ReikaInventoryHelper.decrStack(0, inventory);
 		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inventory);
-		if ((int)Math.sqrt(num) > 1 && par5Random.nextInt(3) == 0) {
-			if (par5Random.nextInt((int)Math.sqrt(num)) > 0) {
+		if ((int)Math.sqrt(num) > 1 && rand.nextInt(3) == 0) {
+			if (rand.nextInt((int)Math.sqrt(num)) > 0) {
 				ReikaInventoryHelper.decrStack(11, inventory);
 			}
 		}
 		if (ReikaMathLibrary.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
-			num *= 1+par5Random.nextFloat();
+			num *= 1+rand.nextFloat();
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
 		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 10))
@@ -130,7 +130,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	public void dropXP() {
-		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord+par5Random.nextFloat(), yCoord+1.25F, zCoord+par5Random.nextFloat(), (int)xp);
+		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord+rand.nextFloat(), yCoord+1.25F, zCoord+rand.nextFloat(), (int)xp);
 		xp = 0;
 	}
 

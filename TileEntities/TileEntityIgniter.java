@@ -29,6 +29,7 @@ import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implements TemperatureTE, RangedEffect {
@@ -75,9 +76,9 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		int spread = this.getRange();
 		int yspread = this.getRange()/2;
 		for (int i = 0; i < 3; i++) {
-			int fx = x-spread+par5Random.nextInt(spread*2+1);
-			int fz = z-spread+par5Random.nextInt(spread*2+1);
-			int fy = y-yspread+par5Random.nextInt(yspread+1);
+			int fx = x-spread+rand.nextInt(spread*2+1);
+			int fz = z-spread+rand.nextInt(spread*2+1);
+			int fy = y-yspread+rand.nextInt(yspread+1);
 			this.fire(world, x, y, z, fx, fy, fz);
 		}
 		if (temperature < ANIMALIGNITION)
@@ -94,15 +95,19 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		int d = this.getRange();
 		//ReikaWorldHelper.spawnParticleLine(world, x+0.5, y+0.5, z+0.5, fx+0.5, fy+0.5, fz+0.5, "flame", 0, 0, 0, 20);
 		for (int i = 0; i < this.getRange()*this.getRange()/2; i++) {
-			int dx = x-d+par5Random.nextInt(d*2+1);
-			int dz = z-d+par5Random.nextInt(d*2+1);
-			int dy = y-d/2+par5Random.nextInt(d/2+1);
+			int dx = x-d+rand.nextInt(d*2+1);
+			int dz = z-d+rand.nextInt(d*2+1);
+			int dy = y-d/2+rand.nextInt(d/2+1);
 			world.spawnParticle("flame", dx, dy+1, dz, 0, 0, 0);
 			world.spawnParticle("smoke", dx, dy+1, dz, 0, 0, 0);
 		}
 		if (world.isRemote)
 			return;
-		ReikaWorldHelper.temperatureEnvironment(world, fx, fy, fz, temperature);
+		ReikaWorldHelper.temperatureEnvironment(world, fx, fy, fz, this.getAffectiveTemperature());
+	}
+
+	private int getAffectiveTemperature() {
+		return ConfigRegistry.BLOCKDAMAGE.getState() ? temperature : Math.min(700, temperature);
 	}
 
 	@Override
@@ -177,7 +182,7 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 		if (temp == 1200) {
 			int leftover = ReikaInventoryHelper.addToInventoryWithLeftover(Item.bucketEmpty.itemID, -1, 1, inv);
 			if (leftover > 0) {
-				EntityItem ei = new EntityItem(worldObj, xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), new ItemStack(Item.bucketLava.itemID, leftover, 0));
+				EntityItem ei = new EntityItem(worldObj, xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), new ItemStack(Item.bucketLava.itemID, leftover, 0));
 				ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
 				if (!worldObj.isRemote)
 					worldObj.spawnEntityInWorld(ei);

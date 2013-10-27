@@ -228,10 +228,10 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	public void overpressure(World world, int x, int y, int z) {
 		pressure = MAXPRESSURE;
-		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 4F+par5Random.nextFloat()*2, ConfigRegistry.BLOCKDAMAGE.getState());
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 4F+rand.nextFloat()*2, ConfigRegistry.BLOCKDAMAGE.getState());
 
 		for (int i = 0; i < 6; i++)
-			world.createExplosion(null, x+0.5-1+par5Random.nextDouble()*2, y+0.5-1+par5Random.nextDouble()*2, z+0.5-1+par5Random.nextDouble()*2, 3F, ConfigRegistry.BLOCKDAMAGE.getState());
+			world.createExplosion(null, x+0.5-1+rand.nextDouble()*2, y+0.5-1+rand.nextDouble()*2, z+0.5-1+rand.nextDouble()*2, 3F, ConfigRegistry.BLOCKDAMAGE.getState());
 	}
 	/*
 	@Override

@@ -99,7 +99,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 				for (int k = z-5; z <= z+5; k++) {
 					if (world.getBlockId(i, j, k) == Block.silverfish.blockID) {
 						ReikaWorldHelper.legacySetBlockWithNotify(world, i, j, k, 0);
-						world.playSoundEffect(i+0.5, j+0.5, k+0.5, "step.stone", 0.5F+0.5F*par5Random.nextFloat(), 0.8F+0.2F*par5Random.nextFloat());
+						world.playSoundEffect(i+0.5, j+0.5, k+0.5, "step.stone", 0.5F+0.5F*rand.nextFloat(), 0.8F+0.2F*rand.nextFloat());
 					}
 				}
 			}
@@ -111,9 +111,9 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		ent.setCurrentItemOrArmor(0, null);
 		if (held != null && !world.isRemote) {
 			EntityItem ei = new EntityItem(world, ent.posX, ent.posY+ent.getEyeHeight(), ent.posZ, held);
-			ei.motionX = -0.2F+0.4F*par5Random.nextFloat();
-			ei.motionZ = -0.2F+0.4F*par5Random.nextFloat();
-			ei.motionY = 0.4F*par5Random.nextFloat();
+			ei.motionX = -0.2F+0.4F*rand.nextFloat();
+			ei.motionZ = -0.2F+0.4F*rand.nextFloat();
+			ei.motionY = 0.4F*rand.nextFloat();
 			ei.delayBeforeCanPickup = 200;
 			world.spawnEntityInWorld(ei);
 		}
@@ -134,7 +134,7 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 		for (int i = 0; i < 3; i++) {
 			repelcoords[i] = entitycoords[i]+(entitycoords[i]-machinecoords[i]);
 			if (i != 1) //not y coord
-				repelcoords[i] += -2+par5Random.nextInt(5); // 2-block random factor
+				repelcoords[i] += -2+rand.nextInt(5); // 2-block random factor
 		}
 		return repelcoords;
 	}

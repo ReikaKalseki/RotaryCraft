@@ -207,17 +207,17 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 			return;
 		if (!world.isRemote) {
 			if (world.getBlockId(harvestx, harvesty, harvestz) == 7) {
-				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
+				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0);
 			}
 			else {
 				int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
 				if (rockmetadata < 15) {
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
+					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1);
 				}
 				else {
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
+					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
 					if (this.isInventoryFull())
 						this.dropItem(world, x, y, z, meta, ItemStacks.bedrockdust.copy());
@@ -233,13 +233,13 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, this.getDrops());
 		ReikaJavaLibrary.pConsole(itementity.getEntityItem());
 		itementity.delayBeforeCanPickup = 0;
-		itementity.motionX = -0.025+0.05*par5Random.nextFloat();	// 0-0.5 m/s
-		itementity.motionZ = -0.025+0.05*par5Random.nextFloat();
+		itementity.motionX = -0.025+0.05*rand.nextFloat();	// 0-0.5 m/s
+		itementity.motionZ = -0.025+0.05*rand.nextFloat();
 		if (meta != 5)
-			itementity.motionY = 0.1+0.2*par5Random.nextFloat()+0.25*par5Random.nextFloat()*par5Random.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
+			itementity.motionY = 0.1+0.2*rand.nextFloat()+0.25*rand.nextFloat()*rand.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
 		itementity.velocityChanged = true;
 		world.spawnEntityInWorld(itementity);
-		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.pop", 0.2F, ((par5Random.nextFloat() - par5Random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 	}
 
 	private ItemStack getDrops() {

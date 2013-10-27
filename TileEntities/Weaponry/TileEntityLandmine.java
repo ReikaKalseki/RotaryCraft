@@ -72,12 +72,12 @@ public class TileEntityLandmine extends InventoriedRCTileEntity {
 	}
 
 	private boolean ageFail() {
-		if (par5Random.nextInt(20) > 0)
+		if (rand.nextInt(20) > 0)
 			return false;
 		int age = this.getAge();
 		if (age == 0)
 			return false;
-		return (par5Random.nextInt(1+65536-this.getAge()) == 0);
+		return (rand.nextInt(1+65536-this.getAge()) == 0);
 	}
 
 	private void maxPowerExplosion(World world, int x, int y, int z) {
@@ -237,7 +237,7 @@ public class TileEntityLandmine extends InventoriedRCTileEntity {
 	public void openChest() {
 		if (inv[0] == null)
 			return;
-		if (par5Random.nextInt(65536-this.getAge())/2 == 0)
+		if (rand.nextInt(65536-this.getAge())/2 == 0)
 			this.detonate(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -280,8 +280,8 @@ public class TileEntityLandmine extends InventoriedRCTileEntity {
 
 	private void chainedExplosion(World world, int x, int y, int z) {
 		for (int i = 0; i < 12; i++) {
-			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x-5+par5Random.nextInt(11), y-5+par5Random.nextInt(11), z-5+par5Random.nextInt(11), null);
-			tnt.fuse = 5+par5Random.nextInt(10);
+			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x-5+rand.nextInt(11), y-5+rand.nextInt(11), z-5+rand.nextInt(11), null);
+			tnt.fuse = 5+rand.nextInt(10);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(tnt);
 		}

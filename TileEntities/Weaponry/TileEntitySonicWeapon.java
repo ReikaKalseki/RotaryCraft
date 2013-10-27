@@ -116,9 +116,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 			range = 20;
 		//ReikaJavaLibrary.pConsole(range);
 		for (int i = 0; i < range; i++) {
-			int bx = x-range+par5Random.nextInt(range+1);
-			int by = y-range+par5Random.nextInt(range+1);
-			int bz = z-range+par5Random.nextInt(range+1);
+			int bx = x-range+rand.nextInt(range+1);
+			int by = y-range+rand.nextInt(range+1);
+			int bz = z-range+rand.nextInt(range+1);
 			//ReikaJavaLibrary.pConsole("Block "+world.getBlockId(bx, by, bz)+" @ "+bx+", "+by+", "+bz);
 			if (world.getBlockId(bx, by, bz) == Block.silverfish.blockID) {
 				//ReikaJavaLibrary.pConsole("Killed at "+bx+", "+by+", "+bz);
@@ -184,8 +184,8 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 					EntityAnimal ani = (EntityAnimal)ent;
 					ani.getNavigator().clearPathEntity();
 					if (ani.getNavigator().noPath()) {
-						double randx = ani.posX - 8 + par5Random.nextInt(17);
-						double randz = ani.posZ - 8 + par5Random.nextInt(17);
+						double randx = ani.posX - 8 + rand.nextInt(17);
+						double randz = ani.posZ - 8 + rand.nextInt(17);
 						int randy = world.getTopSolidOrLiquidBlock((int)randx, (int)randz);
 						PathEntity path = ani.getNavigator().getPathToXYZ(randx, randy, randz);
 						ani.getNavigator().setPath(path, 0.2F);
@@ -216,7 +216,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
 					vuln = false;
 			if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LUNGDAMAGE)
-				if (par5Random.nextInt(40) == 0)
+				if (rand.nextInt(40) == 0)
 					ent.attackEntityFrom(DamageSource.drown, 1);
 		}
 	}

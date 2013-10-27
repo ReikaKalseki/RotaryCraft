@@ -562,8 +562,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		boolean unequal = false;
 		unequal = !ReikaArrayHelper.allNonZerosEqual(powers[0]);
 		if (unequal) {
-			worldObj.spawnParticle("crit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), par5Random.nextFloat()/2F, par5Random.nextFloat(), par5Random.nextFloat()/2F);
-			if (par5Random.nextInt(5) == 0)
+			worldObj.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), rand.nextFloat()/2F, rand.nextFloat(), rand.nextFloat()/2F);
+			if (rand.nextInt(5) == 0)
 				worldObj.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 			return;
 		}

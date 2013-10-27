@@ -98,7 +98,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 
-		if (par5Random.nextInt(20) == 0) {
+		if (rand.nextInt(20) == 0) {
 			if (temperature > Tamb) {
 				temperature--;
 			}
@@ -135,7 +135,7 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		lava.removeLiquid(RotaryConfig.MILLIBUCKET);
 		water.removeLiquid(RotaryConfig.MILLIBUCKET);
 		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inventory, slot);
-		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*par5Random.nextFloat(), 0.7F+0.3F*par5Random.nextFloat());
+		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*rand.nextFloat(), 0.7F+0.3F*rand.nextFloat());
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.5, 0, 0, 0);
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.75, 0, 0, 0);

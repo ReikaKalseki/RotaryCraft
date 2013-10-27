@@ -54,7 +54,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature >= MAXTEMP)
-			if (!world.isRemote && par5Random.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
+			if (!world.isRemote && rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
 	}
 
@@ -160,16 +160,16 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);
 		switch(meta) {
 		case 0:
-			world.spawnParticle("crit", x, fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+			world.spawnParticle("crit", x, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 			break;
 		case 1:
-			world.spawnParticle("crit", x+1, fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+			world.spawnParticle("crit", x+1, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 			break;
 		case 2:
-			world.spawnParticle("crit", fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), z, -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+			world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 			break;
 		case 3:
-			world.spawnParticle("crit", fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), z+1, -0.2+0.4*par5Random.nextDouble(), 0.4*par5Random.nextDouble(), -0.2+0.4*par5Random.nextDouble());
+			world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z+1, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 			break;
 		}
 	}

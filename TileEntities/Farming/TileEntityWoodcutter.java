@@ -181,9 +181,9 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 
 					if (mat == Material.leaves)
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+par5Random.nextFloat(), 1F);
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 					else
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+par5Random.nextFloat(), 1F);
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
 					if (xyz[1] == edity) {
 						int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
@@ -246,8 +246,8 @@ public class TileEntityWoodcutter extends TileEntityInventoriedPowerReceiver imp
 
 		List<ItemStack> drops = dropBlock.getBlockDropped(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
 		if (drop == logID) {
-			if (par5Random.nextInt(3) == 0) {
-				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+par5Random.nextInt(4)));
+			if (rand.nextInt(3) == 0) {
+				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+rand.nextInt(4)));
 			}
 		}
 

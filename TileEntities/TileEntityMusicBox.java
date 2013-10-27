@@ -540,7 +540,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}*/
 		String world = DimensionManager.getCurrentSaveRootDirectory().getPath().substring(8);
 		String biome = worldObj.getBiomeGenForCoords(xCoord, zCoord).biomeName;
-		String mob = EntityList.getStringFromID(50+par5Random.nextInt(15));
+		String mob = EntityList.getStringFromID(50+rand.nextInt(15));
 		String day = "Day"+String.valueOf(worldObj.getWorldTime()/24000);
 		String time = String.valueOf(System.nanoTime());
 		String ench = EnchantmentNameParts.instance.generateRandomEnchantName();

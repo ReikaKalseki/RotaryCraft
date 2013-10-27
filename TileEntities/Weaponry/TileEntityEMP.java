@@ -192,9 +192,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		if (loading) {
 			for (int i = 0; i < 6; i++) {
-				double dx = par5Random.nextDouble();
-				double dz = par5Random.nextDouble();
-				world.spawnParticle("portal", x-0.5+dx*2, y+par5Random.nextDouble()+0.4, z-0.5+dz*2, -1+dx*2, 0.2, -1+dz*2);
+				double dx = rand.nextDouble();
+				double dz = rand.nextDouble();
+				world.spawnParticle("portal", x-0.5+dx*2, y+rand.nextDouble()+0.4, z-0.5+dz*2, -1+dx*2, 0.2, -1+dz*2);
 			}
 		}
 
@@ -206,7 +206,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		World world = worldObj;
 		int num = 1+8*ConfigRegistry.EMPLOAD.getValue();
 		for (int i = 0; i < num && loading; i++) {
-			int index = par5Random.nextInt(check.getSize());
+			int index = rand.nextInt(check.getSize());
 			int[] b = check.getNthBlock(index);
 			int x = b[0];
 			int z = b[2];
@@ -240,11 +240,11 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			items.add(new ItemStack(Item.netherStar));
 			items.add(new ItemStack(Item.diamond, 9, 0));
 			items.add(new ItemStack(Item.ingotGold, 32, 0));
-			items.add(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, par5Random.nextInt(16)));
+			items.add(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, rand.nextInt(16)));
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, items);
 		}
 		else {
-			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+par5Random.nextInt(16)));
+			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(16)));
 		}
 	}
 

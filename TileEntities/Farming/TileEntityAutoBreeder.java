@@ -142,10 +142,10 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 						ent.inLove = 600;
 						for (int var3 = 0; var3 < 1; ++var3)
 						{
-							double var4 = par5Random.nextGaussian() * 0.02D;
-							double var6 = par5Random.nextGaussian() * 0.02D;
-							double var8 = par5Random.nextGaussian() * 0.02D;
-							ent.worldObj.spawnParticle("heart", ent.posX + par5Random.nextFloat() * ent.width * 2.0F - ent.width, ent.posY + 0.5D + par5Random.nextFloat() * ent.height, ent.posZ + par5Random.nextFloat() * ent.width * 2.0F - ent.width, var4, var6, var8);
+							double var4 = rand.nextGaussian() * 0.02D;
+							double var6 = rand.nextGaussian() * 0.02D;
+							double var8 = rand.nextGaussian() * 0.02D;
+							ent.worldObj.spawnParticle("heart", ent.posX + rand.nextFloat() * ent.width * 2.0F - ent.width, ent.posY + 0.5D + rand.nextFloat() * ent.height, ent.posZ + rand.nextFloat() * ent.width * 2.0F - ent.width, var4, var6, var8);
 						}
 					}
 				}

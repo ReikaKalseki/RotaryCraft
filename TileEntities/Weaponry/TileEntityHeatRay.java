@@ -73,7 +73,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					if (!(caught instanceof EntityItem)) //Do not burn drops
 						caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
 					if (caught instanceof EntityTNTPrimed)
-						world.spawnParticle("lava", caught.posX+par5Random.nextFloat(), caught.posY+par5Random.nextFloat(), caught.posZ+par5Random.nextFloat(), 0, 0, 0);
+						world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
 				}
 			}
 		}
@@ -172,96 +172,98 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 	public boolean makeBeam(World world, int x, int y, int z, int metadata, int step, int id, int maxdist) {
 		boolean value = false;
-		if (id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 32));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.lavaMoving.blockID);
-			world.spawnParticle("lava", x+step*xstep+par5Random.nextFloat(), y+step*ystep+par5Random.nextFloat(), z+step*zstep+par5Random.nextFloat(), 0, 0, 0);
-		}
-		if (id == Block.sand.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 16));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.glass.blockID);
-		}
-		if (id == Block.gravel.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 16));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.cobblestone.blockID);
-		}/*
+		if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+			if (id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 32));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.lavaMoving.blockID);
+				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
+			}
+			if (id == Block.sand.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.glass.blockID);
+			}
+			if (id == Block.gravel.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.cobblestone.blockID);
+			}/*
     	if (id == Block.netherrack.blockID) {
     		if (world.getBlockId(x+step*xstep, 1+y+step*ystep, z+step*zstep) == 0) {
     			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, 1+y+step*ystep, z+step*zstep, Block.fire.blockID);
     		}
     	}*/
-		if (id == Block.netherrack.blockID && tickcount >= 6) {
-			world.newExplosion(null, x+step*xstep+0.5, y+step*ystep+0.5, z+step*zstep+0.5, 3F, true, true);
-			if (step >= 500)
-				RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
-			step = maxdist;
-			value = true;
-		}
-		if (id == Block.dirt.blockID || id == Block.tilledField.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 16));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.sand.blockID);
-		}
-		if (id == Block.grass.blockID || id == Block.mycelium.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 16));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.dirt.blockID);
-		}
-		if (id == Block.ice.blockID || id == Block.blockSnow.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 4));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.waterMoving.blockID);
-		}
-		if (id == Block.tallGrass.blockID || id == Block.web.blockID || id == Block.plantYellow.blockID || id == Block.snow.blockID ||
-				id == Block.plantRed.blockID || id == Block.mushroomRed.blockID || id == Block.mushroomBrown.blockID ||
-				id == Block.deadBush.blockID || id == Block.crops.blockID || id == 142 || id == 141 || id == Block.vine.blockID ||
-				id == Block.melonStem.blockID || id == Block.pumpkinStem.blockID || id == Block.waterlily.blockID) {
-			int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0) {
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
-					if (id == Block.snow.blockID)
-						world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (par5Random.nextFloat() - par5Random.nextFloat()) * 0.8F);
-				}
-		}
-		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
-			int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-			chance = ReikaMathLibrary.extrema(chance, 1, "max");
-			if (par5Random.nextInt(chance) != 0)
-				if (par5Random.nextInt(step) == 0) {
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
-					world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (par5Random.nextFloat() - par5Random.nextFloat()) * 0.8F);
-				}
-		}
-		if (id == Block.tnt.blockID) {
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
-			EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*xstep+0.5D, y+step*ystep+0.5D, z+step*zstep+0.5D, null);
-			world.spawnEntityInWorld(var6);
-			world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-			world.spawnParticle("lava", x+step*xstep+par5Random.nextFloat(), y+step*ystep+par5Random.nextFloat(), z+step*zstep+par5Random.nextFloat(), 0, 0, 0);
-		}/*
+			if (id == Block.netherrack.blockID && tickcount >= 6) {
+				world.newExplosion(null, x+step*xstep+0.5, y+step*ystep+0.5, z+step*zstep+0.5, 3F, true, true);
+				if (step >= 500)
+					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
+				step = maxdist;
+				value = true;
+			}
+			if (id == Block.dirt.blockID || id == Block.tilledField.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.sand.blockID);
+			}
+			if (id == Block.grass.blockID || id == Block.mycelium.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.dirt.blockID);
+			}
+			if (id == Block.ice.blockID || id == Block.blockSnow.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0)
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.waterMoving.blockID);
+			}
+			if (id == Block.tallGrass.blockID || id == Block.web.blockID || id == Block.plantYellow.blockID || id == Block.snow.blockID ||
+					id == Block.plantRed.blockID || id == Block.mushroomRed.blockID || id == Block.mushroomBrown.blockID ||
+					id == Block.deadBush.blockID || id == Block.crops.blockID || id == 142 || id == 141 || id == Block.vine.blockID ||
+					id == Block.melonStem.blockID || id == Block.pumpkinStem.blockID || id == Block.waterlily.blockID) {
+				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0) {
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+						if (id == Block.snow.blockID)
+							world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+					}
+			}
+			if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
+				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
+				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				if (rand.nextInt(chance) != 0)
+					if (rand.nextInt(step) == 0) {
+						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+						world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+					}
+			}
+			if (id == Block.tnt.blockID) {
+				ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*xstep+0.5D, y+step*ystep+0.5D, z+step*zstep+0.5D, null);
+				world.spawnEntityInWorld(var6);
+				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
+				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
+			}/*
     	if (id == 0) {
     		if (world.getBlockId(x+step*xstep, -1+y+step*ystep, z+step*zstep) == Block.netherrack.blockID) {
     			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.fire.blockID);
     		}
     	}*/
+		}
 		return value;
 	}
 

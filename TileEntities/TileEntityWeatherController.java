@@ -58,9 +58,9 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 		if (rainmode == 3 && isThunder)
 			return;
 		if (rainmode == 4) {
-			if (par5Random.nextInt(30) == 0) {
-				int xl = x-64+par5Random.nextInt(129);
-				int zl = z-64+par5Random.nextInt(129);
+			if (rand.nextInt(30) == 0) {
+				int xl = x-64+rand.nextInt(129);
+				int zl = z-64+rand.nextInt(129);
 				int yl = world.getTopSolidOrLiquidBlock(xl, zl);
 				world.addWeatherEffect(new EntityLightningBolt(world, xl, yl, zl));
 				if (isThunder)
@@ -144,7 +144,7 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 			return;
 		if (oldrain == rainmode)
 			return;
-		cooldown = 200+par5Random.nextInt(400);
+		cooldown = 200+rand.nextInt(400);
 		this.fire(is, is2);
 		int slot = -1;
 		switch(rainmode) {

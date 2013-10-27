@@ -112,14 +112,14 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		}
 		else if (numchanges > 10) {
 			for (int i = 0; i < numchanges/3; i++)
-				worldObj.spawnParticle("smoke", xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), 0, 0, 0);
-			if (par5Random.nextInt(19-numchanges) == 0)
+				worldObj.spawnParticle("smoke", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), 0, 0, 0);
+			if (rand.nextInt(19-numchanges) == 0)
 				worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 0F, false);
 		}
 		else if (numchanges > 3) {
 			for (int i = 0; i < numchanges/3; i++)
-				worldObj.spawnParticle("smoke", xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), 0, 0, 0);
-			if (par5Random.nextInt(11-numchanges) == 0)
+				worldObj.spawnParticle("smoke", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), 0, 0, 0);
+			if (rand.nextInt(11-numchanges) == 0)
 				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 		}
 		else

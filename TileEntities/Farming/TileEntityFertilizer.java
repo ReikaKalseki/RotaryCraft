@@ -99,7 +99,7 @@ public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver imp
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
 		if (id != 0 && dd <= this.getRange()) {
 			Block b = Block.blocksList[id];
-			b.updateTick(world, dx, dy, dz, par5Random);
+			b.updateTick(world, dx, dy, dz, rand);
 			//ReikaParticleHelper.BONEMEAL.spawnAroundBlockWithOutset(world, dx, dy, z, 2, 0.0625);
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {

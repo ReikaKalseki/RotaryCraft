@@ -776,6 +776,10 @@ public enum MachineRegistry {
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 3);
 		if (this == VALVE)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 4);
+		if (this == BYPASS)
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 5);
+		if (this == SEPARATION)
+			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 6);
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 

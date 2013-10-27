@@ -22,13 +22,10 @@ public enum ConfigRegistry implements ConfigList {
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", false),
 	INSTACUT("Instant Woodcutter", false),
-	//JUNGLECUTTER("Unlimited Jungle Tree Felling", false),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
-	//OREDICT("Ore Dictionary Interchangeability", true),
 	LOGLOADING("Console Loading Info", true),
 	LOCKMACHINES("Owner-Only Machine Use", false),
-	//SIUNITS("SI Metric Units", true),
 	MACHINEVOLUME("Machine Volume Multiplier", 1.0F),
 	FLOODLIGHTRANGE("Max Floodlight Range", 128),
 	HEATRAYRANGE("Max Heat Ray Range", 128),
@@ -53,12 +50,13 @@ public enum ConfigRegistry implements ConfigList {
 	DIFFICULTY("Difficulty Control", 2),
 	ALARM("Machine Warning Alarms", false),
 	BIOMEBLOCKS("Terraformer Block Editing", true),
-	DYNAMICHANDBOOK("Reload Handbook Data on Open", true),
+	DYNAMICHANDBOOK("Reload Handbook Data on Open", false),
 	TABLEMACHINES("Crafting Table can Make Machines", false),
 	EMPLOAD("EMP Charging Speed", 4),
 	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false),
 	RAILGUNDAMAGE("Railgun Block Damage", true),
-	GRAVELPLAYER("Allow Gravel Gun PvP", true);
+	GRAVELPLAYER("Allow Gravel Gun PvP", true),
+	CHESTGEN("Chest Generation Tier", 4);
 
 	private String label;
 	private boolean defaultState;

@@ -163,7 +163,7 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 			if (id == Item.bucketLava.itemID) {
 				int leftover = ReikaInventoryHelper.addToInventoryWithLeftover(Item.bucketEmpty.itemID, -1, 1, inventory);
 				if (leftover > 0) {
-					EntityItem ei = new EntityItem(worldObj, xCoord+par5Random.nextFloat(), yCoord+par5Random.nextFloat(), zCoord+par5Random.nextFloat(), new ItemStack(Item.bucketLava.itemID, leftover, 0));
+					EntityItem ei = new EntityItem(worldObj, xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), new ItemStack(Item.bucketLava.itemID, leftover, 0));
 					ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
 					if (!worldObj.isRemote)
 						worldObj.spawnEntityInWorld(ei);
@@ -305,7 +305,7 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 				tile.temperature += tempdiff;
 				//this.temperature -= tempdiff;
 			}
-			if (par5Random.nextInt(5) == 0)
+			if (rand.nextInt(5) == 0)
 				tile.testYeastKill();
 		}
 		if (id == MachineRegistry.BLASTFURNACE) {

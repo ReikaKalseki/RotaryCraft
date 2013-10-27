@@ -58,7 +58,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 	}
 
 	public void spawnXP() {
-		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord-1+2*par5Random.nextFloat(), yCoord+2*par5Random.nextFloat(), zCoord-1+2*par5Random.nextFloat(), experience);
+		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord-1+2*rand.nextFloat(), yCoord+2*rand.nextFloat(), zCoord-1+2*rand.nextFloat(), experience);
 		experience = 0;
 	}
 
@@ -123,7 +123,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 					return;
 				}
 				ent.setDead();
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.pop", 0.1F+0.5F*par5Random.nextFloat(), par5Random.nextFloat());
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.pop", 0.1F+0.5F*rand.nextFloat(), rand.nextFloat());
 
 			}
 		}
@@ -132,7 +132,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 			EntityXPOrb xp = (EntityXPOrb)closeorbs.get(i);
 			experience += xp.getXpValue();
 			xp.setDead();
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.orb", 0.1F, 0.5F * ((par5Random.nextFloat() - par5Random.nextFloat()) * 0.7F + 1.8F));
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.orb", 0.1F, 0.5F * ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.8F));
 		}
 	}
 

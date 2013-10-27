@@ -10,56 +10,61 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ChestGenHooks;
-import Reika.DragonAPI.Libraries.World.ReikaGenHelper;
+import Reika.DragonAPI.Instantiable.LootController;
+import Reika.DragonAPI.Instantiable.LootController.Location;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RotaryChests {
 
+	private static final LootController data = new LootController();
+
 	public static void addToChests() {
-		ReikaGenHelper.addStackToChestGen(ChestGenHooks.BONUS_CHEST, ItemStacks.steelingot, 1, 5, 50);
+		data.addItem(1, Location.BONUS, ItemStacks.steelingot, 1, 5, 50);
 
-		ReikaGenHelper.addStackToDungeon(ItemStacks.scrap, 1, 6, 40);
-		ReikaGenHelper.addStackToDungeon(ItemStacks.ironscrap, 1, 12, 80);
-		ReikaGenHelper.addStackToDungeon(ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 80);
+		data.addItem(2, Location.DUNGEON, ItemStacks.scrap, 1, 6, 40);
+		data.addItem(2, Location.DUNGEON, ItemStacks.ironscrap, 1, 12, 80);
+		data.addItem(1, Location.DUNGEON, ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 80);
 
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.basepanel, 1, 3, 3);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.steelingot, 1, 8, 25);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.shaftitem, 1, 4, 20);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.mount, 1, 1, 5);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.steelgear, 1, 3, 18);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.gearunit, 1, 2, 10);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.drill, 1, 2, 7);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.goldcoil, 1, 1, 2);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.scrap, 1, 12, 25);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.ironscrap, 1, 12, 25);
-		ReikaGenHelper.addStackToMineshaft(ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 20);
-		ReikaGenHelper.addStackToMineshaft(ItemRegistry.SCREWDRIVER.getStackOf(), 1, 1, 2);
-		ReikaGenHelper.addStackToMineshaft(ItemRegistry.METER.getStackOf(), 1, 1, 1);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.bedrockdust, 1, 3, 1);
-		ReikaGenHelper.addStackToMineshaft(ItemStacks.sawdust, 1, 10, 15);
-		ReikaGenHelper.addStackToMineshaft(ItemRegistry.ETHANOL.getStackOf(), 1, 4, 10);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.basepanel, 1, 3, 3);
+		data.addItem(1, Location.MINESHAFT, ItemStacks.steelingot, 1, 8, 25);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.shaftitem, 1, 4, 20);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.mount, 1, 1, 5);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.steelgear, 1, 3, 18);
+		data.addItem(3, Location.MINESHAFT, ItemStacks.gearunit, 1, 2, 10);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.drill, 1, 2, 7);
+		data.addItem(3, Location.MINESHAFT, ItemStacks.goldcoil, 1, 1, 2);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.scrap, 1, 12, 25);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.ironscrap, 1, 12, 25);
+		data.addItem(1, Location.MINESHAFT, ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 20);
+		data.addItem(2, Location.MINESHAFT, ItemRegistry.SCREWDRIVER.getStackOf(), 1, 1, 2);
+		data.addItem(3, Location.MINESHAFT, ItemRegistry.METER.getStackOf(), 1, 1, 1);
+		data.addItem(4, Location.MINESHAFT, ItemStacks.bedrockdust, 1, 3, 1);
+		data.addItem(2, Location.MINESHAFT, ItemStacks.sawdust, 1, 10, 15);
+		data.addItem(2, Location.MINESHAFT, ItemRegistry.ETHANOL.getStackOf(), 1, 4, 10);
 
-		ReikaGenHelper.addStackToStronghold(ItemStacks.lens, 1, 1, 10);
-		ReikaGenHelper.addStackToStronghold(ItemStacks.steelingot, 1, 3, 50);
-		ReikaGenHelper.addStackToStronghold(ItemStacks.scrap, 1, 8, 40);
-		ReikaGenHelper.addStackToStronghold(ItemStacks.ironscrap, 1, 8, 40);
-		ReikaGenHelper.addStackToStronghold(ItemStacks.lonsda, 1, 2, 20);
-		ReikaGenHelper.addStackToStronghold(new ItemStack(RotaryCraft.obsidianglass), 1, 6, 30);
+		data.addItem(4, Location.STRONGHOLD_HALLWAY, ItemStacks.lens, 1, 1, 10);
+		data.addItem(1, Location.STRONGHOLD_HALLWAY, ItemStacks.steelingot, 1, 3, 50);
+		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.scrap, 1, 8, 40);
+		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.ironscrap, 1, 8, 40);
+		data.addItem(3, Location.STRONGHOLD_HALLWAY, ItemStacks.lonsda, 1, 2, 20);
+		data.addItem(2, Location.STRONGHOLD_HALLWAY, new ItemStack(RotaryCraft.obsidianglass), 1, 6, 30);
 
-		ReikaGenHelper.addStackToStronghold2(ItemStacks.lens, 1, 1, 10);
-		ReikaGenHelper.addStackToStronghold2(ItemStacks.steelingot, 1, 3, 50);
-		ReikaGenHelper.addStackToStronghold2(ItemStacks.scrap, 1, 8, 40);
-		ReikaGenHelper.addStackToStronghold2(ItemStacks.ironscrap, 1, 8, 40);
-		ReikaGenHelper.addStackToStronghold2(ItemStacks.lonsda, 1, 2, 20);
-		ReikaGenHelper.addStackToStronghold2(new ItemStack(RotaryCraft.obsidianglass), 1, 6, 30);
+		data.addItem(4, Location.STRONGHOLD_CROSSING, ItemStacks.lens, 1, 1, 10);
+		data.addItem(1, Location.STRONGHOLD_CROSSING, ItemStacks.steelingot, 1, 3, 50);
+		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.scrap, 1, 8, 40);
+		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.ironscrap, 1, 8, 40);
+		data.addItem(3, Location.STRONGHOLD_CROSSING, ItemStacks.lonsda, 1, 2, 20);
+		data.addItem(2, Location.STRONGHOLD_CROSSING, new ItemStack(RotaryCraft.obsidianglass), 1, 6, 30);
 
-		ReikaGenHelper.addStackToLibrary(ItemRegistry.HANDBOOK.getStackOf(), 1, 1, 50);
-		ReikaGenHelper.addStackToLibrary(ItemRegistry.METER.getStackOf(), 1, 1, 5);
+		data.addItem(2, Location.STRONGHOLD_LIBRARY, ItemRegistry.HANDBOOK.getStackOf(), 1, 1, 50);
+		data.addItem(3, Location.STRONGHOLD_LIBRARY, ItemRegistry.METER.getStackOf(), 1, 1, 5);
 
-		ReikaGenHelper.addStackToVillage(ItemStacks.steelingot, 1, 3, 20);
-		ReikaGenHelper.addStackToVillage(ItemStacks.scrap, 1, 4, 30);
-		ReikaGenHelper.addStackToVillage(ItemStacks.ironscrap, 1, 8, 60);
+		data.addItem(1, Location.VILLAGE, ItemStacks.steelingot, 1, 3, 20);
+		data.addItem(2, Location.VILLAGE, ItemStacks.scrap, 1, 4, 30);
+		data.addItem(2, Location.VILLAGE, ItemStacks.ironscrap, 1, 8, 60);
+
+		data.registerToWorldGen(RotaryCraft.instance, ConfigRegistry.CHESTGEN.getValue());
 	}
 }

@@ -122,14 +122,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (jammed && tickcount%5 == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 			for (int i = 0; i < 6; i++) {
-				world.spawnParticle("smoke", x+par5Random.nextDouble(), y+1+par5Random.nextDouble()*0.2, z+par5Random.nextDouble(), 0, 0, 0);
-				world.spawnParticle("crit", x+par5Random.nextDouble(), y+1+par5Random.nextDouble()*0.2, z+par5Random.nextDouble(), 0, 0, 0);
+				world.spawnParticle("smoke", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
+				world.spawnParticle("crit", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
 			}
 		}
 
 		if (this.hasEnchantments()) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle("portal", -0.5+x+2*par5Random.nextDouble(), y+par5Random.nextDouble(), -0.5+z+2*par5Random.nextDouble(), 0, 0, 0);
+				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
 			}
 		}
 
