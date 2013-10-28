@@ -17,7 +17,9 @@ public interface ShaftPowerReceiver extends ShaftMachine {
 	/** RC machines set your machine's torque with this. */
 	public void setTorque(int torque);
 
-	/** RC machines set your machine's power with this. */
+	/** RC machines set your machine's power with this.
+	 * You do not need to calculate power=omega*torque;
+	 * RC code will do that for you. */
 	public void setPower(long power);
 
 	/** x,y,z to read from */
