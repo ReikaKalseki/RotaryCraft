@@ -89,7 +89,7 @@ public class RecipesGrinder {
 		return ReikaItemHelper.listContainsItemStack(products, item);
 	}
 
-	public ItemStack getSources(ItemStack out) {
+	public List<ItemStack> getSources(ItemStack out) {
 		List<Integer> arr = new ArrayList();
 		arr.add(out.itemID);
 		arr.add(out.getItemDamage());

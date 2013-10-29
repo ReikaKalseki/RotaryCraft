@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -24,8 +25,8 @@ public class RecipesCompactor
 	private static final RecipesCompactor CompactorBase = new RecipesCompactor();
 
 	/** The list of smelting results. */
-	private Map smeltingList = new HashMap();
 	private Map metaSmeltingList = new HashMap();
+	private List<ItemStack> compactables;
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
@@ -37,38 +38,21 @@ public class RecipesCompactor
 
 	private RecipesCompactor()
 	{
-		this.addSmelting(Item.coal.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F); //No charcoal
-		this.addSmelting(RotaryCraft.compacts.itemID, 0, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 1, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F);
-		this.addSmelting(RotaryCraft.compacts.itemID, 2, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F);
+		this.addSmelting(Item.coal, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F); //No charcoal
+		this.addSmelting(ItemStacks.anthracite, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F);
+		this.addSmelting(ItemStacks.prismane, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F);
+		this.addSmelting(ItemStacks.lonsda, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F);
 
-		this.addSmelting(Item.blazePowder.itemID, 0, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F);
+		this.addSmelting(Item.blazePowder, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F);
 	}
 
 	public final int getNumberPerStep() {
 		return DifficultyEffects.COMPACTOR.getInt();
 	}
 
-	/** Adds a smelting recipe. */
-	@Deprecated
-	public void addSmelting(int par1, ItemStack par2ItemStack)
-	{
-		smeltingList.put(Integer.valueOf(par1), par2ItemStack);
-	}
-
-	/**
-	 * Returns the smelting result of an item.
-	 * Deprecated in favor of a metadata sensitive version
-	 */
-	@Deprecated
-	public ItemStack getSmeltingResult(int par1)
-	{
-		return (ItemStack)smeltingList.get(Integer.valueOf(par1));
-	}
-
 	public Map getSmeltingList()
 	{
-		return smeltingList;
+		return metaSmeltingList;
 	}
 
 	/**
@@ -77,10 +61,21 @@ public class RecipesCompactor
 	 * @param metadata The Item Metadata
 	 * @param itemstack The ItemStack for the result
 	 */
-	public void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
+	public void addSmelting(ItemStack in, ItemStack itemstack, float xp)
 	{
-		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
+		metaSmeltingList.put(Arrays.asList(in.itemID, in.getItemDamage()), itemstack);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
+		compactables.add(in.copy());
+	}
+
+	public void addSmelting(Item in, ItemStack itemstack, float xp)
+	{
+		this.addSmelting(new ItemStack(in), itemstack, xp);
+	}
+
+	public void addSmelting(Block in, ItemStack itemstack, float xp)
+	{
+		this.addSmelting(new ItemStack(in), itemstack, xp);
 	}
 
 	/**
@@ -94,8 +89,14 @@ public class RecipesCompactor
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
 		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
-		if (ret != null)
-			return ret;
-		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+		return ret;
+	}
+
+	public boolean isCompactable(ItemStack item) {
+		return this.getSmeltingResult(item) != null;
+	}
+
+	public List<ItemStack> getCompactables() {
+		return compactables;
 	}
 }

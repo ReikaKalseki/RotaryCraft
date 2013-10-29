@@ -297,7 +297,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	public int getAdditivesScaled(int par1)
 	{
-		return (additives * par1) / FUELCAP;
+		return (additives * par1*1000) / FUELCAP;
 	}
 
 	public int getJetFuelScaled(int par1)

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -17,8 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -33,7 +35,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PressureTE
 {
-	private ItemStack compactorItemStacks[];
+	private ItemStack inv[];
 
 	/** The number of ticks that the current item has been cooking for */
 	public int compactorCookTime;
@@ -54,7 +56,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 
 	public TileEntityCompactor()
 	{
-		compactorItemStacks = new ItemStack[5];
+		inv = new ItemStack[5];
 		compactorCookTime = 0;
 	}
 
@@ -64,16 +66,33 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	public void testIdle() {
-		boolean coal = ReikaInventoryHelper.checkForItemStack(Item.coal.itemID, 0, compactorItemStacks);
-		boolean anth = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 0, compactorItemStacks);
-		boolean pris = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 1, compactorItemStacks);
-		boolean lons = ReikaInventoryHelper.checkForItemStack(RotaryCraft.compacts.itemID, 2, compactorItemStacks);
+		boolean ingred = false;
+		boolean invalid = false;
+		for (int i = 0; i < 4; i++) {
+			if (inv[i] == null)
+				invalid = true;
+		}
+		if (!invalid) {
+			int id = inv[0].itemID;
+			int dmg = inv[0].getItemDamage();
+			for (int i = 1; i < 4; i++) {
+				if (inv[i].itemID != id || inv[i].getItemDamage() != dmg)
+					invalid = true;
+			}
+		}
+		if (!invalid) {
+			List li = RecipesCompactor.getRecipes().getCompactables();
+			for (int i = 0; i < li.size() && !ingred; i++) {
+				if (ReikaItemHelper.listContainsItemStack(li, inv[0]))
+					ingred = true;
+			}
+		}
 		boolean full = true;
-		if (compactorItemStacks[4] == null)
+		if (inv[4] == null)
 			full = false;
-		else if (compactorItemStacks[4].stackSize < compactorItemStacks[4].getMaxStackSize())
+		else if (inv[4].stackSize < inv[4].getMaxStackSize())
 			full = false;
-		idle = ((!coal && !anth && !pris && !lons) || full);
+		idle = (!ingred || full);
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
@@ -123,7 +142,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	 */
 	public int getSizeInventory()
 	{
-		return compactorItemStacks.length;
+		return inv.length;
 	}
 
 	/**
@@ -131,12 +150,12 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	 */
 	public ItemStack getStackInSlot(int par1)
 	{
-		return compactorItemStacks[par1];
+		return inv[par1];
 	}
 
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		compactorItemStacks[par1] = par2ItemStack;
+		inv[par1] = par2ItemStack;
 
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
 		{
@@ -152,16 +171,16 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	{
 		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
-		compactorItemStacks = new ItemStack[this.getSizeInventory()];
+		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
-			if (byte0 >= 0 && byte0 < compactorItemStacks.length)
+			if (byte0 >= 0 && byte0 < inv.length)
 			{
-				compactorItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 
@@ -182,13 +201,13 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		NBT.setInteger("pressure", pressure);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < compactorItemStacks.length; i++)
+		for (int i = 0; i < inv.length; i++)
 		{
-			if (compactorItemStacks[i] != null)
+			if (inv[i] != null)
 			{
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
-				compactorItemStacks[i].writeToNBT(nbttagcompound);
+				inv[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
 			}
 		}
@@ -219,10 +238,10 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	public int compressTime() {
-		ItemStack is1 = compactorItemStacks[0];
-		ItemStack is2 = compactorItemStacks[1];
-		ItemStack is3 = compactorItemStacks[2];
-		ItemStack is4 = compactorItemStacks[3];
+		ItemStack is1 = inv[0];
+		ItemStack is2 = inv[1];
+		ItemStack is3 = inv[2];
+		ItemStack is4 = inv[3];
 
 		if (is1 == null || is2 == null || is3 == null || is4 == null)
 			return -1;/*
@@ -344,19 +363,19 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	}
 
 	public int getStage() {
-		if (compactorItemStacks[0] == null)
+		if (inv[0] == null)
 			return -1;
-		int id = compactorItemStacks[0].itemID;
-		int meta = compactorItemStacks[0].getItemDamage();
-		if (id == Item.coal.itemID && meta == 0)
+		if (!RecipesCompactor.getRecipes().isCompactable(inv[0]))
+			return -1;
+		if (inv[0].itemID == Item.coal.itemID)
 			return 1;
-		if (id == RotaryCraft.compacts.itemID && meta == 0)
+		if (ReikaItemHelper.matchStacks(ItemStacks.anthracite, inv[0]))
 			return 2;
-		if (id == RotaryCraft.compacts.itemID && meta == 1)
+		if (ReikaItemHelper.matchStacks(ItemStacks.prismane, inv[0]))
 			return 3;
-		if (id == RotaryCraft.compacts.itemID && meta == 2)
+		if (ReikaItemHelper.matchStacks(ItemStacks.lonsda, inv[0]))
 			return 4;
-		return -1;
+		return 1;
 	}
 
 	@Override
@@ -407,34 +426,34 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 			return false;
 
 		for (int i = 0; i < 4; i++)
-			if (compactorItemStacks[i] == null)
+			if (inv[i] == null)
 				return false;
 
-		if (compactorItemStacks[0].itemID != compactorItemStacks[1].itemID)
+		if (inv[0].itemID != inv[1].itemID)
 			return false;
-		if (compactorItemStacks[0].itemID != compactorItemStacks[2].itemID)
+		if (inv[0].itemID != inv[2].itemID)
 			return false;
-		if (compactorItemStacks[0].itemID != compactorItemStacks[3].itemID)
+		if (inv[0].itemID != inv[3].itemID)
 			return false;
-		if (compactorItemStacks[0].getItemDamage() != compactorItemStacks[1].getItemDamage())
+		if (inv[0].getItemDamage() != inv[1].getItemDamage())
 			return false;
-		if (compactorItemStacks[0].getItemDamage() != compactorItemStacks[2].getItemDamage())
+		if (inv[0].getItemDamage() != inv[2].getItemDamage())
 			return false;
-		if (compactorItemStacks[0].getItemDamage() != compactorItemStacks[3].getItemDamage())
+		if (inv[0].getItemDamage() != inv[3].getItemDamage())
 			return false;
 
-		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(compactorItemStacks[0]);
+		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(inv[0]);
 		if (itemstack == null)
 			return false;
-		if (compactorItemStacks[4] != null) {
-			if (!compactorItemStacks[4].isItemEqual(itemstack))
+		if (inv[4] != null) {
+			if (!inv[4].isItemEqual(itemstack))
 				return false;
-			if (compactorItemStacks[4].stackSize >= itemstack.getMaxStackSize())
+			if (inv[4].stackSize >= itemstack.getMaxStackSize())
 				return false;
 		}
-		if (compactorItemStacks[4] == null)
+		if (inv[4] == null)
 			return true;
-		if (compactorItemStacks[4].stackSize < this.getInventoryStackLimit() && compactorItemStacks[4].stackSize < compactorItemStacks[4].getMaxStackSize())
+		if (inv[4].stackSize < this.getInventoryStackLimit() && inv[4].stackSize < inv[4].getMaxStackSize())
 			return true;
 		return false;
 	}
@@ -446,20 +465,20 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	{
 		if (!this.canSmelt())
 			return;
-		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(compactorItemStacks[0]);
-		if (compactorItemStacks[4] == null)
-			compactorItemStacks[4] = itemstack.copy();
-		else if (compactorItemStacks[4].itemID == itemstack.itemID)
-			compactorItemStacks[4].stackSize += itemstack.stackSize;
+		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(inv[0]);
+		if (inv[4] == null)
+			inv[4] = itemstack.copy();
+		else if (inv[4].itemID == itemstack.itemID)
+			inv[4].stackSize += itemstack.stackSize;
 
 		for (int i = 0; i < 4; i++) {
-			//if (compactorItemStacks[i].getItem().func_46056_k())
-			//    compactorItemStacks[i] = new ItemStack(compactorItemStacks[i].getItem().setFull3D());
+			//if (inv[i].getItem().func_46056_k())
+			//    inv[i] = new ItemStack(inv[i].getItem().setFull3D());
 			// else
-			compactorItemStacks[i].stackSize--;
+			inv[i].stackSize--;
 
-			if (compactorItemStacks[i].stackSize <= 0)
-				compactorItemStacks[i] = null;
+			if (inv[i].stackSize <= 0)
+				inv[i] = null;
 		}
 	}
 

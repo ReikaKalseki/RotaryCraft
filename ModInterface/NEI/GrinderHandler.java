@@ -9,30 +9,30 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import java.util.List;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.GuiGrinder;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class GrinderHandler extends TemplateRecipeHandler {
 
 	public class GrinderRecipe extends CachedRecipe {
 
-		private ItemStack input;
+		private List<ItemStack> input;
 		private ItemStack output;
 
 
-		public GrinderRecipe(ItemStack in) {
+		public GrinderRecipe(List<ItemStack> in) {
 			input = in;
-			output = RecipesGrinder.getRecipes().getSmeltingResult(in);
+			output = RecipesGrinder.getRecipes().getSmeltingResult(in.get(0));
 		}
 
 		@Override
@@ -77,8 +77,8 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (RecipesGrinder.getRecipes().isProduct(result)) {
-			ItemStack is = RecipesGrinder.getRecipes().getSources(result);
-			if (is != null)
+			List<ItemStack> is = RecipesGrinder.getRecipes().getSources(result);
+			if (is != null && !is.isEmpty())
 				arecipes.add(new GrinderRecipe(is));
 		}
 	}
@@ -86,7 +86,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesGrinder.getRecipes().isGrindable(ingredient)) {
-			arecipes.add(new GrinderRecipe(ingredient));
+			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
 		}
 	}
 

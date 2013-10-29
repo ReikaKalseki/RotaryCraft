@@ -63,8 +63,8 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		return i == 1;
 	}
 
-	public void testIdle() { //Test if have sufficient power, only idling if powered but empty
-		idle = (!this.canSmelt() && power > MINPOWER && torque > MINTORQUE);
+	public void testIdle() {
+		idle = (!this.canSmelt());
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
