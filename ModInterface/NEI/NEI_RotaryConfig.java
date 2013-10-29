@@ -11,8 +11,6 @@ package Reika.RotaryCraft.ModInterface.NEI;
 
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
 
 public class NEI_RotaryConfig implements IConfigureNEI {
 
@@ -23,24 +21,42 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final GrinderHandler grinder = new GrinderHandler();
 	private static final ExtractorHandler extractor = new ExtractorHandler();
 	private static final FermenterHandler fermenter = new FermenterHandler();
+	private static final CompactorHandler compactor = new CompactorHandler();
+	private static final PulseJetHandler pulsejet = new PulseJetHandler();
+	private static final FractionHandler fractionator = new FractionHandler();
 
 	@Override
 	public void loadConfig() {
 		RotaryCraft.logger.log("Loading NEI Compatibility!");
 		API.registerRecipeHandler(worktable);
 		API.registerUsageHandler(worktable);
+
 		API.registerRecipeHandler(toolCharge);
 		API.registerUsageHandler(toolCharge);
+
 		API.registerRecipeHandler(toolCrafting);
 		API.registerUsageHandler(toolCrafting);
+
 		API.registerRecipeHandler(blastFurnace);
 		API.registerUsageHandler(blastFurnace);
+
 		API.registerRecipeHandler(grinder);
 		API.registerUsageHandler(grinder);
+
 		API.registerRecipeHandler(extractor);
 		API.registerUsageHandler(extractor);
+
 		API.registerRecipeHandler(fermenter);
 		API.registerUsageHandler(fermenter);
+
+		API.registerRecipeHandler(compactor);
+		API.registerUsageHandler(compactor);
+
+		API.registerRecipeHandler(pulsejet);
+		API.registerUsageHandler(pulsejet);
+
+		API.registerRecipeHandler(fractionator);
+		API.registerUsageHandler(fractionator);
 
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++)
