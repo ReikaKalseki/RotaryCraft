@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
@@ -42,6 +46,16 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	{
 		inventory = new ItemStack[3];
 		grinderCookTime = 0;
+	}
+
+	private static final List<ItemStack> grindableSeeds = new ArrayList();
+
+	static {
+		addGrindableSeed(ItemRegistry.CANOLA.getStackOf());
+	}
+
+	public static void addGrindableSeed(ItemStack seed) {
+		grindableSeeds.add(seed);
 	}
 
 	@Override
@@ -237,14 +251,11 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return false;
 		}
 
-		if (inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID() && inventory[0].getItemDamage() == 0) {
+		if (ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
 			return (lubricant < MAXLUBE);
 		}
-		if (inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID() && inventory[0].getItemDamage() == 1) {
-			return (lubricant < MAXLUBE-9);
-		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0].getItem().itemID);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0]);
 
 		if (itemstack == null)
 		{
@@ -284,10 +295,8 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		{
 			return;
 		}
-		if (inventory[0] != null && inventory[0].itemID == ItemRegistry.CANOLA.getShiftedID()) {
+		if (inventory[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
 			int num = 1;
-			if (inventory[0].getItemDamage() == 1)
-				num = 9;
 			inventory[0].stackSize -= num;
 			lubricant = ReikaMathLibrary.extrema(lubricant+(rand.nextInt(16)+1)*num, MAXLUBE, "min");
 			if (inventory[0].stackSize <= 0)
@@ -295,7 +304,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return;
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0].getItem().itemID);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0]);
 		if (inventory[1] == null)
 		{
 			inventory[1] = itemstack.copy();
@@ -352,7 +361,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			return false;
 		if (slot == 2)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return RecipesGrinder.getRecipes().getSmeltingResult(is.itemID) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
+		return RecipesGrinder.getRecipes().getSmeltingResult(is) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
 	}
 
 	@Override

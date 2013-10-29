@@ -37,7 +37,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public int releaseTorque = 0;
 	public int releaseOmega = 0;
 	/** Stored energy, in joules */
-	public long energy;
+	private long energy;
 
 	public static final int WORMRATIO = 16;
 
@@ -515,5 +515,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public final String getInvName() {
 		return this.getMultiValuedName();
+	}
+
+	public long getEnergy() {
+		return energy;
+	}
+
+	public void setEnergyFromNBT(NBTTagCompound NBT) {
+		energy = NBT.getLong("energy");
 	}
 }

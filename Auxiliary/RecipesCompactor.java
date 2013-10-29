@@ -30,7 +30,7 @@ public class RecipesCompactor
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
 	 */
-	public static final RecipesCompactor smelting()
+	public static final RecipesCompactor getRecipes()
 	{
 		return CompactorBase;
 	}

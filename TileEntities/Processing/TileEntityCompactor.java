@@ -423,7 +423,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 		if (compactorItemStacks[0].getItemDamage() != compactorItemStacks[3].getItemDamage())
 			return false;
 
-		ItemStack itemstack = RecipesCompactor.smelting().getSmeltingResult(compactorItemStacks[0]);
+		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(compactorItemStacks[0]);
 		if (itemstack == null)
 			return false;
 		if (compactorItemStacks[4] != null) {
@@ -446,7 +446,7 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	{
 		if (!this.canSmelt())
 			return;
-		ItemStack itemstack = RecipesCompactor.smelting().getSmeltingResult(compactorItemStacks[0]);
+		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(compactorItemStacks[0]);
 		if (compactorItemStacks[4] == null)
 			compactorItemStacks[4] = itemstack.copy();
 		else if (compactorItemStacks[4].itemID == itemstack.itemID)

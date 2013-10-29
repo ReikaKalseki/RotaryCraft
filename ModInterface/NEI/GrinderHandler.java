@@ -32,7 +32,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 		public GrinderRecipe(ItemStack in) {
 			input = in;
-			output = RecipesGrinder.getRecipes().getSmeltingResult(in.itemID);
+			output = RecipesGrinder.getRecipes().getSmeltingResult(in);
 		}
 
 		@Override
@@ -77,7 +77,9 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (RecipesGrinder.getRecipes().isProduct(result)) {
-			arecipes.add(new GrinderRecipe(RecipesGrinder.getRecipes().getSources(result)));
+			ItemStack is = RecipesGrinder.getRecipes().getSources(result);
+			if (is != null)
+				arecipes.add(new GrinderRecipe(is));
 		}
 	}
 

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,8 @@ public class RecipesGrinder {
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
 
 	/** The list of smelting results. */
-	private Map GrinderList = new HashMap();
-	private Map GrinderExperience = new HashMap();
+	private Map metaSmeltingList = new HashMap();
+
 	private ArrayList<ItemStack> products = new ArrayList();
 	private HashMap<List<Integer>, ItemStack> recipes = new HashMap();
 
@@ -57,9 +58,6 @@ public class RecipesGrinder {
 		this.addSmelting(Block.netherrack, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.netherrackdust.getItemDamage()), 0.2F); //create a netherrack powder
 		this.addSmelting(Block.slowSand, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.tar.getItemDamage()), 0.3F); //create a tar
 
-		this.addSmelting(ItemStacks.anthrablock, new ItemStack(ItemStacks.anthracite.itemID, 1, ItemStacks.anthracite.getItemDamage()), 0.3F);
-		this.addSmelting(ItemStacks.lonsblock, new ItemStack(ItemStacks.lonsda.itemID, 1, ItemStacks.lonsda.getItemDamage()), 0.3F);
-
 		this.addSmelting(Block.wood, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F); //sawdust
 		this.addSmelting(Block.planks, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addSmelting(Block.music, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
@@ -83,50 +81,8 @@ public class RecipesGrinder {
 		this.addSmelting(Block.fenceGate, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
 	}
 
-	/**
-	 * Adds a smelting recipe.
-	 */
-	public void addSmelting(ItemStack in, ItemStack itemStack, float experience)
-	{
-		GrinderList.put(Integer.valueOf(in.itemID), itemStack);
-		GrinderExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(experience));
-		products.add(itemStack);
-		List<Integer> arr = new ArrayList();
-		arr.add(itemStack.itemID);
-		arr.add(itemStack.getItemDamage());
-		recipes.put(arr, in.copy());
-	}
-
-	private void addSmelting(Block in, ItemStack itemStack, float experience)
-	{
-		this.addSmelting(new ItemStack(in), itemStack, experience);
-	}
-
-	private void addSmelting(Item in, ItemStack itemStack, float experience)
-	{
-		this.addSmelting(new ItemStack(in), itemStack, experience);
-	}
-
-	/**
-	 * Returns the smelting result of an item.
-	 */
-	public ItemStack getSmeltingResult(int id)
-	{
-		return (ItemStack)GrinderList.get(Integer.valueOf(id));
-	}
-
-	public Map getSmeltingList()
-	{
-		return GrinderList;
-	}
-
-	public float getExperience(int par1)
-	{
-		return GrinderExperience.containsKey(Integer.valueOf(par1)) ? ((Float)GrinderExperience.get(Integer.valueOf(par1))).floatValue() : 0.0F;
-	}
-
 	public boolean isGrindable(ItemStack item) {
-		return this.getSmeltingResult(item.itemID) != null;
+		return this.getSmeltingResult(item) != null;
 	}
 
 	public boolean isProduct(ItemStack item) {
@@ -138,5 +94,46 @@ public class RecipesGrinder {
 		arr.add(out.itemID);
 		arr.add(out.getItemDamage());
 		return recipes.get(arr);
+	}
+
+	public Map getSmeltingList()
+	{
+		return metaSmeltingList;
+	}
+
+	public void addSmelting(Block b, ItemStack out, float xp) {
+		this.addSmelting(new ItemStack(b), out, xp);
+	}
+
+	public void addSmelting(Item i, ItemStack out, float xp) {
+		this.addSmelting(new ItemStack(i), out, xp);
+	}
+
+	public void addSmelting(ItemStack in, ItemStack out, float xp)
+	{
+		metaSmeltingList.put(Arrays.asList(in.itemID, in.getItemDamage()), out);
+		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
+
+		products.add(out);
+		List<Integer> arr = new ArrayList();
+		arr.add(out.itemID);
+		arr.add(out.getItemDamage());
+		recipes.put(arr, in.copy());
+	}
+
+	/**
+	 * Used to get the resulting ItemStack form a source ItemStack
+	 * @param item The Source ItemStack
+	 * @return The result ItemStack
+	 */
+	public ItemStack getSmeltingResult(ItemStack item)
+	{
+		if (item == null)
+			return null;
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
+		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		if (ret != null)
+			return ret;
+		return (ItemStack)metaSmeltingList.get(Integer.valueOf(item.itemID));
 	}
 }

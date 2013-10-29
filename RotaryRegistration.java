@@ -104,8 +104,8 @@ public class RotaryRegistration {
 	}
 
 	public static void loadOreDictionary() {
-		OreDictionary.registerOre("HSLA", ItemStacks.steelingot);
-		OreDictionary.registerOre("sawdust", ItemStacks.sawdust);
+		OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
+		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
 		ExtractorModOres.registerRCIngots();

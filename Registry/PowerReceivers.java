@@ -73,7 +73,8 @@ public enum PowerReceivers {
 	BOILER(),
 	FERTILIZER(1024),
 	LAVAMAKER(),
-	GENERATOR();
+	GENERATOR(),
+	AGGREGATOR(1, 4096, 8192);
 
 
 	private int minT;

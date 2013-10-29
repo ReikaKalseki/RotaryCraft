@@ -576,6 +576,14 @@ public abstract class BlockBasicMultiTE extends Block {
 						Block b = Block.blocksList[f.getBlockID()];
 						b.onEntityCollidedWithBlock(world, x, y, z, e);
 					}
+					else if (f.getName().toLowerCase().contains("ammonia")) {
+						if (e instanceof EntityLivingBase) {
+							EntityLivingBase eb = (EntityLivingBase)e;
+							PotionEffect eff = eb.getActivePotionEffect(Potion.poison);
+							if (eff == null)
+								eb.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+						}
+					}
 				}
 			}
 		}

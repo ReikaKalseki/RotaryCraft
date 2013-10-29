@@ -326,7 +326,7 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked == null)
 					return false;
 				if (clicked.getType() == TileEntityAdvancedGear.GearType.COIL) {
-					long energy = clicked.energy;
+					long energy = clicked.getEnergy();
 					if (energy/20D >= 1000000000)
 						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
 					else if (energy/20D >= 1000000)

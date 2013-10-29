@@ -16,13 +16,17 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -71,6 +75,9 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			adv.setFlipped(true);
 		}
+		if (adv.getType() == GearType.COIL && is.stackTagCompound != null) {
+			adv.setEnergyFromNBT(is.stackTagCompound);
+		}
 		return true;
 	}
 	@Override
@@ -79,6 +86,25 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		for (int i = 0; i < TileEntityAdvancedGear.GearType.list.length; i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
+			if (i == GearType.COIL.ordinal()) {
+				item = item.copy();
+				item.stackTagCompound = new NBTTagCompound();
+				item.stackTagCompound.setLong("energy", (long)Math.pow(10, 15)*20L);
+				item.stackTagCompound.setBoolean("creative", true);
+				list.add(item);
+			}
+		}
+	}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
+		if (is.stackTagCompound == null)
+			par3List.add("Stored Energy: 0J");
+		else {
+			long e = is.stackTagCompound.getLong("energy")/20;
+			par3List.add("Stored Energy: "+String.format("%.3f", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+			if (is.stackTagCompound.getBoolean("creative"))
+				par3List.add("Basically infinite power for creative mode.");
 		}
 	}
 }
