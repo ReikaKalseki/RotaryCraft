@@ -1671,6 +1671,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
 		int factor = type.getFuelUnitDuration()/timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
+		if (factor <= 0)
+			return 0;
 		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20/factor;
 	}
 

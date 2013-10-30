@@ -74,7 +74,8 @@ public enum PowerReceivers {
 	FERTILIZER(1024),
 	LAVAMAKER(),
 	GENERATOR(),
-	AGGREGATOR(1, 4096, 8192);
+	AGGREGATOR(1, 4096, 8192),
+	AIRGUN(512, 1, 16384);
 
 
 	private int minT;

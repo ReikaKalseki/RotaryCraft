@@ -82,6 +82,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
+import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
@@ -138,6 +139,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAirGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
@@ -253,7 +255,9 @@ public enum MachineRegistry {
 	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer"),
 	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
-	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16);
+	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16),
+	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12),
+	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13);
 
 	private String name;
 	private Class te;
