@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -58,6 +59,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
@@ -257,7 +259,8 @@ public enum MachineRegistry {
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
 	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16),
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12),
-	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13);
+	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13),
+	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4);
 
 	private String name;
 	private Class te;
@@ -886,6 +889,8 @@ public enum MachineRegistry {
 	public boolean isAvailableInCreativeInventory() {
 		if (this.isDummiedOut())
 			return false;
+		if (this.isIncomplete() && !DragonAPICore.isReikasComputer())
+			return false;
 		return true;
 	}
 
@@ -1034,6 +1039,10 @@ public enum MachineRegistry {
 	public static MachineRegistry getMachineMapping(int id, int meta) {
 		List li = Arrays.asList(id, meta);
 		return machineMappings.get(li);
+	}
+
+	public boolean isIncomplete() {
+		return !hasRender && this.hasModel();
 	}
 
 	static {
