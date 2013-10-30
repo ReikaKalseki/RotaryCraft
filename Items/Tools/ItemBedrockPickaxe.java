@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
@@ -114,6 +115,15 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, DartOreHandler.getInstance().oreID);
+			}
+			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
+			return true;
+		}
+		if (ModList.TRANSITIONAL.isLoaded() && TransitionalOreHandler.getInstance().isMagmaniteOre(block) && ConfigRegistry.MODORES.getState()) {
+			world.setBlock(x, y, z, 0);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, TransitionalOreHandler.getInstance().magmaID);
 			}
 			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 			return true;

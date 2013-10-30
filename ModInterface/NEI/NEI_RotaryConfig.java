@@ -11,6 +11,8 @@ package Reika.RotaryCraft.ModInterface.NEI;
 
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import codechicken.nei.api.API;
+import codechicken.nei.api.IConfigureNEI;
 
 public class NEI_RotaryConfig implements IConfigureNEI {
 

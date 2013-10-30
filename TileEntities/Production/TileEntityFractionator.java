@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -46,6 +47,20 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(Item.coal.itemID, 1, 0),
 		new ItemStack(RotaryCraft.powders.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 1),
 		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream.itemID, 1, 0)};
+
+	public static boolean isJetFuelIngredient(ItemStack is) {
+		for (int i = 0; i < ingredients.length; i++) {
+			if (ReikaItemHelper.matchStacks(is, ingredients[i]))
+				return true;
+		}
+		return false;
+	}
+
+	public static ItemStack[] getIngredients() {
+		ItemStack[] is = new ItemStack[ingredients.length];
+		System.arraycopy(ingredients, 0, is, 0, is.length);
+		return is;
+	}
 
 	public ItemStack[] inv = new ItemStack[ingredients.length+1+1];
 

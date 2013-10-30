@@ -9,13 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class RecipesPulseFurnace
@@ -25,6 +28,9 @@ public class RecipesPulseFurnace
 	/** The list of smelting results. */
 	private Map smeltingList = new HashMap();
 	private Map metaSmeltingList = new HashMap();
+
+	private List<ItemStack> outputs = new ArrayList();
+	private List<ItemStack> inputs = new ArrayList();
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
@@ -110,6 +116,9 @@ public class RecipesPulseFurnace
 	{
 		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
+
+		inputs.add(new ItemStack(itemID, 1, metadata));
+		outputs.add(itemstack);
 	}
 
 	/**
@@ -126,5 +135,24 @@ public class RecipesPulseFurnace
 		if (ret != null)
 			return ret;
 		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+	}
+
+	public List<ItemStack> getSources(ItemStack result) {
+		List<ItemStack> li = new ArrayList();
+		for (int i = 0; i < inputs.size(); i++) {
+			ItemStack in = inputs.get(i);
+			ItemStack out = this.getSmeltingResult(in);
+			if (ReikaItemHelper.matchStacks(result, out))
+				li.add(in);
+		}
+		return li;
+	}
+
+	public boolean isProduct(ItemStack result) {
+		return ReikaItemHelper.listContainsItemStack(outputs, result);
+	}
+
+	public boolean isSmeltable(ItemStack ingredient) {
+		return this.getSmeltingResult(ingredient) != null;
 	}
 }

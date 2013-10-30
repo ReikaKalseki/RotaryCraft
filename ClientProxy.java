@@ -14,6 +14,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
+import Reika.DragonAPI.Instantiable.MultiSheetItemRenderer;
 import Reika.DragonAPI.Instantiable.SoundLoader;
 import Reika.DragonAPI.Instantiable.SpawnerRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -44,9 +45,10 @@ public class ClientProxy extends CommonProxy
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/modextracts.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/modingots.png"),
 	};
+
+	public static final MultiSheetItemRenderer modOres = new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class);
+
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png", RotaryAux.terrainpng);
 
@@ -130,8 +132,8 @@ public class ClientProxy extends CommonProxy
 			MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemList[i].getShiftedID(), items[ItemRegistry.itemList[i].getTextureSheet()]);
 		}
 
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modextracts.itemID, items[3]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modingots.itemID, items[4]);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modextracts.itemID, modOres);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modingots.itemID, modOres);
 	}
 
 	// Override any other methods that need to be handled differently client side.

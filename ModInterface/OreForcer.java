@@ -20,6 +20,7 @@ import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
@@ -91,6 +92,50 @@ public final class OreForcer {
 				registerDart();
 			breakForceWrench();
 			break;
+		case ARSMAGICA:
+			if (ConfigRegistry.MODORES.getState())
+				registerMagica();
+			break;
+		case TRANSITIONAL:
+			intercraftMagmanite();
+			break;
+		}
+	}
+
+	private static void intercraftMagmanite() {
+		Class trans = ModList.TRANSITIONAL.getItemClass();
+		try {
+			Field f = trans.getField("MagmaDrop");
+			Item i = (Item)f.get(null);
+			GameRegistry.addShapelessRecipe(new ItemStack(i), ItemStacks.getModOreIngot(ModOreList.MAGMANITE));
+			RotaryCraft.logger.log("RotaryCraft magmanite can now be crafted into Transitional Assistance magmanite!");
+		}
+		catch (NoSuchFieldException e) {
+			RotaryCraft.logger.logError("Transitional Assistance item field not found!");
+		}
+		catch (SecurityException e) {
+			RotaryCraft.logger.logError("Cannot read Transitional Assistance items (Security Exception)! Magmanite not convertible!"+e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IllegalArgumentException e) {
+			RotaryCraft.logger.logError("Illegal argument for reading Transitional Assistance items!");
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			RotaryCraft.logger.logError("Illegal access exception for reading Transitional Assistance items!");
+			e.printStackTrace();
+		}
+	}
+
+	private static void registerMagica() {
+		MagicaOreHandler.getInstance().forceOreRegistration();
+		RotaryCraft.logger.log("Adding ore item conversion recipes!");
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList o = ModOreList.oreList[i];
+			if (o.isArsMagica()) {
+				GameRegistry.addShapelessRecipe(MagicaOreHandler.getInstance().getItem(o), ItemStacks.getModOreIngot(o));
+				RotaryCraft.logger.log(o.getName()+" can now be crafted with RotaryCraft equivalents!");
+			}
 		}
 	}
 

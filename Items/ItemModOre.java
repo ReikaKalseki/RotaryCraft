@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Interfaces.MultisheetItem;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
@@ -20,7 +21,7 @@ import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemModOre extends ItemBasic {
+public class ItemModOre extends ItemBasic implements MultisheetItem {
 
 	public ItemModOre(int ID) {
 		super(ID, 0);
@@ -57,9 +58,36 @@ public class ItemModOre extends ItemBasic {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
+		int step = 0;
+		if (item.itemID == RotaryCraft.modextracts.itemID)
+			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[item.getItemDamage()/4]);
+		else
+			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[item.getItemDamage()]);
 		if (item.itemID == RotaryCraft.modingots.itemID)
-			return item.getItemDamage()*4+ExtractorModOres.getIndexOffsetForIngot(item);
-		return item.getItemDamage();
+			return item.getItemDamage()*4+ExtractorModOres.getIndexOffsetForIngot(item)-step/256;
+		return item.getItemDamage()-step/256;
+	}
+
+	@Override
+	public String getSpritesheet(ItemStack is) {
+		String base = "";
+		if (is.itemID == RotaryCraft.modextracts.itemID) {
+			base = "Textures/Items/modextracts.png";
+		}
+		else if (is.itemID == RotaryCraft.modingots.itemID) {
+			base = "Textures/Items/modingots.png";
+		}
+		int step = 0;
+		if (is.itemID == RotaryCraft.modextracts.itemID)
+			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[is.getItemDamage()/4]);
+		else
+			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[is.getItemDamage()]);
+		if (step > 0) {
+			base = base.substring(0, base.length()-4);
+			base += String.format("%d", 1+step);
+			base += ".png";
+		}
+		return base;
 	}
 
 }

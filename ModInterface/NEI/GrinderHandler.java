@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -21,6 +23,8 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.GuiGrinder;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class GrinderHandler extends TemplateRecipeHandler {
 
@@ -33,6 +37,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		public GrinderRecipe(List<ItemStack> in) {
 			input = in;
 			output = RecipesGrinder.getRecipes().getSmeltingResult(in.get(0));
+			ReikaJavaLibrary.pConsole(in);
 		}
 
 		@Override
@@ -43,7 +48,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input, 71, 24);
+			return new PositionedStack(input.get((int)(System.nanoTime()/1000000000)%input.size()), 71, 24);
 		}
 	}
 

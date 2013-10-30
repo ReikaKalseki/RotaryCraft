@@ -13,10 +13,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 
@@ -26,7 +28,7 @@ public class RecipesCompactor
 
 	/** The list of smelting results. */
 	private Map metaSmeltingList = new HashMap();
-	private List<ItemStack> compactables;
+	private List<ItemStack> compactables = new ArrayList();
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
@@ -98,5 +100,15 @@ public class RecipesCompactor
 
 	public List<ItemStack> getCompactables() {
 		return compactables;
+	}
+
+	public ItemStack getSource(ItemStack result) {
+		for (int i = 0; i < compactables.size(); i++) {
+			ItemStack in = compactables.get(i);
+			ItemStack out = this.getSmeltingResult(in);
+			if (ReikaItemHelper.matchStacks(result, out))
+				return in;
+		}
+		return null;
 	}
 }

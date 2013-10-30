@@ -36,6 +36,10 @@ public class ExtractorModOres {
 		}
 	}
 
+	public static int getSpritesheet(ModOreList ore) {
+		return ore.ordinal()/64;
+	}
+
 	public static boolean isModOreIngredient(ItemStack is) {
 		if (is == null)
 			return false;

@@ -28,7 +28,7 @@ public class RecipesGrinder {
 	private Map metaSmeltingList = new HashMap();
 
 	private ArrayList<ItemStack> products = new ArrayList();
-	private HashMap<List<Integer>, ItemStack> recipes = new HashMap();
+	private ArrayList<ItemStack> ingredients = new ArrayList();
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
@@ -93,7 +93,15 @@ public class RecipesGrinder {
 		List<Integer> arr = new ArrayList();
 		arr.add(out.itemID);
 		arr.add(out.getItemDamage());
-		return recipes.get(arr);
+		List<ItemStack> in = new ArrayList();
+		for (int i = 0; i < ingredients.size(); i++) {
+			ItemStack is = this.getSmeltingResult(ingredients.get(i));
+			if (is != null) {
+				if (ReikaItemHelper.matchStacks(is, out))
+					in.add(ingredients.get(i));
+			}
+		}
+		return in;
 	}
 
 	public Map getSmeltingList()
@@ -115,10 +123,10 @@ public class RecipesGrinder {
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
 
 		products.add(out);
+		ingredients.add(in);
 		List<Integer> arr = new ArrayList();
 		arr.add(out.itemID);
 		arr.add(out.getItemDamage());
-		recipes.put(arr, in.copy());
 	}
 
 	/**
