@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -135,6 +136,22 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 
 	public int getWater() {
 		return tank.getLevel();
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		tank.readFromNBT(NBT);
 	}
 
 }

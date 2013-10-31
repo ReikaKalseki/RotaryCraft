@@ -158,9 +158,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		tank.writeToNBT(NBT);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
