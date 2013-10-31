@@ -101,7 +101,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 
 	@Override
 	public int getRedstoneOverride() {
-		return 0;
+		return 15*tank.getLevel()/tank.getCapacity();
 	}
 
 	@Override
