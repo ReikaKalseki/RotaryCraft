@@ -176,7 +176,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ReikaBlockHelper.isOre(ingredient) || (ingredient.itemID == RotaryCraft.extracts.itemID && ingredient.getItemDamage() < 24) || ingredient.itemID == RotaryCraft.modextracts.itemID) {
+		if (ReikaBlockHelper.isOre(ingredient) || (ingredient.itemID == RotaryCraft.extracts.itemID && ingredient.getItemDamage() < 24) || (ingredient.itemID == RotaryCraft.modextracts.itemID && ingredient.getItemDamage()%4 != 3)) {
 			ModOreList ore = ModOreList.getModOreFromOre(ingredient);
 			if (ingredient.itemID == RotaryCraft.modextracts.itemID)
 				ore = ExtractorModOres.getOreFromExtract(ingredient);

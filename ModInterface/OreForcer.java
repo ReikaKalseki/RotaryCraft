@@ -99,7 +99,15 @@ public final class OreForcer {
 		case TRANSITIONAL:
 			intercraftMagmanite();
 			break;
+		case RAILCRAFT:
+			intercraftFirestone();
 		}
+	}
+
+	private static void intercraftFirestone() {
+		Item item = GameRegistry.findItem(ModList.RAILCRAFT.getModLabel(), "railcraft.firestone.raw");
+		GameRegistry.addShapelessRecipe(new ItemStack(item), ItemStacks.getModOreIngot(ModOreList.FIRESTONE));
+		RotaryCraft.logger.log("RotaryCraft firestone can now be crafted into RailCraft firestone!");
 	}
 
 	private static void intercraftMagmanite() {

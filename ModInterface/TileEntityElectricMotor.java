@@ -21,7 +21,9 @@ import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityElectricMotor extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IElectrical {
 
@@ -53,7 +55,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		}
 	}
 
-	public static final int MAXCOILS = 32;
+	public static final int MAXCOILS = 5;
 	private Tier type = Tier.LOW;
 
 	private int numberCoils = 0;
@@ -108,7 +110,11 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -129,11 +135,12 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		if (numberCoils == MAXCOILS) {
+		if (numberCoils == 5) {
 			type = Tier.HIGH;
 		}
-		else if (numberCoils >= MAXCOILS/2) {
+		else if (numberCoils >= 2) {
 			type = Tier.MEDIUM;
 		}
 		else
@@ -141,9 +148,20 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		if (this.isGettingSufficientPower()) {
 			omega = type.outputSpeed;
 			torque = type.outputTorque;
+			float pit = 1+((type.ordinal()-1)/3F);
+			float m = 1.025F;
+			if (type == Tier.LOW)
+				m = 2.31F;
+			if (type == Tier.HIGH)
+				m = 0.572F;
+			if (tickcount >= EnumEngineType.DC.getSoundLength(0, pit*m)) {
+				SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.36F, pit);
+				tickcount = 0;
+			}
 		}
 		else {
 			omega = torque = 0;
+			tickcount = 2000;
 		}
 		power = omega*torque;
 	}

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.world.World;
@@ -13,6 +22,9 @@ import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler {
+
+	public static final int GEN_OMEGA = 1024;
+	public static final int GEN_TORQUE = 512;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

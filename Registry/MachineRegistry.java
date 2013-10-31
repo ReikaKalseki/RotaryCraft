@@ -252,12 +252,12 @@ public enum MachineRegistry {
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"machine.fertilizer",		BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
-	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2),
-	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3),
+	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, "RenderGenerator"),
+	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, "RenderElecMotor"),
 	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer"),
 	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
-	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16),
+	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16, "RenderAggregator"),
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4);
@@ -331,7 +331,7 @@ public enum MachineRegistry {
 	}
 
 	public String getRenderPackage() {
-		if (this.hasPrerequisite()) {
+		if (this.hasPrerequisite() || BlockModEngine.class.isAssignableFrom(blockClass)) {
 			return "Reika.RotaryCraft.ModInterface.";
 		}
 		switch(this) {
@@ -889,7 +889,7 @@ public enum MachineRegistry {
 	public boolean isAvailableInCreativeInventory() {
 		if (this.isDummiedOut())
 			return false;
-		if (this.isIncomplete() && !DragonAPICore.isReikasComputer())
+		if (this.isIncomplete() && !(DragonAPICore.isReikasComputer() || ConfigRegistry.DEBUGMODE.getState()))
 			return false;
 		return true;
 	}

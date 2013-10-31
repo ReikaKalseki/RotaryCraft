@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -26,14 +27,19 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAggregator extends TileEntityPowerReceiver implements IFluidHandler {
 
-	private HybridTank tank = new HybridTank("aggregator", 6000);
+	public static final int CAPACITY = 6000;
+
+	private HybridTank tank = new HybridTank("aggregator", CAPACITY);
 	private StepTimer timer = new StepTimer(2);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getPowerBelow();
 		if (power >= MINPOWER && omega >= MINSPEED) {
 			if (!tank.isFull()) {
+				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+				float h = biome.rainfall; //Not used by any biome
 				tank.addLiquid(25, FluidRegistry.WATER);
 			}
 		}
@@ -53,7 +59,9 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 					if (te instanceof IFluidHandler) {
 						IFluidHandler fl = (IFluidHandler)te;
 						if (fl.canFill(dir.getOpposite(), FluidRegistry.WATER)) {
-							int amt = fl.fill(ForgeDirection.DOWN, tank.getFluid(), true);
+							FluidStack fs = fl.drain(dir, Integer.MAX_VALUE, false);
+							int max = tank.getLevel()/4+1;
+							int amt = fl.fill(ForgeDirection.DOWN, new FluidStack(tank.getActualFluid(), max), true);
 							tank.removeLiquid(amt);
 						}
 					}
@@ -123,6 +131,10 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 	@Override
 	public int getRedstoneOverride() {
 		return 15*tank.getLevel()/tank.getCapacity();
+	}
+
+	public int getWater() {
+		return tank.getLevel();
 	}
 
 }

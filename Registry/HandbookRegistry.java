@@ -88,6 +88,8 @@ public enum HandbookRegistry {
 	STEAMTURB(MachineRegistry.STEAMTURBINE),
 	LAVAMAKER(MachineRegistry.LAVAMAKER),
 	MOTOR(MachineRegistry.ELECTRICMOTOR),
+	AGGREGATOR(MachineRegistry.AGGREGATOR),
+	FUELENGINE(MachineRegistry.FUELENGINE),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -141,6 +143,7 @@ public enum HandbookRegistry {
 	BLOCKCANNON(MachineRegistry.BLOCKCANNON),
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	EMP(MachineRegistry.EMP),
+	AIRGUN(MachineRegistry.AIRGUN),
 
 	SURVMACHINEDESC("Surveying Machines", "Surveying"),
 	GPR(MachineRegistry.GPR),
@@ -174,6 +177,7 @@ public enum HandbookRegistry {
 	TERRA(MachineRegistry.TERRAFORMER),
 	LINE(MachineRegistry.LINEBUILDER),
 	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
+	SONICBORER(MachineRegistry.SONICBORER),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

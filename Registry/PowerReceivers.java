@@ -75,8 +75,8 @@ public enum PowerReceivers {
 	LAVAMAKER(),
 	GENERATOR(),
 	AGGREGATOR(1, 4096, 8192),
-	AIRGUN(512, 1, 16384);
-
+	AIRGUN(512, 1, 16384),
+	SONICBORER(1024, 1, 65536);
 
 	private int minT;
 	private int minS;

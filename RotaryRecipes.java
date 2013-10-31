@@ -249,6 +249,8 @@ public class RotaryRecipes {
 		MachineRegistry.BYPASS.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Block.netherBrick, 'G', Block.glass, 's', ItemStacks.steelingot});
 
 		MachineRegistry.SEPARATION.addSizedCrafting(4, new Object[]{"sGs", "OGO", "sGs", 'O', Block.blockLapis, 'G', Block.glass, 's', ItemStacks.steelingot});
+
+		MachineRegistry.GENERATOR.addCrafting("gps", "iGs", "ppp", 'p', ItemStacks.basepanel, 'g', Item.ingotGold, 's', ItemStacks.steelingot, 'G', ItemStacks.generator, 'i', ItemStacks.impeller, 's', ItemStacks.shaftcore);
 	}
 
 	private static void addCraftItems() {

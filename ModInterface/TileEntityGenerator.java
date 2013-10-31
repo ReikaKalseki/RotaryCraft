@@ -119,7 +119,8 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEle
 	}
 
 	public ElectricityPack getProduction() {
-		return new ElectricityPack(this.getGenCurrent(), OUTPUT_VOLTAGE);
+		ElectricityPack e = new ElectricityPack(this.getGenCurrent(), OUTPUT_VOLTAGE);
+		return e;
 	}
 
 	private float getGenCurrent() {

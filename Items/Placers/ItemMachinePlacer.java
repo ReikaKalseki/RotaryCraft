@@ -26,8 +26,8 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Blocks.BlockGPR;
+import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import cpw.mods.fml.relauncher.Side;
@@ -205,5 +205,13 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	@Override
 	public int getMetadata(int meta) {
 		return MachineRegistry.machineList[meta].getMachineMetadata();
+	}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
+		int i = is.getItemDamage();
+		if (MachineRegistry.machineList[i].isIncomplete()) {
+			li.add("This machine is in development. Use at your own risk.");
+		}
 	}
 }

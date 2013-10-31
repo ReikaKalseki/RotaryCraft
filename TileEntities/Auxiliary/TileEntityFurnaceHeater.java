@@ -39,7 +39,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		if ((this.hasFurnace(world) || this.hasBlastFurnace(world)) && power > 0) {
+		if ((this.hasFurnace(world) || this.hasBlastFurnace(world)) && power > 0 || this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
@@ -56,6 +56,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature >= MAXTEMP)
 			if (!world.isRemote && rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
+	}
+
+	public boolean hasHeatableMachine(World world) {
+		return world.getBlockTileEntity(fx, fy, fz) instanceof ThermalMachine;
 	}
 
 	@Override
@@ -112,7 +116,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 					ThermalMachine tm = (ThermalMachine)te;
 					if (tm.canBeFrictionHeated()) {
 						int tdiff = temperature-tm.getTemperature();
-						tm.addTemperature(tdiff);
+						if (tdiff > 0)
+							tm.addTemperature(tdiff);
 						if (tm.getTemperature() > tm.getMaxTemperature()) {
 							tm.onOverheat(world, fx, fy, fz);
 						}
@@ -255,7 +260,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void addTemperature(int temp) {
-
+		temperature += temp;
 	}
 
 	@Override
