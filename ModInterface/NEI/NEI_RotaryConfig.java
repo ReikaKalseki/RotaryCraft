@@ -69,6 +69,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		API.hideItem(RotaryCraft.beamblock.blockID);
 		API.hideItem(RotaryCraft.canola.blockID);
 		API.hideItem(RotaryCraft.miningpipe.blockID);
+		API.hideItem(RotaryCraft.waterblock.blockID);
 	}
 
 	@Override

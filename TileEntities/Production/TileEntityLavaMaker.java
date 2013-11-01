@@ -330,4 +330,8 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 		tank.empty();
 	}
 
+	public void removeLava(int amt) {
+		tank.removeLiquid(amt);
+	}
+
 }

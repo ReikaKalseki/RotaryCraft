@@ -80,6 +80,10 @@ public class ItemPipePlacer extends ItemMulti {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 0.8F+0.2F*par5Random.nextFloat(), 0.6F+0.4F*par5Random.nextFloat());
 				break;
 			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 0.8F+0.2F*par5Random.nextFloat(), 1.3F+0.5F*par5Random.nextFloat());
 				break;
 			}

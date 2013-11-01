@@ -108,7 +108,7 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 				int level = tank.getLevel();
 				if (MachineRegistry.getMachine(world, x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ) == MachineRegistry.PIPE) {
 					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ);
-					if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+					if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 						oldLevel = tile.liquidLevel;
 						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 						int newlevel = ReikaMathLibrary.extrema(level+oldLevel/4+1, 0, "max");
@@ -287,10 +287,13 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 			if (inv[8].stackSize+1 > inv[8].getMaxStackSize())
 				return false;
 			if (inv[3] != null) {
-				ItemStack bonus = ExtractorBonus.getBonusForIngredient(inv[3]).getBonus();
-				if (bonus != null) {
-					if (!ReikaItemHelper.matchStacks(bonus, inv[8]))
-						return false;
+				ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(inv[3]);
+				if (bon != null) {
+					ItemStack bonus = bon.getBonus();
+					if (bonus != null) {
+						if (!ReikaItemHelper.matchStacks(bonus, inv[8]))
+							return false;
+					}
 				}
 			}
 		}

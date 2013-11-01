@@ -40,15 +40,14 @@ public enum ExtraConfigIDs implements IDRegistry {
 
 	DECOBLOCKS("Extra Block IDs", "Deco Block", 450, Block.class),
 	BEDROCKSLICE("Extra Block IDs", "Bedrock Slice", 451, Block.class),
-	//GRAVLOG("Extra Block IDs", "Tree Log", 452, Block.class),
-	//GRAVLEAVES("Extra Block IDs", "Tree Leaves", 453, Block.class),
 	LIGHTBLOCK("Extra Block IDs", "LightBlock", 454, Block.class),
 	CANOLA("Extra Block IDs", "Canola", 455, Block.class),
 	MININGPIPE("Extra Block IDs", "Mining Pipe", 456, Block.class),
 	BRIDGEBLOCK("Extra Block IDs", "Light Bridge", 457, Block.class),
 	BLASTPANE("Extra Block IDs", "Blast Glass Pane", 458, Block.class),
 	BLASTGLASS("Extra Block IDs", "Blast Glass", 459, Block.class),
-	BEAMBLOCK("Extra Block IDs", "Beam Block", 460, Block.class);
+	BEAMBLOCK("Extra Block IDs", "Beam Block", 460, Block.class),
+	WATERBLOCK("Extra Block IDs", "Water Block", 452, Block.class);
 
 	private String name;
 	private String category;

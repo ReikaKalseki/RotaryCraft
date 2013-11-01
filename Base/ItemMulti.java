@@ -156,8 +156,17 @@ public class ItemMulti extends ItemBasic {
 					item.setTagCompound(new NBTTagCompound());
 				item.stackTagCompound.setInteger("damage", 0);
 			}
-			if (type != 6 || (type == 6 && (i < 5 || i > 6)))
+			if (type == 6) {
+				if (i < 5 || i > 6)
+					par3List.add(item);
+			}
+			else if (type == 10) {
+				if (i != 3)
+					par3List.add(item);
+			}
+			else {
 				par3List.add(item);
+			}
 			if (item.itemID == ItemStacks.shaftcore.itemID && item.getItemDamage() == ItemStacks.shaftcore.getItemDamage()) {
 				ItemStack mag = item.copy();
 				mag.stackTagCompound = new NBTTagCompound();

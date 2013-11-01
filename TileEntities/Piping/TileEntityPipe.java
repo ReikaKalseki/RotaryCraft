@@ -9,13 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -28,7 +28,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class TileEntityPipe extends TileEntityPiping {
 
-	public int liquidID = -1;
+	private Fluid liquid;
 	public int liquidLevel = 0;
 	public int oldLevel = 0;
 	public int oldPressure = 0;
@@ -46,7 +46,7 @@ public class TileEntityPipe extends TileEntityPiping {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.draw(world, x, y, z);
-		this.getDensity();
+		fluidrho = this.getDensity();
 		this.transfer(world, x, y, z);
 		this.drainReservoir(world, x, y, z);
 		this.getFromBucketFiller(world, x, y, z);
@@ -54,7 +54,7 @@ public class TileEntityPipe extends TileEntityPiping {
 		if (liquidLevel < 0)
 			liquidLevel = 0;
 		if (liquidLevel == 0)
-			liquidID = -1;
+			liquid = null;
 		if (fluidPressure > 0 && tickcount > 40) {
 			fluidPressure--;
 			tickcount = 0;
@@ -63,23 +63,22 @@ public class TileEntityPipe extends TileEntityPiping {
 			fluidPressure = 0;
 	}
 
-	public void getDensity() {
-		if (liquidID == 10 || liquidID == 11)
-			fluidrho = (int)ReikaEngLibrary.rholava/100;
-		if (liquidID == 8 || liquidID == 9)
-			fluidrho = (int)ReikaEngLibrary.rhowater/100;
-		if (liquidID == -1)
-			fluidrho = 0;
+	public int getDensity() {
+		if (FluidRegistry.LAVA.equals(liquid))
+			return (int)ReikaEngLibrary.rholava/100;
+		if (FluidRegistry.WATER.equals(liquid))
+			return (int)ReikaEngLibrary.rhowater/100;
+		return liquid != null ? liquid.getDensity() : 0;
 	}
 
 	private void drainReservoir(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
 			if (tile != null && !tile.isEmpty()) {
-				if (tile.getFluid().getBlockID() == liquidID || liquidID == -1) {
+				if (this.canTakeInFluid(tile.getFluid())) {
 					liquidLevel += tile.getLevel()/4+1;
 					tile.setLevel(tile.getLevel()-tile.getLevel()/4-1);
-					liquidID = tile.getFluid().getBlockID();
+					liquid = tile.getFluid();
 				}
 			}
 		}
@@ -105,13 +104,21 @@ public class TileEntityPipe extends TileEntityPiping {
 		}
 	}
 
+	public boolean canTakeInFluid(Fluid f) {
+		if (f == null)
+			return false;
+		if (f.equals(FluidRegistry.getFluid("jet fuel")))
+			return false;
+		return liquid == null || liquid.equals(f);
+	}
+
 	private void transferFromPump(TileEntityPump tile) {
 		if (tile != null) {
-			if (tile.getLevel() > liquidLevel && (tile.getLiquid().getBlockID() == liquidID || liquidID == -1) && tile.getLevel() > 0) {
-				Fluid f = tile.getLiquid();
-				if (f == null)
-					return;
-				liquidID = f.getBlockID();
+			Fluid f = tile.getLiquid();
+			if (f == null)
+				return;
+			if (tile.getLevel() > liquidLevel && this.canTakeInFluid(f) && tile.getLevel() > 0) {
+				liquid = f;
 				//oldLevel = tile.getLevel();
 				//tile.setLiquid(ReikaMathLibrary.extrema(tile.getLevel()-tile.getLevel()/4-1, 0, "max"));
 				//liquidLevel = tileReikaMathLibrary.extrema(liquidLevel+oldLevel/4+1, 0, "max");
@@ -130,30 +137,17 @@ public class TileEntityPipe extends TileEntityPiping {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				if (liquidID == FluidRegistry.LAVA.getBlockID() || liquidID == -1) {
+				if (this.canTakeInFluid(FluidRegistry.LAVA)) {
 					if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.LAVAMAKER) {
-						TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-						if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
-							oldLevel = tile.liquidLevel;
-							liquidID = FluidRegistry.LAVA.getBlockID();
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+						TileEntityLavaMaker tile = (TileEntityLavaMaker)world.getBlockTileEntity(dx, dy, dz);
+						if (tile != null && tile.getLevel() > 0) {
+							oldLevel = tile.getLevel();
+							liquid = FluidRegistry.LAVA;
+							tile.removeLava(tile.getLevel()/4+1);
 							liquidLevel += oldLevel/4+1;
 						}
 					}
 				}
-			}
-		}
-	}
-
-	private void transferFromLavamaker(TileEntityLavaMaker tile) {
-		if (tile != null) {
-			if (tile.getLevel() <= 0)
-				return;
-			else if (tile.getLevel() > liquidLevel && (liquidID == 11 || liquidID == -1)) {
-				liquidID = 11;
-				oldLevel = tile.getLevel();
-				tile.setEmpty();
-				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
 			}
 		}
 	}
@@ -164,14 +158,14 @@ public class TileEntityPipe extends TileEntityPiping {
 				return;
 			boolean water = tile.getContainedFluid().equals(FluidRegistry.WATER);
 			boolean lava = tile.getContainedFluid().equals(FluidRegistry.LAVA);
-			if (tile.getLevel() > liquidLevel && (liquidID == 9 || liquidID == -1) && water) {
-				liquidID = 9;
+			if (tile.getLevel() > liquidLevel && this.canTakeInFluid(FluidRegistry.WATER) && water) {
+				liquid = FluidRegistry.WATER;
 				oldLevel = tile.getLevel();
 				tile.setEmpty();
 				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
 			}
-			else if (tile.getLevel() > liquidLevel && (liquidID == 11 || liquidID == -1) && lava) {
-				liquidID = 11;
+			else if (tile.getLevel() > liquidLevel && this.canTakeInFluid(FluidRegistry.LAVA) && lava) {
+				liquid = FluidRegistry.LAVA;
 				oldLevel = tile.getLevel();
 				tile.setEmpty();
 				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+oldLevel, 0, "max");
@@ -181,13 +175,13 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	private void interPipe(TileEntityPipe tile) {
 		if (tile != null) {
-			if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-				liquidID = tile.liquidID;
+			if (tile.liquidLevel > liquidLevel && this.canTakeInFluid(tile.liquid) && tile.liquidLevel > 0) {
+				liquid = tile.liquid;
 				oldLevel = tile.liquidLevel;
 				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
 				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
 			}
-			if (tile.fluidPressure > fluidPressure && tile.liquidID == liquidID && tile.liquidLevel > 0) {
+			if (tile.fluidPressure > fluidPressure && this.canTakeInFluid(tile.liquid) && tile.liquidLevel > 0) {
 				oldPressure = tile.fluidPressure;
 				tile.fluidPressure = ReikaMathLibrary.extrema(tile.fluidPressure-(tile.fluidPressure-fluidPressure)/4-1, 0, "max");
 				fluidPressure = ReikaMathLibrary.extrema(fluidPressure+(oldPressure-fluidPressure)/4+1, 0, "max");
@@ -254,8 +248,10 @@ public class TileEntityPipe extends TileEntityPiping {
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("level", liquidLevel);
-		NBT.setInteger("liq", liquidID);
+
 		NBT.setInteger("pressure", fluidPressure);
+
+		ReikaNBTHelper.writeFluidToNBT(NBT, liquid);
 	}
 
 	/**
@@ -265,13 +261,14 @@ public class TileEntityPipe extends TileEntityPiping {
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		liquidID = NBT.getInteger("liq");
 		liquidLevel = NBT.getInteger("level");
 		fluidPressure = NBT.getInteger("pressure");
 
 		if (liquidLevel < 0) {
 			liquidLevel = 0;
 		}
+
+		liquid = ReikaNBTHelper.getFluidFromNBT(NBT);
 	}
 
 	@Override
@@ -301,13 +298,19 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean hasLiquid() {
-		return liquidID > 0 && liquidLevel > 0;
+		return liquid != null && liquidLevel > 0;
 	}
 
 	@Override
 	public Fluid getLiquidType() {
-		if (liquidID <= 0)
-			return FluidRegistry.LAVA;
-		return FluidRegistry.lookupFluidForBlock(Block.blocksList[liquidID]);
+		return liquid;
+	}
+
+	public boolean contains(Fluid f) {
+		return f.equals(liquid);
+	}
+
+	public void setFluid(Fluid f) {
+		liquid = f;
 	}
 }

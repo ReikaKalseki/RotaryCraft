@@ -9,77 +9,64 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.Instantiable.BlockArray;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
-import Reika.RotaryCraft.Base.TileEntityPiping;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Blocks.BlockFallingWater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFlooder extends TileEntityPiping {
+public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
 	//Make pick random coord in 16-block radius, find top block (solid or source block), ++y, then add liquid
 
-	public int liquidID = -1;
-	public int liquidLevel;
 	public int oldLevel;
 
-	private BlockArray blocks = new BlockArray();
+	private HybridTank tank = new HybridTank("flooder", 4000);
+
+	private StepTimer waterTimer = new StepTimer(5);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
 		this.draw(world, x, y, z);
-		if (blocks.isEmpty() || liquidLevel == 0) {
-			if (liquidID == 9) {
-				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
+		if (BlockFallingWater.canMoveInto(world, x, y-1, z)) {
+			waterTimer.update();
+			if (tank.getLevel() >= 1000 && waterTimer.checkCap()) {
+				tank.removeLiquid(1000);
+				world.setBlock(x, y-1, z, RotaryCraft.waterblock.blockID);
 			}
-			if (liquidID == 11) {
-				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.lavaMoving.blockID, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveAddWithBounds(world, x, y-1, z, Block.lavaStill.blockID, x-16, 0, z-16, x+16, y-1, z+16);
-			}
-			blocks.sortBlocksByHeight();
-		}
-		boolean drain = false;
-		if (drain) {
-			for (int i = 8; i <= 11; i++)
-				ReikaChunkHelper.removeBlocksFromChunk(world, x, z, i, -1);
-		}/*
-		else
-			if (liquidLevel > 0 && tickcount >= 20) {
-				this.spill2(world, x, y, z);
-				tickcount = 0;
-			}*/
-		else if (tickcount > 1 && liquidLevel > 0 && !blocks.isEmpty()) {
-			tickcount = 0;
-			int[] coord = blocks.getNextAndMoveOn();
-			world.setBlock(coord[0], coord[1], coord[2], liquidID);
-			//ReikaJavaLibrary.pConsole(coord[0]+"   "+coord[1]+"   "+coord[2]);
-			world.markBlockForUpdate(coord[0], coord[1], coord[2]);
-			liquidLevel--;
 		}
 	}
 
 	private void getFromPipe(TileEntityPipe tile) {
 		if (tile != null) {
-			if (tile.liquidLevel > liquidLevel && (tile.liquidID == liquidID || liquidID == -1) && tile.liquidLevel > 0) {
-				liquidID = tile.liquidID;
+			if (tile.liquidLevel > tank.getLevel() && this.canTakeLiquid(tile.getLiquidType()) && tile.liquidLevel > 0) {
 				oldLevel = tile.liquidLevel;
-				tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-(tile.liquidLevel-liquidLevel)/4-1, 0, "max");
-				liquidLevel = ReikaMathLibrary.extrema(liquidLevel+(oldLevel-liquidLevel)/4+1, 0, "max");
+				int dl = tile.liquidLevel-tank.getLevel();
+				tile.liquidLevel -= dl/4+1;
+				tank.addLiquid(dl/4+1, FluidRegistry.WATER);
 			}
 		}
 	}
 
-	@Override
+	private boolean canTakeLiquid(Fluid f) {
+		if (!f.canBePlacedInWorld())
+			return false;
+		if (tank.isEmpty())
+			return true;
+		return tank.getActualFluid().equals(f);
+	}
+
 	public void draw(World world, int x, int y, int z) {
 		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
@@ -114,8 +101,8 @@ public class TileEntityFlooder extends TileEntityPiping {
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("level", liquidLevel);
-		NBT.setInteger("liq", liquidID);
+
+		tank.writeToNBT(NBT);
 	}
 
 	/**
@@ -125,22 +112,14 @@ public class TileEntityFlooder extends TileEntityPiping {
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		liquidID = NBT.getInteger("liq");
-		liquidLevel = NBT.getInteger("level");
 
-		if (liquidLevel < 0)
-		{
-			liquidLevel = 0;
-		}
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.SPILLER.ordinal();
 	}
-
-	@Override
-	public void transfer(World world, int x, int y, int z) {}
 
 	@Override
 	public int getRedstoneOverride() {
@@ -154,21 +133,51 @@ public class TileEntityFlooder extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return true;
+		return this.canConnectToPipe(p) && side != ForgeDirection.DOWN;
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return Block.cloth.getIcon(0, 15);
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return this.canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
 	}
 
 	@Override
-	public boolean hasLiquid() {
-		return liquidLevel > 0 && liquidID > 0;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
 	}
 
 	@Override
-	public Fluid getLiquidType() {
-		return liquidID == 9 ? FluidRegistry.WATER : liquidID == 1 ? FluidRegistry.LAVA : null;
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return from != ForgeDirection.DOWN && fluid.canBePlacedInWorld();
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
 	}
 }

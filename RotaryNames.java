@@ -139,6 +139,7 @@ public class RotaryNames {
 		LanguageRegistry.addName(RotaryCraft.lightblock, getName("block.light", true));
 		LanguageRegistry.addName(RotaryCraft.beamblock, getName("block.beam", true));
 		LanguageRegistry.addName(RotaryCraft.lightbridge, getName("block.bridge", true));
+		LanguageRegistry.addName(RotaryCraft.waterblock, getName("block.fallingwater", true));
 
 		for (int i = 0; i < shaftPartNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), getName(shaftPartNames, i));

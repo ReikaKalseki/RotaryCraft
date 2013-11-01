@@ -41,28 +41,7 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	public static final Fluid JETFUEL = FluidRegistry.getFluid("jet fuel");
 	public static final Fluid LUBRICANT = FluidRegistry.getFluid("lubricant");
 
-	public void getLava(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Lava!");
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (this.canAccept(LAVA) && tank.getLevel() < CAPACITY) {
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.liquidID == 11 && tile.liquidLevel > 0) {
-						oldLevel = tile.liquidLevel;
-						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.LAVA);
-					}
-				}
-			}
-		}
-	}
-
-	public void getWater(World world, int x, int y, int z, int metadata) {
+	public void getPipe(World world, int x, int y, int z, int metadata) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
 		int oldLevel = 0;
 		for (int i = 2; i < 6; i++) {
@@ -73,10 +52,10 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 			if (this.canAccept(WATER) && tank.getLevel()  < CAPACITY) {
 				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
 					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.liquidID == 9 && tile.liquidLevel > 0) {
+					if (tile != null && this.canAccept(tile.getLiquidType()) && tile.liquidLevel > 0) {
 						oldLevel = tile.liquidLevel;
 						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
+						tank.addLiquid(oldLevel/4+1, tile.getLiquidType());
 					}
 				}
 			}
@@ -166,8 +145,7 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 			return;
 		if (filling) {
 			//ReikaJavaLibrary.pConsole(fuelLevel);
-			this.getWater(world, x, y, z, meta);
-			this.getLava(world, x, y, z, meta);
+			this.getPipe(world, x, y, z, meta);
 			this.getLube(world, x, y, z, meta);
 			this.getFuel(world, x, y, z, meta);
 			if (!this.operationComplete(tickcount, 0))

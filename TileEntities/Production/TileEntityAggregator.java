@@ -22,11 +22,13 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityAggregator extends TileEntityPowerReceiver implements IFluidHandler {
+public class TileEntityAggregator extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector {
 
 	public static final int CAPACITY = 6000;
 
@@ -55,8 +57,16 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 				int dx = x+dir.offsetX;
 				int dz = z+dir.offsetZ;
 				int id = world.getBlockId(dx, y, dz);
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, y, dz);
+				TileEntity te = world.getBlockTileEntity(dx, y, dz);
+				if (m == MachineRegistry.PIPE) {
+					TileEntityPipe tp = (TileEntityPipe)te;
+					if (tp.canTakeInFluid(FluidRegistry.WATER));
+					int amt = tank.getLevel()/4+1;
+					tp.liquidLevel += amt;
+					tp.setFluid(FluidRegistry.WATER);
+				}
 				if (id != 0) {
-					TileEntity te = world.getBlockTileEntity(dx, y, dz);
 					if (te instanceof IFluidHandler) {
 						IFluidHandler fl = (IFluidHandler)te;
 						if (fl.canFill(dir.getOpposite(), FluidRegistry.WATER)) {
@@ -152,6 +162,16 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 		super.readFromNBT(NBT);
 
 		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p) && side.offsetY == 0;
 	}
 
 }

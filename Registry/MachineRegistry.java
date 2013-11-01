@@ -208,7 +208,7 @@ public enum MachineRegistry {
 	BLASTFURNACE(		"machine.blastfurnace", 	BlockIMachine.class,		TileEntityBlastFurnace.class,		2),
 	FORCEFIELD(			"machine.forcefield", 		BlockMMachine.class,		TileEntityForceField.class,			6,	"RenderForceField"),
 	MUSICBOX(			"machine.musicbox", 		BlockMachine.class,			TileEntityMusicBox.class,			1),
-	SPILLER(			"machine.spiller", 			BlockPiping.class,			TileEntityFlooder.class,			3,	"PipeRenderer"),
+	SPILLER(			"machine.spiller", 			BlockMachine.class,			TileEntityFlooder.class,			8),
 	CHUNKLOADER(		"machine.chunkloader", 		BlockMMachine.class,		TileEntityChunkLoader.class,		7,	"RenderChunkLoader"),
 	MOBHARVESTER(		"machine.mobharvester", 	BlockMMachine.class,		TileEntityMobHarvester.class,		8,	"RenderHarvester"),
 	CCTV(				"machine.cctv", 			BlockMIMachine.class,		TileEntityCCTV.class,				11,	"RenderCCTV"),
@@ -248,7 +248,7 @@ public enum MachineRegistry {
 	UNUSED(				"machine.unused",			BlockMachine.class,			TileEntityCCTV.class,				7),
 	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
 	ARROWGUN(			"machine.arrowgun",			BlockDMachine.class,		TileEntityMachineGun.class,			1),
-	BOILER(				"machine.boiler", 			BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
+	BOILER(				"machine.frictionboiler", 	BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"machine.fertilizer",		BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
@@ -714,6 +714,8 @@ public enum MachineRegistry {
 		case BEAMMIRROR:
 		case GENERATOR:
 		case ELECTRICMOTOR:
+		case AIRGUN:
+		case FUELENGINE:
 			return true;
 		default:
 			return false;
@@ -729,6 +731,7 @@ public enum MachineRegistry {
 		case COOLINGFIN:
 		case COMPRESSOR:
 		case LINEBUILDER:
+		case SONICBORER:
 			return true;
 		default:
 			return false;
@@ -787,8 +790,6 @@ public enum MachineRegistry {
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1);
 		if (this == FUELLINE)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2);
-		if (this == SPILLER)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 3);
 		if (this == VALVE)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 4);
 		if (this == BYPASS)

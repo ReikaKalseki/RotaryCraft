@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -100,18 +99,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				if (m == MachineRegistry.PIPE) {
 					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 					if (tile != null) {
-						if (tile.liquidID == 11 && this.canAcceptFluid(FluidRegistry.LAVA) && tile.liquidLevel > 0) {
-							oldLevel = tile.liquidLevel;
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
-							tank.addLiquid(oldLevel/4, FluidRegistry.LAVA);
-						}
-						else if (tile.liquidID == 9 && this.canAcceptFluid(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-							oldLevel = tile.liquidLevel;
-							tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
-							tank.addLiquid(oldLevel/4, FluidRegistry.WATER);
-						}
-						else if (tile.liquidID > 0) {
-							Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[tile.liquidID]);
+						if (tile.getLiquidType() != null && tile.liquidLevel > 0) {
+							Fluid f = tile.getLiquidType();
 							if (f != null && this.canAcceptFluid(f)) {
 								tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
 								tank.addLiquid(oldLevel/4, f);

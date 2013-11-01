@@ -73,11 +73,11 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 	}
 
 	private double getFirePower() {
-		return ReikaMathLibrary.logbase(torque, 2);
+		return ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
 	private int getFireRate() {
-		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega, 2), 4, "max");
+		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
 	}
 
 	private void fire(World world, int x, int y, int z, int meta, List<EntityLivingBase> li) {
@@ -102,7 +102,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			Entity e = li.get(i);
 			e.motionX = vx;
 			e.motionZ = vz;
-			e.motionY = 0.2;
+			e.motionY = 1;
 		}
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 1); //gravity gun sound?
 	}
@@ -164,7 +164,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 	@Override
 	public int getMaxRange() {
-		return 10+2*(int)ReikaMathLibrary.logbase(torque, 2);
+		return 10+2*(int)ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
 }

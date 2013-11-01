@@ -87,7 +87,7 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 			else if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 				if (te.liquidLevel > level) {
-					Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[te.liquidID]);
+					Fluid f = te.getLiquidType();
 					if (this.canIntakeFluid(f)) {
 						fluid = f;
 						level += te.liquidLevel/4+1;
@@ -129,12 +129,13 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 		}
 		else if (m == MachineRegistry.PIPE) {
 			TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-			if (te.liquidLevel < level)
-				if (fluid.canBePlacedInWorld() && (te.liquidID == -1 || te.liquidID == fluid.getBlockID())) {
-					te.liquidID = fluid.getBlockID();
+			if (te.liquidLevel < level) {
+				if (te.canTakeInFluid(fluid)) {
+					te.setFluid(fluid);
 					te.liquidLevel += level/4+1;
 					level -= level/4+1;
 				}
+			}
 		}
 	}
 

@@ -115,8 +115,8 @@ public class TileEntityValve extends TileEntityPiping {
 			else if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 				if (te.liquidLevel < level)
-					if (fluid.canBePlacedInWorld() && (te.liquidID == -1 || te.liquidID == fluid.getBlockID())) {
-						te.liquidID = fluid.getBlockID();
+					if (te.canTakeInFluid(fluid)) {
+						te.setFluid(fluid);
 						te.liquidLevel += level/4+1;
 						level -= level/4+1;
 					}

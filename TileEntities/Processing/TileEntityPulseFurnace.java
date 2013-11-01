@@ -109,7 +109,7 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 				int dz = z+dir.offsetZ;
 				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
 					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+					if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 						oldLevel = tile.liquidLevel;
 						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 						water.addLiquid(oldLevel/4+1, FluidRegistry.WATER);

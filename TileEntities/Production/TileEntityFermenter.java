@@ -249,7 +249,7 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 			if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-				if (te != null && te.liquidID == 9) {
+				if (te != null && te.contains(FluidRegistry.WATER)) {
 					tank.addLiquid(te.liquidLevel/4+1, FluidRegistry.WATER);
 					te.liquidLevel -= te.liquidLevel/4+1;
 				}

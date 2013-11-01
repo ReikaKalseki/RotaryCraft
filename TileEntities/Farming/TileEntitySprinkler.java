@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -44,7 +45,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		int oldLevel = 0;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 				if (waterLevel < CAPACITY) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");

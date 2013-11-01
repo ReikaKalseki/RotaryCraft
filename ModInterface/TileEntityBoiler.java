@@ -127,7 +127,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 		if (waterLevel < CAPACITY) {
 			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
@@ -135,7 +135,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 			}
 			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
@@ -143,7 +143,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 			}
 			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
@@ -151,7 +151,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 			}
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
@@ -159,7 +159,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 			}
 			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
@@ -167,7 +167,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 			}
 			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && (tile.liquidID == 8 || tile.liquidID == 9) && tile.liquidLevel > 0) {
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");

@@ -58,7 +58,7 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	public boolean canIntakeLiquidFrom(TileEntityPipe te) {
-		return fluid == null || fluid.getBlockID() == te.liquidID;
+		return fluid == null || te.contains(fluid);
 	}
 
 	public boolean canOutputFuelTo(TileEntityFuelLine te) {
@@ -72,7 +72,7 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	public boolean canOutputLiquidTo(TileEntityPipe te) {
-		return te.liquidID == -1 || fluid.getBlockID() == te.liquidID;
+		return te.canTakeInFluid(fluid);
 	}
 
 	private void outputLiquid(World world, int x, int y, int z) {
@@ -85,7 +85,7 @@ public class TileEntityBypass extends TileEntityPiping {
 			if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 				if (level > 0 && te != null && te.liquidLevel < level && this.canOutputLiquidTo(te)) {
-					te.liquidID = fluid.getBlockID();
+					te.setFluid(fluid);
 					//ReikaJavaLibrary.pConsole(level+">"+te.liquidLevel, Side.SERVER);
 					te.liquidLevel += level/2;
 					level -= level/2;
@@ -116,7 +116,7 @@ public class TileEntityBypass extends TileEntityPiping {
 			if (m == MachineRegistry.PIPE) {
 				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
 				if (te != null && te.liquidLevel > level && this.canIntakeLiquidFrom(te)) {
-					fluid = FluidRegistry.lookupFluidForBlock(Block.blocksList[te.liquidID]);
+					fluid = te.getLiquidType();
 					level += te.liquidLevel/2;
 					te.liquidLevel -= te.liquidLevel/2;
 				}

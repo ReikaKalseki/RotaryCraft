@@ -673,9 +673,9 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
-			if (te.liquidLevel <= 0 || te.liquidID <= 0)
+			if (te.liquidLevel <= 0 || te.getLiquidType() == null)
 				return 0;
-			Fluid f = FluidRegistry.lookupFluidForBlock(Block.blocksList[te.liquidID]);
+			Fluid f = te.getLiquidType();
 			return f.getLuminosity();
 		}
 		return 0;

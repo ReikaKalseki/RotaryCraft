@@ -27,8 +27,10 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, SimpleProvider, PowerGenerator {
+public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, SimpleProvider, PowerGenerator, IPipeConnection {
 
 	public static final int GEN_OMEGA = 1024;
 	public static final int GEN_TORQUE = 512;
@@ -36,7 +38,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	private HybridTank tank = new HybridTank("fuelengine", 24000);
 	private HybridTank watertank = new HybridTank("waterfuelengine", 24000);
 
-	private StepTimer fuelTimer = new StepTimer(240);
+	private StepTimer fuelTimer = new StepTimer(60);
 
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
@@ -60,12 +62,61 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getIOSides(world, x, y, z, meta);
 		fuelTimer.setCap(this.getFuelDuration(world, x, y, z));
 		if (this.canEmitPower(world, x, y, z)) {
 			fuelTimer.update();
 			if (fuelTimer.checkCap()) {
 				tank.removeLiquid(1);
 			}
+			torque = GEN_TORQUE;
+			omega = GEN_OMEGA;
+			MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
+			if (m == MachineRegistry.ECU) {
+				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
+				omega *= te.getSpeedMultiplier();
+			}
+		}
+		else {
+			torque = omega = 0;
+		}
+		power = omega*torque;
+	}
+
+	private void getIOSides(World world, int x, int y, int z, int meta) {
+		switch(meta) {
+		case 0:
+			readx = x+1;
+			readz = z;
+			ready = y;
+			writex = x-1;
+			writey = y;
+			writez = z;
+			break;
+		case 1:
+			readx = x-1;
+			readz = z;
+			ready = y;
+			writex = x+1;
+			writey = y;
+			writez = z;
+			break;
+		case 2:
+			readz = z+1;
+			readx = x;
+			ready = y;
+			writex = x;
+			writey = y;
+			writez = z-1;
+			break;
+		case 3:
+			readz = z-1;
+			readx = x;
+			ready = y;
+			writex = x;
+			writey = y;
+			writez = z+1;
+			break;
 		}
 	}
 
@@ -160,6 +211,11 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 		super.readFromNBT(NBT);
 
 		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		return with == ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
 }

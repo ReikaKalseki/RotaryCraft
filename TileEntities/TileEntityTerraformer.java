@@ -146,7 +146,7 @@ public class TileEntityTerraformer extends TileEntityLiquidInventoryReceiver imp
 
 	private void interPipe(World world, int x, int y, int z) {
 		TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
-		if (tile != null && (tile.liquidID == 9 && tile.liquidLevel > 0)) {
+		if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 			int oldLevel = tile.liquidLevel;
 			tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
 			tank.setContents(ReikaMathLibrary.extrema(tank.getLevel()+oldLevel/4+1, 0, "max"), FluidRegistry.WATER);

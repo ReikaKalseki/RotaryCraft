@@ -9,12 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -115,11 +113,11 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			if (clicked.liquidID == -1 || clicked.liquidLevel <= 0) {
+			if (clicked.getLiquidType() == null || clicked.liquidLevel <= 0) {
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, FluidRegistry.lookupFluidForBlock(Block.blocksList[clicked.liquidID]).getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.fluidPressure));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.liquidLevel/(double)RotaryConfig.MILLIBUCKET, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.fluidPressure));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {

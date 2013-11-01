@@ -53,6 +53,7 @@ public class RotaryRegistration {
 		//GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
 		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
+		GameRegistry.registerBlock(RotaryCraft.waterblock, "WaterBlock");
 		/*
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			String regname = BlockRegistry.blockList[i].getName(0).toLowerCase().replaceAll("\\s","");
