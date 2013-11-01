@@ -46,6 +46,8 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		//ReikaJavaLibrary.pConsole(this.hasEnchantments());
 		//this.tickcount++;
 		this.getSummativeSidedPower();
+		if (power < MINPOWER)
+			return;
 		EntityPlayer ep = null;
 		if (owner != null)
 			ep = world.getPlayerEntityByName(owner);

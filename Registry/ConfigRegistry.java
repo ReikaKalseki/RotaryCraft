@@ -35,6 +35,7 @@ public enum ConfigRegistry implements ConfigList {
 	VACUUMRANGE("Max Vacuum Range", 128),
 	SONICRANGE("Max Sonic Weapon Range", 128),
 	FORCERANGE("Max Force Field Range", 128),
+	SONICBORERRANGE("Sonic Borer Range", 512),
 	SPAWNERLIMIT("Spawner Mob Limit", 128),
 	DETECTORRANGE("Player Detector Range", 128),
 	BREEDERRANGE("Breeder Range", 128),

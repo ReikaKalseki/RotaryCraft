@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -26,6 +27,7 @@ import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
@@ -39,6 +41,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	private HybridTank watertank = new HybridTank("waterfuelengine", 24000);
 
 	private StepTimer fuelTimer = new StepTimer(60);
+	private StepTimer soundTick = new StepTimer(77);
 
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
@@ -49,6 +52,25 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 			return te.getFuelMultiplier() > 0;
 		}
 		return true;
+	}
+
+	private void updateSpeed(int maxspeed, boolean revup) {
+		if (revup) {
+			if (omega < maxspeed) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
+				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed, 2);
+				tank.removeLiquid(1); //more fuel burn while spinning up
+				if (omega > maxspeed)
+					omega = maxspeed;
+			}
+		}
+		else {
+			if (omega > 0) {
+				//ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Side.SERVER);
+				omega -= omega/256+1;
+				//soundtick = 2000;
+			}
+		}
 	}
 
 	private int getFuelDuration(World world, int x, int y, int z) {
@@ -64,23 +86,28 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
 		fuelTimer.setCap(this.getFuelDuration(world, x, y, z));
+		int genomega = GEN_OMEGA;
 		if (this.canEmitPower(world, x, y, z)) {
 			fuelTimer.update();
 			if (fuelTimer.checkCap()) {
 				tank.removeLiquid(1);
 			}
 			torque = GEN_TORQUE;
-			omega = GEN_OMEGA;
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 			if (m == MachineRegistry.ECU) {
 				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
-				omega *= te.getSpeedMultiplier();
+				genomega *= te.getSpeedMultiplier();
 			}
 		}
 		else {
-			torque = omega = 0;
+			torque = genomega = 0;
 		}
+		this.updateSpeed(genomega, genomega >= omega);
 		power = omega*torque;
+		soundTick.update();
+		if (power > 0 && soundTick.checkCap()) {
+			SoundRegistry.playSoundAtBlock(SoundRegistry.DIESEL, world, x, y, z);
+		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

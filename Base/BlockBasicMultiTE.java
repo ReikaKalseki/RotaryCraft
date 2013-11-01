@@ -60,6 +60,7 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -213,6 +214,20 @@ public abstract class BlockBasicMultiTE extends Block {
 				return true;
 			}
 			return false;
+		}
+		if (m == MachineRegistry.FUELENGINE) {
+			if (is != null) {
+				if (FluidContainerRegistry.isFilledContainer(is)) {
+					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
+						TileEntityFuelEngine tf = (TileEntityFuelEngine)te;
+						tf.fill(ForgeDirection.DOWN, f, true);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						return true;
+					}
+				}
+			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)te;

@@ -12,16 +12,20 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySonicBorer extends TileEntityPowerReceiver implements PressureTE {
@@ -144,18 +148,22 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			return;
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		if (id == 0)
-			return;
 		Block b = Block.blocksList[id];
-		if (b.getBlockHardness(world, x, y, z) < 0)
-			;//return;
+		if (!this.canDrop(world, x, y, z) && !(b instanceof BlockFluid))
+			return;
 		List<ItemStack> li = b.getBlockDropped(world, x, y, z, meta, 0);
+		if (b.blockID == Block.mobSpawner.blockID) {
+			ItemStack is = new ItemStack(RotaryCraft.spawner);
+			TileEntityMobSpawner te = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
+			ReikaSpawnerHelper.addMobNBTToItem(is, te);
+			li.add(is);
+		}
 		ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 		world.setBlock(x, y, z, 0);
 	}
 
 	private int getDistanceToSurface(World world, int x, int y, int z) {
-		for (int m = 1; m < 512; m++) {
+		for (int m = 1; m < ConfigRegistry.SONICBORERRANGE.getValue(); m++) {
 			int dx = x+m*xstep;
 			int dy = y+m*ystep;
 			int dz = z+m*zstep;
@@ -163,7 +171,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			if (xstep != 0) {
 				for (int i = z-k; i <= z+k; i++) {
 					for (int j = y-k; j <= y+k; j++) {
-						if (!ReikaWorldHelper.softBlocks(world, dx, j, i))
+						if (this.canDrop(world, dx, j, i))
 							return m;
 					}
 				}
@@ -171,7 +179,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			else if (zstep != 0) {
 				for (int i = x-k; i <= x+k; i++) {
 					for (int j = y-k; j <= y+k; j++) {
-						if (!ReikaWorldHelper.softBlocks(world, i, j, dz))
+						if (this.canDrop(world, i, j, dz))
 							return m;
 					}
 				}
@@ -179,13 +187,25 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			else if (ystep != 0) {
 				for (int i = x-k; i <= x+k; i++) {
 					for (int j = z-k; j <= z+k; j++) {
-						if (!ReikaWorldHelper.softBlocks(world, i, dy, j))
+						if (this.canDrop(world, i, dy, j))
 							return m;
 					}
 				}
 			}
 		}
 		return -1;
+	}
+
+	private boolean canDrop(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (id == 0)
+			return false;
+		Block b = Block.blocksList[id];
+		if (b.getBlockHardness(world, x, y, z) < 0)
+			return false;
+		if (b instanceof BlockFluid)
+			return false;
+		return true;
 	}
 
 	private boolean canFire(World world, int x, int y, int z, int meta) {
@@ -197,7 +217,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	private int getPressureIncrement() {
-		return 8*(int)ReikaMathLibrary.logbase(torque+1, 2);
+		return 2*(int)ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
 	@Override

@@ -54,7 +54,8 @@ public enum SoundRegistry implements SoundList {
 	AIRCOMP("#compress"),
 	PNEUMATIC("#pneu"),
 	LINEBUILDER("linebuild"),
-	JETPACK("pack");
+	JETPACK("pack"),
+	DIESEL("#diesel");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
