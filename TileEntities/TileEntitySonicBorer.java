@@ -9,22 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -43,6 +36,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, true);
 		this.updatePressure(world, x, y, z, meta);
@@ -112,54 +106,11 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		int r = this.getDistanceToSurface(world, x, y, z);
 		if (r < 0)
 			return;
-		int fx = x+r*xstep;
-		int fy = y+r*ystep;
-		int fz = z+r*zstep;
-		int k = FOV;
-		if (!world.isRemote) {
-			if (xstep != 0) {
-				for (int i = z-k; i <= z+k; i++) {
-					for (int j = y-k; j <= y+k; j++) {
-						this.dropBlockAt(world, fx, j, i);
-					}
-				}
-			}
-			else if (zstep != 0) {
-				for (int i = x-k; i <= x+k; i++) {
-					for (int j = y-k; j <= y+k; j++) {
-						this.dropBlockAt(world, i, j, fz);
-					}
-				}
-			}
-			else if (ystep != 0) {
-				for (int i = x-k; i <= x+k; i++) {
-					for (int j = z-k; j <= z+k; j++) {
-						this.dropBlockAt(world, i, fy, j);
-					}
-				}
-			}
-		}
-		ReikaSoundHelper.playSoundAtBlock(world, fx, fy, fz, "random.explode");
-		ReikaParticleHelper.EXPLODE.spawnAt(world, fx, fy, fz);
-	}
 
-	private void dropBlockAt(World world, int x, int y, int z) {
-		if (y == 0)
-			return;
-		int id = world.getBlockId(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		Block b = Block.blocksList[id];
-		if (!this.canDrop(world, x, y, z) && !(b instanceof BlockFluid))
-			return;
-		List<ItemStack> li = b.getBlockDropped(world, x, y, z, meta, 0);
-		if (b.blockID == Block.mobSpawner.blockID) {
-			ItemStack is = new ItemStack(RotaryCraft.spawner);
-			TileEntityMobSpawner te = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
-			ReikaSpawnerHelper.addMobNBTToItem(is, te);
-			li.add(is);
+		if (!world.isRemote) {
+			EntitySonicShot e = new EntitySonicShot(world, this);
+			world.spawnEntityInWorld(e);
 		}
-		ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-		world.setBlock(x, y, z, 0);
 	}
 
 	private int getDistanceToSurface(World world, int x, int y, int z) {
@@ -196,7 +147,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		return -1;
 	}
 
-	private boolean canDrop(World world, int x, int y, int z) {
+	public static boolean canDrop(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		if (id == 0)
 			return false;
@@ -211,13 +162,31 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	private boolean canFire(World world, int x, int y, int z, int meta) {
 		if (pressure < FIRE_PRESSURE)
 			return false;
-		if (y-this.getDistanceToSurface(world, x, y, z) <= 0)
+		if (y-this.getDistanceToSurface(world, x, y, z) <= 0 && ystep == -1)
 			return false;
 		return true;
 	}
 
 	private int getPressureIncrement() {
-		return 2*(int)ReikaMathLibrary.logbase(torque+1, 2);
+		//ReikaJavaLibrary.pConsole((int)ReikaMathLibrary.logbase(torque+1, 2)+":"+(int)ReikaMathLibrary.logbase(power+1, 2));
+		int amt = (int)ReikaMathLibrary.logbase(power+1, 2);
+		int amt2 = (int)Math.sqrt(power)/32;
+		int amt3 = (int)(power/32768);
+		//ReikaJavaLibrary.pConsole(amt3);
+		return amt3;
+	}
+
+	public int[] getTargetPosn() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		int[] arr = new int[3];
+		int r = this.getDistanceToSurface(world, x, y, z);
+		arr[0] = x+xstep*r;
+		arr[1] = y+ystep*r;
+		arr[2] = z+zstep*r;
+		return arr;
 	}
 
 	@Override
@@ -251,8 +220,16 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		if (world.provider.isHellWorld)
 			Pamb = 2000;
 		int dP = pressure-Pamb;
-		//pressure -= dP/32+1;
-		pressure += this.getPressureIncrement();
+		int pd = dP/384+1;
+		//ReikaJavaLibrary.pConsole(dP+":"+pd+":"+(pressure-pd), Side.SERVER);
+		if (dP > 0)
+			pressure -= pd;
+		else
+			pressure++;
+		if (power >= MINPOWER && torque >= MINTORQUE) {
+			pressure += this.getPressureIncrement();
+		}
+		//ReikaJavaLibrary.pConsole(pressure, Side.SERVER);
 	}
 
 	@Override
@@ -267,7 +244,35 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 
 	@Override
 	public void overpressure(World world, int x, int y, int z) {
+		float f = 4;
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
 
+		world.createExplosion(null, x+0.5, y+1.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+		world.createExplosion(null, x+0.5, y-0.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+
+		world.createExplosion(null, x+1.5, y+0.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+		world.createExplosion(null, x-0.5, y+0.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+
+		world.createExplosion(null, x+0.5, y+0.5, z+1.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+		world.createExplosion(null, x+0.5, y+0.5, z-0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setInteger("press", pressure);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		pressure = NBT.getInteger("press");
+	}
+
+	public int getDistanceToSurface() {
+		return this.getDistanceToSurface(worldObj, xCoord, yCoord, zCoord);
 	}
 
 }

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -79,7 +80,24 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private void playSound(World world, int x, int y, int z) {
 		int p = (int)(ReikaMathLibrary.logbase(omega, 2)/8);
-		SoundRegistry.playSoundAtBlock(SoundRegistry.AIRCOMP, world, x, y, z, 0.5F, p);
+		SoundRegistry.playSoundAtBlock(SoundRegistry.AIRCOMP, world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
+	}
+
+	private float getSoundVolume(World world, int x, int y, int z) {
+		ForgeDirection dir = facingDir;
+		ForgeDirection dir2 = dir.getOpposite();
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection side = dirs[i];
+			if (side != dir && side != dir2) {
+				int dx = x+side.offsetX;
+				int dy = y+side.offsetY;
+				int dz = z+side.offsetZ;
+				int id = world.getBlockId(dx, dy, dz);
+				if (id != Block.cloth.blockID)
+					return 1;
+			}
+		}
+		return 0.2625F;
 	}
 
 	private boolean hasOutputTile() {

@@ -216,7 +216,7 @@ public enum PowerReceivers {
 			throw new RuntimeException(m+" does not correspond to an existing machine Enum!");
 		for (PowerReceivers e : PowerReceivers.values()) {
 			String en = e.toString();
-			if (en.equals(em) || en.contains(em) || em.contains(en)) {
+			if (en.equals(em)) {
 				return e;
 			}
 		}

@@ -84,6 +84,8 @@ public enum MaterialRegistry {
 			return false;
 		if (tool.itemID == ItemRegistry.BEDPICK.getShiftedID())
 			return true;
+		if (tool.itemID == ItemRegistry.STEELPICK.getShiftedID())
+			return true;
 		if (tool.getItem() instanceof ItemPickaxe) {
 			switch(this) {
 			case STONE:

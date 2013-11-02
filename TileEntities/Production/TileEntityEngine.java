@@ -892,6 +892,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				break;
 			case HYDRO:
 				speed = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				if (speed == 0)
+					speed = 1;
 				this.updateSpeed(speed, true);
 				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
@@ -940,10 +942,18 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	private void updateSpeed(int maxspeed, boolean revup) {
+		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
+			TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+			if (te != null) {
+				maxspeed *= te.getSpeedMultiplier();
+			}
+			if (omega > maxspeed)
+				revup = false;
+		}
 		if (revup) {
 			if (omega < maxspeed) {
 				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
-				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed, 2);
+				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed+1, 2);
 				timer.setCap("fuel", type.getFuelUnitDuration()/4); //4x fuel burn while spinning up
 				if (omega > maxspeed)
 					omega = maxspeed;
@@ -1271,7 +1281,11 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 				if (te != null) {
 					if (te.canProducePower()) {
-						omega = (int)(omega*te.getSpeedMultiplier());
+						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
+							//omega = (int)(omega*te.getSpeedMultiplier());
+							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
+							//this.updateSpeed(max, omega < max);
+						}
 						int fuelcap = timer.getCapOf("fuel");
 						fuelcap = fuelcap*te.getFuelMultiplier();
 						timer.setCap("fuel", fuelcap);
@@ -1496,9 +1510,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return;
 		}
 		double pow = 1.05;
+		double mult = 1;
 		if (type == EnumEngineType.JET)
 			pow = 1.1;
-		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), pow);
+		if (type == EnumEngineType.HYDRO) {
+			mult = 256F/type.getSpeed();
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(mult*omega+1, 2), pow);
 	}
 
 	@Override

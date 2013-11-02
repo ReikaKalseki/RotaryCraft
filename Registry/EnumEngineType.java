@@ -22,7 +22,7 @@ public enum EnumEngineType {
 	GAS(512, 128),
 	AC(256, 512),
 	SPORT(1024, 256),
-	HYDRO(256, 2048),
+	HYDRO(32, 16384),
 	MICRO(131072, 16),
 	JET(65536, 1024);
 

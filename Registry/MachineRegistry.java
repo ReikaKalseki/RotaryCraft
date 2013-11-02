@@ -260,7 +260,7 @@ public enum MachineRegistry {
 	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16, "RenderAggregator"),
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13),
-	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4);
+	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY);
 
 	private String name;
 	private Class te;
