@@ -235,7 +235,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		ReikaChatHelper.write(name+" removed from "+placer+"'s "+this.getName()+" whitelist.");
 	}
 
-	public boolean playerIsSafe(EntityPlayer ep) {
+	public final boolean playerIsSafe(EntityPlayer ep) {
 		if (ep.capabilities.isCreativeMode)
 			return true;
 		String name = ep.getEntityName();

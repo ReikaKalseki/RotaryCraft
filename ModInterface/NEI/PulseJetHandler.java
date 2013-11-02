@@ -48,13 +48,20 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(output, 120, 41);
+			ItemStack is = output;
+			if (input != null && input.size() > 1)
+				is = RecipesPulseFurnace.smelting().getSmeltingResult(this.getEntry());
+			return new PositionedStack(is, 120, 41);
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input.get((int)(System.nanoTime()/1000000000)%input.size()), 120, 5);
+			return new PositionedStack(this.getEntry(), 120, 5);
+		}
+
+		public ItemStack getEntry() {
+			return input.get((int)(System.nanoTime()/1000000000)%input.size());
 		}
 	}
 

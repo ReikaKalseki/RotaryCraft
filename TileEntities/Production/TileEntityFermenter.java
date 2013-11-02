@@ -133,11 +133,11 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 		}
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
-			return PlantMaterials.SAPLING.getPlantValue()*getModSaplingValue(sap);
+			return PlantMaterials.SAPLING.getPlantValue()*getModWoodValue(sap);
 		}
 		ModWoodList leaf = ModWoodList.getModWoodFromLeaf(is);
 		if (leaf != null) {
-			return PlantMaterials.LEAVES.getPlantValue()*getModSaplingValue(leaf);
+			return PlantMaterials.LEAVES.getPlantValue()*getModWoodValue(leaf);
 		}
 		PlantMaterials plant = PlantMaterials.getPlantEntry(is);
 		if (plant == null)
@@ -145,10 +145,12 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 		return plant.getPlantValue();
 	}
 
-	public static int getModSaplingValue(ModWoodList wood) {
+	public static int getModWoodValue(ModWoodList wood) {
 		if (wood == null)
 			return 0;
 		if (wood == ModWoodList.SILVERWOOD)
+			return 32;
+		if (wood.isRareTree())
 			return 32;
 		ModList mod = wood.getParentMod();
 		if (mod == ModList.THAUMCRAFT)

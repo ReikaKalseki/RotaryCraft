@@ -143,12 +143,12 @@ public final class HandbookAuxData {
 
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
 			if (ModWoodList.woodList[i].exists()) {
-				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModWoodValue(ModWoodList.woodList[i])));
 				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling()});
 				args = new ItemStack[]{out, in[0], in[1]};
 				fermenter.add(args);
 
-				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModSaplingValue(ModWoodList.woodList[i])));
+				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModWoodValue(ModWoodList.woodList[i])));
 				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf()});
 				args = new ItemStack[]{out, in[0], in[1]};
 				fermenter.add(args);

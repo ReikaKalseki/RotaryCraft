@@ -9,8 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
@@ -18,18 +21,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver implements RangedEffect {
+public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver implements RangedEffect, EnchantableMachine {
 
 	private ItemStack[] inv = new ItemStack[27];
+
+	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -46,7 +53,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 		if (tickcount >= this.getFireRate() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
 			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
+			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false) && !(li.size() == 1 && li.get(0).getEntityName().equals("Reika_Kalseki"))) {
 				this.fire(world, x, y, z, meta);
 			}
 			tickcount = 0;
@@ -101,7 +108,7 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	}
 
 	private double getFirePower() {
-		return ReikaMathLibrary.logbase(torque+1, 2);
+		return this.getEnchantment(Enchantment.power)*0.5+ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
 	private int getFireRate() {
@@ -138,7 +145,8 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 			ar.velocityChanged = true;
 			world.spawnEntityInWorld(ar);
 		}
-		ReikaInventoryHelper.decrStack(this.getArrowSlot(), inv);
+		if (!this.hasEnchantment(Enchantment.infinity))
+			ReikaInventoryHelper.decrStack(this.getArrowSlot(), inv);
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.bow", 1, 1);
 	}
 
@@ -204,6 +212,56 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public boolean applyEnchants(ItemStack is) {
+		boolean accepted = false;
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
+			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
+			accepted = true;
+		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.power, is)) {
+			enchantments.put(Enchantment.power, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.power, is));
+			accepted = true;
+		}
+		return accepted;
+	}
+
+	public HashMap<Enchantment,Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	@Override
+	public boolean hasEnchantment(Enchantment e) {
+		return this.getEnchantments().containsKey(e);
+	}
+
+	@Override
+	public int getEnchantment(Enchantment e) {
+		if (!this.hasEnchantment(e))
+			return 0;
+		else
+			return this.getEnchantments().get(e);
+	}
+
+	@Override
+	public boolean hasEnchantments() {
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public ArrayList<Enchantment> getValidEnchantments() {
+		ArrayList<Enchantment> li = new ArrayList();
+		li.add(Enchantment.infinity);
+		li.add(Enchantment.power);
+		return li;
 	}
 
 }

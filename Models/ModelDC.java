@@ -52,13 +52,13 @@ public class ModelDC extends RotaryModelBase
 		this.setRotation(Shape1, 0F, 0F, 0F);
 		Shape12 = new ModelRenderer(this, 0, 27);
 		Shape12.addBox(0F, 0F, 0F, 11, 2, 2);
-		Shape12.setRotationPoint(-8.5F, 15F, -1F);
+		Shape12.setRotationPoint(-8.5F, 14F, -1F);
 		Shape12.setTextureSize(128, 128);
 		Shape12.mirror = true;
 		this.setRotation(Shape12, 0F, 0F, 0F);
 		Shape13 = new ModelRenderer(this, 0, 27);
 		Shape13.addBox(0F, 0F, 0F, 11, 2, 2);
-		Shape13.setRotationPoint(-8.5F, 16F, -1.4F);
+		Shape13.setRotationPoint(-8.5F, 15F, -1.4F);
 		Shape13.setTextureSize(128, 128);
 		Shape13.mirror = true;
 		this.setRotation(Shape13, 0.7853982F, 0F, 0F);

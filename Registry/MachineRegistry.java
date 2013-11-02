@@ -258,8 +258,8 @@ public enum MachineRegistry {
 	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
 	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16, "RenderAggregator"),
-	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12),
-	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13),
+	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12, "RenderAirGun"),
+	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY);
 
 	private String name;
@@ -901,6 +901,8 @@ public enum MachineRegistry {
 		if (this == CHUNKLOADER)
 			return true;
 		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
+			return true;
+		if (this.name().equalsIgnoreCase("Unused"))
 			return true;
 		return false;
 	}

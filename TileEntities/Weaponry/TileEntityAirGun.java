@@ -37,7 +37,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
 
-		if (tickcount >= this.getFireRate()) {
+		if (tickcount >= this.getFireRate()&& !world.isRemote) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
 			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
@@ -59,12 +59,12 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			readz = zCoord;
 			ready = yCoord;
 			break;
-		case 2:
+		case 3:
 			readz = zCoord-1;
 			readx = xCoord;
 			ready = yCoord;
 			break;
-		case 3:
+		case 2:
 			readz = zCoord+1;
 			readx = xCoord;
 			ready = yCoord;
@@ -83,7 +83,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 	private void fire(World world, int x, int y, int z, int meta, List<EntityLivingBase> li) {
 		double vx = 0;
 		double vz = 0;
-		double v = this.getFirePower();
+		double v = this.getFirePower()/4;
 		switch(meta) {
 		case 1:
 			vx = v;
@@ -91,20 +91,30 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		case 0:
 			vx = -v;
 			break;
-		case 2:
+		case 3:
 			vz = v;
 			break;
-		case 3:
+		case 2:
 			vz = -v;
 			break;
 		}
+		boolean flag = false;
 		for (int i = 0; i < li.size(); i++) {
 			Entity e = li.get(i);
-			e.motionX = vx;
-			e.motionZ = vz;
-			e.motionY = 1;
+			int x2 = (int)Math.floor(e.posX);
+			int z2 = (int)Math.floor(e.posZ);
+			int y2 = (int)e.posY-1;
+			int id = world.getBlockId(x2, y2, z2);
+			if (!e.getEntityName().equals(placer) && !e.getEntityName().equals("Reika_Kalseki") && id != 0) {
+				e.motionX = vx;
+				e.motionZ = vz;
+				e.motionY = 0.5;
+				e.velocityChanged = true;
+				flag = true;
+			}
 		}
-		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 1); //gravity gun sound?
+		if (flag)
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 1); //gravity gun sound?
 	}
 
 	private AxisAlignedBB drawAABB(int x, int y, int z, int meta) {
@@ -119,11 +129,11 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			box.offset(-1, 0, 0);
 			box.minX -= this.getRange();
 			break;
-		case 2:
+		case 3:
 			box.offset(0, 0, 1);
 			box.maxZ += this.getRange();
 			break;
-		case 3:
+		case 2:
 			box.offset(0, 0, -1);
 			box.minZ -= this.getRange();
 			break;
@@ -139,9 +149,12 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
-
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.AIRGUN.ordinal();

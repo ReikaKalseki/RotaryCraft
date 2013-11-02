@@ -46,7 +46,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(output, 111, 36);
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(output, TileEntityFermenter.getPlantValue(this.getEntry(this.getBottomSlot()))), 111, 36);
 		}
 
 		@Override
@@ -56,7 +56,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			stacks.add(new PositionedStack(this.getTopSlot(), 50, 18));
 			//stacks.add(new PositionedStack(this.getMiddleSlot(), 50, 36));
 			List li = this.getBottomSlot();
-			stacks.add(new PositionedStack(li.get((int)(System.nanoTime()/1000000000)%li.size()), 50, 54));
+			stacks.add(new PositionedStack(this.getEntry(li), 50, 54));
 			return stacks;
 		}
 
@@ -66,6 +66,10 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 		private List<ItemStack> getBottomSlot() {
 			return output.itemID == ItemRegistry.YEAST.getShiftedID() ? ReikaJavaLibrary.makeListFrom(new ItemStack(Block.dirt)) : TileEntityFermenter.getAllValidPlants();
+		}
+
+		public ItemStack getEntry(List<ItemStack> li) {
+			return li.get((int)(System.nanoTime()/1000000000)%li.size());
 		}
 	}
 

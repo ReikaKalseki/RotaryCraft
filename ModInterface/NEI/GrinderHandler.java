@@ -33,22 +33,24 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		private List<ItemStack> input;
 		private ItemStack output;
 
-
 		public GrinderRecipe(List<ItemStack> in) {
 			input = in;
 			output = RecipesGrinder.getRecipes().getSmeltingResult(in.get(0));
-			ReikaJavaLibrary.pConsole(in);
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(output, 131, 24);
+			return new PositionedStack(RecipesGrinder.getRecipes().getSmeltingResult(this.getEntry()), 131, 24);
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input.get((int)(System.nanoTime()/1000000000)%input.size()), 71, 24);
+			return new PositionedStack(this.getEntry(), 71, 24);
+		}
+
+		public ItemStack getEntry() {
+			return input.get((int)(System.nanoTime()/1000000000)%input.size());
 		}
 	}
 

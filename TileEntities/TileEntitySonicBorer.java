@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -111,6 +112,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			EntitySonicShot e = new EntitySonicShot(world, this);
 			world.spawnEntityInWorld(e);
 		}
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
 	}
 
 	private int getDistanceToSurface(World world, int x, int y, int z) {
