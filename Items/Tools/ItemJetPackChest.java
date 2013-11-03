@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
@@ -34,7 +35,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem { //does not work in smp!!
+public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem {
 
 	public ItemJetPackChest(int ID, int tex, int render, int type) {
 		super(ID, tex, render, type);
@@ -118,7 +119,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, "isJumping", RotaryCraft.logger);
+		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, DragonAPICore.isDeObfEnvironment() ? "isJumping" : "field_70703_bu", RotaryCraft.logger);
 		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
 		if (bool) {
 			jetpackUsed = this.useJetpack(player);

@@ -81,7 +81,7 @@ public class EntitySonicShot extends EntityFireball {
 	@Override
 	public void onUpdate() {
 		this.onEntityUpdate();
-		if (!worldObj.isRemote && te != null) {
+		if (te != null) {
 			int x = (int)Math.floor(posX);
 			int y = (int)Math.floor(posY);
 			int z = (int)Math.floor(posZ);
@@ -95,6 +95,22 @@ public class EntitySonicShot extends EntityFireball {
 			}
 		}
 		this.setPosition(posX+motionX, posY+motionY, posZ+motionZ);
+		int dx; int dy; int dz;
+		if (te != null) {
+			int r = 3;
+			dx = te.xstep == 0 ? r : 0;
+			dy = te.ystep == 0 ? r : 0;
+			dz = te.zstep == 0 ? r : 0;
+		}
+		else {
+			dx = dy = dz = 2;
+			AxisAlignedBB box = this.getBoundingBox().expand(dx, dy, dz);
+			List<Entity> li = worldObj.getEntitiesWithinAABB(Entity.class, box);
+			for (int i = 0; i < li.size(); i++) {
+				Entity e = li.get(i);
+				this.applyEntityCollision(e);
+			}
+		}
 	}
 
 	private int getRange() {
@@ -173,4 +189,9 @@ public class EntitySonicShot extends EntityFireball {
 		e.motionZ = motionZ;
 	}
 
+	@Override
+	public boolean shouldRenderInPass(int pass)
+	{
+		return pass == 1;
+	}
 }

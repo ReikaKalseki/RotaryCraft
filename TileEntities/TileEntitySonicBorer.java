@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
@@ -108,8 +109,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		if (r < 0)
 			return;
 
+		EntitySonicShot e = new EntitySonicShot(world, this);
 		if (!world.isRemote) {
-			EntitySonicShot e = new EntitySonicShot(world, this);
 			world.spawnEntityInWorld(e);
 		}
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
@@ -157,6 +158,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		if (b.getBlockHardness(world, x, y, z) < 0)
 			return false;
 		if (b instanceof BlockFluid)
+			return false;
+		if (b instanceof BlockFluidBase)
 			return false;
 		return true;
 	}

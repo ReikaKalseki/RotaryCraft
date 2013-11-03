@@ -161,6 +161,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
+	//private String version;
+
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
@@ -186,6 +188,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);
+		//version = evt.getModMetadata().version;
 	}
 
 	@Override
@@ -229,7 +232,15 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryRecipes.addModInterface();
 		RotaryRecipes.addProps();
 	}
-
+	/*
+	@VersionCheckHandler
+	public boolean isCompatibleVersion(String sg) {
+		ReikaJavaLibrary.spamConsole(sg);
+		sg = "derp";
+		ReikaJavaLibrary.spamConsole(version);
+		return sg != null && sg.equals(version);
+	}
+	 */
 	private static void setupClassFiles() {
 		RotaryRegistration.instantiateItems();
 

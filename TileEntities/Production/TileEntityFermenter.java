@@ -148,8 +148,6 @@ public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver imple
 	public static int getModWoodValue(ModWoodList wood) {
 		if (wood == null)
 			return 0;
-		if (wood == ModWoodList.SILVERWOOD)
-			return 32;
 		if (wood.isRareTree())
 			return 32;
 		ModList mod = wood.getParentMod();
