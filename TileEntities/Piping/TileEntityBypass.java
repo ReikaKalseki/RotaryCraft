@@ -32,11 +32,6 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p);
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.collectLiquid(world, x, y, z);
 		this.outputLiquid(world, x, y, z);
@@ -190,16 +185,6 @@ public class TileEntityBypass extends TileEntityPiping {
 		if (level < 0) {
 			level = 0;
 		}
-	}
-
-	@Override
-	public int getLiquidLevel() {
-		return level;
-	}
-
-	@Override
-	protected void removeLiquid(int amt) {
-		level -= amt;
 	}
 
 }

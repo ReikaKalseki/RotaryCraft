@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -197,11 +196,6 @@ public class TileEntityHose extends TileEntityPiping {
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return true;
-	}
-
-	@Override
 	public Icon getBlockIcon() {
 		return Block.planks.getIcon(0, 0);
 	}
@@ -214,15 +208,5 @@ public class TileEntityHose extends TileEntityPiping {
 	@Override
 	public Fluid getLiquidType() {
 		return RotaryCraft.lubeFluid;
-	}
-
-	@Override
-	public int getLiquidLevel() {
-		return lubricant;
-	}
-
-	@Override
-	protected void removeLiquid(int amt) {
-		lubricant -= amt;
 	}
 }

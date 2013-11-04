@@ -174,17 +174,4 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 		return this.canConnectToPipe(p) && side.offsetY == 0;
 	}
 
-	@Override
-	public boolean canTakeInFluid(Fluid f, ForgeDirection side) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo getTank(ForgeDirection side) {
-		return null;
-	}
-
-	@Override
-	public void addLiquid(Fluid f, int amt) {}
-
 }

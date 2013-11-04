@@ -88,16 +88,16 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 				power = 0;
 				return;
 			}
+			omega = this.getUnwindSpeed();
+			torque = this.getUnwindTorque();
+			power = omega*torque;
+			writex = readx;
+			writez = readz;
+			writey = yCoord;
 			if (tickcount < this.getUnwindTime())
 				return;
 			tickcount = 0;
 			inslot[0] = new ItemStack(inslot[0].itemID, 1, inslot[0].getItemDamage()-1);
-			omega = this.getUnwindSpeed();
-			torque = this.getUnwindTorque();
-			power = omega;
-			writex = readx;
-			writez = readz;
-			writey = yCoord;
 		}
 
 	}

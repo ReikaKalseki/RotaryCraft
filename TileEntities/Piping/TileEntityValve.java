@@ -32,11 +32,6 @@ public class TileEntityValve extends TileEntityPiping {
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side != ForgeDirection.UP && this.canConnectToPipe(p);
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (world.isBlockIndirectlyGettingPowered(x, y, z))
 			this.draw(world, x, y, z);
@@ -147,16 +142,6 @@ public class TileEntityValve extends TileEntityPiping {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
-	}
-
-	@Override
-	public int getLiquidLevel() {
-		return level;
-	}
-
-	@Override
-	protected void removeLiquid(int amt) {
-		level -= amt;
 	}
 
 }

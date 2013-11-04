@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public interface TensionStorage {
 
 	/** This controls how much torque is required to charge the spring. At 1, max charge = input torque.
-	 * At n, where n is an integer > 1, max charge = input torque/n. n must be > 1!
+	 * At n, where n is an integer > 1, max charge = input torque/n. n must be > 1! Ideal value = getPowerScale()^2.
 	 * 
 	 * Stiffness also controls unwind time in a machine (how long it lasts), by simple multiplier. */
 	public int getStiffness(ItemStack is);

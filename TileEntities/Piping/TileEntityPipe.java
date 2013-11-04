@@ -309,14 +309,4 @@ public class TileEntityPipe extends TileEntityPiping {
 	public void setFluid(Fluid f) {
 		liquid = f;
 	}
-
-	@Override
-	public int getLiquidLevel() {
-		return liquidLevel;
-	}
-
-	@Override
-	protected void removeLiquid(int amt) {
-		liquidLevel -= amt;
-	}
 }

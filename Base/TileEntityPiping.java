@@ -18,9 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -31,29 +28,29 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 
 	private boolean[] connections = new boolean[6];
 
-	public abstract int getLiquidLevel();
+	//public abstract int getLiquidLevel();
 
-	protected abstract void removeLiquid(int amt);
+	//protected abstract void removeLiquid(int amt);
 
 	public abstract boolean canConnectToPipe(MachineRegistry p);
 
-	public abstract boolean canIntakeFluid(Fluid f);
+	//public abstract boolean canIntakeFluid(Fluid f);
 
 	/** Already checked that Fluid was valid */
-	protected abstract void addFluid(int amt);
+	//protected abstract void addFluid(int amt);
 
-	protected abstract boolean dumpsToMachines();
+	//protected abstract boolean dumpsToMachines();
 
-	protected abstract boolean intakesFromMachines();
+	//protected abstract boolean intakesFromMachines();
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public void updateEntity(World world, int x, int y, int z, int meta) {/*
 		if (this.intakesFromMachines()) {
 			this.intakeFluid(world, x, y, z);
 		}
 		if (this.dumpsToMachines()) {
 			this.dumpContents(world, x, y, z);
-		}
+		}*/
 	}
 
 	protected final boolean canInteractWith(World world, int x, int y, int z, ForgeDirection side) {
@@ -71,7 +68,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return false;
 		return Block.blocksList[id].hasTileEntity(meta);
 	}
-
+	/*
 	public void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getLiquidType();
 		if (this.getLiquidLevel() <= 0 || f == null)
@@ -161,7 +158,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			}
 		}
 	}
-
+	 */
 	@Override
 	public final RotaryModelBase getTEModel(World world, int x, int y, int z) {
 		return null;

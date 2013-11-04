@@ -31,11 +31,6 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p);
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.draw(world, x, y, z);
 		this.transfer(world, x, y, z);
@@ -188,16 +183,6 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 		if (level < 0) {
 			level = 0;
 		}
-	}
-
-	@Override
-	public int getLiquidLevel() {
-		return level;
-	}
-
-	@Override
-	protected void removeLiquid(int amt) {
-		level -= amt;
 	}
 
 }
