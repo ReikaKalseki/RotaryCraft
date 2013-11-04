@@ -45,6 +45,7 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateEntity(world, x, y, z, meta);
 		this.draw(world, x, y, z);
 		fluidrho = this.getDensity();
 		this.transfer(world, x, y, z);
@@ -284,11 +285,6 @@ public class TileEntityPipe extends TileEntityPiping {
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS;
-	}
-
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p);
 	}
 
 	@Override

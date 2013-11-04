@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -17,6 +18,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -31,22 +35,130 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 
 	protected abstract void removeLiquid(int amt);
 
+	public abstract boolean canConnectToPipe(MachineRegistry p);
+
+	public abstract boolean canIntakeFluid(Fluid f);
+
+	/** Already checked that Fluid was valid */
+	protected abstract void addFluid(int amt);
+
+	protected abstract boolean dumpsToMachines();
+
+	protected abstract boolean intakesFromMachines();
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (this.intakesFromMachines()) {
+			this.intakeFluid(world, x, y, z);
+		}
+		if (this.dumpsToMachines()) {
+			this.dumpContents(world, x, y, z);
+		}
+	}
+
+	protected final boolean canInteractWith(World world, int x, int y, int z, ForgeDirection side) {
+		if (!connections[side.ordinal()])
+			return false;
+		int dx = x+side.offsetX;
+		int dy = y+side.offsetY;
+		int dz = z+side.offsetZ;
+		int id = world.getBlockId(dx, dy, dz);
+		int meta = world.getBlockMetadata(dx, dy, dz);
+		if (id == 0)
+			return false;
+		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+		if (m != null && m.isPipe())
+			return false;
+		return Block.blocksList[id].hasTileEntity(meta);
+	}
+
 	public void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getLiquidType();
+		if (this.getLiquidLevel() <= 0 || f == null)
+			return;
 		for (int i = 0; i < 6; i++) {
+			int level = this.getLiquidLevel();
+			if (level <= 0)
+				return;
+			int toadd = level/4+1;
 			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
+			if (this.canInteractWith(world, x, y, z, dir)) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				if (te instanceof PipeConnector) {
+					PipeConnector pc = (PipeConnector)te;
+					if (pc.canTakeInFluid(f, dir.getOpposite())) {
+						FluidTankInfo ifo = pc.getTank(f);
+						FluidStack fs = ifo.fluid;
+						int max = ifo.capacity;
+						if (fs == null) {
+							if (max >= toadd) {
+								pc.addLiquid(f, toadd);
+								this.removeLiquid(toadd);
+							}
+							else {
+								pc.addLiquid(f, max);
+								this.removeLiquid(max);
+							}
+						}
+						else {
+							int space = max-fs.amount;
+							Fluid in = fs.getFluid();
+							if (f.equals(in)) {
+								if (space >= toadd) {
+									pc.addLiquid(f, toadd);
+									this.removeLiquid(toadd);
+								}
+								else {
+									pc.addLiquid(f, space);
+									this.removeLiquid(space);
+								}
+							}
+						}
+					}
+				}
+				else if (te instanceof IFluidHandler) {
+					IFluidHandler fl = (IFluidHandler)te;
+					if (fl.canFill(dir.getOpposite(), f)) {
+						int added = fl.fill(dir.getOpposite(), new FluidStack(f, toadd), true);
+						if (added > 0) {
+							this.removeLiquid(added);
+						}
+					}
+				}
+			}
 		}
 	}
 
 	public void intakeFluid(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
+			if (this.canInteractWith(world, x, y, z, dir)) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				if (te instanceof PipeConnector) {
+					PipeConnector pc = (PipeConnector)te;
+
+				}
+				else if (te instanceof IFluidHandler) {
+					IFluidHandler fl = (IFluidHandler)te;
+					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
+					if (fs != null) {
+						int level = this.getLiquidLevel();
+						int todrain = fs.amount;
+						if (todrain > level) {
+							if (this.canIntakeFluid(fs.getFluid())) {
+								fl.drain(dir.getOpposite(), todrain, true);
+								this.addFluid(todrain);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -67,14 +179,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 	public boolean isConnectionValidForSide(ForgeDirection dir) {
 		if (dir.offsetX == 0 && MinecraftForgeClient.getRenderPass() != 1)
 			dir = dir.getOpposite();
-		return connections[dir.ordinal()];/*
-		int dx = xCoord+dir.offsetX;
-		int dy = yCoord+dir.offsetY;
-		int dz = zCoord+dir.offsetZ;
-		World world = worldObj;
-		int id = world.getBlockId(dx, dy, dz);
-		int meta = world.getBlockMetadata(dx, dy, dz);
-		return*/
+		return connections[dir.ordinal()];
 	}
 
 	@Override

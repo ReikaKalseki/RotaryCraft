@@ -11,8 +11,11 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidTankInfo;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+/** To declare a machine output-only, return false for canTakeInFluid for all cases.
+ * To declare a machine input-only, return null for getTanks for all cases. */
 public interface PipeConnector {
 
 	public boolean canConnectToPipe(MachineRegistry m);
@@ -20,12 +23,19 @@ public interface PipeConnector {
 	/** Side is relative to the piping block (so DOWN means the block is below the pipe); p is the pipe type */
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side);
 
-	public boolean canTakeInFluid(Fluid f);
+	/** This is for "can this TE accept fluid f on this side EVER", not for
+	 * "if tank has space and can accept fluid f" */
+	public boolean canTakeInFluid(Fluid f, ForgeDirection side);
 
-	public int getCapacity();
+	/** This is called by fluid addition. Return a FluidTankInfo which accurately encapsulates
+	 * the amount your TE has of fluid 'f' and the maximum amount it can hold. */
+	public FluidTankInfo getTank(Fluid f);
 
+	/** This is called by liquid removal. Return info on all tanks which can emit their
+	 * contents to direction 'side'. */
+	public FluidTankInfo getTanks(ForgeDirection side);
+
+	/** This will call if your TE can accept 'amt' mB of Fluid 'f'. */
 	public void addLiquid(Fluid f, int amt);
-
-	public int getLevel();
 
 }

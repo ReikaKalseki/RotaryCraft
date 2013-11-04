@@ -307,4 +307,24 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 		return p == MachineRegistry.PIPE && dir.offsetY == 0;
 	}
 
+	@Override
+	public boolean canTakeInFluid(Fluid f) {
+		return f.equals(FluidRegistry.WATER);
+	}
+
+	@Override
+	public int getCapacity() {
+		return watertank.getCapacity();
+	}
+
+	@Override
+	public void addLiquid(Fluid f, int amt) {
+		watertank.addLiquid(amt, f);
+	}
+
+	@Override
+	public int getLevel() {
+		return watertank.getLevel();
+	}
+
 }

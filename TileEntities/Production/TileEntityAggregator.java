@@ -175,23 +175,16 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 	}
 
 	@Override
-	public boolean canTakeInFluid(Fluid f) {
+	public boolean canTakeInFluid(Fluid f, ForgeDirection side) {
 		return false;
 	}
 
 	@Override
-	public int getCapacity() {
-		return CAPACITY;
+	public FluidTankInfo getTank(ForgeDirection side) {
+		return null;
 	}
 
 	@Override
-	public void addLiquid(Fluid f, int amt) {
-
-	}
-
-	@Override
-	public int getLevel() {
-		return tank.getLevel();
-	}
+	public void addLiquid(Fluid f, int amt) {}
 
 }
