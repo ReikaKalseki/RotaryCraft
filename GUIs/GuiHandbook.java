@@ -308,6 +308,9 @@ public class GuiHandbook extends GuiScreen
 		int posX = (width - xSize) / 2-2;
 		int posY = (height - ySize) / 2-8;
 
+		if (!(this instanceof GuiHandbookPage))
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("Page %d", screen), posX+xSize-45, posY+12, 0);
+
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 
 		if (h == HandbookRegistry.TERMS) {

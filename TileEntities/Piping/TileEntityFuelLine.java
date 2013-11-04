@@ -89,7 +89,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		return false;
 	}
 
-	public boolean canIntakeFluid(Fluid f) {
+	public boolean canTakeInFluid(Fluid f) {
 		return fuelType == Fuels.EMPTY || f.equals(FluidRegistry.getFluid(fuelType.fluidName));
 	}
 
@@ -171,7 +171,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 		if (tile != null) {
 			if (tile.filling)
 				return;
-			if (tile.getContainedFluid() != null && this.canIntakeFluid(tile.getContainedFluid())) {
+			if (tile.getContainedFluid() != null && this.canTakeInFluid(tile.getContainedFluid())) {
 				if (tile.getContainedFluid().equals(FluidRegistry.getFluid("jet fuel")))
 					fuelType = Fuels.JETFUEL;
 				if (tile.getContainedFluid().equals(FluidRegistry.getFluid("rc ethanol")))

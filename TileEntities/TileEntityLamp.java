@@ -11,27 +11,21 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.BlockArray;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Base.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityLamp extends InventoriedRCTileEntity implements InertIInv, RangedEffect, OneSlotMachine {
+public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv, RangedEffect, OneSlotMachine {
 
 	private BlockArray light = new BlockArray();
 
 	private boolean canlight;
-
-	private ItemStack[] inv = new ItemStack[1];
 
 	public static final int MAXRANGE = 12;
 
@@ -141,22 +135,13 @@ public class TileEntityLamp extends InventoriedRCTileEntity implements InertIInv
 	}
 
 	private void updateCoil() {
-		if (inv[0] == null) {
-			canlight = false;
-			return;
-		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
-			canlight = false;
-			return;
-		}
-		if (inv[0].getItemDamage() <= 0) {
+		if (!this.hasCoil()) {
 			canlight = false;
 			return;
 		}
 		tickcount++;
-		int dmg = inv[0].getItemDamage();
-		if (tickcount > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
+		if (tickcount > this.getUnwindTime()) {
+			ItemStack is = this.getDecrementedCharged();
 			inv[0] = is;
 			tickcount = 0;
 		}
@@ -181,100 +166,8 @@ public class TileEntityLamp extends InventoriedRCTileEntity implements InertIInv
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return is.itemID == ItemRegistry.SPRING.getShiftedID();
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 1;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
+	public int getBaseDischargeTime() {
+		return 120;
 	}
 
 }

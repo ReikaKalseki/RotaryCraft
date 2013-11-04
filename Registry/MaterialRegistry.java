@@ -134,4 +134,30 @@ public enum MaterialRegistry {
 	public String getName() {
 		return StatCollector.translateToLocal("material."+this.name().toLowerCase());
 	}
+
+	public double getMaxShaftTorque() {
+		double r = 0.0625;
+		double tau = this.getShearStrength();
+		return 0.5*Math.PI*r*r*r*tau;
+	}
+
+	public double getMaxShaftSpeed() {
+		double f = 1D/(1-(0.11D*this.ordinal()));
+		double rho = this.getDensity();
+		double r = 0.0625;
+		double sigma = this.getTensileStrength();
+		double base = Math.sqrt(2*sigma/(rho*r*r));
+		return Math.pow(base, f);
+	}
+
+	public static int[] getAllLimitLoads() {
+		int[] loads = new int[matList.length*2-2];
+		for (int i = 0; i < loads.length; i += 2) {
+			int j = i/2;
+			MaterialRegistry m = matList[j];
+			loads[i] = (int)m.getMaxShaftTorque();
+			loads[i+1] = (int)m.getMaxShaftSpeed();
+		}
+		return loads;
+	}
 }

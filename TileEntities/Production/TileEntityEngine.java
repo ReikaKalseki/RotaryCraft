@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -354,7 +355,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (fuelslot[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= FUELCAP) {
 				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
-					fuel.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, RotaryCraft.ethanolFluid);
+					fuel.addLiquid(1000, RotaryCraft.ethanolFluid);
 				}
 			}
 			break;
@@ -362,7 +363,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (fuelslot[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME < FUELCAP) {
 				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 					ReikaInventoryHelper.decrStack(0, fuelslot);
-					fuel.addLiquid(FluidContainerRegistry.BUCKET_VOLUME, RotaryCraft.ethanolFluid);
+					fuel.addLiquid(1000, RotaryCraft.ethanolFluid);
 				}
 			}
 			if (fuelslot [1] != null && additives < FUELCAP/FluidContainerRegistry.BUCKET_VOLUME) { //additives
@@ -574,21 +575,22 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public boolean isDrowned(World world, int x, int y, int z) {
 		if (!type.isAirBreathing())
 			return false;
-		//if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, 0) != -1) {
-		if (world.getBlockMaterial(x-1, y, z) != Material.water && world.getBlockMaterial(x-1, y, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y-1, z) != Material.water && world.getBlockMaterial(x, y-1, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y, z-1) != Material.water && world.getBlockMaterial(x, y, z-1) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x+1, y, z) != Material.water && world.getBlockMaterial(x+1, y, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y+1, z) != Material.water && world.getBlockMaterial(x, y+1, z) != Material.lava)
-			return false;
-		if (world.getBlockMaterial(x, y, z+1) != Material.water && world.getBlockMaterial(x, y, z+1) != Material.lava)
-			return false;
-		//}
-		return true;
+		boolean flag = false;
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			int id = world.getBlockId(dx, dy, dz);
+			boolean fluid = Block.blocksList[id] instanceof BlockFluid;
+			flag = flag || fluid;
+			if (id == 0)
+				return false;
+			if (!fluid)
+				if (ReikaWorldHelper.softBlocks(world, dx, dy, dz))
+					return false;
+		}
+		return flag && true;
 	}
 
 	private boolean combustionCheck(World world, int x, int y, int z, boolean isPerf) {

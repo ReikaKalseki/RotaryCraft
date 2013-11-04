@@ -13,16 +13,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public abstract class RemoteControlMachine extends InventoriedRCTileEntity {
+public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 
 	public int[] colors = new int[3];
 
-	public ItemStack[] inv = new ItemStack[4];
 	protected int tickcount2 = 0;
 	protected boolean on = false;
 
@@ -46,19 +42,6 @@ public abstract class RemoteControlMachine extends InventoriedRCTileEntity {
 	{
 		super.readFromNBT(NBT);
 		colors = NBT.getIntArray("color");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	/**
@@ -70,26 +53,12 @@ public abstract class RemoteControlMachine extends InventoriedRCTileEntity {
 	{
 		super.writeToNBT(NBT);
 		NBT.setIntArray("color", colors);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
-			return is.itemID == ItemRegistry.SPRING.getShiftedID();
+			return super.isItemValidForSlot(i, is);
 		return is.itemID == Item.dyePowder.itemID;
 	}
 
@@ -99,39 +68,8 @@ public abstract class RemoteControlMachine extends InventoriedRCTileEntity {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
+	public int getBaseDischargeTime() {
+		return 120;
 	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 
 }

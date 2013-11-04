@@ -69,6 +69,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
+import Reika.RotaryCraft.TileEntities.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.TileEntityFireworkMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
@@ -260,7 +261,8 @@ public enum MachineRegistry {
 	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16, "RenderAggregator"),
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12, "RenderAirGun"),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
-	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY);
+	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY),
+	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17);
 
 	private String name;
 	private Class te;

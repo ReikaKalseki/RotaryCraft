@@ -50,22 +50,13 @@ public class TileEntityCCTV extends RemoteControlMachine {
 		if (theta < 0)
 			this.setBlockMetadata(0);
 		this.setColors();
-		if (inv[0] == null) {
-			on = false;
-			return;
-		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
-			on = false;
-			return;
-		}
-		if (inv[0].getItemDamage() <= 0) {
+		if (!this.hasCoil()) {
 			on = false;
 			return;
 		}
 		tickcount2++;
-		int dmg = inv[0].getItemDamage();
-		if (tickcount2 > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
+		if (tickcount2 > this.getUnwindTime()) {
+			ItemStack is = this.getDecrementedCharged();
 			inv[0] = is;
 			tickcount2 = 0;
 		}
@@ -206,11 +197,6 @@ public class TileEntityCCTV extends RemoteControlMachine {
 			NBT.setString("sowner", owner);
 		NBT.setFloat("thetad", theta);
 		NBT.setBoolean("moved", cameraIsMoved);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
 	}
 
 	@Override

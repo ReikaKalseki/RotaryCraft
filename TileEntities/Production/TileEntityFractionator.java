@@ -94,10 +94,10 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 		super.updateTileEntity();
 		this.getPowerBelow();
 		power = omega * torque;
-		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE) {
+		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE*1000) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket;
-				tank.removeLiquid(ItemFuelLubeBucket.JET_VALUE);
+				tank.removeLiquid(ItemFuelLubeBucket.JET_VALUE*1000);
 			}
 		}
 		if (power < MINPOWER || omega < MINSPEED)
@@ -123,7 +123,7 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
-		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt()*RotaryConfig.MILLIBUCKET, RotaryCraft.jetFuelFluid);
+		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt()*RotaryConfig.MILLIBUCKET, FluidRegistry.getFluid("jet fuel"));
 	}
 
 	public boolean process() {

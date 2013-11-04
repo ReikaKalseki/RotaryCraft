@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.XMLInterface;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,6 +31,7 @@ import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
@@ -55,6 +57,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
@@ -114,6 +117,13 @@ public final class RotaryDescriptions {
 
 	private static void addData(HandbookRegistry h, Object... data) {
 		miscData.put(h, data);
+	}
+
+	private static void addData(HandbookRegistry h, int[] data) {
+		Object[] o = new Object[data.length];
+		for (int i = 0; i < o.length; i++)
+			o[i] = data[i];
+		miscData.put(h, o);
 	}
 
 	private static void addNotes(MachineRegistry m, Object... data) {
@@ -207,6 +217,7 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < misctabs.length; i++) {
 			HandbookRegistry h = misctabs[i];
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase());
+			ReikaJavaLibrary.pConsole(desc);
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
@@ -298,6 +309,9 @@ public final class RotaryDescriptions {
 				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Sdiamond),
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Sdiamond)
 				);
+
+		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoads());
+		addData(HandbookRegistry.FLYWHEELS, TileEntityFlywheel.getLimitLoads());
 
 		addData(HandbookRegistry.MODINTERFACE,
 				ReikaMathLibrary.getThousandBase(ReikaBuildCraftHelper.getWattsPerMJ()),

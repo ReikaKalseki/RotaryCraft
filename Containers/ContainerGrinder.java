@@ -51,7 +51,7 @@ public class ContainerGrinder extends CoreContainer
 			{
 				icrafting.sendProgressBarUpdate(this, 0, grinder.grinderCookTime);
 			}
-			icrafting.sendProgressBarUpdate(this, 1, grinder.lubricant);
+			icrafting.sendProgressBarUpdate(this, 1, grinder.getLevel());
 		}
 
 		lastGrinderCookTime = grinder.grinderCookTime;
@@ -61,7 +61,7 @@ public class ContainerGrinder extends CoreContainer
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: grinder.lubricant = par2; break;
+		case 1: grinder.setLevel(par2); break;
 		case 0: grinder.grinderCookTime = par2; break;
 		}
 	}

@@ -20,12 +20,35 @@ import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity implements PipeConnector {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 
 	public abstract void draw(World world, int x, int y, int z);
 	public abstract void transfer(World world, int x, int y, int z);
 
 	private boolean[] connections = new boolean[6];
+
+	public abstract int getLiquidLevel();
+
+	protected abstract void removeLiquid(int amt);
+
+	public void dumpContents(World world, int x, int y, int z) {
+		Fluid f = this.getLiquidType();
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+		}
+	}
+
+	public void intakeFluid(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+		}
+	}
 
 	@Override
 	public final RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -107,7 +130,14 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	private boolean isConnected(ForgeDirection dir) {
-		TileEntity tile = worldObj.getBlockTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
+		int x = xCoord+dir.offsetX;
+		int y = yCoord+dir.offsetY;
+		int z = zCoord+dir.offsetZ;
+		MachineRegistry m = this.getMachine();
+		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
+		if (m == m2)
+			return true;
+		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
 		if (!(tile instanceof PipeConnector))
 			return false;
 		PipeConnector pc = (PipeConnector)tile;

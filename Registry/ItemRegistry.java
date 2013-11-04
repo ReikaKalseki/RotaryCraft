@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -96,7 +97,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"item.bedlegs",				ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"item.bedboots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"item.tileselector",		ItemTileSelector.class),
-	JETCHEST(12, false,			"item.jetchest",			ItemJetPackChest.class, ModList.INDUSTRIALCRAFT),
+	BEDPACK(12, false,			"item.jetchest",			ItemJetPackChest.class),
 	STEELPICK(13, true,			"item.steelpick",			ItemSteelPick.class),
 	STEELAXE(14, true,			"item.steelaxe",			ItemSteelAxe.class),
 	STEELSHOVEL(15, true,		"item.steelshovel",			ItemSteelShovel.class),
@@ -104,7 +105,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	STEELCHEST(18, false,		"item.steelchest",			ItemSteelArmor.class),
 	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
 	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
-	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class);
+	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class),
+	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPackChest.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -164,6 +166,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
+			if (this.isJetpack())
+				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Armor render, Sprite index
 			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
 		}
 
@@ -174,8 +178,6 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this == BEDHELM)
 			return true;
 		if (this == BEDCHEST)
-			return true;
-		if (this == JETCHEST)
 			return true;
 		if (this == BEDLEGS)
 			return true;
@@ -188,11 +190,27 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
+			else if (this.isJetpack())
+				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getArmorMaterial(), this.getTextureIndex(), this.getArmorRender()};
 			else
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
 		}
 		else
 			return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex()};
+	}
+
+	private EnumArmorMaterial getArmorMaterial() {
+		if (this == BEDPACK)
+			return RotaryCraft.BEDROCK;
+		if (this == JETPACK)
+			return RotaryCraft.JETPACK;
+		return null;
+	}
+
+	private boolean isJetpack() {
+		if (this == JETPACK || this == BEDPACK)
+			return true;
+		return false;
 	}
 
 	private int getArmorType() {
@@ -202,8 +220,6 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return 3;
 		case BEDCHEST:
 		case STEELCHEST:
-			return 1;
-		case JETCHEST:
 			return 1;
 		case BEDHELM:
 		case STEELHELMET:
@@ -286,9 +302,11 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (this == NVH)
 			return RotaryCraft.proxy.NVHelmet;
 		if (this.isBedrockArmor())
-			return RotaryCraft.proxy.BedArmor;
+			return RotaryCraft.proxy.armor;
 		if (this.isSteelArmor())
-			return RotaryCraft.proxy.BedArmor;
+			return RotaryCraft.proxy.armor;
+		if (this.isJetpack())
+			return RotaryCraft.proxy.armor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
 	}
 
@@ -377,7 +395,8 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case BEDCHEST:
 		case BEDLEGS:
 		case BEDBOOTS:
-		case JETCHEST:
+		case BEDPACK:
+		case JETPACK:
 		case STEELHELMET:
 		case STEELCHEST:
 		case STEELLEGS:
@@ -520,9 +539,10 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case BEDCHEST:
 		case BEDHELM:
 		case BEDLEGS:
-		case JETCHEST:
 			is.addEnchantment(((ItemBedrockArmor)is.getItem()).getDefaultEnchantment(), 4);
 			return is;
+		case BEDPACK:
+			is.addEnchantment(((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantment(), 4);
 		case BEDPICK:
 			is.addEnchantment(Enchantment.silkTouch, 1);
 			return is;

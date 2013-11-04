@@ -90,7 +90,7 @@ public class ClientProxy extends CommonProxy
 		NVHelmet = RenderingRegistry.addNewArmourRendererPrefix("NVHelmet");
 		NVGoggles = RenderingRegistry.addNewArmourRendererPrefix("NVGoggles");
 		IOGoggles = RenderingRegistry.addNewArmourRendererPrefix("IOGoggles");
-		BedArmor = RenderingRegistry.addNewArmourRendererPrefix("Bedrock");
+		armor = RenderingRegistry.addNewArmourRendererPrefix("Bedrock");
 		SteelArmor = RenderingRegistry.addNewArmourRendererPrefix("HSLA");
 	}
 

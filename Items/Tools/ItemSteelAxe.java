@@ -36,13 +36,15 @@ public class ItemSteelAxe extends ItemAxe implements IndexedItemSprites {
 	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block)
 	{
-		return super.getStrVsBlock(par1ItemStack, par2Block)*1.2F;
+		float amt = super.getStrVsBlock(par1ItemStack, par2Block);
+		return amt > 1 ? amt*1.2F : 1;
 	}
 
 	@Override
 	public float getStrVsBlock(ItemStack stack, Block block, int meta)
 	{
-		return super.getStrVsBlock(stack, block, meta)*1.2F;
+		float amt = super.getStrVsBlock(stack, block, meta);
+		return amt > 1 ? amt*1.2F : 1;
 	}
 
 	public String getTextureFile() {

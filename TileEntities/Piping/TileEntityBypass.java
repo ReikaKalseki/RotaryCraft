@@ -192,4 +192,14 @@ public class TileEntityBypass extends TileEntityPiping {
 		}
 	}
 
+	@Override
+	public int getLiquidLevel() {
+		return level;
+	}
+
+	@Override
+	protected void removeLiquid(int amt) {
+		level -= amt;
+	}
+
 }

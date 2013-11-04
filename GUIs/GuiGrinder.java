@@ -47,7 +47,7 @@ public class GuiGrinder extends GuiMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", grin.lubricant, grin.MAXLUBE), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", grin.getLevel(), grin.MAXLUBE), mx-j, my-k);
 		}
 	}
 

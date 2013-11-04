@@ -64,7 +64,7 @@ public class RotaryRecipes {
 
 	public static void addModInterface() {
 		if (ModList.THERMALEXPANSION.isLoaded()) {
-			FluidStack ethanol = FluidRegistry.getFluidStack("RC Ethanol", 80);
+			FluidStack ethanol = FluidRegistry.getFluidStack("RC Ethanol", 100);
 			ethanol.amount = FluidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {
 				//CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
@@ -485,6 +485,7 @@ public class RotaryRecipes {
 
 		ItemRegistry.TILESELECTOR.addRecipe(" l ", "srs", "ses", 'e', Item.enderPearl, 'r', Item.redstone, 'l', ReikaItemHelper.lapisDye, 's', ItemStacks.steelingot);
 
+		ItemRegistry.JETPACK.addRecipe("CRC", "cBc", "d d", 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'B', ItemStacks.basepanel, 'd', ItemStacks.diffuser, 'c', ItemStacks.compressor, 'C', ItemStacks.combustor);
 	}
 
 	private static void addMisc() {

@@ -13,7 +13,6 @@ import java.util.List;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -26,7 +25,6 @@ import Reika.RotaryCraft.Base.RemoteControlMachine;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffect {
@@ -58,23 +56,15 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.setColors();
-		if (inv[0] == null) {
-			on = false;
-			return;
-		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
-			on = false;
-			return;
-		}
-		if (inv[0].getItemDamage() <= 0) {
+		if (!this.hasCoil()) {
 			on = false;
 			return;
 		}
 		on = true;
 		tickcount2++;
 		int dmg = inv[0].getItemDamage();
-		if (tickcount2 > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
+		if (tickcount2 > this.getUnwindTime()) {
+			ItemStack is = this.getDecrementedCharged();
 			inv[0] = is;
 			tickcount2 = 0;
 		}
@@ -155,11 +145,6 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	@Override
 	public int getMaxRange() {
 		return MAXRANGE;
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
 	}
 
 	@Override

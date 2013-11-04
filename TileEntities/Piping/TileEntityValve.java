@@ -149,4 +149,14 @@ public class TileEntityValve extends TileEntityPiping {
 		return 0;
 	}
 
+	@Override
+	public int getLiquidLevel() {
+		return level;
+	}
+
+	@Override
+	protected void removeLiquid(int amt) {
+		level -= amt;
+	}
+
 }

@@ -270,6 +270,19 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.obsidian), dx+87, dy+28);
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.obsidianglass), dx+145, dy+28);
 		}
+		else if (h == HandbookRegistry.JETPACK) {
+			int k = (int)((System.nanoTime()/2000000000)%2);
+			if (k == 0) {
+				ItemStack out = ItemRegistry.JETPACK.getStackOf();
+				List li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
+				ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
+			}
+			else {
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDCHEST.getStackOf(), dx+72, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.JETPACK.getStackOf(), dx+90, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDPACK.getStackOf(), dx+166, dy+28);
+			}
+		}
 		else if (h == HandbookRegistry.YEAST) {
 			int k = (int)((System.nanoTime()/1000000000)%fermenter.size());
 			ItemStack[] args = fermenter.get(k);

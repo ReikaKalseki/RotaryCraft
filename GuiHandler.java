@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Containers.ContainerCompactor;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
+import Reika.RotaryCraft.Containers.ContainerFillingStation;
 import Reika.RotaryCraft.Containers.ContainerFractionator;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
 import Reika.RotaryCraft.Containers.ContainerGrinder;
@@ -69,6 +70,7 @@ import Reika.RotaryCraft.GUIs.GuiCompactor;
 import Reika.RotaryCraft.GUIs.GuiEthanol;
 import Reika.RotaryCraft.GUIs.GuiExtractor;
 import Reika.RotaryCraft.GUIs.GuiFermenter;
+import Reika.RotaryCraft.GUIs.GuiFillingStation;
 import Reika.RotaryCraft.GUIs.GuiFractionator;
 import Reika.RotaryCraft.GUIs.GuiGPR;
 import Reika.RotaryCraft.GUIs.GuiGearbox;
@@ -112,6 +114,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
+import Reika.RotaryCraft.TileEntities.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
@@ -265,6 +268,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityPneumaticEngine) {
 			return new ContainerPneumatic(player, (TileEntityPneumaticEngine)te);
+		}
+		if (te instanceof TileEntityFillingStation) {
+			return new ContainerFillingStation(player, (TileEntityFillingStation) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -442,6 +448,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityPneumaticEngine) {
 			return new GuiPneumatic(player, (TileEntityPneumaticEngine)te);
+		}
+		if (te instanceof TileEntityFillingStation) {
+			return new GuiFillingStation(player, (TileEntityFillingStation)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

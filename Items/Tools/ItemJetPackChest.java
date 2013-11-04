@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import ic2.api.item.IElectricItem;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.input.Keyboard;
 
@@ -27,6 +28,8 @@ import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Fuelable;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -34,29 +37,28 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+public class ItemJetPackChest extends ItemRotaryArmor implements Fuelable {
 
-public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem {
-
-	public ItemJetPackChest(int ID, int tex, int render, int type) {
-		super(ID, tex, render, type);
+	public ItemJetPackChest(int ID, EnumArmorMaterial mat, int tex, int render) {
+		super(ID, mat, tex, render, 1);
 	}
 
-	public int getCharge(ItemStack is) {
+	public int getFuel(ItemStack is) {
 		NBTTagCompound nbt = is.stackTagCompound;
 		if (nbt == null)
 			return 0;
-		return nbt.getInteger("charge");
+		return nbt.getInteger("fuel");
 	}
 
 	public void use(ItemStack is, int amount) {
-		int newCharge = this.getCharge(is) - amount;
-		if (newCharge < 0)
-			newCharge = 0;
+		int newFuel = this.getFuel(is) - amount;
+		if (newFuel < 0)
+			newFuel = 0;
 
 		NBTTagCompound nbt = is.stackTagCompound;
 		if (nbt == null)
 			is.stackTagCompound = new NBTTagCompound();
-		nbt.setInteger("charge", newCharge);
+		nbt.setInteger("fuel", newFuel);
 	}
 
 	public boolean useJetpack(EntityPlayer player)
@@ -68,7 +70,7 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 
 		ItemStack jetpack = player.inventory.armorInventory[2];
 
-		int chg = this.getCharge(jetpack);
+		int chg = this.getFuel(jetpack);
 		if (chg == 0)
 			return false;
 		if (player.ridingEntity != null)
@@ -76,23 +78,13 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 
 		float power = 0.03875F;
 
-		double max = this.getMaxCharge(jetpack);
+		double max = this.getMaxFuel(jetpack);
 
-		int hscale = 160;
-
-		if (this.getCharge(jetpack) <= max/6) {
-			hscale -= (max/6-chg)/(max/6)*160;
-		}
-		if (hscale < 10)
-			hscale = 10;
-		else if (hscale < 20)
-			hscale = 20;
-
-		int maxh = player.worldObj.getTopSolidOrLiquidBlock(px, pz)+hscale;
+		int maxh = player.worldObj.provider.getActualHeight();
 		if (y > maxh)
 			power = 0.005F;
 		else if (maxh-y < 20) {
-			double factor = (maxh-y)/20D;
+			double factor = (maxh-y)/8D;
 			power = 0.005F+(float)(power*factor*factor);
 		}
 
@@ -132,42 +124,15 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 		}
 	}
 
-	@Override
-	public boolean canProvideEnergy(ItemStack is) {
-		return false;
-	}
-
-	@Override
-	public int getChargedItemId(ItemStack is) {
-		return itemID;
-	}
-
-	@Override
-	public int getEmptyItemId(ItemStack is) {
-		return itemID;
-	}
-
-	@Override
-	public int getMaxCharge(ItemStack is) {
+	public int getMaxFuel(ItemStack is) {
 		return 30000;
 	}
-
-	@Override
-	public int getTier(ItemStack is) {
-		return 1;
-	}
-
-	@Override
-	public int getTransferLimit(ItemStack is) {
-		return 60;
-	}
-
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
-		int ch = is.stackTagCompound.getInteger("charge");
-		li.add(String.format("Charge: %d EU", ch));
+		int ch = is.stackTagCompound.getInteger("fuel");
+		li.add(String.format("Fuel: %d mB", ch));
 	}
 
 	@Override
@@ -175,18 +140,63 @@ public class ItemJetPackChest extends ItemBedrockArmor implements IElectricItem 
 	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
-		Enchantment ench = this.getDefaultEnchantment();
+		Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantment();
 		if (ench != null)
 			is.addEnchantment(ench, 4);
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("charge", this.getMaxCharge(is));
-		if (ItemRegistry.JETCHEST.isAvailableInCreativeInventory())
+		is.stackTagCompound.setInteger("fuel", this.getMaxFuel(is));
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		if (ir.isAvailableInCreativeInventory())
 			li.add(is);
 	}
 
-	@Override
 	public String getArmorTextureFile(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png";
+	}
+
+	@Override
+	public Fluid getFuel() {
+		return FluidRegistry.getFluid("rc ethanol");
+	}
+
+	@Override
+	public int getCapacity(ItemStack is) {
+		return this.getMaxFuel(is);
+	}
+
+	@Override
+	public int getCurrentFuel(ItemStack is) {
+		return this.getFuel(is);
+	}
+
+	@Override
+	public int addFuel(ItemStack is, int amt) {
+		NBTTagCompound nbt = is.stackTagCompound;
+		if (nbt == null) {
+			is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setInteger("fuel", amt);
+			return amt;
+		}
+		else {
+			int cap = this.getCapacity(is);
+			int cur = nbt.getInteger("fuel");
+			int sum = cur+amt;
+			if (sum > cap) {
+				int diff = sum-cap;
+				is.stackTagCompound.setInteger("fuel", cap);
+				return sum-diff;
+			}
+			else {
+				is.stackTagCompound.setInteger("fuel", sum);
+				return amt;
+			}
+		}
+	}
+
+	@Override
+	public int getItemSpriteIndex(ItemStack item) {
+		ItemRegistry ir = ItemRegistry.getEntry(item);
+		return ir != null ? ir.getTextureIndex() : 0;
 	}
 }

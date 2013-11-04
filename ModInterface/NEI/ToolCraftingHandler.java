@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.GuiWorktable;
@@ -79,8 +78,8 @@ public class ToolCraftingHandler extends TemplateRecipeHandler {
 				GuiCraftingRecipe.openRecipeGui("item", ir.getStackOf());
 			}
 		}
-		else if (ir == ItemRegistry.JETCHEST && ModList.INDUSTRIALCRAFT.isLoaded()) {
-			ItemStack jet = ic2.api.item.Items.getItem("electricJetpack");
+		else if (ir == ItemRegistry.BEDPACK) {
+			ItemStack jet = ItemRegistry.JETPACK.getStackOf();
 			arecipes.add(new CraftingRecipe(ir.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
 			isWorktable = true;
 		}
@@ -89,9 +88,9 @@ public class ToolCraftingHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		isWorktable = false;
-		if (ingredient != null && ingredient.itemID == ItemRegistry.BEDCHEST.getShiftedID() && ModList.INDUSTRIALCRAFT.isLoaded()) {
-			ItemStack jet = ic2.api.item.Items.getItem("electricJetpack");
-			arecipes.add(new CraftingRecipe(ItemRegistry.JETCHEST.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
+		if (ingredient != null && ingredient.itemID == ItemRegistry.BEDCHEST.getShiftedID()) {
+			ItemStack jet = ItemRegistry.JETPACK.getStackOf();
+			arecipes.add(new CraftingRecipe(ItemRegistry.BEDPACK.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
 			isWorktable = true;
 		}
 	}

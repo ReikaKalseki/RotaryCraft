@@ -18,6 +18,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -30,7 +36,7 @@ import Reika.RotaryCraft.Models.ModelGrinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implements PipeConnector {
+public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private ItemStack inventory[];
 
@@ -39,8 +45,9 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 
 	public boolean idle = false;
 
-	public int lubricant = 0;
 	public static final int MAXLUBE = 4000;
+
+	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
 	public TileEntityGrinder()
 	{
@@ -158,7 +165,8 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		}
 
 		grinderCookTime = NBT.getShort("CookTime");
-		lubricant = NBT.getInteger("lube");
+
+		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -169,7 +177,9 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	{
 		super.writeToNBT(NBT);
 		NBT.setShort("CookTime", (short)grinderCookTime);
-		NBT.setInteger("lube", lubricant);
+
+		tank.writeToNBT(NBT);
+
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inventory.length; i++)
@@ -230,10 +240,10 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inventory[2] != null && lubricant >= ItemFuelLubeBucket.LUBE_VALUE) {
+		if (inventory[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000) {
 			if (inventory[2].itemID == Item.bucketEmpty.itemID && inventory[2].stackSize == 1) {
 				inventory[2] = ItemStacks.lubebucket;
-				lubricant -= ItemFuelLubeBucket.LUBE_VALUE;
+				tank.removeLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000);
 			}
 		}
 	}
@@ -252,7 +262,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		}
 
 		if (ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
-			return (lubricant < MAXLUBE);
+			return (!tank.isFull());
 		}
 
 		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0]);
@@ -282,7 +292,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 
 	public int getLubricantScaled(int par1)
 	{
-		return (lubricant*par1)/MAXLUBE;
+		return tank.getLevel()*par1/MAXLUBE;
 	}
 
 	/**
@@ -298,7 +308,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		if (inventory[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
 			int num = 1;
 			inventory[0].stackSize -= num;
-			lubricant = ReikaMathLibrary.extrema(lubricant+(rand.nextInt(16)+1)*num, MAXLUBE, "min");
+			tank.addLiquid((rand.nextInt(16)+1)*num, FluidRegistry.getFluid("lubricant"));
 			if (inventory[0].stackSize <= 0)
 				inventory[0] = null;
 			return;
@@ -383,4 +393,50 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (this.canDrain(from, null))
+			return tank.drain(resource.amount, doDrain);
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (this.canDrain(from, null))
+			return tank.drain(maxDrain, doDrain);
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return from != ForgeDirection.UP;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
+	}
+
+	public void setLevel(int amt) {
+		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
+	}
+
+	public void removeLiquid(int amt) {
+		tank.removeLiquid(amt);
+	}
 }

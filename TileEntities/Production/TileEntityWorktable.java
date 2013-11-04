@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -30,8 +29,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.chargeTools();
-		if (ModList.INDUSTRIALCRAFT.isLoaded())
-			this.makeJetplate();
+		this.makeJetplate();
 	}
 
 	@Override
@@ -88,12 +86,12 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	private void makeJetplate() {
 		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inventory);
-		int jetslot = ReikaInventoryHelper.locateInInventory(ic2.api.item.Items.getItem("electricJetpack").itemID, inventory);
+		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getShiftedID(), inventory);
 		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
-			int original = (int)(((float)(inventory[jetslot].getMaxDamage()-inventory[jetslot].getItemDamage()))/(inventory[jetslot].getMaxDamage()-1)*30000);
+			int original = inventory[jetslot].stackTagCompound.getInteger("fuel");
 			inventory[jetslot] = null;
 			inventory[plateslot] = null;
-			ItemStack is = ItemRegistry.JETCHEST.getEnchantedStack();
+			ItemStack is = ItemRegistry.BEDPACK.getEnchantedStack();
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setInteger("charge", original);
@@ -112,38 +110,13 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return ReikaInventoryHelper.decrStackSize(this, i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, i);
-	}
-
-	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		inventory[i] = itemstack;
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public void openChest() {
-
-	}
-
-	@Override
-	public void closeChest() {
-
 	}
 
 	@Override

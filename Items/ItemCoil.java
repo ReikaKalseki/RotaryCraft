@@ -15,11 +15,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCoil extends ItemBasic
+public class ItemCoil extends ItemBasic implements TensionStorage
 {
 	public ItemCoil(int ID, int tex) {
 		super(ID, tex);
@@ -45,5 +47,27 @@ public class ItemCoil extends ItemBasic
 	{
 		int d = is.getItemDamage();
 		return super.getUnlocalizedName() + "." + String.valueOf(d);
+	}
+
+	@Override
+	public int getStiffness(ItemStack is) {
+		ItemRegistry i = ItemRegistry.getEntry(is);
+		switch(i) {
+		case STRONGCOIL:
+			return 16;
+		default:
+			return 1;
+		}
+	}
+
+	@Override
+	public int getPowerScale(ItemStack is) {
+		ItemRegistry i = ItemRegistry.getEntry(is);
+		switch(i) {
+		case STRONGCOIL:
+			return 4;
+		default:
+			return 1;
+		}
 	}
 }

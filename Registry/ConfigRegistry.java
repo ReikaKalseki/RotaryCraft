@@ -40,6 +40,7 @@ public enum ConfigRegistry implements ConfigList {
 	DETECTORRANGE("Player Detector Range", 128),
 	BREEDERRANGE("Breeder Range", 128),
 	BAITRANGE("Bait Box Range", 128),
+	LINEBUILDER("Block Ram Range", 512),
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),

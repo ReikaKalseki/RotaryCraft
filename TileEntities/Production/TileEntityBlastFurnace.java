@@ -253,54 +253,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inventory[par1] != null)
-		{
-			if (inventory[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inventory[par1];
-				inventory[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inventory[par1].splitStack(par2);
-
-			if (inventory[par1].stackSize <= 0)
-			{
-				inventory[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-
-
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inventory[par1] != null)
-		{
-			ItemStack itemstack = inventory[par1];
-			inventory[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
 	 *
 	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -316,16 +268,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public void openChest() {
-
-	}
-
-	@Override
-	public void closeChest() {
-
 	}
 
 	/**
@@ -379,11 +321,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override

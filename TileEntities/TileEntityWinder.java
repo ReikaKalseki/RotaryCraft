@@ -16,10 +16,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Models.ModelWinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -32,20 +32,16 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	//Whether in wind or unwind mode
 	public boolean winding = true;
 
-	public int getUnwindTorque() {
+	public final int getUnwindTorque() {
 		if (inslot[0] == null)
 			return 0;
-		if (inslot[0].itemID == ItemRegistry.STRONGCOIL.getShiftedID())
-			return 64;
-		return 8;
+		return 8*((TensionStorage)inslot[0].getItem()).getPowerScale(inslot[0]);
 	}
 
-	public int getUnwindSpeed() {
+	public final int getUnwindSpeed() {
 		if (inslot[0] == null)
 			return 0;
-		if (inslot[0].itemID == ItemRegistry.STRONGCOIL.getShiftedID())
-			return 8192;
-		return 1024;
+		return 1024*((TensionStorage)inslot[0].getItem()).getPowerScale(inslot[0]);
 	}
 
 	@Override
@@ -66,7 +62,7 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			}
 			return;
 		}
-		if (!(inslot[0].getItem() instanceof ItemCoil)) {
+		if (!(inslot[0].getItem() instanceof TensionStorage)) {
 			if (!winding) {
 				torque = 0;
 				omega = 0;
@@ -92,10 +88,10 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 				power = 0;
 				return;
 			}
-			if (tickcount < 20)
+			if (tickcount < this.getUnwindTime())
 				return;
 			tickcount = 0;
-			inslot[0] = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, inslot[0].getItemDamage()-1);
+			inslot[0] = new ItemStack(inslot[0].itemID, 1, inslot[0].getItemDamage()-1);
 			omega = this.getUnwindSpeed();
 			torque = this.getUnwindTorque();
 			power = omega;
@@ -104,6 +100,12 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 			writey = yCoord;
 		}
 
+	}
+
+	protected final int getUnwindTime() {
+		ItemStack is = inslot[0];
+		int base = 20;
+		return base*((TensionStorage)is.getItem()).getStiffness(is);
 	}
 
 	private boolean breakCoil() {
@@ -129,12 +131,11 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	public int getMaxWind() {
 		if (inslot[0] == null)
 			return 0;
+		if (!(inslot[0].getItem() instanceof TensionStorage))
+			return 0;
 		int id = inslot[0].itemID;
 		int max = 0;
-		if (id == ItemRegistry.SPRING.getShiftedID())
-			max = torque;
-		else if (id == ItemRegistry.STRONGCOIL.getShiftedID())
-			max = torque/16;
+		max = torque/((TensionStorage)inslot[0].getItem()).getStiffness(inslot[0]);
 		if (max > 30000) //technical limit
 			return 30000;
 		return max;

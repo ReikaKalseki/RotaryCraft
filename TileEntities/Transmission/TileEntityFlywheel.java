@@ -40,7 +40,18 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	public boolean failed = false;
 	private int soundtick = 0;
 
-
+	public static int[] getLimitLoads() {
+		double r = 0.75;
+		int[] loads = new int[4];
+		for (int i = 0; i < 4; i++) {
+			double rho = getDensity(i);
+			double s = 100*getStrength(i);
+			double frac = 2*s/(rho*r*r);
+			double base = Math.sqrt(frac);
+			loads[i] = (int)base;
+		}
+		return loads;
+	}
 
 	public void testFailure() {
 		double factor = 0.25*Math.sqrt(omega);
@@ -50,7 +61,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		case 3:
 			factor *= 1.25;
 		}
-		factor *= ReikaMathLibrary.doubpow(omega/65536D, 1.5);
+		factor *= ReikaMathLibrary.doubpow(omega/65536D, 1.5); //tp reduce damage
 		double energy = ReikaEngLibrary.rotenergy(this.getDensity(), 0.25, omega, 0.75);
 		//ReikaJavaLibrary.pConsole(ReikaPhysicsHelper.getExplosionFromEnergy(energy/factor)+"  fails: "+ReikaEngLibrary.mat_rotfailure(this.getDensity(), 0.75, omega, 100*this.getStrength()));
 		if (ReikaEngLibrary.mat_rotfailure(this.getDensity(), 0.75, omega, 100*this.getStrength()))
@@ -63,8 +74,12 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, ReikaPhysicsHelper.getExplosionFromEnergy(e), ConfigRegistry.BLOCKDAMAGE.getState());
 	}
 
-	public double getDensity() {
-		switch (this.getBlockMetadata()/4) {
+	private double getDensity() {
+		return this.getDensity(this.getBlockMetadata()/4);
+	}
+
+	public static double getDensity(int dmg) {
+		switch (dmg) {
 		case 0:
 			return ReikaEngLibrary.rhowood;
 		case 1:
@@ -77,8 +92,12 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		return 0;
 	}
 
-	public double getStrength() {
-		switch (this.getBlockMetadata()/4) {
+	private double getStrength() {
+		return this.getStrength(this.getBlockMetadata()/4);
+	}
+
+	public static double getStrength(int i) {
+		switch (i) {
 		case 0:
 			return ReikaEngLibrary.Twood;
 		case 1:

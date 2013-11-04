@@ -18,23 +18,20 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Base.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityDisplay extends InventoriedRCTileEntity implements InertIInv, GuiController {
+public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController {
 
 	private float scroll;
 	private int[] rgb = new int[3];
@@ -48,8 +45,6 @@ public class TileEntityDisplay extends InventoriedRCTileEntity implements InertI
 	public static final int charWidth = 10;
 
 	private boolean display;
-
-	private ItemStack[] inv = new ItemStack[1];
 
 	@Override
 	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
@@ -86,23 +81,14 @@ public class TileEntityDisplay extends InventoriedRCTileEntity implements InertI
 	}
 
 	private void updateCoil() {
-		if (inv[0] == null) {
-			display = false;
-			return;
-		}
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID()) {
-			display = false;
-			return;
-		}
-		if (inv[0].getItemDamage() <= 0) {
+		if (!this.hasCoil()) {
 			display = false;
 			return;
 		}
 		display = true;
 		tickcount++;
-		int dmg = inv[0].getItemDamage();
-		if (tickcount > 120) {
-			ItemStack is = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, dmg-1);
+		if (tickcount > this.getUnwindTime()) {
+			ItemStack is = this.getDecrementedCharged();
 			inv[0] = is;
 			tickcount = 0;
 		}
@@ -287,21 +273,6 @@ public class TileEntityDisplay extends InventoriedRCTileEntity implements InertI
 				}
 			}
 		}*/
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**
@@ -314,20 +285,6 @@ public class TileEntityDisplay extends InventoriedRCTileEntity implements InertI
 		//ReikaJavaLibrary.pConsole(Arrays.toString(NBT.getIntArray("Bcolor")));
 		rgb = NBT.getIntArray("color");
 		Brgb = NBT.getIntArray("Bcolor");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		//message = new ArrayList<String>();
 	}
@@ -405,59 +362,13 @@ public class TileEntityDisplay extends InventoriedRCTileEntity implements InertI
 			f.delete();
 	}
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return is.itemID == ItemRegistry.SPRING.getShiftedID();
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 1;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
-	}
-
 	public void swapCoils(ItemStack is) {
 		ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, inv[0]);
 		inv[0] = is.copy();
+	}
+
+	@Override
+	public int getBaseDischargeTime() {
+		return 120;
 	}
 }

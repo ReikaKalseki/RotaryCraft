@@ -10,20 +10,18 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Base.TileEntitySpringPowered;
 import Reika.RotaryCraft.Models.ModelSmokeDetector;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements RangedEffect, OneSlotMachine {
+public class TileEntitySmokeDetector extends TileEntitySpringPowered implements RangedEffect, OneSlotMachine {
 
 	//public static int MINPOWER = 16; //runs off of 4AAA's (max power = 4W) , so 16W (one DC engine can run 64, or 8 at max range)
 	//public static int BASESPEED = 0;
@@ -36,8 +34,6 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 
 	public int soundDelay = -1;
 
-	public ItemStack[] battery = new ItemStack[1];
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
@@ -47,8 +43,8 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 		//	return;
 		if (!this.checkValidCoil())
 			return;
-		if (unwindtick >= 1200) {
-			battery[0].setItemDamage(battery[0].getItemDamage()-1);
+		if (unwindtick >= this.getUnwindTime()) {
+			inv[0] = this.getDecrementedCharged();
 			unwindtick = 0;
 		}
 		//ReikaChatHelper.write(ReikaWorldHelper.findNearBlock(world, x, y, z, 8, Block.fire.blockID));
@@ -80,11 +76,7 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 	}
 	 */
 	public boolean checkValidCoil() {
-		if (battery[0] == null)
-			return false;
-		if (battery[0].itemID != ItemRegistry.SPRING.getShiftedID())
-			return false;
-		return true;
+		return this.hasCoil();
 	}
 
 	public int getRange() {
@@ -92,7 +84,7 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 		//overpower  = (int)(this.power/MINPOWER);
 		if (!this.checkValidCoil())
 			return 0;
-		overpower = (int)(ReikaMathLibrary.logbase(ReikaMathLibrary.intpow(battery[0].getItemDamage(), 2), 2));
+		overpower = (int)(ReikaMathLibrary.logbase(ReikaMathLibrary.intpow(inv[0].getItemDamage(), 2), 2));
 		if (overpower > 8)
 			return 8;
 		return overpower;
@@ -101,75 +93,8 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 	public boolean lowBattery() {
 		if (!this.checkValidCoil())
 			return false;
-		if (battery[0].getItemDamage() > 8)
+		if (inv[0].getItemDamage() > 8)
 			return false;
-		return true;
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 1;
-	}
-	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return battery[0];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (battery[par1] != null) {
-			if (battery[par1].stackSize <= par2) {
-				ItemStack itemstack = battery[par1];
-				battery[par1] = null;
-				return itemstack;
-			}
-			ItemStack itemstack1 = battery[par1].splitStack(par2);
-			if (battery[par1].stackSize == 0)
-				battery[par1] = null;
-			return itemstack1;
-		}
-		else
-			return null;
-	}
-
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (battery[par1] != null) {
-			ItemStack itemstack = battery[par1];
-			battery[par1] = null;
-			return itemstack;
-		}
-		else
-			return null;
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		battery[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {
-	}
-	@Override
-	public void closeChest() {
-	}
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 
@@ -192,6 +117,7 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 	public int getMachineIndex() {
 		return MachineRegistry.SMOKEDETECTOR.ordinal();
 	}
+
 	@Override
 	public int getMaxRange() {
 		return this.getRange();
@@ -201,9 +127,10 @@ public class TileEntitySmokeDetector extends InventoriedRCTileEntity implements 
 	public int getRedstoneOverride() {
 		return 0;
 	}
+
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return itemstack.getItemDamage() == 0;
+	public int getBaseDischargeTime() {
+		return 1200;
 	}
 
 }

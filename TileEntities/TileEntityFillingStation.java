@@ -1,0 +1,277 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package Reika.RotaryCraft.TileEntities;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.API.Fuelable;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
+public class TileEntityFillingStation extends InventoriedRCTileEntity implements IFluidHandler, PipeConnector{
+
+	private ItemStack[] inv = new ItemStack[2];
+
+	public static final int CAPACITY = 32000;
+
+	public static final int FUEL_PER_CRYSTAL = 250;
+
+	private HybridTank tank = new HybridTank("filling", CAPACITY);
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (this.canMakeFuel()) {
+			this.makeFuel();
+		}
+
+		if (this.hasFillable()) {
+			if (this.canFill()) {
+				this.fill();
+			}
+		}
+	}
+
+	public boolean canMakeFuel() {
+		if (inv[1] == null)
+			return false;
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+		if (fs == null) {
+			boolean item = inv[1].itemID == ItemRegistry.ETHANOL.getShiftedID();
+			boolean space = tank.canTakeIn(FUEL_PER_CRYSTAL) && (tank.isEmpty() || tank.getActualFluid().equals(FluidRegistry.getFluid("rc ethanol")));
+			return item && space;
+		}
+		else {
+			if (tank.isEmpty())
+				return true;
+			return tank.canTakeIn(fs.amount) && tank.getActualFluid().equals(fs.getFluid());
+		}
+	}
+
+	public void makeFuel() {
+		if (inv[1].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
+			tank.addLiquid(FUEL_PER_CRYSTAL, FluidRegistry.getFluid("rc ethanol"));
+			ReikaInventoryHelper.decrStack(1, inv);
+			return;
+		}
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+		tank.addLiquid(fs.amount, fs.getFluid());
+		inv[1] = new ItemStack(Item.bucketEmpty);
+	}
+
+	private void fill() {
+		ItemStack is = inv[0];
+		Fuelable i = (Fuelable)is.getItem();
+		int added = i.addFuel(is, 1);
+		tank.removeLiquid(added);
+	}
+
+	private boolean hasFillable() {
+		return inv[0] != null && inv[0].getItem() instanceof Fuelable;
+	}
+
+	private boolean canFill() {
+		if (tank.isEmpty())
+			return false;
+		ItemStack is = inv[0];
+		Fuelable i = (Fuelable)is.getItem();
+		int current = i.getCurrentFuel(is);
+		int max = i.getCapacity(is);
+		Fluid f = i.getFuel();
+		return tank.getActualFluid().equals(f) && max > current;
+	}
+
+	private boolean canIntakeFluid(Fluid f) {
+		return tank.isEmpty() || tank.getActualFluid().equals(f);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return false;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 2;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inv[i];
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inv[i] = itemstack;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		if (i == 0)
+			return itemstack.getItem() instanceof Fuelable;
+		if (i == 1) {
+			boolean container = FluidContainerRegistry.isFilledContainer(itemstack);
+			return container || itemstack.itemID == ItemRegistry.ETHANOL.getShiftedID();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p);
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return tank.fill(resource, doFill);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	@Override
+	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public void animateWithTick(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.FILLINGSTATION.ordinal();
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return this.canFill() ? 0 : 15;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+
+		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
+
+		tank.writeToNBT(NBT);
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
+	}
+
+	public void setLevel(int level) {
+		if (tank.isEmpty())
+			return;
+		else
+			tank.setContents(level, tank.getActualFluid());
+	}
+
+	public boolean isEmpty() {
+		return tank.isEmpty();
+	}
+
+	public Fluid getFluid() {
+		return tank.getActualFluid();
+	}
+
+	public int getLiquidScaled(int i) {
+		return tank.getLevel() * i / tank.getCapacity();
+	}
+
+}

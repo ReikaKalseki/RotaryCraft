@@ -142,10 +142,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			this.getLube(world, x, y, z, this.getBlockMetadata());
 			tickcount = 0;
 		}
-		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE <= MAXLUBE) {
+		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= MAXLUBE) {
 			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
 				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				tank.addLiquid(ItemFuelLubeBucket.LUBE_VALUE, RotaryCraft.lubeFluid);
+				tank.addLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000, FluidRegistry.getFluid("lubricant"));
 			}
 		}
 

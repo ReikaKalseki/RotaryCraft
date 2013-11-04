@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -198,7 +199,7 @@ public class TileEntityLineBuilder extends TileEntityInventoriedPowerReceiver im
 
 	@Override
 	public int getMaxRange() {
-		return 512;
+		return ConfigRegistry.LINEBUILDER.getValue();
 	}
 
 	@Override

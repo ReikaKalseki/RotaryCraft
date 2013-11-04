@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public interface PipeConnector {
@@ -18,5 +19,13 @@ public interface PipeConnector {
 
 	/** Side is relative to the piping block (so DOWN means the block is below the pipe); p is the pipe type */
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side);
+
+	public boolean canTakeInFluid(Fluid f);
+
+	public int getCapacity();
+
+	public void addLiquid(Fluid f, int amt);
+
+	public int getLevel();
 
 }

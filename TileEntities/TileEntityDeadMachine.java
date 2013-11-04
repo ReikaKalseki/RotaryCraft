@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -107,35 +106,14 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return ReikaInventoryHelper.decrStackSize(this, i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, i);
-	}
-
-	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		parentInv[i] = itemstack;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

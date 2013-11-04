@@ -16,7 +16,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -40,6 +39,8 @@ public enum HandbookRegistry {
 	TERMS("Basic Terms", "Terms and Physics Explanations"),
 	PHYSICS("Relevant Physics"),
 	MATERIAL("Material Properties"),
+	SHAFTS("Shaft Load Limits"),
+	FLYWHEELS("Flywheel Load Limits"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -199,7 +200,7 @@ public enum HandbookRegistry {
 	CKEY(ItemRegistry.KEY),
 	MINECART(ItemRegistry.MINECART),
 	TILESELECT(ItemRegistry.TILESELECTOR),
-	JETPACK(ItemRegistry.JETCHEST),
+	JETPACK("Jetpacks"),
 	STEELTOOLS("Steel Tools"),
 	STEELARMOR("Steel Armor"),
 	//---------------------RESOURCE--------------------//
@@ -677,7 +678,7 @@ public enum HandbookRegistry {
 		if (this == SILVERINGOT)
 			return false;
 		if (this == JETPACK)
-			return ModList.INDUSTRIALCRAFT.isLoaded();
+			return false;
 		return true;
 	}
 
@@ -866,6 +867,10 @@ public enum HandbookRegistry {
 			return new ItemStack(Item.book);
 		if (this == MATERIAL)
 			return ItemStacks.steelingot;
+		if (this == SHAFTS)
+			return MachineRegistry.SHAFT.getCraftedMetadataProduct(3);
+		if (this == FLYWHEELS)
+			return MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(0);
 		if (this == LUBE)
 			return ItemStacks.lubebucket;
 		if (this == MODINTERFACE)
@@ -895,7 +900,7 @@ public enum HandbookRegistry {
 		if (this == STEELARMOR)
 			return ItemRegistry.STEELHELMET.getEnchantedStack();
 		if (this == JETPACK)
-			return ItemRegistry.JETCHEST.getEnchantedStack();
+			return ItemRegistry.BEDPACK.getEnchantedStack();
 		if (this.isCrafting())
 			return this.getCrafting().get(this.getTabIconIndex());
 		if (this.isSmelting())

@@ -110,9 +110,9 @@ public class TileEntityHose extends TileEntityPiping {
 
 	private void getFromGrinder(TileEntityGrinder tile) {
 		if (tile != null) {
-			if (tile.lubricant > lubricant) {
-				oldlube = tile.lubricant;
-				tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
+			if (tile.getLevel() > lubricant) {
+				oldlube = tile.getLevel();
+				tile.removeLiquid(oldlube/4);
 				lubricant = ReikaMathLibrary.extrema(lubricant+oldlube/4, 0, "max");
 			}
 		}
@@ -214,5 +214,15 @@ public class TileEntityHose extends TileEntityPiping {
 	@Override
 	public Fluid getLiquidType() {
 		return RotaryCraft.lubeFluid;
+	}
+
+	@Override
+	public int getLiquidLevel() {
+		return lubricant;
+	}
+
+	@Override
+	protected void removeLiquid(int amt) {
+		lubricant -= amt;
 	}
 }

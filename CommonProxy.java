@@ -17,7 +17,7 @@ public class CommonProxy
 	public static int NVGoggles;
 	public static int NVHelmet;
 
-	public static int BedArmor;
+	public static int armor;
 	public static int SteelArmor;
 
 	public static int pipeRender;
