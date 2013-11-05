@@ -333,4 +333,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public void addLiquid(int amt, Fluid f) {
 		tank.addLiquid(amt, f);
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? Flow.OUTPUT : Flow.NONE;
+	}
 }

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities.Piping;
+package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Blocks.BlockFallingWater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
 	//Make pick random coord in 16-block radius, find top block (solid or source block), ++y, then add liquid
@@ -179,5 +180,10 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side != ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
 	}
 }

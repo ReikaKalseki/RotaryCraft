@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelGrinder;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -308,7 +309,7 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 		if (inventory[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
 			int num = 1;
 			inventory[0].stackSize -= num;
-			tank.addLiquid((rand.nextInt(16)+1)*num, FluidRegistry.getFluid("lubricant"));
+			tank.addLiquid(DifficultyEffects.CANOLA.getInt()*num, FluidRegistry.getFluid("lubricant"));
 			if (inventory[0].stackSize <= 0)
 				inventory[0] = null;
 			return;
@@ -438,5 +439,10 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 
 	public void removeLiquid(int amt) {
 		tank.removeLiquid(amt);
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side != ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
 	}
 }

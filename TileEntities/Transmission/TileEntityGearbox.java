@@ -590,4 +590,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public boolean isUseableByPlayer(EntityPlayer var1) {
 		return this.isPlayerAccessible(var1);
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side != ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
+	}
 }

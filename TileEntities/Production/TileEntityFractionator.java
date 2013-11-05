@@ -18,13 +18,17 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
+import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -32,7 +36,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
+public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	public int mixTime;
 	public int storeTime;
@@ -40,6 +44,8 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 	public static final int CAPACITY = 240;
 	public static final int BASETIME = 9600/100; //70s at 0rpm
 	public static final int MINTIME = 10;
+
+	private HybridTank tank = new HybridTank("fractionator", CAPACITY);
 
 	public boolean idle = false;
 
@@ -291,21 +297,6 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 	}
 
 	@Override
-	public Fluid getInputFluid() {
-		return null;
-	}
-
-	@Override
-	public int getCapacity() {
-		return CAPACITY;
-	}
-
-	@Override
-	public boolean canReceiveFrom(ForgeDirection from) {
-		return false;
-	}
-
-	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		if (!this.canDrain(from, resource.getFluid()))
 			return null;
@@ -334,5 +325,29 @@ public class TileEntityFractionator extends TileEntityLiquidInventoryReceiver {
 
 	public void setFuelLevel(int amt) {
 		tank.setContents(amt, RotaryCraft.jetFuelFluid);
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
 	}
 }

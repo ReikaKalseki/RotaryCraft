@@ -36,12 +36,12 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SelectableTiles;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityTerraformer extends TileEntityLiquidInventoryReceiver implements SelectableTiles {
+public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles {
 
 	private static final ObjectWeb transforms = new ObjectWeb(BiomeGenBase.class);
 	private static final HashMap<List<BiomeGenBase>, List<ItemReq>> itemReqs = new HashMap<List<BiomeGenBase>, List<ItemReq>>();

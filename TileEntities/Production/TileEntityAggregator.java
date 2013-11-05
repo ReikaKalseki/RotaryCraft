@@ -174,4 +174,9 @@ public class TileEntityAggregator extends TileEntityPowerReceiver implements IFl
 		return this.canConnectToPipe(p) && side.offsetY == 0;
 	}
 
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
+	}
+
 }

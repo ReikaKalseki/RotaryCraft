@@ -311,4 +311,9 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return Flow.INPUT;
+	}
+
 }

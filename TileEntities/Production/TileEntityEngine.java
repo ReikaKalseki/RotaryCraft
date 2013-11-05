@@ -1913,4 +1913,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public void setFlipped(boolean set) {
 		isFlipped = set;
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
+	}
 }

@@ -10,10 +10,11 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-/* To declare a machine output-only, return false for canTakeInFluid for all cases.
- * To declare a machine input-only, return null for getTanks for all cases. */
+/** To declare a machine output-only, return 0 for addFluid for all cases.
+ * To declare a machine input-only, return 0 for removeFluid for all cases. */
 public interface PipeConnector {
 
 	public boolean canConnectToPipe(MachineRegistry m);
@@ -22,8 +23,22 @@ public interface PipeConnector {
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side);
 
 	/** This is for "can this TE accept fluid f on this side EVER", not for
-	 * "if tank has space and can accept fluid f" *//*
-	public boolean canTakeInFluid(Fluid f, ForgeDirection side);*/
+	 * "if tank has space and can accept fluid f" */
+	//public boolean canTakeInFluid(Fluid f, ForgeDirection side);
+
+	/** This is called by fluid addition code. The pipes will attempt to add the specified
+	 * amount of fluid 'f', from direction 'side'. Return how much was successfully added.
+	 * Note that 'amt' may be much larger than the machine's capacity or free space.
+	 * It is up to the machine to run all the calculations and fluid distribution.
+	 * This is called every tick, so be efficient. */
+	//public int addFluid(Fluid f, int amt, ForgeDirection side);
+
+	/** This is called by fluid removal code. The pipes will attempt to drain from direction
+	 * 'side'. Return the fluid that was successfully removed.
+	 * Note that 'amt' may be much larger than the machine's liquid level.
+	 * It is up to the machine to run all the calculations and fluid distribution.
+	 * This is called every tick, so be efficient. */
+	//public FluidStack removeFluid(int amt, ForgeDirection side);
 
 	/** This is called by fluid addition. Return a FluidTankInfo which accurately encapsulates
 	 * the amount your TE has of fluid 'f' and the maximum amount it can hold. *//*
@@ -35,5 +50,26 @@ public interface PipeConnector {
 
 	/** This will call if your TE can accept 'amt' mB of Fluid 'f'. *//*
 	public void addLiquid(Fluid f, int amt);*/
+
+	int fill(ForgeDirection from, FluidStack resource, boolean doFill);
+
+	FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain);
+
+	public Flow getFlowForSide(ForgeDirection side);
+
+	public enum Flow {
+		INPUT(true, false),
+		OUTPUT(false, true),
+		DUAL(true, true),
+		NONE(false, false);
+
+		public final boolean canIntake;
+		public final boolean canOutput;
+
+		private Flow(boolean in, boolean out) {
+			canIntake = in;
+			canOutput = out;
+		}
+	}
 
 }

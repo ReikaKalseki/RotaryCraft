@@ -27,7 +27,8 @@ public enum DifficultyEffects {
 	CONSUMEFRAC(0.03125F, 0.25F, 0.75F),
 	PRODUCEFRAC(new int[]{8,16}, new int[]{5,11}, new int[]{2,4}),
 	BREAKCOIL(16, 4, 1),
-	FURNACEMELT(1800, 600, 150);
+	FURNACEMELT(1800, 600, 150),
+	CANOLA(new int[]{18,36}, new int[]{8,24}, new int[]{2,16});
 
 	private boolean isChance = false;
 

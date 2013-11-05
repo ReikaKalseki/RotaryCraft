@@ -17,32 +17,24 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Base.PoweredLiquidIO;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidHandler, TemperatureTE, PipeConnector {
+public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
 	private int temperature;
-	private int waterLevel;
 	private long storedEnergy;
 
 	public static final int CAPACITY = 27000;
 	public static final int MAXTEMP = 500;
-
-	private HybridTank tank = new HybridTank("boilersteam", 27000);
-	private HybridTank watertank = new HybridTank("boilerwater", CAPACITY);
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -72,9 +64,9 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 
 	@Override
 	public int getRedstoneOverride() {
-		if (tank.isFull())
+		if (output.isFull())
 			return 15;
-		if (watertank.isEmpty())
+		if (input.isEmpty())
 			return 15;
 		return 0;
 	}
@@ -90,10 +82,6 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 		if (temperature > 100)
 			storedEnergy += power*6000;
 
-		if (watertank.getFluid() != null && watertank.getFluid().amount > 0) {
-			int amount = watertank.drain(watertank.getFluid().amount, true).amount;
-			waterLevel += amount;
-		}
 		this.getPipeWater(world, x, y, z);
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getSteam()+":"+storedEnergy+"/"+ReikaRailCraftHelper.getSteamBucketEnergy(), Side.SERVER);
@@ -103,34 +91,34 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 		TileEntity te = world.getBlockTileEntity(x, y+1, z);
 		if (te instanceof IFluidHandler) {
 			IFluidHandler ic = (IFluidHandler)te;
-			if (tank.getFluid() != null) {
-				ic.fill(ForgeDirection.DOWN, tank.getFluid(), true);
-				tank.drain(tank.getFluid().amount, true);
+			if (output.getFluid() != null) {
+				ic.fill(ForgeDirection.DOWN, output.getFluid(), true);
+				output.drain(output.getFluid().amount, true);
 			}
 		}
 	}
 
 	private void makeSteam() {
-		if (waterLevel >= FluidContainerRegistry.BUCKET_VOLUME && (tank.getFluid() == null || tank.getFluid().amount < tank.getCapacity())) {
-			waterLevel -= FluidContainerRegistry.BUCKET_VOLUME;
-			tank.fill(FluidRegistry.getFluidStack("steam", FluidContainerRegistry.BUCKET_VOLUME), true);
+		if (this.getWater() >= FluidContainerRegistry.BUCKET_VOLUME && (output.isEmpty() || output.canTakeIn(1000))) {
+			input.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
+			output.fill(FluidRegistry.getFluidStack("steam", FluidContainerRegistry.BUCKET_VOLUME), true);
 			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy();
 		}
 	}
 
 	public int getSteam() {
-		return tank.getFluid() != null ? tank.getFluid().amount : 0;
+		return output.getFluid() != null ? output.getFluid().amount : 0;
 	}
 
 	public void getPipeWater(World world, int x, int y, int z) {
 		int oldLevel = 0;
-		if (waterLevel < CAPACITY) {
+		if (this.getWater() < CAPACITY) {
 			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
 				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
@@ -138,7 +126,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
@@ -146,7 +134,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
@@ -154,7 +142,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
@@ -162,7 +150,7 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
@@ -170,55 +158,14 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
 					oldLevel = tile.liquidLevel;
 					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
+					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
 				}
 			}
 		}
 	}
 
 	public int getWater() {
-		int level = waterLevel;
-		level += watertank.getFluid() != null ? watertank.getFluid().amount : 0;
-		return level;
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (from == ForgeDirection.UP)
-			return 0;
-		if (!resource.getFluid().equals(FluidRegistry.WATER))
-			return 0;
-		if (!this.canFill(from, resource.getFluid()))
-			return 0;
-		return watertank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (from == ForgeDirection.UP)
-			return tank.drain(maxDrain, doDrain);
-		else
-			return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return this.drain(from, resource.amount, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from.offsetY == 0 && fluid.equals(FluidRegistry.WATER);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{tank.getInfo(), watertank.getInfo()};
+		return input.getLevel();
 	}
 
 	@Override
@@ -275,11 +222,10 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("temp", temperature);
-		NBT.setInteger("waterl", waterLevel);
 		NBT.setLong("energy", storedEnergy);
 
-		tank.writeToNBT(NBT);
-		watertank.writeToNBT(NBT);
+		output.writeToNBT(NBT);
+		input.writeToNBT(NBT);
 	}
 
 	/**
@@ -291,10 +237,9 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 		super.readFromNBT(NBT);
 		temperature = NBT.getInteger("temp");
 		storedEnergy = NBT.getLong("energy");
-		waterLevel = NBT.getInteger("waterl");
 
-		tank.readFromNBT(NBT);
-		watertank.readFromNBT(NBT);
+		output.readFromNBT(NBT);
+		input.readFromNBT(NBT);
 	}
 
 	@Override
@@ -303,8 +248,23 @@ public class TileEntityBoiler extends TileEntityPowerReceiver implements IFluidH
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection dir) {
-		return p == MachineRegistry.PIPE && dir.offsetY == 0;
+	public Fluid getInputFluid() {
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public boolean canOutputTo(ForgeDirection to) {
+		return to == ForgeDirection.UP;
 	}
 
 }

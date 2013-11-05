@@ -18,7 +18,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.PipeConnector.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity {
@@ -44,13 +47,13 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 	//protected abstract boolean intakesFromMachines();
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {/*
+	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (this.intakesFromMachines()) {
 			this.intakeFluid(world, x, y, z);
 		}
 		if (this.dumpsToMachines()) {
 			this.dumpContents(world, x, y, z);
-		}*/
+		}
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return false;
 		return Block.blocksList[id].hasTileEntity(meta);
 	}
-	/*
+
 	public void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getLiquidType();
 		if (this.getLiquidLevel() <= 0 || f == null)
@@ -91,34 +94,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof PipeConnector) {
 					PipeConnector pc = (PipeConnector)te;
-					if (pc.canTakeInFluid(f, dir.getOpposite())) {
-						FluidTankInfo ifo = pc.getTank(f);
-						FluidStack fs = ifo.fluid;
-						int max = ifo.capacity;
-						if (fs == null) {
-							if (max >= toadd) {
-								pc.addLiquid(f, toadd);
-								this.removeLiquid(toadd);
-							}
-							else {
-								pc.addLiquid(f, max);
-								this.removeLiquid(max);
-							}
-						}
-						else {
-							int space = max-fs.amount;
-							Fluid in = fs.getFluid();
-							if (f.equals(in)) {
-								if (space >= toadd) {
-									pc.addLiquid(f, toadd);
-									this.removeLiquid(toadd);
-								}
-								else {
-									pc.addLiquid(f, space);
-									this.removeLiquid(space);
-								}
-							}
-						}
+					Flow flow = pc.getFlowForSide(dir.getOpposite());
+					if (flow.canIntake) {
+
 					}
 				}
 				else if (te instanceof IFluidHandler) {
@@ -142,11 +120,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof PipeConnector) {
-					PipeConnector pc = (PipeConnector)te;
-
-				}
-				else if (te instanceof IFluidHandler) {
+				if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {
@@ -163,7 +137,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			}
 		}
 	}
-	 */
+
 	@Override
 	public final RotaryModelBase getTEModel(World world, int x, int y, int z) {
 		return null;
@@ -288,22 +262,27 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
 	}
 
-	public enum TransferPattern {
+	public enum TransferAmount {
 		UNITY(),
+		BUCKET(),
 		QUARTER(),
 		FORCEDQUARTER(),
 		ALL();
 
 		public int getTransferred(int max) {
+			if (max <= 0)
+				return 0;
 			switch(this) {
 			case ALL:
 				return max;
 			case FORCEDQUARTER:
-				return max > 0 ? max/4+1 : 0;
+				return max/4+1;
 			case QUARTER:
 				return max/4;
 			case UNITY:
 				return 1;
+			case BUCKET:
+				return max > 1000 ? 1000 : max;
 			default:
 				return 1;
 			}

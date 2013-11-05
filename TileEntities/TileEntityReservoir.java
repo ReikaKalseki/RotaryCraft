@@ -302,4 +302,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void setEmpty() {
 		tank.empty();
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.DOWN ? Flow.OUTPUT: Flow.INPUT;
+	}
 }

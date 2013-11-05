@@ -274,4 +274,9 @@ public class TileEntityFillingStation extends InventoriedRCTileEntity implements
 		return tank.getLevel() * i / tank.getCapacity();
 	}
 
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return Flow.INPUT;
+	}
+
 }

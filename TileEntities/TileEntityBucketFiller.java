@@ -19,22 +19,28 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
+import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
+public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
 
 	public static final int CAPACITY = 24000;
+
+	private HybridTank tank = new HybridTank("bucketfiller", CAPACITY);
 
 	public static final Fluid WATER = FluidRegistry.WATER;
 	public static final Fluid LAVA = FluidRegistry.LAVA;
@@ -266,23 +272,12 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	}
 
 	@Override
-	public Fluid getInputFluid() {
-		return null;
-	}
-
-	@Override
-	public int getCapacity() {
-		return CAPACITY;
-	}
-
-	@Override
-	public boolean canReceiveFrom(ForgeDirection from) {
-		return from.offsetY == 0;
-	}
-
-	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
 		return this.canReceiveFrom(from) && filling;
+	}
+
+	private boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
 	}
 
 	public void setEmpty() {
@@ -306,5 +301,30 @@ public class TileEntityBucketFiller extends TileEntityLiquidInventoryReceiver {
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return !filling && from.offsetY == 0;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (this.canFill(from, resource.getFluid()))
+			return tank.fill(resource, doFill);
+		return 0;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? (filling ? Flow.INPUT : Flow.OUTPUT) : Flow.NONE;
+	}
+
+	public int getLevel() {
+		return tank.getLevel();
+	}
+
+	public Fluid getContainedFluid() {
+		return tank.getActualFluid();
 	}
 }

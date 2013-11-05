@@ -18,54 +18,54 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 
-public abstract class TileEntityLiquidPowered extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector {
+public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
 	protected HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()), this.getCapacity());
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public final FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return null;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public final boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
 	}
 
 	public abstract Fluid getInputFluid();
 
-	public abstract int getCapacity();
-
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public final FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
-	public int getLevel() {
+	public final int getLevel() {
 		return tank.getLevel();
 	}
 
-	public Fluid getContainedFluid() {
+	public final Fluid getContainedFluid() {
 		return tank.getActualFluid();
 	}
 
-	public void addLiquid(int amt) {
+	public final void addLiquid(int amt) {
 		tank.addLiquid(amt, this.getInputFluid());
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public final boolean canFill(ForgeDirection from, Fluid fluid) {
 		return this.canReceiveFrom(from) && fluid.equals(this.getInputFluid());
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public final int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		if (!this.canFill(from, resource.getFluid()))
 			return 0;
 		return tank.fill(resource, doFill);
@@ -74,8 +74,17 @@ public abstract class TileEntityLiquidPowered extends TileEntityPowerReceiver im
 	public abstract boolean canReceiveFrom(ForgeDirection from);
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return this.canReceiveFrom(side) && this.canConnectToPipe(p);
+	}
+
+	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		return type == PipeType.FLUID ? (this.canReceiveFrom(side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
+	}
+
+	@Override
+	public final Flow getFlowForSide(ForgeDirection side) {
+		return this.canReceiveFrom(side) ? Flow.INPUT : Flow.NONE;
 	}
 
 }

@@ -286,4 +286,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return Flow.INPUT;
+	}
 }

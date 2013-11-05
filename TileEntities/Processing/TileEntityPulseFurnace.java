@@ -578,4 +578,9 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	public void setWater(int amt) {
 		water.setContents(amt, FluidRegistry.WATER);
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? Flow.INPUT : Flow.NONE;
+	}
 }

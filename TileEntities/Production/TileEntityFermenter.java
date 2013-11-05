@@ -33,13 +33,13 @@ import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityFermenter extends TileEntityLiquidInventoryReceiver implements TemperatureTE
+public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE
 {
 
 	/** The number of ticks that the current item has been cooking for */

@@ -334,4 +334,9 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 		tank.removeLiquid(amt);
 	}
 
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return Flow.OUTPUT;
+	}
+
 }

@@ -419,4 +419,9 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public void setWater(int amt) {
 		water.setContents(amt, FluidRegistry.WATER);
 	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side.offsetY == 0 ? Flow.INPUT : Flow.NONE;
+	}
 }

@@ -13,7 +13,9 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -260,5 +262,31 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		return side == ForgeDirection.DOWN;
+	}
+
+	public boolean canFill(ForgeDirection side, Fluid f) {
+		return f.equals(FluidRegistry.WATER) && side == ForgeDirection.UP;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (this.canFill(from, resource.getFluid())) {
+			int space = CAPACITY-waterLevel;
+			int add = Math.min(space, resource.amount);
+			waterLevel += add;
+			return add;
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
 	}
 }

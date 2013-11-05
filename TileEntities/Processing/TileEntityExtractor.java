@@ -26,13 +26,13 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityLiquidInventoryReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
+public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -43,7 +43,7 @@ public class TileEntityExtractor extends TileEntityLiquidInventoryReceiver {
 	/** The number of ticks that the current item has been cooking for */
 	public int[] extractorCookTime = new int[4];
 
-	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 16000;
 
 	public boolean idle = false;
 
