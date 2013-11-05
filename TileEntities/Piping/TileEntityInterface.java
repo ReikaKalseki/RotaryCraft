@@ -1,16 +1,8 @@
-/*******************************************************************************
- * @author Reika Kalseki
- * 
- * Copyright 2013
- * 
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -19,60 +11,40 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 
-public class TileEntityValve extends TileEntityPiping {
+public class TileEntityInterface extends TileEntityPiping {
 
 	private Fluid fluid;
 	private int level;
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry p) {
-		return p == MachineRegistry.PIPE || p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE || p == MachineRegistry.SEPARATION;
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
-			this.draw(world, x, y, z);
+		this.draw(world, x, y, z);
 		this.transfer(world, x, y, z);
-		if (level <= 0) {
-			level = 0;
-			fluid = null;
-		}
 	}
 
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBT.setInteger("amount", level);
-
-		ReikaNBTHelper.writeFluidToNBT(NBT, fluid);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		level = NBT.getInteger("amount");
-
-		fluid = ReikaNBTHelper.getFluidFromNBT(NBT);
-
-		if (level < 0) {
-			level = 0;
-		}
+	private boolean isTarget(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		if (id == 0)
+			return false;
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m != null && m.isPipe())
+			return false;
+		return Block.blocksList[id].hasTileEntity(meta);
 	}
 
 	@Override
 	public void draw(World world, int x, int y, int z) {
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y+1, z);
-		if (m == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
-			if (!tile.isEmpty() && (tile.getFluid().equals(fluid) || level <= 0)) {
-				fluid = tile.getFluid();
-				level += tile.getLevel()/4+1;
-				tile.setLevel(tile.getLevel()-tile.getLevel()/4-1);
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (this.canInteractWith(world, x, y, z, dir)) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if (this.isTarget(world, dx, dy, dz)) {
+					TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				}
 			}
 		}
 	}
@@ -120,8 +92,13 @@ public class TileEntityValve extends TileEntityPiping {
 	}
 
 	@Override
+	public boolean canConnectToPipe(MachineRegistry p) {
+		return p == MachineRegistry.PIPE || p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE;
+	}
+
+	@Override
 	public Icon getBlockIcon() {
-		return Block.blockRedstone.getIcon(0, 0);
+		return Block.stone.getIcon(0, 0);
 	}
 
 	@Override
@@ -136,7 +113,29 @@ public class TileEntityValve extends TileEntityPiping {
 
 	@Override
 	public int getMachineIndex() {
-		return MachineRegistry.VALVE.ordinal();
+		return MachineRegistry.INTERFACE.ordinal();
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+		NBT.setInteger("amount", level);
+
+		ReikaNBTHelper.writeFluidToNBT(NBT, fluid);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+		level = NBT.getInteger("amount");
+
+		fluid = ReikaNBTHelper.getFluidFromNBT(NBT);
+
+		if (level < 0) {
+			level = 0;
+		}
 	}
 
 }

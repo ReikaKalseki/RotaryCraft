@@ -40,7 +40,7 @@ public class ItemVacuum extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (ep.isSneaking() || true) {
+		if (ep.isSneaking()) {
 			this.empty(is, world, ep);
 			return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
 		}

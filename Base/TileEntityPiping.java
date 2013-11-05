@@ -53,6 +53,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		}*/
 	}
 
+	@Override
+	public final int getRedstoneOverride() {
+		return 0;
+	}
+
 	protected final boolean canInteractWith(World world, int x, int y, int z, ForgeDirection side) {
 		if (!connections[side.ordinal()])
 			return false;
@@ -281,5 +286,27 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		int id = world.getBlockId(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
+	}
+
+	public enum TransferPattern {
+		UNITY(),
+		QUARTER(),
+		FORCEDQUARTER(),
+		ALL();
+
+		public int getTransferred(int max) {
+			switch(this) {
+			case ALL:
+				return max;
+			case FORCEDQUARTER:
+				return max > 0 ? max/4+1 : 0;
+			case QUARTER:
+				return max/4;
+			case UNITY:
+				return 1;
+			default:
+				return 1;
+			}
+		}
 	}
 }

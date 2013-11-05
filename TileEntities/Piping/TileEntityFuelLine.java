@@ -215,11 +215,6 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	}
 
 	@Override
-	public int getRedstoneOverride() {
-		return 0;
-	}
-
-	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS;
 	}

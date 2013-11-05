@@ -186,11 +186,6 @@ public class TileEntityHose extends TileEntityPiping {
 	}
 
 	@Override
-	public int getRedstoneOverride() {
-		return 0;
-	}
-
-	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.HOSE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION;
 	}

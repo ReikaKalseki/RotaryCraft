@@ -161,11 +161,6 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	@Override
-	public int getRedstoneOverride() {
-		return 0;
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
