@@ -40,7 +40,7 @@ public class ItemVacuum extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (ep.isSneaking()) {
+		if (ep.isSneaking() || true) {
 			this.empty(is, world, ep);
 			return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2);
 		}
@@ -82,8 +82,8 @@ public class ItemVacuum extends ItemChargedTool {
 	}
 
 	private void empty(ItemStack is, World world, EntityPlayer ep) {
-		MovingObjectPosition mov = ReikaPlayerAPI.getLookedAtBlock(5);
-		//ReikaChatHelper.write(mov);
+		MovingObjectPosition mov = ReikaPlayerAPI.getLookedAtBlock(ep, 5, false);
+		//ReikaChatHelper.write(mov.blockX+", "+mov.blockY+", "+mov.blockZ);
 		if (mov == null)
 			return;
 		int x = mov.blockX;
