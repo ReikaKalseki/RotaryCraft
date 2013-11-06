@@ -20,39 +20,48 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.PipeConnector.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 
-	public abstract void draw(World world, int x, int y, int z);
-	public abstract void transfer(World world, int x, int y, int z);
-
 	private boolean[] connections = new boolean[6];
 
-	//public abstract int getLiquidLevel();
-
-	//protected abstract void removeLiquid(int amt);
+	public abstract int getLiquidLevel();
 
 	public abstract boolean canConnectToPipe(MachineRegistry p);
 
-	//public abstract boolean canIntakeFluid(Fluid f);
+	protected abstract void setFluid(Fluid f);
 
-	/** Already checked that Fluid was valid */
-	//protected abstract void addFluid(int amt);
+	protected abstract void setLevel(int amt);
 
-	//protected abstract boolean dumpsToMachines();
+	protected abstract boolean interactsWithMachines();
 
-	//protected abstract boolean intakesFromMachines();
+	protected abstract void onIntake(TileEntity te);
+
+	public abstract boolean canReceiveFromPipeOn(ForgeDirection side);
+
+	public abstract boolean canEmitToPipeOn(ForgeDirection side);
+
+	public final boolean canIntakeFluid(Fluid f) {
+		if (f == null)
+			return false;
+		return this.isValidFluid(f) && (this.getLiquidType() == null || this.getLiquidLevel() == 0 || this.getLiquidType().equals(f));
+	}
+
+	public abstract boolean isValidFluid(Fluid f);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (this.intakesFromMachines()) {
-			this.intakeFluid(world, x, y, z);
-		}
-		if (this.dumpsToMachines()) {
-			this.dumpContents(world, x, y, z);
+		this.intakeFluid(world, x, y, z);
+		this.dumpContents(world, x, y, z);
+		if (this.getLiquidLevel() <= 0) {
+			this.setLevel(0);
+			this.setFluid(null);
 		}
 	}
 
@@ -73,8 +82,16 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return false;
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
-			return false;
-		return Block.blocksList[id].hasTileEntity(meta);
+			return this.canConnectToPipe(m);
+		return this.interactsWithMachines() && Block.blocksList[id].hasTileEntity(meta);
+	}
+
+	public final int getIntake(int otherlevel) {
+		return TransferAmount.FORCEDQUARTER.getTransferred(otherlevel);
+	}
+
+	public final int getOutput(int max) {
+		return TransferAmount.FORCEDQUARTER.getTransferred(max);
 	}
 
 	public void dumpContents(World world, int x, int y, int z) {
@@ -83,33 +100,67 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			return;
 		for (int i = 0; i < 6; i++) {
 			int level = this.getLiquidLevel();
-			if (level <= 0)
+			if (level <= 0) {
+				this.setFluid(null);
 				return;
-			int toadd = level/4+1;
+			}
 			ForgeDirection dir = dirs[i];
 			if (this.canInteractWith(world, x, y, z, dir)) {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof PipeConnector) {
+				if (te instanceof TileEntityPiping) {
+					TileEntityPiping tp = (TileEntityPiping)te;
+					if (this.canConnectToPipe(tp.getMachine())) {
+						if (tp.canIntakeFluid(f)) {
+							int otherlevel = tp.getLiquidLevel();
+							int dL = level-otherlevel;
+							int toadd = this.getOutput(dL);
+							if (toadd > 0) {
+								this.addFluid(toadd);
+								tp.removeLiquid(toadd);
+							}
+						}
+					}
+				}
+				else if (te instanceof PipeConnector) {
 					PipeConnector pc = (PipeConnector)te;
 					Flow flow = pc.getFlowForSide(dir.getOpposite());
 					if (flow.canIntake) {
-
+						int toadd = this.getOutput(this.getLiquidLevel());
+						if (toadd > 0) {
+							FluidStack fs = new FluidStack(f, toadd);
+							int added = pc.fill(dir.getOpposite(), fs, true);
+							if (added > 0) {
+								ReikaJavaLibrary.pConsole(toadd+":"+added+":"+this.getLiquidLevel(), Side.SERVER);
+								this.removeLiquid(added);
+							}
+						}
 					}
 				}
 				else if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
-						int added = fl.fill(dir.getOpposite(), new FluidStack(f, toadd), true);
-						if (added > 0) {
-							this.removeLiquid(added);
+						int toadd = this.getOutput(this.getLiquidLevel());
+						if (toadd > 0) {
+							int added = fl.fill(dir.getOpposite(), new FluidStack(f, toadd), true);
+							if (added > 0) {
+								this.removeLiquid(added);
+							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	protected final void removeLiquid(int toremove) {
+		this.setLevel(this.getLiquidLevel()-toremove);
+	}
+
+	protected final void addFluid(int toadd) {
+		this.setLevel(this.getLiquidLevel()+toadd);
 	}
 
 	public void intakeFluid(World world, int x, int y, int z) {
@@ -120,16 +171,52 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof IFluidHandler) {
+				if (te instanceof TileEntityPiping) {
+					TileEntityPiping tp = (TileEntityPiping)te;
+					if (this.canConnectToPipe(tp.getMachine())) {
+						Fluid f = tp.getLiquidType();
+						int amt = tp.getLiquidLevel();
+						int dL = amt-this.getLiquidLevel();
+						int todrain = this.getIntake(dL);
+						if (todrain > 0 && this.canIntakeFluid(f)) {
+							this.setFluid(f);
+							this.addFluid(todrain);
+							tp.removeLiquid(todrain);
+							this.onIntake(te);
+						}
+					}
+				}
+				else if (te instanceof PipeConnector) {
+					PipeConnector pc = (PipeConnector)te;
+					Flow flow = pc.getFlowForSide(dir.getOpposite());
+					if (flow.canOutput) {
+						FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
+						if (fs != null) {
+							int level = this.getLiquidLevel();
+							int todrain = this.getIntake(fs.amount-level);
+							if (todrain > 0) {
+								if (this.canIntakeFluid(fs.getFluid())) {
+									this.addFluid(todrain);
+									this.setFluid(fs.getFluid());
+									pc.drain(dir.getOpposite(), todrain, true);
+									this.onIntake(te);
+								}
+							}
+						}
+					}
+				}
+				else if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {
 						int level = this.getLiquidLevel();
-						int todrain = fs.amount;
-						if (todrain > level) {
+						int todrain = this.getIntake(fs.amount-level);
+						if (todrain > 0) {
 							if (this.canIntakeFluid(fs.getFluid())) {
 								fl.drain(dir.getOpposite(), todrain, true);
 								this.addFluid(todrain);
+								this.setFluid(fs.getFluid());
+								this.onIntake(te);
 							}
 						}
 					}
@@ -219,6 +306,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		if (m == m2)
 			return true;
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+		if (tile instanceof TileEntityPiping)
+			return ((TileEntityPiping) tile).canConnectToPipe(m);
 		if (!(tile instanceof PipeConnector))
 			return false;
 		PipeConnector pc = (PipeConnector)tile;
@@ -233,6 +322,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		for (int i = 0; i < 6; i++) {
 			NBT.setBoolean("conn"+i, connections[i]);
 		}
+
+		ReikaNBTHelper.writeFluidToNBT(NBT, this.getLiquidType());
+		NBT.setInteger("level", this.getLiquidLevel());
 	}
 
 	/**
@@ -246,6 +338,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		for (int i = 0; i < 6; i++) {
 			connections[i] = NBT.getBoolean("conn"+i);
 		}
+
+		this.setFluid(ReikaNBTHelper.getFluidFromNBT(NBT));
+		this.setLevel(NBT.getInteger("level"));
 	}
 
 	public boolean isConnectedToNonSelf(ForgeDirection dir) {

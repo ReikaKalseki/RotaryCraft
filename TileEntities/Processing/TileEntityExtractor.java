@@ -25,8 +25,8 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -172,8 +172,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 		}
 
 		extractorCookTime = NBT.getIntArray("CookTime");
-
-		tank.readFromNBT(NBT);
 	}
 
 	/**
@@ -184,8 +182,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	{
 		super.writeToNBT(NBT);
 		NBT.setIntArray("CookTime", extractorCookTime);
-
-		tank.writeToNBT(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
 

@@ -35,8 +35,8 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SelectableTiles;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
@@ -190,11 +190,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		return m == MachineRegistry.PIPE;
 	}
 
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return p == MachineRegistry.PIPE;
-	}
-
 	private boolean isValidTarget(BiomeGenBase from) {
 		return transforms.isDirectionallyConnectedTo(from, target);
 	}
@@ -332,8 +327,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			}
 		}
 
-		tank.readFromNBT(NBT);
-
 		int tg = NBT.getInteger("tg");
 		if (tg != -1)
 			target = BiomeGenBase.biomeList[tg];
@@ -346,8 +339,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-
-		tank.writeToNBT(NBT);
 
 		if (target != null)
 			NBT.setInteger("tg", target.biomeID);

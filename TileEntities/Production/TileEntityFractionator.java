@@ -15,20 +15,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Base.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelFraction;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -36,7 +30,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 
 	public int mixTime;
 	public int storeTime;
@@ -44,8 +38,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public static final int CAPACITY = 240;
 	public static final int BASETIME = 9600/100; //70s at 0rpm
 	public static final int MINTIME = 10;
-
-	private HybridTank tank = new HybridTank("fractionator", CAPACITY);
 
 	public boolean idle = false;
 
@@ -203,8 +195,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	{
 		super.writeToNBT(NBT);
 
-		tank.writeToNBT(NBT);
-
 		NBT.setInteger("mix", mixTime);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -230,8 +220,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-
-		tank.readFromNBT(NBT);
 
 		mixTime = NBT.getInteger("mix");
 
@@ -291,30 +279,6 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 		return m == MachineRegistry.FUELLINE;
 	}
 
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side == ForgeDirection.DOWN;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, resource.getFluid()))
-			return null;
-		return tank.drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (from != ForgeDirection.UP)
-			return null;
-		return tank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from == ForgeDirection.UP && fluid.equals(FluidRegistry.getFluid("jet fuel"));
-	}
-
 	public int getFuelLevel() {
 		return tank.getLevel();
 	}
@@ -328,26 +292,12 @@ public class TileEntityFractionator extends TileEntityInventoriedPowerReceiver i
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
+	public boolean canOutputTo(ForgeDirection to) {
+		return to == ForgeDirection.UP;
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{tank.getInfo()};
-	}
-
-	@Override
-	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
-	}
-
-	public int getLevel() {
-		return tank.getLevel();
+	public int getCapacity() {
+		return CAPACITY;
 	}
 }

@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 
-public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProducer implements ISidedInventory {
+public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO implements ISidedInventory {
 
 	public void openChest() {}
 

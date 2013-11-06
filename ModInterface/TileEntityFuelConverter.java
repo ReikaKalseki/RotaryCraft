@@ -19,26 +19,20 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver implements IFluidHandler {
+public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	public static final Fluid BC_FUEL = FluidRegistry.getFluid("fuel");
 	public static final Fluid JET_FUEL = FluidRegistry.getFluid("jet fuel");
 
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
-
-	private HybridTank bctank = new HybridTank("converterbc", CAPACITY);
-	private HybridTank jettank = new HybridTank("converterjet", CAPACITY);
 
 	private static final ItemStack[] ingredients =
 		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 0),
@@ -72,9 +66,9 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 
 	@Override
 	public int getRedstoneOverride() {
-		if (bctank.isEmpty())
+		if (input.isEmpty())
 			return 15;
-		if (jettank.isFull())
+		if (output.isFull())
 			return 15;
 		return 0;
 	}
@@ -96,9 +90,9 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		if (omega < MINSPEED)
 			convert = false;
 
-		if (convert && bctank.getFluid() != null && bctank.getFluid().amount >= 8*factor && this.hasItems()) {
-			FluidStack drain = bctank.drain(8*factor, true);
-			jettank.fill(FluidRegistry.getFluidStack("jet fuel", factor), true);
+		if (convert && input.getFluid() != null && input.getFluid().amount >= 8*factor && this.hasItems()) {
+			FluidStack drain = input.drain(8*factor, true);
+			output.fill(FluidRegistry.getFluidStack("jet fuel", factor), true);
 			if (!world.isRemote) //chance^2
 				this.consumeItems();
 		}
@@ -143,9 +137,6 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		bctank.readFromNBT(NBT);
-		jettank.readFromNBT(NBT);
-
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
 
@@ -165,9 +156,6 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		bctank.writeToNBT(NBT);
-		jettank.writeToNBT(NBT);
-
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inv.length; i++)
@@ -184,44 +172,11 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 		NBT.setTag("Items", nbttaglist);
 	}
 
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (!this.canFill(from, resource.getFluid()))
-			return 0;
-		return bctank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return jettank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return jettank.drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid)
-	{
-		return fluid.equals(BC_FUEL);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid)
-	{
-		return fluid.equals(JET_FUEL);
-	}
-
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{bctank.getInfo(), jettank.getInfo()};
-	}
-
 	public int getFuel(FluidStack liquid) {
 		if (liquid.getFluid().equals(BC_FUEL))
-			return bctank.getLevel();
+			return input.getLevel();
 		else if (liquid.getFluid().equals(JET_FUEL))
-			return jettank.getLevel();
+			return output.getLevel();
 		return 0;
 	}
 
@@ -234,15 +189,40 @@ public class TileEntityFuelConverter extends TileEntityInventoriedPowerReceiver 
 	}
 
 	public int getBCFuel() {
-		return bctank.getLevel();
+		return input.getLevel();
 	}
 
 	public int getJetFuel() {
-		return jettank.getLevel();
+		return output.getLevel();
 	}
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return BC_FUEL;
+	}
+
+	@Override
+	public boolean canOutputTo(ForgeDirection to) {
+		return true;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return true;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
 	}
 
 }

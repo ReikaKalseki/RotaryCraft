@@ -156,7 +156,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			if (m == MachineRegistry.FUELLINE) {
 				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
 				if (tile != null && tile.fuel > 0) {
-					Fluid f = tile.getContainedFuel();
+					Fluid f = tile.getLiquidType();
 					if (tile.fuel > tank.getLevel() && this.canIntakeFuel(f)) {
 						oldfuel = tile.fuel-1;
 						tile.fuel = 1;

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -75,7 +76,7 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canReceiveFrom(side) && this.canConnectToPipe(p);
+		return this.canReceiveFrom(side.getOpposite()) && this.canConnectToPipe(p);
 	}
 
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
@@ -85,6 +86,20 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 	@Override
 	public final Flow getFlowForSide(ForgeDirection side) {
 		return this.canReceiveFrom(side) ? Flow.INPUT : Flow.NONE;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		tank.writeToNBT(NBT);
 	}
 
 }

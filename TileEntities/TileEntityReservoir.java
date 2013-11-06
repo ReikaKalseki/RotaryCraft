@@ -20,21 +20,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelReservoir;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine.Fuels;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
-	public static final int CAPACITY = 64*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 64000;
 
 	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
@@ -45,7 +39,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.getLiq(world, x, y, z, meta);
 		this.transferBetween(world, x, y, z);
 
 		if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
@@ -85,55 +78,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			return true;
 		}
 		return false;
-	}
-
-	public void getLiq(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (tank.getLevel() < CAPACITY) {
-				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (m == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null) {
-						if (tile.getLiquidType() != null && tile.liquidLevel > 0) {
-							Fluid f = tile.getLiquidType();
-							if (f != null && this.canAcceptFluid(f)) {
-								oldLevel = tile.liquidLevel;
-								tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4, 0, "max");
-								tank.addLiquid(oldLevel/4, f);
-							}
-						}
-					}
-				}
-				if (m == MachineRegistry.HOSE) {
-					TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && this.canAcceptFluid(FluidRegistry.getFluid("lubricant"))) {
-						oldLevel = tile.lubricant;
-						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-						tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("lubricant"));
-					}
-				}
-				if (m == MachineRegistry.FUELLINE) {
-					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.getContainedFuel() != null) {
-						Fuels f = tile.getFuelType();
-						oldLevel = tile.fuel;
-						if (f == Fuels.JETFUEL && this.canAcceptFluid(FluidRegistry.getFluid("jet fuel"))) {
-							tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
-							tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("jet fuel"));
-						}
-						if (f == Fuels.ETHANOL && this.canAcceptFluid(FluidRegistry.getFluid("rc ethanol"))) {
-							tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4, 0, "max");
-							tank.addLiquid(oldLevel/4, FluidRegistry.getFluid("rc ethanol"));
-						}
-					}
-				}
-			}
-		}
 	}
 
 
@@ -215,33 +159,33 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (from == ForgeDirection.DOWN)
+		if (from == ForgeDirection.UP)
 			return 0;
 		return tank.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (from == ForgeDirection.DOWN)
+		if (from == ForgeDirection.UP)
 			return null;
 		return tank.drain(resource.amount, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (from == ForgeDirection.DOWN)
+		if (from == ForgeDirection.UP)
 			return null;
 		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from != ForgeDirection.DOWN;
+		return from != ForgeDirection.UP;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from != ForgeDirection.DOWN;
+		return from != ForgeDirection.UP;
 	}
 
 	@Override

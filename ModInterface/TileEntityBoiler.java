@@ -223,9 +223,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		super.writeToNBT(NBT);
 		NBT.setInteger("temp", temperature);
 		NBT.setLong("energy", storedEnergy);
-
-		output.writeToNBT(NBT);
-		input.writeToNBT(NBT);
 	}
 
 	/**
@@ -237,9 +234,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		super.readFromNBT(NBT);
 		temperature = NBT.getInteger("temp");
 		storedEnergy = NBT.getLong("energy");
-
-		output.readFromNBT(NBT);
-		input.readFromNBT(NBT);
 	}
 
 	@Override

@@ -87,6 +87,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
+import Reika.RotaryCraft.TileEntities.TileEntitySorting;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
@@ -107,7 +108,6 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityBypass;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityInterface;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
@@ -247,7 +247,7 @@ public enum MachineRegistry {
 	BEAMMIRROR(			"machine.beammirror",		BlockDMMachine.class,		TileEntityBeamMirror.class,			11, "RenderBeamMirror"),
 	MULTICLUTCH(		"machine.multiclutch",		BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"machine.terraformer",		BlockMachine.class,			TileEntityTerraformer.class,		6),
-	INTERFACE(			"machine.interface",		BlockPiping.class,			TileEntityInterface.class,			7, "PipeRenderer"),
+	SORTING(			"machine.sorting",			BlockMachine.class,			TileEntitySorting.class,			5),
 	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
 	ARROWGUN(			"machine.arrowgun",			BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"machine.frictionboiler", 	BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
@@ -719,6 +719,7 @@ public enum MachineRegistry {
 		case ELECTRICMOTOR:
 		case AIRGUN:
 		case FUELENGINE:
+		case SORTING:
 			return true;
 		default:
 			return false;
@@ -793,8 +794,6 @@ public enum MachineRegistry {
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1);
 		if (this == FUELLINE)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2);
-		if (this == INTERFACE)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 3);
 		if (this == VALVE)
 			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 4);
 		if (this == BYPASS)

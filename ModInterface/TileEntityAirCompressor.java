@@ -85,6 +85,8 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private float getSoundVolume(World world, int x, int y, int z) {
 		ForgeDirection dir = facingDir;
+		if (dir == null)
+			return 1F;
 		ForgeDirection dir2 = dir.getOpposite();
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection side = dirs[i];

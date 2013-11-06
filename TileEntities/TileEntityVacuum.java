@@ -11,14 +11,20 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
@@ -53,8 +59,53 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 		tickcount = 0;
 		this.suck(world, x, y, z);
 		this.absorb(world, x, y, z);
+		this.transfer(world, x, y, z);
 		//ReikaChatHelper.writeInt(this.experience);
+	}
 
+	private void transfer(World world, int x, int y, int z) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			int id = world.getBlockId(dx, dy, dz);
+			int meta = world.getBlockMetadata(dx, dy, dz);
+			if (id != 0 && Block.blocksList[id].hasTileEntity(meta) && !(id == MachineRegistry.VACUUM.getBlockID() && meta == MachineRegistry.VACUUM.getMachineMetadata())) {
+				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				if (te instanceof IInventory) {
+					IInventory ii = ((IInventory)te);
+					int size = ii.getSizeInventory();
+					for (int k = 0; k < size; k++) {
+						ItemStack inslot = ii.getStackInSlot(k);
+						boolean cansuck = true;
+						if (te instanceof ISidedInventory)
+							cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
+						if (inslot != null) {
+							if (this.canSuckStacks()) {
+								if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
+									ii.setInventorySlotContents(k, null);
+								}
+							}
+							else {
+								int newsize = inslot.stackSize-1;
+								ItemStack is2 = new ItemStack(inslot.itemID, 1, inslot.getItemDamage());
+								ItemStack is3 = new ItemStack(inslot.itemID, newsize, inslot.getItemDamage());
+								if (newsize <= 0)
+									is3 = null;
+								if (ReikaInventoryHelper.addToIInv(is2, this)) {
+									ii.setInventorySlotContents(k, is3);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private boolean canSuckStacks() {
+		return power/MINPOWER >= 4;
 	}
 
 	public void spawnXP() {
@@ -280,7 +331,7 @@ public class TileEntityVacuum extends TileEntityInventoriedPowerReceiver impleme
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return false;
+		return true;
 	}
 
 	@Override
