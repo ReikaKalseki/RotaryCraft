@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFuelLine extends TileEntityPiping {
 
-	public int fuel = 0;
+	private int fuel = 0;
 	private Fluid fluid;
 
 	private boolean isAcceptableFuel(Fluid f) {

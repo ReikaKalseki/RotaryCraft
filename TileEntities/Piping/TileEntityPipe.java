@@ -20,13 +20,12 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class TileEntityPipe extends TileEntityPiping {
 
 	private Fluid liquid;
-	public int liquidLevel = 0;
+	private int liquidLevel = 0;
 	public int fluidPressure = 0;
 	public int fluidrho;
 
@@ -42,14 +41,6 @@ public class TileEntityPipe extends TileEntityPiping {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 		fluidrho = this.getDensity();
-		//this.transfer(world, x, y, z);
-		//this.drainReservoir(world, x, y, z);
-		//this.getFromBucketFiller(world, x, y, z);
-		//this.drainLavaMaker(world, x, y, z);
-		if (liquidLevel < 0)
-			liquidLevel = 0;
-		if (liquidLevel == 0)
-			liquid = null;
 		if (fluidPressure > 0 && tickcount > 40) {
 			fluidPressure--;
 			tickcount = 0;
@@ -64,27 +55,6 @@ public class TileEntityPipe extends TileEntityPiping {
 		if (FluidRegistry.WATER.equals(liquid))
 			return (int)ReikaEngLibrary.rhowater/100;
 		return liquid != null ? liquid.getDensity() : 0;
-	}
-
-	private void drainReservoir(World world, int x, int y, int z) {
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null && !tile.isEmpty()) {
-				if (this.canTakeInFluid(tile.getFluid())) {
-					liquidLevel += tile.getLevel()/4+1;
-					tile.setLevel(tile.getLevel()-tile.getLevel()/4-1);
-					liquid = tile.getFluid();
-				}
-			}
-		}
-	}
-
-	public boolean canTakeInFluid(Fluid f) {
-		if (f == null)
-			return false;
-		if (f.equals(FluidRegistry.getFluid("jet fuel")))
-			return false;
-		return liquid == null || liquid.equals(f);
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
@@ -127,7 +126,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.drawFuel(world, x, y, z, meta);
 		if (tank.isEmpty())
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
@@ -143,28 +141,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			return;
 		te.addFuel(liq.amount/4+1);
 		tank.removeLiquid(liq.amount/4+1);
-	}
-
-	private void drawFuel(World world, int x, int y, int z, int metadata) {
-		int oldfuel;
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
-				if (tile != null && tile.fuel > 0) {
-					Fluid f = tile.getLiquidType();
-					if (tile.fuel > tank.getLevel() && this.canIntakeFuel(f)) {
-						oldfuel = tile.fuel-1;
-						tile.fuel = 1;
-						tank.addLiquid(oldfuel, f);
-					}
-				}
-			}
-		}
 	}
 
 	private boolean canIntakeFuel(Fluid f) {

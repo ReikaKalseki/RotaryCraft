@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -19,7 +21,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
 public class BlockGPR extends BlockBasicMachine {
@@ -180,5 +185,30 @@ public class BlockGPR extends BlockBasicMachine {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:steel");
 				icons[j][1] = par1IconRegister.registerIcon("RotaryCraft:gpr_top_"+biome);
 			}
+	}
+
+	@Override
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	{
+		if (this.canHarvest(world, player, x, y, z))
+			this.harvestBlock(world, player, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
+	}
+
+	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
+		return RotaryAux.canHarvestSteelMachine(ep);
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
+		if (!this.canHarvest(world, ep, x, y, z))
+			return;
+		if (!world.isRemote) {
+			ItemStack todrop = MachineRegistry.GPR.getCraftedProduct();
+			EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+			item.delayBeforeCanPickup = 10;
+			if (!world.isRemote)
+				world.spawnEntityInWorld(item);
+		}
 	}
 }

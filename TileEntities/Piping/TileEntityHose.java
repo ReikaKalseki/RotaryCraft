@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityHose extends TileEntityPiping {
 
-	public int lubricant = 0;
+	private int lubricant = 0;
 
 	@Override
 	public int getMachineIndex() {

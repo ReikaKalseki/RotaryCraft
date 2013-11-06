@@ -23,7 +23,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.PipeConnector.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -86,11 +85,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		return this.interactsWithMachines() && Block.blocksList[id].hasTileEntity(meta);
 	}
 
-	public final int getIntake(int otherlevel) {
+	public final int getPipeIntake(int otherlevel) {
 		return TransferAmount.FORCEDQUARTER.getTransferred(otherlevel);
 	}
 
-	public final int getOutput(int max) {
+	public final int getPipeOutput(int max) {
 		return TransferAmount.FORCEDQUARTER.getTransferred(max);
 	}
 
@@ -116,7 +115,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						if (tp.canIntakeFluid(f)) {
 							int otherlevel = tp.getLiquidLevel();
 							int dL = level-otherlevel;
-							int toadd = this.getOutput(dL);
+							int toadd = this.getPipeOutput(dL);
 							if (toadd > 0) {
 								this.addFluid(toadd);
 								tp.removeLiquid(toadd);
@@ -128,7 +127,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 					PipeConnector pc = (PipeConnector)te;
 					Flow flow = pc.getFlowForSide(dir.getOpposite());
 					if (flow.canIntake) {
-						int toadd = this.getOutput(this.getLiquidLevel());
+						int toadd = this.getPipeOutput(this.getLiquidLevel());
+						//int toadd = pc.getFluidRemoval().getTransferred(this.getLiquidLevel());
 						if (toadd > 0) {
 							FluidStack fs = new FluidStack(f, toadd);
 							int added = pc.fill(dir.getOpposite(), fs, true);
@@ -142,7 +142,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 				else if (te instanceof IFluidHandler) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
-						int toadd = this.getOutput(this.getLiquidLevel());
+						int toadd = this.getPipeOutput(this.getLiquidLevel());
 						if (toadd > 0) {
 							int added = fl.fill(dir.getOpposite(), new FluidStack(f, toadd), true);
 							if (added > 0) {
@@ -177,7 +177,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						Fluid f = tp.getLiquidType();
 						int amt = tp.getLiquidLevel();
 						int dL = amt-this.getLiquidLevel();
-						int todrain = this.getIntake(dL);
+						int todrain = this.getPipeIntake(dL);
 						if (todrain > 0 && this.canIntakeFluid(f)) {
 							this.setFluid(f);
 							this.addFluid(todrain);
@@ -193,7 +193,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 						if (fs != null) {
 							int level = this.getLiquidLevel();
-							int todrain = this.getIntake(fs.amount-level);
+							int todrain = this.getPipeIntake(fs.amount-level);
 							if (todrain > 0) {
 								if (this.canIntakeFluid(fs.getFluid())) {
 									this.addFluid(todrain);
@@ -210,7 +210,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {
 						int level = this.getLiquidLevel();
-						int todrain = this.getIntake(fs.amount-level);
+						int todrain = this.getPipeIntake(fs.amount-level);
 						if (todrain > 0) {
 							if (this.canIntakeFluid(fs.getFluid())) {
 								fl.drain(dir.getOpposite(), todrain, true);
@@ -381,6 +381,21 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			default:
 				return 1;
 			}
+		}
+	}
+
+	public enum Flow {
+		INPUT(true, false),
+		OUTPUT(false, true),
+		DUAL(true, true),
+		NONE(false, false);
+
+		public final boolean canIntake;
+		public final boolean canOutput;
+
+		private Flow(boolean in, boolean out) {
+			canIntake = in;
+			canOutput = out;
 		}
 	}
 }

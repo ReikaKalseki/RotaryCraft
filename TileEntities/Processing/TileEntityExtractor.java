@@ -30,7 +30,6 @@ import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 
@@ -94,25 +93,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 					if (inv[i].itemID == inv[i+3].itemID && inv[i].getItemDamage() == inv[i+3].getItemDamage()) {
 						inv[i].stackSize++;
 						ReikaInventoryHelper.decrStack(i+3, inv);
-					}
-				}
-			}
-		}
-	}
-
-	public void getLiq(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			if (tank.getLevel() < CAPACITY) {
-				int level = tank.getLevel();
-				if (MachineRegistry.getMachine(world, x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ) == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ);
-					if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-						oldLevel = tile.liquidLevel;
-						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						int newlevel = ReikaMathLibrary.extrema(level+oldLevel/4+1, 0, "max");
-						tank.setContents(newlevel, FluidRegistry.WATER);
 					}
 				}
 			}
@@ -241,7 +221,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 		this.getPowerBelow();
 		this.testIdle();
 		this.throughPut();
-		this.getLiq(world, x, y, z, meta);
 		if (world.isRemote)
 			return;
 		for (int i = 0; i < 4; i++) {
