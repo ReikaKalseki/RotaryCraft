@@ -10,14 +10,14 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.BaseMod;
-import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -36,24 +37,32 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class RotaryAux {
-	public static boolean[] liquidReceiver = new boolean[256];
 
 	public static int blockModel;
-
-	public static final String items1png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/items.png";
-	public static final String items2png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/items2.png";
-	public static final String items3png = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/items3.png";
-	public static final String modexpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/modextracts.png";
-	public static final String modingotpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Items/modingots.png";
-	public static final String terrainpng = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/Terrain/textures.png";
-	public static final String tileentdir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/Textures/TileEntityTex/";
-	public static final String mididir = "C:/Users/Reika/Downloads/mcp/src/minecraft/Reika/RotaryCraft/MIDIs/";
 
 	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
-	public static void initializeModel (BaseMod mod) {
-		blockModel = ModLoader.getUniqueBlockModelID(mod, true);
+	private static List<Class<? extends TileEntity>> shaftPowerBlacklist = new ArrayList<Class<? extends TileEntity>>();
+
+	static {
+		//addShaftBlacklist("example.author.unauthorizedconverter.teclass");
+	}
+
+	public static boolean isBlacklistedIOMachine(TileEntity te) {
+		return shaftPowerBlacklist.contains(te.getClass());
+	}
+
+	private static void addShaftBlacklist(String name) {
+		Class cl;
+		try {
+			cl = Class.forName(name);
+			shaftPowerBlacklist.add(cl);
+			RotaryCraft.logger.log("Disabling "+name+" for shaft power. Destructive compatibility.");
+		}
+		catch (ClassNotFoundException e) {
+			//RotaryCraft.logger.logError("Could not add EMP blacklist for "+name+": Class not found!");
+		}
 	}
 
 	public static final boolean hasGui(World world, int x, int y, int z, EntityPlayer ep) {

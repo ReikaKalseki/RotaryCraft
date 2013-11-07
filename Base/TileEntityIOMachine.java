@@ -18,6 +18,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
@@ -238,9 +239,9 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	private boolean isBlacklistedReceiver(TileEntity te) {
-		int id = te.getBlockType().blockID;
-		int meta = te.getBlockMetadata();
-		return false;
+		//int id = te.getBlockType().blockID;
+		//int meta = te.getBlockMetadata();
+		return RotaryAux.isBlacklistedIOMachine(te);
 	}
 
 	private void affectBlacklistedReceiver(TileEntity te) {

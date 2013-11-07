@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import net.minecraft.entity.EntityList;
@@ -29,7 +28,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.DemoMusic;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -108,13 +106,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 					tickcount = -pauseDelay;
 					return;
 				}
-			}
-		}
-		if (demo && tickcount == 0) {
-			int[][][] demoMusic = DemoMusic.getDemo(demoTrack);
-			if (musicQueue == null || !Arrays.equals(musicQueue, demoMusic)) {
-				musicQueue = demoMusic;
-				lastNote[0] = demoMusic.length;
 			}
 		}
 		if (musicQueue != null) {

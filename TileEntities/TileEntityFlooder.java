@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -22,6 +23,7 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
@@ -44,6 +46,11 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			}
 		}*/
 		//Do with entities?
+		if (tickcount > 20) {
+			tickcount = 0;
+			if (!world.isRemote)
+				world.spawnEntityInWorld(new EntityLiquidBlock(world, x, y-2, z, FluidRegistry.WATER));
+		}
 	}
 
 	private boolean canTakeLiquid(Fluid f) {

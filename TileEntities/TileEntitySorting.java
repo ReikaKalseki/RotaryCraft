@@ -72,8 +72,15 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	private void sortItems(World world, int x, int y, int z, List<EntityItem> li) {
 		for (int i = 0; i < li.size(); i++) {
 			EntityItem ei = li.get(i);
-			ItemStack is = ei.getEntityItem().copy();
-			ei.setDead();
+			ItemStack eis = ei.getEntityItem();
+			ItemStack is = new ItemStack(eis.itemID, 1, eis.getItemDamage());
+			if (eis.stackSize <= 1)
+				ei.setDead();
+			else {
+				ItemStack eis2 = eis.copy();
+				eis2.stackSize--;
+				ei.setEntityItemStack(eis2);
+			}
 			ForgeDirection dir = this.getSideForItem(is);
 			double dx = x+0.5+dir.offsetX*0.75;
 			double dy = y+0.5+dir.offsetY*0.75;
@@ -97,11 +104,11 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 					Item item2 = map.getItem();
 					if (item.getHasSubtypes() || item2.getHasSubtypes()) {
 						if (ReikaItemHelper.matchStacks(map, is))
-							return this.getDirection(k);
+							return this.getDirection(i);
 					}
 					else {
 						if (is.itemID == map.itemID)
-							return this.getDirection(k);
+							return this.getDirection(i);
 					}
 				}
 			}

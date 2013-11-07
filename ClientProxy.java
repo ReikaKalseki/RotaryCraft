@@ -17,7 +17,6 @@ import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.MultiSheetItemRenderer;
 import Reika.DragonAPI.Instantiable.SoundLoader;
 import Reika.DragonAPI.Instantiable.SpawnerRenderer;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
@@ -52,7 +51,7 @@ public class ClientProxy extends CommonProxy
 	public static final MultiSheetItemRenderer modOres = new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class);
 
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
-	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png", RotaryAux.terrainpng);
+	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png");
 
 	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();

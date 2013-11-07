@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
+import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
@@ -100,6 +101,10 @@ public class RotaryRegistration {
 		id = EntityRegistry.findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntitySonicShot.class, "Shock Wave", id);
 		EntityRegistry.registerModEntity(EntitySonicShot.class, "Shock Wave", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
+
+		id = EntityRegistry.findGlobalUniqueEntityId();
+		EntityRegistry.registerGlobalEntityID(EntityLiquidBlock.class, "Liquid Block", id);
+		EntityRegistry.registerModEntity(EntityLiquidBlock.class, "Liquid Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
 	}
 
 	public static void instantiateMachines() {

@@ -11,17 +11,22 @@ package Reika.RotaryCraft.Entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import codechicken.lib.math.MathHelper;
+import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
 
 public class EntityLiquidBlock extends Entity {
 
 	private Fluid fluid;
 
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
+
+	public EntityLiquidBlock(World world) {
+		super(world);
+	}
 
 	public EntityLiquidBlock(World world, int x, int y, int z, Fluid f) {
 		super(world);
@@ -31,7 +36,17 @@ public class EntityLiquidBlock extends Entity {
 
 	@Override
 	public void onUpdate() {
-
+		//super.onUpdate();
+		World world = worldObj;
+		int x = this.getIntegerX();
+		int y = this.getIntegerY();
+		int z = this.getIntegerZ();
+		if (this.canMoveInto(ForgeDirection.DOWN)) {
+			posY--;
+		}
+		else {
+			this.setDead();
+		}
 	}
 
 	public int getIntegerX() {
@@ -46,8 +61,11 @@ public class EntityLiquidBlock extends Entity {
 		return MathHelper.floor_double(posZ);
 	}
 
-	public boolean canMove() {
-		return true;
+	public boolean canMoveInto(ForgeDirection side) {
+		int dx = this.getIntegerX()+side.offsetX;
+		int dy = this.getIntegerY()+side.offsetY;
+		int dz = this.getIntegerZ()+side.offsetZ;
+		return BlockFallingLiquid.canMoveInto(worldObj, dx, dy, dz);
 	}
 
 	public int getBlockID(ForgeDirection side) {
