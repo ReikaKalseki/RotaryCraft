@@ -229,23 +229,43 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	protected void basicPowerReceiver() {
 		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
 		if (te instanceof ShaftPowerReceiver) {
-			this.writePowerToReciever((ShaftPowerReceiver)te);
+			if (this.isBlacklistedReceiver(te)) {
+				this.affectBlacklistedReceiver(te);
+			}
+			else
+				this.writePowerToReciever((ShaftPowerReceiver)te);
 		}
+	}
+
+	private boolean isBlacklistedReceiver(TileEntity te) {
+		int id = te.getBlockType().blockID;
+		int meta = te.getBlockMetadata();
+		return false;
+	}
+
+	private void affectBlacklistedReceiver(TileEntity te) {
+		te.worldObj.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
+		te.worldObj.createExplosion(null, te.xCoord, te.yCoord, te.zCoord, 3, true);
 	}
 
 	protected void writeToPowerReceiverAt(World world, int x, int y, int z, int om, int tq) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof ShaftPowerReceiver) {
-			ShaftPowerReceiver sp = (ShaftPowerReceiver)te;
-			if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
-				sp.setOmega(om);
-				sp.setTorque(tq);
-				sp.setPower(om*tq);
+			if (this.isBlacklistedReceiver(te)) {
+				this.affectBlacklistedReceiver(te);
 			}
 			else {
-				sp.setOmega(0);
-				sp.setTorque(0);
-				sp.setPower(0);
+				ShaftPowerReceiver sp = (ShaftPowerReceiver)te;
+				if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
+					sp.setOmega(om);
+					sp.setTorque(tq);
+					sp.setPower(om*tq);
+				}
+				else {
+					sp.setOmega(0);
+					sp.setTorque(0);
+					sp.setPower(0);
+				}
 			}
 		}
 	}
