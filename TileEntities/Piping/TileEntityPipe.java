@@ -26,7 +26,7 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	private Fluid liquid;
 	private int liquidLevel = 0;
-	public int fluidPressure = 0;
+	private int fluidPressure = 0;
 	public int fluidrho;
 
 	public static final int HORIZLOSS = 1*0;	// all are 1(friction)+g (10m) * delta h (0 or 1m)
@@ -36,6 +36,10 @@ public class TileEntityPipe extends TileEntityPiping {
 	public static final int UPPRESSURE = 40;
 	public static final int HORIZPRESSURE = 20;
 	public static final int DOWNPRESSURE = 0;
+
+	public int getPressure() {
+		return fluidPressure;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

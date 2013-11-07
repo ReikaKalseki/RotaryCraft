@@ -35,10 +35,10 @@ import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler {
 
@@ -72,29 +72,9 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return MachineRegistry.SOLARTOWER.ordinal();
 	}
 
-	public void getLiq(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-
-			if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					tank.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-		}
-	}
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getLiq(world, x, y, z, meta);
 		int temp = (int)(15*this.getArraySize()*this.getArrayOverallBrightness());
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {

@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Models.ModelSprinkler;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -33,27 +34,33 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect, PipeConnector {
 
-	public static final int CAPACITY = 16*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 16000;
 
-	public int waterLevel = 0;
-	public int waterPressure = 0;
-
+	private int waterLevel = 0;
+	private int waterPressure = 0;
 
 	private int soundtick = 40;
 
+	public int getWater() {
+		return waterLevel;
+	}
 
+	public int getPressure() {
+		return waterPressure;
+	}
 
 	public void getLiq(World world, int x, int y, int z, int metadata) {
 		int oldLevel = 0;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
+			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
 				if (waterLevel < CAPACITY) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
+					oldLevel = tile.getLiquidLevel();
+					int toremove = tile.getLiquidLevel()/4+1;
+					tile.removeLiquid(toremove);
 					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
 				}
-				waterPressure = tile.fluidPressure;
+				waterPressure = tile.getPressure();
 			}
 		}
 		if (waterLevel > CAPACITY)

@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import thermalexpansion.api.crafting.CraftingManagers;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Auxiliary.ModList;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
@@ -67,9 +68,13 @@ public class RotaryRecipes {
 			FluidStack ethanol = FluidRegistry.getFluidStack("RC Ethanol", 100);
 			ethanol.amount = FluidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {
-				//CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
+				CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
 			}
 			catch (NullPointerException e) {
+				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");
+				e.printStackTrace();
+			}
+			catch (Exception e) {
 				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");
 				e.printStackTrace();
 			}

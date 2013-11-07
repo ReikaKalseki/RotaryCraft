@@ -14,10 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine implements ISidedInventory {
 
@@ -27,7 +24,7 @@ public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine i
 		return ReikaInventoryHelper.getWholeInventoryForISided(this);
 	}
 
-	public boolean canInsertItem(int i, ItemStack is, int side) {
+	public final boolean canInsertItem(int i, ItemStack is, int side) {
 		if (this instanceof InertIInv)
 			return false;
 		return ((IInventory)this).isItemValidForSlot(i, is);
@@ -40,5 +37,19 @@ public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine i
 	public boolean isUseableByPlayer(EntityPlayer var1) {
 		return this.isPlayerAccessible(var1);
 	}
+
+	public final ItemStack decrStackSize(int par1, int par2)
+	{
+		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+	}
+
+	public final ItemStack getStackInSlotOnClosing(int par1)
+	{
+		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
+	}
+
+	public void openChest() {}
+
+	public void closeChest() {}
 
 }

@@ -26,7 +26,6 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.PoweredLiquidIO;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
@@ -82,8 +81,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (temperature > 100)
 			storedEnergy += power*6000;
 
-		this.getPipeWater(world, x, y, z);
-
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getSteam()+":"+storedEnergy+"/"+ReikaRailCraftHelper.getSteamBucketEnergy(), Side.SERVER);
 		if (storedEnergy >= ReikaRailCraftHelper.getSteamBucketEnergy() && !world.isRemote)
 			this.makeSteam();
@@ -108,60 +105,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
 	public int getSteam() {
 		return output.getFluid() != null ? output.getFluid().amount : 0;
-	}
-
-	public void getPipeWater(World world, int x, int y, int z) {
-		int oldLevel = 0;
-		if (this.getWater() < CAPACITY) {
-			if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-			if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-			if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					input.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-		}
 	}
 
 	public int getWater() {

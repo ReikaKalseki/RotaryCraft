@@ -21,10 +21,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 
@@ -132,8 +130,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						if (toadd > 0) {
 							FluidStack fs = new FluidStack(f, toadd);
 							int added = pc.fill(dir.getOpposite(), fs, true);
+							//ReikaJavaLibrary.pConsole(added, Side.SERVER);
 							if (added > 0) {
-								ReikaJavaLibrary.pConsole(toadd+":"+added+":"+this.getLiquidLevel(), Side.SERVER);
+								//ReikaJavaLibrary.pConsole(toadd+":"+added+":"+this.getLiquidLevel(), Side.SERVER);
 								this.removeLiquid(added);
 							}
 						}
@@ -155,11 +154,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		}
 	}
 
-	protected final void removeLiquid(int toremove) {
+	public final void removeLiquid(int toremove) {
 		this.setLevel(this.getLiquidLevel()-toremove);
 	}
 
-	protected final void addFluid(int toadd) {
+	public final void addFluid(int toadd) {
 		this.setLevel(this.getLiquidLevel()+toadd);
 	}
 

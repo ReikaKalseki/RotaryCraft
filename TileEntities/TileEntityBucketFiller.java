@@ -23,16 +23,12 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
@@ -47,69 +43,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 	public static final Fluid LAVA = FluidRegistry.LAVA;
 	public static final Fluid JETFUEL = FluidRegistry.getFluid("jet fuel");
 	public static final Fluid LUBRICANT = FluidRegistry.getFluid("lubricant");
-
-	public void getPipe(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (this.canAccept(WATER) && tank.getLevel()  < CAPACITY) {
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && this.canAccept(tile.getLiquidType()) && tile.liquidLevel > 0) {
-						oldLevel = tile.liquidLevel;
-						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, tile.getLiquidType());
-					}
-				}
-			}
-		}
-	}
-
-	public void getFuel(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (this.canAccept(JETFUEL) && tank.getLevel()  < CAPACITY) {
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.FUELLINE) {
-					TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.fuel > 0) {
-						oldLevel = tile.fuel;
-						tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("jet fuel"));
-					}
-				}
-			}
-		}
-	}
-
-	public void getLube(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
-		int oldLevel = 0;
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (this.canAccept(LUBRICANT) && tank.getLevel() < CAPACITY) {
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.HOSE) {
-					TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.lubricant > 0) {
-						oldLevel = tile.lubricant;
-						tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4-1, 0, "max");
-						tank.addLiquid(oldLevel/4+1, FluidRegistry.getFluid("lubricant"));
-					}
-				}
-			}
-		}
-	}
 
 	@Override
 	public int getSizeInventory() {
@@ -152,9 +85,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 			return;
 		if (filling) {
 			//ReikaJavaLibrary.pConsole(fuelLevel);
-			this.getPipe(world, x, y, z, meta);
-			this.getLube(world, x, y, z, meta);
-			this.getFuel(world, x, y, z, meta);
 			if (!this.operationComplete(tickcount, 0))
 				return;
 			tickcount = 0;

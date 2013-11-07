@@ -72,7 +72,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d", tile.lubricant));
+				ReikaChatHelper.write(String.format("%d", tile.getLiquidLevel()));
 			}
 		}
 		if (world.getBlockId(x, y, z) == Block.mobSpawner.blockID) {
@@ -85,7 +85,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getLiquidType(), tile.liquidLevel, tile.fluidPressure));
+				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getLiquidType(), tile.getLiquidLevel(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.PUMP) {
@@ -109,7 +109,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.SPRINKLER) {
 			TileEntitySprinkler tile = (TileEntitySprinkler)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.waterLevel, tile.waterPressure));
+				ReikaChatHelper.write(String.format("%d  %d", tile.getWater(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.OBSIDIAN) {

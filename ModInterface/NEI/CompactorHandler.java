@@ -111,4 +111,11 @@ public class CompactorHandler extends TemplateRecipeHandler {
 		return GuiGrinder.class;
 	}
 
+	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(142, 26, 176, 37, 4, 44);
+		drawTexturedModalRect(112, 25, 181, 41, 11, 46);
+	}
+
 }

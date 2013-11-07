@@ -98,13 +98,15 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
-		if (is.stackTagCompound == null)
-			par3List.add("Stored Energy: 0J");
-		else {
-			long e = is.stackTagCompound.getLong("energy")/20;
-			par3List.add("Stored Energy: "+String.format("%.3f", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
-			if (is.stackTagCompound.getBoolean("creative"))
-				par3List.add("Basically infinite power for creative mode.");
+		if (is.getItemDamage() == GearType.COIL.ordinal()) {
+			if (is.stackTagCompound == null)
+				par3List.add("Stored Energy: 0J");
+			else {
+				long e = is.stackTagCompound.getLong("energy")/20;
+				par3List.add("Stored Energy: "+String.format("%.3f", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+				if (is.stackTagCompound.getBoolean("creative"))
+					par3List.add("Basically infinite power for creative mode.");
+			}
 		}
 	}
 }

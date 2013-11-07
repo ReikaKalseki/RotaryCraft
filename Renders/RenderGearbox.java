@@ -9,12 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -207,8 +212,36 @@ public class RenderGearbox extends RotaryTERenderer implements MultiModel
 		}
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityGearboxAt((TileEntityGearbox)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+			this.renderLiquid(tile, par2, par4, par6);
+		}
+	}
+
+	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
+		GL11.glTranslated(par2, par4, par6);
+		TileEntityGearbox tr = (TileEntityGearbox)tile;
+		if (tr.getLubricant() > 0 && tr.isInWorld()) {
+			Fluid f = FluidRegistry.getFluid("lubricant");
+			ReikaLiquidRenderer.bindFluidTexture(f);
+			GL11.glEnable(GL11.GL_BLEND);
+			Icon ico = f.getIcon();
+			float u = ico.getMinU();
+			float v = ico.getMinV();
+			float du = ico.getMaxU();
+			float dv = ico.getMaxV();
+			double h = 0.0625+(4D/16D*tr.getLubricant()/tr.MAXLUBE)*0.9;
+			Tessellator v5 = Tessellator.instance;
+			v5.startDrawingQuads();
+			v5.setNormal(0, 1, 0);
+			v5.addVertexWithUV(0.0625, h, 0.9375, u, dv);
+			v5.addVertexWithUV(0.9375, h, 0.9375, du, dv);
+			v5.addVertexWithUV(0.9375, h, 0.0625, du, v);
+			v5.addVertexWithUV(0.0625, h, 0.0625, u, v);
+			v5.draw();
+		}
+		GL11.glTranslated(-par2, -par4, -par6);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override

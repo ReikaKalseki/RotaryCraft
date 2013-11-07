@@ -30,10 +30,10 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Models.ModelObsidian;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
 
@@ -68,8 +68,6 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 		tickcount++;
 		temptick++;
 		this.getPowerBelow();
-		this.getWater(world, x, y, z, meta);
-		this.getLava(world, x, y, z, meta);
 		if (temptick >= 20) {
 			this.updateTemperature(world, x, y, z, meta);
 			temptick = 0;
@@ -166,48 +164,6 @@ public class TileEntityObsidianMaker extends TileEntityInventoriedPowerReceiver 
 	public int getLavaScaled(int par1)
 	{
 		return (lava.getLevel()*par1)/CAPACITY;
-	}
-
-	public void getLava(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Lava!");
-		int oldLevel = 0;
-		if (lava.getLevel() < CAPACITY) {
-			for (int i = 2; i < 6; i++) {
-				ForgeDirection dir = dirs[i];
-				int dx = x+dir.offsetX;
-				int dy = y+dir.offsetY;
-				int dz = z+dir.offsetZ;
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.contains(FluidRegistry.LAVA) && tile.liquidLevel > 0) {
-						oldLevel = tile.liquidLevel;
-						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						lava.addLiquid(oldLevel/4+1, FluidRegistry.LAVA);
-					}
-				}
-			}
-		}
-	}
-
-	public void getWater(World world, int x, int y, int z, int metadata) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Water!");
-		int oldLevel = 0;
-		if (water.getLevel() < CAPACITY) {
-			for (int i = 2; i < 6; i++) {
-				ForgeDirection dir = dirs[i];
-				int dx = x+dir.offsetX;
-				int dy = y+dir.offsetY;
-				int dz = z+dir.offsetZ;
-				if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-					TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-					if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-						oldLevel = tile.liquidLevel;
-						tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-						water.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-					}
-				}
-			}
-		}
 	}
 
 	/**

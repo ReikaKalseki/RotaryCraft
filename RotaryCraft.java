@@ -50,7 +50,7 @@ import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
 import Reika.RotaryCraft.Blocks.BlockBlastGlass;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Blocks.BlockDeco;
-import Reika.RotaryCraft.Blocks.BlockFallingWater;
+import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
 import Reika.RotaryCraft.Blocks.BlockLightBridge;
 import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
@@ -281,7 +281,7 @@ public class RotaryCraft extends DragonAPIMod {
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
 		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
-		waterblock = new BlockFallingWater(ExtraConfigIDs.WATERBLOCK.getValue()).setUnlocalizedName("WaterBlock");
+		waterblock = new BlockFallingLiquid(ExtraConfigIDs.WATERBLOCK.getValue()).setUnlocalizedName("WaterBlock");
 
 		RotaryRegistration.setupLiquids();
 	}

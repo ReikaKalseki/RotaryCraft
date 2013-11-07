@@ -102,4 +102,10 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		return GuiBlastFurnace.class;
 	}
 
+	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(6, 17, 176, 44, 11, 43);
+	}
+
 }

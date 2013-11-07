@@ -30,7 +30,6 @@ import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.ObjectWeb;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -39,7 +38,6 @@ import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles {
 
@@ -103,7 +101,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
-		this.getWater(world, x, y, z);
 		tickcount++;
 
 		//ReikaJavaLibrary.pConsoleSideOnly(String.format("Tick %2d: ", tickcount)+coords, Side.SERVER);
@@ -131,26 +128,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 	public int[] getUniqueID() {
 		return new int[]{xCoord, yCoord, zCoord};
-	}
-
-	private void getWater(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			int dx = x+dirs[i].offsetX;
-			int dy = y+dirs[i].offsetY;
-			int dz = z+dirs[i].offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == MachineRegistry.PIPE)
-				this.interPipe(world, dx, dy, dz);
-		}
-	}
-
-	private void interPipe(World world, int x, int y, int z) {
-		TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
-		if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-			int oldLevel = tile.liquidLevel;
-			tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-			tank.setContents(ReikaMathLibrary.extrema(tank.getLevel()+oldLevel/4+1, 0, "max"), FluidRegistry.WATER);
-		}
 	}
 
 	private boolean setBiome(World world, int x, int z) {

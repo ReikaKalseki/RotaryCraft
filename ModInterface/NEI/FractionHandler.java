@@ -21,7 +21,9 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.GUIs.GuiFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import codechicken.nei.PositionedStack;
@@ -88,12 +90,15 @@ public class FractionHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.fuelbucket))
+			arecipes.add(new FractionatorRecipe());
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (TileEntityFractionator.isJetFuelIngredient(ingredient) || ingredient.itemID == Item.ghastTear.itemID)
+		if (TileEntityFractionator.isJetFuelIngredient(ingredient))
+			arecipes.add(new FractionatorRecipe());
+		if (ingredient.itemID == Item.ghastTear.itemID)
 			arecipes.add(new FractionatorRecipe());
 	}
 
@@ -101,6 +106,12 @@ public class FractionHandler extends TemplateRecipeHandler {
 	public Class<? extends GuiContainer> getGuiClass()
 	{
 		return GuiFractionator.class;
+	}
+
+	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(134, 7, 177, 45, 6, 50);
 	}
 
 }

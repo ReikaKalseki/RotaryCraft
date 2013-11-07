@@ -26,9 +26,9 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 
-public class BlockFallingWater extends Block {
+public class BlockFallingLiquid extends Block {
 
-	public BlockFallingWater(int par1) {
+	public BlockFallingLiquid(int par1) {
 		super(par1, Material.ground);
 		this.setTickRandomly(true);
 		this.setResistance(3600000);
@@ -46,6 +46,23 @@ public class BlockFallingWater extends Block {
 		world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 	}
 
+	public static ForgeDirection findPathToDepression(World world, int x, int y, int z) {
+		ForgeDirection[] dir = new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.SOUTH, ForgeDirection.NORTH};
+		ReikaArrayHelper.shuffleArray(dir);
+		int dy = y-1;
+		int r = 6;
+		for (int i = 0; i < 4; i++) {
+			ForgeDirection d = dir[i];
+			for (int k = 1; k <= r; k++) {
+				int dx = x+d.offsetX*k;
+				int dz = z+d.offsetZ*k;
+				if (canMoveInto(world, dx, dy, dz))
+					return d;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random r) {
 		boolean flag = false;
@@ -55,11 +72,24 @@ public class BlockFallingWater extends Block {
 			ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y-1, z, 8);
 			return;
 		}
+		ForgeDirection toPit = this.findPathToDepression(world, x, y, z);
 		if (this.canMoveInto(world, x, y-1, z)) {
 			world.setBlock(x, y-1, z, blockID);
 			world.setBlock(x, y, z, 0);
 			world.markBlockForRenderUpdate(x, y, z);
 			world.markBlockForRenderUpdate(x, y-1, z);
+			flag = true;
+		}
+		else if (toPit != null) {
+			int dx = x+toPit.offsetX;
+			int dy = y+toPit.offsetY;
+			int dz = z+toPit.offsetZ;
+			if (this.canMoveInto(world, dx, dy, dz)) {
+				world.setBlock(dx, dy, dz, blockID);
+				world.setBlock(x, y, z, 0);
+				world.markBlockForRenderUpdate(x, y, z);
+				world.markBlockForRenderUpdate(dx, dy, dz);
+			}
 			flag = true;
 		}
 		else {
@@ -76,13 +106,32 @@ public class BlockFallingWater extends Block {
 					world.markBlockForRenderUpdate(dx, dy, dz);
 					flag = true;
 				}
+				else if (world.getBlockId(dx, dy, dz) == blockID) {
+					for (int k = 0; k < 4; k++)  {
+						int ddx = dx+dir[k].offsetX;
+						int ddy = dy+dir[k].offsetY;
+						int ddz = dz+dir[k].offsetZ;
+						if (this.canMoveInto(world, ddx, ddy, ddz)) {
+							world.markBlockForRenderUpdate(x, y, z);
+							world.markBlockForRenderUpdate(dx, dy, dz);
+							flag = true;
+						}
+					}
+				}
+				else if (world.getBlockId(dx, dy, dz) == this.getLiquidID(world, x, y, z)) {
+
+				}
 			}
 		}
 		if (flag)
 			world.scheduleBlockUpdate(x, y, z, blockID, this.tickRate(world));
 		else {
-			world.setBlock(x, y, z, Block.waterMoving.blockID);
+			world.setBlock(x, y, z, this.getLiquidID(world, x, y, z));
 		}
+	}
+
+	private int getLiquidID(World world, int x, int y, int z) {
+		return 0;
 	}
 
 	@Override

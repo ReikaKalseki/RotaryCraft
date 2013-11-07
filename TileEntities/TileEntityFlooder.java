@@ -13,20 +13,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Blocks.BlockFallingWater;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
 	//Make pick random coord in 16-block radius, find top block (solid or source block), ++y, then add liquid
@@ -39,26 +35,15 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		tickcount++;
-		this.draw(world, x, y, z);
-		if (BlockFallingWater.canMoveInto(world, x, y-1, z)) {
+		tickcount++;/*
+		if (BlockFallingLiquid.canMoveInto(world, x, y-1, z)) {
 			waterTimer.update();
 			if (tank.getLevel() >= 1000 && waterTimer.checkCap()) {
 				tank.removeLiquid(1000);
 				world.setBlock(x, y-1, z, RotaryCraft.waterblock.blockID);
 			}
-		}
-	}
-
-	private void getFromPipe(TileEntityPipe tile) {
-		if (tile != null) {
-			if (tile.liquidLevel > tank.getLevel() && this.canTakeLiquid(tile.getLiquidType()) && tile.liquidLevel > 0) {
-				oldLevel = tile.liquidLevel;
-				int dl = tile.liquidLevel-tank.getLevel();
-				tile.liquidLevel -= dl/4+1;
-				tank.addLiquid(dl/4+1, FluidRegistry.WATER);
-			}
-		}
+		}*/
+		//Do with entities?
 	}
 
 	private boolean canTakeLiquid(Fluid f) {
@@ -67,33 +52,6 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		if (tank.isEmpty())
 			return true;
 		return tank.getActualFluid().equals(f);
-	}
-
-	public void draw(World world, int x, int y, int z) {
-		if (MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x+1, y, z);
-			this.getFromPipe(tile);
-		}
-		if (MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x-1, y, z);
-			this.getFromPipe(tile);
-		}
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			this.getFromPipe(tile);
-		}
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-			this.getFromPipe(tile);
-		}
-		if (MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z+1);
-			this.getFromPipe(tile);
-		}
-		if (MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z-1);
-			this.getFromPipe(tile);
-		}
 	}
 
 	/**

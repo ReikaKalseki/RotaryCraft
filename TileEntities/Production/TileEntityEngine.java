@@ -64,6 +64,7 @@ import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityInventoryIOMachine;
+import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelAC;
 import Reika.RotaryCraft.Models.ModelCombustion;
@@ -83,8 +84,6 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -178,54 +177,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
-	 * stack.
-	 */
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (fuelslot[par1] != null)
-		{
-			if (fuelslot[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = fuelslot[par1];
-				fuelslot[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = fuelslot[par1].splitStack(par2);
-
-			if (fuelslot[par1].stackSize <= 0)
-			{
-				fuelslot[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (fuelslot[par1] != null)
-		{
-			ItemStack itemstack = fuelslot[par1];
-			fuelslot[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
 	 *
 	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
@@ -235,42 +186,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
 		{
 			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	public void openChest()
-	{
-	}
-
-	public void closeChest()
-	{
-	}
-
-	public void getLiq(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		if (water.getLevel() < CAPACITY) {
-			if (MachineRegistry.getMachine(world, backx, y, backz) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(backx, y, backz);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.liquidLevel > 0) {
-					oldLevel = tile.liquidLevel;
-					tile.liquidLevel = ReikaMathLibrary.extrema(tile.liquidLevel-tile.liquidLevel/4-1, 0, "max");
-					water.addLiquid(oldLevel/4+1, FluidRegistry.WATER);
-				}
-			}
-		}
-	}
-
-	public void drawFuel(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		if (fuel.getLevel() < FUELCAP) {
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FUELLINE) {
-				TileEntityFuelLine tile = (TileEntityFuelLine)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.fuel > 0) {
-					oldLevel = tile.fuel;
-					tile.fuel = ReikaMathLibrary.extrema(tile.fuel-tile.fuel/4-1, 0, "max");
-					fuel.addLiquid(oldLevel/4+1, RotaryCraft.jetFuelFluid);
-				}
-			}
 		}
 	}
 
@@ -381,8 +296,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			break;
 		case MICRO:
 		case JET:
-			if (fuel.getLevel() < FUELCAP)
-				this.drawFuel(world, x, y, z, meta);
 			break;
 		default:
 			break;
@@ -1327,8 +1240,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			}
 		}
 		timer.updateTicker("fuel");
-		if (type.isWaterPiped())
-			this.getLiq(world, x, y, z, meta);
 		if (type.burnsFuel())
 			this.consumeFuel(world, x, y, z, meta);
 

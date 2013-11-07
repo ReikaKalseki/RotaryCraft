@@ -120,4 +120,12 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		return GuiPulseFurnace.class;
 	}
 
+	@Override
+	public void drawExtras(int recipe)
+	{
+		drawTexturedModalRect(85, 4, 247, 0, 7, 54);
+		drawTexturedModalRect(53, 4, 198, 0, 7, 54);
+		drawTexturedModalRect(15, 11, 176, 7, 11, 49);
+	}
+
 }

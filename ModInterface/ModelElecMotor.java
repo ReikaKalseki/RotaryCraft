@@ -467,37 +467,36 @@ public class ModelElecMotor extends RotaryModelBase
 		Shape1kg.render(f5);
 		Shape1kh.render(f5);
 
+		double t = 0.25;
+		double dz = 0.75;
+		double dd = 0.125;
+		double dl = 0;
+
+		GL11.glScaled(1, 1, t);
+		GL11.glTranslated(0, 0, dz);
+
 		int num = (Integer)li.get(0);
+		if (num == 2)
+			dl = 0.2;
+		if (num == 4)
+			dl = 0.0625;
+		dd *= 6-num;
+		GL11.glTranslated(0, 0, -dl);
 		if (num > 0) {
-			c1.render(f5);
-			c1a.render(f5);
-			c1b.render(f5);
-			c1c.render(f5);
+			for (double i = 0; i < 1.9; i += dd) {
+				GL11.glTranslated(0, 0, -i);
+				c1.render(f5);
+				c1a.render(f5);
+				c1b.render(f5);
+				c1c.render(f5);
+				GL11.glTranslated(0, 0, i);
+			}
 		}
-		if (num > 1) {
-			c2.render(f5);
-			c2a.render(f5);
-			c2b.render(f5);
-			c2c.render(f5);
-		}
-		if (num > 2) {
-			c3a.render(f5);
-			c3b.render(f5);
-			c3c.render(f5);
-			c3.render(f5);
-		}
-		if (num > 3) {
-			c4.render(f5);
-			c4a.render(f5);
-			c4b.render(f5);
-			c4c.render(f5);
-		}
-		if (num > 4) {
-			c5a.render(f5);
-			c5b.render(f5);
-			c5c.render(f5);
-			c5.render(f5);
-		}
+		GL11.glTranslated(0, 0, dl);
+
+
+		GL11.glTranslated(0, 0, -dz);
+		GL11.glScaled(1, 1, 1D/t);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.GuiGrinder;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -54,6 +55,21 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		}
 	}
 
+	public class CanolaRecipe extends CachedRecipe {
+
+		@Override
+		public PositionedStack getIngredient()
+		{
+			return new PositionedStack(ItemRegistry.CANOLA.getStackOf(), 71, 24);
+		}
+
+		@Override
+		public PositionedStack getResult() {
+			return null;
+		}
+
+	}
+
 	@Override
 	public String getRecipeName() {
 		return "Grinder";
@@ -79,6 +95,10 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+		CachedRecipe c = arecipes.get(recipe);
+		if (c.getIngredient() != null && c.getIngredient().item.itemID == ItemRegistry.CANOLA.getShiftedID()) {
+			drawTexturedModalRect(19, 10, 176, 71, 8, 55);
+		}
 	}
 
 	@Override
@@ -92,6 +112,9 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
+		if (ingredient.itemID == ItemRegistry.CANOLA.getShiftedID()) {
+			arecipes.add(new CanolaRecipe());
+		}
 		if (RecipesGrinder.getRecipes().isGrindable(ingredient)) {
 			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
 		}

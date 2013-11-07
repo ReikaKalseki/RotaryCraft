@@ -32,12 +32,11 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE
 {
@@ -194,8 +193,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			this.updateTemperature(world, x, y, z, meta);
 		}
 
-		this.getWater(world, x, y, z);
-
 		if (product == null) {
 			idle = true;
 			return;
@@ -238,23 +235,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			fermenterCookTime = 0;
 		}
 
-	}
-
-	private void getWater(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == MachineRegistry.PIPE) {
-				TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-				if (te != null && te.contains(FluidRegistry.WATER)) {
-					tank.addLiquid(te.liquidLevel/4+1, FluidRegistry.WATER);
-					te.liquidLevel -= te.liquidLevel/4+1;
-				}
-			}
-		}
 	}
 
 	private boolean canMake() {

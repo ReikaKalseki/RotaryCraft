@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
+import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Models.ModelGearbox;
 import Reika.RotaryCraft.Models.ModelGearbox16;
@@ -44,7 +45,6 @@ import Reika.RotaryCraft.Models.ModelGearbox8;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector, IFluidHandler {
 
@@ -188,25 +188,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				}
 			}
 			else if (type.consumesLubricant()) {
-				if (!tank.isEmpty() && omega > 0)
-					tank.removeLiquid((int)ReikaMathLibrary.logbase(omega, 2));
-			}
-		}
-		if (tank.getLevel() < MAXLUBE) {
-			for (int i = 0; i < 6; i++) {
-				ForgeDirection dir = dirs[i];
-				if (dir != ForgeDirection.UP) {
-					int dx = x+dir.offsetX;
-					int dy = y+dir.offsetY;
-					int dz = z+dir.offsetZ;
-					if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.HOSE) {
-						TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(dx, dy, dz);
-						if (tile != null) {
-							oldlube = tile.lubricant;
-							tile.lubricant = ReikaMathLibrary.extrema(tile.lubricant-tile.lubricant/4, 0, "max");
-							tank.addLiquid(oldlube/4, RotaryCraft.lubeFluid);
-						}
-					}
+				if (!tank.isEmpty() && omega > 0) {
+					int chance = type.ordinal()+1;
+					if (rand.nextInt(chance) == 0)
+						tank.removeLiquid((int)ReikaMathLibrary.logbase(omega, 2));
 				}
 			}
 		}
@@ -525,6 +510,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (this.canFill(from, resource.getFluid())) {
+			return tank.fill(resource, doFill);
+		}
 		return 0;
 	}
 

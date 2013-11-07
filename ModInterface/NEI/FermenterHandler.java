@@ -107,6 +107,8 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		if (result.itemID == ItemRegistry.YEAST.getShiftedID() || ReikaItemHelper.matchStacks(result, ItemStacks.sludge)) {
 			arecipes.add(new FermenterRecipe(result));
 		}
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket))
+			arecipes.add(new FermenterRecipe(ItemStacks.sludge));
 	}
 
 	public boolean isEthanolIngredient(ItemStack is) {
@@ -141,6 +143,13 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	public Class<? extends GuiContainer> getGuiClass()
 	{
 		return GuiFermenter.class;
+	}
+
+	@Override
+	public void drawExtras(int recipe)
+	{
+		int l = 27;
+		drawTexturedModalRect(18, 16+l, 176, 31+l, 11, 56-l);
 	}
 
 }
