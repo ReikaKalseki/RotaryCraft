@@ -53,6 +53,7 @@ import Reika.RotaryCraft.Containers.ContainerRemoteControl;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.ContainerScreen;
+import Reika.RotaryCraft.Containers.ContainerSorter;
 import Reika.RotaryCraft.Containers.ContainerSteam;
 import Reika.RotaryCraft.Containers.ContainerTerraformer;
 import Reika.RotaryCraft.Containers.ContainerVacuum;
@@ -96,6 +97,7 @@ import Reika.RotaryCraft.GUIs.GuiReservoir;
 import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.GuiSonic;
+import Reika.RotaryCraft.GUIs.GuiSorter;
 import Reika.RotaryCraft.GUIs.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.GuiSplitter;
 import Reika.RotaryCraft.GUIs.GuiSpyCam;
@@ -122,6 +124,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
+import Reika.RotaryCraft.TileEntities.TileEntitySorting;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
@@ -271,6 +274,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityFillingStation) {
 			return new ContainerFillingStation(player, (TileEntityFillingStation) te);
+		}
+		if (te instanceof TileEntitySorting) {
+			return new ContainerSorter(player, (TileEntitySorting) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -451,6 +457,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityFillingStation) {
 			return new GuiFillingStation(player, (TileEntityFillingStation)te);
+		}
+		if (te instanceof TileEntitySorting) {
+			return new GuiSorter(player, (TileEntitySorting) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

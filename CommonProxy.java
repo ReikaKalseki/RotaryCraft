@@ -21,6 +21,7 @@ public class CommonProxy
 	public static int SteelArmor;
 
 	public static int pipeRender;
+	public static int cubeRender;
 
 	/**
 	 * Client side only register stuff...

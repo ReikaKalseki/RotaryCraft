@@ -231,7 +231,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
 		if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
-				this.affectBlacklistedReceiver(te);
+				if (omega > 0 && torque > 0)
+					this.affectBlacklistedReceiver(te);
 			}
 			else
 				this.writePowerToReciever((ShaftPowerReceiver)te);
@@ -253,7 +254,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
-				this.affectBlacklistedReceiver(te);
+				if (om > 0 && tq > 0)
+					this.affectBlacklistedReceiver(te);
 			}
 			else {
 				ShaftPowerReceiver sp = (ShaftPowerReceiver)te;

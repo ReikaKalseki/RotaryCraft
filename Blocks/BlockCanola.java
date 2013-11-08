@@ -23,11 +23,13 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class BlockCanola extends BlockBasic {
+public final class BlockCanola extends BlockBasic implements IPlantable {
 
 	Random rand = new Random();
 
@@ -37,8 +39,6 @@ public class BlockCanola extends BlockBasic {
 		this.setResistance(0F);
 		this.setLightValue(0F);
 		this.setStepSound(soundGrassFootstep);
-		//this.blockIndexInTexture = 36;
-		////this.requiresSelfNotify[this.blockID] = true;
 		this.setTickRandomly(true);
 	}
 
@@ -201,5 +201,21 @@ public class BlockCanola extends BlockBasic {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola"+String.valueOf(j));
 			}
 		}
+	}
+
+	@Override
+	public EnumPlantType getPlantType(World world, int x, int y, int z) {
+		return EnumPlantType.Crop;
+	}
+
+	@Override
+	public int getPlantID(World world, int x, int y, int z) {
+		return blockID;
+	}
+
+	/** What is this <u>for?</u> Nothing calls it... */
+	@Override
+	public int getPlantMetadata(World world, int x, int y, int z) {
+		return 9;
 	}
 }

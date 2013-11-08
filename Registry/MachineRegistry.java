@@ -247,7 +247,7 @@ public enum MachineRegistry {
 	BEAMMIRROR(			"machine.beammirror",		BlockDMMachine.class,		TileEntityBeamMirror.class,			11, "RenderBeamMirror"),
 	MULTICLUTCH(		"machine.multiclutch",		BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
 	TERRAFORMER(		"machine.terraformer",		BlockMachine.class,			TileEntityTerraformer.class,		6),
-	SORTING(			"machine.sorting",			BlockMachine.class,			TileEntitySorting.class,			5),
+	SORTING(			"machine.sorting",			BlockDMachine.class,		TileEntitySorting.class,			2),
 	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
 	ARROWGUN(			"machine.arrowgun",			BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"machine.frictionboiler", 	BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),

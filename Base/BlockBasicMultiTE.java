@@ -156,7 +156,7 @@ public abstract class BlockBasicMultiTE extends Block {
 
 	@Override
 	public int getRenderType() {
-		return 0;
+		return 0;//RotaryCraft.proxy.cubeRender;
 	}
 
 	@Override

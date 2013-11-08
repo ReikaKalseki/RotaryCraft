@@ -57,6 +57,7 @@ public class ClientProxy extends CommonProxy
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();
 
 	public static PipeBodyRenderer pipe;
+	public static CubicalMachineRenderer cube;
 
 	@Override
 	public void registerSounds() {
@@ -69,6 +70,10 @@ public class ClientProxy extends CommonProxy
 		pipeRender = RenderingRegistry.getNextAvailableRenderId();
 		pipe = new PipeBodyRenderer(pipeRender);
 		RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+
+		cubeRender = RenderingRegistry.getNextAvailableRenderId();
+		cube = new CubicalMachineRenderer(cubeRender);
+		RenderingRegistry.registerBlockHandler(cubeRender, cube);
 
 		this.loadModels();
 

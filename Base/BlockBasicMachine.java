@@ -87,7 +87,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 
 	@Override
 	public int getRenderType() {
-		return 0;//ClientProxy.BlockSheetTexRenderID;
+		return 0;//RotaryCraft.proxy.cubeRender;//ClientProxy.BlockSheetTexRenderID;
 	}
 
 	@Override

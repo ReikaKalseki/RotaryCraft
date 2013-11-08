@@ -112,6 +112,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 			else {
 				RenderBlocks rb = new RenderBlocks();
 				ReikaTextureHelper.bindTerrainTexture();
+				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
+					double d = 0.5;
+					GL11.glTranslated(d, d, d);
+				}
 				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlockVariable(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
 			}
 		}
