@@ -172,6 +172,8 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 
 	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection dir) {
+		if (facingDir == null)
+			return ConnectOverride.DEFAULT;
 		return dir == facingDir.getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
