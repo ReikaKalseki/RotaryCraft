@@ -17,9 +17,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Models.ModelFriction;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -65,11 +63,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	@Override
 	public int getThermalDamage() {
 		return temperature*5/1200;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelFriction();
 	}
 
 	@Override

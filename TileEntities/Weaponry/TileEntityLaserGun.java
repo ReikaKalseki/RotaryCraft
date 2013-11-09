@@ -19,9 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
-import Reika.RotaryCraft.Models.ModelLaserGun;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -176,11 +174,6 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	@Override
 	protected double randomOffset() {
 		return 0;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelLaserGun();
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.InventoriedPoweredLiquidIO;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -39,11 +38,6 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		new ItemStack(RotaryCraft.powders.itemID, 1, 1), new ItemStack(Item.magmaCream.itemID, 1, 0)};
 
 	private ItemStack[] inv = new ItemStack[9];
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

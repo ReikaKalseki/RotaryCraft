@@ -22,7 +22,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RemoteControlMachine;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -37,11 +36,6 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	private int[][] mobs = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	private int[][] topY = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	public List inzone;
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

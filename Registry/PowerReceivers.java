@@ -77,7 +77,8 @@ public enum PowerReceivers {
 	AGGREGATOR(1, 4096, 8192),
 	AIRGUN(512, 1, 16384),
 	SONICBORER(1024, 1, 65536),
-	SORTING(1024);
+	SORTING(1024),
+	FILLINGSTATION(1024);
 
 	private int minT;
 	private int minS;

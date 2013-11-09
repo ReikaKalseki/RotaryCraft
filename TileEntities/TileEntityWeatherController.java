@@ -20,11 +20,10 @@ import net.minecraft.world.storage.WorldInfo;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWeatherController extends TileEntityInventoriedPowerReceiver {
+public class TileEntityWeatherController extends InventoriedPowerReceiver {
 
 	/** 0 = no control; 1 = set sun; 2 = set rain; 3 = set thunder, 4 = superstorm */
 	public int rainmode = 0;
@@ -256,11 +255,6 @@ public class TileEntityWeatherController extends TileEntityInventoriedPowerRecei
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

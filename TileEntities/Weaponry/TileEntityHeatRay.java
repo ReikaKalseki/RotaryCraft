@@ -21,9 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
-import Reika.RotaryCraft.Models.ModelHRay;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -273,11 +271,6 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelHRay();
 	}
 
 	@Override

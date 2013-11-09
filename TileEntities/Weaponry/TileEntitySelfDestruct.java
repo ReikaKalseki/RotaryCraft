@@ -11,18 +11,12 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 
 	private boolean lastHasPower;
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

@@ -18,13 +18,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityProjector extends TileEntityInventoriedPowerReceiver implements RangedEffect {
+public class TileEntityProjector extends InventoriedPowerReceiver implements RangedEffect {
 
 	public static final int MAXCHANNELS = 24;
 	public static final int DELAY = 400;
@@ -123,11 +122,6 @@ public class TileEntityProjector extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

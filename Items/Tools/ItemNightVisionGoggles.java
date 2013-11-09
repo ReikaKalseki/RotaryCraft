@@ -69,9 +69,20 @@ public class ItemNightVisionGoggles extends ItemRotaryArmor {
 	{
 		par3List.add(new ItemStack(par1, 1, 8192));
 	}
-
-	public String getArmorTextureFile(ItemStack itemstack) {
+	/*
+	@Override
+	public String getArmorTexture(ItemStack itemstack, Entity e, int slot, String nulll) {
 		return "/Reika/RotaryCraft/Textures/Misc/NVGoggles.png";
+	}*/
+
+	@Override
+	public boolean providesProtection() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeDamaged() {
+		return false;
 	}
 
 }

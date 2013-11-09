@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Items.Tools.ItemJetPackChest;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -450,7 +450,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			ep.distanceWalkedModified = 0.0F;
 			if (!ep.capabilities.isCreativeMode) {
 				ItemStack jet = ep.getCurrentArmor(2);
-				ItemJetPackChest i = (ItemJetPackChest)jet.getItem();
+				ItemJetPack i = (ItemJetPack)jet.getItem();
 				i.use(jet, 4);
 			}
 			break;

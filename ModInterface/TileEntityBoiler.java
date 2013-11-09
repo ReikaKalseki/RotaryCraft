@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.PoweredLiquidIO;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
@@ -36,11 +35,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	public static final int MAXTEMP = 500;
 
 	private StepTimer timer = new StepTimer(20);
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

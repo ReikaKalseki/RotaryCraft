@@ -27,21 +27,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
-import Reika.RotaryCraft.Models.ModelFreezeGun;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISidedInventory {
 
 	private ItemStack[] inv = new ItemStack[27];
 	//public List<EntityLivingBase> frozen = new ArrayList<EntityLivingBase>();
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelFreezeGun();
-	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

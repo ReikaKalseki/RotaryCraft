@@ -32,8 +32,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
 
 	}
-
-	public String getArmorTextureFile(ItemStack is) {
+	/*
+	@Override
+	public String getArmorTexture(ItemStack is, Entity entity, int slot, String type) {
 		ItemRegistry item = ItemRegistry.getEntry(is);
 		switch(item) {
 		case BEDHELM:
@@ -47,7 +48,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		default:
 			return "";
 		}
-	}
+	}*/
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -61,18 +62,29 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	}
 
 	public Enchantment getDefaultEnchantment() {
-		switch(armorType) {
-		case 0:
-			return Enchantment.projectileProtection;
-		case 1:
-			return Enchantment.blastProtection;
-		case 2:
-			return Enchantment.fireProtection;
-		case 3:
-			return Enchantment.featherFalling;
-		default:
-			return null;
+		if (ItemRegistry.getEntryByID(itemID).isBedrockArmor()) {
+			switch(armorType) {
+			case 0:
+				return Enchantment.projectileProtection;
+			case 1:
+				return Enchantment.blastProtection;
+			case 2:
+				return Enchantment.fireProtection;
+			case 3:
+				return Enchantment.featherFalling;
+			}
 		}
+		return null;
+	}
+
+	@Override
+	public boolean providesProtection() {
+		return true;
+	}
+
+	@Override
+	public boolean canBeDamaged() {
+		return false;
 	}
 
 }

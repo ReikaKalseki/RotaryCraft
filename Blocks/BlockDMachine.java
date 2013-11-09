@@ -62,9 +62,13 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:gun_back");
 
 		k = MachineRegistry.SORTING.getMachineMetadata();
+		String s = "RotaryCraft:sorter_side";
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
-				icons[MachineRegistry.SORTING.getMachineMetadata()][j][i+2][0] = ico.registerIcon("RotaryCraft:sorter_side"+i);
+				for (int n = 2; n < 6; n++) {
+					String tex = i > 0 ? String.format("%s%d", s, i) : s;
+					icons[MachineRegistry.SORTING.getMachineMetadata()][j][n][i] = ico.registerIcon(tex);
+				}
 			}
 			icons[MachineRegistry.SORTING.getMachineMetadata()][j][0][0] = ico.registerIcon("RotaryCraft:sorter_bottom");
 			icons[MachineRegistry.SORTING.getMachineMetadata()][j][1][0] = ico.registerIcon("RotaryCraft:sorter_top");

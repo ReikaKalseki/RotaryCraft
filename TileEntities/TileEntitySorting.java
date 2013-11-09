@@ -21,7 +21,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -145,11 +144,6 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
-
-	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
 	}
@@ -262,13 +256,56 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	public int getTextureStateForSide(int s) {
 		switch(this.getBlockMetadata()) {
 		case 0:
-			return s == 4 ? this.getActiveTexture() : 0;
+			switch(s) {
+			case 2:
+				return 1;
+			case 3:
+				return 2;
+			case 4:
+				return 3;
+			case 5:
+				return 0;
+			}
+			break;
+
 		case 1:
-			return s == 5 ? this.getActiveTexture() : 0;
+			switch(s) {
+			case 2:
+				return 1;
+			case 3:
+				return 2;
+			case 4:
+				return 0;
+			case 5:
+				return 3;
+			}
+			break;
+
 		case 2:
-			return s == 2 ? this.getActiveTexture() : 0;
+			switch(s) {
+			case 2:
+				return 0;
+			case 3:
+				return 1;
+			case 4:
+				return 2;
+			case 5:
+				return 3;
+			}
+			break;
+
 		case 3:
-			return s == 3 ? this.getActiveTexture() : 0;
+			switch(s) {
+			case 2:
+				return 1;
+			case 3:
+				return 0;
+			case 4:
+				return 2;
+			case 5:
+				return 3;
+			}
+			break;
 		}
 		return 0;
 	}

@@ -14,9 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
-import Reika.RotaryCraft.Models.ModelBridge;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -135,11 +133,6 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBridge();
 	}
 
 	@Override

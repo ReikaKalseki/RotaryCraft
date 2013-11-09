@@ -18,7 +18,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -126,11 +125,6 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		}
 		else
 			return; //not its output
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

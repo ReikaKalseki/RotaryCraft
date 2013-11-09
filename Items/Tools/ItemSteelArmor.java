@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,8 +30,9 @@ public class ItemSteelArmor extends ItemRotaryArmor {
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
 
 	}
-
-	public String getArmorTextureFile(ItemStack is) {
+	/*
+	@Override
+	public String getArmorTexture(ItemStack is, Entity e, int slot, String nulll) {
 		ItemRegistry item = ItemRegistry.getEntry(is);
 		switch(item) {
 		case STEELHELMET:
@@ -46,7 +46,7 @@ public class ItemSteelArmor extends ItemRotaryArmor {
 		default:
 			return "";
 		}
-	}
+	}*/
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -54,6 +54,16 @@ public class ItemSteelArmor extends ItemRotaryArmor {
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
 		li.add(is);
+	}
+
+	@Override
+	public boolean providesProtection() {
+		return true;
+	}
+
+	@Override
+	public boolean canBeDamaged() {
+		return true;
 	}
 
 }

@@ -18,10 +18,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Models.ModelSplitter;
-import Reika.RotaryCraft.Models.ModelSplitter2;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySplitter extends TileEntityIOMachine implements GuiController, ShaftMerger {
@@ -641,15 +638,6 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		int dmg = world.getBlockMetadata(x, y, z);
-		if (dmg < 4 || (dmg >= 8 && dmg < 12))
-			return new ModelSplitter();
-		else
-			return new ModelSplitter2();
 	}
 
 	@Override

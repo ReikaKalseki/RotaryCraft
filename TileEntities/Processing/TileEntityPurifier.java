@@ -23,11 +23,10 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE {
 
 	private ItemStack[] inv = new ItemStack[7];
 
@@ -131,11 +130,6 @@ public class TileEntityPurifier extends TileEntityInventoriedPowerReceiver imple
 		if (slot == 6)
 			return false;
 		return this.isModSteel(is);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

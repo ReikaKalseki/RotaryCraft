@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.MultiBlockMachine;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -54,11 +53,6 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 
 	@Override
 	public int[] getMultiBlockSize(World world, int x, int y, int z) {
-		return null;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
 		return null;
 	}
 

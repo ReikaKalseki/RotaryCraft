@@ -63,7 +63,11 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 
 	@Override
 	public final boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.canReceiveFrom(from) && fluid.equals(this.getInputFluid());
+		return this.canReceiveFrom(from) && this.isValidFluid(fluid);
+	}
+
+	public boolean isValidFluid(Fluid f) {
+		return f.equals(this.getInputFluid());
 	}
 
 	@Override

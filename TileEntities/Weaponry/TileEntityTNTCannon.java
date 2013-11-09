@@ -20,9 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Models.ModelCannon;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTNTCannon extends TileEntityLaunchCannon {
@@ -167,11 +165,6 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelCannon();
 	}
 
 	@Override

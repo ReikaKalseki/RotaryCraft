@@ -28,11 +28,10 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver implements RangedEffect, EnchantableMachine {
+public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine {
 
 	private ItemStack[] inv = new ItemStack[27];
 
@@ -193,11 +192,6 @@ public class TileEntityMachineGun extends TileEntityInventoriedPowerReceiver imp
 	@Override
 	public int getMaxRange() {
 		return 10+2*(int)ReikaMathLibrary.logbase(torque+1, 2);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

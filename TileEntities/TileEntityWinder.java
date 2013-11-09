@@ -18,14 +18,12 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelWinder;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityWinder extends TileEntityInventoriedPowerReceiver implements OneSlotMachine, SimpleProvider {
+public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlotMachine, SimpleProvider {
 
 	public ItemStack[] inslot = new ItemStack[1];
 
@@ -216,11 +214,6 @@ public class TileEntityWinder extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelWinder();
 	}
 
 	@Override

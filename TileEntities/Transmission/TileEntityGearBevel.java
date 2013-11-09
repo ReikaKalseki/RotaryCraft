@@ -17,9 +17,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
-import Reika.RotaryCraft.Models.ModelBevel;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiController {
@@ -355,11 +353,6 @@ public class TileEntityGearBevel extends TileEntity1DTransmitter implements GuiC
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBevel();
 	}
 
 	@Override

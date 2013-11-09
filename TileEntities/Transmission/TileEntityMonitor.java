@@ -14,9 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
-import Reika.RotaryCraft.Models.ModelMonitor;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMonitor extends TileEntity1DTransmitter {
@@ -132,11 +130,6 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelMonitor();
 	}
 
 	@Override

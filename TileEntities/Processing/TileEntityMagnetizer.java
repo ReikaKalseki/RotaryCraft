@@ -16,23 +16,16 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelMagnetizer;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMagnetizer extends TileEntityInventoriedPowerReceiver implements OneSlotMachine {
+public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine {
 
 	public ItemStack[] inv = new ItemStack[1];
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return j == 0;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelMagnetizer();
 	}
 
 	@Override

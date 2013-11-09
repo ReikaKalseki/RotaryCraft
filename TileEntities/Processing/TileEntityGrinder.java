@@ -29,16 +29,14 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Models.ModelGrinder;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private ItemStack inventory[];
 
@@ -344,11 +342,6 @@ public class TileEntityGrinder extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelGrinder();
 	}
 
 	@Override

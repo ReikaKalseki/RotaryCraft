@@ -22,9 +22,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidProducer;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Models.ModelFraction;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -241,11 +239,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelFraction();
 	}
 
 	@Override

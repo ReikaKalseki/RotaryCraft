@@ -15,9 +15,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Models.ModelCave;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -30,11 +28,6 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 
 	public TileEntityCaveFinder() {
 		this.setSrc(xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelCave();
 	}
 
 	@Override

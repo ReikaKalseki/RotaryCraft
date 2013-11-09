@@ -23,11 +23,8 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Models.ModelShaft;
-import Reika.RotaryCraft.Models.ModelShaftV;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -535,15 +532,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		int dmg = world.getBlockMetadata(x, y, z);
-		if (dmg < 4)
-			return new ModelShaft();
-		else
-			return new ModelShaftV();
 	}
 
 	@Override

@@ -31,13 +31,12 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver implements IFluidHandler, PipeConnector, TemperatureTE {
+public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFluidHandler, PipeConnector, TemperatureTE {
 
 	private ItemStack[] inv = new ItemStack[9];
 
@@ -167,11 +166,6 @@ public class TileEntityLavaMaker extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return fuels.contains(is.itemID);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

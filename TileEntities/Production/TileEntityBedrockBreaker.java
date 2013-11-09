@@ -22,15 +22,12 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelBedrockBreaker;
-import Reika.RotaryCraft.Models.ModelBedrockBreakerV;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver implements InertIInv {
+public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implements InertIInv {
 	private int harvestx;
 	private int harvesty;
 	private int harvestz;
@@ -257,15 +254,6 @@ public class TileEntityBedrockBreaker extends TileEntityInventoriedPowerReceiver
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		int dmg = world.getBlockMetadata(x, y, z);
-		if (dmg < 4)
-			return new ModelBedrockBreaker();
-		else
-			return new ModelBedrockBreakerV();
 	}
 
 	@Override

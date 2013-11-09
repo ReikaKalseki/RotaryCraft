@@ -48,8 +48,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return true;
 	}
 
-	public abstract RotaryModelBase getTEModel(World world, int x, int y, int z);
-
 	@Override
 	public abstract void animateWithTick(World world, int x, int y, int z);
 

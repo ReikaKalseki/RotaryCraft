@@ -18,11 +18,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityItemCannon extends TileEntityInventoriedPowerReceiver {
+public class TileEntityItemCannon extends InventoriedPowerReceiver {
 
 	private ItemStack[] inv = new ItemStack[9];
 	public int[] target = new int[3];
@@ -50,11 +49,6 @@ public class TileEntityItemCannon extends TileEntityInventoriedPowerReceiver {
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

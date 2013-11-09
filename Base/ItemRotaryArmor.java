@@ -9,21 +9,27 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites {
+public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSprites, ISpecialArmor {
 
 	private int index;
 
@@ -33,6 +39,10 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 		maxStackSize = 1;
 		this.setIndex(ind);
 	}
+
+	public abstract boolean providesProtection();
+
+	public abstract boolean canBeDamaged();
 
 	@Override
 	public final boolean isValidArmor(ItemStack stack, int type, Entity e) {
@@ -63,6 +73,48 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	@Override
 	public final Icon getIconFromDamage(int dmg) {
 		return Item.plateIron.getIconFromDamage(0);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final ModelBiped getArmorModel(EntityLivingBase elb, ItemStack is, int armorSlot)
+	{
+		return null;//ClientProxy.getArmorRenderer(ItemRegistry.getEntry(is));
+	}
+
+	@Override
+	public final String getArmorTexture(ItemStack is, Entity entity, int slot, String type) {
+		ItemRegistry item = ItemRegistry.getEntry(is);
+		String sg = ClientProxy.getArmorTextureAsset(item);
+		return sg;
+	}
+
+	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+		if (this.providesProtection()) {
+			return damageReduceAmount;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
+		if (player.worldObj.isRemote)
+			return new ArmorProperties(0, 1000, Integer.MAX_VALUE);
+		double protection = this.providesProtection() ? damageReduceAmount/20D : 0;
+		protection *= 1.45;
+		ArmorProperties prop = new ArmorProperties(Integer.MAX_VALUE, protection, Integer.MAX_VALUE);
+		return prop;
+	}
+
+	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+		if (this.canBeDamaged() && this.isVulnerableTo(source)) {
+			stack.damageItem(damage, entity);
+		}
+	}
+
+	public boolean isVulnerableTo(DamageSource src) {
+		return true;
 	}
 
 }

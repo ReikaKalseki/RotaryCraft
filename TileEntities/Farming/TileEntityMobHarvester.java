@@ -26,9 +26,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Models.ModelHarvester;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobHarvester extends TileEntityPowerReceiver implements EnchantableMachine {
@@ -160,11 +158,6 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelHarvester();
 	}
 
 	@Override

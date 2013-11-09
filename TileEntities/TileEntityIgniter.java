@@ -27,12 +27,11 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implements TemperatureTE, RangedEffect {
+public class TileEntityIgniter extends InventoriedPowerReceiver implements TemperatureTE, RangedEffect {
 
 	public int temperature;
 	private ItemStack[] inv = new ItemStack[18];
@@ -41,11 +40,6 @@ public class TileEntityIgniter extends TileEntityInventoriedPowerReceiver implem
 	public static final int MAXTEMP = 2500;
 
 	public int theta;
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

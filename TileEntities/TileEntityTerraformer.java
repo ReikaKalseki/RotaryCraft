@@ -35,7 +35,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SelectableTiles;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -70,11 +69,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return true;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

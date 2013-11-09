@@ -225,11 +225,6 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 	}
 
 	@Override
-	public final RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
-
-	@Override
 	public final void animateWithTick(World world, int x, int y, int z) {}
 
 	@Override

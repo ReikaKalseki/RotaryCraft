@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -45,11 +44,6 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	public static final int charWidth = 10;
 
 	private boolean display;
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

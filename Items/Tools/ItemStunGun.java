@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items.Tools;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -76,13 +77,14 @@ public class ItemStunGun extends ItemChargedTool {
 			return false;
 		if (is.getItemDamage() <= 0)
 			return false;
-		if (is.getItemDamage() < 8192 || ep.capabilities.isCreativeMode)
+		if (is.getItemDamage() < 8192 && !ep.capabilities.isCreativeMode)
 			return false;
 		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
 		//ReikaChatHelper.write(mov);
 		//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		Material mat = world.getBlockMaterial(x, y, z);
 		if (id != 0 && (id < 8 || id > 11) && (id == Block.web.blockID || id == Block.mushroomRed.blockID ||
 				id == Block.gravel.blockID ||  id == Block.silverfish.blockID  || id == Block.mushroomBrown.blockID ||
 				id == Block.waterlily.blockID || id == Block.flowerPot.blockID ||
@@ -93,7 +95,7 @@ public class ItemStunGun extends ItemChargedTool {
 			ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
 		}
 		int leafrange = 4;
-		if (id == Block.leaves.blockID || id == Block.sand.blockID || id == Block.snow.blockID) {
+		if (mat == Material.leaves || id == Block.sand.blockID || id == Block.snow.blockID) {
 			for (int k = 0; k < 64; k++)
 				world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);

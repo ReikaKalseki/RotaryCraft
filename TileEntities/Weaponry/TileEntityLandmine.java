@@ -28,9 +28,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntitySpringPowered;
-import Reika.RotaryCraft.Models.ModelLandmine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -227,11 +225,6 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 			if (!world.isRemote)
 				world.spawnEntityInWorld(tnt);
 		}
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelLandmine();
 	}
 
 	@Override

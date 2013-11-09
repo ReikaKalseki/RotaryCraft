@@ -18,13 +18,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.RemoteControlMachine;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelScreen;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
+public class TileEntityScreen extends InventoriedPowerReceiver {
 
 	public int channel = 0;
 
@@ -32,11 +30,6 @@ public class TileEntityScreen extends TileEntityInventoriedPowerReceiver {
 	private HashMap<int[], int[]> cameras = new HashMap<int[], int[]>();
 
 	private ItemStack[] inv = new ItemStack[3];
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelScreen();
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

@@ -19,19 +19,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.API.Fuelable;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFillingStation extends InventoriedRCTileEntity implements IFluidHandler, PipeConnector{
+public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	private ItemStack[] inv = new ItemStack[2];
 
@@ -145,47 +140,7 @@ public class TileEntityFillingStation extends InventoriedRCTileEntity implements
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE;
-	}
-
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p);
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{tank.getInfo()};
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.PIPE;
 	}
 
 	@Override
@@ -252,10 +207,6 @@ public class TileEntityFillingStation extends InventoriedRCTileEntity implements
 		tank.writeToNBT(NBT);
 	}
 
-	public int getLevel() {
-		return tank.getLevel();
-	}
-
 	public void setLevel(int level) {
 		if (tank.isEmpty())
 			return;
@@ -276,8 +227,23 @@ public class TileEntityFillingStation extends InventoriedRCTileEntity implements
 	}
 
 	@Override
-	public Flow getFlowForSide(ForgeDirection side) {
-		return Flow.INPUT;
+	public Fluid getInputFluid() {
+		return null;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return true;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		return true;
 	}
 
 }

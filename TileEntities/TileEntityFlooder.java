@@ -21,7 +21,6 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -131,11 +130,6 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{tank.getInfo()};
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

@@ -37,10 +37,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemJetPackChest extends ItemRotaryArmor implements Fuelable {
+public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 
-	public ItemJetPackChest(int ID, EnumArmorMaterial mat, int tex, int render) {
-		super(ID, mat, tex, render, 1);
+	public ItemJetPack(int ID, EnumArmorMaterial mat, int tex, int render) {
+		super(ID, mat, render, 1, tex);
 	}
 
 	public int getFuel(ItemStack is) {
@@ -150,10 +150,16 @@ public class ItemJetPackChest extends ItemRotaryArmor implements Fuelable {
 		if (ir.isAvailableInCreativeInventory())
 			li.add(is);
 	}
-
-	public String getArmorTextureFile(ItemStack is) {
-		return "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png";
-	}
+	/*
+	@Override
+	public String getArmorTexture(ItemStack is, Entity e, int slot, String nulll) {
+		ItemRegistry i = ItemRegistry.getEntry(is);
+		if (i == ItemRegistry.BEDPACK)
+			return "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png";
+		if (i == ItemRegistry.JETPACK)
+			return "/Reika/RotaryCraft/Textures/Misc/jet.png";
+		return "";
+	}*/
 
 	@Override
 	public Fluid getFuel() {
@@ -198,5 +204,15 @@ public class ItemJetPackChest extends ItemRotaryArmor implements Fuelable {
 	public int getItemSpriteIndex(ItemStack item) {
 		ItemRegistry ir = ItemRegistry.getEntry(item);
 		return ir != null ? ir.getTextureIndex() : 0;
+	}
+
+	@Override
+	public boolean providesProtection() {
+		return itemID == ItemRegistry.BEDPACK.getShiftedID();
+	}
+
+	@Override
+	public boolean canBeDamaged() {
+		return false;
 	}
 }

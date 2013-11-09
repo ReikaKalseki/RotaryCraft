@@ -22,9 +22,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Models.ModelCannon;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlockCannon extends TileEntityLaunchCannon {
@@ -32,11 +30,6 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.getItem() instanceof ItemBlock || is.itemID == Item.bucketLava.itemID || is.itemID == Item.bucketWater.itemID; //Blocks only
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelCannon();
 	}
 
 	@Override

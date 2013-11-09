@@ -159,7 +159,7 @@ public final class HandbookAuxData {
 			try {
 				Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
 				Method sapling = tree.getMethod("getDyeSapling", int.class);
-				Method leaf = tree.getMethod("getDyeLeaf", int.class);
+				Method leaf = tree.getMethod("getHeldDyeLeaf", int.class);
 				for (int j = 0; j < 16; j++) {
 					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
 					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(null, j)});

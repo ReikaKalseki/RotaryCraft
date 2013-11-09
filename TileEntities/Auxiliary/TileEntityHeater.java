@@ -29,9 +29,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelHeater;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
@@ -41,7 +39,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
-public class TileEntityHeater extends TileEntityInventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityHeater extends InventoriedPowerReceiver implements TemperatureTE {
 
 	public ItemStack[] inventory = new ItemStack[18];
 	public int temperature;
@@ -452,11 +450,6 @@ public class TileEntityHeater extends TileEntityInventoriedPowerReceiver impleme
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelHeater();
 	}
 
 	@Override

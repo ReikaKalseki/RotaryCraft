@@ -9,10 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.HashMap;
+
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.BlockSheetTexRenderer;
+import Reika.DragonAPI.Instantiable.ForcedTextureArmorModel;
 import Reika.DragonAPI.Instantiable.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.MultiSheetItemRenderer;
 import Reika.DragonAPI.Instantiable.SoundLoader;
@@ -59,6 +62,19 @@ public class ClientProxy extends CommonProxy
 	public static PipeBodyRenderer pipe;
 	public static CubicalMachineRenderer cube;
 
+	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
+	//public static final ForcedTextureArmorModel bed2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
+	//public static final ForcedTextureArmorModel hsla1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/steel_1.png");
+	//public static final ForcedTextureArmorModel hsla2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/steel_2.png");
+	//public static final ForcedTextureArmorModel io = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png");
+	//public static final ForcedTextureArmorModel nvg = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/NVGoggles.png");
+	//public static final ForcedTextureArmorModel nvh = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/NVHelmet.png");
+	//public static final ForcedTextureArmorModel jet = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/jet.png");
+	//public static final ForcedTextureArmorModel bedjet = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png");
+
+	private static final HashMap<ItemRegistry, ForcedTextureArmorModel> armorTextures = new HashMap();
+	private static final HashMap<ItemRegistry, String> armorAssets = new HashMap();
+
 	@Override
 	public void registerSounds() {
 		//RotarySounds.addSounds();
@@ -96,6 +112,46 @@ public class ClientProxy extends CommonProxy
 		IOGoggles = RenderingRegistry.addNewArmourRendererPrefix("IOGoggles");
 		armor = RenderingRegistry.addNewArmourRendererPrefix("Bedrock");
 		SteelArmor = RenderingRegistry.addNewArmourRendererPrefix("HSLA");
+		/*
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/steel_1.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/steel_2.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/IOGoggles.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/NVGoggles.png");
+		ReikaTextureHelper.forceArmorTexturePath("/Reika/RotaryCraft/Textures/Misc/NVHelmet.png");*/
+
+		addArmorTexture(ItemRegistry.JETPACK, "/Reika/RotaryCraft/Textures/Misc/jet.png");
+		addArmorTexture(ItemRegistry.BEDPACK, "/Reika/RotaryCraft/Textures/Misc/bedrock_jet.png");
+		addArmorTexture(ItemRegistry.NVG, "/Reika/RotaryCraft/Textures/Misc/NVGoggles.png");
+		addArmorTexture(ItemRegistry.NVH, "/Reika/RotaryCraft/Textures/Misc/NVHelmet.png");
+		addArmorTexture(ItemRegistry.IOGOGGLES, "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png");
+		addArmorTexture(ItemRegistry.BEDHELM, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
+		addArmorTexture(ItemRegistry.BEDCHEST, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
+		addArmorTexture(ItemRegistry.BEDBOOTS, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
+		addArmorTexture(ItemRegistry.BEDLEGS, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
+		addArmorTexture(ItemRegistry.STEELBOOTS, "/Reika/RotaryCraft/Textures/Misc/steel_2.png");
+		addArmorTexture(ItemRegistry.STEELHELMET, "/Reika/RotaryCraft/Textures/Misc/steel_1.png");
+		addArmorTexture(ItemRegistry.STEELCHEST, "/Reika/RotaryCraft/Textures/Misc/steel_1.png");
+		addArmorTexture(ItemRegistry.STEELLEGS, "/Reika/RotaryCraft/Textures/Misc/steel_2.png");
+	}
+
+	private static void addArmorTexture(ItemRegistry item, String tex) {
+		RotaryCraft.logger.log("Adding armor texture for "+item+": "+tex);
+		armorTextures.put(item, new ForcedTextureArmorModel(RotaryCraft.class, tex, item.getArmorType()));
+		String[] s = tex.split("/");
+		String file = s[s.length-1];
+		String defaultTex = "rotarycraft:textures/models/armor/"+file;
+		//ReikaJavaLibrary.pConsole(defaultTex);
+		armorAssets.put(item, defaultTex);
+	}
+
+	public static ForcedTextureArmorModel getArmorRenderer(ItemRegistry item) {
+		return armorTextures.get(item);
+	}
+
+	public static String getArmorTextureAsset(ItemRegistry item) {
+		return armorAssets.get(item);
 	}
 
 	public void loadModels() {

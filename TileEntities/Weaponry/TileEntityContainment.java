@@ -41,11 +41,6 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 	public int setRange;
 
 	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelForce();
-	}
-
-	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
 	}

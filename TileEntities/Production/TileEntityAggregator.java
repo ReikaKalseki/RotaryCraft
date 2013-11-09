@@ -17,7 +17,6 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.PoweredLiquidProducer;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAggregator extends PoweredLiquidProducer {
@@ -38,11 +37,6 @@ public class TileEntityAggregator extends PoweredLiquidProducer {
 				tank.addLiquid(25, FluidRegistry.WATER);
 			}
 		}
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

@@ -19,7 +19,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class TileEntityDeadMachine extends InventoriedRCTileEntity implements InertIInv {
 
@@ -71,11 +70,6 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

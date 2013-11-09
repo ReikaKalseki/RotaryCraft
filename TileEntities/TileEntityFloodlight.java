@@ -14,10 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
-import Reika.RotaryCraft.Models.ModelLamp;
-import Reika.RotaryCraft.Models.ModelVLamp;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -117,15 +114,6 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		int dmg = world.getBlockMetadata(x, y, z);
-		if (dmg < 4)
-			return new ModelLamp();
-		else
-			return new ModelVLamp();
 	}
 
 	@Override

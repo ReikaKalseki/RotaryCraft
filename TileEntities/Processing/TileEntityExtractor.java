@@ -26,8 +26,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Models.ModelExtractor;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -409,11 +407,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	@Override
 	public boolean hasModelTransparency() {
 		return true;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelExtractor();
 	}
 
 	@Override

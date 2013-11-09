@@ -22,14 +22,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
-public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver {
+public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	public static final int FALLOFF = 128;
 	public static final int MAXROWS = 6;
@@ -153,11 +152,6 @@ public class TileEntityScaleableChest extends TileEntityInventoriedPowerReceiver
 		{
 			par2ItemStack.stackSize = this.getInventoryStackLimit();
 		}
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

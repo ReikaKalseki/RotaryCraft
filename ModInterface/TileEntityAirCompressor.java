@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -36,11 +35,6 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	public static final int MAXPRESSURE = 1000;
 
 	private ForgeDirection facingDir;
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelCompressor();
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

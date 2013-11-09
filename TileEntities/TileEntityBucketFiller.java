@@ -25,12 +25,11 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler {
 
 	private ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
@@ -57,11 +56,6 @@ public class TileEntityBucketFiller extends TileEntityInventoriedPowerReceiver i
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return FluidContainerRegistry.isContainer(is);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

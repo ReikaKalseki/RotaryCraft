@@ -29,21 +29,15 @@ import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
-public class TileEntityFertilizer extends TileEntityInventoriedPowerReceiver implements RangedEffect {
+public class TileEntityFertilizer extends InventoriedPowerReceiver implements RangedEffect {
 
 	private ItemStack[] inv = new ItemStack[18];
 
 	private static final ArrayList<Integer> fertilizables = new ArrayList();
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {

@@ -34,14 +34,9 @@ import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Models.ModelGearbox;
-import Reika.RotaryCraft.Models.ModelGearbox16;
-import Reika.RotaryCraft.Models.ModelGearbox4;
-import Reika.RotaryCraft.Models.ModelGearbox8;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -361,22 +356,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		switch(ratio) {
-		case 2:
-			return new ModelGearbox();
-		case 4:
-			return new ModelGearbox4();
-		case 8:
-			return new ModelGearbox8();
-		case 16:
-			return new ModelGearbox16();
-		default:
-			return null;
-		}
 	}
 
 	@Override

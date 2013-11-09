@@ -629,7 +629,7 @@ public class RotaryRecipes {
 	private static void addItemBlocks() {
 
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(0, new Object[]{"SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear}); //Worm gear
-		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, new Object[]{"BSB", "BSB", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing}); //CVT
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, new Object[]{"BSB", "BSB", " Ms", 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing}); //CVT
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, new Object[]{"BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil}); //Coil
 
 		MachineRegistry.FLYWHEEL.addMetaCrafting(0, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount});

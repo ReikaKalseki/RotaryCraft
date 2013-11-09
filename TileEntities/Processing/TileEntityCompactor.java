@@ -27,13 +27,11 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelCompactor;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PressureTE
+public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE
 {
 	private ItemStack inv[];
 
@@ -485,11 +483,6 @@ public class TileEntityCompactor extends TileEntityInventoriedPowerReceiver impl
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelCompactor();
 	}
 
 	@Override

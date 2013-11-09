@@ -37,14 +37,12 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelBaitBox;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
-public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implements RangedEffect {
+public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect {
 
 	public ItemStack[] inventory = new ItemStack[27]; //ReikaMathLibrary.extrema(ReikaMathLibrary.nextMultiple(9, ReikaEntityHelper.getNumberMobsInMC(this.worldObj)), 54, "absmin")
 	public boolean[] attractive = new boolean[inventory.length];
@@ -347,11 +345,6 @@ public class TileEntityBaitBox extends TileEntityInventoriedPowerReceiver implem
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBaitBox();
 	}
 
 	@Override

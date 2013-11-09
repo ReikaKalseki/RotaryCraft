@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCoolingFin extends RotaryCraftTileEntity implements TemperatureTE {
@@ -53,11 +52,6 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	@Override
 	public int getThermalDamage() {
 		return temperature/200;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

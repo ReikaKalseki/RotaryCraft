@@ -19,7 +19,6 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -101,11 +100,6 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		return new PowerSourceList().addSource(this);
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override
@@ -217,9 +211,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public boolean canConnect(ForgeDirection dir) {
-		return dir == facingDir.getOpposite();
+		return dir == facingDir;
 	}
-
+	//which of these is the receive power??
 	@Override
 	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
 		return 0;

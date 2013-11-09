@@ -9,15 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Registry.EnumEngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -51,6 +58,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		Map map = EnchantmentHelper.getEnchantments(item);
+		boolean enchant = map != null && !map.isEmpty();
 		if (Renderid == -1) {
 			RenderBlocks rb = new RenderBlocks();
 			//ModLoader.getMinecraftInstance().renderEngine.bindTexture("/terrain.png");
@@ -107,8 +116,14 @@ public class ItemMachineRenderer implements IItemRenderer {
 			if (item.getItemDamage() >= MachineRegistry.machineList.length)
 				return;
 			MachineRegistry machine = MachineRegistry.machineList[item.getItemDamage()];
-			if (machine.hasModel())
-				TileEntityRenderer.instance.renderTileEntityAt(machine.createTEInstanceForRender(), a, -0.1D, b, 0.0F);
+			if (machine.hasModel()) {
+				TileEntity te = machine.createTEInstanceForRender();
+				if (machine.isEnchantable()) {
+					EnchantableMachine em = (EnchantableMachine)te;
+					em.applyEnchants(item);
+				}
+				TileEntityRenderer.instance.renderTileEntityAt(te, a, -0.1D, b, 0.0F);
+			}
 			else {
 				RenderBlocks rb = new RenderBlocks();
 				ReikaTextureHelper.bindTerrainTexture();
@@ -118,6 +133,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 				}
 				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlockVariable(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
 			}
+		}
+		if (enchant) {
+			ReikaRenderHelper.disableLighting();
+			RenderHelper.enableStandardItemLighting();
 		}
 	}
 }

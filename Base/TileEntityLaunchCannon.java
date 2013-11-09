@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-public abstract class TileEntityLaunchCannon extends TileEntityInventoriedPowerReceiver {
+public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver {
 
 	protected ItemStack[] inventory = new ItemStack[9];
 

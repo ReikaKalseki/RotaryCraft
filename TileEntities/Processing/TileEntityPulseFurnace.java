@@ -33,16 +33,14 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Models.ModelPulseFurnace;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
+public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
 
 	private ItemStack inv[] = new ItemStack[3];
 
@@ -415,11 +413,6 @@ public class TileEntityPulseFurnace extends TileEntityInventoriedPowerReceiver i
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelPulseFurnace();
 	}
 
 	@Override

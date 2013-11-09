@@ -70,13 +70,13 @@ public class RenderForceField extends RotaryTERenderer
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityForceFieldAt((TileEntityForceField)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			IORenderer.renderIO(tile, par2, par4, par6);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			IORenderer.renderIO(tile, par2, par4, par6);
 			if (ConfigRegistry.RENDERFORCEFIELD.getState())
 				this.renderField(((TileEntityForceField)tile), par2+0.5, par4+0.5, par6+0.5);
 			if (((TileEntityForceField)tile).hasEnchantments())
-				EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
+				//EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
+				EnchantmentRenderer.renderGlint(tile, ForceFieldModel, null, par2, par4, par6);
 		}
 	}
 

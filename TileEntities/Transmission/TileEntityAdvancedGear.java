@@ -25,10 +25,7 @@ import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
-import Reika.RotaryCraft.Models.ModelCVT;
-import Reika.RotaryCraft.Models.ModelCoil;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory {
@@ -453,13 +450,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		if (this.getBlockMetadata() >= 8)
-			return new ModelCoil();
-		return new ModelCVT();
 	}
 
 	@Override

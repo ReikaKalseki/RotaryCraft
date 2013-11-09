@@ -25,13 +25,11 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-import Reika.RotaryCraft.Base.TileEntityInventoriedPowerReceiver;
-import Reika.RotaryCraft.Models.ModelBreeder;
+import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver implements RangedEffect {
+public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements RangedEffect {
 
 	public ItemStack[] inventory = new ItemStack[18];
 
@@ -264,11 +262,6 @@ public class TileEntityAutoBreeder extends TileEntityInventoriedPowerReceiver im
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelBreeder();
 	}
 
 	@Override

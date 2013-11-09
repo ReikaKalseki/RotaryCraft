@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -192,11 +191,6 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		arr[1] = y+ystep*r;
 		arr[2] = z+zstep*r;
 		return arr;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

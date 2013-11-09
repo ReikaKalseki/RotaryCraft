@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.XMLInterface;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -173,9 +172,10 @@ public final class RotaryDescriptions {
 			MachineRegistry m = h.getMachine();
 			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase()+DESC_SUFFIX);
 			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase()+NOTE_SUFFIX);
-
 			desc = String.format(desc, machineData.get(m));
 			aux = String.format(aux, machineNotes.get(m));
+
+			//ReikaJavaLibrary.pConsole(m.name().toLowerCase()+":"+desc);
 
 			if (m.isDummiedOut()) {
 				desc += "\nThis machine is currently unavailable.";
@@ -217,7 +217,7 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < misctabs.length; i++) {
 			HandbookRegistry h = misctabs[i];
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase());
-			ReikaJavaLibrary.pConsole(desc);
+			//ReikaJavaLibrary.pConsole(desc);
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
@@ -412,5 +412,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.FUELENGINE, TileEntityFuelEngine.GEN_TORQUE, TileEntityFuelEngine.GEN_OMEGA, TileEntityFuelEngine.GEN_TORQUE*TileEntityFuelEngine.GEN_OMEGA);
 		addNotes(MachineRegistry.AIRGUN, PowerReceivers.AIRGUN.getMinPower(), PowerReceivers.AIRGUN.getMinTorque());
 		addNotes(MachineRegistry.SONICBORER, PowerReceivers.SONICBORER.getMinPower(), PowerReceivers.SONICBORER.getMinTorque());
+		addNotes(MachineRegistry.FILLINGSTATION, PowerReceivers.FILLINGSTATION.getMinPower());
+		addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
 	}
 }

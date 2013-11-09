@@ -50,8 +50,19 @@ public class ItemIOGoggles extends ItemRotaryArmor {
 
 	@Override
 	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {}
-
-	public String getArmorTextureFile(ItemStack itemstack) {
+	/*
+	@Override
+	public String getArmorTexture(ItemStack itemstack, Entity e, int slot, String nulll) {
 		return "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png";
+	}*/
+
+	@Override
+	public boolean providesProtection() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeDamaged() {
+		return false;
 	}
 }

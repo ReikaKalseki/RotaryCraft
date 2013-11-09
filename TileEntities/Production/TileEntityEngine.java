@@ -61,20 +61,10 @@ import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.EntityTurretShot;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityInventoryIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Models.ModelAC;
-import Reika.RotaryCraft.Models.ModelCombustion;
-import Reika.RotaryCraft.Models.ModelDC;
-import Reika.RotaryCraft.Models.ModelHydro;
-import Reika.RotaryCraft.Models.ModelJet;
-import Reika.RotaryCraft.Models.ModelMicroTurbine;
-import Reika.RotaryCraft.Models.ModelPerformance;
-import Reika.RotaryCraft.Models.ModelSteam;
-import Reika.RotaryCraft.Models.ModelWind;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EnumEngineType;
@@ -1386,34 +1376,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		if (type == null)
-			type = EnumEngineType.DC;
-		switch(type) {
-		case DC:
-			return new ModelDC();
-		case WIND:
-			return new ModelWind();
-		case STEAM:
-			return new ModelSteam();
-		case GAS:
-			return new ModelCombustion();
-		case AC:
-			return new ModelAC();
-		case SPORT:
-			return new ModelPerformance();
-		case HYDRO:
-			return new ModelHydro();
-		case MICRO:
-			return new ModelMicroTurbine();
-		case JET:
-			return new ModelJet();
-		default:
-			return null;
-		}
 	}
 
 	@Override

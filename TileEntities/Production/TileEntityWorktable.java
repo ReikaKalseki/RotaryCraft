@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.ItemChargedTool;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -30,11 +29,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.chargeTools();
 		this.makeJetplate();
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return null;
 	}
 
 	@Override

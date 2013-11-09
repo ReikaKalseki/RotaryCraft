@@ -22,9 +22,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Models.ModelReservoir;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
@@ -104,11 +102,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	@Override
 	public boolean hasModelTransparency() {
 		return true;
-	}
-
-	@Override
-	public RotaryModelBase getTEModel(World world, int x, int y, int z) {
-		return new ModelReservoir();
 	}
 
 	@Override

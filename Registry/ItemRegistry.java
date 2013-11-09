@@ -43,7 +43,7 @@ import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.Tools.ItemGravelGun;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
-import Reika.RotaryCraft.Items.Tools.ItemJetPackChest;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
@@ -97,7 +97,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BEDLEGS(10, false,			"item.bedlegs",				ItemBedrockArmor.class),
 	BEDBOOTS(8, false,			"item.bedboots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"item.tileselector",		ItemTileSelector.class),
-	BEDPACK(12, false,			"item.jetchest",			ItemJetPackChest.class),
+	BEDPACK(12, false,			"item.jetchest",			ItemJetPack.class),
 	STEELPICK(13, true,			"item.steelpick",			ItemSteelPick.class),
 	STEELAXE(14, true,			"item.steelaxe",			ItemSteelAxe.class),
 	STEELSHOVEL(15, true,		"item.steelshovel",			ItemSteelShovel.class),
@@ -106,7 +106,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
 	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
 	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class),
-	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPackChest.class);
+	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -174,7 +174,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		return new Class[]{int.class, int.class}; // ID, Sprite index
 	}
 
-	private boolean isBedrockArmor() {
+	public boolean isBedrockArmor() {
 		if (this == BEDHELM)
 			return true;
 		if (this == BEDCHEST)
@@ -213,13 +213,15 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		return false;
 	}
 
-	private int getArmorType() {
+	public int getArmorType() {
 		switch(this) {
 		case BEDBOOTS:
 		case STEELBOOTS:
 			return 3;
 		case BEDCHEST:
 		case STEELCHEST:
+		case JETPACK:
+		case BEDPACK:
 			return 1;
 		case BEDHELM:
 		case STEELHELMET:
