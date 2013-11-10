@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Auxiliary.ModList;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -254,8 +254,8 @@ public enum MachineRegistry {
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"machine.fertilizer",		BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
-	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, "RenderGenerator"),
-	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, "RenderElecMotor"),
+	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, "RenderGenerator", ModList.MEKANISM),
+	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, "RenderElecMotor", ModList.MEKANISM),
 	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer"),
 	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
@@ -906,7 +906,7 @@ public enum MachineRegistry {
 			return true;
 		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
-		if (this.name().equalsIgnoreCase("Unused"))
+		if (this.hasPrerequisite() && this.getPrerequisite() == ModList.MEKANISM)
 			return true;
 		return false;
 	}
@@ -917,7 +917,7 @@ public enum MachineRegistry {
 
 	public ModList getPrerequisite() {
 		if (!this.hasPrerequisite())
-			throw new RegistrationException(RotaryCraft.instance, this.getName()+" has no prerequisites and yet was called for them!");
+			;//throw new RegistrationException(RotaryCraft.instance, this.getName()+" has no prerequisites and yet was called for them!");
 		return requirement;
 	}
 

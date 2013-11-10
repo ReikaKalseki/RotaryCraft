@@ -16,10 +16,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
-import Reika.DragonAPI.Auxiliary.ModList;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
@@ -101,7 +102,16 @@ public final class OreForcer {
 			break;
 		case RAILCRAFT:
 			intercraftFirestone();
+		case INDUSTRIALCRAFT:
+			convertUranium();
 		}
+	}
+
+	private static void convertUranium() {
+		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
+		ItemStack ir = new ItemStack(IC2Handler.getInstance().iridiumID, 1, 0);
+		GameRegistry.addShapelessRecipe(ir, ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
+		GameRegistry.addShapelessRecipe(u, ItemStacks.getModOreIngot(ModOreList.URANIUM));
 	}
 
 	private static void intercraftFirestone() {

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.electricity.ElectricityPack;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -58,6 +59,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	private Tier type = Tier.LOW;
 
 	private int numberCoils = 0;
+
+	private float current;
+	private float voltage;
 
 	private ForgeDirection facingDir;
 
@@ -152,12 +156,15 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 				SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.36F, pit);
 				tickcount = 0;
 			}
+			current -= type.inputCurrent;
+			voltage -= type.inputVoltage;
 		}
 		else {
 			omega = torque = 0;
 			tickcount = 2000;
 		}
 		power = omega*torque;
+		ReikaJavaLibrary.pConsole(current+"/"+type.inputCurrent+"   :   "+voltage+"/"+type.inputVoltage);
 	}
 
 	public boolean addCoil() {
@@ -192,6 +199,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		super.readFromNBT(NBT);
 
 		numberCoils = NBT.getInteger("coils");
+
+		voltage = NBT.getFloat("v");
+		current = NBT.getFloat("a");
 	}
 
 	/**
@@ -203,6 +213,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("coils", numberCoils);
+
+		NBT.setFloat("v", voltage);
+		NBT.setFloat("a", current);
 	}
 
 	public int getNumberCoils() {
@@ -215,19 +228,31 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	}
 	//which of these is to receive power??
 	@Override
-	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
-		return 0;
+	public float receiveElectricity(ForgeDirection from, ElectricityPack in, boolean doReceive) {
+		boolean fix = true;
+		float mult = 300470F;
+		if (fix) {
+			float e = in.amperes*in.voltage;
+			e *= mult;
+			int v = type.inputVoltage;
+			in = new ElectricityPack(e/v, v);
+		}
+		//ReikaJavaLibrary.pConsole(in.amperes+"/"+type.inputCurrent+"   :   "+in.voltage+"/"+type.inputVoltage);
+		//ReikaJavaLibrary.pConsole(current+"/"+type.inputCurrent+"   :   "+voltage+"/"+type.inputVoltage);
+		if (!doReceive)
+			return 0;
+		if (!this.canConnect(from))
+			return 0;
+		if (in.voltage < type.inputVoltage || in.amperes < type.inputCurrent)
+			;//return 0;
+		current += in.amperes;
+		voltage += in.voltage;
+		return type.inputCurrent*type.inputVoltage/mult;
 	}
 
 	@Override
 	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack in, boolean doProvide) {
-		if (!doProvide)
-			return null;
-		if (!this.canConnect(from))
-			return null;
-		if (in.voltage < type.inputVoltage || in.amperes < type.inputCurrent)
-			return null;
-		return in;
+		return null;
 	}
 
 	@Override
@@ -242,10 +267,10 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public float getVoltage() {
-		return this.isGettingSufficientPower() ? type.inputVoltage : 0;
+		return type.inputVoltage;
 	}
 
 	public boolean isGettingSufficientPower() {
-		return false;
+		return current >= type.inputCurrent && voltage >= type.inputVoltage;
 	}
 }

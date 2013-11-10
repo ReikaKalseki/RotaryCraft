@@ -28,7 +28,7 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.ModList;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
