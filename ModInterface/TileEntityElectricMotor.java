@@ -211,9 +211,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public boolean canConnect(ForgeDirection dir) {
-		return dir == facingDir;
+		return dir == facingDir || dir == ForgeDirection.DOWN;
 	}
-	//which of these is the receive power??
+	//which of these is to receive power??
 	@Override
 	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
 		return 0;
