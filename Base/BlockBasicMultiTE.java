@@ -426,7 +426,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		ItemStack core = m.getCraftedProduct();
 		if (m.isEnchantable()) {
 			HashMap<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantments();
-			core = ReikaEnchantmentHelper.applyEnchantments(core, ench);
+			ReikaEnchantmentHelper.applyEnchantments(core, ench);
 			return core;
 		}
 		return core;
@@ -484,7 +484,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			List li;
 			if (m.isEnchantable()) {
 				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
-				is = ReikaEnchantmentHelper.applyEnchantments(is, map);
+				ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
 			if (m.isBroken((RotaryCraftTileEntity)te))
 				li = m.getBrokenProducts();

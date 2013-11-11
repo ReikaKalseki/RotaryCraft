@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -30,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.ItemReq;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -291,7 +293,13 @@ public class GuiHandbook extends GuiScreen
 
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2;
-		HandbookAuxData.drawPage(fontRenderer, screen, page, subpage, posX, posY);
+		try {
+			HandbookAuxData.drawPage(fontRenderer, screen, page, subpage, posX, posY);
+		}
+		catch (Exception e) {
+			ReikaChatHelper.write(Arrays.toString(e.getStackTrace()));
+			e.printStackTrace();
+		}
 	}
 
 	private void drawTabIcons() {
