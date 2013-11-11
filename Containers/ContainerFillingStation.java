@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.TileEntityFillingStation;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 
 public class ContainerFillingStation extends CoreContainer {
 
@@ -47,7 +47,7 @@ public class ContainerFillingStation extends CoreContainer {
 	{
 		switch(par1) {
 		//case 1: Reservoir.liquidID = par2; break;
-		case 2: tile.setLevel(par2); break;
+		//case 2: tile.setLevel(par2); break;
 		}
 	}
 

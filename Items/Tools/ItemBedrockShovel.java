@@ -74,4 +74,13 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	public final Icon getIconFromDamage(int dmg) {
 		return Item.shovelStone.getIconFromDamage(0);
 	}
+
+	public Class getTextureReferenceClass() {
+		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
 }

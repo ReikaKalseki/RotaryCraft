@@ -241,4 +241,13 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		this.forceSilkTouch(is);
 		return false;
 	}
+
+	public Class getTextureReferenceClass() {
+		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
 }

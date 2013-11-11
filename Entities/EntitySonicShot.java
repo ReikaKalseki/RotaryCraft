@@ -57,6 +57,20 @@ public class EntitySonicShot extends EntityFireball {
 			velocityChanged = true;
 	}
 
+	public int[] getSteps() {
+		int[] steps = new int[3];
+		if (motionX != 0) {
+			steps[0] = motionX > 0 ? 1 : -1;
+		}
+		if (motionY != 0) {
+			steps[1] = motionY > 0 ? 1 : -1;
+		}
+		if (motionZ != 0) {
+			steps[2] = motionZ > 0 ? 1 : -1;
+		}
+		return steps;
+	}
+
 	@Override
 	protected void onImpact(MovingObjectPosition mov) {
 		World world = worldObj;

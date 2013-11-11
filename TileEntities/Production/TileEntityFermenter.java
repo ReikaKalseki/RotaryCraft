@@ -51,7 +51,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public static final int OPTFERMENTTEMP = 35;
 	public static final int MAXTEMP = 60;
 
-	public static final int CAPACITY = 3000;
+	public static final int CAPACITY = 4000;
 	public static final int CONSUME_WATER = 50;
 
 	public int temperature;

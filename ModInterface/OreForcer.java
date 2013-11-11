@@ -111,7 +111,9 @@ public final class OreForcer {
 		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
 		ItemStack ir = new ItemStack(IC2Handler.getInstance().iridiumID, 1, 0);
 		GameRegistry.addShapelessRecipe(ir, ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
+		RotaryCraft.logger.log("RotaryCraft iridium ingots can now be crafted into IC2 Iridium items!");
 		GameRegistry.addShapelessRecipe(u, ItemStacks.getModOreIngot(ModOreList.URANIUM));
+		RotaryCraft.logger.log("RotaryCraft uranium ingots can now be crafted into IC2 purified crushed uranium!");
 	}
 
 	private static void intercraftFirestone() {
@@ -162,6 +164,7 @@ public final class OreForcer {
 	}
 
 	private static void addThaumAspects() {
+		RotaryCraft.logger.log("Adding ThaumCraft aspects.");
 		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
 		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
 

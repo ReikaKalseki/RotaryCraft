@@ -39,21 +39,37 @@ public class GuiFermenter extends GuiMachine
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
 		boolean red = ferm.worldObj.isBlockIndirectlyGettingPowered(ferm.xCoord, ferm.yCoord, ferm.zCoord);
+		int sx = 154;
+		int sy = 6;
 		if (red) {
-			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemStacks.sludge, 154, 6);
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemStacks.sludge, sx, sy);
 		}
 		else {
-			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemRegistry.YEAST.getStackOf(), 154, 6);
+			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, ItemRegistry.YEAST.getStackOf(), sx, sy);
 		}
 		fontRenderer.drawString("Target", 119, 10, 0);
+
+		if (ReikaGuiAPI.instance.isMouseInBox(sx+j, sx+16+j, sy+k, sy+16+k)) {
+			int dy = 13;
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, "This controls automation.", ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k);
+		}
+
+		sx = 55;
+		sy = 35;
+		if (ReikaGuiAPI.instance.isMouseInBox(sx+j-1, sx+16+j+1, sy+k-1, sy+16+k+1)) {
+			int dy = 13;
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("Water: %.1f/%d", ferm.getLevel()/1000F, ferm.CAPACITY/1000), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k);
+		}
 
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaLiquidRenderer.bindFluidTexture(FluidRegistry.WATER);
 		int h = 16*ferm.getLevel()/ferm.CAPACITY;
 		int dy = red ? 18 : 0;
 		dy = 0;
-		this.drawTexturedModelRectFromIcon(55, 35+16-h+dy, FluidRegistry.WATER.getIcon(), 16, h);
+		this.drawTexturedModelRectFromIcon(sx, sy+16-h+dy, FluidRegistry.WATER.getIcon(), 16, h);
 	}
 
 	/**

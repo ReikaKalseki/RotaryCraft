@@ -15,7 +15,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerFillingStation;
-import Reika.RotaryCraft.TileEntities.TileEntityFillingStation;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 
 public class GuiFillingStation extends GuiNonPoweredMachine
 {
@@ -46,7 +46,7 @@ public class GuiFillingStation extends GuiNonPoweredMachine
 		if (ReikaGuiAPI.instance.isMouseInBox(j+81, j+94, k+20, k+87)) {
 			int mx = ReikaGuiAPI.instance.getMouseRealX();
 			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", FillingStation.getLevel(), FillingStation.CAPACITY), mx-j, my-k);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d mB", FillingStation.getLevel(), FillingStation.CAPACITY), mx-j, my-k);
 		}
 
 		if (!FillingStation.isEmpty()) {

@@ -69,7 +69,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
-import Reika.RotaryCraft.TileEntities.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.TileEntityFireworkMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -94,6 +93,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
@@ -263,7 +263,7 @@ public enum MachineRegistry {
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12, "RenderAirGun"),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY),
-	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17);
+	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17, "RenderFillingStation");
 
 	private String name;
 	private Class te;
@@ -720,6 +720,7 @@ public enum MachineRegistry {
 		case AIRGUN:
 		case FUELENGINE:
 		case SORTING:
+		case FILLINGSTATION:
 			return true;
 		default:
 			return false;

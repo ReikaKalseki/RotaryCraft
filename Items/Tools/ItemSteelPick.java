@@ -68,4 +68,13 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 		return Item.pickaxeStone.getIconFromDamage(0);
 	}
 
+	public Class getTextureReferenceClass() {
+		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
 }

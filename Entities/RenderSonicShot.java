@@ -51,8 +51,34 @@ public class RenderSonicShot extends Render
 		//GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		//GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float var25 = 0.3F;
+		int[] dirs = par1EntitySonicShot.getSteps();
 		GL11.glScalef(var25, var25, var25);
 		int[] color = new int[]{127,222,255};
+		int rx = 0;
+		int ry = 0;
+		int rz = 0;
+		if (dirs[0] == 1) {
+
+		}
+		if (dirs[0] == -1) {
+			ry = 180;
+		}
+		if (dirs[1] == 1) {
+			rz = 90;
+		}
+		if (dirs[1] == -1) {
+			rz = -90;
+		}
+		if (dirs[2] == 1) {
+			ry = -90;
+		}
+		if (dirs[2] == -1) {
+			ry = 90;
+		}
+
+		GL11.glRotated(rx, 1, 0, 0);
+		GL11.glRotated(ry, 0, 1, 0);
+		GL11.glRotated(rz, 0, 0, 1);
 		double[] x = {0, 0, -0.0625, -0.1875, -0.4375, -0.75, -1.5, -2.5};
 		for (int i = 0; i < 360; i += 60) {
 			GL11.glRotatef(i, 1, 0, 0);
@@ -64,6 +90,10 @@ public class RenderSonicShot extends Render
 		for (int i = 1; i < x.length; i++)
 			ReikaRenderHelper.renderVCircle(i, x[i], 0, 0, color, 0);
 		//ReikaRenderHelper.exitGeoDraw();
+
+		GL11.glRotated(-rz, 0, 0, 1);
+		GL11.glRotated(-ry, 0, 1, 0);
+		GL11.glRotated(-rx, 1, 0, 0);
 
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);

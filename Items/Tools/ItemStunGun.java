@@ -73,34 +73,40 @@ public class ItemStunGun extends ItemChargedTool {
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float a, float b, float c) {
 		if (!ep.isSneaking())
 			return false;
-		if (world.isRemote)
-			return false;
 		if (is.getItemDamage() <= 0)
 			return false;
 		if (is.getItemDamage() < 8192 && !ep.capabilities.isCreativeMode)
 			return false;
-		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
-		//ReikaChatHelper.write(mov);
-		//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
-		int id = world.getBlockId(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		Material mat = world.getBlockMaterial(x, y, z);
-		if (id != 0 && (id < 8 || id > 11) && (id == Block.web.blockID || id == Block.mushroomRed.blockID ||
-				id == Block.gravel.blockID ||  id == Block.silverfish.blockID  || id == Block.mushroomBrown.blockID ||
-				id == Block.waterlily.blockID || id == Block.flowerPot.blockID ||
-				ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(id) && id != Block.snow.blockID))) {
-			for (int k = 0; k < 64; k++)
-				world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-			ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);
-			ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
+		if (!world.isRemote) {
+			MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
+			//ReikaChatHelper.write(mov);
+			//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
+			int id = world.getBlockId(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+			Material mat = world.getBlockMaterial(x, y, z);
+			if (id != 0 && (id < 8 || id > 11) && (id == Block.web.blockID || id == Block.mushroomRed.blockID ||
+					id == Block.gravel.blockID ||  id == Block.silverfish.blockID  || id == Block.mushroomBrown.blockID ||
+					id == Block.waterlily.blockID || id == Block.flowerPot.blockID ||
+					ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(id) && id != Block.snow.blockID))) {
+				for (int k = 0; k < 64; k++)
+					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+				ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);
+				ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
+			}
+			int leafrange = 4;
+			if (mat == Material.leaves || id == Block.sand.blockID || id == Block.snow.blockID) {
+				for (int k = 0; k < 64; k++)
+					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+				ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);
+				ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
+			}
 		}
-		int leafrange = 4;
-		if (mat == Material.leaves || id == Block.sand.blockID || id == Block.snow.blockID) {
-			for (int k = 0; k < 64; k++)
-				world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);
-			ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
-		}
+		double[] part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
+		for (int i = 0; i < 12; i++)
+			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+		//}
+		Vec3 norm = ep.getLookVec();
+		SoundRegistry.playSound(SoundRegistry.KNOCKBACK, world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		return true;
 	}
 

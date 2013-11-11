@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
@@ -28,6 +29,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	private boolean wentdark = false;
 
 	private BlockArray beam = new BlockArray();
+	private int lastRange = 0;
 	private boolean markUpdate = true;
 
 	/** Rate of conversion - one power++ = 1/falloff ++ light levels */
@@ -54,34 +56,30 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	@Override
 	public void makeBeam(World world, int x, int y, int z, int metadata) {
-		//boolean blocked = false;
-		int range = this.getRange();
-		//1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
-
-		if (markUpdate) {
-			beam.clear();
-			markUpdate = false;
-		}
-		if (beam.isEmpty()) {
-			beam.addLineOfClear(world, x, y, z, range, xstep, ystep, zstep);
-		}
-		int size = beam.getSize();
-		wentdark = false;
-		boolean pow = power >= MINPOWER;
-		if (!pow) {
-			wentdark = true;
-			markUpdate = true;
-		}
-		for (int i = 0; i < size; i++) {
-			int[] xyz = beam.getNthBlock(i);
-			if (pow) {
-				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
-			}
-			else {
-				if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == RotaryCraft.lightblock.blockID)
+		//ReikaJavaLibrary.pConsole(lastRange+":"+this.getRange(), Side.SERVER);
+		int r = this.getRange();
+		if (lastRange != r) {
+			//ReikaJavaLibrary.pConsole(beam);
+			for (int i = 0; i < beam.getSize(); i++) {
+				int[] xyz = beam.getNthBlock(i);
+				int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+				if (id == RotaryCraft.lightblock.blockID) {
+					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
+				}
 			}
-			world.markBlockForUpdate(xyz[0], xyz[1], xyz[2]);
+			beam.clear();
+			if (r > 0)
+				beam.addLineOfClear(world, x+xstep, y+ystep, z+ystep, r, xstep, ystep, zstep);
+			lastRange = r;
+		}
+
+		for (int i = 0; i < beam.getSize(); i++) {
+			int[] xyz = beam.getNthBlock(i);
+			if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == 0)
+				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
+			world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
 		}
 	}
 
@@ -89,6 +87,15 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		world.markBlockForUpdate(x, y, z);
 		world.notifyBlocksOfNeighborChange(x, y, z, this.getTileEntityBlockID());
 		wentdark = true;
+		for (int i = 0; i < beam.getSize(); i++) {
+			int[] xyz = beam.getNthBlock(i);
+			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			if (id == RotaryCraft.lightblock.blockID) {
+				//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
+				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
+			}
+		}
 	}
 
 	/**
@@ -123,7 +130,19 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 
 	@Override
 	public int getRange() {
-		return distancelimit;
+		//ReikaJavaLibrary.pConsole(r);
+		if (power < MINPOWER)
+			return 0;
+		int ir = this.getMaxRange();
+		for (int i = 1; i < ir; i++) {
+			int id = worldObj.getBlockId(xCoord+i*xstep, yCoord+i*ystep, zCoord+i*zstep);
+			if (id != 0) {
+				Block b = Block.blocksList[id];
+				if (b.isOpaqueCube())
+					return i;
+			}
+		}
+		return ir;
 	}
 
 	@Override

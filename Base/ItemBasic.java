@@ -84,4 +84,14 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 				RotaryAchievements.DIAMONDGEARS.triggerAchievement(player);
 		}
 	}
+
+	public Class getTextureReferenceClass() {
+		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		ItemRegistry item = ItemRegistry.getEntry(is);
+		return item != null ? "/Reika/RotaryCraft/Textures/Items/items2.png" : "/Reika/RotaryCraft/Textures/Items/items1.png";
+	}
 }

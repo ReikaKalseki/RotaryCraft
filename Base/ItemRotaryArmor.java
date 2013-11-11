@@ -117,4 +117,13 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 		return true;
 	}
 
+	public Class getTextureReferenceClass() {
+		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getTexture(ItemStack is) {
+		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
 }

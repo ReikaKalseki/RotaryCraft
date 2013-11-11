@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -113,8 +114,9 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	}
 
 	private void setLight(World world, int x, int y, int z) {
-		//ReikaJavaLibrary.pConsole(lastRange+":"+this.getRange(), Side.SERVER);
-		if (lastRange != this.getRange()) {
+		//ReikaJavaLibrary.pConsole(lastRange+":"+r, Side.SERVER);
+		int r = this.getRange();
+		if (lastRange != r) {
 			//ReikaJavaLibrary.pConsole(light);
 			for (int i = 0; i < light.getSize(); i++) {
 				int[] xyz = light.getNthBlock(i);
@@ -126,9 +128,9 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 				}
 			}
 			light.clear();
-			if (this.getRange() > 0 && world.canBlockSeeTheSky(x, y+1, z))
-				light.addLineOfClear(world, x+facingDir.offsetX, y, z+facingDir.offsetZ, this.getRange(), facingDir.offsetX, 0, facingDir.offsetZ);
-			lastRange = this.getRange();
+			if (r > 0 && world.canBlockSeeTheSky(x, y+1, z))
+				light.addLineOfClear(world, x+facingDir.offsetX, y, z+facingDir.offsetZ, r, facingDir.offsetX, 0, facingDir.offsetZ);
+			lastRange = r;
 		}
 
 		for (int i = 0; i < light.getSize(); i++) {
@@ -158,9 +160,18 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 			return 0;
 		double r = ReikaMathLibrary.doubpow(2, 7*ReikaWorldHelper.getSunIntensity(worldObj));
 		//ReikaJavaLibrary.pConsole(r);
-		if (r > this.getMaxRange())
-			return this.getMaxRange();
-		return (int)r;
+		int ir = (int)r;
+		if (ir > this.getMaxRange())
+			ir = this.getMaxRange();
+		for (int i = 1; i < ir; i++) {
+			int id = worldObj.getBlockId(xCoord+i*facingDir.offsetX, yCoord+i*facingDir.offsetY, zCoord+i*facingDir.offsetZ);
+			if (id != 0) {
+				Block b = Block.blocksList[id];
+				if (b.isOpaqueCube())
+					return i;
+			}
+		}
+		return ir;
 	}
 
 	@Override

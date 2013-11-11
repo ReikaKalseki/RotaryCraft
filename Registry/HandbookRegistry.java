@@ -130,6 +130,7 @@ public enum HandbookRegistry {
 	MIRROR(MachineRegistry.MIRROR),
 	COOLINGFIN(MachineRegistry.COOLINGFIN),
 	SORTING(MachineRegistry.SORTING),
+	FILLING(MachineRegistry.FILLINGSTATION),
 
 	WEPMACHINEDESC("Defence/Offence Machines", "Defence/Offense"),
 	ARROWGUN(MachineRegistry.ARROWGUN),
@@ -180,7 +181,6 @@ public enum HandbookRegistry {
 	LINE(MachineRegistry.LINEBUILDER),
 	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
 	SONICBORER(MachineRegistry.SONICBORER),
-	FILLING(MachineRegistry.FILLINGSTATION),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

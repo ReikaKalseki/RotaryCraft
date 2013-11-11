@@ -124,14 +124,15 @@ public class ModelDC extends RotaryModelBase
 		Shape7.render(f5);
 		Shape8.render(f5);
 
-		GL11.glTranslated(0, 1, 0);
+		double d = 0.9375;
+		GL11.glTranslated(0, d, 0);
 		GL11.glRotatef(phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+		GL11.glTranslated(0, -d, 0);
 		Shape12.render(f5);
 		Shape13.render(f5);
-		GL11.glTranslated(0, 1, 0);
+		GL11.glTranslated(0, d, 0);
 		GL11.glRotatef(-phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+		GL11.glTranslated(0, -d, 0);
 
 		Shape14.render(f5);
 	}

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.API.Fuelable;
 import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
@@ -34,10 +33,13 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	public static final int FUEL_PER_CRYSTAL = 250;
 
-	private HybridTank tank = new HybridTank("filling", CAPACITY);
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		this.getIOSidesDefault(world, x, y, z, meta);
+		this.getPower(false, false);
+		if (power < MINPOWER)
+			return;
+
 		if (this.canMakeFuel()) {
 			this.makeFuel();
 		}
@@ -47,6 +49,8 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 				this.fill();
 			}
 		}
+
+		//ReikaJavaLibrary.pConsole(this.getSide()+":"+tank);
 	}
 
 	public boolean canMakeFuel() {
@@ -155,7 +159,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	@Override
 	public boolean hasModelTransparency() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -244,6 +248,10 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 	@Override
 	public boolean isValidFluid(Fluid f) {
 		return true;
+	}
+
+	public ItemStack getItemForRender() {
+		return inv[0] != null ? inv[0].copy() : null;
 	}
 
 }

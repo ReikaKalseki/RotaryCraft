@@ -111,10 +111,14 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			return stacks;
 		}
 
+		private int getTick() {
+			return (int)((System.nanoTime()/1000000000)%oreBlock.size());
+		}
+
 		private Object getItem(int x, int y) {
 			switch(x+y*4) {
 			case 0:
-				return oreBlock;
+				return oreBlock.get(this.getTick());
 			case 1:
 			case 4:
 				return this.getDust();
@@ -185,7 +189,8 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			ReikaOreHelper van = ReikaOreHelper.getEntryByOreDict(ingredient);
 			if (van == null)
 				van = RecipesExtractor.getOreFromExtract(ingredient);
-			arecipes.add(new ExtractorRecipe(ore, van, ingredient));
+			//List<ItemStack> ores = ore.getAllOreBlocks();
+			arecipes.add(new ExtractorRecipe(ore, van, null));
 		}
 	}
 

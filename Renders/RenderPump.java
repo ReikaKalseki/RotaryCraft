@@ -92,10 +92,9 @@ public class RenderPump extends RotaryTERenderer
 			this.renderTileEntityPumpAt((TileEntityPump)tile, par2, par4, par6, par8);
 		}
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			//ReikaJavaLibrary.pConsole(((TileEntityPump)tile).iotick+"@"+MinecraftForgeClient.getRenderPass());
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 0) {
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
 	}
