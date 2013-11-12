@@ -18,6 +18,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -78,6 +79,8 @@ public class GuiHandbook extends GuiScreen
 	private int buttoni = 0;
 	protected int buttontimer = 0;
 
+	EntityCreeper mob;
+
 	private static int staticwidth;
 	private static int staticheight;
 
@@ -96,6 +99,8 @@ public class GuiHandbook extends GuiScreen
 
 		if (ConfigRegistry.DYNAMICHANDBOOK.getState())
 			RotaryDescriptions.reload();
+
+		mob = new EntityCreeper(world);
 	}
 
 	@Override

@@ -16,7 +16,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -51,6 +54,27 @@ public class TileEntityPipe extends TileEntityPiping {
 		}
 		if (fluidPressure < 0)
 			fluidPressure = 0;
+
+		if (ModList.BUILDCRAFTFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
+			if (this.contains(FluidRegistry.getFluid("uranium hexafluoride")) || this.contains(FluidRegistry.getFluid("hydrofluoric acid"))) {
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+				for (int i = 0; i < 6; i++) {
+					ForgeDirection dir = dirs[i];
+					int dx = x+dir.offsetX;
+					int dy = y+dir.offsetY;
+					int dz = z+dir.offsetZ;
+					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+					if (m == MachineRegistry.PIPE) {
+						TileEntityPipe p = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+						p.setFluid(liquid);
+						p.addFluid(5);
+						//ReikaParticleHelper.SMOKE.spawnAroundBlock(world, dx, dy, dz, 8);
+					}
+				}
+				world.setBlock(x, y, z, 0);
+				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
+			}
+		}
 	}
 
 	public int getDensity() {

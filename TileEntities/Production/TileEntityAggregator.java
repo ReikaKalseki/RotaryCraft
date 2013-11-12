@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -23,7 +23,6 @@ public class TileEntityAggregator extends PoweredLiquidProducer {
 
 	public static final int CAPACITY = 6000;
 
-	private HybridTank tank = new HybridTank("aggregator", CAPACITY);
 	private StepTimer timer = new StepTimer(2);
 
 	@Override
@@ -34,7 +33,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer {
 			if (!tank.isFull()) {
 				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 				float h = biome.rainfall; //Not used by any biome
-				tank.addLiquid(25, FluidRegistry.WATER);
+				tank.addLiquid((int)(40*ReikaWorldHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
 			}
 		}
 	}
@@ -74,7 +73,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer {
 
 	@Override
 	public boolean canOutputTo(ForgeDirection to) {
-		return to == ForgeDirection.UP;
+		return to.offsetY == 0;
 	}
 
 	@Override

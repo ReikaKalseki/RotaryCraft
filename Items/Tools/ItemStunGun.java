@@ -94,7 +94,7 @@ public class ItemStunGun extends ItemChargedTool {
 				ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-2));
 			}
 			int leafrange = 4;
-			if (mat == Material.leaves || id == Block.sand.blockID || id == Block.snow.blockID) {
+			if (mat == Material.glass || mat == Material.ice || mat == Material.leaves || id == Block.sand.blockID || id == Block.snow.blockID || id == Block.ice.blockID) {
 				for (int k = 0; k < 64; k++)
 					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 				ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);

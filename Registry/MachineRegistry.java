@@ -65,6 +65,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -263,7 +264,8 @@ public enum MachineRegistry {
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12, "RenderAirGun"),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY),
-	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17, "RenderFillingStation");
+	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17, "RenderFillingStation"),
+	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14);
 
 	private String name;
 	private Class te;
@@ -737,6 +739,7 @@ public enum MachineRegistry {
 		case COMPRESSOR:
 		case LINEBUILDER:
 		case SONICBORER:
+		case BELT:
 			return true;
 		default:
 			return false;
@@ -902,13 +905,13 @@ public enum MachineRegistry {
 
 	public boolean isDummiedOut() {
 		if (this == CCTV)
-			return true;
+			return !DragonAPICore.isReikasComputer();
 		if (this == CHUNKLOADER)
-			return true;
+			return !DragonAPICore.isReikasComputer();
 		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
 		if (this.hasPrerequisite() && this.getPrerequisite() == ModList.MEKANISM)
-			return true;
+			return !DragonAPICore.isReikasComputer();
 		return false;
 	}
 

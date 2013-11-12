@@ -138,7 +138,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler) {
+				else if (te instanceof IFluidHandler && dir != ForgeDirection.UP) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
 						int toadd = this.getPipeOutput(this.getLiquidLevel());
@@ -204,7 +204,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler) {
+				else if (te instanceof IFluidHandler && dir == ForgeDirection.UP) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {
@@ -302,6 +302,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityPiping)
 			return ((TileEntityPiping) tile).canConnectToPipe(m);
+		if (tile instanceof IFluidHandler)
+			return true;
 		if (!(tile instanceof PipeConnector))
 			return false;
 		PipeConnector pc = (PipeConnector)tile;
