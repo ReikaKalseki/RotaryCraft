@@ -57,6 +57,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Blocks.BlockPiping;
+import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -77,6 +78,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
@@ -310,6 +312,25 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
 			if (ex.getLevel()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
 				ex.addLiquid(RotaryConfig.MILLIBUCKET);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
+		}
+		if (m == MachineRegistry.PULSEJET) {
+			TileEntityPulseFurnace ex = (TileEntityPulseFurnace)te;
+			int f = ex.getFuel();
+			if (f+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
+				ex.setFuel(RotaryConfig.MILLIBUCKET*ItemFuelLubeBucket.JET_VALUE);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
+			int water = ex.getWater();
+			if (water+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
+				ex.setWater(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}

@@ -19,12 +19,14 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.PoweredLiquidIO;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
@@ -73,10 +75,12 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 		if (temperature > 100)
-			storedEnergy += power*6000;
+			storedEnergy += power*200;
+
+		ReikaJavaLibrary.pConsole(storedEnergy/ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getSteam()+":"+storedEnergy+"/"+ReikaRailCraftHelper.getSteamBucketEnergy(), Side.SERVER);
-		if (storedEnergy >= ReikaRailCraftHelper.getSteamBucketEnergy() && !world.isRemote)
+		if (storedEnergy >= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()) && !world.isRemote)
 			this.makeSteam();
 
 		TileEntity te = world.getBlockTileEntity(x, y+1, z);
@@ -93,8 +97,12 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (this.getWater() >= FluidContainerRegistry.BUCKET_VOLUME && (output.isEmpty() || output.canTakeIn(1000))) {
 			input.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
 			output.fill(FluidRegistry.getFluidStack("steam", FluidContainerRegistry.BUCKET_VOLUME), true);
-			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy();
+			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp());
 		}
+	}
+
+	private int getWaterTemp() {
+		return ReikaWorldHelper.getBiomeTemp(worldObj, xCoord, zCoord);
 	}
 
 	public int getSteam() {
@@ -109,13 +117,13 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 		if (power > 0) {
-			temperature += 2.5*ReikaMathLibrary.logbase(power, 2);
+			temperature += 0.3125*ReikaMathLibrary.logbase(power, 2);
 		}
 		if (temperature > Tamb) {
-			temperature -= (temperature-Tamb)/5;
+			temperature -= (temperature-Tamb)/40;
 		}
 		else {
-			temperature += (temperature-Tamb)/5;
+			temperature += (temperature-Tamb)/40;
 		}
 		if (temperature - Tamb <= 4 && temperature > Tamb)
 			temperature--;
@@ -196,6 +204,16 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	@Override
 	public boolean canOutputTo(ForgeDirection to) {
 		return to == ForgeDirection.UP;
+	}
+
+	@Override
+	public boolean canIntakeFromPipe(MachineRegistry p) {
+		return p == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canOutputToPipe(MachineRegistry p) {
+		return p == MachineRegistry.PIPE;
 	}
 
 }

@@ -23,7 +23,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
@@ -72,7 +72,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				eng.type = EnumEngineType.setType(is.getItemDamage());
+				eng.type = EngineType.setType(is.getItemDamage());
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				eng.placer = ep.getEntityName();
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
@@ -85,7 +85,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 
 	@Override
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep,	World world, int x, int y, int z) {
-		if (is.getItemDamage() == EnumEngineType.HYDRO.ordinal()) {
+		if (is.getItemDamage() == EngineType.HYDRO.ordinal()) {
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					int a = 0; int b = 0;
@@ -105,35 +105,35 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				}
 			}
 		}
-		if (is.getItemDamage() == EnumEngineType.WIND.ordinal()) {
+		if (is.getItemDamage() == EngineType.WIND.ordinal()) {
 			if (world.getBlockId(x, y+1, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y+1, z);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y-1, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y-1, z);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x+1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x+1, y, z);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x-1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x-1, y, z);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y, z+1) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z+1);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y, z-1) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z-1);
-				if (te.type == EnumEngineType.WIND)
+				if (te.type == EngineType.WIND)
 					return false;
 			}
 
@@ -173,7 +173,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	protected void checkAndBreakAdjacent(World world, int x, int y, int z) {
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
-			if (eng.type == EnumEngineType.HYDRO) {
+			if (eng.type == EngineType.HYDRO) {
 				int id = world.getBlockId(x, y+1, z);
 				if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y+1, z);
@@ -266,7 +266,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < EnumEngineType.engineList.length; i++) {
+		for (int i = 0; i < EngineType.engineList.length; i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
 		}

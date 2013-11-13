@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Models.ModelBevel;
+import Reika.RotaryCraft.Models.Animated.ModelBevel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
 
 public class RenderBevel extends RotaryTERenderer
@@ -38,168 +38,151 @@ public class RenderBevel extends RotaryTERenderer
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelBevel var14;
 
-			{
-				//((BlockBevelBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		var14 = BevelModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
+
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
+		int var12 = 0;
+		int var13 = 0;
+		int dir = 1;
+		if (tile.isInWorld()) {
+
+			switch(tile.direction) {
+			case 0:
+				var11 = 90; var12 = 0; var13 = 0;
+				break;
+			case 1:
+				var11 = 180; var12 = 0; var13 = 0;
+				break;
+			case 2:
+				var11 = 270; var12 = 0; var13 = 0;
+				break;
+			case 3:
+				var11 = 0; var12 = 0; var13 = 0;
+				break;
+			case 4:
+				var11 = 0; var12 = 0; var13 = 0;
+				dir = -1;
+				break;
+			case 5:
+				var11 = 90; var12 = 0; var13 = 0;
+				dir = -1;
+				break;
+			case 6:
+				var11 = 180; var12 = 0; var13 = 0;
+				dir = -1;
+				break;
+			case 7:
+				var11 = 270; var12 = 0; var13 = 0;
+				dir = -1;
+				break;
+			case 8:
+				var11 = 0; var12 = 270; var13 = 0;
+				GL11.glTranslatef(0F, 1F, 1F);
+				dir = -1;
+				break;
+			case 9:
+				var11 = 90; var12 = 270; var13 = 0;
+				GL11.glTranslatef(1F, 1F, -0F);
+				dir = -1;
+				break;
+			case 10:
+				var11 = 180; var12 = 270; var13 = 0;
+				GL11.glTranslatef(0F, 1F, -1F);
+				dir = -1;
+				break;
+			case 11:
+				var11 = -90; var12 = 270; var13 = 0;
+				GL11.glTranslatef(-1F, 1F, -0F);
+				dir = -1;
+				break;
+			case 12:
+				var11 = 0; var12 = 90; var13 = 0;
+				GL11.glTranslatef(0F, 1F, -1F);
+				dir = -1;
+				break;
+			case 13:
+				var11 = 90; var12 = 90; var13 = 0;
+				GL11.glTranslatef(-1F, 1F, -0F);
+				break;
+			case 14:
+				var11 = 180; var12 = 90; var13 = 0;
+				GL11.glTranslatef(0F, 1F, 1F);
+				dir = -1;
+				break;
+			case 15:
+				var11 = -90; var12 = 90; var13 = 0;
+				GL11.glTranslatef(1F, 1F, -0F);
+				dir = -1;
+				break;
+			case 16:
+				var11 = 0; var12 = 90; var13 = 0;
+				GL11.glTranslatef(0F, 1F, -1F);
+				dir = -1;
+				break;
+			case 17:
+				var11 = 90; var12 = 90; var13 = 0;
+				GL11.glTranslatef(-1F, 1F, -0F);
+				dir = -1;
+				break;
+			case 18:
+				var11 = 180; var12 = 90; var13 = 0;
+				GL11.glTranslatef(0F, 1F, 1F);
+				dir = -1;
+				break;
+			case 19:
+				var11 = -90; var12 = 90; var13 = 0;
+				GL11.glTranslatef(1F, 1F, -0F);
+				dir = -1;
+				break;
+			case 20:
+				var11 = 0; var12 = 270; var13 = 0;
+				GL11.glTranslatef(0F, 1F, 1F);
+				break;
+			case 21:
+				var11 = 90; var12 = 270; var13 = 0;
+				GL11.glTranslatef(1F, 1F, -0F);
+				break;
+			case 22:
+				var11 = 180; var12 = 270; var13 = 0;
+				GL11.glTranslatef(0F, 1F, -1F);
+				break;
+			case 23:
+				var11 = -90; var12 = 270; var13 = 0;
+				GL11.glTranslatef(-1F, 1F, 0F);
+				break;
 			}
+
+
+			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(var12, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(var13, 0.0F, 0.0F, 1.0F);
+
+		}
+		else {
+			GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
 		}
 
-		if (true)
-		{
-			ModelBevel var14;
+		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
 
-			if (true)
-			{
-				var14 = BevelModel;
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
-			}
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-			int var12 = 0;
-			int var13 = 0;
-			int dir = 1;
-			if (tile.isInWorld()) {
-
-				switch(tile.direction) {
-				case 0:
-					var11 = 90; var12 = 0; var13 = 0;
-					break;
-				case 1:
-					var11 = 180; var12 = 0; var13 = 0;
-					break;
-				case 2:
-					var11 = 270; var12 = 0; var13 = 0;
-					break;
-				case 3:
-					var11 = 0; var12 = 0; var13 = 0;
-					break;
-				case 4:
-					var11 = 0; var12 = 0; var13 = 0;
-					dir = -1;
-					break;
-				case 5:
-					var11 = 90; var12 = 0; var13 = 0;
-					dir = -1;
-					break;
-				case 6:
-					var11 = 180; var12 = 0; var13 = 0;
-					dir = -1;
-					break;
-				case 7:
-					var11 = 270; var12 = 0; var13 = 0;
-					dir = -1;
-					break;
-				case 8:
-					var11 = 0; var12 = 270; var13 = 0;
-					GL11.glTranslatef(0F, 1F, 1F);
-					dir = -1;
-					break;
-				case 9:
-					var11 = 90; var12 = 270; var13 = 0;
-					GL11.glTranslatef(1F, 1F, -0F);
-					dir = -1;
-					break;
-				case 10:
-					var11 = 180; var12 = 270; var13 = 0;
-					GL11.glTranslatef(0F, 1F, -1F);
-					dir = -1;
-					break;
-				case 11:
-					var11 = -90; var12 = 270; var13 = 0;
-					GL11.glTranslatef(-1F, 1F, -0F);
-					dir = -1;
-					break;
-				case 12:
-					var11 = 0; var12 = 90; var13 = 0;
-					GL11.glTranslatef(0F, 1F, -1F);
-					dir = -1;
-					break;
-				case 13:
-					var11 = 90; var12 = 90; var13 = 0;
-					GL11.glTranslatef(-1F, 1F, -0F);
-					break;
-				case 14:
-					var11 = 180; var12 = 90; var13 = 0;
-					GL11.glTranslatef(0F, 1F, 1F);
-					dir = -1;
-					break;
-				case 15:
-					var11 = -90; var12 = 90; var13 = 0;
-					GL11.glTranslatef(1F, 1F, -0F);
-					dir = -1;
-					break;
-				case 16:
-					var11 = 0; var12 = 90; var13 = 0;
-					GL11.glTranslatef(0F, 1F, -1F);
-					dir = -1;
-					break;
-				case 17:
-					var11 = 90; var12 = 90; var13 = 0;
-					GL11.glTranslatef(-1F, 1F, -0F);
-					dir = -1;
-					break;
-				case 18:
-					var11 = 180; var12 = 90; var13 = 0;
-					GL11.glTranslatef(0F, 1F, 1F);
-					dir = -1;
-					break;
-				case 19:
-					var11 = -90; var12 = 90; var13 = 0;
-					GL11.glTranslatef(1F, 1F, -0F);
-					dir = -1;
-					break;
-				case 20:
-					var11 = 0; var12 = 270; var13 = 0;
-					GL11.glTranslatef(0F, 1F, 1F);
-					break;
-				case 21:
-					var11 = 90; var12 = 270; var13 = 0;
-					GL11.glTranslatef(1F, 1F, -0F);
-					break;
-				case 22:
-					var11 = 180; var12 = 270; var13 = 0;
-					GL11.glTranslatef(0F, 1F, -1F);
-					break;
-				case 23:
-					var11 = -90; var12 = 270; var13 = 0;
-					GL11.glTranslatef(-1F, 1F, 0F);
-					break;
-				}
-
-
-				GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(var12, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(var13, 0.0F, 0.0F, 1.0F);
-
-			}
-			else {
-				GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-			}
-
-			//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-
-			var14.renderAll(null, tile.phi*dir);
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		var14.renderAll(null, tile.phi*dir);
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

@@ -904,14 +904,16 @@ public enum MachineRegistry {
 	}
 
 	public boolean isDummiedOut() {
+		if (DragonAPICore.isReikasComputer())
+			return false;
 		if (this == CCTV)
-			return !DragonAPICore.isReikasComputer();
+			return true;
 		if (this == CHUNKLOADER)
-			return !DragonAPICore.isReikasComputer();
+			return true;
 		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
 		if (this.hasPrerequisite() && this.getPrerequisite() == ModList.MEKANISM)
-			return !DragonAPICore.isReikasComputer();
+			return true;
 		return false;
 	}
 

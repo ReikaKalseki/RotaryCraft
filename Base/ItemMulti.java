@@ -23,7 +23,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,7 +66,7 @@ public class ItemMulti extends ItemBasic {
 							for (int k = -6; k <= 6; k++) {
 								if (world.getBlockTileEntity(x+i, y+j, z+k) instanceof TileEntityEngine) {
 									TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x+i, y+j, z+k);
-									if (te.type == EnumEngineType.AC) {
+									if (te.type == EngineType.AC) {
 										double dx = x-te.xCoord-0.5;
 										double dy = y-te.yCoord-0.5;
 										double dz = z-te.zCoord-0.5;
@@ -125,7 +125,7 @@ public class ItemMulti extends ItemBasic {
 			j = RotaryNames.compactNames.length;
 			break;
 		case 7: //engines
-			j = EnumEngineType.engineList.length;
+			j = EngineType.engineList.length;
 			break;
 		case 8: //powders
 			j = RotaryNames.powderNames.length;

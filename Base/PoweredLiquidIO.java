@@ -93,8 +93,12 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return (this.canReceiveFrom(side) || this.canOutputTo(side.getOpposite())) && this.canConnectToPipe(p);
+		return (this.canReceiveFrom(side) && this.canIntakeFromPipe(p)) || (this.canOutputTo(side.getOpposite()) && this.canOutputToPipe(p)) && this.canConnectToPipe(p);
 	}
+
+	public abstract boolean canIntakeFromPipe(MachineRegistry p);
+
+	public abstract boolean canOutputToPipe(MachineRegistry p);
 
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
 		return type == PipeType.FLUID ? (this.canOutputTo(side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;

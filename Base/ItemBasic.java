@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -69,7 +69,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	private void checkAchievements(EntityPlayer player, ItemStack item) {
 		if (ReikaItemHelper.matchStacks(item, MachineRegistry.RAILGUN.getCraftedProduct()))
 			RotaryAchievements.MAKERAILGUN.triggerAchievement(player);
-		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal())))
+		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.engineitems.itemID, 1, EngineType.JET.ordinal())))
 			RotaryAchievements.MAKEJET.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal())))
 			RotaryAchievements.STEELSHAFT.triggerAchievement(player);

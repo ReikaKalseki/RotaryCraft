@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
@@ -166,7 +166,7 @@ public class ItemMeter extends ItemRotaryTool
 				torque = omega = 0;
 				if (clicked.type.isAirBreathing() && clicked.isDrowned(world, x, y, z))
 					RotaryAux.writeMessage("drowning");
-				if (clicked.type == EnumEngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
+				if (clicked.type == EngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
 					RotaryAux.writeMessage("choke");
 				if (clicked.FOD >= 8)
 					RotaryAux.writeMessage("fod");

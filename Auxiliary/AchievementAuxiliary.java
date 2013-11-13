@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -35,11 +35,11 @@ public abstract class AchievementAuxiliary {
 		MachineRegistry.EXTRACTOR.getCraftedProduct(),
 		MachineRegistry.BORER.getCraftedProduct(),
 		MachineRegistry.PULSEJET.getCraftedProduct(),
-		new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.JET.ordinal()),
+		new ItemStack(RotaryCraft.engineitems.itemID, 1, EngineType.JET.ordinal()),
 		MachineRegistry.RAILGUN.getCraftedProduct(),
 		new ItemStack(Item.rottenFlesh),
 		MachineRegistry.BEDROCKBREAKER.getCraftedProduct(),
-		new ItemStack(RotaryCraft.engineitems.itemID, 1, EnumEngineType.STEAM.ordinal()),
+		new ItemStack(RotaryCraft.engineitems.itemID, 1, EngineType.STEAM.ordinal()),
 		new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.STEEL.ordinal()),
 		new ItemStack(RotaryCraft.advgearitems.itemID, 1, 1),
 		new ItemStack(RotaryCraft.shaftitems.itemID, 1, MaterialRegistry.BEDROCK.ordinal()),

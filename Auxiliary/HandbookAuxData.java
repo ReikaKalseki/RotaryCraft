@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -48,14 +49,29 @@ public final class HandbookAuxData {
 	private static final ArrayList<ItemStack> flakes = new ArrayList();
 	private static final ArrayList<ItemStack[]> fermenter = new ArrayList();
 
+	private static final ArrayMap<HandbookRegistry> tabMappings = new ArrayMap(2);
+
 	static {
 		load();
+
+		mapHandbook();
 	}
 
 	private static void load() {
 		addFlakes();
 		addExtracts();
 		addPlants();
+	}
+
+	private static void mapHandbook() {
+		for (int i = 0; i < HandbookRegistry.tabList.length; i++) {
+			HandbookRegistry h = HandbookRegistry.tabList[i];
+			tabMappings.putV(h, h.getScreen(), h.getPage());
+		}
+	}
+
+	public static HandbookRegistry getMapping(int screen, int page) {
+		return tabMappings.getV(screen, page);
 	}
 
 	public static void reload() {

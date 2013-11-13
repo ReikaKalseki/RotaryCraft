@@ -158,7 +158,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			this.transferPower(world, x, y, z, meta);
 		else
 			this.store(world, x, y, z, meta);
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 
 		this.basicPowerReceiver();
 	}

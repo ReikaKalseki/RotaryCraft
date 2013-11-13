@@ -23,7 +23,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class BlockEngine extends BlockModelledMachine {
@@ -49,7 +49,7 @@ public class BlockEngine extends BlockModelledMachine {
 			return;
 
 		if (tile.type == null)
-			tile.type = EnumEngineType.DC;
+			tile.type = EngineType.DC;
 		switch(tile.type) {
 		case DC:
 			maxy -= 0.1875F;
@@ -130,8 +130,8 @@ public class BlockEngine extends BlockModelledMachine {
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
 			if (eng.type == null)
-				eng.type = EnumEngineType.DC;
-			if (eng.FOD >= 8 && eng.type == EnumEngineType.JET) {
+				eng.type = EngineType.DC;
+			if (eng.FOD >= 8 && eng.type == EngineType.JET) {
 				ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;

@@ -47,7 +47,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private static List<Class<? extends TileEntity>> blacklist = new ArrayList<Class<? extends TileEntity>>();
 
-	public static final double BLAST_ENERGY = 4.814*1000000000000D; //1 kiloton
+	public static final double BLAST_ENERGY = 4.814D*1000000000000D; //1 kiloton
 
 	private boolean loading = true;
 	private boolean canLoad = true;

@@ -39,7 +39,7 @@ import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -592,7 +592,7 @@ public class RotaryRecipes {
 			"ppp", "psp", "ppp", 's', ItemRegistry.RAILGUN.getStackOfMetadata(14), 'p', ItemStacks.bedingot});
 
 		GameRegistry.addRecipe(ItemRegistry.MINECART.getCraftedProduct(1), new Object[]{
-			"g", "m", 'g', EnumEngineType.GAS.getCraftedProduct(), 'm', new ItemStack(Item.minecartEmpty)});
+			"g", "m", 'g', EngineType.GAS.getCraftedProduct(), 'm', new ItemStack(Item.minecartEmpty)});
 
 		GameRegistry.addRecipe(ItemRegistry.SHELL.getCraftedProduct(16), new Object[]{
 			" s ", "sns", " s ", 's', ItemStacks.steelingot, 'n', ItemStacks.nitrate});
@@ -647,15 +647,15 @@ public class RotaryRecipes {
 		MachineRegistry.SHAFT.addMetaCrafting(3, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft});
 		MachineRegistry.SHAFT.addMetaCrafting(4, new Object[]{"S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft});
 
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.DC.ordinal(), new Object[]{"SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.WIND.ordinal(), new Object[]{"SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.STEAM.ordinal(), new Object[]{"SSS", "CIs", "PGP", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', Item.ingotGold, 'C', ItemStacks.condenser});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.GAS.ordinal(), new Object[]{"CgC", "SGs", "PIP", 'g', Item.ingotGold, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'C', ItemStacks.cylinder});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.AC.ordinal(), new Object[]{"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.SPORT.ordinal(), new Object[]{"CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.HYDRO.ordinal(), new Object[]{"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.MICRO.ordinal(), new Object[]{"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
-		MachineRegistry.ENGINE.addMetaCrafting(EnumEngineType.JET.ordinal(), new Object[]{"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.DC.ordinal(), new Object[]{"SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.WIND.ordinal(), new Object[]{"SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.STEAM.ordinal(), new Object[]{"SSS", "CIs", "PGP", 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', Item.ingotGold, 'C', ItemStacks.condenser});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.GAS.ordinal(), new Object[]{"CgC", "SGs", "PIP", 'g', Item.ingotGold, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.gearunit, 'C', ItemStacks.cylinder});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.AC.ordinal(), new Object[]{"SSS", "SGs", "PRP", 'S', Item.ingotGold, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.SPORT.ordinal(), new Object[]{"CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.HYDRO.ordinal(), new Object[]{"PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.shaftcore});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.MICRO.ordinal(), new Object[]{"CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), new Object[]{"DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem});
 
 		if (ConfigRegistry.ROTATEHOSE.getState()) {
 			MachineRegistry.HOSE.addRecipe(new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.hose, DifficultyEffects.PIPECRAFT.getInt()), new Object[]{"WWW", "GGG", "WWW", 'G', Block.glass, 'W', ExpandedOreRecipe.getWoodList()}));

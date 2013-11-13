@@ -27,7 +27,6 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
@@ -48,7 +47,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public int pulseFurnaceCookTime;
 
 	public static final int CAPACITY = 3000;
-	public static final int MAXFUEL = 500;
+	public static final int MAXFUEL = 8000;
 	public static final int MAXTEMP = 1000; //1370C = melting steel, 800C = 90% strength loss
 	public static final int SMELTTICKS = 100;
 
@@ -211,7 +210,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	public void getFuel(World world, int x, int y, int z, int meta) {
 		if (tickcount2 >= 100) {
-			fuel.removeLiquid(RotaryConfig.MILLIBUCKET);
+			fuel.removeLiquid(100);
 			tickcount2 = 0;
 		}
 	}
@@ -222,7 +221,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 		if (water.getLevel() > 0) {
 			if (rand.nextInt(3) == 0)
-				water.removeLiquid((temperature*2/MAXTEMP)*RotaryConfig.MILLIBUCKET);
+				water.removeLiquid((temperature*2/MAXTEMP)*50);
 			temperature -= temperature/64;
 		}
 		if (temperature < 0)
@@ -284,7 +283,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 				soundtick = 0;
 				SoundRegistry.playSoundAtBlock(SoundRegistry.PULSEJET, world, x, y, z, 1, 1);
 			}
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("$$");
 			if (!flag2)
 				this.getFuel(world, x, y, z, meta);
 			this.updateTemperature(world, x, y, z, meta);
@@ -328,6 +326,8 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return false;
 		if (inv[0] == null)
 			return false;
+		if (fuel.isEmpty())
+			return false;
 		if (this.hasScrap()) {
 			if (inv[0].stackSize < 9 && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage() && inv[0].itemID == ItemStacks.scrap.itemID)
 				return false;
@@ -342,8 +342,8 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		//if (this.fuelLevel <= 0)
 		//return false;
 		int mintemp = this.getReqTemps(inv[0]);
-		//if (mintemp == -1 || mintemp > this.temperature)
-		//	return false;
+		if (mintemp == -1 || mintemp > temperature)
+			return false;
 
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
 		if (itemstack == null)

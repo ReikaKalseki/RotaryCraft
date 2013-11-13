@@ -42,7 +42,7 @@ import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -141,7 +141,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
-				if (tile.type == EnumEngineType.JET && tile.FOD > 0) {
+				if (tile.type == EngineType.JET && tile.FOD > 0) {
 					tile.repairJet();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;
@@ -149,7 +149,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				}
 			}
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
-				if (tile.type == EnumEngineType.JET && tile.FOD > 0) {
+				if (tile.type == EngineType.JET && tile.FOD > 0) {
 					tile.repairJetPartial();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;

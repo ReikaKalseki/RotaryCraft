@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -69,7 +69,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 		float a = 0; float b = 0;
 		if (item.itemID == RotaryCraft.engineitems.itemID) {
 			TileEntityEngine eng = new TileEntityEngine();
-			eng.type = EnumEngineType.DC;
+			eng.type = EngineType.DC;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);

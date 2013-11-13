@@ -50,6 +50,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -67,7 +68,7 @@ import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -110,7 +111,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	/** Used by turbine engines */
 
-	public EnumEngineType type;
+	public EngineType type;
 
 	/** Used in jet engines */
 	public int FOD = 0;
@@ -529,7 +530,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int Tamb = ReikaWorldHelper.getBiomeTemp(biome);
 		//ReikaChatHelper.writeInt(temperature);
-		if (temperature > Tamb && omega == 0 && torque == 0 && type == EnumEngineType.SPORT) { //If off and hot
+		if (temperature > Tamb && omega == 0 && torque == 0 && type == EngineType.SPORT) { //If off and hot
 			if (temperature > Tamb+300)
 				temperature -= (temperature-Tamb)/100;
 			else if (temperature > Tamb+100)
@@ -619,10 +620,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
-		if (type == EnumEngineType.SPORT) {
+		if (type == EngineType.SPORT) {
 			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
 		}
-		else if (type == EnumEngineType.STEAM) {
+		else if (type == EngineType.STEAM) {
 			world.setBlockToAir(x, y, z);
 			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, false, 1F, false, true, 2F);
 		}
@@ -664,7 +665,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	private boolean jetCheck(World world, int x, int y, int z) {
-		if (type == EnumEngineType.JET) {
+		if (type == EngineType.JET) {
 			if (FOD >= 8)
 				return false;
 		}
@@ -724,7 +725,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	private void getType() {
 		if (type == null) {
-			type = EnumEngineType.DC;
+			type = EngineType.DC;
 			omega = 0;
 			torque = 0;
 			return;
@@ -759,13 +760,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			switch (type) {
 			case DC:
 				//omega = EnumEngineType.DC.getSpeed();
-				this.updateSpeed(EnumEngineType.DC.getSpeed(), true);
-				torque = EnumEngineType.DC.getTorque();
+				this.updateSpeed(EngineType.DC.getSpeed(), true);
+				torque = EngineType.DC.getTorque();
 				break;
 			case WIND:
-				speed = (int)(EnumEngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				speed = (int)(EngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
 				this.updateSpeed(speed, true);
-				torque = EnumEngineType.WIND.getTorque();
+				torque = EngineType.WIND.getTorque();
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
@@ -774,33 +775,33 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					this.dealBladeDamage();
 				break;
 			case STEAM:
-				this.updateSpeed(EnumEngineType.STEAM.getSpeed(), true);
-				torque = EnumEngineType.STEAM.getTorque();
+				this.updateSpeed(EngineType.STEAM.getSpeed(), true);
+				torque = EngineType.STEAM.getTorque();
 				break;
 			case GAS:
-				this.updateSpeed(EnumEngineType.GAS.getSpeed(), true);
-				torque = EnumEngineType.GAS.getTorque();
+				this.updateSpeed(EngineType.GAS.getSpeed(), true);
+				torque = EngineType.GAS.getTorque();
 				break;
 			case AC:
-				this.updateSpeed(EnumEngineType.AC.getSpeed(), true);
-				torque = EnumEngineType.AC.getTorque();
+				this.updateSpeed(EngineType.AC.getSpeed(), true);
+				torque = EngineType.AC.getTorque();
 				break;
 			case SPORT:
 				if (!starvedengine) {
-					this.updateSpeed(EnumEngineType.SPORT.getSpeed(), true);
-					torque = EnumEngineType.SPORT.getTorque();
+					this.updateSpeed(EngineType.SPORT.getSpeed(), true);
+					torque = EngineType.SPORT.getTorque();
 				}
 				else {
-					this.updateSpeed(EnumEngineType.GAS.getSpeed(), true);
-					torque = EnumEngineType.GAS.getTorque();
+					this.updateSpeed(EngineType.GAS.getSpeed(), true);
+					torque = EngineType.GAS.getTorque();
 				}
 				break;
 			case HYDRO:
-				speed = (int)(EnumEngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				speed = (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
 				if (speed == 0)
 					speed = 1;
 				this.updateSpeed(speed, true);
-				torque = (int)(EnumEngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
+				torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
@@ -809,14 +810,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					this.dealPanelDamage();
 				break;
 			case MICRO:
-				this.updateSpeed(EnumEngineType.MICRO.getSpeed(), true);
-				torque = EnumEngineType.MICRO.getTorque();
+				this.updateSpeed(EngineType.MICRO.getSpeed(), true);
+				torque = EngineType.MICRO.getTorque();
 				break;
 			case JET:
 				this.checkJetFailure();
-				speed = (int)(EnumEngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				speed = (int)(EngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
 				this.updateSpeed(speed, true);
-				torque = EnumEngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
+				torque = EngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
@@ -1235,6 +1236,20 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		if (power > 0) {
 			this.playSounds(world, x, y, z, pitch);
+			if (type == EngineType.JET) {
+				double dx = x-backx;
+				double dz = z-backz;
+				dx /= 2;
+				dz /= 2;
+				double vx = -(x-backx)/2D;
+				double vz = -(z-backz)/2D;
+				world.spawnParticle("smoke", dx+x+0.25+0.5*rand.nextDouble(), y+0.5*rand.nextDouble(), dz+z+0.25+0.5*rand.nextDouble(), -vx-0.1+0.2*rand.nextDouble(), -0.1+0.2*rand.nextDouble(), -vz-0.1+0.2*rand.nextDouble());
+			}
+			else if (type == EngineType.HYDRO) {
+				int[] xz = this.getWaterColumnPos();
+				ReikaParticleHelper.RAIN.spawnAroundBlock(world, x, y, z, 16);
+				ReikaParticleHelper.RAIN.spawnAroundBlock(world, xz[0], y, xz[1], 16);
+			}
 		}
 		else if (soundtick < type.getSoundLength(FOD, soundfactor))
 			soundtick = 2000;
@@ -1325,7 +1340,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		isJetFailing = NBT.getBoolean("jetfail");
 		chickenCount = NBT.getInteger("chickens");
 
-		type = EnumEngineType.setType(NBT.getInteger("type"));
+		type = EngineType.setType(NBT.getInteger("type"));
 		FOD = NBT.getInteger("FOD");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
@@ -1386,9 +1401,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		double pow = 1.05;
 		double mult = 1;
-		if (type == EnumEngineType.JET)
+		if (type == EngineType.JET)
 			pow = 1.1;
-		if (type == EnumEngineType.HYDRO) {
+		if (type == EngineType.HYDRO) {
 			mult = 256F/type.getSpeed();
 		}
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(mult*omega+1, 2), pow);
@@ -1550,7 +1565,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return FUELCAP;
 		if (type.isJetFueled())
 			return FUELCAP;
-		if (type == EnumEngineType.STEAM)
+		if (type == EngineType.STEAM)
 			return CAPACITY;
 		return 0;
 	}
@@ -1633,7 +1648,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
 		if (to == MachineRegistry.ENGINE) {
 			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(writex, writey, writez);
-			return te.type == EnumEngineType.HYDRO;
+			return te.type == EngineType.HYDRO;
 		}
 		return false;
 	}
@@ -1643,7 +1658,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
 		if (from == MachineRegistry.ENGINE && to != MachineRegistry.ENGINE) {
 			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(backx, yCoord, backz);
-			return te.type == EnumEngineType.HYDRO;
+			return te.type == EngineType.HYDRO;
 		}
 		return false;
 	}
@@ -1664,7 +1679,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				TileEntity te = worldObj.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
 				if (te instanceof TileEntityEngine) {
 					TileEntityEngine eng = (TileEntityEngine)te;
-					if (eng.type == EnumEngineType.HYDRO) {
+					if (eng.type == EngineType.HYDRO) {
 						if (eng.hydroCheck(worldObj, xyz[0], xyz[1], xyz[2], eng.getBlockMetadata())) {
 							float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
 							size += 1*fac;

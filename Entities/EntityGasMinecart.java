@@ -23,7 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class EntityGasMinecart extends EntityMinecart {
@@ -66,7 +66,7 @@ public class EntityGasMinecart extends EntityMinecart {
 
 		fueltick++;
 
-		if (fueltick >= EnumEngineType.GAS.getFuelUnitDuration()) {
+		if (fueltick >= EngineType.GAS.getFuelUnitDuration()) {
 			fueltick = 0;
 			if (fuel > 0)
 				--fuel;
@@ -87,7 +87,7 @@ public class EntityGasMinecart extends EntityMinecart {
 		super.killMinecart(par1DamageSource);
 
 		if (!par1DamageSource.isExplosion())
-			this.entityDropItem(EnumEngineType.GAS.getCraftedProduct(), 0);
+			this.entityDropItem(EngineType.GAS.getCraftedProduct(), 0);
 	}
 
 	@Override

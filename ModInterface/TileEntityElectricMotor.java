@@ -21,7 +21,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -152,7 +152,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 				m = 2.31F;
 			if (type == Tier.HIGH)
 				m = 0.572F;
-			if (tickcount >= EnumEngineType.DC.getSoundLength(0, pit*m)) {
+			if (tickcount >= EngineType.DC.getSoundLength(0, pit*m)) {
 				SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.36F, pit);
 				tickcount = 0;
 			}

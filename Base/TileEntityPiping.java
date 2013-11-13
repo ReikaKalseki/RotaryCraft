@@ -302,12 +302,13 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityPiping)
 			return ((TileEntityPiping) tile).canConnectToPipe(m);
-		if (tile instanceof IFluidHandler)
+		else if (tile instanceof PipeConnector) {
+			PipeConnector pc = (PipeConnector)tile;
+			return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
+		}
+		else if (tile instanceof IFluidHandler)
 			return true;
-		if (!(tile instanceof PipeConnector))
-			return false;
-		PipeConnector pc = (PipeConnector)tile;
-		return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir);
+		return false;
 	}
 
 	@Override

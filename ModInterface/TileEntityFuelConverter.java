@@ -73,6 +73,8 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		tickcount++;
 		this.getPowerBelow();
 
+		//ReikaJavaLibrary.pConsole(input+":"+output);
+
 		int factor = 1;
 
 		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.CLIENT);
@@ -206,17 +208,27 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	@Override
 	public boolean canOutputTo(ForgeDirection to) {
-		return true;
+		return to.offsetY == 0;
 	}
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return true;
+		return from == ForgeDirection.UP;
 	}
 
 	@Override
 	public int getCapacity() {
 		return CAPACITY;
+	}
+
+	@Override
+	public boolean canIntakeFromPipe(MachineRegistry p) {
+		return p == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public boolean canOutputToPipe(MachineRegistry p) {
+		return p == MachineRegistry.FUELLINE;
 	}
 
 }

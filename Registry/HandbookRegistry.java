@@ -20,6 +20,7 @@ import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
@@ -51,15 +52,15 @@ public enum HandbookRegistry {
 	MODINTERFACE("Inter-Mod Interactions"),
 	//---------------------ENGINES--------------------//
 	ENGINEDESC("Power Supply", "Engines"),
-	DCENGINE(MachineRegistry.ENGINE, EnumEngineType.DC.ordinal()),
-	WINDENGINE(MachineRegistry.ENGINE, EnumEngineType.WIND.ordinal()),
-	STEAMENGINE(MachineRegistry.ENGINE, EnumEngineType.STEAM.ordinal()),
-	GASENGINE(MachineRegistry.ENGINE, EnumEngineType.GAS.ordinal()),
-	ACENGINE(MachineRegistry.ENGINE, EnumEngineType.AC.ordinal()),
-	PERFENGINE(MachineRegistry.ENGINE, EnumEngineType.SPORT.ordinal()),
-	HYDROENGINE(MachineRegistry.ENGINE, EnumEngineType.HYDRO.ordinal()),
-	MICROTURB(MachineRegistry.ENGINE, EnumEngineType.MICRO.ordinal()),
-	JETENGINE(MachineRegistry.ENGINE, EnumEngineType.JET.ordinal()),
+	DCENGINE(MachineRegistry.ENGINE, EngineType.DC.ordinal()),
+	WINDENGINE(MachineRegistry.ENGINE, EngineType.WIND.ordinal()),
+	STEAMENGINE(MachineRegistry.ENGINE, EngineType.STEAM.ordinal()),
+	GASENGINE(MachineRegistry.ENGINE, EngineType.GAS.ordinal()),
+	ACENGINE(MachineRegistry.ENGINE, EngineType.AC.ordinal()),
+	PERFENGINE(MachineRegistry.ENGINE, EngineType.SPORT.ordinal()),
+	HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO.ordinal()),
+	MICROTURB(MachineRegistry.ENGINE, EngineType.MICRO.ordinal()),
+	JETENGINE(MachineRegistry.ENGINE, EngineType.JET.ordinal()),
 	SOLAR(MachineRegistry.SOLARTOWER),
 
 	//---------------------TRANSMISSION--------------------//
@@ -475,7 +476,7 @@ public enum HandbookRegistry {
 		return this.getParent().getBaseScreen()+this.getRelativeScreen();
 	}
 
-	private int getPage() {
+	public int getPage() {
 		return (this.ordinal()-this.getParent().ordinal())%8;
 	}
 
@@ -508,12 +509,12 @@ public enum HandbookRegistry {
 	}
 
 	private static int getEnginePage(TileEntity te) {
-		EnumEngineType e = ((TileEntityEngine)te).type;
+		EngineType e = ((TileEntityEngine)te).type;
 		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.getBaseScreen())*8;
 	}
 
 	private static int getEngineScreen(TileEntity te) {
-		EnumEngineType e = ((TileEntityEngine)te).type;
+		EngineType e = ((TileEntityEngine)te).type;
 		int ei = (1+e.ordinal())/8;
 		ReikaJavaLibrary.pConsole(ENGINEDESC.getBaseScreen()+ei);
 		return ENGINEDESC.getBaseScreen()+ei;
@@ -573,12 +574,9 @@ public enum HandbookRegistry {
 
 	public static HandbookRegistry getEntry(int screen, int page) {
 		//ReikaJavaLibrary.pConsole(screen+"   "+page);
-		for (int i = 0; i < tabList.length; i++) {
-			if (tabList[i].getScreen() == screen && tabList[i].getPage() == page) {
-				return tabList[i];
-			}
-		}
-		return TOC;
+
+		HandbookRegistry h = HandbookAuxData.getMapping(screen, page);
+		return h != null ? h : TOC;
 		//throw new RuntimeException("Handbook screen "+screen+" and page "+page+" do not correspond to an entry!");
 	}
 
@@ -780,7 +778,7 @@ public enum HandbookRegistry {
 		if (this == SOLAR)
 			return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getCraftedProduct());
 		if (this.getParent() == ENGINEDESC)
-			return ReikaJavaLibrary.makeListFrom(EnumEngineType.engineList[offset].getCraftedProduct());
+			return ReikaJavaLibrary.makeListFrom(EngineType.engineList[offset].getCraftedProduct());
 		if (machine == MachineRegistry.ADVANCEDGEARS)
 			return ReikaJavaLibrary.makeListFrom(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(offset));
 		if (this.getParent() == TRANSDESC || this.isMachine()) {
@@ -880,7 +878,7 @@ public enum HandbookRegistry {
 		if (this == ENCHANTING)
 			return new ItemStack(Item.enchantedBook);
 		if (this == ENGINES)
-			return EnumEngineType.AC.getCraftedProduct();
+			return EngineType.AC.getCraftedProduct();
 		if (this == MISC)
 			return ItemRegistry.SCREWDRIVER.getStackOf();
 		if (this == TRANS)

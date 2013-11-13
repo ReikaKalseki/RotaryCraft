@@ -14,11 +14,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 
-public class ItemCanolaSeed extends ItemBasic {
+public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 
 	public ItemCanolaSeed(int ID, int tex) {
 		super(ID, tex);
@@ -60,5 +62,20 @@ public class ItemCanolaSeed extends ItemBasic {
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		return 80+item.getItemDamage();
+	}
+
+	@Override
+	public EnumPlantType getPlantType(World world, int x, int y, int z) {
+		return EnumPlantType.Crop;
+	}
+
+	@Override
+	public int getPlantID(World world, int x, int y, int z) {
+		return RotaryCraft.canola.blockID;
+	}
+
+	@Override
+	public int getPlantMetadata(World world, int x, int y, int z) {
+		return 0;
 	}
 }

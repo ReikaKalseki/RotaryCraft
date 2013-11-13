@@ -27,7 +27,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
-import Reika.RotaryCraft.Registry.EnumEngineType;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -233,8 +233,8 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = enginetabs[i];
 			String desc;
 			String aux;
-			if (i < EnumEngineType.engineList.length) {
-				EnumEngineType e = EnumEngineType.engineList[i];
+			if (i < EngineType.engineList.length) {
+				EngineType e = EngineType.engineList[i];
 				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase()+DESC_SUFFIX);
 				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase()+NOTE_SUFFIX);
 
@@ -400,6 +400,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.LAMP, TileEntityLamp.MAXRANGE);
 		addNotes(MachineRegistry.ECU, TileEntityEngineController.getSettingsAsString());
 		addNotes(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELT_XP);
+		addNotes(MachineRegistry.FUELENHANCER, PowerReceivers.FUELENHANCER.getMinPower(), PowerReceivers.FUELENHANCER.getMinSpeed());
 		addNotes(MachineRegistry.ARROWGUN, PowerReceivers.ARROWGUN.getMinPower(), PowerReceivers.ARROWGUN.getMinTorque());
 		addNotes(MachineRegistry.STEAMTURBINE, TileEntitySteam.GEN_OMEGA, TileEntitySteam.MAX_TORQUE);
 		addNotes(MachineRegistry.FERTILIZER, PowerReceivers.FERTILIZER.getMinPower());
