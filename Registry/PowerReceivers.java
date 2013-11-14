@@ -78,7 +78,8 @@ public enum PowerReceivers {
 	AIRGUN(512, 1, 16384),
 	SONICBORER(1024, 1, 65536),
 	SORTING(1024),
-	FILLINGSTATION(1024);
+	FILLINGSTATION(1024),
+	BELT();
 
 	private int minT;
 	private int minS;

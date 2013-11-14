@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -24,6 +25,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -50,6 +53,65 @@ public class ItemMulti extends ItemBasic {
 		maxStackSize = max;
 		//this.setIconCoord(0, 0);
 		this.setCreativeTab(RotaryCraft.tabRotaryItems);
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.belt)) {
+			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+			if (m == MachineRegistry.BELT) {
+				TileEntityBeltHub te = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+				if (is.stackTagCompound == null) {
+					is.stackTagCompound = new NBTTagCompound();
+					is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
+					is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
+					is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
+					is.stackTagCompound.setInteger("rx", Integer.MIN_VALUE);
+					is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
+					is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
+				}
+				if (te.isEmitting()) {
+					is.stackTagCompound.setInteger("ex", x);
+					is.stackTagCompound.setInteger("ey", y);
+					is.stackTagCompound.setInteger("ez", z);
+				}
+				else {
+					is.stackTagCompound.setInteger("rx", x);
+					is.stackTagCompound.setInteger("ry", y);
+					is.stackTagCompound.setInteger("rz", z);
+				}
+				int ex = is.stackTagCompound.getInteger("ex");
+				int ey = is.stackTagCompound.getInteger("ey");
+				int ez = is.stackTagCompound.getInteger("ez");
+				int rx = is.stackTagCompound.getInteger("rx");
+				int ry = is.stackTagCompound.getInteger("ry");
+				int rz = is.stackTagCompound.getInteger("rz");
+
+				int dl = Math.abs(ex-rx+ey-ry+ez-rz);
+
+				//ReikaJavaLibrary.pConsole(dl);
+				if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
+					if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
+						if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
+							TileEntityBeltHub em = (TileEntityBeltHub)world.getBlockTileEntity(ex, ey, ez);
+							TileEntityBeltHub rec = (TileEntityBeltHub)world.getBlockTileEntity(rx, ry, rz);
+
+							//ReikaJavaLibrary.pConsole(rec+"\n"+em);
+							boolean src = rec.setSource(ex, ey, ez);
+							boolean tg = em.setTarget(rx, ry, rz);
+							//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
+							if (src && tg) {
+								ReikaJavaLibrary.pConsole("connected", Side.SERVER);
+								if (!ep.capabilities.isCreativeMode)
+									is.stackSize -= dl;
+								is.stackTagCompound = null;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
