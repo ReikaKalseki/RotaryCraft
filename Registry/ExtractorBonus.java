@@ -23,14 +23,14 @@ public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
-	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), ModList.INDUSTRIALCRAFT), //Nod to gregtech
+	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), ModList.IC2), //Nod to gregtech
 	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.ironoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.FERROUS), 0.25F),
 	NETHERGOLD(ExtractorModOres.getSolutionProduct(ModOreList.NETHERGOLD), ItemStacks.silverflakes, 0.125F),
 	NETHERIRON(ExtractorModOres.getSolutionProduct(ModOreList.NETHERIRON), ItemStacks.aluminumpowder, 0.125F),
-	SILVER(ExtractorModOres.getSolutionProduct(ModOreList.SILVER), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.01F, ModList.INDUSTRIALCRAFT),
-	PLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.PLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.0625F, ModList.INDUSTRIALCRAFT),
-	NETHERPLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.NETHERPLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.125F, ModList.INDUSTRIALCRAFT),
+	SILVER(ExtractorModOres.getSolutionProduct(ModOreList.SILVER), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.01F, ModList.IC2),
+	PLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.PLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.0625F, ModList.IC2),
+	NETHERPLATINUM(ExtractorModOres.getSolutionProduct(ModOreList.NETHERPLATINUM), ExtractorModOres.getFlakeProduct(ModOreList.IRIDIUM), 0.125F, ModList.IC2),
 	FERROUS(ExtractorModOres.getSolutionProduct(ModOreList.FERROUS), ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM), 0.5F), //Since GregTech does it
 	NETHERNICKEL(ExtractorModOres.getSolutionProduct(ModOreList.NETHERNICKEL), ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM), 0.5F),
 	SODALITE(ExtractorModOres.getSolutionProduct(ModOreList.SODALITE), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 1F),

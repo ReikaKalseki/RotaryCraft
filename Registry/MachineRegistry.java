@@ -230,41 +230,41 @@ public enum MachineRegistry {
 	LASERGUN(			"machine.lasergun",			BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
 	ITEMCANNON(			"machine.itemcannon",		BlockMIMachine.class,		TileEntityItemCannon.class,			15, "RenderItemCannon"),
 	LANDMINE(			"machine.landmine",			BlockMIMachine.class,		TileEntityLandmine.class,			16, "RenderLandmine"),
-	FRICTION(			"machine.friction",			BlockDMMachine.class,		TileEntityFurnaceHeater.class,		8, "RenderFriction"),
+	FRICTION(			"machine.friction",			BlockDMMachine.class,		TileEntityFurnaceHeater.class,		8, 	"RenderFriction"),
 	BLOCKCANNON(		"machine.blockcannon",		BlockMIMachine.class,		TileEntityBlockCannon.class,		17, "RenderCannon"),
 	BUCKETFILLER(		"machine.bucketfiller",		BlockIMachine.class,		TileEntityBucketFiller.class,		5),
 	MIRROR(				"machine.mirror",			BlockSolar.class,			TileEntityMirror.class,				0,	"RenderMirror"),
 	SOLARTOWER(			"machine.solartower",		BlockSolar.class,			TileEntitySolar.class,				1,	"RenderSolar"),
 	SPYCAM(				"machine.spycam",			BlockMIMachine.class,		TileEntitySpyCam.class,				18,	"RenderSpyCam"),
 	SELFDESTRUCT(		"machine.selfdestruct",		BlockMachine.class,			TileEntitySelfDestruct.class,		3),
-	COOLINGFIN(			"machine.coolingfin",		BlockDMMachine.class,		TileEntityCoolingFin.class,			9, "RenderFin"),
+	COOLINGFIN(			"machine.coolingfin",		BlockDMMachine.class,		TileEntityCoolingFin.class,			9, 	"RenderFin"),
 	WORKTABLE(			"machine.worktable",		BlockIMachine.class,		TileEntityWorktable.class,			6),
-	COMPRESSOR(			"machine.compressor", 		BlockModEngine.class,		TileEntityAirCompressor.class,		0, "RenderCompressor", ModList.BUILDCRAFTENERGY),
-	PNEUENGINE(			"machine.pneuengine",		BlockModEngine.class,		TileEntityPneumaticEngine.class,	1, "RenderPneumatic", ModList.BUILDCRAFTENERGY),
+	COMPRESSOR(			"machine.compressor", 		BlockModEngine.class,		TileEntityAirCompressor.class,		0, 	"RenderCompressor", ModList.BCENERGY),
+	PNEUENGINE(			"machine.pneuengine",		BlockModEngine.class,		TileEntityPneumaticEngine.class,	1, 	"RenderPneumatic", ModList.BCENERGY),
 	DISPLAY(			"machine.display",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"machine.lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"machine.emp",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
-	LINEBUILDER(		"machine.linebuilder",		BlockDMIMachine.class,		TileEntityLineBuilder.class,		7, "RenderLineBuilder"),
+	LINEBUILDER(		"machine.linebuilder",		BlockDMIMachine.class,		TileEntityLineBuilder.class,		7, 	"RenderLineBuilder"),
 	BEAMMIRROR(			"machine.beammirror",		BlockDMMachine.class,		TileEntityBeamMirror.class,			11, "RenderBeamMirror"),
-	MULTICLUTCH(		"machine.multiclutch",		BlockTrans.class,			TileEntityMultiClutch.class,		4, "RenderMultiClutch"),
+	MULTICLUTCH(		"machine.multiclutch",		BlockTrans.class,			TileEntityMultiClutch.class,		4, 	"RenderMultiClutch"),
 	TERRAFORMER(		"machine.terraformer",		BlockMachine.class,			TileEntityTerraformer.class,		6),
 	SORTING(			"machine.sorting",			BlockDMachine.class,		TileEntitySorting.class,			2),
-	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BUILDCRAFTENERGY),
+	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BCENERGY),
 	ARROWGUN(			"machine.arrowgun",			BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"machine.frictionboiler", 	BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", ModList.RAILCRAFT),
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"machine.fertilizer",		BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
-	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, "RenderGenerator", ModList.MEKANISM),
-	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, "RenderElecMotor", ModList.MEKANISM),
-	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, "PipeRenderer"),
-	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, "PipeRenderer"),
-	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, "PipeRenderer"),
+	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, 	"RenderGenerator", ModList.MEKANISM),
+	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, 	"RenderElecMotor", ModList.MEKANISM),
+	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, 	"PipeRenderer"),
+	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, 	"PipeRenderer"),
+	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, 	"PipeRenderer"),
 	AGGREGATOR(			"machine.aggregator",		BlockMMachine.class,		TileEntityAggregator.class,			16, "RenderAggregator"),
 	AIRGUN(				"machine.airgun",			BlockDMMachine.class,		TileEntityAirGun.class,				12, "RenderAirGun"),
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
-	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, "RenderFuelEngine", ModList.BUILDCRAFTENERGY),
-	FILLINGSTATION(		"machine.fillingstation",	BlockMMachine.class,		TileEntityFillingStation.class,		17, "RenderFillingStation"),
+	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, 	"RenderFuelEngine", ModList.BCENERGY),
+	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
 	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14);
 
 	private String name;
@@ -332,17 +332,39 @@ public enum MachineRegistry {
 	public String getRenderer() {
 		if (!hasRender)
 			throw new RuntimeException("Machine "+this.getName()+" has no render to call!");
-		return this.getRenderPackage()+renderClass;
+		return this.getRenderPackage()+"."+renderClass;
 	}
 
 	public String getRenderPackage() {
 		if (this.hasPrerequisite() || BlockModEngine.class.isAssignableFrom(blockClass)) {
-			return "Reika.RotaryCraft.ModInterface.";
+			return "Reika.RotaryCraft.ModInterface";
 		}
-		switch(this) {
-		default:
-			return "Reika.RotaryCraft.Renders.";
-		}
+
+		if (blockClass == BlockTrans.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockEngine.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockSolar.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockFlywheel.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockGearbox.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockShaft.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockAdvGear.class)
+			return "Reika.RotaryCraft.Renders";
+		if (blockClass == BlockPiping.class)
+			return "Reika.RotaryCraft.Renders";
+
+		String base = "Reika.RotaryCraft.Renders";
+		String app = ".";
+		app += this.getBlockType();
+		return base+app;
+	}
+
+	public String getBlockType() {
+		return blockClass.getSimpleName().replaceAll("Block", "").replaceAll("Machine", "");
 	}
 
 	public int getBlockOffset() {

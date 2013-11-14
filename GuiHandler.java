@@ -19,7 +19,6 @@ import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Resources.GuiGuide;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
@@ -297,8 +296,8 @@ public class GuiHandler implements IGuiHandler {
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
 		if (gr == GuiRegistry.HANDBOOK)
-			//return new GuiHandbook(player, world, 0, 0);
-			return new GuiGuide();
+			return new GuiHandbook(player, world, 0, 0);
+		//return new GuiGuide();
 		if (gr == GuiRegistry.LOADEDHANDBOOK) {
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 			return new GuiHandbook(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));

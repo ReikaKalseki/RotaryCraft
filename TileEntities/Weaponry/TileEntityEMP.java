@@ -64,12 +64,12 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry(TileEntitySign.class);
 		addEntry(TileEntitySkull.class);
 
-		addEntry("buildcraft.factory.TileTank", ModList.BUILDCRAFTFACTORY);
-		addEntry("buildcraft.transport.PipeTransport", ModList.BUILDCRAFTTRANSPORT);
+		addEntry("buildcraft.factory.TileTank", ModList.BCFACTORY);
+		addEntry("buildcraft.transport.PipeTransport", ModList.BCTRANSPORT);
 
 		addEntry("thermalexpansion.block.conduit.TileConduitRoot", ModList.THERMALEXPANSION);
 
-		addEntry("ic2.core.block.wiring.TileEntityCable", ModList.INDUSTRIALCRAFT);
+		addEntry("ic2.core.block.wiring.TileEntityCable", ModList.IC2);
 
 		addEntry("codechicken.enderstorage.common.TileFrequencyOwner", ModList.ENDERSTORAGE);
 
@@ -103,7 +103,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("forestry.aboriculture.gadgets.TileTreeContainer", ModList.FORESTRY);
 		addEntry("forestry.factory.gadgets.TileWorktable", ModList.FORESTRY);
 
-		addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRY);
+		addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRYKINGDOMS);
 
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntity555", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityBreaker", ModList.EXPANDEDREDSTONE);

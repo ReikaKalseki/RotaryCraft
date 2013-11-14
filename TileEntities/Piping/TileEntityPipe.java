@@ -55,7 +55,7 @@ public class TileEntityPipe extends TileEntityPiping {
 		if (fluidPressure < 0)
 			fluidPressure = 0;
 
-		if (ModList.BUILDCRAFTFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
+		if (ModList.BCFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
 			if (this.contains(FluidRegistry.getFluid("uranium hexafluoride")) || this.contains(FluidRegistry.getFluid("hydrofluoric acid"))) {
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
 				for (int i = 0; i < 6; i++) {

@@ -71,7 +71,7 @@ public final class OreForcer {
 		if (!api.isReikasMod())
 			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
-		case APPLIEDENERGISTICS:
+		case APPENG:
 			intercraftQuartz();
 			break;
 		case FORESTRY:
@@ -102,7 +102,7 @@ public final class OreForcer {
 			break;
 		case RAILCRAFT:
 			intercraftFirestone();
-		case INDUSTRIALCRAFT:
+		case IC2:
 			convertUranium();
 		}
 	}
