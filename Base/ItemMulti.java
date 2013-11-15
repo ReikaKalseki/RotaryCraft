@@ -103,8 +103,8 @@ public class ItemMulti extends ItemBasic {
 								//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
 								if (!ep.capabilities.isCreativeMode)
 									is.stackSize -= dl;
-								is.stackTagCompound = null;
 							}
+							is.stackTagCompound = null;
 						}
 					}
 				}

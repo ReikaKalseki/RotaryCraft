@@ -105,14 +105,14 @@ public class RenderBelt extends RotaryTERenderer
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((TileEntityBeltHub)tile).shouldRenderBelt())
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
-			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);
+			this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	private void drawBelt2(TileEntityBeltHub tile, double par2, double par4, double par6, float par8) {
 		int meta = tile.getBlockMetadata();
-		boolean vertical = meta == 4 || meta == 5;
+		boolean side = meta%2 == 0;
 		ForgeDirection dir = tile.getBeltDirection();
 		int dist = tile.getDistanceToTarget();
 		GL11.glTranslated(par2, par4, par6);
@@ -122,7 +122,256 @@ public class RenderBelt extends RotaryTERenderer
 		v5.startDrawingQuads();
 		v5.setColorOpaque(192, 120, 70);
 
+		//Top
+		if (dir != ForgeDirection.UP) {
+			v5.addVertex(0.375, 0.875, 0.375);
+			v5.addVertex(0.625, 0.875, 0.375);
+			v5.addVertex(0.625, 0.875, 0.625);
+			v5.addVertex(0.375, 0.875, 0.625);
+		}
 
+		//Bottom
+		if (dir != ForgeDirection.DOWN) {
+			v5.addVertex(0.375, 0.125, 0.375);
+			v5.addVertex(0.625, 0.125, 0.375);
+			v5.addVertex(0.625, 0.125, 0.625);
+			v5.addVertex(0.375, 0.125, 0.625);
+		}
+
+		//East
+		if (dir != ForgeDirection.EAST) {
+			v5.addVertex(0.875, 0.375, 0.375);
+			v5.addVertex(0.875, 0.625, 0.375);
+			v5.addVertex(0.875, 0.625, 0.625);
+			v5.addVertex(0.875, 0.375, 0.625);
+		}
+
+		//West
+		if (dir != ForgeDirection.WEST) {
+			v5.addVertex(0.125, 0.375, 0.375);
+			v5.addVertex(0.125, 0.625, 0.375);
+			v5.addVertex(0.125, 0.625, 0.625);
+			v5.addVertex(0.125, 0.375, 0.625);
+		}
+
+		//North
+		if (dir != ForgeDirection.NORTH) {
+			v5.addVertex(0.375, 0.375, 0.125);
+			v5.addVertex(0.375, 0.625, 0.125);
+			v5.addVertex(0.625, 0.625, 0.125);
+			v5.addVertex(0.625, 0.375, 0.125);
+		}
+
+		//South
+		if (dir != ForgeDirection.SOUTH) {
+			v5.addVertex(0.375, 0.375, 0.875);
+			v5.addVertex(0.375, 0.625, 0.875);
+			v5.addVertex(0.625, 0.625, 0.875);
+			v5.addVertex(0.625, 0.375, 0.875);
+		}
+
+		if (dir == ForgeDirection.EAST) {
+
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.125, 0.625, 0.625);
+				v5.addVertex(0.375, 0.875, 0.625);
+				v5.addVertex(0.375, 0.875, 0.375);
+				v5.addVertex(0.125, 0.625, 0.375);
+
+				v5.addVertex(0.125, 0.375, 0.625);
+				v5.addVertex(0.375, 0.125, 0.625);
+				v5.addVertex(0.375, 0.125, 0.375);
+				v5.addVertex(0.125, 0.375, 0.375);
+
+				//Other end
+			}
+
+			if (meta == 4 || meta == 5) {
+				v5.addVertex(0.375, 0.375, 0.875);
+				v5.addVertex(0.625+dist, 0.375, 0.875);
+				v5.addVertex(0.625+dist, 0.625, 0.875);
+				v5.addVertex(0.375, 0.625, 0.875);
+
+				v5.addVertex(0.375, 0.375, 0.125);
+				v5.addVertex(0.625+dist, 0.375, 0.125);
+				v5.addVertex(0.625+dist, 0.625, 0.125);
+				v5.addVertex(0.375, 0.625, 0.125);
+			}
+		}
+		if (dir == ForgeDirection.WEST) {
+
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.875, 0.625, 0.625);
+				v5.addVertex(0.625, 0.875, 0.625);
+				v5.addVertex(0.625, 0.875, 0.375);
+				v5.addVertex(0.875, 0.625, 0.375);
+
+				v5.addVertex(0.875, 0.375, 0.625);
+				v5.addVertex(0.625, 0.125, 0.625);
+				v5.addVertex(0.625, 0.125, 0.375);
+				v5.addVertex(0.875, 0.375, 0.375);
+
+				//Other end
+			}
+		}
+		else if (dir == ForgeDirection.UP) {
+		}
+		else if (dir == ForgeDirection.DOWN) {
+		}
+		else if (dir == ForgeDirection.SOUTH) {
+		}
+		else if (dir == ForgeDirection.NORTH) {
+		}
+
+		switch(dir) {
+		case EAST:
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.375, 0.875, 0.375);
+				v5.addVertex(0.625+dist, 0.875, 0.375);
+				v5.addVertex(0.625+dist, 0.875, 0.625);
+				v5.addVertex(0.375, 0.875, 0.625);
+
+				v5.addVertex(0.375, 0.125, 0.375);
+				v5.addVertex(0.625+dist, 0.125, 0.375);
+				v5.addVertex(0.625+dist, 0.125, 0.625);
+				v5.addVertex(0.375, 0.125, 0.625);
+			}
+
+			if (meta == 4 || meta == 5) {
+				v5.addVertex(0.375, 0.375, 0.875);
+				v5.addVertex(0.625+dist, 0.375, 0.875);
+				v5.addVertex(0.625+dist, 0.625, 0.875);
+				v5.addVertex(0.375, 0.625, 0.875);
+
+				v5.addVertex(0.375, 0.375, 0.125);
+				v5.addVertex(0.625+dist, 0.375, 0.125);
+				v5.addVertex(0.625+dist, 0.625, 0.125);
+				v5.addVertex(0.375, 0.625, 0.125);
+			}
+			break;
+		case WEST:
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.375-dist, 0.875, 0.375);
+				v5.addVertex(0.625, 0.875, 0.375);
+				v5.addVertex(0.625, 0.875, 0.625);
+				v5.addVertex(0.375-dist, 0.875, 0.625);
+
+				v5.addVertex(0.375-dist, 0.125, 0.375);
+				v5.addVertex(0.625, 0.125, 0.375);
+				v5.addVertex(0.625, 0.125, 0.625);
+				v5.addVertex(0.375-dist, 0.125, 0.625);
+			}
+			if (meta == 4 || meta == 5) {
+				v5.addVertex(0.375-dist, 0.375, 0.875);
+				v5.addVertex(0.625, 0.375, 0.875);
+				v5.addVertex(0.625, 0.625, 0.875);
+				v5.addVertex(0.375-dist, 0.625, 0.875);
+
+				v5.addVertex(0.375-dist, 0.375, 0.125);
+				v5.addVertex(0.625, 0.375, 0.125);
+				v5.addVertex(0.625, 0.625, 0.125);
+				v5.addVertex(0.375-dist, 0.625, 0.125);
+			}
+			break;
+		case NORTH:
+			if (meta == 0 || meta == 1) {
+				v5.addVertex(0.375, 0.875, 0.375-dist);
+				v5.addVertex(0.625, 0.875, 0.375-dist);
+				v5.addVertex(0.625, 0.875, 0.625);
+				v5.addVertex(0.375, 0.875, 0.625);
+
+				v5.addVertex(0.375, 0.125, 0.375-dist);
+				v5.addVertex(0.625, 0.125, 0.375-dist);
+				v5.addVertex(0.625, 0.125, 0.625);
+				v5.addVertex(0.375, 0.125, 0.625);
+			}
+			if (meta == 4 || meta == 5) {
+				v5.addVertex(0.875, 0.375, 0.375);
+				v5.addVertex(0.875, 0.375, 0.625-dist);
+				v5.addVertex(0.875, 0.625, 0.625-dist);
+				v5.addVertex(0.875, 0.625, 0.375);
+
+				v5.addVertex(0.125, 0.375, 0.375);
+				v5.addVertex(0.125, 0.375, 0.625-dist);
+				v5.addVertex(0.125, 0.625, 0.625-dist);
+				v5.addVertex(0.125, 0.625, 0.375);
+			}
+			break;
+		case SOUTH:
+			if (meta == 0 || meta == 1) {
+				v5.addVertex(0.375, 0.875, 0.375+dist);
+				v5.addVertex(0.625, 0.875, 0.375+dist);
+				v5.addVertex(0.625, 0.875, 0.625);
+				v5.addVertex(0.375, 0.875, 0.625);
+
+				v5.addVertex(0.375, 0.125, 0.375+dist);
+				v5.addVertex(0.625, 0.125, 0.375+dist);
+				v5.addVertex(0.625, 0.125, 0.625);
+				v5.addVertex(0.375, 0.125, 0.625);
+			}
+			if (meta == 4 || meta == 5) {
+				v5.addVertex(0.875, 0.375, 0.375+dist);
+				v5.addVertex(0.875, 0.375, 0.625);
+				v5.addVertex(0.875, 0.625, 0.625);
+				v5.addVertex(0.875, 0.625, 0.375+dist);
+
+				v5.addVertex(0.125, 0.375, 0.375+dist);
+				v5.addVertex(0.125, 0.375, 0.625);
+				v5.addVertex(0.125, 0.625, 0.625);
+				v5.addVertex(0.125, 0.625, 0.375+dist);
+			}
+			break;
+		case UP:
+			if (meta == 0 || meta == 1) {
+				v5.addVertex(0.375, 0.375, 0.125);
+				v5.addVertex(0.375, 0.625+dist, 0.125);
+				v5.addVertex(0.625, 0.625+dist, 0.125);
+				v5.addVertex(0.625, 0.375, 0.125);
+
+				v5.addVertex(0.375, 0.375, 0.875);
+				v5.addVertex(0.375, 0.625+dist, 0.875);
+				v5.addVertex(0.625, 0.625+dist, 0.875);
+				v5.addVertex(0.625, 0.375, 0.875);
+			}
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.125, 0.375, 0.375);
+				v5.addVertex(0.125, 0.625+dist, 0.375);
+				v5.addVertex(0.125, 0.625+dist, 0.625);
+				v5.addVertex(0.125, 0.375, 0.625);
+
+				v5.addVertex(0.875, 0.375, 0.375);
+				v5.addVertex(0.875, 0.625+dist, 0.375);
+				v5.addVertex(0.875, 0.625+dist, 0.625);
+				v5.addVertex(0.875, 0.375, 0.625);
+			}
+			break;
+		case DOWN:
+			if (meta == 0 || meta == 1) {
+				v5.addVertex(0.375, 0.375-dist, 0.125);
+				v5.addVertex(0.375, 0.625, 0.125);
+				v5.addVertex(0.625, 0.625, 0.125);
+				v5.addVertex(0.625, 0.375-dist, 0.125);
+
+				v5.addVertex(0.375, 0.375-dist, 0.875);
+				v5.addVertex(0.375, 0.625, 0.875);
+				v5.addVertex(0.625, 0.625, 0.875);
+				v5.addVertex(0.625, 0.375-dist, 0.875);
+			}
+			if (meta == 2 || meta == 3) {
+				v5.addVertex(0.125, 0.375-dist, 0.375);
+				v5.addVertex(0.125, 0.625, 0.375);
+				v5.addVertex(0.125, 0.625, 0.625);
+				v5.addVertex(0.125, 0.375-dist, 0.625);
+
+				v5.addVertex(0.875, 0.375-dist, 0.375);
+				v5.addVertex(0.875, 0.625, 0.375);
+				v5.addVertex(0.875, 0.625, 0.625);
+				v5.addVertex(0.875, 0.375-dist, 0.625);
+			}
+			break;
+		default:
+			break;
+		}
 
 		v5.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -148,6 +397,11 @@ public class RenderBelt extends RotaryTERenderer
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
 		float dv = ico.getMaxV();
+
+		v5.addVertexWithUV(0.125, 0.375, 0.375, u, v);
+		v5.addVertexWithUV(0.125, 0.625, 0.375, du, v);
+		v5.addVertexWithUV(0.125, 0.625, 0.625, du, dv);
+		v5.addVertexWithUV(0.125, 0.375, 0.625, u, dv);
 
 		switch(dir) {
 		case EAST:

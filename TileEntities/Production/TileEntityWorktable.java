@@ -53,13 +53,16 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	private void chargeTools() {
 		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getShiftedID(), inventory);
+		if (coilslot == -1)
+			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getShiftedID(), inventory);
 		int toolid = this.getTool();
 		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inventory);
 		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
+			int coilid = inventory[coilslot].itemID;
 			int toolmeta = inventory[toolslot].getItemDamage();
 			int coilmeta = inventory[coilslot].getItemDamage();
 			ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
-			ItemStack newcoil = new ItemStack(ItemRegistry.SPRING.getShiftedID(), 1, toolmeta);
+			ItemStack newcoil = new ItemStack(coilid, 1, toolmeta);
 			inventory[toolslot] = null;
 			inventory[coilslot] = null;
 			inventory[9] = newtool;

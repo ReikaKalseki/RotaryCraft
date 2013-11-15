@@ -58,7 +58,8 @@ public enum ConfigRegistry implements ConfigList {
 	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false),
 	RAILGUNDAMAGE("Railgun Block Damage", true),
 	GRAVELPLAYER("Allow Gravel Gun PvP", true),
-	CHESTGEN("Chest Generation Tier", 4);
+	CHESTGEN("Chest Generation Tier", 4),
+	HOSTILECRASH("Crash on hostile interference from other mods", true);
 
 	private String label;
 	private boolean defaultState;

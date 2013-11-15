@@ -51,6 +51,13 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			writez = Integer.MIN_VALUE;
 			this.getPower(false, true);
 		}
+
+		if (omega > 0)
+			this.playSound(world, x, y, z);
+	}
+
+	private void playSound(World world, int x, int y, int z) {
+
 	}
 
 	public void reset() {
@@ -121,7 +128,9 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			return MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]) == MachineRegistry.BELT;
 		}
 		else {
-			//return MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]) == MachineRegistry.BELT;
+			if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
+				//return MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]) == MachineRegistry.BELT;
+				return true;
 			return false;
 		}
 	}
@@ -130,7 +139,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
-			return false;
+			;//return false;
 		target[0] = x;
 		target[1] = y;
 		target[2] = z;
@@ -141,7 +150,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
-			return false;
+			;//return false;
 		source[0] = x;
 		source[1] = y;
 		source[2] = z;
@@ -321,7 +330,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
+	public AxisAlignedBB getRenderBoundingBox() {/*
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord);
 		ForgeDirection dir = this.getBeltDirection();
 		int a = this.getDistanceToTarget();
@@ -330,8 +339,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		box.maxY += a*dir.offsetY;
 		box.maxY -= a*dir.offsetY;
 		box.maxZ += a*dir.offsetZ;
-		box.maxZ -= a*dir.offsetZ;
-		return AxisAlignedBB.getAABBPool().getAABB(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+		box.maxZ -= a*dir.offsetZ;*/
+		//return AxisAlignedBB.getAABBPool().getAABB(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+		//return INFINITE_EXTENT_AABB;
+		int a = this.getDistanceToTarget();
+		return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(a, a, a);
 	}
 
 }
