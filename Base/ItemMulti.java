@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -97,11 +96,11 @@ public class ItemMulti extends ItemBasic {
 							TileEntityBeltHub rec = (TileEntityBeltHub)world.getBlockTileEntity(rx, ry, rz);
 
 							//ReikaJavaLibrary.pConsole(rec+"\n"+em);
-							boolean src = rec.setSource(ex, ey, ez);
-							boolean tg = em.setTarget(rx, ry, rz);
+							boolean src = em.setSource(rx, ry, rz);
+							boolean tg = rec.setTarget(ex, ey, ez);
 							//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
 							if (src && tg) {
-								ReikaJavaLibrary.pConsole("connected", Side.SERVER);
+								//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
 								if (!ep.capabilities.isCreativeMode)
 									is.stackSize -= dl;
 								is.stackTagCompound = null;
@@ -110,6 +109,8 @@ public class ItemMulti extends ItemBasic {
 					}
 				}
 			}
+			else
+				is.stackTagCompound = null;
 		}
 		return false;
 	}
@@ -152,6 +153,7 @@ public class ItemMulti extends ItemBasic {
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
+		par3List.add("Additional Data Present.");
 		if (is.stackTagCompound.hasKey("magnet")) {
 			if (is.stackTagCompound.getInteger("magnet") >= 1000000)
 				par3List.add("Magnetized to "+String.format("%.3f", is.stackTagCompound.getInteger("magnet")/1000000D)+" T");

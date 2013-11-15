@@ -57,7 +57,6 @@ public class RenderFan extends RotaryTERenderer
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		if (tile.isInWorld()) {
-
 			switch(tile.getBlockMetadata()) {
 			case 0:
 				var11 = 0;

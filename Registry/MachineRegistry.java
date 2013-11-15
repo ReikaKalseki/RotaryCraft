@@ -265,7 +265,7 @@ public enum MachineRegistry {
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, 	"RenderFuelEngine", ModList.BCENERGY),
 	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
-	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14);
+	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt");
 
 	private String name;
 	private Class te;

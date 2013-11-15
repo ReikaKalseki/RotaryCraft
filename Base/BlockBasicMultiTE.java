@@ -65,6 +65,7 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -549,6 +550,15 @@ public abstract class BlockBasicMultiTE extends Block {
 			for (int i = 0; i < num; i++) {
 				ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.goldcoil.copy());
 			}
+		}
+		if (te instanceof TileEntityBeltHub) {
+			TileEntityBeltHub tile = (TileEntityBeltHub)te;
+			int num = tile.getDistanceToTarget();
+			num = 1;
+			for (int i = 0; i < num; i++) {
+				ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.belt.copy());
+			}
+			tile.resetOther();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

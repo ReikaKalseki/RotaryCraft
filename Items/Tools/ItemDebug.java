@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
@@ -67,6 +68,12 @@ public class ItemDebug extends ItemRotaryTool {
 				if (player.isSneaking()) {
 					tile.addTemperature(tile.MAXTEMP-tile.getTemperature());
 				}
+			}
+		}
+		if (m == MachineRegistry.BELT) {
+			TileEntityBeltHub tile = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+			if (tile != null) {
+				ReikaChatHelper.write(tile.getDistanceToTarget()+" @ "+tile.getBeltDirection());
 			}
 		}
 		if (m == MachineRegistry.HOSE) {

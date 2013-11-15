@@ -10,20 +10,21 @@
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator {
+public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider {
 
 	private boolean isEmitting;
 
@@ -32,12 +33,22 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
 		//isEmitting = true;
 		if (isEmitting) {
+			writex = readx;
+			writey = ready;
+			writez = readz;
+			readx = Integer.MIN_VALUE;
+			ready = Integer.MIN_VALUE;
+			readz = Integer.MIN_VALUE;
 			this.copyPower();
 		}
 		else {
+			writex = Integer.MIN_VALUE;
+			writey = Integer.MIN_VALUE;
+			writez = Integer.MIN_VALUE;
 			this.getPower(false, true);
 		}
 	}
@@ -45,6 +56,23 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	public void reset() {
 		source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 		target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+	}
+
+	public void resetOther() {
+		if (isEmitting) {
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]);
+			if (m == MachineRegistry.BELT) {
+				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getBlockTileEntity(target[0], target[1], target[2]);
+				te.reset();
+			}
+		}
+		else {
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
+			if (m == MachineRegistry.BELT) {
+				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getBlockTileEntity(source[0], source[1], source[2]);
+				te.reset();
+			}
+		}
 	}
 
 	public boolean canConnect(int x, int y, int z) {
@@ -80,7 +108,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			int yi = yCoord+dir.offsetY*i;
 			int zi = zCoord+dir.offsetZ*i;
 			int id = worldObj.getBlockId(xi, yi, zi);
-			ReikaJavaLibrary.pConsole(xi+", "+yi+", "+zi+" -> "+id, Side.SERVER);
+			//ReikaJavaLibrary.pConsole(xi+", "+yi+", "+zi+" -> "+id, Side.SERVER);
 			if (!ReikaWorldHelper.softBlocks(worldObj, xi, yi, zi)) {
 				return false;
 			}
@@ -101,6 +129,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	public boolean setTarget(int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
+		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
+			return false;
 		target[0] = x;
 		target[1] = y;
 		target[2] = z;
@@ -110,10 +140,18 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	public boolean setSource(int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
+		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
+			return false;
 		source[0] = x;
 		source[1] = y;
 		source[2] = z;
 		return true;
+	}
+
+	public boolean setEmitting(boolean emit) {
+		boolean flag = isEmitting;
+		isEmitting = emit;
+		return flag;
 	}
 
 	public int getMaxTorque() {
@@ -134,11 +172,66 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	private void copyPower() {
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
+		//ReikaJavaLibrary.pConsole(Arrays.toString(source));
 		if (m == MachineRegistry.BELT) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getBlockTileEntity(source[0], source[1], source[2]);
 			omega = this.getSlipOmega(tile.omega);
 			torque = Math.min(this.getMaxTorque(), tile.torque);
 			power = tile.power;
+		}
+		else {
+			if (omega > 0)
+				omega--;
+			else
+				torque = 0;
+			power = omega*torque;
+		}
+	}
+
+	public ForgeDirection getBeltDirection() {
+		int dx = 0;
+		int dy = 0;
+		int dz = 0;
+
+		if (isEmitting) {
+			dx = xCoord-source[0];
+			dy = yCoord-source[1];
+			dz = zCoord-source[2];
+		}
+		else {
+			dx = xCoord-target[0];
+			dy = yCoord-target[1];
+			dz = zCoord-target[2];
+		}
+
+		ForgeDirection dir = ForgeDirection.UNKNOWN;
+		if (dx < 0)
+			dir = ForgeDirection.EAST;
+		if (dx > 0)
+			dir = ForgeDirection.WEST;
+		if (dy < 0)
+			dir = ForgeDirection.UP;
+		if (dy > 0)
+			dir = ForgeDirection.DOWN;
+		if (dz < 0)
+			dir = ForgeDirection.SOUTH;
+		if (dz > 0)
+			dir = ForgeDirection.NORTH;
+		return dir;
+	}
+
+	public int getDistanceToTarget() {
+		if (isEmitting) {
+			int dx = xCoord-source[0];
+			int dy = yCoord-source[1];
+			int dz = zCoord-source[2];
+			return Math.abs(dx+dy+dz);
+		}
+		else {
+			int dx = xCoord-target[0];
+			int dy = yCoord-target[1];
+			int dz = zCoord-target[2];
+			return Math.abs(dx+dy+dz);
 		}
 	}
 
@@ -173,7 +266,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -221,6 +318,20 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 		source = NBT.getIntArray("src");
 		target = NBT.getIntArray("tg");
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord);
+		ForgeDirection dir = this.getBeltDirection();
+		int a = this.getDistanceToTarget();
+		box.maxX += a*dir.offsetX;
+		box.maxX -= a*dir.offsetX;
+		box.maxY += a*dir.offsetY;
+		box.maxY -= a*dir.offsetY;
+		box.maxZ += a*dir.offsetZ;
+		box.maxZ -= a*dir.offsetZ;
+		return AxisAlignedBB.getAABBPool().getAABB(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
 	}
 
 }

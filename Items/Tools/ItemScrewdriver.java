@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Base.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -183,6 +184,15 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					else
 						clicked.filling = true;
 					return true;
+				}
+			}
+			if (m == MachineRegistry.BELT) {
+				if (ep.isSneaking()) {
+					TileEntityBeltHub clicked = (TileEntityBeltHub)te;
+					if (clicked != null) {
+						clicked.setEmitting(!clicked.isEmitting());
+						return true;
+					}
 				}
 			}
 			if (m == MachineRegistry.GPR) {
