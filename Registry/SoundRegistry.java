@@ -55,7 +55,9 @@ public enum SoundRegistry implements SoundList {
 	PNEUMATIC("#pneu"),
 	LINEBUILDER("linebuild"),
 	JETPACK("pack"),
-	DIESEL("#diesel");
+	DIESEL("#diesel"),
+	BELT("#belt"),
+	FAN("#fan");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
@@ -99,20 +101,20 @@ public enum SoundRegistry implements SoundList {
 			return this.getSoundVolume();
 	}
 
-	public static void playSound(SoundRegistry s, World world, double x, double y, double z, float vol, float pitch) {
+	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, s.getPlayableReference(), x, y, z, vol*s.getModVolume(), pitch);
+		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this.getPlayableReference(), x, y, z, vol*this.getModVolume(), pitch);
 	}
 
-	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z, float vol, float pitch) {
-		playSound(s, world, x+0.5, y+0.5, z+0.5, vol, pitch);
+	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
+		this.playSound(world, x+0.5, y+0.5, z+0.5, vol, pitch);
 	}
 
-	public static void playSoundAtBlock(SoundRegistry s, World world, int x, int y, int z) {
-		playSound(s, world, x+0.5, y+0.5, z+0.5, 1, 1);
+	public void playSoundAtBlock(World world, int x, int y, int z) {
+		this.playSound(world, x+0.5, y+0.5, z+0.5, 1, 1);
 	}
 
 	public String getName() {

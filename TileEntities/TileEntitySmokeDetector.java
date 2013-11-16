@@ -62,7 +62,7 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 			soundDelay = -1;
 		if (tickcount >= soundDelay && soundDelay != -1) {
 			tickcount = 0;
-			SoundRegistry.playSoundAtBlock(SoundRegistry.SMOKE, world, x, y, z, 0.1F, 1);
+			SoundRegistry.SMOKE.playSoundAtBlock(world, x, y, z, 0.1F, 1);
 		}
 	}
 	/*

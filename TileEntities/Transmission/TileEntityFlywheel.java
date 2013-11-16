@@ -144,7 +144,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		if (soundtick < -3F/(pitch*pitch)+69/(pitch))
 			return;
 		soundtick = 0;
-		SoundRegistry.playSoundAtBlock(SoundRegistry.FLYWHEEL, worldObj, xCoord, yCoord, zCoord, 1, pitch);
+		SoundRegistry.FLYWHEEL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, pitch);
 	}
 
 	public void getType(int meta) {

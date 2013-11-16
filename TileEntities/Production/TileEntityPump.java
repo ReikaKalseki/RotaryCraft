@@ -101,7 +101,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 		if (power > MINPOWER && soundtick >= 100) {
 			soundtick = 0;
-			SoundRegistry.playSoundAtBlock(SoundRegistry.PUMP, world, x, y, z, 0.5F, 1);
+			SoundRegistry.PUMP.playSoundAtBlock(world, x, y, z, 0.5F, 1);
 		}
 		if (power > MINPOWER)
 			this.suckUpMobs(world, x, y, z);

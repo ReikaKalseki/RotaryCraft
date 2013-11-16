@@ -153,7 +153,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 			if (type == Tier.HIGH)
 				m = 0.572F;
 			if (tickcount >= EngineType.DC.getSoundLength(0, pit*m)) {
-				SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.36F, pit);
+				SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.36F, pit);
 				tickcount = 0;
 			}
 			current -= type.inputCurrent;

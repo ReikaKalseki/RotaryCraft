@@ -113,7 +113,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
 			this.fail(worldObj, xCoord, yCoord, zCoord, true);
 		}
-		else if (ReikaEngLibrary.mat_twistfailure(torque, 0.0625, type.getShearStrength())) {
+		else if (ReikaEngLibrary.mat_twistfailure(torque, 0.0625, type.getShearStrength()/16D)) {
 			this.fail(worldObj, xCoord, yCoord, zCoord, false);
 		}
 	}

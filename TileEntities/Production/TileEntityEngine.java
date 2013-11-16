@@ -1121,7 +1121,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		soundtick = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
 		if (type.electricNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.ELECTRIC, world, x, y, z, 0.125F*volume, 1F*pitchMultiplier);
+			SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.125F*volume, 1F*pitchMultiplier);
 		if (type.turbineNoise()) {
 			float pitch = 1F;
 			if (type.jetNoise()) {
@@ -1131,18 +1131,18 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				volume *= 0.125F;
 			}
 			if (type.jetNoise())
-				SoundRegistry.playSoundAtBlock(SoundRegistry.JET, world, x, y, z, volume, pitch*pitchMultiplier);
+				SoundRegistry.JET.playSoundAtBlock(world, x, y, z, volume, pitch*pitchMultiplier);
 			else
-				SoundRegistry.playSoundAtBlock(SoundRegistry.MICRO, world, x, y, z, volume, pitch*pitchMultiplier);
+				SoundRegistry.MICRO.playSoundAtBlock(world, x, y, z, volume, pitch*pitchMultiplier);
 		}
 		if (type.steamNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.STEAM, world, x, y, z, 0.7F*volume, 1F*pitchMultiplier);
+			SoundRegistry.STEAM.playSoundAtBlock(world, x, y, z, 0.7F*volume, 1F*pitchMultiplier);
 		if (type.carNoise())
-			SoundRegistry.playSoundAtBlock(SoundRegistry.CAR, world, x, y, z, 0.33F*volume, 0.9F*pitchMultiplier);
+			SoundRegistry.CAR.playSoundAtBlock(world, x, y, z, 0.33F*volume, 0.9F*pitchMultiplier);
 		if (type.waterNoise() && (this.isFrontOfArray() || !this.isPartOfArray()))
-			SoundRegistry.playSoundAtBlock(SoundRegistry.HYDRO, world, x, y, z, 1F*volume, 0.9F*pitchMultiplier);
+			SoundRegistry.HYDRO.playSoundAtBlock(world, x, y, z, 1F*volume, 0.9F*pitchMultiplier);
 		if (type.windNoise()) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.WIND, world, x, y, z, 1.1F*volume, 1F*pitchMultiplier);
+			SoundRegistry.WIND.playSoundAtBlock(world, x, y, z, 1.1F*volume, 1F*pitchMultiplier);
 		}
 	}
 

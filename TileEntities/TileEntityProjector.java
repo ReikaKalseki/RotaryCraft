@@ -91,7 +91,7 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			slides[i] = slides[i+1];
 		}
 		slides[slides.length-1] = active;
-		SoundRegistry.playSoundAtBlock(SoundRegistry.PROJECTOR, worldObj, xCoord, yCoord, zCoord, 1, 1);
+		SoundRegistry.PROJECTOR.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1);
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

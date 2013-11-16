@@ -281,7 +281,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (this.canSmelt()) {
 			if (soundtick >= 18 && temperature > reqtemp && reqtemp != -1) {
 				soundtick = 0;
-				SoundRegistry.playSoundAtBlock(SoundRegistry.PULSEJET, world, x, y, z, 1, 1);
+				SoundRegistry.PULSEJET.playSoundAtBlock(world, x, y, z, 1, 1);
 			}
 			if (!flag2)
 				this.getFuel(world, x, y, z, meta);

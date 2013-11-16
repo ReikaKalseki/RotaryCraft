@@ -74,7 +74,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private void playSound(World world, int x, int y, int z) {
 		int p = (int)(ReikaMathLibrary.logbase(omega, 2)/8);
-		SoundRegistry.playSoundAtBlock(SoundRegistry.AIRCOMP, world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
+		SoundRegistry.AIRCOMP.playSoundAtBlock(world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
 	}
 
 	private float getSoundVolume(World world, int x, int y, int z) {

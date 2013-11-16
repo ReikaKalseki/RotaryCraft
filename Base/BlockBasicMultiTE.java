@@ -553,10 +553,14 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityBeltHub) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)te;
-			int num = tile.getDistanceToTarget();
-			num = 1;
-			for (int i = 0; i < num; i++) {
-				ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.belt.copy());
+			if (!world.isRemote) {
+				int num = tile.getDistanceToTarget()-1;
+				num = Math.min(num, ItemStacks.belt.getMaxStackSize());
+				if (!tile.shouldRenderBelt())
+					num = 0;
+				for (int i = 0; i < num; i++) {
+					ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.belt.copy());
+				}
 			}
 			tile.resetOther();
 		}

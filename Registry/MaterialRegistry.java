@@ -138,7 +138,7 @@ public enum MaterialRegistry {
 	public double getMaxShaftTorque() {
 		double r = 0.0625;
 		double tau = this.getShearStrength();
-		return 0.5*Math.PI*r*r*r*tau;
+		return 0.5*Math.PI*r*r*r*tau/16D;
 	}
 
 	public double getMaxShaftSpeed() {

@@ -86,7 +86,7 @@ public class ItemMulti extends ItemBasic {
 				int ry = is.stackTagCompound.getInteger("ry");
 				int rz = is.stackTagCompound.getInteger("rz");
 
-				int dl = Math.abs(ex-rx+ey-ry+ez-rz);
+				int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
 
 				//ReikaJavaLibrary.pConsole(dl);
 				if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {

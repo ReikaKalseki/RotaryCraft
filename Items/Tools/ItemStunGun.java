@@ -49,7 +49,7 @@ public class ItemStunGun extends ItemChargedTool {
 			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 		//}
 		Vec3 norm = ep.getLookVec();
-		SoundRegistry.playSound(SoundRegistry.KNOCKBACK, world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
+		SoundRegistry.KNOCKBACK.playSound(world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		for (float i = 1; i <= 5; i += 0.5) {
 			double[] look = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			//ReikaChatHelper.writeString(String.format("%.3f", look.xCoord)+" "+String.format("%.3f", look.yCoord)+" "+String.format("%.3f", look.zCoord));
@@ -106,7 +106,7 @@ public class ItemStunGun extends ItemChargedTool {
 			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 		//}
 		Vec3 norm = ep.getLookVec();
-		SoundRegistry.playSound(SoundRegistry.KNOCKBACK, world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
+		SoundRegistry.KNOCKBACK.playSound(world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		return true;
 	}
 

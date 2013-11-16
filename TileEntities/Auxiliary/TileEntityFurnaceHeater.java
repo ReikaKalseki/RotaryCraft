@@ -152,7 +152,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		//ReikaJavaLibrary.pConsole(smeltTime+" , "+tile.furnaceCookTime);
 		soundtick++;
 		if (soundtick > 49) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.FRICTION, world, x, y, z, 0.5F, 1);
+			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
 			soundtick = 0;
 		}
 		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);

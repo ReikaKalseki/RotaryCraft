@@ -109,7 +109,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 		if (power > 0) {
 			this.makeSmoke(world, x, y, z, meta);
 			if (soundTick.checkCap()) {
-				SoundRegistry.playSoundAtBlock(SoundRegistry.DIESEL, world, x, y, z, 1F, 0.4F);
+				SoundRegistry.DIESEL.playSoundAtBlock(world, x, y, z, 1F, 0.4F);
 			}
 		}
 	}

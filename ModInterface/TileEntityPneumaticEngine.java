@@ -177,7 +177,7 @@ PowerGenerator, GuiController {
 
 			if (power > 0) {
 				if (sound.checkCap())
-					SoundRegistry.playSoundAtBlock(SoundRegistry.PNEUMATIC, world, x, y, z, 1.2F, 1);
+					SoundRegistry.PNEUMATIC.playSoundAtBlock(world, x, y, z, 1.2F, 1);
 			}
 		}
 	}

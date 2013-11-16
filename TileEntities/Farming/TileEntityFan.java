@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -26,6 +27,7 @@ import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
@@ -45,6 +47,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public static final int FIRESPREADSPEED = 16;
 	public static final int HARVESTSPEED = 512;
 
+	private StepTimer sound = new StepTimer(27);
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -52,6 +56,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, true);
 		this.makeBeam(world, x, y, z, meta);
+		sound.update();
+		if (omega > 0) {
+			if (sound.checkCap())
+				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, 0.7F, 1F);
+		}
 	}
 
 	public void spreadFire(World world, int x, int y, int z, int meta, int range) {

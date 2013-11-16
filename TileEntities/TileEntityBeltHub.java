@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -23,6 +24,7 @@ import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider {
 
@@ -31,10 +33,14 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	private int[] source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 	private int[] target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
+	private StepTimer sound = new StepTimer(25);
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
+
+		sound.update();
 		//isEmitting = true;
 		if (isEmitting) {
 			writex = readx;
@@ -57,16 +63,31 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	private void playSound(World world, int x, int y, int z) {
+		if (sound.checkCap()) {
+			SoundRegistry.BELT.playSoundAtBlock(world, x, y, z, 0.6F, 1F);
+		}
+	}
 
+	public boolean areInSamePlane(TileEntityBeltHub belt) {
+		int meta = this.getBlockMetadata();
+		int meta2 = belt.getBlockMetadata();
+		if (meta == 0 || meta == 1)
+			return meta2 == 0 || meta2 == 1;
+		if (meta == 2 || meta == 3)
+			return meta2 == 2 || meta2 == 3;
+		if (meta == 4 || meta == 5)
+			return meta2 == 4 || meta2 == 5;
+		return false;
 	}
 
 	public void reset() {
+		//ReikaJavaLibrary.pConsole(this);
 		source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 		target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 	}
 
 	public void resetOther() {
-		if (isEmitting) {
+		if (!isEmitting) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]);
 			if (m == MachineRegistry.BELT) {
 				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getBlockTileEntity(target[0], target[1], target[2]);
@@ -86,6 +107,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		int dx = x-xCoord;
 		int dy = y-yCoord;
 		int dz = z-zCoord;
+
+		//ReikaJavaLibrary.pConsole(isEmitting ? Arrays.toString(source) : Arrays.toString(target));
 
 		if (!ReikaMathLibrary.nBoolsAreTrue(1, dx != 0, dy != 0, dz != 0))
 			return false;
@@ -125,12 +148,13 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	public boolean shouldRenderBelt() {
 		if (isEmitting) {
-			return MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]) == MachineRegistry.BELT;
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
+			return m == MachineRegistry.BELT && this.canConnect(source[0], source[1], source[2]);
 		}
 		else {
 			if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
 				//return MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]) == MachineRegistry.BELT;
-				return true;
+				return this.canConnect(target[0], target[1], target[2]);
 			return false;
 		}
 	}
@@ -140,6 +164,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			return false;
 		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
 			;//return false;
+		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getBlockTileEntity(x, y, z)))
+			return false;
 		target[0] = x;
 		target[1] = y;
 		target[2] = z;
@@ -151,6 +177,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			return false;
 		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
 			;//return false;
+		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getBlockTileEntity(x, y, z)))
+			return false;
 		source[0] = x;
 		source[1] = y;
 		source[2] = z;
@@ -163,11 +191,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return flag;
 	}
 
-	public int getMaxTorque() {
+	public static int getMaxTorque() {
 		return 8192;
 	}
 
-	public int getMaxSmoothSpeed() {
+	public static int getMaxSmoothSpeed() {
 		return 8192;
 	}
 
@@ -182,7 +210,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	private void copyPower() {
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(source));
-		if (m == MachineRegistry.BELT) {
+		if (m == MachineRegistry.BELT && this.canConnect(source[0], source[1], source[2])) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getBlockTileEntity(source[0], source[1], source[2]);
 			omega = this.getSlipOmega(tile.omega);
 			torque = Math.min(this.getMaxTorque(), tile.torque);

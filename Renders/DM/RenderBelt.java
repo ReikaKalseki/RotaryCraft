@@ -105,275 +105,122 @@ public class RenderBelt extends RotaryTERenderer
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((TileEntityBeltHub)tile).shouldRenderBelt())
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
-			this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
+			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	private void drawBelt2(TileEntityBeltHub tile, double par2, double par4, double par6, float par8) {
 		int meta = tile.getBlockMetadata();
-		boolean side = meta%2 == 0;
+		boolean vertical = meta == 4 || meta == 5;
 		ForgeDirection dir = tile.getBeltDirection();
 		int dist = tile.getDistanceToTarget();
+		boolean emit = tile.isEmitting();
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Tessellator v5 = Tessellator.instance;
-		v5.startDrawingQuads();
-		v5.setColorOpaque(192, 120, 70);
 
-		//Top
-		if (dir != ForgeDirection.UP) {
-			v5.addVertex(0.375, 0.875, 0.375);
-			v5.addVertex(0.625, 0.875, 0.375);
-			v5.addVertex(0.625, 0.875, 0.625);
-			v5.addVertex(0.375, 0.875, 0.625);
-		}
+		double rx = 0;
+		double ry = 0;
+		double rz = 0;
 
-		//Bottom
-		if (dir != ForgeDirection.DOWN) {
-			v5.addVertex(0.375, 0.125, 0.375);
-			v5.addVertex(0.625, 0.125, 0.375);
-			v5.addVertex(0.625, 0.125, 0.625);
-			v5.addVertex(0.375, 0.125, 0.625);
-		}
-
-		//East
-		if (dir != ForgeDirection.EAST) {
-			v5.addVertex(0.875, 0.375, 0.375);
-			v5.addVertex(0.875, 0.625, 0.375);
-			v5.addVertex(0.875, 0.625, 0.625);
-			v5.addVertex(0.875, 0.375, 0.625);
-		}
-
-		//West
-		if (dir != ForgeDirection.WEST) {
-			v5.addVertex(0.125, 0.375, 0.375);
-			v5.addVertex(0.125, 0.625, 0.375);
-			v5.addVertex(0.125, 0.625, 0.625);
-			v5.addVertex(0.125, 0.375, 0.625);
-		}
-
-		//North
-		if (dir != ForgeDirection.NORTH) {
-			v5.addVertex(0.375, 0.375, 0.125);
-			v5.addVertex(0.375, 0.625, 0.125);
-			v5.addVertex(0.625, 0.625, 0.125);
-			v5.addVertex(0.625, 0.375, 0.125);
-		}
-
-		//South
-		if (dir != ForgeDirection.SOUTH) {
-			v5.addVertex(0.375, 0.375, 0.875);
-			v5.addVertex(0.375, 0.625, 0.875);
-			v5.addVertex(0.625, 0.625, 0.875);
-			v5.addVertex(0.625, 0.375, 0.875);
-		}
-
-		if (dir == ForgeDirection.EAST) {
-
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.125, 0.625, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.375);
-				v5.addVertex(0.125, 0.625, 0.375);
-
-				v5.addVertex(0.125, 0.375, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.375);
-				v5.addVertex(0.125, 0.375, 0.375);
-
-				//Other end
-			}
-
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.375, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.625, 0.875);
-				v5.addVertex(0.375, 0.625, 0.875);
-
-				v5.addVertex(0.375, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.625, 0.125);
-				v5.addVertex(0.375, 0.625, 0.125);
-			}
-		}
-		if (dir == ForgeDirection.WEST) {
-
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.875, 0.625, 0.625);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.625, 0.875, 0.375);
-				v5.addVertex(0.875, 0.625, 0.375);
-
-				v5.addVertex(0.875, 0.375, 0.625);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.625, 0.125, 0.375);
-				v5.addVertex(0.875, 0.375, 0.375);
-
-				//Other end
-			}
-		}
-		else if (dir == ForgeDirection.UP) {
-		}
-		else if (dir == ForgeDirection.DOWN) {
-		}
-		else if (dir == ForgeDirection.SOUTH) {
-		}
-		else if (dir == ForgeDirection.NORTH) {
-		}
+		double dx = -0.5;
+		double dy = -0.5;
+		double dz = -0.5;
 
 		switch(dir) {
-		case EAST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.375, 0.875, 0.375);
-				v5.addVertex(0.625+dist, 0.875, 0.375);
-				v5.addVertex(0.625+dist, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
-
-				v5.addVertex(0.375, 0.125, 0.375);
-				v5.addVertex(0.625+dist, 0.125, 0.375);
-				v5.addVertex(0.625+dist, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
-			}
-
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.375, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.625, 0.875);
-				v5.addVertex(0.375, 0.625, 0.875);
-
-				v5.addVertex(0.375, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.625, 0.125);
-				v5.addVertex(0.375, 0.625, 0.125);
-			}
-			break;
 		case WEST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.375-dist, 0.875, 0.375);
-				v5.addVertex(0.625, 0.875, 0.375);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375-dist, 0.875, 0.625);
-
-				v5.addVertex(0.375-dist, 0.125, 0.375);
-				v5.addVertex(0.625, 0.125, 0.375);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375-dist, 0.125, 0.625);
+			if (vertical) {
+				rx = 90;
 			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.375-dist, 0.375, 0.875);
-				v5.addVertex(0.625, 0.375, 0.875);
-				v5.addVertex(0.625, 0.625, 0.875);
-				v5.addVertex(0.375-dist, 0.625, 0.875);
-
-				v5.addVertex(0.375-dist, 0.375, 0.125);
-				v5.addVertex(0.625, 0.375, 0.125);
-				v5.addVertex(0.625, 0.625, 0.125);
-				v5.addVertex(0.375-dist, 0.625, 0.125);
+			ry = 180;
+			break;
+		case EAST:
+			if (vertical) {
+				rx = 90;
 			}
 			break;
 		case NORTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.875, 0.375-dist);
-				v5.addVertex(0.625, 0.875, 0.375-dist);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
-
-				v5.addVertex(0.375, 0.125, 0.375-dist);
-				v5.addVertex(0.625, 0.125, 0.375-dist);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
+			if (vertical) {
+				rz = 90;
+				rx = -90;
 			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.875, 0.375, 0.375);
-				v5.addVertex(0.875, 0.375, 0.625-dist);
-				v5.addVertex(0.875, 0.625, 0.625-dist);
-				v5.addVertex(0.875, 0.625, 0.375);
-
-				v5.addVertex(0.125, 0.375, 0.375);
-				v5.addVertex(0.125, 0.375, 0.625-dist);
-				v5.addVertex(0.125, 0.625, 0.625-dist);
-				v5.addVertex(0.125, 0.625, 0.375);
-			}
+			else
+				ry = 90;
 			break;
 		case SOUTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.875, 0.375+dist);
-				v5.addVertex(0.625, 0.875, 0.375+dist);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
-
-				v5.addVertex(0.375, 0.125, 0.375+dist);
-				v5.addVertex(0.625, 0.125, 0.375+dist);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
+			if (vertical) {
+				rz = 90;
+				rx = 90;
 			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.875, 0.375, 0.375+dist);
-				v5.addVertex(0.875, 0.375, 0.625);
-				v5.addVertex(0.875, 0.625, 0.625);
-				v5.addVertex(0.875, 0.625, 0.375+dist);
-
-				v5.addVertex(0.125, 0.375, 0.375+dist);
-				v5.addVertex(0.125, 0.375, 0.625);
-				v5.addVertex(0.125, 0.625, 0.625);
-				v5.addVertex(0.125, 0.625, 0.375+dist);
-			}
+			else
+				ry = -90;
 			break;
 		case UP:
 			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.375, 0.125);
-				v5.addVertex(0.375, 0.625+dist, 0.125);
-				v5.addVertex(0.625, 0.625+dist, 0.125);
-				v5.addVertex(0.625, 0.375, 0.125);
-
-				v5.addVertex(0.375, 0.375, 0.875);
-				v5.addVertex(0.375, 0.625+dist, 0.875);
-				v5.addVertex(0.625, 0.625+dist, 0.875);
-				v5.addVertex(0.625, 0.375, 0.875);
+				ry = 90;
+				rz = 90;
 			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.125, 0.375, 0.375);
-				v5.addVertex(0.125, 0.625+dist, 0.375);
-				v5.addVertex(0.125, 0.625+dist, 0.625);
-				v5.addVertex(0.125, 0.375, 0.625);
-
-				v5.addVertex(0.875, 0.375, 0.375);
-				v5.addVertex(0.875, 0.625+dist, 0.375);
-				v5.addVertex(0.875, 0.625+dist, 0.625);
-				v5.addVertex(0.875, 0.375, 0.625);
-			}
+			else
+				rz = 90;
 			break;
 		case DOWN:
 			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.375-dist, 0.125);
-				v5.addVertex(0.375, 0.625, 0.125);
-				v5.addVertex(0.625, 0.625, 0.125);
-				v5.addVertex(0.625, 0.375-dist, 0.125);
-
-				v5.addVertex(0.375, 0.375-dist, 0.875);
-				v5.addVertex(0.375, 0.625, 0.875);
-				v5.addVertex(0.625, 0.625, 0.875);
-				v5.addVertex(0.625, 0.375-dist, 0.875);
+				ry = 90;
+				rz = -90;
 			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.125, 0.375-dist, 0.375);
-				v5.addVertex(0.125, 0.625, 0.375);
-				v5.addVertex(0.125, 0.625, 0.625);
-				v5.addVertex(0.125, 0.375-dist, 0.625);
-
-				v5.addVertex(0.875, 0.375-dist, 0.375);
-				v5.addVertex(0.875, 0.625, 0.375);
-				v5.addVertex(0.875, 0.625, 0.625);
-				v5.addVertex(0.875, 0.375-dist, 0.625);
-			}
+			else
+				rz = -90;
 			break;
 		default:
 			break;
 		}
 
+		GL11.glTranslated(0.5, 0.5, 0.5);
+		GL11.glRotated(rx, 1, 0, 0);
+		GL11.glRotated(ry, 0, 1, 0);
+		GL11.glRotated(rz, 0, 0, 1);
+		GL11.glTranslated(dx, dy, dz);
+
+		v5.startDrawingQuads();
+		v5.setColorOpaque(192, 120, 70);
+
+		v5.addVertex(0.125, 0.375, 0.375);
+		v5.addVertex(0.125, 0.625, 0.375);
+		v5.addVertex(0.125, 0.625, 0.625);
+		v5.addVertex(0.125, 0.375, 0.625);
+
+		v5.addVertex(0.125, 0.625, 0.625);
+		v5.addVertex(0.375, 0.875, 0.625);
+		v5.addVertex(0.375, 0.875, 0.375);
+		v5.addVertex(0.125, 0.625, 0.375);
+
+		v5.addVertex(0.125, 0.375, 0.625);
+		v5.addVertex(0.375, 0.125, 0.625);
+		v5.addVertex(0.375, 0.125, 0.375);
+		v5.addVertex(0.125, 0.375, 0.375);
+
+		if (tile.isEmitting()) {
+			v5.addVertex(0.375, 0.875, 0.375);
+			v5.addVertex(0.625+dist, 0.875, 0.375);
+			v5.addVertex(0.625+dist, 0.875, 0.625);
+			v5.addVertex(0.375, 0.875, 0.625);
+
+			v5.addVertex(0.375, 0.125, 0.375);
+			v5.addVertex(0.625+dist, 0.125, 0.375);
+			v5.addVertex(0.625+dist, 0.125, 0.625);
+			v5.addVertex(0.375, 0.125, 0.625);
+		}
+
 		v5.draw();
+
+		GL11.glTranslated(-dx, -dy, -dz);
+		GL11.glRotated(-rz, 0, 0, 1);
+		GL11.glRotated(-ry, 0, 1, 0);
+		GL11.glRotated(-rx, 1, 0, 0);
+		GL11.glTranslated(-0.5, -0.5, -0.5);
+
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glTranslated(-par2, -par4, -par6);

@@ -79,7 +79,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		}
 		this.hydrate(world, x, y, z, meta);
 		if (this.getRange() > 0 && waterLevel > 0 && soundtick >= 40) {
-			SoundRegistry.playSoundAtBlock(SoundRegistry.SPRINKLER, world, x, y, z, 1, 1);
+			SoundRegistry.SPRINKLER.playSoundAtBlock(world, x, y, z, 1, 1);
 			soundtick = 0;
 		}
 		else {

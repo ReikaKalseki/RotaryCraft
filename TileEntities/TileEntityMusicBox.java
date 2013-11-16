@@ -155,13 +155,13 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			}
 			switch(activeVoice) {
 			case 1:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 2:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 3:
-				SoundRegistry.playSoundAtBlock(SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit), worldObj, xCoord, yCoord, zCoord, volume, pitch);
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, volume, pitch);
 				break;
 			case 4:
 				worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "note.bd", volume, pitch);

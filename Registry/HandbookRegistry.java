@@ -76,6 +76,7 @@ public enum HandbookRegistry {
 	CVT(MachineRegistry.ADVANCEDGEARS, 1),
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
 	MULTI(MachineRegistry.MULTICLUTCH),
+	BELT(MachineRegistry.BELT),
 
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),

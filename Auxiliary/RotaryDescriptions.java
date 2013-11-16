@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
+import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
@@ -199,6 +200,7 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = transtabs[i];
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase());
+			desc = String.format(desc, machineData.get(m));
 			addEntry(h, desc);
 		}
 
@@ -345,6 +347,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
 		addData(MachineRegistry.GENERATOR, TileEntityGenerator.OUTPUT_VOLTAGE);
+		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

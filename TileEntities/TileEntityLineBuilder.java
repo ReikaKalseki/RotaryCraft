@@ -137,8 +137,8 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		int ry = y+dir.offsetY;
 		int rz = z+dir.offsetZ;
 		world.setBlock(rx, ry, rz, is.itemID, is.getItemDamage(), 3);
-		SoundRegistry.playSoundAtBlock(SoundRegistry.LINEBUILDER, world, rx, ry, rz);
-		SoundRegistry.playSoundAtBlock(SoundRegistry.LINEBUILDER, world, x, y, z);
+		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, rx, ry, rz);
+		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, x, y, z);
 	}
 
 	public boolean canShift(World world, int x, int y, int z) {

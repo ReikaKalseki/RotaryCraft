@@ -92,7 +92,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		this.bounce(world, x, y-step-1, z);
 		this.dealDamage(world, x, y-step-1, z);
 		this.addNausea(world, x, y-step-1, z);
-		SoundRegistry.playSoundAtBlock(SoundRegistry.PILEDRIVER, world, x, y, z, 1, 1);
+		SoundRegistry.PILEDRIVER.playSoundAtBlock(world, x, y, z, 1, 1);
 	}
 
 	public void bounce(World world, int x, int y, int z) { //bounce entities
