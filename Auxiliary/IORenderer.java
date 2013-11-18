@@ -19,7 +19,8 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -33,11 +34,17 @@ public abstract class IORenderer {
 
 	public static void renderOut(double x, double y, double z, int a) {
 		int[] color = {255, 0, 0, a};
+		if (ConfigRegistry.COLORBLIND.getState())
+			color[0] = 0;
 		renderBox(x, y, z, color);
 	}
 
 	public static void renderIn(double x, double y, double z, int a) {
 		int[] color = {0, 255, 0, a};
+		if (ConfigRegistry.COLORBLIND.getState()) {
+			color[0] = 255;
+			color[2] = 255;
+		}
 		renderBox(x, y, z, color);
 	}
 

@@ -37,7 +37,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityBeamMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;

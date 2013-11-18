@@ -42,6 +42,7 @@ public enum HandbookRegistry {
 	MATERIAL("Material Properties"),
 	SHAFTS("Shaft Load Limits"),
 	FLYWHEELS("Flywheel Load Limits"),
+	TRANSFER("Basics of Power Transfer"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -87,6 +88,7 @@ public enum HandbookRegistry {
 	BEDROCK(MachineRegistry.BEDROCKBREAKER),
 	BORER(MachineRegistry.BORER),
 	PUMP(MachineRegistry.PUMP),
+	OBSIDIAN(MachineRegistry.OBSIDIAN),
 	PNEUMATIC(MachineRegistry.PNEUENGINE),
 	STEAMTURB(MachineRegistry.STEAMTURBINE),
 	LAVAMAKER(MachineRegistry.LAVAMAKER),
@@ -110,6 +112,7 @@ public enum HandbookRegistry {
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
 	BREEDER(MachineRegistry.AUTOBREEDER),
+	BAITBOX(MachineRegistry.BAITBOX),
 	SPAWNER(MachineRegistry.SPAWNERCONTROLLER),
 	SPRINKLER(MachineRegistry.SPRINKLER),
 	WOODCUTTER(MachineRegistry.WOODCUTTER),
@@ -170,7 +173,6 @@ public enum HandbookRegistry {
 	AEROSOL(MachineRegistry.AEROSOLIZER),
 	LIGHTBRID(MachineRegistry.LIGHTBRIDGE),
 	RESERVOIR(MachineRegistry.RESERVOIR),
-	BAITBOX(MachineRegistry.BAITBOX),
 	DETECTOR(MachineRegistry.PLAYERDETECTOR),
 	CHEST(MachineRegistry.SCALECHEST),
 	SPILLER(MachineRegistry.SPILLER),
@@ -878,6 +880,8 @@ public enum HandbookRegistry {
 			return MachineRegistry.COMPRESSOR.getCraftedProduct();
 		if (this == ENCHANTING)
 			return new ItemStack(Item.enchantedBook);
+		if (this == TRANSFER)
+			return ItemStacks.gearunit;
 		if (this == ENGINES)
 			return EngineType.AC.getCraftedProduct();
 		if (this == MISC)

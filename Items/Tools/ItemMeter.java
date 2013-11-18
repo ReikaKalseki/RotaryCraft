@@ -29,8 +29,8 @@ import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -51,7 +51,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
@@ -365,7 +365,7 @@ public class ItemMeter extends ItemRotaryTool
 				}
 			}
 			if (m == MachineRegistry.BEVELGEARS) {
-				TileEntityGearBevel clicked = (TileEntityGearBevel)world.getBlockTileEntity(x, y, z);
+				TileEntityBevelGear clicked = (TileEntityBevelGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
 				torque = clicked.torque;

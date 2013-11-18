@@ -20,7 +20,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;

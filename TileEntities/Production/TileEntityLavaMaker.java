@@ -31,8 +31,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -276,11 +276,11 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 			this.overheat(world, x, y, z);
 		}
 		if (temperature > 50) {
-			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
-			if (side != -1)
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
 			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-			if (side != -1)
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
 		}
 	}

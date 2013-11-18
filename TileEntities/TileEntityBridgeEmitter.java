@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityBeamMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

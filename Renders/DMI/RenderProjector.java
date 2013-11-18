@@ -18,15 +18,17 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.IO.ReikaPNGLoader;
+import Reika.DragonAPI.IO.ReikaImageLoader;
 import Reika.DragonAPI.Instantiable.PixelRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelProjector;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
 
 public class RenderProjector extends RotaryTERenderer {
@@ -40,7 +42,7 @@ public class RenderProjector extends RotaryTERenderer {
 	public RenderProjector() {
 		for (int i = 0; i < hasImages.length; i++) {
 			String name = "/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(i)+".png";
-			if (ReikaPNGLoader.imageFileExists(RotaryCraft.class, name))
+			if (ReikaImageLoader.imageFileExists(RotaryCraft.class, name))
 				hasImages[i] = true;
 		}
 	}
@@ -53,76 +55,62 @@ public class RenderProjector extends RotaryTERenderer {
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelProjector var14;
+		var14 = ProjectorModel;
+		//ModelProjectorV var15;
+		//var14 = this.ProjectorModelV;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/projtex.png");
 
-			{
-				//((BlockProjectorBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		if (tile.isInWorld()) {
+
+			switch(tile.getBlockMetadata()) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
 			}
+
+			GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
+		}
+		else {
+			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 
-		if (true)
-		{
-			ModelProjector var14;
-			var14 = ProjectorModel;
-			//ModelProjectorV var15;
-			//var14 = this.ProjectorModelV;
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/projtex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			if (tile.isInWorld()) {
-
-				switch(tile.getBlockMetadata()) {
-				case 0:
-					var11 = 0;
-					break;
-				case 1:
-					var11 = 180;
-					break;
-				case 2:
-					var11 = 270;
-					break;
-				case 3:
-					var11 = 90;
-					break;
-				}
-
-				GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
-			}
-			else {
-				GL11.glEnable(GL11.GL_LIGHTING);
-			}
-
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
+		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+		float var13;/*
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
+		// if (tile.getBlockMetadata() < 4)
 
 
-			var14.renderAll(null, 0);
-			// else
-			//var15.renderAll();
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		var14.renderAll(null, 0);
+		// else
+		//var15.renderAll();
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -178,37 +166,52 @@ public class RenderProjector extends RotaryTERenderer {
 		}
 		double voffset = b;
 
-		this.drawBeam(voffset, te.getBlockMetadata(), v5, a, b, c, p2, p4, p6);
+		if (ConfigRegistry.PROJECTORLINES.getState())
+			this.drawBeam(voffset, te.getBlockMetadata(), v5, a, b, c, p2, p4, p6);
 		if (te.channel == -1) {
 			this.drawEasterEgg(a, b, c, voffset, te, p2, p4, p6);
 			return;
 		}
-		if (te.emptySlide || te.channel < 0 || te.channel >= hasImages.length || !hasImages[te.channel]) {
-			this.renderErrorScreen(a, b, c, voffset, te, p2, p4, p6);
-			ReikaRenderHelper.exitGeoDraw();
-			return;
+		if (te.channel != -2) {
+			if (te.emptySlide || te.channel < 0 || te.channel >= hasImages.length || !hasImages[te.channel]) {
+				this.renderErrorScreen(a, b, c, voffset, te, p2, p4, p6);
+				ReikaRenderHelper.exitGeoDraw();
+				return;
+			}
 		}
 		ReikaRenderHelper.exitGeoDraw();
 		ReikaRenderHelper.disableLighting();
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(te.channel)+".png");
+		if (te.channel == -2)
+			ReikaTextureHelper.bindRawTexture(te.getCustomImagePath());
+		else
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(te.channel)+".png");
 		GL11.glTranslated(0, voffset, 0);
-		if (te.getBlockMetadata()%2 == 0)
+		int u = 0;
+		int v = 0;
+		int du = 1;
+		int dv = 1;
+		if (te.getBlockMetadata()%2 == 0) {
 			GL11.glFrontFace(GL11.GL_CW);
+		}
+		else {
+			u = 1;
+			du = 0;
+		}
 		if (te.getBlockMetadata() < 2) {
 			v5.startDrawingQuads();
-			v5.addVertexWithUV(p2-a, p4+b+1, p6-c, 1, 0);
-			v5.addVertexWithUV(p2-a, p4-b, p6-c, 1, 1);
-			v5.addVertexWithUV(p2-a, p4-b, p6+1+c, 0, 1);
-			v5.addVertexWithUV(p2-a, p4+b+1, p6+1+c, 0, 0);
+			v5.addVertexWithUV(p2-a, p4+b+1, p6-c, du, v);
+			v5.addVertexWithUV(p2-a, p4-b, p6-c, du, dv);
+			v5.addVertexWithUV(p2-a, p4-b, p6+1+c, u, dv);
+			v5.addVertexWithUV(p2-a, p4+b+1, p6+1+c, u, v);
 			v5.draw();
 		}
 		else {
 			c *= -1;
 			v5.startDrawingQuads();
-			v5.addVertexWithUV(p2-a, p4+b+1, p6-c, 1, 0);
-			v5.addVertexWithUV(p2-a, p4-b, p6-c, 1, 1);
-			v5.addVertexWithUV(p2+1+a, p4-b, p6-c, 0, 1);
-			v5.addVertexWithUV(p2+1+a, p4+b+1, p6-c, 0, 0);
+			v5.addVertexWithUV(p2-a, p4+b+1, p6-c, du, v);
+			v5.addVertexWithUV(p2-a, p4-b, p6-c, du, dv);
+			v5.addVertexWithUV(p2+1+a, p4-b, p6-c, u, dv);
+			v5.addVertexWithUV(p2+1+a, p4+b+1, p6-c, u, v);
 			v5.draw();
 		}
 		GL11.glTranslated(0, -voffset, 0);

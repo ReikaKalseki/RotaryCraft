@@ -15,7 +15,7 @@ import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntitySpringPowered;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 

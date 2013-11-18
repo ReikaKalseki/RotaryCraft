@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine {

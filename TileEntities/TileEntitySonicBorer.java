@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;

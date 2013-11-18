@@ -65,7 +65,7 @@ public class RotaryRecipes {
 
 	public static void addModInterface() {
 		if (ModList.THERMALEXPANSION.isLoaded()) {
-			FluidStack ethanol = FluidRegistry.getFluidStack("RC Ethanol", 100);
+			FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
 			ethanol.amount = FluidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
 			try {
 				CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
@@ -603,8 +603,10 @@ public class RotaryRecipes {
 	}
 
 	private static void addSlideRecipes() {
-		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(0), new Object[]{ //Wood shaft unit
+		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(0), new Object[]{
 			"PPP", "PGP", "PPP", 'G', Block.thinGlass, 'P', Item.paper});
+		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(24), new Object[]{
+			"rPr", "PGP", "rPr", 'G', Block.thinGlass, 'P', Item.paper, 'r', Item.redstone});
 
 		Random r = new Random();
 		HashMap<Integer, Integer> colors = new HashMap<Integer, Integer>();

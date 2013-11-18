@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.TileEntitySpringPowered;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 

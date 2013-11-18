@@ -27,7 +27,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.TileEntitySpringPowered;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController {

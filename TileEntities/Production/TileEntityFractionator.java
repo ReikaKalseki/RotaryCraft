@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.InventoriedPowerLiquidProducer;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;

@@ -18,7 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -82,7 +82,18 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			return;
 		}
 		emptySlide = false;
-		channel = slides[0].getItemDamage();
+		if (slides[0].getItemDamage() == 24) {
+			channel = -2;
+		}
+		else
+			channel = slides[0].getItemDamage();
+	}
+
+	public String getCustomImagePath() {
+		if (slides[0] == null || slides[0].stackTagCompound == null)
+			return "";
+		NBTTagCompound nbt = slides[0].stackTagCompound;
+		return nbt.getString("file");
 	}
 
 	public void cycleInv() {
@@ -145,7 +156,7 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			return x-xCoord+1;
 		case 1:
 			x = xCoord+1;
-			while (x <= xCoord+12+1 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+			while (x <= xCoord+12+1 && (worldObj.getBlockId(x, yCoord, zCoord) == 0 || Block.blocksList[worldObj.getBlockId(x, yCoord, zCoord)].isAirBlock(worldObj, x, yCoord, zCoord)))
 				x++;
 			return -(x-xCoord);
 		case 2:

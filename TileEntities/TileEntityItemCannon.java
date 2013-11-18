@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityItemCannon extends InventoriedPowerReceiver {

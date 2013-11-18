@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class PowerSourceList {
 

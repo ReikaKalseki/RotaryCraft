@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine {

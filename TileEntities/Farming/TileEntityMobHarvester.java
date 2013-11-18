@@ -26,7 +26,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobHarvester extends TileEntityPowerReceiver implements EnchantableMachine {

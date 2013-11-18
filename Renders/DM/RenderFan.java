@@ -20,7 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.Animated.ModelFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 

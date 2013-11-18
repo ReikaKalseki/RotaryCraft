@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;

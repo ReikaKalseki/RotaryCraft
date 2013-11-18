@@ -21,7 +21,7 @@ import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiController, RangedEffect {

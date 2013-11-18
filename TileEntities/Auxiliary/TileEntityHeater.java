@@ -29,7 +29,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;

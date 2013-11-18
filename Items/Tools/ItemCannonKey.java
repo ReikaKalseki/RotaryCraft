@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;

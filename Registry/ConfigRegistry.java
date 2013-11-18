@@ -59,7 +59,9 @@ public enum ConfigRegistry implements ConfigList {
 	RAILGUNDAMAGE("Railgun Block Damage", true),
 	GRAVELPLAYER("Allow Gravel Gun PvP", true),
 	CHESTGEN("Chest Generation Tier", 4),
-	HOSTILECRASH("Crash on hostile interference from other mods", true);
+	HOSTILECRASH("Crash on hostile interference from other mods", true),
+	PROJECTORLINES("Render projector lines", true),
+	COLORBLIND("Color Blind Mode", false);
 
 	private String label;
 	private boolean defaultState;

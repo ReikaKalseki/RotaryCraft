@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -27,7 +28,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RecipesCompactor;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -317,27 +318,27 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", 0));
 
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != -1)
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null)
 			temperature += 4;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != -1)
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null)
 			temperature += 2;
 		if (Tamb == 300)	//Fire is 50% hotter in the nether
 			temperature++;
 
-		int a = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (a != -1 && temperature > 600) {
+		ForgeDirection a = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (a != null && temperature > 600) {
 			temperature--;
 			if (rand.nextInt(4000) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0, 0);
 		}
-		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-		if (iceside != -1 && temperature > 0) {
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != null && temperature > 0) {
 			temperature -= 2;
 			if (rand.nextInt(200) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
-		int snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
-		if (snowside != -1 && temperature > -5) {
+		ForgeDirection snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
+		if (snowside != null && temperature > -5) {
 			temperature -= 2;
 			if (rand.nextInt(100) == 0)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);

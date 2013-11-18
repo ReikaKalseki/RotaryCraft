@@ -30,8 +30,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 

@@ -14,8 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

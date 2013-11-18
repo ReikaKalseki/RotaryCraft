@@ -37,10 +37,11 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
+import codechicken.lib.math.MathHelper;
 
 public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect {
 
@@ -64,11 +65,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 		int range = this.getRange();
 		AxisAlignedBB box = this.getBox(x, y, z, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
-
 		if (tickcount >= 20) {
 			for (int i = 0; i < inbox.size() && (i < this.maxMobs() || this.maxMobs() == -1); i++) {
 				EntityLiving ent = (EntityLiving)inbox.get(i);
 				//ReikaChatHelper.write(this.canAttract(ent)+"  "+ent.getEntityName());
+				//ReikaJavaLibrary.pConsole(this.canRepel(ent), ent instanceof EntityPigZombie);
 				if (this.canRepel(ent)) {
 					this.applyEffect(world, x, y, z, ent, false);
 					//ReikaChatHelper.write(this.canAttract(ent));
@@ -88,7 +89,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	public int getMaxRange() {
-		return ConfigRegistry.BAITMOBS.getValue();
+		return ConfigRegistry.BAITRANGE.getValue();
 	}
 
 	private void silverfishStone(World world, int x, int y, int z) {
@@ -126,17 +127,17 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	private int[] getRepelTo(World world, int x, int y, int z, EntityLivingBase ent) {
-		int[] machinecoords = {x, y, z};
-		int[] entitycoords = {(int)ent.posX, (int)ent.posY, (int)ent.posZ};
+		double[] machinecoords = {x+0.5, y+0.5, z+0.5};
+		int[] entitycoords = {MathHelper.floor_double(ent.posX), MathHelper.floor_double(ent.posY), MathHelper.floor_double(ent.posZ)};
 		int[] repelcoords = new int[3];
 		for (int i = 0; i < 3; i++) {
-			repelcoords[i] = entitycoords[i]+(entitycoords[i]-machinecoords[i]);
+			repelcoords[i] = MathHelper.floor_double(entitycoords[i]+(entitycoords[i]-machinecoords[i]));
 			if (i != 1) //not y coord
 				repelcoords[i] += -2+rand.nextInt(5); // 2-block random factor
 		}
 		return repelcoords;
 	}
-	//Need special ender code
+
 	private void applyEffect(World world, int x, int y, int z, EntityLiving ent, boolean attract) {
 		if (world.isRemote)
 			;//return;
@@ -166,10 +167,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			if (ent instanceof EntityCreeper && ent.getNavigator().getPath() != null)
 			ReikaChatHelper.write(ent.getNavigator().getPath().isSamePath(path));
 			else if (ent instanceof EntityCreeper && ent.posY >= 65) ReikaChatHelper.write(null);*/
-			ent.getNavigator().setPath(path, 0.25F);
+			ent.getNavigator().setPath(path, 1F);
 			//if (ent instanceof EntityCreeper && ent.getNavigator().getPath() != null)
 			//ReikaChatHelper.write(ent.getNavigator().getPath().isSamePath(path));
 		}
+		//ReikaJavaLibrary.pConsole(ent, ent.getClass() == EntityCreeper.class);
 		if (ent instanceof EntitySpider) {
 			if (attract)
 				path = ent.getNavigator().getPathToXYZ(x, y, z);

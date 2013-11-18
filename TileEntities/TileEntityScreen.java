@@ -18,8 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.RemoteControlMachine;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityScreen extends InventoriedPowerReceiver {

@@ -35,9 +35,9 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	public ItemRotaryArmor(int par1, EnumArmorMaterial par2, int par3, int par4, int ind) {
 		super(par1, par2, par3, par4);
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;
 		this.setIndex(ind);
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	public abstract boolean providesProtection();

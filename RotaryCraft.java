@@ -44,6 +44,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
+import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Base.ItemMulti;
 import Reika.RotaryCraft.Blocks.BlockBeam;
@@ -99,6 +100,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
 	public static CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
+	public static CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(),"RotaryTools");
 	public static CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(),"RotaryModOres");
 	public static CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(),"Spawners");
 

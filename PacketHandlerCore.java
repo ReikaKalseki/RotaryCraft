@@ -16,6 +16,7 @@ import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -23,11 +24,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
-import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -48,7 +48,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
@@ -61,7 +61,7 @@ import cpw.mods.fml.common.network.Player;
 public abstract class PacketHandlerCore implements IPacketHandler {
 
 	private TileEntityBorer borer;
-	private TileEntityGearBevel gbevel;
+	private TileEntityBevelGear gbevel;
 	private TileEntitySplitter splitter;
 	private TileEntitySpawnerController spawner;
 	private TileEntityPlayerDetector detector;
@@ -197,7 +197,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		}
 		break;
 		case BEVEL: {
-			gbevel = (TileEntityGearBevel)world.getBlockTileEntity(x, y, z);
+			gbevel = (TileEntityBevelGear)world.getBlockTileEntity(x, y, z);
 			gbevel.direction = data[0];
 		}
 		break;
@@ -460,9 +460,14 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			}
 			break;
 		case GRAVELGUN:
-			ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
+			//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 			ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 			world.playSoundEffect(x, y, z, "random.explode", 1, 1F);
+			break;
+		case SLIDE:
+			ItemStack is = ep.getCurrentEquippedItem();
+			is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setString("file", stringdata);
 			break;
 		}
 	}

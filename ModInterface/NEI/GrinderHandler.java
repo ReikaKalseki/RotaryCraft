@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipesGrinder;
-import Reika.RotaryCraft.GUIs.GuiGrinder;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;

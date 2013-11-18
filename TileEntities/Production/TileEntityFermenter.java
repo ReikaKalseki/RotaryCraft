@@ -32,7 +32,7 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
@@ -295,20 +295,20 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
-		int waterside = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
-		if (waterside != -1) {
+		ForgeDirection waterside = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
+		if (waterside != null) {
 			Tamb -= 5;
 		}
-		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-		if (iceside != -1) {
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != null) {
 			Tamb -= 15;
 		}
-		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-		if (fireside != -1) {
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != null) {
 			Tamb += 50;
 		}
-		int lavaside = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.lava);
-		if (lavaside != -1) {
+		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.lava);
+		if (lavaside != null) {
 			Tamb += 200;
 		}
 		if (temperature > Tamb)

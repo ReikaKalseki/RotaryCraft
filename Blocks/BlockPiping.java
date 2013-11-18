@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
-import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {

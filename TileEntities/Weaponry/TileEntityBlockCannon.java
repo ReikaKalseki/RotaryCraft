@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlockCannon extends TileEntityLaunchCannon {

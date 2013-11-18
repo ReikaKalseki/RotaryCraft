@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.API.Fuelable;
-import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

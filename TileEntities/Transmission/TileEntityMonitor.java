@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
+import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMonitor extends TileEntity1DTransmitter {

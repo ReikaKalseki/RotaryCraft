@@ -20,7 +20,7 @@ import net.minecraft.world.storage.WorldInfo;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWeatherController extends InventoriedPowerReceiver {

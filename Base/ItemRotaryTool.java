@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import Reika.RotaryCraft.RotaryCraft;
+
 
 public abstract class ItemRotaryTool extends ItemBasic {
 
@@ -16,6 +18,7 @@ public abstract class ItemRotaryTool extends ItemBasic {
 		super(ID, index);
 		maxStackSize = 1;
 		this.setNoRepair();
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	//public abstract boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int par4, int par5, int par6, int par7, float par8, float par9, float par10);

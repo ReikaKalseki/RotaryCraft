@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;

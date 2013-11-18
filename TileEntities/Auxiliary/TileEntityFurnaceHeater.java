@@ -17,7 +17,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;

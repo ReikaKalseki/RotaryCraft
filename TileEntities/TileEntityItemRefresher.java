@@ -15,7 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityItemRefresher extends TileEntityPowerReceiver implements RangedEffect {

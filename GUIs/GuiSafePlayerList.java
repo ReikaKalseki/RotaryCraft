@@ -22,7 +22,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiSafePlayerList extends GuiScreen {

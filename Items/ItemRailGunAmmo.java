@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,6 +25,7 @@ public class ItemRailGunAmmo extends ItemBasic {
 		maxStackSize = 16;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

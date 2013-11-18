@@ -35,9 +35,9 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
@@ -138,7 +138,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
@@ -167,7 +167,7 @@ public enum MachineRegistry {
 	ENGINE(				"machine.engine", 			BlockEngine.class,			TileEntityEngine.class,				0,	"RenderSEngine"),
 	FLYWHEEL(			"machine.flywheel", 		BlockFlywheel.class,		TileEntityFlywheel.class,			0,	"RenderFlywheel"),
 	SHAFT(				"machine.shaft", 			BlockShaft.class,			TileEntityShaft.class,				0,	"RenderShaft"),
-	BEVELGEARS(			"machine.bevel", 			BlockTrans.class,			TileEntityGearBevel.class,			0,	"RenderBevel"),
+	BEVELGEARS(			"machine.bevel", 			BlockTrans.class,			TileEntityBevelGear.class,			0,	"RenderBevel"),
 	GEARBOX(			"machine.gearbox", 			BlockGearbox.class,			TileEntityGearbox.class,			0,	"RenderGearbox"),
 	SPLITTER(			"machine.splitter", 		BlockTrans.class,			TileEntitySplitter.class,			1,	"RenderSplitter"),
 	FERMENTER(			"machine.fermenter", 		BlockIMachine.class,		TileEntityFermenter.class,			0),

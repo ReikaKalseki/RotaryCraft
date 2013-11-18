@@ -30,12 +30,12 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		this.setIndex(tex);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		maxStackSize = 1;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
 		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

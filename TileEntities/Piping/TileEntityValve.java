@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityValve extends TileEntityPiping {

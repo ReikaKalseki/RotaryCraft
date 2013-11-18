@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
+import Reika.RotaryCraft.Items.ItemSlide;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockPickaxe;
@@ -88,7 +89,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	BUCKET(104, 106, true, 		"#item.bucket", 			ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"item.target", 				ItemTarget.class),
 	IOGOGGLES(1, true, 			"item.iogoggles", 			ItemIOGoggles.class),
-	SLIDE(2, true, 				"#item.slide", 				ItemBasic.class),
+	SLIDE(2, true, 				"item.slide", 				ItemSlide.class),
 	KEY(4, false,				"item.key",					ItemCannonKey.class),
 	SHELL(5, false,				"item.shell",				ItemBasic.class),
 	MINECART(6, false,			"item.ethacart",			ItemEthanolMinecart.class),
@@ -289,8 +290,6 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			return RotaryNames.getBucketName(dmg);
 		if (this == RAILGUN)
 			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
-		if (this == SLIDE)
-			return this.getBasicName()+" "+String.format("%d", dmg);
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
 
@@ -378,7 +377,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		case STRONGCOIL:
 			return 65536;
 		case SLIDE:
-			return 24;
+			return 25;
 		case RAILGUN:
 			return 16;
 		case BUCKET:

@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.PoweredLiquidIO;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -132,11 +132,11 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 			this.overheat(world, x, y, z);
 		}
 		if (temperature > 50) {
-			int side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
-			if (side != -1)
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
 			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-			if (side != -1)
+			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
 		}
 	}

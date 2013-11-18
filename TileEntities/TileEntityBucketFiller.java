@@ -25,8 +25,8 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler {

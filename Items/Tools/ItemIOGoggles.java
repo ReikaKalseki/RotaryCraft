@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class ItemIOGoggles extends ItemRotaryArmor {
 

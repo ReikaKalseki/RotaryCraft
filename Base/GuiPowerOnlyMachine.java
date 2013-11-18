@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 
 public abstract class GuiPowerOnlyMachine extends GuiMachine {
 

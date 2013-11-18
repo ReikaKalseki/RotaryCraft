@@ -15,10 +15,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
-public class ItemTarget extends ItemBasic {
+public class ItemTarget extends ItemRotaryTool {
 
 	public ItemTarget(int ID, int tex) {
 		super(ID, tex);

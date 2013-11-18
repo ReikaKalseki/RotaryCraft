@@ -21,7 +21,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySorting extends TileEntityPowerReceiver {

@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 

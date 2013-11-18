@@ -27,7 +27,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

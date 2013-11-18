@@ -25,7 +25,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
-import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

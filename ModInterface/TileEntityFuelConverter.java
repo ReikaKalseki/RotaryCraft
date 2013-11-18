@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.InventoriedPoweredLiquidIO;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

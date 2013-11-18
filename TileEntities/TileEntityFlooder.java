@@ -21,7 +21,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

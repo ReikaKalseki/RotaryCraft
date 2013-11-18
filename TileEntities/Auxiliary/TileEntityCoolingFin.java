@@ -31,11 +31,11 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != -1)
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != null)
 			Tamb -= 5;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != -1)
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null)
 			Tamb = 2600;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != -1)
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != null)
 			Tamb -= 15;
 		if (Tamb > temperature) {
 			temperature++;

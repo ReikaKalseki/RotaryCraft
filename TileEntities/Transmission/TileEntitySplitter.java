@@ -18,7 +18,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySplitter extends TileEntityIOMachine implements GuiController, ShaftMerger {

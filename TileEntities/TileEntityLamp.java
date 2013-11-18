@@ -17,7 +17,7 @@ import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntitySpringPowered;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv, RangedEffect, OneSlotMachine {

@@ -14,12 +14,14 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 
-public class ItemDisk extends ItemBasic {
+public class ItemDisk extends ItemRotaryTool {
 
 	public ItemDisk(int ID, int tex) {
 		super(ID, tex);
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

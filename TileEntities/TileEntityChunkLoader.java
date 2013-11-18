@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityChunkLoader extends TileEntityPowerReceiver implements LoadingCallback {

@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 /** To declare a machine output-only, return 0 for addFluid for all cases.

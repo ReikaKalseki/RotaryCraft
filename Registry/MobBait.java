@@ -41,7 +41,6 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 public enum MobBait {
@@ -99,12 +98,16 @@ public enum MobBait {
 
 	public static MobBait getEntryFromEntity(EntityLivingBase e) {
 		Class c = e.getClass();
+		MobBait strict = null;
+		MobBait len = null;
 		for (int i = 0; i < baitList.length; i++) {
 			if (c == baitList[i].entityClass)
-				return baitList[i];
+				strict = baitList[i];
+			if (baitList[i].entityClass.isAssignableFrom(c))
+				len = baitList[i];
 		}
-		ReikaChatHelper.write("Entity "+e.getEntityName()+" has no mapped bait items!");
-		return null;
+		//ReikaChatHelper.write("Entity "+e.getEntityName()+" has no mapped bait items!");
+		return strict != null ? strict : len;
 	}
 
 	public int getAttractorItemID() {
@@ -183,6 +186,7 @@ public enum MobBait {
 		if (!isAffectableEntity(e))
 			return false;
 		ItemStack is = getEntityRepellent(e);
+		//ReikaJavaLibrary.pConsole(is, e instanceof EntityPigZombie);
 		return ReikaInventoryHelper.checkForItemStack(is, inv, false);
 	}
 
@@ -194,12 +198,7 @@ public enum MobBait {
 	}
 
 	public static boolean isAffectableEntity(EntityLivingBase e) {
-		Class c = e.getClass();
-		for (int i = 0; i < baitList.length; i++) {
-			if (c == baitList[i].entityClass)
-				return true;
-		}
-		return false;
+		return getEntryFromEntity(e) != null;
 	}
 
 	public int getMobIconU() {

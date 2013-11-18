@@ -19,7 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

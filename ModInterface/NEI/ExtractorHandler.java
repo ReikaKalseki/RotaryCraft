@@ -29,7 +29,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
-import Reika.RotaryCraft.GUIs.GuiExtractor;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;

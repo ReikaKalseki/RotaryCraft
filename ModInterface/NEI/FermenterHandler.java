@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.GUIs.GuiFermenter;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import codechicken.nei.PositionedStack;

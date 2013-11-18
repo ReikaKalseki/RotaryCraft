@@ -22,7 +22,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {

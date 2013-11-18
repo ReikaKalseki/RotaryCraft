@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityBeamMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -64,7 +64,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	public void spreadFire(World world, int x, int y, int z, int meta, int range) {
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != -1 || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != -1) {
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null) {
 			int a = 0;
 			if (meta > 1)
 				a = 1;

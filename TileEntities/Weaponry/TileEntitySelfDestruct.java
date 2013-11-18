@@ -11,7 +11,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySelfDestruct extends TileEntityPowerReceiver {

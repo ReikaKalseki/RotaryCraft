@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.GUIs.GuiWorktable;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiCraftingRecipe;

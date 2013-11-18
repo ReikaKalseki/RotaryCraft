@@ -57,12 +57,12 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	public ItemBedrockPickaxe(int ID, int tex) {
 		super(ID, EnumToolMaterial.EMERALD);
 		this.setIndex(tex);
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 5;
 		this.setNoRepair();
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
@@ -56,7 +56,7 @@ public class ItemDebug extends ItemRotaryTool {
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BEVELGEARS) {
-			TileEntityGearBevel tile = (TileEntityGearBevel)world.getBlockTileEntity(x, y, z);
+			TileEntityBevelGear tile = (TileEntityBevelGear)world.getBlockTileEntity(x, y, z);
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d", tile.direction));
 			}

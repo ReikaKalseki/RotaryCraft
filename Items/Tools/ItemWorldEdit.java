@@ -18,10 +18,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 
-public class ItemWorldEdit extends ItemBasic {
+public class ItemWorldEdit extends ItemRotaryTool {
 
 	public int[] start = new int[3];
 	public int[] end = new int[3];

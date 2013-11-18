@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Base.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 
 public class TileEntityDeadMachine extends InventoriedRCTileEntity implements InertIInv {
 

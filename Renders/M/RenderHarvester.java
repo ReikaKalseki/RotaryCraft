@@ -26,7 +26,7 @@ import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import cpw.mods.fml.relauncher.Side;

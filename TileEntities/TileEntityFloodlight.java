@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityBeamMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;

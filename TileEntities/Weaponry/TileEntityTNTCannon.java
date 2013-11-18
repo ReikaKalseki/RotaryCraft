@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
-import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTNTCannon extends TileEntityLaunchCannon {

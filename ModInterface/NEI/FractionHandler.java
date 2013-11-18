@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.GUIs.GuiFractionator;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;

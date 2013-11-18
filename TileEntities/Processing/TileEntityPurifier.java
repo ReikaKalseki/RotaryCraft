@@ -18,12 +18,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE {
@@ -196,22 +197,22 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 
-		int waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (waterside != -1) {
+		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
+		if (waterside != null) {
 			Tamb /= 2;
 		}
-		int iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-		if (iceside != -1) {
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
 			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
 		}
-		int fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-		if (fireside != -1) {
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != null) {
 			Tamb += 200;
 		}
-		int lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-		if (lavaside != -1) {
+		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != null) {
 			Tamb += 600;
 		}
 		if (temperature > Tamb)

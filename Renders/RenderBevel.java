@@ -17,13 +17,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.Animated.ModelBevel;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearBevel;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 
 public class RenderBevel extends RotaryTERenderer
 {
@@ -33,7 +35,7 @@ public class RenderBevel extends RotaryTERenderer
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityBevelAt(TileEntityGearBevel tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityBevelAt(TileEntityBevelGear tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -189,13 +191,82 @@ public class RenderBevel extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityBevelAt((TileEntityGearBevel)tile, par2, par4, par6, par8);
+			this.renderTileEntityBevelAt((TileEntityBevelGear)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			//this.renderCompass(tile, par2, par4, par6);
-			this.renderFaceColors((TileEntityIOMachine) tile, par2, par4, par6);
-			//if (((TileEntityIOMachine)tile).iotick < 255)
+			if (((TileEntityIOMachine)tile).iotick > 64 && ConfigRegistry.COLORBLIND.getState())
+				this.renderFaceNumbers((TileEntityBevelGear)tile, par2, par4, par6);
+			else
+				this.renderFaceColors((TileEntityIOMachine) tile, par2, par4, par6);
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
+	}
+
+	private void renderFaceNumbers(TileEntityBevelGear tile, double par2, double par4, double par6) {
+		GL11.glTranslated(par2, par4, par6);
+		ReikaRenderHelper.disableLighting();
+		double s = 0.0625;
+		double d = 0.53;
+		for (int i = 0; i < 6; i++) {
+			double l = -0.07;
+			int rx = 0;
+			int ry = 0;
+			int rz = 0;
+			double dx = 0;
+			double dy = 0;
+			double dz = 0;
+			switch(i) {
+			case 0:
+				rx = 90;
+				l = 0.07;
+				break;
+			case 1:
+				rx = 90;
+				dy = 1;
+				break;
+			case 2:
+				rz = 180;
+				dy = 1;
+				dx = 1;
+				break;
+			case 3:
+				dz = 1;
+				l = 0.07;
+				break;
+			case 4:
+				ry = 90;
+				rz = 180;
+				dy = 1;
+				break;
+			case 5:
+				ry = -90;
+				rz = 180;
+				dy = 1;
+				dx = 1;
+				dz = 1;
+				break;
+			}
+			GL11.glTranslated(dx, 0, 0);
+			GL11.glTranslated(0, dy, 0);
+			GL11.glTranslated(0, 0, dz);
+			GL11.glRotated(rx, 1, 0, 0);
+			GL11.glRotated(ry, 0, 1, 0);
+			GL11.glRotated(rz, 0, 0, 1);
+			GL11.glTranslated(d, 0.28, l);
+			GL11.glScaled(s, s, s);
+			//Minecraft.getMinecraft().fontRenderer.drawString("0", 0, 0, 0xffffff);
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(this.getFontRenderer(), String.valueOf(i), 0, 0, 0xffffff);
+			GL11.glScaled(1/s, 1/s, 1/s);
+			GL11.glTranslated(-d, -0.28, -l);
+			GL11.glRotated(-rz, 0, 0, 1);
+			GL11.glRotated(-ry, 0, 1, 0);
+			GL11.glRotated(-rx, 1, 0, 0);
+			GL11.glTranslated(0, 0, -dz);
+			GL11.glTranslated(0, -dy, 0);
+			GL11.glTranslated(-dx, 0, 0);
+		}
+		ReikaRenderHelper.enableLighting();
+		GL11.glTranslated(-par2, -par4, -par6);
 	}
 
 	private void renderCompass(TileEntity te, double p2, double p4, double p6) {

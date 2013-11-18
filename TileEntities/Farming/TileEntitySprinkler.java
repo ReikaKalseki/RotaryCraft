@@ -24,7 +24,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;

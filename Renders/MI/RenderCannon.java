@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Models.ModelCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;

@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.RotaryCraft.Base.TileEntityPiping;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {

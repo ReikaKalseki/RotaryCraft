@@ -37,7 +37,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

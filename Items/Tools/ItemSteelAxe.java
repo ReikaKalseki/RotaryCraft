@@ -29,8 +29,8 @@ public class ItemSteelAxe extends ItemAxe implements IndexedItemSprites {
 		super(ID, EnumToolMaterial.IRON);
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		this.setIndex(tex);
+		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SelectableTiles;
-import Reika.RotaryCraft.Base.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

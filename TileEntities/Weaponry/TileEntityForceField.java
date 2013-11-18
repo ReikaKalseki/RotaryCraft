@@ -47,7 +47,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;

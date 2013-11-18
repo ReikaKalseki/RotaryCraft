@@ -19,22 +19,25 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity1DTransmitter;
+import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory {
 
-	boolean isReleasing = false;
+	private boolean isReleasing = false;
 	public int releaseTorque = 0;
 	public int releaseOmega = 0;
 	/** Stored energy, in joules */
 	private long energy;
+
+	private boolean lastPower;
 
 	public static final int WORMRATIO = 16;
 
@@ -153,7 +156,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	{
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getType();
+		if (this.getType() == GearType.CVT) {
+			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
+				ratio = -ratio;
+		}
 		if (this.getType() != GearType.COIL)
 			this.transferPower(world, x, y, z, meta);
 		else
@@ -161,6 +167,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		power = (long)omega*(long)torque;
 
 		this.basicPowerReceiver();
+		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
 	private void store(World world, int x, int y, int z, int meta) {
