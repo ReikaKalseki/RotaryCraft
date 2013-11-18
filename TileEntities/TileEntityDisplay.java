@@ -15,22 +15,27 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController {
+public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController, OneSlotMachine {
 
 	private float scroll;
 	private int[] rgb = new int[3];
@@ -188,11 +193,15 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	}
 
 	public void addLine(String str) {
-		if (str.length() > displayWidth) {
-			String rstr = str.substring(0, displayWidth);
-			String estr = str.substring(displayWidth+1);
-			message.add(rstr);
-			message.add(estr);
+		//str = str.replaceAll("\\\\n", "");
+		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
+		int rd = 5;
+		if (str.length() > rd) {
+			int d = rd * f.FONT_HEIGHT;
+			List<String> list = f.listFormattedStringToWidth(str, d);
+			ReikaJavaLibrary.pConsole(list);
+			for (int i = 0; i < list.size(); i++)
+				message.add(list.get(i));
 		}
 		else
 			message.add(str);
@@ -203,6 +212,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	}
 
 	public void clearMessage() {
+		scroll = 0;
 		message.clear();
 	}
 

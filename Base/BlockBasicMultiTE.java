@@ -25,6 +25,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
@@ -371,22 +374,40 @@ public abstract class BlockBasicMultiTE extends Block {
 				}
 			}
 		}
-		if (m == MachineRegistry.DISPLAY && ReikaDyeHelper.isDyeItem(is)) {
-			TileEntityDisplay td = (TileEntityDisplay)te;
-			td.setColor(ReikaDyeHelper.getColorFromItem(is));
-			return true;
-		}
-		if (m == MachineRegistry.DISPLAY && is != null && is.itemID == Item.glowstone.itemID) {
-			TileEntityDisplay td = (TileEntityDisplay)te;
-			td.setColorToArgon();
-			return true;
-		}
-		if (m == MachineRegistry.DISPLAY && is != null && is.itemID == ItemRegistry.SPRING.getShiftedID()) {
-			TileEntityDisplay td = (TileEntityDisplay)te;
-			td.swapCoils(is);
-			if (!ep.capabilities.isCreativeMode)
-				ep.setCurrentItemOrArmor(0, null);
-			return true;
+		if (m == MachineRegistry.DISPLAY && is != null) {
+			if (ReikaDyeHelper.isDyeItem(is)) {
+				TileEntityDisplay td = (TileEntityDisplay)te;
+				td.setColor(ReikaDyeHelper.getColorFromItem(is));
+				return true;
+			}
+			if (is.itemID == Item.glowstone.itemID) {
+				TileEntityDisplay td = (TileEntityDisplay)te;
+				td.setColorToArgon();
+				return true;
+			}
+			if (is.itemID == Item.writtenBook.itemID) {
+				try {
+					TileEntityDisplay td = (TileEntityDisplay)te;
+					NBTTagCompound nbt = is.stackTagCompound;
+					NBTTagList li = (NBTTagList)nbt.getTags().toArray()[2];
+					ArrayList<String> s = new ArrayList();
+					for (int i = 0; i < li.tagCount(); i++) {
+						NBTTagString ns = (NBTTagString)li.tagAt(i);
+						s.add(ns.data);
+					}
+					td.clearMessage();
+					for (int i = 0; i < s.size(); i++) {
+						td.addLine(s.get(i));
+						if (i < s.size()-1)
+							td.addLine("");
+					}
+				}
+				catch (Exception e) {
+					ReikaChatHelper.writeString("Error reading book.");
+					e.printStackTrace();
+				}
+				return true;
+			}
 		}
 		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;

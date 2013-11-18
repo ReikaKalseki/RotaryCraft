@@ -21,7 +21,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -35,8 +34,6 @@ public class BlockGPR extends BlockBasicMachine {
 	}
 
 	public int getBlockTextureFromSideAndMetadata(int s, int dmg) {
-		// We want the texture next to our default texture from this block for the bottom and top side
-		// so we just add 1 when the side is 0 or 1 else we return the default one
 		if (s == 1)
 			return 82;
 		if (s == 0)
@@ -191,7 +188,7 @@ public class BlockGPR extends BlockBasicMachine {
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
 		if (this.canHarvest(world, player, x, y, z))
-			this.harvestBlock(world, player, x, y, z, 0);
+			;//this.harvestBlock(world, player, x, y, z, 0);
 		return world.setBlock(x, y, z, 0);
 	}
 

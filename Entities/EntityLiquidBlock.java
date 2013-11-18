@@ -17,20 +17,25 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
+import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 
 public class EntityLiquidBlock extends Entity {
 
 	private Fluid fluid;
+	private TileEntityFlooder tile;
 
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public EntityLiquidBlock(World world) {
 		super(world);
+		fluid = null;
+		tile = null;
 	}
 
-	public EntityLiquidBlock(World world, int x, int y, int z, Fluid f) {
+	public EntityLiquidBlock(World world, int x, int y, int z, Fluid f, TileEntityFlooder te) {
 		super(world);
 		fluid = f;
+		tile = te;
 		this.setPosition(x, y, z);
 	}
 
