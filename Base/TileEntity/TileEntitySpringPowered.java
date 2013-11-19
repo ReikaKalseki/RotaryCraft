@@ -24,6 +24,8 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 	public abstract int getBaseDischargeTime();
 
 	protected final int getUnwindTime() {
+		if (isCreativeMode)
+			return Integer.MAX_VALUE;
 		ItemStack is = inv[this.getCoilSlot()];
 		int base = this.getBaseDischargeTime();
 		return base*((TensionStorage)is.getItem()).getStiffness(is);
