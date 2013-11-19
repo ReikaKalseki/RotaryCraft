@@ -19,6 +19,8 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
+	public boolean isCreativeMode;
+
 	public abstract int getBaseDischargeTime();
 
 	protected final int getUnwindTime() {
@@ -43,10 +45,14 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 
 	protected final ItemStack getDecrementedCharged() {
 		ItemStack in = inv[this.getCoilSlot()];
+		if (isCreativeMode)
+			return in;
 		return new ItemStack(in.itemID, in.stackSize, in.getItemDamage()-1);
 	}
 
 	protected final boolean hasCoil() {
+		if (isCreativeMode)
+			return true;
 		ItemStack is = inv[this.getCoilSlot()];
 		if (is == null)
 			return false;
@@ -94,6 +100,8 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+
+		isCreativeMode = NBT.getBoolean("creative");
 	}
 
 	/**
@@ -118,5 +126,7 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		NBT.setBoolean("creative", isCreativeMode);
 	}
 }

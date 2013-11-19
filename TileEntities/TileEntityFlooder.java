@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -45,10 +44,11 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			}
 		}*/
 		//Do with entities?
-		if (tickcount > 20) {
+		if (tickcount > 20 && tank.getLevel() >= 1000) {
 			tickcount = 0;
 			if (!world.isRemote)
-				world.spawnEntityInWorld(new EntityLiquidBlock(world, x, y-2, z, FluidRegistry.WATER));
+				world.spawnEntityInWorld(new EntityLiquidBlock(world, x, y-1, z, tank.getActualFluid(), this));
+			tank.removeLiquid(1000);
 		}
 	}
 

@@ -396,11 +396,16 @@ public abstract class BlockBasicMultiTE extends Block {
 						s.add(ns.data);
 					}
 					td.clearMessage();
+					StringBuilder sb = new StringBuilder();
 					for (int i = 0; i < s.size(); i++) {
-						td.addLine(s.get(i));
-						if (i < s.size()-1)
-							td.addLine("");
+						sb.append(s.get(i));
+						if (i < s.size()-1 && !s.get(i).endsWith(" ")) {
+							sb.append(" ");
+						}
 					}
+					td.setMessage(sb.toString());
+					//String text = sb.toString();
+					//ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue(), text, td);
 				}
 				catch (Exception e) {
 					ReikaChatHelper.writeString("Error reading book.");
@@ -554,9 +559,6 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (te instanceof TileEntityMusicBox) {
 			((TileEntityMusicBox)te).deleteFiles(x, y, z);
-		}
-		if (te instanceof TileEntityDisplay) {
-			((TileEntityDisplay)te).deleteFiles(x, y, z);
 		}
 		if (te instanceof TileEntityLamp) {
 			((TileEntityLamp)te).clearAll();

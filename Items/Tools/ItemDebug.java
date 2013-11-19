@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -54,15 +55,21 @@ public class ItemDebug extends ItemRotaryTool {
 				ReikaChatHelper.write("Tile Entity Direction Data: "+(((RotaryCraftTileEntity)te).getBlockMetadata()+1)+" of "+((RotaryCraftTileEntity)te).getMachine().getNumberDirections());
 			ReikaChatHelper.write("Additional Data (Meaning differs per machine):");
 		}
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (player.isSneaking() && te instanceof TileEntitySpringPowered) {
+			TileEntitySpringPowered sp = (TileEntitySpringPowered)te;
+			sp.isCreativeMode = !sp.isCreativeMode;
+			return true;
+		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BEVELGEARS) {
-			TileEntityBevelGear tile = (TileEntityBevelGear)world.getBlockTileEntity(x, y, z);
+			TileEntityBevelGear tile = (TileEntityBevelGear)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d", tile.direction));
 			}
 		}
 		if (m == MachineRegistry.BLASTFURNACE) {
-			TileEntityBlastFurnace tile = (TileEntityBlastFurnace)world.getBlockTileEntity(x, y, z);
+			TileEntityBlastFurnace tile = (TileEntityBlastFurnace)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("Temperature: %dC", tile.getTemperature()));
 				if (player.isSneaking()) {
@@ -71,56 +78,56 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 		}
 		if (m == MachineRegistry.BELT) {
-			TileEntityBeltHub tile = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+			TileEntityBeltHub tile = (TileEntityBeltHub)te;
 			if (tile != null) {
 				ReikaChatHelper.write(tile.getDistanceToTarget()+" @ "+tile.getBeltDirection());
 			}
 		}
 		if (m == MachineRegistry.HOSE) {
-			TileEntityHose tile = (TileEntityHose)world.getBlockTileEntity(x, y, z);
+			TileEntityHose tile = (TileEntityHose)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d", tile.getLiquidLevel()));
 			}
 		}
 		if (world.getBlockId(x, y, z) == Block.mobSpawner.blockID) {
-			TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
+			TileEntityMobSpawner tile = (TileEntityMobSpawner)te;
 			if (tile != null) {
 				MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 				lgc.spawnDelay = 0;
 			}
 		}
 		if (m == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
+			TileEntityPipe tile = (TileEntityPipe)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getLiquidType(), tile.getLiquidLevel(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.PUMP) {
-			TileEntityPump tile = (TileEntityPump)world.getBlockTileEntity(x, y, z);
+			TileEntityPump tile = (TileEntityPump)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d", tile.getLevel() <= 0 ? 0 : tile.getLiquid().getID(), tile.getLevel()));
 			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
+			TileEntityReservoir tile = (TileEntityReservoir)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%s  %d", tile.getFluid().getLocalizedName(), tile.getLevel()));
 			}
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
-			TileEntityExtractor tile = (TileEntityExtractor)world.getBlockTileEntity(x, y, z);
+			TileEntityExtractor tile = (TileEntityExtractor)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d", tile.getLevel()));
 			}
 		}
 		if (m == MachineRegistry.SPRINKLER) {
-			TileEntitySprinkler tile = (TileEntitySprinkler)world.getBlockTileEntity(x, y, z);
+			TileEntitySprinkler tile = (TileEntitySprinkler)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d", tile.getWater(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.OBSIDIAN) {
-			TileEntityObsidianMaker tile = (TileEntityObsidianMaker)world.getBlockTileEntity(x, y, z);
+			TileEntityObsidianMaker tile = (TileEntityObsidianMaker)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getWater(), tile.getLava(), tile.temperature));
 			}
@@ -131,7 +138,7 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 		}
 		if (m == MachineRegistry.TNTCANNON) {
-			TileEntityTNTCannon tile = (TileEntityTNTCannon)world.getBlockTileEntity(x, y, z);
+			TileEntityTNTCannon tile = (TileEntityTNTCannon)te;
 			if (tile != null) {
 				if (player.isSneaking()) {
 					if (tile.isCreative) {
@@ -146,7 +153,7 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 		}
 		if (m == MachineRegistry.PULSEJET) {
-			TileEntityPulseFurnace tile = (TileEntityPulseFurnace)world.getBlockTileEntity(x, y, z);
+			TileEntityPulseFurnace tile = (TileEntityPulseFurnace)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getWater(), tile.temperature, tile.getFuel()));
 				if (player.isSneaking()) {
@@ -157,19 +164,19 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 		}
 		if (m == MachineRegistry.FRACTIONATOR) {
-			TileEntityFractionator tile = (TileEntityFractionator)world.getBlockTileEntity(x, y, z);
+			TileEntityFractionator tile = (TileEntityFractionator)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d", tile.getFuelLevel()));
 			}
 		}
 		if (m == MachineRegistry.FAN) {
-			TileEntityFan tile = (TileEntityFan)world.getBlockTileEntity(x, y, z);
+			TileEntityFan tile = (TileEntityFan)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d %d %d", tile.xstep, tile.ystep, tile.zstep));
 			}
 		}
 		if (m == MachineRegistry.ENGINE) {
-			TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+			TileEntityEngine tile = (TileEntityEngine)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d", tile.getWater(), tile.temperature));
 			}
@@ -182,13 +189,13 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 		}
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft tile = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+			TileEntityShaft tile = (TileEntityShaft)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d %d %d %d", tile.readomega[0], tile.readomega[1], tile.readtorque[0], tile.readtorque[1]));
 			}
 		}
 		if (m == MachineRegistry.GEARBOX) {
-			TileEntityGearbox tile = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+			TileEntityGearbox tile = (TileEntityGearbox)te;
 			if (player.isSneaking()) {
 				tile.damage = 0;
 				tile.setLubricant(tile.MAXLUBE);

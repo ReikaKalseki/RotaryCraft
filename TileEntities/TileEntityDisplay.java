@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -23,17 +17,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Base.OneSlotMachine;
-import Reika.DragonAPI.Instantiable.GuiStringBuilder;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Renders.M.RenderDisplay;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController, OneSlotMachine {
 
@@ -42,9 +35,9 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	private int[] Brgb = new int[3];
 	private static final int[] ArRGB = {0, 128, 255};
 	private static final int[] ArBRGB = {0, 255, 255};
-	private ArrayList<String> message = new ArrayList<String>();
+	private String message = "";
 	public static final int displayHeight = 12; //in lines
-	public static final int displayWidth = 41; //in chars
+	public static final int displayWidth = 27; //in chars
 	public static final int lineHeight = 12;
 	public static final int charWidth = 10;
 
@@ -100,25 +93,13 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	public boolean hasList() {
 		if (message == null)
 			return false;
-		if (message.size() <= 0)
+		if (message.isEmpty())
 			return false;
 		return true;
 	}
 
-	public String getMessageLine(int line) {
-		String l = message.get(line);
-		if (l.length() > displayWidth) {
-			String rl = l.substring(0, displayWidth);
-			String el = l.substring(displayWidth+1);
-			message.add(line+1, el);
-			message.set(line, rl);
-			return rl;
-		}
-		return l;
-	}
-
 	public int getMessageLength() {
-		return message.size();
+		return message.length();
 	}
 
 	public float getScrollPos() {
@@ -192,28 +173,16 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		return 0xffffff;
 	}
 
-	public void addLine(String str) {
-		//str = str.replaceAll("\\\\n", "");
-		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
-		int rd = 5;
-		if (str.length() > rd) {
-			int d = rd * f.FONT_HEIGHT;
-			List<String> list = f.listFormattedStringToWidth(str, d);
-			ReikaJavaLibrary.pConsole(list);
-			for (int i = 0; i < list.size(); i++)
-				message.add(list.get(i));
-		}
-		else
-			message.add(str);
-	}
-
-	public void deleteLine(int l) {
-		message.remove(l);
+	public void setMessage(String str) {
+		if (this.getSide() == Side.CLIENT)
+			((RenderDisplay)RotaryRenderList.getRenderForMachine(this.getMachine())).resetCache();
+		message = str;
 	}
 
 	public void clearMessage() {
-		scroll = 0;
-		message.clear();
+		if (this.getSide() == Side.CLIENT)
+			((RenderDisplay)RotaryRenderList.getRenderForMachine(this.getMachine())).resetCache();
+		message = "";
 	}
 
 	public void setColor(ReikaDyeHelper dye) {
@@ -228,37 +197,6 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		Brgb[2] = b;
 	}
 
-	public void setFullMessage(String str) {
-		this.clearMessage();
-		//ReikaJavaLibrary.pConsole(Arrays.toString(str.split(GuiStringBuilder.NEWLINE)));
-		if (str.length() > displayWidth) {
-			ArrayList<String> li = new ArrayList<String>();
-			while (str != null && str.length() > 0) {
-				if (str.length() <= displayWidth) {
-					String[] s = str.split(GuiStringBuilder.NEWLINE);
-					for (int i = 0; i < s.length; i++)
-						message.add(s[i]);
-					return;
-				}
-				else {
-					String s1 = str.substring(0, displayWidth);
-					String[] sp1 = s1.split(GuiStringBuilder.NEWLINE);
-					for (int i = 0; i < sp1.length; i++)
-						message.add(sp1[i]);
-					str = str.substring(displayWidth+1);
-					String[] s2 = str.split(GuiStringBuilder.NEWLINE);
-					for (int i = 0; i < s2.length; i++)
-						message.add(s2[i]);
-				}
-			}
-		}
-		else {
-			String[] s = str.split(GuiStringBuilder.NEWLINE);
-			for (int i = 0; i < s.length; i++)
-				message.add(s[i]);
-		}
-	}
-
 	/**
 	 * Writes a tile entity to NBT.
 	 */
@@ -268,15 +206,8 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		super.writeToNBT(NBT);
 		NBT.setIntArray("color", rgb);
 		NBT.setIntArray("Bcolor", Brgb);
-		/*
-		if (!message.isEmpty()) {
-			for (int i = 0; i < message.size(); i++) {
-				String str = message.get(i);
-				if (str != null && !str.isEmpty()) {
-					NBT.setString("msg"+i, str);
-				}
-			}
-		}*/
+
+		NBT.setString("msg", message);
 	}
 
 	/**
@@ -290,52 +221,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		rgb = NBT.getIntArray("color");
 		Brgb = NBT.getIntArray("Bcolor");
 
-		//message = new ArrayList<String>();
-	}
-
-	public void readFromFile() {
-		File save = DimensionManager.getCurrentSaveRootDirectory();
-		//ReikaJavaLibrary.pConsole(musicFile);
-		String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
-		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(save.getPath()+"\\RotaryCraft\\"+name)));
-			message = new ArrayList<String>();
-			String line = null;
-			while((line = p.readLine()) != null) {
-				message.add(line);
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
-		}
-	}
-
-	public void saveToFile() {
-		try {
-			File save = DimensionManager.getCurrentSaveRootDirectory();
-			String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
-			File dir = new File(save.getPath()+"\\RotaryCraft\\");
-			if (!dir.exists())
-				dir.mkdir();
-			File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
-			if (f.exists())
-				f.delete();
-			PrintWriter p = new PrintWriter(f);
-			f.createNewFile();
-			for (int i = 0; i < message.size(); i++) {
-				String str = message.get(i);
-				p.append(str);
-				if (i != message.size()-1)
-					p.append(GuiStringBuilder.NEWLINE);
-			}
-			p.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
-		}
+		message = NBT.getString("msg");
 	}
 
 	public void setColorToArgon() {
@@ -347,28 +233,10 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		Brgb[2] = ArBRGB[2];
 	}
 
-	public String getMessageAsBigString() {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < message.size(); i++) {
-			sb.append(message.get(i));
-			if (i != message.size()-1)
-				sb.append(GuiStringBuilder.NEWLINE);
-		}
-		return sb.toString();
-	}
-
-	public void deleteFiles(int x, int y, int z) {
-		File save = DimensionManager.getCurrentSaveRootDirectory();
-		//ReikaJavaLibrary.pConsole(musicFile);
-		String name = "displayscreen@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".txt";
-		File f = new File(save.getPath()+"\\RotaryCraft\\");
-		if (f.exists())
-			f.delete();
-	}
-
-	public void swapCoils(ItemStack is) {
-		ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, inv[0]);
-		inv[0] = is.copy();
+	@SideOnly(Side.CLIENT)
+	public List<String> getMessageForDisplay() {
+		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
+		return f.listFormattedStringToWidth(message, displayWidth*f.FONT_HEIGHT);
 	}
 
 	@Override

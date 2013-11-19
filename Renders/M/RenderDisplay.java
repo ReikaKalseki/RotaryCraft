@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
+import java.util.List;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +30,8 @@ import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 public class RenderDisplay extends RotaryTERenderer {
 
 	private ModelDisplay displayModel = new ModelDisplay();
+
+	private List<String> cache;
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -216,19 +220,32 @@ public class RenderDisplay extends RotaryTERenderer {
 		int dz = 0;
 		GL11.glTranslated(dx, 0, dz);
 
-		float scroll = tile.getScrollPos();
-		int linescroll = tile.getRoundedScroll();
-		int len = ReikaMathLibrary.extrema(tile.getMessageLength()-1, tile.displayHeight+linescroll-1, "min");
-		for (int i = linescroll; i < len+1; i++) {
-			//ReikaJavaLibrary.pConsole("Printing line "+i+" of "+tile.getMessageLength()+": "+tile.getMessageLine(i));
-			f.drawString(tile.getMessageLine(i), 0, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
-			GL11.glTranslated(0, 0, -0.2875);
-			f.drawString(tile.getMessageLine(i), 0, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
-			GL11.glTranslated(0, 0, 0.2875);
+		if (cache == null)
+			cache = tile.getMessageForDisplay();
+		else {
+			float scroll = cache.size() > tile.displayHeight ? (System.currentTimeMillis()/20)%(60*cache.size())/60F : 0;
+			int linescroll = scroll-(int)scroll > 0.5F ? (int)scroll+1 : (int)scroll;//tile.getRoundedScroll();
+			//ReikaJavaLibrary.pConsole(tile.getMessageLine(0));
+			int len = ReikaMathLibrary.extrema(cache.size()-1, tile.displayHeight+linescroll-1, "min");
+			for (int i = linescroll; i < len+1; i++) {
+				String s2 = cache.get(i);
+				//ReikaJavaLibrary.pConsole("Printing line "+i+" of "+tile.getMessageLength()+": "+tile.getMessageLine(i));
+				//f.drawString(tile.getMessageLine(i), 1, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+				//f.drawSplitString(s, 1, -1+(int)((i-scroll)*tile.lineHeight), tile.displayWidth*f.FONT_HEIGHT, tile.getTextColor());
+				f.drawString(s2, 1, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+				GL11.glTranslated(0, 0, -0.2875);
+				//f.drawString(tile.getMessageLine(i), 1, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+				f.drawString(s2, 1, -1+(int)((i-scroll)*tile.lineHeight), tile.getTextColor());
+				GL11.glTranslated(0, 0, 0.2875);
+			}
 		}
 		GL11.glPopMatrix();
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+
+	public void resetCache() {
+		cache = null;
 	}
 
 	@Override
