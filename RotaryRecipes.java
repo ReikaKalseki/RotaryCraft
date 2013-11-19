@@ -502,7 +502,7 @@ public class RotaryRecipes {
 	private static void addMisc() {
 		if (ConfigRegistry.CRAFTABLEBEDROCK.getState())
 			GameRegistry.addRecipe(new ItemStack(Block.bedrock.blockID, 1, 0), new Object[]{
-				"DDD", "DDD", "DDD", 'D', ItemStacks.bedrockdust});
+				"DDD", "DSD", "DDD", 'D', ItemStacks.bedrockdust, 'S', Block.stone});
 
 		GameRegistry.addRecipe(ItemRegistry.CANOLA.getCraftedMetadataProduct(1, 1), new Object[]{
 			"DDD", "DDD", "DDD", 'D', ItemRegistry.CANOLA.getStackOf()});

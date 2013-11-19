@@ -18,6 +18,7 @@ import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class GuiBasicStorage extends GuiMachine {

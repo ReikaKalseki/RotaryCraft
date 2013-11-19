@@ -36,6 +36,8 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 	private int cheatTick = 0;
 	private int[] lastTorque = new int[7]; //torque 1-7 ticks ago
 
+	private int pow2;
+
 	public int getRatioFromMode() {
 		switch(splitmode) {
 		case -1:

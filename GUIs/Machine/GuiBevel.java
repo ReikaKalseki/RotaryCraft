@@ -25,7 +25,12 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 
 public class GuiBevel extends GuiNonPoweredMachine
 {
-	/** Cyan-Blue, Yellow-Black, Orange-Magenta (0,1; 2,3; 4,5) */
+	/** Side colors:
+	 * 
+	 * Cyan y-1; blue y+1; yellow -z; black +z; orange -x; magenta +x;<br>
+	 * 0 y-1; 1 y+1; 2 -z; 3 +z; 4 -x; 5 +x;
+	 * 
+	 */
 	private int posn;
 
 	/** Cyan-Blue, Yellow-Black, Orange-Magenta (0,1; 2,3; 4,5) */
@@ -34,6 +39,8 @@ public class GuiBevel extends GuiNonPoweredMachine
 	private int out;
 	/** Cyan-Blue, Yellow-Black, Orange-Magenta (0,1; 2,3; 4,5) */
 	private boolean[] isValid = {true, true, true, true, true, true};
+
+
 
 	private TileEntityBevelGear bevel;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
@@ -79,7 +86,106 @@ public class GuiBevel extends GuiNonPoweredMachine
 
 	public void getIOFromDirection() {
 		switch(posn) {
+		case 0:
+			in = 4;
+			out = 2;
+			break;
+		case 1:
+			in = 2;
+			out = 5;
+			break;
+		case 2:
+			in = 5;
+			out = 3;
+			break;
+		case 3:
+			in = 3;
+			out = 4;
+			break;
+		case 4:
+			in = 4;
+			out = 3;
+			break;
+		case 5:
+			in = 4;
+			out = 2;
+			break;
+		case 6:
+			in = 5;
+			out = 2;
+			break;
+		case 7:
+			in = 3;
+			out = 5;
+			break;
 
+		case 8:
+			in = 4;
+			out = 1;
+			break;
+		case 9:
+			in = 2;
+			out = 1;
+			break;
+		case 10:
+			in = 5;
+			out = 1;
+			break;
+		case 11:
+			in = 3;
+			out = 1;
+			break;
+
+		case 12:
+			in = 0;
+			out = 4;
+			break;
+		case 13:
+			in = 0;
+			out = 2;
+			break;
+		case 14:
+			in = 0;
+			out = 5;
+			break;
+		case 15:
+			in = 0;
+			out = 3;
+			break;
+
+		case 16:
+			in = 4;
+			out = 0;
+			break;
+		case 17:
+			in = 2;
+			out = 0;
+			break;
+		case 18:
+			in = 5;
+			out = 0;
+			break;
+		case 19:
+			in = 3;
+			out = 0;
+			break;
+
+		case 20:
+			in = 1;
+			out = 4;
+			break;
+		case 21:
+			in = 1;
+			out = 2;
+			break;
+		case 22:
+			in = 1;
+			out = 5;
+			break;
+		case 23:
+			in = 1;
+			out = 3;
+			break;
 		}
 	}
 

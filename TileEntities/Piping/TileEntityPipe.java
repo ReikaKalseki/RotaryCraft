@@ -91,6 +91,13 @@ public class TileEntityPipe extends TileEntityPiping {
 			TileEntityPump tile = (TileEntityPump)te;
 			fluidPressure = tile.liquidPressure;
 		}
+		else if (te instanceof TileEntityPipe) {
+			TileEntityPipe tile = (TileEntityPipe)te;
+			int dp = tile.fluidPressure-fluidPressure;
+			if (dp > 0) {
+				fluidPressure += dp/4;
+			}
+		}
 	}
 
 	/**

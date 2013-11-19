@@ -23,7 +23,7 @@ import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
-import Reika.RotaryCraft.Base.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -91,7 +91,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		int val = 0;
 		if (waterPressure <= 0)
 			return 0;
-		val = waterPressure/400;
+		val = waterPressure/80;
 		if (val > this.getMaxRange())
 			val = this.getMaxRange();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", val));

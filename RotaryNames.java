@@ -123,7 +123,7 @@ public class RotaryNames {
 
 		for (int i = 0; i < blockNames.length; i++) {
 			ItemStack blockStack = new ItemStack(RotaryCraft.decoblock, 1, i);
-			LanguageRegistry.addName(blockStack, getName(blockNames[blockStack.getItemDamage()], false));
+			LanguageRegistry.addName(blockStack, getName(blockNames[i], false));
 		}
 
 		LanguageRegistry.addName(RotaryCraft.bedrockslice, getName("block.bedrockslice", true));

@@ -30,8 +30,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -50,7 +50,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public int liquidPressure = 0;
 
 	/** Rate of conversion - one power++ = one tick-- per operation */
-	public static final int FALLOFF = 8; //512W per 1 kPa
+	public static final int FALLOFF = 256; //256W per 1 kPa
 
 	public void getPressure() {
 		int overPower = (int)(power-MINPOWER);
@@ -58,7 +58,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			liquidPressure = 0;
 			return;
 		}
-		liquidPressure = overPower/FALLOFF;
+		liquidPressure = 101+overPower/FALLOFF;
 	}
 
 	@Override
