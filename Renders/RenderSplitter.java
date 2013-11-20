@@ -16,14 +16,13 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelSplitter;
 import Reika.RotaryCraft.Models.Animated.ModelSplitter2;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
-public class RenderSplitter extends RotaryTERenderer implements MultiModel
+public class RenderSplitter extends RotaryTERenderer
 {
 
 	private ModelSplitter SplitterModel = new ModelSplitter();

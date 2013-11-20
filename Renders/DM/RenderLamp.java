@@ -18,14 +18,13 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelLamp;
 import Reika.RotaryCraft.Models.ModelVLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 
-public class RenderLamp extends RotaryTERenderer implements MultiModel
+public class RenderLamp extends RotaryTERenderer
 {
 
 	private ModelLamp LampModel = new ModelLamp();

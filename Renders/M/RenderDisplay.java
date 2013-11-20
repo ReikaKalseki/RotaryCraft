@@ -223,7 +223,8 @@ public class RenderDisplay extends RotaryTERenderer {
 		if (cache == null)
 			cache = tile.getMessageForDisplay();
 		else {
-			float scroll = cache.size() > tile.displayHeight ? (System.currentTimeMillis()/20)%(60*cache.size())/60F : 0;
+			long core = tile.getTick();//System.currentTimeMillis();
+			float scroll = cache.size() > tile.displayHeight ? (core*4)%(180*cache.size())/180F : 0;
 			int linescroll = scroll-(int)scroll > 0.5F ? (int)scroll+1 : (int)scroll;//tile.getRoundedScroll();
 			//ReikaJavaLibrary.pConsole(tile.getMessageLine(0));
 			int len = ReikaMathLibrary.extrema(cache.size()-1, tile.displayHeight+linescroll-1, "min");

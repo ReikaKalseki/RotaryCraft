@@ -21,7 +21,6 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox;
@@ -30,7 +29,7 @@ import Reika.RotaryCraft.Models.Animated.ModelGearbox4;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox8;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
-public class RenderGearbox extends RotaryTERenderer implements MultiModel
+public class RenderGearbox extends RotaryTERenderer
 {
 
 	private ModelGearbox GearboxModel = new ModelGearbox();

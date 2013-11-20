@@ -17,14 +17,13 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.Animated.ModelBedrockBreakerV;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 
-public class RenderBedrockBreaker extends RotaryTERenderer implements MultiModel
+public class RenderBedrockBreaker extends RotaryTERenderer
 {
 	private ModelBedrockBreaker bbm = new ModelBedrockBreaker();
 	private ModelBedrockBreakerV bbmV = new ModelBedrockBreakerV();

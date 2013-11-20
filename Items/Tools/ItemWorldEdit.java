@@ -79,8 +79,8 @@ public class ItemWorldEdit extends ItemRotaryTool {
 					if (id == 0)
 						name = "Air";
 					else
-						name = Block.blocksList[id].getLocalizedName();
-					ReikaChatHelper.write(String.format("%d", Math.abs((s[0]-e[0]+1)*(s[1]-e[1]+1)*(s[2]-e[2]+1)))+" blocks being changed to Block "+name+" (ID "+id+") with Metadata "+meta);
+						name = new ItemStack(id, 1, meta).getDisplayName();
+					ReikaChatHelper.write(String.format("%d", Math.abs((s[0]-e[0]+1)*(s[1]-e[1]+1)*(s[2]-e[2]+1)))+" blocks being changed to "+name+" (ID "+id+") with Metadata "+meta);
 					for (int m = 0; m < 3; m++) {
 						if (s[m] > e[m]) {
 							int sc = s[m];

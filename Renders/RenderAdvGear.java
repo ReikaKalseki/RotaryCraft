@@ -17,7 +17,6 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -26,7 +25,7 @@ import Reika.RotaryCraft.Models.Animated.ModelCoil;
 import Reika.RotaryCraft.Models.Animated.ModelWorm;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
-public class RenderAdvGear extends RotaryTERenderer implements MultiModel
+public class RenderAdvGear extends RotaryTERenderer
 {
 
 	private ModelWorm wormModel = new ModelWorm();

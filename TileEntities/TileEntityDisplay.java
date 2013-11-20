@@ -21,7 +21,6 @@ import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
-import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Renders.M.RenderDisplay;
@@ -70,6 +69,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.updateCoil();
+		tickcount++;
 	}
 
 	private void updateCoil() {
@@ -175,13 +175,13 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 
 	public void setMessage(String str) {
 		if (this.getSide() == Side.CLIENT)
-			((RenderDisplay)RotaryRenderList.getRenderForMachine(this.getMachine())).resetCache();
+			((RenderDisplay)this.getRenderer()).resetCache();
 		message = str;
 	}
 
 	public void clearMessage() {
 		if (this.getSide() == Side.CLIENT)
-			((RenderDisplay)RotaryRenderList.getRenderForMachine(this.getMachine())).resetCache();
+			((RenderDisplay)this.getRenderer()).resetCache();
 		message = "";
 	}
 

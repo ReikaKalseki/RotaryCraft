@@ -17,13 +17,12 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.MultiModel;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 
-public class RenderFlywheel extends RotaryTERenderer implements MultiModel
+public class RenderFlywheel extends RotaryTERenderer
 {
 
 	private ModelFlywheel FlywheelModel = new ModelFlywheel();
