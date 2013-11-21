@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
 import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 
@@ -50,8 +51,37 @@ public class EntityLiquidBlock extends Entity {
 			posY--;
 		}
 		else {
-			this.setDead();
+			ForgeDirection toPit = this.findPathToDepression(world, x, y, z);
+			if (toPit != null) {
+				int dx = x+toPit.offsetX;
+				int dy = y+toPit.offsetY;
+				int dz = z+toPit.offsetZ;
+				if (this.canMoveInto(toPit)) {
+					this.moveEntity(toPit.offsetX, toPit.offsetY, toPit.offsetZ);
+				}
+			}
+			else {
+
+			}
 		}
+		this.setDead();
+	}
+
+	public ForgeDirection findPathToDepression(World world, int x, int y, int z) {
+		ForgeDirection[] dir = new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.SOUTH, ForgeDirection.NORTH};
+		ReikaArrayHelper.shuffleArray(dir);
+		int dy = y-1;
+		int r = 6;
+		for (int i = 0; i < 4; i++) {
+			ForgeDirection d = dir[i];
+			for (int k = 1; k <= r; k++) {
+				int dx = x+d.offsetX*k;
+				int dz = z+d.offsetZ*k;
+				if (this.canMoveInto(d))
+					return d;
+			}
+		}
+		return null;
 	}
 
 	public int getIntegerX() {
@@ -93,6 +123,10 @@ public class EntityLiquidBlock extends Entity {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound NBT) {
 		ReikaNBTHelper.writeFluidToNBT(NBT, fluid);
+	}
+
+	public Fluid getFluid() {
+		return fluid;
 	}
 
 }

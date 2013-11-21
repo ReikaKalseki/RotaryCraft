@@ -108,7 +108,10 @@ public enum BlockRegistry implements RegistrationList, IDRegistry {
 			if (blockList[i].getBlockID() == id)
 				return blockList[i].getOffset();
 		}
-		throw new RuntimeException("Unregistered block ID "+id);
+		//throw new RuntimeException("Unregistered block ID "+id);
+		RotaryCraft.logger.logError("Unregistered block ID "+id);
+		Thread.dumpStack();
+		return 0;
 	}
 
 	public Block getBlockVariable() {

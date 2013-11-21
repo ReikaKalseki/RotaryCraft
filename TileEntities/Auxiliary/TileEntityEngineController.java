@@ -31,6 +31,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	private HybridTank tank = new HybridTank("ecu", FUELCAP);
 
+	public boolean redstoneMode;
+
 	private EngineSettings setting = EngineSettings.FULL;
 
 	private enum EngineSettings {
@@ -68,7 +70,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	public boolean canProducePower() {
-		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) && !redstoneMode)
 			return false;
 		return setting.speedFactor != 0;
 	}
@@ -126,6 +128,10 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (redstoneMode) {
+			int power = world.getBlockPowerInput(x, y, z);
+			setting = power == 15 ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
+		}
 		if (tank.isEmpty())
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
@@ -168,6 +174,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("lvl", setting.ordinal());
+
+		NBT.setBoolean("redstone", redstoneMode);
 	}
 
 	/**
@@ -181,6 +189,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		tank.readFromNBT(NBT);
 
 		setting = EngineSettings.list[NBT.getInteger("lvl")];
+
+		redstoneMode = NBT.getBoolean("redstone");
 	}
 
 	@Override

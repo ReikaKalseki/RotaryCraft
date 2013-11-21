@@ -25,10 +25,12 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
+import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Entities.RenderFreezeGunShot;
 import Reika.RotaryCraft.Entities.RenderIceBlock;
+import Reika.RotaryCraft.Entities.RenderLiquidBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
 import Reika.RotaryCraft.Entities.RenderSonicShot;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -98,6 +100,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityFreezeGunShot.class, new RenderFreezeGunShot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceBlock.class, new RenderIceBlock());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySonicShot.class, new RenderSonicShot());
+		RenderingRegistry.registerEntityRenderingHandler(EntityLiquidBlock.class, new RenderLiquidBlock());
 
 		this.registerSpriteSheets();
 		this.registerBlockSheets();

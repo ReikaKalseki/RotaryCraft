@@ -115,8 +115,14 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}
 			if (m == MachineRegistry.ECU) {
 				TileEntityEngineController clicked = (TileEntityEngineController)te;
-				clicked.increment();
-				ReikaChatHelper.writeString(String.format("ECU set to %.2f%s speed.", 100D*clicked.getSpeedMultiplier(), "%%"));
+				if (ep.isSneaking()) {
+					clicked.redstoneMode = !clicked.redstoneMode;
+					ReikaChatHelper.writeString(clicked.redstoneMode ? "ECU is now redstone-operated." : "ECU is now manually controlled.");
+				}
+				else {
+					clicked.increment();
+					ReikaChatHelper.writeString(String.format("ECU set to %.2f%s speed.", 100D*clicked.getSpeedMultiplier(), "%%"));
+				}
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)te;

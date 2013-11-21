@@ -9,12 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,6 +37,79 @@ public class RenderLiquidBlock extends Render
 	public void renderLiquidBlock(EntityLiquidBlock e, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glTranslated(par2, par4, par6);
+		GL11.glColor3f(1, 1, 1);
+		Tessellator v5 = Tessellator.instance;
+		RenderHelper.disableStandardItemLighting();
+		Icon ico;
+		Fluid f = e.getFluid();
+		if (f != null) {
+			ico = e.getFluid().getIcon();
+			ReikaLiquidRenderer.bindFluidTexture(f);
+		}
+		else {
+			ico = Block.grass.getIcon(0, 0);
+			ReikaTextureHelper.bindTerrainTexture();
+		}
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float du = ico.getMaxU();
+		float dv = ico.getMaxV();
+
+		float color = 1;
+
+		color = 0.5F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(0, 0, 0, u, v);
+		v5.addVertexWithUV(1, 0, 0, du, v);
+		v5.addVertexWithUV(1, 0, 1, du, dv);
+		v5.addVertexWithUV(0, 0, 1, u, dv);
+		v5.draw();
+
+		color = 1F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(0, 1, 1, u, dv);
+		v5.addVertexWithUV(1, 1, 1, du, dv);
+		v5.addVertexWithUV(1, 1, 0, du, v);
+		v5.addVertexWithUV(0, 1, 0, u, v);
+		v5.draw();
+
+		color = 0.6F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(0, 1, 0, u, dv);
+		v5.addVertexWithUV(1, 1, 0, du, dv);
+		v5.addVertexWithUV(1, 0, 0, du, v);
+		v5.addVertexWithUV(0, 0, 0, u, v);
+		v5.draw();
+
+		color = 0.8F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(0, 0, 1, u, v);
+		v5.addVertexWithUV(1, 0, 1, du, v);
+		v5.addVertexWithUV(1, 1, 1, du, dv);
+		v5.addVertexWithUV(0, 1, 1, u, dv);
+		v5.draw();
+
+		color = 0.8F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(0, 0, 0, u, v);
+		v5.addVertexWithUV(0, 0, 1, du, v);
+		v5.addVertexWithUV(0, 1, 1, du, dv);
+		v5.addVertexWithUV(0, 1, 0, u, dv);
+		v5.draw();
+
+		color = 0.6F;
+		GL11.glColor3f(color, color, color);
+		v5.startDrawingQuads();
+		v5.addVertexWithUV(1, 1, 0, u, dv);
+		v5.addVertexWithUV(1, 1, 1, du, dv);
+		v5.addVertexWithUV(1, 0, 1, du, v);
+		v5.addVertexWithUV(1, 0, 0, u, v);
+		v5.draw();
 
 		GL11.glTranslated(-par2, -par4, -par6);
 	}

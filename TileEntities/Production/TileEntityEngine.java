@@ -46,6 +46,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -1681,8 +1682,15 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					TileEntityEngine eng = (TileEntityEngine)te;
 					if (eng.type == EngineType.HYDRO) {
 						if (eng.hydroCheck(worldObj, xyz[0], xyz[1], xyz[2], eng.getBlockMetadata())) {
-							float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
-							size += 1*fac;
+							if (eng.omega == omega) {
+								float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
+								size += 1*fac;
+							}
+							else {
+								ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, xyz[0], xyz[1], xyz[2], 5);
+								if (rand.nextInt(3) == 0)
+									ReikaSoundHelper.playSoundAtBlock(worldObj, xyz[0], xyz[1], xyz[2], "mob.blaze.hit");
+							}
 						}
 					}
 				}
