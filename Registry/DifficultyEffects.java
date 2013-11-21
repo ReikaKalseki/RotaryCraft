@@ -13,7 +13,7 @@ import java.util.Random;
 
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 
 public enum DifficultyEffects {
 
@@ -150,7 +150,7 @@ public enum DifficultyEffects {
 			return false;
 		}
 		float chance = this.getChance();
-		return ReikaMathLibrary.doWithChance(chance);
+		return ReikaRandomHelper.doWithChance(chance);
 	}
 
 	private static EnumDifficulty getDifficulty() {

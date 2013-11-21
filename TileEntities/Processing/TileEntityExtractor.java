@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -65,19 +66,19 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
 			if (ore.isNetherOres()) {
-				if (ReikaMathLibrary.doWithChance(oreCopyNether/100D))
+				if (ReikaRandomHelper.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
 					return 1;
 			}
 			if (ore.isRare()) {
-				if (ReikaMathLibrary.doWithChance(oreCopyRare/100D))
+				if (ReikaRandomHelper.doWithChance(oreCopyRare/100D))
 					return 2;
 				else
 					return 1;
 			}
 		}
-		return ReikaMathLibrary.doWithChance(oreCopy/100D) ? 2 : 1;
+		return ReikaRandomHelper.doWithChance(oreCopy/100D) ? 2 : 1;
 	}
 
 	public void throughPut() {

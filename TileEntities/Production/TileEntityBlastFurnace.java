@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -110,7 +111,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				ReikaInventoryHelper.decrStack(11, inventory);
 			}
 		}
-		if (ReikaMathLibrary.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
+		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
 			num *= 1+rand.nextFloat();
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));

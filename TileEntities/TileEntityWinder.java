@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
@@ -113,7 +114,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			return false;
 		int dmg = inslot[0].getItemDamage();
 		float diff = (float)dmg/65536*0.05F;
-		boolean rand = ReikaMathLibrary.doWithChance(diff);
+		boolean rand = ReikaRandomHelper.doWithChance(diff);
 		if (rand)
 			ReikaJavaLibrary.pConsole(dmg, Side.SERVER);
 		return rand;

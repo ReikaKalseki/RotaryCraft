@@ -71,7 +71,7 @@ public class RotaryRecipes {
 				CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
 			}
 			catch (NullPointerException e) {
-				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");
+				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol! API issue?");
 				e.printStackTrace();
 			}
 			catch (Exception e) {

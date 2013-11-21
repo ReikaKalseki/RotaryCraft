@@ -30,7 +30,7 @@ import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.BlockArray;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -229,10 +229,10 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		world.setBlock(x, y, z, 0);
-		if (ReikaMathLibrary.doWithChance(50)) {
+		if (ReikaRandomHelper.doWithChance(50)) {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, this.getMachine().getCraftedProduct());
 		}
-		else if (ReikaMathLibrary.doWithChance(50)) {
+		else if (ReikaRandomHelper.doWithChance(50)) {
 			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 			items.add(new ItemStack(Item.netherStar));
 			items.add(new ItemStack(Item.diamond, 9, 0));

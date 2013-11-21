@@ -98,7 +98,7 @@ public class TileEntityFertilizer extends InventoriedPowerReceiver implements Ra
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);
-				if (ReikaMathLibrary.doWithChance(20))
+				if (ReikaRandomHelper.doWithChance(20))
 					this.consumeItem();
 			}
 			else if (id == Block.grass.blockID) {

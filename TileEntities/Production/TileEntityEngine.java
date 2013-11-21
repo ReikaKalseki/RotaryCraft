@@ -47,6 +47,7 @@ import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -330,7 +331,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		int[] pos = this.getWaterColumnPos();
 		int id = world.getBlockId(pos[0], y, pos[1]);
 		if (id == Block.lavaMoving.blockID || id == Block.lavaStill.blockID) {
-			if (ReikaMathLibrary.doWithChance(2)) {
+			if (ReikaRandomHelper.doWithChance(2)) {
 				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2, true);
 				world.setBlock(x, y, z, 0);
 			}

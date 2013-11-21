@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
@@ -104,7 +105,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	private void consumeItems() {
 		for (int i = 0; i < ingredients.length; i++) {
-			if (ReikaMathLibrary.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/16))
+			if (ReikaRandomHelper.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/16))
 				ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(ingredients[i], inv, false), inv);
 		}
 	}
