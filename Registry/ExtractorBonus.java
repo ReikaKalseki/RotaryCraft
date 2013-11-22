@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.Item;
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
@@ -23,7 +26,7 @@ public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
-	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM), ModList.IC2), //Nod to gregtech
+	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ModList.REACTORCRAFT, ExtractorModOres.getFlakeProduct(ModOreList.PITCHBLENDE), ModList.IC2, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM)), //Nod to gregtech
 	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.ironoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.FERROUS), 0.25F),
 	NETHERGOLD(ExtractorModOres.getSolutionProduct(ModOreList.NETHERGOLD), ItemStacks.silverflakes, 0.125F),
@@ -44,33 +47,48 @@ public enum ExtractorBonus {
 	private ItemStack bonusItem;
 	private ItemStack sourceItem;
 	private float probability;
-	private boolean hasMod = false;
-	private ItemStack modBonus;
-	private ModList modReq;
+	private boolean isVariable = false;
+	private List<ItemStack> modBonus;
+	private List<ModList> bonusMods;
 	private boolean hasReq = false;
-	private ModList bonusReq;
+	private ModList requirementMod;
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ModList req) {
 		bonusItem = is.copy();
 		sourceItem = in.copy();
 		probability = chance;
-		if (req != null) {
-			hasReq = true;
-			bonusReq = req;
-		}
+		hasReq = true;
+		requirementMod = req;
+		if (req.isLoaded())
+			RotaryCraft.logger.log(req.getDisplayName()+" is loaded. Adding extractor bonus "+this.toString());
+		else
+			RotaryCraft.logger.log(req.getDisplayName()+" is loaded. Skipping extractor bonus.");
 	}
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance) {
-		this(in, is, chance, null);
+		this(in, is, chance, null, null);
 	}
 
-	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ItemStack mod, ModList condition) {
+	private ExtractorBonus(ItemStack in, ItemStack is, float chance, Object... mods) {
 		bonusItem = is.copy();
 		sourceItem = in.copy();
 		probability = chance;
-		hasMod = true;
-		modBonus = mod.copy();
-		modReq = condition;
+
+		if (mods != null && mods.length > 0) {
+			isVariable = true;
+			if (mods.length%2 != 0)
+				throw new IllegalArgumentException("Every mod must have a specified bonus!");
+			modBonus = new ArrayList();
+			bonusMods = new ArrayList();
+			for (int i = 0; i < mods.length; i += 2) {
+				ModList mod = (ModList)mods[i];
+				ItemStack extra = (ItemStack)mods[i+1];
+				modBonus.add(extra.copy());
+				bonusMods.add(mod);
+			}
+		}
+
+		RotaryCraft.logger.log("Adding extractor bonus "+this.toString());
 	}
 
 	public static ExtractorBonus getBonusForIngredient(ItemStack is) {
@@ -84,11 +102,13 @@ public enum ExtractorBonus {
 	}
 
 	public ItemStack getBonus() {
-		if (hasReq && !bonusReq.isLoaded())
+		if (hasReq && !requirementMod.isLoaded())
 			return null;
-		if (hasMod) {
-			if (modReq.isLoaded())
-				return modBonus.copy();
+		if (isVariable) {
+			for (int i = 0; i < bonusMods.size(); i++) {
+				if (bonusMods.get(i).isLoaded())
+					return modBonus.get(i).copy();
+			}
 		}
 		return bonusItem.copy();
 	}
@@ -111,6 +131,52 @@ public enum ExtractorBonus {
 		else {
 			inv[slot] = bonus;
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (isVariable) {
+			sb.append("Bonuses from ");
+			sb.append(sourceItem.getDisplayName());
+			sb.append(":\n");
+			for (int i = 0; i < bonusMods.size(); i++) {
+				ModList mod = bonusMods.get(i);
+				ItemStack item = modBonus.get(i);
+				sb.append(mod.getDisplayName());
+				sb.append(": ");
+				sb.append(item.getDisplayName());
+				sb.append(" (");
+				sb.append(this.getBonusPercent());
+				sb.append("% chance)");
+				sb.append("\n");
+			}
+		}
+		else if (hasReq) {
+			sb.append("Bonus of ");
+			sb.append(this.getBonus().getDisplayName());
+			sb.append(" from ");
+			sb.append(sourceItem.getDisplayName());
+			sb.append(" (");
+			sb.append(this.getBonusPercent());
+			sb.append("% chance); ");
+			sb.append("Requires ");
+			sb.append(requirementMod.getDisplayName());
+		}
+		else {
+			sb.append("Bonus of ");
+			sb.append(this.getBonus().getDisplayName());
+			sb.append(" from ");
+			sb.append(sourceItem.getDisplayName());
+			sb.append(" (");
+			sb.append(this.getBonusPercent());
+			sb.append("% chance)");
+		}
+		return sb.toString();
+	}
+
+	public float getBonusPercent() {
+		return probability*100F;
 	}
 
 }
