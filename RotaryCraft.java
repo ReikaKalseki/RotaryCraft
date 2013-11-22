@@ -39,6 +39,7 @@ import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -220,6 +221,8 @@ public class RotaryCraft extends DragonAPIMod {
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
 
 		FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
+
+		RotaryRecipes.addThermalExpansion();
 	}
 
 	@Override
@@ -231,12 +234,12 @@ public class RotaryCraft extends DragonAPIMod {
 			new ModIncompatibilityException(instance, "Optifine", msg, false);
 		}
 
-		if (!DragonAPICore.isDeObfEnvironment())
+		if (!ReikaObfuscationHelper.isDeObfEnvironment())
 			IntegrityChecker.checkForTampering();
 
 		OreForcer.forceCompatibility();
 
-		RotaryRecipes.addModInterface();
+		//RotaryRecipes.addModInterface();
 		RotaryRecipes.addProps();
 	}
 	/*

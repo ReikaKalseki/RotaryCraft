@@ -18,13 +18,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import thermalexpansion.api.crafting.CraftingManagers;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
@@ -36,12 +34,12 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
-import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
@@ -63,21 +61,17 @@ public class RotaryRecipes {
 		ItemMaterialController.addItem(ItemStacks.steelblock, ItemMaterial.STEEL);
 	}
 
-	public static void addModInterface() {
+	public static void addThermalExpansion() {
 		if (ModList.THERMALEXPANSION.isLoaded()) {
 			FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
-			ethanol.amount = FluidContainerRegistry.BUCKET_VOLUME/ItemFuelLubeBucket.ETHANOL_VALUE;
-			try {
-				CraftingManagers.crucibleManager.addRecipe(ethanol.amount, ItemRegistry.ETHANOL.getStackOf(), ethanol);
-			}
-			catch (NullPointerException e) {
-				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol! API issue?");
-				e.printStackTrace();
-			}
-			catch (Exception e) {
-				RotaryCraft.logger.logError("Could not add magma crucible recipe for ethanol!");
-				e.printStackTrace();
-			}
+			int energy = 750;
+			NBTTagCompound toSend = new NBTTagCompound();
+			toSend.setInteger("energy", energy);
+			toSend.setCompoundTag("input", new NBTTagCompound());
+			toSend.setCompoundTag("output", new NBTTagCompound());
+			ItemRegistry.ETHANOL.getStackOf().writeToNBT(toSend.getCompoundTag("input"));
+			ethanol.writeToNBT(toSend.getCompoundTag("output"));
+			FMLInterModComms.sendMessage("ThermalExpansion", "CrucibleRecipe", toSend);
 		}
 	}
 

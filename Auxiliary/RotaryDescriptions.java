@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.XMLInterface;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -78,7 +78,7 @@ public final class RotaryDescriptions {
 
 	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
-	private static final boolean mustLoad = !DragonAPICore.isDeObfEnvironment();
+	private static final boolean mustLoad = !ReikaObfuscationHelper.isDeObfEnvironment();
 	private static final XMLInterface parents = new XMLInterface(RotaryCraft.class, PARENT+"categories.xml", mustLoad);
 	private static final XMLInterface machines = new XMLInterface(RotaryCraft.class, PARENT+"machines.xml", mustLoad);
 	private static final XMLInterface trans = new XMLInterface(RotaryCraft.class, PARENT+"trans.xml", mustLoad);

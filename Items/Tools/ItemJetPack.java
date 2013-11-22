@@ -23,9 +23,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Fuelable;
@@ -111,7 +111,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
 
-		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, DragonAPICore.isDeObfEnvironment() ? "isJumping" : "field_70703_bu", RotaryCraft.logger);
+		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, ReikaObfuscationHelper.getLabelName("isJumping"), RotaryCraft.logger);
 		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
 		if (bool) {
 			jetpackUsed = this.useJetpack(player);

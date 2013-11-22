@@ -20,7 +20,6 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -32,7 +31,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityProjector;
@@ -146,7 +144,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected final void drawSlotInventory(Slot slot) {
 		super.drawSlotInventory(slot);
-		if (ConfigRegistry.DEBUGMODE.getState() || (DragonAPICore.isDeObfEnvironment() && Keyboard.isKeyDown(Keyboard.KEY_TAB))) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
 			ReikaTextureHelper.bindFontTexture();
 			fontRenderer.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
 		}
