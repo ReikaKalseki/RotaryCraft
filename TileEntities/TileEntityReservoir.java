@@ -126,7 +126,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return (side != ForgeDirection.DOWN && p != MachineRegistry.VALVE) || (side == ForgeDirection.UP && p == MachineRegistry.VALVE);
+		return this.canConnectToPipe(p);
 	}
 
 	@Override
