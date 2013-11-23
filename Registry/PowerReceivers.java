@@ -79,7 +79,8 @@ public enum PowerReceivers {
 	SONICBORER(1024, 1, 65536),
 	SORTING(1024),
 	FILLINGSTATION(1024),
-	BELT();
+	BELT(),
+	VANDEGRAFF();
 
 	private int minT;
 	private int minS;

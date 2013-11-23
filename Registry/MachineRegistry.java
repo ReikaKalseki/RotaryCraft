@@ -90,6 +90,7 @@ import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+import Reika.RotaryCraft.TileEntities.TileEntityVanDeGraff;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -265,7 +266,8 @@ public enum MachineRegistry {
 	SONICBORER(			"machine.sonicborer",		BlockDMMachine.class,		TileEntitySonicBorer.class,			13, "RenderSonicBorer"),
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, 	"RenderFuelEngine", ModList.BCENERGY),
 	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
-	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt");
+	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt"),
+	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17);
 
 	private String name;
 	private Class te;
@@ -863,20 +865,6 @@ public enum MachineRegistry {
 		default:
 			return false;
 		}
-	}
-
-	public String getManufacturerName() {
-		return this.getManufacturer().getName();
-	}
-
-	public String getMachineDescription() {
-		return this.getManufacturer().getPartDesc();
-	}
-
-	public Manufacturers getManufacturer() {
-		if (Manufacturers.hasSubMakers(this))
-			return Manufacturers.getSpecificMaker(this, 0);
-		return Manufacturers.getMaker(this);
 	}
 
 	public boolean canBeBroken() {

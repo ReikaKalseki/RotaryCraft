@@ -15,6 +15,7 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -57,16 +58,21 @@ public enum ExtractorBonus {
 		bonusItem = is.copy();
 		sourceItem = in.copy();
 		probability = chance;
+
 		hasReq = true;
 		requirementMod = req;
 		if (req.isLoaded())
 			RotaryCraft.logger.log(req.getDisplayName()+" is loaded. Adding extractor bonus "+this.toString());
 		else
-			RotaryCraft.logger.log(req.getDisplayName()+" is loaded. Skipping extractor bonus.");
+			RotaryCraft.logger.log(req.getDisplayName()+" is not loaded. Skipping extractor bonus "+this.toString());
 	}
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance) {
-		this(in, is, chance, null, null);
+		bonusItem = is.copy();
+		sourceItem = in.copy();
+		probability = chance;
+
+		RotaryCraft.logger.log("Adding extractor bonus "+this.toString());
 	}
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance, Object... mods) {
@@ -74,18 +80,16 @@ public enum ExtractorBonus {
 		sourceItem = in.copy();
 		probability = chance;
 
-		if (mods != null && mods.length > 0) {
-			isVariable = true;
-			if (mods.length%2 != 0)
-				throw new IllegalArgumentException("Every mod must have a specified bonus!");
-			modBonus = new ArrayList();
-			bonusMods = new ArrayList();
-			for (int i = 0; i < mods.length; i += 2) {
-				ModList mod = (ModList)mods[i];
-				ItemStack extra = (ItemStack)mods[i+1];
-				modBonus.add(extra.copy());
-				bonusMods.add(mod);
-			}
+		isVariable = true;
+		if (mods.length%2 != 0)
+			throw new IllegalArgumentException("Every mod must have a specified bonus!");
+		modBonus = new ArrayList();
+		bonusMods = new ArrayList();
+		for (int i = 0; i < mods.length; i += 2) {
+			ModList mod = (ModList)mods[i];
+			ItemStack extra = (ItemStack)mods[i+1];
+			modBonus.add(extra.copy());
+			bonusMods.add(mod);
 		}
 
 		RotaryCraft.logger.log("Adding extractor bonus "+this.toString());
@@ -138,25 +142,27 @@ public enum ExtractorBonus {
 		StringBuilder sb = new StringBuilder();
 		if (isVariable) {
 			sb.append("Bonuses from ");
-			sb.append(sourceItem.getDisplayName());
+			sb.append(StatCollector.translateToLocal(sourceItem.getDisplayName()));
 			sb.append(":\n");
 			for (int i = 0; i < bonusMods.size(); i++) {
 				ModList mod = bonusMods.get(i);
 				ItemStack item = modBonus.get(i);
+				sb.append("\t\t\t");
 				sb.append(mod.getDisplayName());
 				sb.append(": ");
-				sb.append(item.getDisplayName());
+				sb.append(StatCollector.translateToLocal(item.getDisplayName()));
 				sb.append(" (");
 				sb.append(this.getBonusPercent());
 				sb.append("% chance)");
-				sb.append("\n");
+				if (i < bonusMods.size()-1)
+					sb.append("\n");
 			}
 		}
 		else if (hasReq) {
 			sb.append("Bonus of ");
-			sb.append(this.getBonus().getDisplayName());
+			sb.append(StatCollector.translateToLocal(bonusItem.getDisplayName()));
 			sb.append(" from ");
-			sb.append(sourceItem.getDisplayName());
+			sb.append(StatCollector.translateToLocal(sourceItem.getDisplayName()));
 			sb.append(" (");
 			sb.append(this.getBonusPercent());
 			sb.append("% chance); ");
@@ -165,9 +171,9 @@ public enum ExtractorBonus {
 		}
 		else {
 			sb.append("Bonus of ");
-			sb.append(this.getBonus().getDisplayName());
+			sb.append(StatCollector.translateToLocal(bonusItem.getDisplayName()));
 			sb.append(" from ");
-			sb.append(sourceItem.getDisplayName());
+			sb.append(StatCollector.translateToLocal(sourceItem.getDisplayName()));
 			sb.append(" (");
 			sb.append(this.getBonusPercent());
 			sb.append("% chance)");

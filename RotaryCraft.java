@@ -33,12 +33,15 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -70,9 +73,18 @@ import Reika.RotaryCraft.ModInterface.IntegrityChecker;
 import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
+import Reika.RotaryCraft.Registry.ExtractorBonus;
+import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MobBait;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.Registry.PlantMaterials;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -195,6 +207,8 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);
 		//version = evt.getModMetadata().version;
+
+		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
 	}
 
 	@Override
@@ -241,6 +255,16 @@ public class RotaryCraft extends DragonAPIMod {
 
 		//RotaryRecipes.addModInterface();
 		RotaryRecipes.addProps();
+
+		ReikaJavaLibrary.initClass(DifficultyEffects.class);
+		ReikaJavaLibrary.initClass(ExtractorBonus.class);
+		ReikaJavaLibrary.initClass(HandbookRegistry.class);
+		ReikaJavaLibrary.initClass(MobBait.class);
+		ReikaJavaLibrary.initClass(PlantMaterials.class);
+		ReikaJavaLibrary.initClass(EngineType.class);
+		ReikaJavaLibrary.initClass(SoundRegistry.class);
+		ReikaJavaLibrary.initClass(PacketRegistry.class);
+		ReikaJavaLibrary.initClass(PowerReceivers.class);
 	}
 	/*
 	@VersionCheckHandler
