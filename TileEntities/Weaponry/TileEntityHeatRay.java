@@ -19,7 +19,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -57,7 +56,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				if (Block.opaqueCubeLookup[world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep)])
 					blocked = true; //break loop
 				/*if (world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep) == 0)
-	    			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 4);*/
+	    			world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, 4);*/
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d ", step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep))+String.valueOf(blocked));
 				world.markBlockForUpdate(x+xstep*step, y+ystep*step, z+zstep*step);
 			}
@@ -176,7 +175,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.lavaMoving.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.lavaMoving.blockID);
 				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id == Block.sand.blockID) {
@@ -184,18 +183,18 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.glass.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.glass.blockID);
 			}
 			if (id == Block.gravel.blockID) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.cobblestone.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.cobblestone.blockID);
 			}/*
     	if (id == Block.netherrack.blockID) {
     		if (world.getBlockId(x+step*xstep, 1+y+step*ystep, z+step*zstep) == 0) {
-    			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, 1+y+step*ystep, z+step*zstep, Block.fire.blockID);
+    			world.setBlock(x+step*xstep, 1+y+step*ystep, z+step*zstep, Block.fire.blockID);
     		}
     	}*/
 			if (id == Block.netherrack.blockID && tickcount >= 6) {
@@ -210,21 +209,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.sand.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.sand.blockID);
 			}
 			if (id == Block.grass.blockID || id == Block.mycelium.blockID) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.dirt.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.dirt.blockID);
 			}
 			if (id == Block.ice.blockID || id == Block.blockSnow.blockID) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.waterMoving.blockID);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.waterMoving.blockID);
 			}
 			if (id == Block.tallGrass.blockID || id == Block.web.blockID || id == Block.plantYellow.blockID || id == Block.snow.blockID ||
 					id == Block.plantRed.blockID || id == Block.mushroomRed.blockID || id == Block.mushroomBrown.blockID ||
@@ -234,7 +233,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, 0);
 						if (id == Block.snow.blockID)
 							world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
@@ -245,12 +244,12 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, 0);
 						world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
 			}
 			if (id == Block.tnt.blockID) {
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, 0);
+				world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, 0);
 				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*xstep+0.5D, y+step*ystep+0.5D, z+step*zstep+0.5D, null);
 				world.spawnEntityInWorld(var6);
 				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
@@ -258,7 +257,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}/*
     	if (id == 0) {
     		if (world.getBlockId(x+step*xstep, -1+y+step*ystep, z+step*zstep) == Block.netherrack.blockID) {
-    			ReikaWorldHelper.legacySetBlockWithNotify(world, x+step*xstep, y+step*ystep, z+step*zstep, Block.fire.blockID);
+    			world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.fire.blockID);
     		}
     	}*/
 		}

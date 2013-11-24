@@ -57,7 +57,8 @@ public enum SoundRegistry implements SoundList {
 	JETPACK("pack"),
 	DIESEL("#diesel"),
 	BELT("#belt"),
-	FAN("#fan");
+	FAN("#fan"),
+	SPARK("spark");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

@@ -107,7 +107,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 
 	@Override
 	public void fire(World world, double[] xyz) {
-		double speed = 6;
+		double speed = 4;
 		int maxmeta = this.getMaxThrust();
 		if (isExplosiveShell) {
 			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getShiftedID(), ammo, maxmeta);

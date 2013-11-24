@@ -13,7 +13,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public enum PowerReceivers {
 
-	AEROSOLIZER(65536),
+	AEROSOLIZER(16384),
 	AUTOBREEDER(16384),
 	BAITBOX(32768),
 	BEDROCKBREAKER(8192, 1, 262144),

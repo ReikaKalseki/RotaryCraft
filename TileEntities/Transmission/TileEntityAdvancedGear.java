@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.CVTController;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -41,7 +42,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public static final int WORMRATIO = 16;
 
+	private CVTController controller;
+
 	public ItemStack[] belts = new ItemStack[31];
+
+	public void setController(CVTController c) {
+		controller = c;
+	}
 
 	public enum GearType {
 		WORM(),
@@ -157,8 +164,15 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		if (this.getType() == GearType.CVT) {
-			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
-				ratio = -ratio;
+			if (controller != null && controller.isActive() && controller.getCVT().equals(this)) {
+				boolean torque = controller.isTorque();
+				int r = controller.getControlledRatio();
+				ratio = torque ? r : -r;
+			}
+			else {
+				if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
+					ratio = -ratio;
+			}
 		}
 		if (this.getType() != GearType.COIL)
 			this.transferPower(world, x, y, z, meta);

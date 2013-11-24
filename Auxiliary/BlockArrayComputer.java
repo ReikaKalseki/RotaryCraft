@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 
 public class BlockArrayComputer implements Runnable {
 

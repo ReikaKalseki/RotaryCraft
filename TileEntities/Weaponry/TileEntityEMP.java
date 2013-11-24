@@ -29,7 +29,7 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;

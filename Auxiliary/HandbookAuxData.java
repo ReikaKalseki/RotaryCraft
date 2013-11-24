@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.ArrayMap;
+import Reika.DragonAPI.Instantiable.Data.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;

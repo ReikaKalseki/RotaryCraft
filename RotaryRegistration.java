@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Auxiliary.EntityDischarge;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
@@ -105,6 +106,10 @@ public class RotaryRegistration {
 		id = EntityRegistry.findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityLiquidBlock.class, "Liquid Block", id);
 		EntityRegistry.registerModEntity(EntityLiquidBlock.class, "Liquid Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
+
+		id = EntityRegistry.findGlobalUniqueEntityId();
+		EntityRegistry.registerGlobalEntityID(EntityDischarge.class, "Discharge", id);
+		EntityRegistry.registerModEntity(EntityDischarge.class, "Discharge", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
 	}
 
 	public static void instantiateMachines() {

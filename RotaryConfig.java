@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
-import Reika.DragonAPI.Instantiable.ControlledConfig;
+import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;

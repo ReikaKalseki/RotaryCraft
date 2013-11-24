@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import Reika.DragonAPI.Instantiable.XMLInterface;
+import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;

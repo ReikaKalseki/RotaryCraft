@@ -90,7 +90,6 @@ import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
 import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
-import Reika.RotaryCraft.TileEntities.TileEntityVanDeGraff;
 import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -159,6 +158,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
@@ -267,7 +267,7 @@ public enum MachineRegistry {
 	FUELENGINE(			"machine.fuelengine",		BlockModEngine.class,		TileEntityFuelEngine.class,			4, 	"RenderFuelEngine", ModList.BCENERGY),
 	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
 	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt"),
-	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17);
+	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17, "RenderVanDeGraff");
 
 	private String name;
 	private Class te;

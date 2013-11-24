@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.IO.ReikaImageLoader;
-import Reika.DragonAPI.Instantiable.PixelRenderer;
+import Reika.DragonAPI.Instantiable.Rendering.PixelRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;

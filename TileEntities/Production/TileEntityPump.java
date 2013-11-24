@@ -23,8 +23,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.BlockArray;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -76,13 +76,10 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		Fluid f = FluidRegistry.lookupFluidForBlock(b);
 		if (f == null)
 			return;
-		if (blocks.isEmpty() || tank.isEmpty()) {
+		if (blocks.isEmpty()) {
 			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
 			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
 			blocks.reverseBlockOrder();
-			//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" sized "+blocks.getSize());
-			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterMoving.blockID, x-32, 0, z-32, x+32, y-1, z+32);
-			//blocks.recursiveFillWithBounds(world, x, y-1, z, Block.waterStill.blockID, x-32, 0, z-32, x+32, y-1, z+32);
 		}
 		if (damage > 400)
 			power = 0;

@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
-import Reika.DragonAPI.Instantiable.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;

@@ -15,7 +15,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.Glow;
+import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;

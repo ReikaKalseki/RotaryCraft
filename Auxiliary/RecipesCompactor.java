@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

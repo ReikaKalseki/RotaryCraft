@@ -106,10 +106,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return;
 		ReikaInventoryHelper.decrStack(0, inventory);
 		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inventory);
-		if ((int)Math.sqrt(num) > 1 && rand.nextInt(3) == 0) {
-			if (rand.nextInt((int)Math.sqrt(num)) > 0) {
-				ReikaInventoryHelper.decrStack(11, inventory);
-			}
+		if ((int)Math.sqrt(num) >= 1 && rand.nextInt(3) == 0) {
+			ReikaInventoryHelper.decrStack(11, inventory);
 		}
 		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
 			num *= 1+rand.nextFloat();

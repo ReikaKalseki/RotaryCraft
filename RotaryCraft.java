@@ -39,7 +39,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
-import Reika.DragonAPI.Instantiable.ModLogger;
+import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
