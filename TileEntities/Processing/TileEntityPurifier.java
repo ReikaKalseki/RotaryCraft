@@ -254,7 +254,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 			return 15;
 		if (inv[6] == null)
 			return 0;
-		if (ReikaItemHelper.isMatch(inv[6], ItemStacks.steelingot))
+		if (ReikaItemHelper.matchStacks(inv[6], ItemStacks.steelingot))
 			return 15;
 		if (inv[6].stackSize >= ItemStacks.steelingot.getMaxStackSize())
 			return 15;
