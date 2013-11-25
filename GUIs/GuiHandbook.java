@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,24 +18,16 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
-import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -46,8 +37,6 @@ import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.Registry.MobBait;
-import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiHandbook extends GuiScreen
@@ -321,107 +310,7 @@ public class GuiHandbook extends GuiScreen
 
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 
-		if (h == HandbookRegistry.TERMS) {
-			int xc = posX+xSize/2; int yc = posY+43; int r = 35;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, xc+r, yc, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);/*
-    		for (float i = 0; i < 1; i += 0.1)
-    			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(i)*r), (int)(yc-Math.sin(i)*r), 0x000000);*/
-			String s = "One radian";
-			fontRenderer.drawString(s, xc+r+10, yc-4, 0x000000);
-		}
-
-		if (h == HandbookRegistry.PHYSICS) {
-			int xc = posX+xSize/8; int yc = posY+45; int r = 5;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			ReikaGuiAPI.instance.drawLine(xc, yc, xc+45, yc, 0x0000ff);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+45, yc+20, 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+50, yc+5, 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc+45, yc, xc+40, yc+5, 0xff0000);
-			fontRenderer.drawString("Distance", xc+4, yc-10, 0x0000ff);
-			fontRenderer.drawString("Force", xc+30, yc+20, 0xff0000);
-
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-2*r-2, yc, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc-2*r, (int)(yc+1.4*r), xc-r, yc+r*2+2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
-			ReikaGuiAPI.instance.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
-			fontRenderer.drawString("Torque", xc-24, yc+18, 0x8800ff);
-
-			r = 35; xc = posX+xSize/2+r+r/2; yc = posY+43;
-			ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
-			double a = 57.3*System.nanoTime()/1000000000%360;
-			double b = 3*57.3*System.nanoTime()/1000000000%360;
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
-			ReikaGuiAPI.instance.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
-
-			fontRenderer.drawString("1 rad/s", xc+r-4, yc+18, 0xff0000);
-			fontRenderer.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
-		}
-		if (h == HandbookRegistry.BAITBOX && subpage == 1) {
-			RenderItem ri = new RenderItem();
-			int k = (int)((System.nanoTime()/2000000000)%MobBait.baitList.length);
-			MobBait b = MobBait.baitList[k];
-			int u = b.getMobIconU();
-			int v = b.getMobIconV();
-			ItemStack is1 = b.getAttractorItemStack();
-			ItemStack is2 = b.getRepellentItemStack();
-			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is1, posX+162, posY+27);
-			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is2, posX+162, posY+27+18);
-			String var4 = "/Reika/RotaryCraft/Textures/GUI/mobicons.png";
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
-			int UNIT = 4;
-			this.drawTexturedModalRect(posX+88-UNIT/2, posY+41-UNIT/2, u, v, UNIT*2, UNIT*2);
-			fontRenderer.drawString("Attractor", posX+110, posY+30, 0);
-			fontRenderer.drawString("Repellent", posX+110, posY+48, 0);
-			//RenderManager.instance.renderEntityWithPosYaw(new EntityCreeper(Minecraft.getMinecraft().theWorld), 120, 60, 0, 0, 0);
-		}
-		if (h == HandbookRegistry.TERRA && subpage == 1) {
-			RenderItem ri = new RenderItem();
-			ArrayList<Object[]> transforms = TileEntityTerraformer.getTransformList();
-			int time = 2000000000;
-			int k = (int)((System.nanoTime()/time)%transforms.size());
-			String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
-			ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
-			Object[] data = transforms.get(k);
-			BiomeGenBase from = (BiomeGenBase)data[0];
-			BiomeGenBase from_ = from;
-			from = ReikaBiomeHelper.getParentBiomeType(from);
-			BiomeGenBase to = (BiomeGenBase)data[1];
-			this.drawTexturedModalRect(posX+16, posY+22, 32*(from.biomeID%8), 32*(from.biomeID/8), 32, 32);
-			this.drawTexturedModalRect(posX+80, posY+22, 32*(to.biomeID%8), 32*(to.biomeID/8), 32, 32);
-			String name = ReikaStringParser.splitCamelCase(from_.biomeName);
-			String[] words = name.split(" ");
-			for (int i = 0; i < words.length; i++) {
-				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, words[i], posX+33, posY+57+i*fontRenderer.FONT_HEIGHT, 0);
-			}
-			String name2 = ReikaStringParser.splitCamelCase(to.biomeName);
-			String[] words2 = name2.split(" ");
-			for (int i = 0; i < words2.length; i++) {
-				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, words2[i], posX+97, posY+57+i*fontRenderer.FONT_HEIGHT, 0);
-			}
-			fontRenderer.drawString(String.format("%.3f kW", (Integer)data[2]/1000D), posX+116, posY+22, 0);
-			FluidStack liq = (FluidStack)data[3];
-			if (liq != null) {
-				GL11.glColor4f(1, 1, 1, 1);
-				ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
-				Icon ico = liq.getFluid().getIcon();
-				this.drawTexturedModelRectFromIcon(posX+116, posY+38, ico, 16, 16);
-				this.drawTexturedModelRectFromIcon(posX+116+16, posY+38, ico, 16, 16);
-				//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);
-				//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
-				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
-			}
-			List<ItemReq> li = (List<ItemReq>)data[4];
-			for (int i = 0; i < li.size(); i++) {
-				ItemStack is = li.get(i).asItemStack();
-				ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, is, posX+190, posY+8+i*18);
-			}
-		}
+		HandbookAuxData.drawGraphics(h, posX, posY, xSize, ySize, fontRenderer, subpage);
 	}
 
 	@Override

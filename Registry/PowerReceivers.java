@@ -128,6 +128,10 @@ public enum PowerReceivers {
 		return (minT == -1 || minS == -1 || minP == -1);
 	}
 
+	public int getMultiValuedPowerTypes() {
+		return powers.length;
+	}
+
 	public int numberMetadatasForMachine() {
 		if (!this.isMetadataDifferentiated())
 			return 15;

@@ -43,6 +43,7 @@ public enum HandbookRegistry {
 	SHAFTS("Shaft Load Limits"),
 	FLYWHEELS("Flywheel Load Limits"),
 	TRANSFER("Basics of Power Transfer"),
+	TIERS("Machine Tiers"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
