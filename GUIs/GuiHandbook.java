@@ -124,6 +124,13 @@ public class GuiHandbook extends GuiScreen
 		return HandbookRegistry.RESOURCEDESC.getScreen()+HandbookRegistry.RESOURCEDESC.getNumberChildren()/8;
 	}
 
+	public int getMaxSubpage() {
+		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+		if (h == HandbookRegistry.TIERS)
+			return HandbookAuxData.getPowerDataSize()-1;
+		return 1;
+	}
+
 	@Override
 	public void actionPerformed(GuiButton button) {
 		if (button.id == 12) {
@@ -200,13 +207,13 @@ public class GuiHandbook extends GuiScreen
 			return;
 		}
 		if (button.id == 13) {
-			if (subpage != 1)
+			if (subpage < this.getMaxSubpage())
 				subpage++;
 			this.initGui();
 			return;
 		}
 		if (button.id == 14) {
-			if (subpage != 0)
+			if (subpage > 0)
 				subpage--;
 			this.initGui();
 			return;
@@ -243,6 +250,8 @@ public class GuiHandbook extends GuiScreen
 			return 9;
 		if (h == HandbookRegistry.TERRA && subpage == 1)
 			return 10;
+		if (h == HandbookRegistry.TIERS)
+			return 12;
 		if (subpage == 1)
 			return 1;
 		if (h == HandbookRegistry.STEELINGOT)
@@ -364,6 +373,9 @@ public class GuiHandbook extends GuiScreen
 		case 11:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguim.png";
 			break;
+		case 12:
+			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguin.png";
+			break;
 		default:
 			var4 = "/Reika/RotaryCraft/Textures/GUI/Handbook/handbookguib.png"; //default to plain gui
 			break;
@@ -380,7 +392,7 @@ public class GuiHandbook extends GuiScreen
 		int yo = 0;
 		fontRenderer.drawString(HandbookRegistry.getEntry(screen, page).getTitle(), posX+xo+6, posY+yo+6, 0x000000);
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-		if (subpage == 0) {
+		if (subpage == 0 || h.sameTextAllSubpages()) {
 			fontRenderer.drawSplitString(String.format("%s", h.getData()), posX+descX, posY+descY, 242, 0xffffff);
 		}
 		else {

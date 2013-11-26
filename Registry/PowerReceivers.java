@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
+
 public enum PowerReceivers {
 
 	AEROSOLIZER(16384),
@@ -90,6 +91,8 @@ public enum PowerReceivers {
 	private int[] torques;
 	private int[] speeds;
 
+	public static final PowerReceivers[] list = values();
+
 	/** Min Torque, Min Speed, Min Power */
 	private PowerReceivers(int T, int S, int P) {
 		minT = T;
@@ -130,12 +133,6 @@ public enum PowerReceivers {
 
 	public int getMultiValuedPowerTypes() {
 		return powers.length;
-	}
-
-	public int numberMetadatasForMachine() {
-		if (!this.isMetadataDifferentiated())
-			return 15;
-		return this.getNumberFaceDirections();
 	}
 
 	public int getNumberFaceDirections() {
@@ -215,22 +212,36 @@ public enum PowerReceivers {
 	}
 
 	public static PowerReceivers getEnumFromMachineIndex(int index) {
-		MachineRegistry m = MachineRegistry.machineList[index];
-		String name = m.getName();
-		String em = m.toString();
-		if (!MachineRegistry.machineList[index].isPowerReceiver()) {
-			throw new RuntimeException(em+" does not correspond to an existing power receiver Enum!");
-		}
-		if (name == null)
-			throw new RuntimeException(m+" does not correspond to an existing machine Enum!");
-		for (PowerReceivers e : PowerReceivers.values()) {
-			String en = e.toString();
-			if (en.equals(em)) {
-				return e;
+		return MachineRegistry.machineList[index].getPowerReceiverEntry();
+	}
+
+	public static PowerReceivers initialize(MachineRegistry m) {
+		if (m.isPowerReceiver()) {
+			String name = m.getName();
+			String em = m.toString();
+			if (name == null)
+				throw new RuntimeException(m+" does not correspond to an existing machine Enum!");
+			for (PowerReceivers e : PowerReceivers.list) {
+				String en = e.toString();
+				if (en.equals(em)) {
+					return e;
+				}
 			}
+			//throw new RuntimeException("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+			ReikaJavaLibrary.pConsole("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+			return null;
 		}
-		//throw new RuntimeException("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
-		ReikaJavaLibrary.pConsole("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+		else
+			return null;
+	}
+
+	public MachineRegistry getMachine() {
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList[i];
+			if (m.getPowerReceiverEntry() == this)
+				return m;
+		}
+		ReikaJavaLibrary.pConsole("This should not happen! Power Receiver "+this+" has no machine!");
 		return null;
 	}
 
@@ -354,6 +365,63 @@ public enum PowerReceivers {
 		if (this == PILEDRIVER)
 			return true;
 		return false;
+	}
+
+	public int getMinPowerForDisplay() {
+		int min = -1;
+		if (this.hasNoDirectMinPower()) {
+			min = 0;
+		}
+		else if (this.hasMultiValuedPower()) {
+			int n = this.getMultiValuedPowerTypes();
+			for (int k = 0; k < n; k++) {
+				int t = this.getMinPower(k);
+				if (t > min)
+					min = t;
+			}
+		}
+		else {
+			min = this.getMinPower();
+		}
+		return min;
+	}
+
+	public int getMinTorqueForDisplay() {
+		int min = -1;
+		if (this.hasNoDirectMinTorque()) {
+			min = 0;
+		}
+		else if (this.hasMultiValuedPower()) {
+			int n = this.getMultiValuedPowerTypes();
+			for (int k = 0; k < n; k++) {
+				int t = this.getMinTorque(k);
+				if (t > min)
+					min = t;
+			}
+		}
+		else {
+			min = this.getMinTorque();
+		}
+		return min;
+	}
+
+	public int getMinSpeedForDisplay() {
+		int min = -1;
+		if (this.hasNoDirectMinSpeed()) {
+			min = 0;
+		}
+		else if (this.hasMultiValuedPower()) {
+			int n = this.getMultiValuedPowerTypes();
+			for (int k = 0; k < n; k++) {
+				int t = this.getMinSpeed(k);
+				if (t > min)
+					min = t;
+			}
+		}
+		else {
+			min = this.getMinSpeed();
+		}
+		return min;
 	}
 
 }

@@ -599,6 +599,8 @@ public enum HandbookRegistry {
 		//ReikaJavaLibrary.pConsole(this);
 		if (this == TOC)
 			return true;
+		if (this == TIERS)
+			return false;
 		if (this.getParent() == TERMS)
 			return true;
 		if (isParent)
@@ -875,6 +877,8 @@ public enum HandbookRegistry {
 			return MachineRegistry.SHAFT.getCraftedMetadataProduct(3);
 		if (this == FLYWHEELS)
 			return MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(0);
+		if (this == TIERS)
+			return MachineRegistry.EMP.getCraftedProduct();
 		if (this == LUBE)
 			return ItemStacks.lubebucket;
 		if (this == MODINTERFACE)
@@ -958,6 +962,14 @@ public enum HandbookRegistry {
 		if (this.getParent() == ENGINEDESC)
 			return true;
 		if (this.isMachine())
+			return true;
+		if (this == TIERS)
+			return true;
+		return false;
+	}
+
+	public boolean sameTextAllSubpages() {
+		if (this == TIERS)
 			return true;
 		return false;
 	}

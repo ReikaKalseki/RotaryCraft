@@ -136,7 +136,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int changedid) {
-		;//this.testStable(world, x, y, z);
+		this.testStable(world, x, y, z);
 	}
 
 	public void testStable(World world, int x, int y, int z) {

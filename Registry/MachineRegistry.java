@@ -280,6 +280,7 @@ public enum MachineRegistry {
 	private int rollover;
 	private ModList requirement;
 	private static HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
+	private PowerReceivers receiver;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -291,22 +292,30 @@ public enum MachineRegistry {
 		if (meta > 15)
 			//	throw new RegistrationException(RotaryCraft.instance, "Machine "+name+" assigned to metadata > 15 for Block "+blockClass);
 			rollover = m/16;
+
+		receiver = PowerReceivers.initialize(this);
 	}
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList a) {
 		this(n, b, tile, m);
 		requirement = a;
+
+		receiver = PowerReceivers.initialize(this);
 	}
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r) {
 		this(n, b, tile, m);
 		hasRender = true;
 		renderClass = r;
+
+		receiver = PowerReceivers.initialize(this);
 	}
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, ModList a) {
 		this(n, b, tile, m, r);
 		requirement = a;
+
+		receiver = PowerReceivers.initialize(this);
 	}
 
 	public static TileEntity createTEFromIDAndMetadata(int id, int metad) {
@@ -387,6 +396,10 @@ public enum MachineRegistry {
 		if (this.is6Sided())
 			return 6;
 		return 1;
+	}
+
+	public PowerReceivers getPowerReceiverEntry() {
+		return receiver;
 	}
 
 	public static int getMachineIndexFromIDandMetadata(int id, int metad) {

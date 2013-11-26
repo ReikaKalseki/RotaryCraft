@@ -86,7 +86,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	NVH(48, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
 	HANDCRAFT(33, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
 	RAILGUN(113, true, 			"#item.railgun", 			ItemRailGunAmmo.class),
-	BUCKET(104, 106, true, 		"#item.bucket", 			ItemFuelLubeBucket.class),
+	BUCKET(104, 106, true, 		"#item.rcbucket", 			ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"item.target", 				ItemTarget.class),
 	IOGOGGLES(1, true, 			"item.iogoggles", 			ItemIOGoggles.class),
 	SLIDE(2, true, 				"item.slide", 				ItemSlide.class),
