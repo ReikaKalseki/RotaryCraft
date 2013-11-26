@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Exception.ModReflectionException;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
@@ -60,6 +62,10 @@ public final class OreForcer {
 				}
 				catch (IllegalArgumentException e) {
 					RotaryCraft.logger.logError("Could not force compatibility with "+mod+". Reason: ");
+					e.printStackTrace();
+				}
+				catch (ModReflectionException e) {
+					ReikaJavaLibrary.pConsole(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -109,6 +115,10 @@ public final class OreForcer {
 
 	private static void convertUranium() {
 		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
+		if (u == null)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null ItemStack for Uranium");
+		if (IC2Handler.getInstance().iridiumID == -1)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null Item for Iridium");
 		ItemStack ir = new ItemStack(IC2Handler.getInstance().iridiumID, 1, 0);
 		GameRegistry.addShapelessRecipe(ir, ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
 		RotaryCraft.logger.log("RotaryCraft iridium ingots can now be crafted into IC2 Iridium items!");
@@ -118,6 +128,8 @@ public final class OreForcer {
 
 	private static void intercraftFirestone() {
 		Item item = GameRegistry.findItem(ModList.RAILCRAFT.getModLabel(), "railcraft.firestone.raw");
+		if (item == null)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.RAILCRAFT, "Null ItemStack for Firestone");
 		GameRegistry.addShapelessRecipe(new ItemStack(item), ItemStacks.getModOreIngot(ModOreList.FIRESTONE));
 		RotaryCraft.logger.log("RotaryCraft firestone can now be crafted into RailCraft firestone!");
 	}
@@ -127,6 +139,8 @@ public final class OreForcer {
 		try {
 			Field f = trans.getField("MagmaDrop");
 			Item i = (Item)f.get(null);
+			if (i == null)
+				throw new ModReflectionException(RotaryCraft.instance, ModList.TRANSITIONAL, "Null ItemStack for Magmanite Drop");
 			GameRegistry.addShapelessRecipe(new ItemStack(i), ItemStacks.getModOreIngot(ModOreList.MAGMANITE));
 			RotaryCraft.logger.log("RotaryCraft magmanite can now be crafted into Transitional Assistance magmanite!");
 		}
@@ -153,13 +167,18 @@ public final class OreForcer {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
 			if (o.isArsMagica()) {
-				GameRegistry.addShapelessRecipe(MagicaOreHandler.getInstance().getItem(o), ItemStacks.getModOreIngot(o));
+				ItemStack is = MagicaOreHandler.getInstance().getItem(o);
+				if (is == null)
+					throw new ModReflectionException(RotaryCraft.instance, ModList.ARSMAGICA, "Null ItemStack for Ars Magica "+o);
+				GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(o));
 				RotaryCraft.logger.log(o.getName()+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
 	}
 
 	private static void registerOsmium() {
+		if (MekanismHandler.getInstance().oreID == -1)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.MEKANISM, "Null Item for Osmium");
 		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, 0));
 	}
 
@@ -258,12 +277,17 @@ public final class OreForcer {
 
 	private static void intercraftQuartz() {
 		ItemStack quartz = AppEngHandler.getInstance().getCertusQuartz();
+		if (quartz == null)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.APPENG, "Null ItemStack for Certus Quartz");
 		GameRegistry.addShapelessRecipe(quartz, ItemStacks.getModOreIngot(ModOreList.CERTUSQUARTZ));
 		RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
 	}
 
 	private static void intercraftApatite() {
-		ItemStack apatite = new ItemStack(ForestryHandler.getInstance().apatiteID, 1, 0);
+		int id = ForestryHandler.getInstance().apatiteID;
+		if (id == -1)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Apatite");
+		ItemStack apatite = new ItemStack(id, 1, 0);
 		GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));
 		RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
 	}
@@ -274,7 +298,10 @@ public final class OreForcer {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
 			if (o.isThaumcraft()) {
-				GameRegistry.addShapelessRecipe(ThaumOreHandler.getInstance().getItem(o), ItemStacks.getModOreIngot(o));
+				ItemStack is = ThaumOreHandler.getInstance().getItem(o);
+				GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(o));
+				if (is == null)
+					throw new ModReflectionException(RotaryCraft.instance, ModList.THAUMCRAFT, "Null ItemStack for Thaumcraft's "+o);
 				RotaryCraft.logger.log(o.getName()+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
