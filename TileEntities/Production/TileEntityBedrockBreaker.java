@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -228,14 +227,14 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	private void dropItem(World world, int x, int y, int z, int meta, ItemStack is) {
 		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, this.getDrops());
-		ReikaJavaLibrary.pConsole(itementity.getEntityItem());
 		itementity.delayBeforeCanPickup = 0;
 		itementity.motionX = -0.025+0.05*rand.nextFloat();	// 0-0.5 m/s
 		itementity.motionZ = -0.025+0.05*rand.nextFloat();
 		if (meta != 5)
 			itementity.motionY = 0.1+0.2*rand.nextFloat()+0.25*rand.nextFloat()*rand.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
 		itementity.velocityChanged = true;
-		world.spawnEntityInWorld(itementity);
+		if (!world.isRemote)
+			world.spawnEntityInWorld(itementity);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 	}
 

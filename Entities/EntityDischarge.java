@@ -19,10 +19,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class EntityDischarge extends Entity implements IEntityAdditionalSpawnData {
 
 	public int charge;
