@@ -802,7 +802,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				speed = (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
 				if (speed == 0)
 					speed = 1;
-				this.updateSpeed(speed, true);
+				this.updateSpeed(speed, lubricant > 0);
 				torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
