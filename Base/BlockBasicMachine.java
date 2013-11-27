@@ -40,11 +40,9 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
-import Reika.RotaryCraft.Items.Tools.ItemDebug;
-import Reika.RotaryCraft.Items.Tools.ItemMeter;
-import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
@@ -136,7 +134,8 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		}
 		if (ep.isSneaking() && !(te instanceof TileEntityCaveFinder))
 			return false;
-		if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver || ep.getCurrentEquippedItem().getItem() instanceof ItemMeter || ep.getCurrentEquippedItem().getItem() instanceof ItemDebug)) {
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		if (ir!= null && ir.overridesRightClick()) {
 			return false;
 		}
 		if (te instanceof TileEntityEngine) {
@@ -183,7 +182,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					}
 				}
 				if (tile.type.isJetFueled()) {
-					if (is.itemID == ItemStacks.fuelbucket.itemID && is.getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.JET_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
@@ -197,7 +196,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					}
 				}
 				if (tile.type.isEthanolFueled()) {
-					if (is.itemID == ItemStacks.ethanolbucket.itemID && is.getItemDamage() == ItemStacks.ethanolbucket.getItemDamage()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.ETHANOL_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
@@ -206,6 +205,20 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						else {
 							ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine is too full to add fuel!");
+						}
+						return true;
+					}
+				}
+				if (tile.type.requiresLubricant()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
+						if (tile.getLube() <= tile.LUBECAP-ItemFuelLubeBucket.LUBE_VALUE) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+							tile.addLubricant(ItemFuelLubeBucket.LUBE_VALUE*RotaryConfig.MILLIBUCKET);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add lubricant!");
 						}
 						return true;
 					}

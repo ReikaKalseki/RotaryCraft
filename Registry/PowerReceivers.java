@@ -36,7 +36,7 @@ public enum PowerReceivers {
 	HEATER(16, 1, 8192),
 	HEATRAY(524288),
 	IGNITER(1, 1024, 32768),
-	ITEMREFRESHER(16384),
+	REFRESHER(16384),
 	MOBHARVESTER(16384),
 	MOBRADAR(32768),
 	MUSICBOX(),
@@ -318,7 +318,7 @@ public enum PowerReceivers {
 			return true;
 		if (this == IGNITER)
 			return true;
-		if (this == ITEMREFRESHER)
+		if (this == REFRESHER)
 			return true;
 		if (this == MOBHARVESTER)
 			return true;

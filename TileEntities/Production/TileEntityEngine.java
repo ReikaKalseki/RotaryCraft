@@ -47,6 +47,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -90,10 +91,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	/** Fuel capacity */
 	public static final int FUELCAP = 240*RotaryConfig.MILLIBUCKET;
 
+	public static final int LUBECAP = 24*RotaryConfig.MILLIBUCKET;
+
 	private HybridTank water = new HybridTank("enginewater", CAPACITY);
 	private HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
 
 	public int temperature;
+
+	private HybridTank lubricant = new HybridTank("enginelube", LUBECAP);
 
 	/** For timing control */
 	public int soundtick = 2000;
@@ -802,7 +807,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				speed = (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
 				if (speed == 0)
 					speed = 1;
-				this.updateSpeed(speed, lubricant > 0);
+				boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
+				//ReikaJavaLibrary.pConsole(lubricant, Side.SERVER);
+				this.updateSpeed(speed, hasLube);
 				torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
@@ -1236,6 +1243,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (type.burnsFuel())
 			this.consumeFuel(world, x, y, z, meta);
 
+		if (type.requiresLubricant())
+			this.distributeLubricant(world, x, y, z);
+
 		if (power > 0) {
 			this.playSounds(world, x, y, z, pitch);
 			if (type == EngineType.JET) {
@@ -1255,6 +1265,32 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		else if (soundtick < type.getSoundLength(FOD, soundfactor))
 			soundtick = 2000;
+	}
+
+	private void distributeLubricant(World world, int x, int y, int z) {
+		ReikaJavaLibrary.pConsole(lubricant);
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == MachineRegistry.ENGINE) {
+				TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(dx, dy, dz);
+				if (eng.type.requiresLubricant()) {
+					int it = eng.lubricant.getLevel();
+					int dL = lubricant.getLevel()-it;
+					if (dL > 0) {
+						eng.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("lubricant"));
+						lubricant.removeLiquid(dL/4);
+					}
+				}
+			}
+		}
+		if (!lubricant.isEmpty() && omega > 0) {
+			if (rand.nextInt(5) == 0)
+				lubricant.removeLiquid(1);
+		}
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -1321,6 +1357,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		lubricant.writeToNBT(NBT);
 	}
 
 	/**
@@ -1334,6 +1372,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		water.readFromNBT(NBT);
 		fuel.readFromNBT(NBT);
+
+		lubricant.readFromNBT(NBT);
 
 		timer.setTickOf("fuel", NBT.getInteger("fuelburn"));
 
@@ -1595,7 +1635,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE || m == MachineRegistry.HOSE;
 	}
 
 	@Override
@@ -1614,6 +1654,21 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				return this.getBlockMetadata() == 0;
 			case NORTH:
 				return this.getBlockMetadata() == 2;
+			default:
+				return false;
+			}
+		}
+		if (type.requiresLubricant() && p == MachineRegistry.HOSE) {
+			//ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
+			switch(side) {
+			case EAST:
+				return this.getBlockMetadata() == 0;
+			case SOUTH:
+				return this.getBlockMetadata() == 2;
+			case WEST:
+				return this.getBlockMetadata() == 1;
+			case NORTH:
+				return this.getBlockMetadata() == 3;
 			default:
 				return false;
 			}
@@ -1733,6 +1788,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (f.equals(FluidRegistry.WATER)) {
 			return water.fill(resource, doFill);
 		}
+		else if (f.equals(FluidRegistry.getFluid("lubricant"))) {
+			return lubricant.fill(resource, doFill);
+		}
 		else {
 			return fuel.fill(resource, doFill);
 		}
@@ -1758,10 +1816,16 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			int dz = zCoord+from.offsetZ;
 			return dx == backx && dy == yCoord && dz == backz;
 		}
-		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+		else if (fluid.equals(FluidRegistry.getFluid("lubricant"))) {
+			int dx = xCoord+from.offsetX;
+			int dy = yCoord+from.offsetY;
+			int dz = zCoord+from.offsetZ;
+			return dx == backx && dy == yCoord && dz == backz;
+		}
+		else if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
 			return from == ForgeDirection.DOWN;
 		}
-		if (fluid.equals(FluidRegistry.getFluid("rc ethanol"))) {
+		else if (fluid.equals(FluidRegistry.getFluid("rc ethanol"))) {
 			return from == ForgeDirection.DOWN;
 		}
 		return false;
@@ -1774,11 +1838,15 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{water.getInfo(), fuel.getInfo()};
+		return new FluidTankInfo[]{water.getInfo(), fuel.getInfo(), lubricant.getInfo()};
 	}
 
 	public void addFuel(int amt) {
 		fuel.addLiquid(amt, type.getFuelType());
+	}
+
+	public void addLubricant(int amt) {
+		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
 	public void subtractFuel(int amt) {
@@ -1797,8 +1865,16 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		water.setContents(amt, FluidRegistry.WATER);
 	}
 
+	public void setLube(int amt) {
+		lubricant.setContents(amt, FluidRegistry.getFluid("lubricant"));
+	}
+
 	public int getWater() {
 		return water.getLevel();
+	}
+
+	public int getLube() {
+		return lubricant.getLevel();
 	}
 
 	@Override
@@ -1813,6 +1889,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
+		return Flow.INPUT;
 	}
 }

@@ -88,7 +88,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 	}
 
 	public final int getPipeOutput(int max) {
-		return TransferAmount.FORCEDQUARTER.getTransferred(max);
+		return Math.min(TransferAmount.FORCEDQUARTER.getTransferred(max), this.getLiquidLevel()-5);
 	}
 
 	public void dumpContents(World world, int x, int y, int z) {

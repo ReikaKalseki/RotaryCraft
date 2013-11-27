@@ -385,7 +385,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.PROJECTOR, PowerReceivers.PROJECTOR.getMinPower());
 		addNotes(MachineRegistry.RAILGUN, PowerReceivers.RAILGUN.getMinPower());
 		addNotes(MachineRegistry.WEATHERCONTROLLER, PowerReceivers.WEATHERCONTROLLER.getMinPower());
-		addNotes(MachineRegistry.REFRESHER, PowerReceivers.ITEMREFRESHER.getMinPower(), PowerReceivers.ITEMREFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF);
+		addNotes(MachineRegistry.REFRESHER, PowerReceivers.REFRESHER.getMinPower(), PowerReceivers.REFRESHER.getMinPower(), TileEntityItemRefresher.FALLOFF);
 		addNotes(MachineRegistry.CAVESCANNER, PowerReceivers.CAVESCANNER.getMinPower());
 		addNotes(MachineRegistry.SCALECHEST, PowerReceivers.SCALECHEST.getMinPower(), PowerReceivers.SCALECHEST.getMinPower(), TileEntityScaleableChest.FALLOFF, TileEntityScaleableChest.MAXSIZE);
 		addNotes(MachineRegistry.IGNITER, PowerReceivers.IGNITER.getMinPower());

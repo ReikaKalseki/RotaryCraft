@@ -109,7 +109,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if ((int)Math.sqrt(num) >= 1 && rand.nextInt(3) == 0) {
 			ReikaInventoryHelper.decrStack(11, inventory);
 		}
-		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*ReikaMathLibrary.intpow(1.005, num*num))) {
+		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1))) {
 			num *= 1+rand.nextFloat();
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
