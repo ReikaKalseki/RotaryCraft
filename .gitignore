@@ -75,12 +75,9 @@ build/
 *.tli
 *.tlh
 *.tmp
-*.ogg
 *.pdn
 *.tcn
-*.png
 *.ks
-*.xml
 *.keystore
 *.properties
 *.tmp_proj
