@@ -232,7 +232,7 @@ public class RenderProjector extends RotaryTERenderer {
 		Color minutehand = Color.white;
 		Color text = new Color(150, 212, 255);
 
-		long time = te.worldObj.getWorldTime();
+		long time = te.worldObj.getWorldTime()+6000; //+6000 so 6AM-6PM days
 		int perday = (int)(time%24000);
 
 		double hour = perday/1000D;
