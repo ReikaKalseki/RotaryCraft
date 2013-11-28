@@ -77,6 +77,10 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			emptySlide = false;
 			channel = -1;
 		}
+		if (slides[0].itemID == Item.pocketSundial.itemID) {
+			emptySlide = false;
+			channel = -3;
+		}
 		if (slides[0].itemID != ItemRegistry.SLIDE.getShiftedID()) {
 			emptySlide = true;
 			return;

@@ -166,10 +166,15 @@ public class RenderProjector extends RotaryTERenderer {
 		}
 		double voffset = b;
 
-		if (ConfigRegistry.PROJECTORLINES.getState())
-			this.drawBeam(voffset, te.getBlockMetadata(), v5, a, b, c, p2, p4, p6);
+		if (ConfigRegistry.PROJECTORLINES.getState()) {
+			this.drawBeam(voffset, te.getBlockMetadata(), v5, a, b, c, p2, p4, p6, te.channel == -3);
+		}
 		if (te.channel == -1) {
 			this.drawEasterEgg(a, b, c, voffset, te, p2, p4, p6);
+			return;
+		}
+		if (te.channel == -3) {
+			this.drawClock(a, b, c, voffset, te, p2, p4, p6);
 			return;
 		}
 		if (te.channel != -2) {
@@ -216,6 +221,169 @@ public class RenderProjector extends RotaryTERenderer {
 		}
 		GL11.glTranslated(0, -voffset, 0);
 		ReikaRenderHelper.enableLighting();
+		GL11.glFrontFace(GL11.GL_CCW);
+	}
+
+	private void drawClock(double a, double b, double c, double voffset, TileEntityProjector te, double p2, double p4, double p6) {
+		double r = 2.5;
+
+		Color frame = new Color(0, 127, 255);
+		Color hourhand = Color.white;
+		Color minutehand = Color.white;
+		Color text = new Color(150, 212, 255);
+
+		long time = te.worldObj.getWorldTime();
+		int perday = (int)(time%24000);
+
+		double hour = perday/1000D;
+		int houri = perday/1000;
+		double minute = (perday-houri*1000)/16.67;
+
+		int angph = 30; //30 deg/hr
+		int angpm = 6; //6 deg/min
+		double angh = hour*angph;
+		double angm = minute*angpm;
+		double dxh = Math.cos(Math.toRadians(90-angh))*r*0.6;
+		double dyh = Math.sin(Math.toRadians(90-angh))*r*0.6;
+
+		double dxm = Math.cos(Math.toRadians(90-angm))*r*0.9;
+		double dym = Math.sin(Math.toRadians(90-angm))*r*0.9;
+
+		ReikaRenderHelper.prepareGeoDraw(false);
+		GL11.glTranslated(0, voffset, 0);
+		int u = 0;
+		int v = 0;
+		int du = 1;
+		int dv = 1;
+		Tessellator v5 = new Tessellator();
+		if (te.getBlockMetadata()%2 == 0) {
+			GL11.glFrontFace(GL11.GL_CW);
+		}
+		else {
+			u = 1;
+			du = 0;
+		}
+		GL11.glTranslated(p2, p4, p6);
+		if (te.getBlockMetadata() < 2) {
+			double d = 0.01;
+			if (te.getBlockMetadata() == 0) {
+				d = -0.01;
+				dxm = -dxm;
+				dxh = -dxh;
+			}
+			GL11.glTranslated(-a-d, 0.5, 0.5);
+			GL11.glColor4f(1, 1, 1, 1);
+			//ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{100, 192, 255}, 0);
+			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, 0);
+			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, 0);
+			ReikaRenderHelper.prepareGeoDraw(false);
+			v5.startDrawing(GL11.GL_LINES); //hour hand
+			v5.setColorOpaque(hourhand.getRed(), hourhand.getGreen(), hourhand.getBlue());
+			v5.addVertex(0, 0, 0);
+			v5.addVertex(0, dyh, dxh);
+			v5.draw();
+
+			v5.startDrawing(GL11.GL_LINES); //minute hand
+			//v5.setColorOpaque(120, 212, 255);
+			v5.setColorOpaque(minutehand.getRed(), minutehand.getGreen(), minutehand.getBlue());
+			v5.addVertex(0, 0, 0);
+			v5.addVertex(0, dym, dxm);
+			v5.draw();
+
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			double s = 0.0625;
+			GL11.glScaled(s, -s, -s);
+			if (te.getBlockMetadata() == 0) {
+				GL11.glScaled(1, 1, -1);
+				GL11.glFrontFace(GL11.GL_CCW);
+			}
+			GL11.glRotated(90, 0, 1, 0);
+			int textcolor = text.getRGB();
+			this.getFontRenderer().drawString(String.valueOf(12), -5, -38, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(1), 15, -32, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(2), 27, -20, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(3), 32, -3, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(4), 26, 13, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(5), 14, 25, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(6), -2, 31, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(7), -20, 25, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(8), -33, 12, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(9), -37, -3, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(10), -33, -20, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(11), -22, -32, textcolor);
+			GL11.glRotated(-90, 0, 1, 0);
+			if (te.getBlockMetadata() == 0)
+				GL11.glScaled(1, 1, -1);
+			GL11.glFrontFace(GL11.GL_CCW);
+			GL11.glScaled(1/s, -1/s, -1/s);
+
+			GL11.glTranslated(a+d, -0.5, -0.5);
+
+		}
+		else {
+			c *= -1;
+			/*
+			v5.addVertexWithUV(-a, b+1, -c, du, v);
+			v5.addVertexWithUV(-a, -b, -c, du, dv);
+			v5.addVertexWithUV(1+a, -b, -c, u, dv);
+			v5.addVertexWithUV(1+a, b+1, -c, u, v);
+			v5.draw();*/
+
+			double d = 0.01;
+			if (te.getBlockMetadata() == 2) {
+				d = -0.01;
+				dxm = -dxm;
+				dxh = -dxh;
+			}
+			GL11.glTranslated(0.5, 0.5, -c+d);
+			GL11.glColor4f(1, 1, 1, 1);
+			//ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{100, 192, 255}, 0);
+			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, Math.toRadians(90));
+			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, Math.toRadians(90));
+			ReikaRenderHelper.prepareGeoDraw(false);
+			v5.startDrawing(GL11.GL_LINES); //hour hand
+			v5.setColorOpaque(hourhand.getRed(), hourhand.getGreen(), hourhand.getBlue());
+			v5.addVertex(0, 0, 0);
+			v5.addVertex(dxh, dyh, 0);
+			v5.draw();
+
+			v5.startDrawing(GL11.GL_LINES); //minute hand
+			//v5.setColorOpaque(120, 212, 255);
+			v5.setColorOpaque(minutehand.getRed(), minutehand.getGreen(), minutehand.getBlue());
+			v5.addVertex(0, 0, 0);
+			v5.addVertex(dxm, dym, 0);
+			v5.draw();
+
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			double s = 0.0625;
+			GL11.glScaled(s, -s, -s);
+			if (te.getBlockMetadata() == 2) {
+				GL11.glScaled(-1, 1, 1);
+				GL11.glFrontFace(GL11.GL_CCW);
+			}
+			int textcolor = text.getRGB();
+			this.getFontRenderer().drawString(String.valueOf(12), -5, -38, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(1), 15, -32, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(2), 27, -20, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(3), 32, -3, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(4), 26, 13, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(5), 14, 25, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(6), -2, 31, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(7), -20, 25, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(8), -33, 12, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(9), -37, -3, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(10), -33, -20, textcolor);
+			this.getFontRenderer().drawString(String.valueOf(11), -22, -32, textcolor);
+			if (te.getBlockMetadata() == 2)
+				GL11.glScaled(-1, 1, 1);
+			GL11.glFrontFace(GL11.GL_CCW);
+			GL11.glScaled(1/s, -1/s, -1/s);
+
+			GL11.glTranslated(-0.5, -0.5, c-d);
+		}
+		GL11.glTranslated(-p2, -p4, -p6);
+		GL11.glTranslated(0, -voffset, 0);
+		ReikaRenderHelper.exitGeoDraw();
 		GL11.glFrontFace(GL11.GL_CCW);
 	}
 
@@ -409,104 +577,109 @@ public class RenderProjector extends RotaryTERenderer {
 		ReikaRenderHelper.enableLighting();
 	}
 
-	private void drawBeam(double vo, int meta, Tessellator v5, double a, double b, double c, double p2, double p4, double p6) {
-		switch(meta) {
-		case 0:
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2, p4+0.5, p6+0.4375);
-			v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2, p4+0.5, p6+0.5625);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2, p4+0.375, p6+0.5625);
-			v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2, p4+0.375, p6+0.4375);
-			v5.addVertex(p2-a, vo+p4-b, p6-c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-			v5.addVertex(p2-a, vo+p4-b, p6-c);
-			v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-			v5.draw();
-			break;
-		case 1:
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+1, p4+0.5, p6+0.4375);
-			v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+1, p4+0.5, p6+0.5625);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+1, p4+0.375, p6+0.5625);
-			v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+1, p4+0.375, p6+0.4375);
-			v5.addVertex(p2-a, vo+p4-b, p6-c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-			v5.addVertex(p2-a, vo+p4-b, p6-c);
-			v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-			v5.draw();
-			break;
-		case 2:
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.5625, p4+0.5, p6+1);
-			v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.4375, p4+0.5, p6+1);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.5625, p4+0.375, p6+1);
-			v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.4375, p4+0.375, p6+1);
-			v5.addVertex(p2-a, vo+p4-b, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-			v5.addVertex(p2-a, vo+p4-b, p6+c);
-			v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-			v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-			v5.draw();
-			break;
-		case 3:
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.5625, p4+0.5, p6);
-			v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.4375, p4+0.5, p6);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.5625, p4+0.375, p6);
-			v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2+0.4375, p4+0.375, p6);
-			v5.addVertex(p2-a, vo+p4-b, p6+c);
-			v5.draw();
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-			v5.addVertex(p2-a, vo+p4-b, p6+c);
-			v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-			v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-			v5.draw();
-			break;
+	private void drawBeam(double vo, int meta, Tessellator v5, double a, double b, double c, double p2, double p4, double p6, boolean circle) {
+		if (circle) {
+			return;
+		}
+		else {
+			switch(meta) {
+			case 0:
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2, p4+0.5, p6+0.4375);
+				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2, p4+0.5, p6+0.5625);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2, p4+0.375, p6+0.5625);
+				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2, p4+0.375, p6+0.4375);
+				v5.addVertex(p2-a, vo+p4-b, p6-c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+				v5.addVertex(p2-a, vo+p4-b, p6-c);
+				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+				v5.draw();
+				break;
+			case 1:
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+1, p4+0.5, p6+0.4375);
+				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+1, p4+0.5, p6+0.5625);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+1, p4+0.375, p6+0.5625);
+				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+1, p4+0.375, p6+0.4375);
+				v5.addVertex(p2-a, vo+p4-b, p6-c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+				v5.addVertex(p2-a, vo+p4-b, p6-c);
+				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+				v5.draw();
+				break;
+			case 2:
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.5625, p4+0.5, p6+1);
+				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.4375, p4+0.5, p6+1);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.5625, p4+0.375, p6+1);
+				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.4375, p4+0.375, p6+1);
+				v5.addVertex(p2-a, vo+p4-b, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+				v5.addVertex(p2-a, vo+p4-b, p6+c);
+				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+				v5.draw();
+				break;
+			case 3:
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.5625, p4+0.5, p6);
+				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.4375, p4+0.5, p6);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.5625, p4+0.375, p6);
+				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2+0.4375, p4+0.375, p6);
+				v5.addVertex(p2-a, vo+p4-b, p6+c);
+				v5.draw();
+				v5.startDrawing(GL11.GL_LINE_LOOP);
+				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+				v5.addVertex(p2-a, vo+p4-b, p6+c);
+				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+				v5.draw();
+				break;
+			}
 		}
 	}
 
