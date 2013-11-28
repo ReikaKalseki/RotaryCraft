@@ -1,0 +1,48 @@
+﻿<?xml version="1.0"?>
+<info>
+	<terms>
+		W/kW/MW - Watts/Kilowatts/Megawatts - a unit of power (energy per unit time). 1W = 1 Joule per second.
+
+		Nm - Newton-meters - a unit of torque (force times distance).
+
+		rad/s - Radians per second. A unit of angular (rotational) velocity. 1 rad/s = 9.55 rpm.
+
+		Radian - A unit of angle, equal to 180/pi (57.3) degrees; there are 6.28 radians in a full circle.
+	</terms>
+	<physics>
+		Torque is the 'strength' of a turn; greater torques can exert greater loads. Therefore, a machine that requires more force to operate, such as the Compactor, will naturally require more torque than one like the Woodcutter.
+
+		Angular velocity is the rotational speed. For example, a machine that mixes things quickly, such as the Fractionator, will require a greater angular velocity than one which mixes them more slowly, like the Fermenter.
+	</physics>
+	<material>
+		Different materials have different strengths, which controls when the shafts and flywheels made of them fail. Flywheels fail based on density and tensile strength (TS), while shafts can fail from tensile or shear overload (SS).
+
+		Wood: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Stone: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Iron: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Steel: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Gold: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Diamond: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+	</material>
+	<shafts>
+		These are the load limits for the shafts. Exceeding these will result in breakage.
+		Wood: %dNm at %d rad/s
+		Stone: %dNm at %d rad/s
+		Steel: %dNm at %d rad/s
+		Diamond: %dNm at %d rad/s
+		Bedrock: Infinity
+	</shafts>
+	<flywheels>
+		These are the failure speeds for the flywheels. Exceeding these will result in violent failure.
+		Wood: %d rad/s
+		Stone: %d rad/s
+		Iron: %d rad/s
+		Gold: %d rad/s
+	</flywheels>
+	<transfer>
+		Shaft power behaves completely differently than electrical, pneumatic, or other traditional kinds of power. For example, shaft power is true power, not energy, and as such does not "build up" in machines or shafts with no output; it must be used immediately upon its creation. Furthermore, the "load" on a shaft has no effect on its power consumption - a disconnected shaft still draws any and all power given to it, but simply wastes it. This is unlike a wire, where disconnecting outputs would redirect that power into the remaining outputs.
+	</transfer>
+	<tiers>
+		Not all machines are created equal; some are much more difficult to operate than others. A good metric of the relative position of a machine in the techtree is its power requirement, if applicable. There are exceptions to this rule, and of course different play styles can mean different paths to take, but it is generally recommended to be aware of this hierarchy. Also note that a zero minimum only means that there is no minimum cutoff, and that the effects of increased power are more complex.
+	</tiers>
+</info>
