@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.API.ChargeableTool;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -74,7 +75,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		for (int i = 0; i < 9; i++) {
 			ItemStack is = inventory[i];
 			if (is != null) {
-				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID())
+				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID() || is.getItem() instanceof ChargeableTool)
 					return inventory[i].itemID;
 			}
 		}

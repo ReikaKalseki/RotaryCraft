@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -87,6 +88,16 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			ShaftMachine sm = (ShaftMachine)te;
 			sm.setIORenderAlpha(512);
 			world.markBlockForUpdate(x, y, z);
+		}
+		if (te instanceof Screwdriverable) {
+			Screwdriverable sc = (Screwdriverable)te;
+			boolean flag = false;
+			if (ep.isSneaking())
+				flag = sc.onShiftRightClick(world, x, y, z);
+			else
+				flag = sc.onRightClick(world, x, y, z);
+			if (flag)
+				return true;
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
