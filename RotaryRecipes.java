@@ -264,6 +264,10 @@ public class RotaryRecipes {
 		MachineRegistry.BELT.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', ItemStacks.basepanel, 'G', ItemStacks.hub, 's', ItemStacks.steelingot);
 
 		MachineRegistry.VANDEGRAFF.addCrafting("shs", "bgb", "php", 'h', ItemStacks.hub, 'p', ItemStacks.basepanel, 'b', Item.brick, 'g', Block.thinGlass, 's', ItemStacks.steelingot);
+
+		MachineRegistry.DISTILLER.addCrafting("PGP", "gMg", "PGP", 'G', Block.thinGlass, 'M', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'g', Item.ingotIron);
+
+		MachineRegistry.BIGFURNACE.addCrafting("SFS", "FRF", "SRS", 'S', ItemStacks.basepanel, 'F', Block.furnaceIdle, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 	}
 
 	private static void addCraftItems() {

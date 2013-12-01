@@ -19,7 +19,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelBeamMirror;
+import Reika.RotaryCraft.Models.Animated.ModelBeamMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
 
 public class RenderBeamMirror extends RotaryTERenderer {
@@ -67,7 +67,7 @@ public class RenderBeamMirror extends RotaryTERenderer {
 			}
 			GL11.glRotatef(var11+90, 0, 1, 0);
 		}
-		var14.renderAll(null, -tile.phi, -tile.theta);
+		var14.renderAll(null, -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

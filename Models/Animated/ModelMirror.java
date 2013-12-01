@@ -13,9 +13,9 @@
 // Keep in mind that you still need to fill in some blanks
 // - ZeuX
 
-package Reika.RotaryCraft.Models;
+package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -140,18 +140,13 @@ public class ModelMirror extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
-	{
-		this.renderAll(li, phi, 0);
-	}
-
-	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5);
 	}
 
-	public void renderAll(List li, float phi, float theta)
+	@Override
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		boolean broken = (Boolean)li.get(0);
 		Shape1.render(f5);

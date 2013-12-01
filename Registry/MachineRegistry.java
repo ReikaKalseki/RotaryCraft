@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
@@ -57,6 +58,7 @@ import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
+import Reika.RotaryCraft.ModInterface.TileEntityDistillery;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -65,7 +67,6 @@ import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -113,6 +114,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
@@ -137,6 +139,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
@@ -269,7 +272,9 @@ public enum MachineRegistry {
 	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
 	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt"),
 	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17, "RenderVanDeGraff"),
-	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21);
+	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
+	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
+	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY);
 
 	private String name;
 	private Class te;
@@ -762,6 +767,7 @@ public enum MachineRegistry {
 		case FUELENGINE:
 		case SORTING:
 		case FILLINGSTATION:
+		case DISTILLER:
 			return true;
 		default:
 			return false;
@@ -1081,6 +1087,10 @@ public enum MachineRegistry {
 
 	public boolean isIncomplete() {
 		return !hasRender && this.hasModel();
+	}
+
+	public boolean canBeFrictionHeated() {
+		return FrictionHeatable.class.isAssignableFrom(te);
 	}
 
 	static {

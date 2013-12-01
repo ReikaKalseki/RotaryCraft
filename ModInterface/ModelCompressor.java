@@ -14,7 +14,7 @@
 // - ZeuX
 package Reika.RotaryCraft.ModInterface;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -104,7 +104,7 @@ public class ModelCompressor extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		if (phi == 0)
 			phi = 0.0001F;

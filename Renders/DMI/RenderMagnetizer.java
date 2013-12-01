@@ -80,7 +80,7 @@ public class RenderMagnetizer extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItemStack(ItemStacks.shaftcore, tile.inv, false)), -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItemStack(ItemStacks.shaftcore, tile.inv, false)), -tile.phi, 0);
 		// else
 		//var15.renderAll();
 		//GL11.glEnable(GL11.GL_LIGHTING);

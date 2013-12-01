@@ -77,7 +77,7 @@ public class RenderPump extends RotaryTERenderer
 		pars[0] = tile.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
 		pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
 		pars[2] = tile.damage > 400;
-		var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

@@ -109,6 +109,7 @@ public enum HandbookRegistry {
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	BOILER(MachineRegistry.BOILER),
 	GENERATOR(MachineRegistry.GENERATOR),
+	FURNACE(MachineRegistry.BIGFURNACE),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -153,6 +154,7 @@ public enum HandbookRegistry {
 	SELFDESTRUCT(MachineRegistry.SELFDESTRUCT),
 	EMP(MachineRegistry.EMP),
 	AIRGUN(MachineRegistry.AIRGUN),
+	VDG(MachineRegistry.VANDEGRAFF),
 
 	SURVMACHINEDESC("Surveying Machines", "Surveying"),
 	GPR(MachineRegistry.GPR),

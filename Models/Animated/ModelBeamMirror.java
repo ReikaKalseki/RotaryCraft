@@ -13,9 +13,9 @@
 // Keep in mind that you still need to fill in some blanks
 // - ZeuX
 
-package Reika.RotaryCraft.Models;
+package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -82,9 +82,9 @@ public class ModelBeamMirror extends RotaryModelBase
 		Shape5d.mirror = true;
 		this.setRotation(Shape5d, 0F, 0F, 0F);
 	}
-
+	/*
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape1.render(f5);
 		Shape4.render(f5);
@@ -93,9 +93,10 @@ public class ModelBeamMirror extends RotaryModelBase
 		Shape5b.render(f5);
 		Shape5c.render(f5);
 		Shape5d.render(f5);
-	}
+	}*/
 
-	public void renderAll(List li, float phi, float theta)
+	@Override
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape1.render(f5);
 		Shape4.render(f5);
@@ -120,12 +121,6 @@ public class ModelBeamMirror extends RotaryModelBase
 		GL11.glTranslated(0, d, 0);
 		GL11.glScaled(1, 1D/sc, 1);
 		GL11.glTranslated(0, -d, 0);
-	}
-
-	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		super.setRotationAngles(f, f1, f2, f3, f4, f5);
 	}
 
 }

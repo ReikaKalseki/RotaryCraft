@@ -86,7 +86,7 @@ public class RenderCompactor extends RotaryTERenderer
 		float p = tile.phi;
 		if (!tile.isInWorld())
 			p = 1;
-		var14.renderAll(null, p);
+		var14.renderAll(null, p, 0);
 		// else
 		//var15.renderAll();
 

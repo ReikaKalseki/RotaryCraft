@@ -86,7 +86,7 @@ public class RenderHeater extends RotaryTERenderer
 			// if (tile.getBlockMetadata() < 4)
 
 
-			var14.renderAll(null, 0);
+			var14.renderAll(null, 0, 0);
 			// else
 			//var15.renderAll();
 			if (tile.isInWorld())

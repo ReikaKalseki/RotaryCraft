@@ -94,7 +94,7 @@ public class RenderSonicBorer extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.getBlockMetadata()<4), -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.getBlockMetadata()<4), -tile.phi, 0);
 		// else
 		//var15.renderAll();
 		if (tile.isInWorld())

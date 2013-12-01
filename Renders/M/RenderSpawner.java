@@ -75,10 +75,10 @@ public class RenderSpawner extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 			// if (tile.getBlockMetadata() < 4)
 			if (!tile.isInWorld()) {
-				var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0);
+				var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0, 0);
 			}
 			else
-				var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0);
+				var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0, 0);
 			// else
 			//var15.renderAll();
 			if (tile.isInWorld())

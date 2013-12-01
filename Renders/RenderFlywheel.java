@@ -108,7 +108,7 @@ public class RenderFlywheel extends RotaryTERenderer
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.failed), -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.failed), -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

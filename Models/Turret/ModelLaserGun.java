@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Turret;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -181,7 +181,8 @@ public class ModelLaserGun extends RotaryModelBase
 		this.setRotation(Shape3da1, 0F, 0F, 0F);
 	}
 
-	public void renderAll(List li, float phi, float theta)
+	@Override
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape5.render(f5);
 		GL11.glTranslated(0, 1, 0);
@@ -226,12 +227,6 @@ public class ModelLaserGun extends RotaryModelBase
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5);
-	}
-
-	@Override
-	public void renderAll(List li, float phi)
-	{
-		this.renderAll(li, phi, 0);
 	}
 
 }

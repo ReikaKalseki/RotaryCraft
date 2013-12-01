@@ -99,7 +99,7 @@ public class RenderReservoir extends RotaryTERenderer
 			var14.renderSide(ForgeDirection.DOWN);
 		}
 		else {
-			var14.renderAll(null, 0);
+			var14.renderAll(null, 0, 0);
 		}
 
 		if (tile.isInWorld())

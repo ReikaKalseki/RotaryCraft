@@ -871,6 +871,43 @@
 		</desc>
 		<note>
 			Required power: %dW
+			Power Input: Back
 		</note>
 	</fillingstation>
+	<vandegraaff>
+		<desc>
+			The van de graaff uses a belt to build a static charge on the upper metal sphere. If a conductive object - like a mob - comes close enough, that charge can be released into the object. The larger the charge, the longer a gap it can jump.
+		</desc>
+		<note>
+			Water dissipates static charge
+		</note>
+	</vandegraaff>
+	<defoliator>
+		<desc>
+			The defoliator is used for quickly clearing large areas of plant life. Note that animal life in the vicinity is also likely to die.
+		</desc>
+		<note>
+			Required power: %dW
+			Power Input: Bottom
+		</note>
+	</defoliator>
+	<bigfurnace>
+		<desc>
+			The lava smeltery can smelt up to 18 items at a time. However, to do this, its tanks must be full of lava, and it must be at least 400 degrees. It also requires shaft power.
+		</desc>
+		<note>
+			Required power: %dW
+			Power Input: Bottom
+		</note>
+	</bigfurnace>
+	<distiller>
+		<desc>
+			The distiller is used to convert one fluid type to another. For example, it can make lubricant from BuildCraft oil. Simply pump the fluid upwards through the machine.
+		</desc>
+		<note>
+			Required power: %dW
+			Required torque: %d Nm
+			Power Input: Back
+		</note>
+	</distiller>
 </machines>

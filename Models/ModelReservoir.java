@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.ForgeDirection;
@@ -72,7 +72,7 @@ public class ModelReservoir extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		mx.render(f5);
 		mz.render(f5);

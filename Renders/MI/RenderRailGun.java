@@ -59,7 +59,7 @@ public class RenderRailGun extends RotaryTERenderer {
 		}
 		GL11.glTranslated(0, var12, 0);
 		GL11.glScaled(1, var11, 1);
-		var14.renderAll(null, -tile.phi, -tile.theta*var11);
+		var14.renderAll(null, -tile.phi, 0);
 		GL11.glScaled(1, var11, 1);
 		GL11.glTranslated(0, -var12, 0);
 		GL11.glFrontFace(GL11.GL_CCW);

@@ -138,7 +138,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler && dir != ForgeDirection.UP) {
+				else if (te instanceof IFluidHandler && dir.offsetY == 0) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
 						int toadd = this.getPipeOutput(this.getLiquidLevel());
@@ -204,7 +204,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler && dir == ForgeDirection.UP) {
+				else if (te instanceof IFluidHandler && dir.offsetY != 0) {
 					IFluidHandler fl = (IFluidHandler)te;
 					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 					if (fs != null) {

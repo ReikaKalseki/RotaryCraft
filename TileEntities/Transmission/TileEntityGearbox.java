@@ -28,7 +28,6 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -521,7 +520,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	public void setLubricant(int amt) {
-		tank.setContents(amt, RotaryCraft.lubeFluid);
+		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
 	public int getLubricant() {

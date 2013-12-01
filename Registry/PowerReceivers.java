@@ -82,7 +82,9 @@ public enum PowerReceivers {
 	FILLINGSTATION(1024),
 	BELT(),
 	VANDEGRAFF(),
-	DEFOLIATOR(16384);
+	DEFOLIATOR(16384),
+	BIGFURNACE(2048),
+	DISTILLER(512, 1, 1024);
 
 	private int minT;
 	private int minS;

@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -519,7 +519,7 @@ public class ModelGrinder extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		double xoff = -0.25;
 		double yoff = 1.125;

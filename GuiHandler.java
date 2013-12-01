@@ -28,6 +28,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
+import Reika.RotaryCraft.Containers.ContainerBigFurnace;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
@@ -81,6 +82,7 @@ import Reika.RotaryCraft.GUIs.Machine.GuiSorter;
 import Reika.RotaryCraft.GUIs.Machine.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.Machine.GuiSplitter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiAerosolizer;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBigFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCVT;
@@ -129,6 +131,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
@@ -277,6 +280,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntitySorting) {
 			return new ContainerSorter(player, (TileEntitySorting) te);
+		}
+		if (te instanceof TileEntityBigFurnace) {
+			return new ContainerBigFurnace(player, (TileEntityBigFurnace) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -460,6 +466,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntitySorting) {
 			return new GuiSorter(player, (TileEntitySorting) te);
+		}
+		if (te instanceof TileEntityBigFurnace) {
+			return new GuiBigFurnace(player, (TileEntityBigFurnace) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

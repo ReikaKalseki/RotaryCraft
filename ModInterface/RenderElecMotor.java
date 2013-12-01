@@ -64,7 +64,7 @@ public class RenderElecMotor extends RotaryTERenderer
 
 		GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 		int num = tile.isInWorld() ? tile.getNumberCoils() : 5;
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(num), tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(num), tile.phi, 0);
 
 		this.closeGL(tile);
 	}

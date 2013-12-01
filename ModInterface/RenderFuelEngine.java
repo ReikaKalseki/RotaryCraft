@@ -62,7 +62,7 @@ public class RenderFuelEngine extends RotaryTERenderer
 		}
 
 		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
-		var14.renderAll(null, tile.phi);
+		var14.renderAll(null, tile.phi, 0);
 
 		this.closeGL(tile);
 	}

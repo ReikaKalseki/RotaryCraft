@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Engine;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -246,7 +246,7 @@ public class ModelPerformance extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		double ang0 = 0.03125*Math.sin(Math.toRadians(phi)*4);
 		double ang1 = 0.03125*Math.sin(Math.toRadians(phi+120)*4);

@@ -81,15 +81,15 @@ public class RenderAdvGear extends RotaryTERenderer
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
 			switch(itemMetadata) {
 			case 1:
-				var14.renderAll(null, 0);
+				var14.renderAll(null, 0, 0);
 				break;
 			case 2:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-				var15.renderAll(null, 0);
+				var15.renderAll(null, 0, 0);
 				break;
 			case 3:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-				var16.renderAll(null, 0);
+				var16.renderAll(null, 0, 0);
 				break;
 			}
 			if (tile.isInWorld())
@@ -106,14 +106,14 @@ public class RenderAdvGear extends RotaryTERenderer
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
 		if (tile.getBlockMetadata() < 4)
-			var14.renderAll(null, tile.phi);
+			var14.renderAll(null, tile.phi, 0);
 		else if (tile.getBlockMetadata() < 8) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-			var15.renderAll(null, tile.phi);
+			var15.renderAll(null, tile.phi, 0);
 		}
 		else if (tile.getBlockMetadata() < 12) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-			var16.renderAll(null, tile.phi);
+			var16.renderAll(null, tile.phi, 0);
 		}
 
 		this.closeGL(tile);

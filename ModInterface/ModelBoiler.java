@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.ModInterface;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -154,7 +154,7 @@ public class ModelBoiler extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape1b.render(f5);
 		Shape1c.render(f5);

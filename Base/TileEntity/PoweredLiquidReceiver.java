@@ -107,4 +107,12 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 		tank.writeToNBT(NBT);
 	}
 
+	public final boolean isEmpty() {
+		return tank.isEmpty();
+	}
+
+	public final boolean isFull() {
+		return tank.isFull();
+	}
+
 }

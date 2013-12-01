@@ -62,7 +62,7 @@ public class RenderGenerator extends RotaryTERenderer
 		}
 
 		GL11.glRotatef(var11+180, 0.0F, 1.0F, 0.0F);
-		var14.renderAll(null, 0);
+		var14.renderAll(null, 0, 0);
 
 		this.closeGL(tile);
 	}

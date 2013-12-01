@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,13 +22,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer {
+public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable {
 
 	private int temperature;
 	public ItemStack[] inventory = new ItemStack[14];
@@ -139,11 +139,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	public void clearXP() {
 		xp = 0;
-	}
-
-	public void addXPToPlayer(EntityPlayer ep) {
-		ep.addExperience((int)xp);
-		this.clearXP();
 	}
 
 	private boolean checkSpreadFit(int num) {

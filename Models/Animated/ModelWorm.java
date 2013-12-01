@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -386,7 +386,7 @@ public class ModelWorm extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		double xoff;
 		double yoff;

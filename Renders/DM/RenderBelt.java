@@ -25,7 +25,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelBelt;
-import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 
 public class RenderBelt extends RotaryTERenderer
 {
@@ -91,7 +91,7 @@ public class RenderBelt extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(null, tile.phi);
+		var14.renderAll(null, tile.phi, 0);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
@@ -108,6 +108,7 @@ public class RenderBelt extends RotaryTERenderer
 			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
+		//ReikaAABBHelper.renderAABB(tile.getRenderBoundingBox(), par2, par4, par6, 0, 0, 0, 127, 255, 255, 0, true);
 	}
 
 	private void drawBelt2(TileEntityBeltHub tile, double par2, double par4, double par6, float par8) {

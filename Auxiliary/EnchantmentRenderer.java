@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -37,7 +37,7 @@ public abstract class EnchantmentRenderer {
 		Minecraft.getMinecraft().renderEngine.bindTexture(RES_ITEM_GLINT);
 	}
 
-	public static void renderGlint(TileEntity tile, RotaryModelBase model, List li, double par2, double par4, double par6) {
+	public static void renderGlint(TileEntity tile, RotaryModelBase model, ArrayList li, double par2, double par4, double par6) {
 		int x = tile.xCoord;
 		int y = tile.yCoord;
 		int z = tile.zCoord;
@@ -88,7 +88,7 @@ public abstract class EnchantmentRenderer {
 
 		double f = 0.01*0;
 		GL11.glTranslated(par2*f, par4*f, -par6*f);
-		model.renderAll(li, 0);
+		model.renderAll(li, 0, 0);
 
 		GL11.glTranslated(0, p, 0);
 		GL11.glScaled(1D/d, 1D/d, 1D/d);

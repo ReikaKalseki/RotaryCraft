@@ -88,7 +88,7 @@ public class RenderPileDriver extends RotaryTERenderer
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
 			// if (tile.getBlockMetadata() < 4)
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.power > 0), tile.phi);
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.power > 0), tile.phi, 0);
 			// else
 			//var15.renderAll();
 			if (tile.isInWorld())

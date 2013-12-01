@@ -97,7 +97,7 @@ public class RenderFin extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(null, -tile.phi);
+		var14.renderAll(null, -tile.phi, 0);
 		// else
 		//var15.renderAll();
 		if (tile.isInWorld())
@@ -119,7 +119,7 @@ public class RenderFin extends RotaryTERenderer
 	private void renderTarget(TileEntityCoolingFin tile, double par2, double par4, double par6) {
 		int[] xyz = tile.getTarget();
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(xyz[0], xyz[1], xyz[2], xyz[0]+1, xyz[1]+1, xyz[2]+1).expand(0.03125, 0.03125, 0.03125);
-		ReikaAABBHelper.renderAABB(tile.worldObj, box, par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, tile.ticks, 0, 127, 255, true);
+		ReikaAABBHelper.renderAABB(box, par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, tile.ticks, 0, 127, 255, true);
 	}
 
 	@Override

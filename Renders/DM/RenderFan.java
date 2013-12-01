@@ -95,7 +95,7 @@ public class RenderFan extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(null, -tile.phi);
+		var14.renderAll(null, -tile.phi, 0);
 		// else
 		//var15.renderAll();
 		if (tile.isInWorld())
@@ -112,7 +112,7 @@ public class RenderFan extends RotaryTERenderer
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			ReikaAABBHelper.renderAABB(tile.worldObj, ((TileEntityFan)tile).getBlowZone(tile.getBlockMetadata(), ((TileEntityFan)tile).getRange()), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 0, 127, 255, true);
+			ReikaAABBHelper.renderAABB(((TileEntityFan)tile).getBlowZone(tile.getBlockMetadata(), ((TileEntityFan)tile).getRange()), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 0, 127, 255, true);
 	}
 
 	@Override

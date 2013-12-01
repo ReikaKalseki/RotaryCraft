@@ -80,7 +80,7 @@ public class RenderAerosolizer extends RotaryTERenderer
 			for (int i = 0; i < 9; i++) {
 				liqlevel += tile.potionLevel[i];
 			}
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(liqlevel > 0), 0);
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(liqlevel > 0), 0, 0);
 			// else
 			//var15.renderAll();
 			//if (!tile.isInWorld())

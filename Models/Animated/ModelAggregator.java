@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -238,7 +238,7 @@ public class ModelAggregator extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		GL11.glRotatef(phi, 0, 1, 0);
 		Shape1.render(f5);

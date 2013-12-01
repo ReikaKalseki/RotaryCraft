@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -22,25 +22,25 @@ public abstract class RotaryModelBase extends ModelBase {
 	protected final float f5 = 0.0625F;
 	protected int pass;
 
-	public abstract void renderAll(List conditions, float phi);
+	public abstract void renderAll(ArrayList conditions, float phi, float theta);
 
 	public final void renderAll(boolean a) {
-		this.renderAll(ReikaJavaLibrary.makeListFrom(a), 0);
+		this.renderAll(ReikaJavaLibrary.makeListFrom(a), 0, 0);
 	}
 
 	public final void renderAll(boolean a, boolean b) {
 		Object[] arr = {a,b};
-		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0);
+		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0, 0);
 	}
 
 	public final void renderAll(boolean a, boolean b, boolean c) {
 		Object[] arr = {a,b,c};
-		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0);
+		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0, 0);
 	}
 
 	public final void renderAll(boolean a, boolean b, boolean c, boolean d) {
 		Object[] arr = {a,b,c,d};
-		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0);
+		this.renderAll(ReikaJavaLibrary.makeListFromArray(arr), 0, 0);
 	}
 
 	/** To prevent use of the basic method *//*

@@ -70,7 +70,6 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
@@ -83,6 +82,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
@@ -90,6 +90,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
@@ -276,12 +277,13 @@ public abstract class BlockBasicMultiTE extends Block {
 					FluidStack stack = tr.getContents();
 					ItemStack ret = FluidContainerRegistry.fillFluidContainer(stack, is);
 					if (ret != null) {
-						int amt = FluidContainerRegistry.getFluidForFilledItem(ret).amount;
-						ReikaJavaLibrary.pConsole(amt);
-						tr.removeLiquid(amt);
-						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(ret, size));
-						return true;
+						int amt = FluidContainerRegistry.getFluidForFilledItem(ret).amount*size;
+						if (tr.getLevel() >= amt) {
+							tr.removeLiquid(amt*size);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(ret, size));
+							return true;
+						}
 					}
 				}
 				else if (is.itemID == Item.glassBottle.itemID) {
@@ -344,9 +346,19 @@ public abstract class BlockBasicMultiTE extends Block {
 			}
 		}
 		if (m == MachineRegistry.FERMENTER) {
-			TileEntityFermenter ex = (TileEntityFermenter)te;
-			if (ex.getLevel()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
-				ex.addLiquid(RotaryConfig.MILLIBUCKET);
+			TileEntityFermenter fm = (TileEntityFermenter)te;
+			if (fm.getLevel()+RotaryConfig.MILLIBUCKET <= fm.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
+				fm.addLiquid(RotaryConfig.MILLIBUCKET);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
+		}
+		if (m == MachineRegistry.BIGFURNACE) {
+			TileEntityBigFurnace bf = (TileEntityBigFurnace)te;
+			if (bf.getLevel()+RotaryConfig.MILLIBUCKET <= bf.getCapacity() && is != null && is.itemID == Item.bucketLava.itemID) {
+				bf.addLiquid(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}

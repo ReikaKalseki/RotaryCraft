@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -104,7 +104,8 @@ public class ModelCCTV extends RotaryModelBase
 		this.setRotation(Shape7, 0F, 0F, 0F);
 	}
 
-	public void renderAll(List li, float phi, float theta)
+	@Override
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		double d = 0.175;
 		double d1 = 0.0625;
@@ -138,11 +139,6 @@ public class ModelCCTV extends RotaryModelBase
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5);
-	}
-
-	@Override
-	public void renderAll(List conditions, float phi) {
-		this.renderAll(conditions, phi, 0);
 	}
 
 }

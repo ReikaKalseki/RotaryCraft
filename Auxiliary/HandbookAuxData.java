@@ -157,18 +157,27 @@ public final class HandbookAuxData {
 			else {
 				int i = k-ReikaOreHelper.oreList.length;
 				//ReikaJavaLibrary.pConsoleIf(modores.get(i)+" at "+i+" ("+""+")");
-				ModOreList ore = ModOreList.getModOreFromOre(modores.get(i));
-				in[0] = modores.get(i);
-				in[1] = ExtractorModOres.getDustProduct(ore);
-				in[2] = ExtractorModOres.getSlurryProduct(ore);
-				in[3] = ExtractorModOres.getSolutionProduct(ore);
+				ItemStack is = modores.get(i);
+				ModOreList ore = ModOreList.getModOreFromOre(is);
+				if (ore == null) {
+					ReikaJavaLibrary.pConsole("DRAGONAPI: ItemStack "+is.getDisplayName()+" ("+is.itemID+":"+is.getItemDamage()+")");
+					ReikaJavaLibrary.pConsole("has no mod ore list entry, yet was registered as such during load!");
+					ReikaJavaLibrary.pConsole("Contact both mod developers immediately!");
+					oreName = "ERROR";
+				}
+				else {
+					in[0] = modores.get(i);
+					in[1] = ExtractorModOres.getDustProduct(ore);
+					in[2] = ExtractorModOres.getSlurryProduct(ore);
+					in[3] = ExtractorModOres.getSolutionProduct(ore);
 
-				out[0] = ExtractorModOres.getDustProduct(ore);
-				out[1] = ExtractorModOres.getSlurryProduct(ore);
-				out[2] = ExtractorModOres.getSolutionProduct(ore);
-				out[3] = ExtractorModOres.getFlakeProduct(ore);
+					out[0] = ExtractorModOres.getDustProduct(ore);
+					out[1] = ExtractorModOres.getSlurryProduct(ore);
+					out[2] = ExtractorModOres.getSolutionProduct(ore);
+					out[3] = ExtractorModOres.getFlakeProduct(ore);
 
-				oreName = ore.getName();
+					oreName = ore.getName();
+				}
 			}
 			Object[][] obj = {in, out, new String[]{oreName}};
 			extracts.add(obj);

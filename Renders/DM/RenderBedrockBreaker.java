@@ -102,10 +102,10 @@ public class RenderBedrockBreaker extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 		if (tile.isInWorld() && tile.getBlockMetadata() > 3) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/bedrockvtex.png");
-			var15.renderAll(null, tile.phi);
+			var15.renderAll(null, tile.phi, 0);
 		}
 		else
-			var14.renderAll(null, tile.phi);
+			var14.renderAll(null, tile.phi, 0);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

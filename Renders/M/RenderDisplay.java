@@ -71,7 +71,7 @@ public class RenderDisplay extends RotaryTERenderer {
 			break;
 		}
 		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
-		var14.renderAll(null, -tile.phi);
+		var14.renderAll(null, -tile.phi, 0);
 		GL11.glScaled(1, var11, 1);
 
 		if (tile.isInWorld())

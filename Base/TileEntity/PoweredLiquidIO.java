@@ -25,8 +25,8 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 
 public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
-	protected HybridTank output = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()), this.getCapacity());
-	protected HybridTank input = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()), this.getCapacity());
+	protected HybridTank output = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"out"), this.getCapacity());
+	protected HybridTank input = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"in"), this.getCapacity());
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
@@ -63,7 +63,11 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 		return output.getLevel();
 	}
 
-	public final Fluid getContainedFluid() {
+	public final Fluid getFluidInInput() {
+		return input.getActualFluid();
+	}
+
+	public final Fluid getFluidInOutput() {
 		return output.getActualFluid();
 	}
 
@@ -77,7 +81,11 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 
 	@Override
 	public final boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.canReceiveFrom(from) && fluid.equals(this.getInputFluid());
+		return this.canReceiveFrom(from) && this.isValidFluid(fluid);
+	}
+
+	public boolean isValidFluid(Fluid f) {
+		return f.equals(this.getInputFluid());
 	}
 
 	@Override
@@ -93,7 +101,7 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return (this.canReceiveFrom(side) && this.canIntakeFromPipe(p)) || (this.canOutputTo(side.getOpposite()) && this.canOutputToPipe(p)) && this.canConnectToPipe(p);
+		return (this.canReceiveFrom(side) && this.canIntakeFromPipe(p)) || (this.canOutputTo(side) && this.canOutputToPipe(p)) && this.canConnectToPipe(p);
 	}
 
 	public abstract boolean canIntakeFromPipe(MachineRegistry p);
@@ -101,7 +109,7 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 	public abstract boolean canOutputToPipe(MachineRegistry p);
 
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
-		return type == PipeType.FLUID ? (this.canOutputTo(side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
+		return type == PipeType.FLUID ? ((this.canOutputTo(side) || this.canReceiveFrom(side)) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT) : ConnectOverride.DEFAULT;
 	}
 
 	@Override

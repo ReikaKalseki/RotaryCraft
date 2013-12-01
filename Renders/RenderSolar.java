@@ -53,7 +53,7 @@ public class RenderSolar extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(null, 0);
+		var14.renderAll(null, 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

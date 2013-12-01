@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -211,7 +211,7 @@ public class ModelCompactor extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		Shape1.render(f5);
 		Shape3.render(f5);

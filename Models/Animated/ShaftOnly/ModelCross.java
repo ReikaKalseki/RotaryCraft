@@ -15,6 +15,7 @@
 
 package Reika.RotaryCraft.Models.Animated.ShaftOnly;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
@@ -253,6 +254,6 @@ public class ModelCross extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List conditions, float phi) {}
+	public void renderAll(ArrayList conditions, float phi, float theta) {}
 
 }

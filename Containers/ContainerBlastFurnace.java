@@ -53,8 +53,6 @@ public class ContainerBlastFurnace extends CoreContainer
 		if (ID < blast.getSizeInventory() && (ID == 10 || ID == 13 || ID == 12)) {
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is)) {
 				RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
-				blast.addXPToPlayer(ep);
-				ep.playSound("random.orb", 0.3F, 1);
 			}
 		}
 		return is;

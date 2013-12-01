@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -16,13 +17,13 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 
 public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE {
 	//give ability to heat blast furnace
@@ -37,7 +38,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		if ((this.hasFurnace(world) || this.hasBlastFurnace(world)) && power > 0 || this.hasHeatableMachine(world)) {
+		if (power > 0 && this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
@@ -57,7 +58,20 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	public boolean hasHeatableMachine(World world) {
-		return world.getBlockTileEntity(fx, fy, fz) instanceof ThermalMachine;
+		int id = world.getBlockId(fx, fy, fz);
+		int meta = world.getBlockMetadata(fx, fy, fz);
+		if (id == 0)
+			return false;
+		if (id == Block.furnaceIdle.blockID || id == Block.furnaceBurning.blockID)
+			return true;
+		Block b = Block.blocksList[id];
+		if (!b.hasTileEntity(meta))
+			return false;
+		MachineRegistry m = MachineRegistry.getMachine(world, fx, fy, fz);
+		if (m != null && m.canBeFrictionHeated())
+			return true;
+		TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+		return te instanceof ThermalMachine;
 	}
 
 	@Override
@@ -100,8 +114,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		this.getFurnaceCoordinates(world, x, y, z, meta);
 
 		if (!this.hasFurnace(world)) {
-			if (this.hasBlastFurnace(world)) {
-				this.heatBlast(world);
+			if (this.hasHeatable(world)) {
+				this.heatMachine(world);
 			}
 			else {
 				TileEntity te = world.getBlockTileEntity(fx, fy, fz);
@@ -122,14 +136,14 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		this.hijackFurnace(world, x, y, z, meta);
 	}
 
-	private void heatBlast(World world) {
-		TileEntityBlastFurnace te = (TileEntityBlastFurnace)world.getBlockTileEntity(fx, fy, fz);
+	private void heatMachine(World world) {
+		FrictionHeatable te = (FrictionHeatable)world.getBlockTileEntity(fx, fy, fz);
 		int tdiff = temperature-te.getTemperature();
 		te.addTemperature(tdiff);
 	}
 
-	private boolean hasBlastFurnace(World world) {
-		return MachineRegistry.getMachine(world, fx, fy, fz) == MachineRegistry.BLASTFURNACE;
+	private boolean hasHeatable(World world) {
+		return world.getBlockTileEntity(fx, fy, fz) instanceof FrictionHeatable;
 	}
 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {

@@ -226,6 +226,7 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 		tank.readFromNBT(NBT);
 
 		energy = NBT.getLong("e");
+		temperature = NBT.getInteger("temp");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
@@ -244,6 +245,7 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 		tank.writeToNBT(NBT);
 
 		NBT.setLong("e", energy);
+		NBT.setInteger("temp", temperature);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < inv.length; i++) {

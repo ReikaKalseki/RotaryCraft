@@ -15,7 +15,7 @@
 
 package Reika.RotaryCraft.Models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -144,7 +144,7 @@ public class ModelLamp extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(List li, float phi)
+	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		boolean vertical = (Boolean)li.get(0);
 		if (!vertical)

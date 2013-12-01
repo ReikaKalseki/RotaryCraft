@@ -21,7 +21,6 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -65,7 +64,7 @@ public class RenderHarvester extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(null, 0);
+		var14.renderAll(null, 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -76,15 +75,12 @@ public class RenderHarvester extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		int error = GL11.glGetError();
-		if (error != 0)
-			ReikaJavaLibrary.pConsole(error);
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityMobHarvesterAt((TileEntityMobHarvester)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			ReikaAABBHelper.renderAABB(tile.worldObj, ((TileEntityMobHarvester)tile).getBox(), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 255, 127, 0, true);
+			ReikaAABBHelper.renderAABB(((TileEntityMobHarvester)tile).getBox(), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 255, 127, 0, true);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLaser((TileEntityMobHarvester)tile, par2, par4, par6);
 			if (((TileEntityMobHarvester)tile).hasEnchantments())
@@ -100,8 +96,8 @@ public class RenderHarvester extends RotaryTERenderer
 		boolean laser1 = harv.inbox.size() > 0;
 		boolean laser2 = harv.inbox.size() == 1 && (harv.inbox.get(0) instanceof EntityPlayer || harv.inbox.get(0) instanceof EntityVillager);
 		if (laser1 && !laser2 && !ReikaEntityHelper.allAreDead(harv.inbox, true)) {
-			ReikaAABBHelper.renderAABB(harv.worldObj, harv.getLaser(), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -960, 255, 0, 0, false);
-			ReikaAABBHelper.renderAABB(harv.worldObj, harv.getLaser().expand(0.125, 0.001, 0.125), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -192, 255, 128, 128, false);
+			ReikaAABBHelper.renderAABB(harv.getLaser(), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -960, 255, 0, 0, false);
+			ReikaAABBHelper.renderAABB(harv.getLaser().expand(0.125, 0.001, 0.125), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -192, 255, 128, 128, false);
 		}
 		ReikaRenderHelper.exitGeoDraw();
 	}

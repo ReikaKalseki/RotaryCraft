@@ -69,7 +69,7 @@ public class RenderBreeder extends RotaryTERenderer
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
 		// if (tile.getBlockMetadata() < 4)
-		var14.renderAll(ReikaJavaLibrary.makeListFromArray(this.getConditions(te)), 0);
+		var14.renderAll(ReikaJavaLibrary.makeListFromArray(this.getConditions(te)), 0, 0);
 
 		if (te.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

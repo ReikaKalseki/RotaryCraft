@@ -89,7 +89,7 @@ public class RenderRockMelter extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.hasStone()), -tile.phi);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.hasStone()), -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

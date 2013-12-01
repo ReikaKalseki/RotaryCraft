@@ -119,9 +119,9 @@ public class RenderSplitter extends RotaryTERenderer
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
 		if (meta < 4 || (meta >= 8 && meta < 12))
-			var14.renderAll(null, -tile.phi*dir);
+			var14.renderAll(null, -tile.phi*dir, 0);
 		else
-			var15.renderAll(null, -tile.phi*dir);
+			var15.renderAll(null, -tile.phi*dir, 0);
 
 		this.closeGL(tile);
 	}
