@@ -47,7 +47,7 @@ public class CompactorHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input, 71, 24);
+			return new PositionedStack(new ItemStack(input.itemID, 1, input.getItemDamage()), 71, 24);
 		}
 
 		@Override
