@@ -26,10 +26,7 @@ import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerHeater;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class GuiHeater extends GuiMachine
 {
 	private IInventory upperHeaterInventory;
@@ -57,6 +54,7 @@ public class GuiHeater extends GuiMachine
 		ySize = var4 + inventoryRows * 18;
 		heater = te;
 		temperature = te.setTemperature;
+		ySize = 167;
 	}
 
 	@Override
@@ -110,7 +108,7 @@ public class GuiHeater extends GuiMachine
 		int k = (height - ySize) / 2;
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
 		if (tile instanceof IInventory)
-			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) - 14, 4210752);
+			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) +3, 4210752);
 
 		fontRenderer.drawString("Temperature Control:", 26, 59, 4210752);
 		if (!input.isFocused()) {

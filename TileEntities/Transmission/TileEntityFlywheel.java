@@ -251,15 +251,16 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 			else {
 				omega = (int)(omega*DECAY);
 				if (torquein > 0)
-					torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), torque, "max");
+					torque = (int)ReikaMathLibrary.extremad((Math.min(maxtorque, torque)*DECAY), Math.min(maxtorque, torque), "max");
 				else
-					torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), torque, "min");
+					torque = (int)ReikaMathLibrary.extremad((Math.min(maxtorque, torque)*DECAY), Math.min(maxtorque, torque), "min");
 			}
 		}
 		else {
 			omega = (int)(omega*DECAY);
-			torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), torque, "max");
+			torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), Math.min(maxtorque, torque), "max");
 		}
+		torque = torquein > 0 ? torquein : 1; //for now
 		if (omega == 0)
 			torque = 0;
 	}

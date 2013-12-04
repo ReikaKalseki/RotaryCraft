@@ -39,8 +39,8 @@ public class ContainerFermenter extends CoreContainer
 		//if (tile.worldObj.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
 		//this.addSlotToContainer(new Slot(par2TileEntityFermenter, 1, 55, 35));
 		//else
-		this.addSlotToContainer(new Slot(par2TileEntityFermenter, 2, 55, 53));
-		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityFermenter, 3, 116, 35));
+		this.addSlotToContainer(new Slot(par2TileEntityFermenter, 1, 55, 53));
+		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityFermenter, 2, 116, 35));
 
 		this.addPlayerInventory(player);
 	}

@@ -164,7 +164,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				int targetslot = this.checkForStack(is);
 				if (targetslot != -1) {
 					if (inventory[targetslot] == null)
-						inventory[targetslot] = new ItemStack(is.itemID, is.stackSize, is.getItemDamage());
+						inventory[targetslot] = is.copy();
 					else
 						inventory[targetslot].stackSize += is.stackSize;
 				}
@@ -201,14 +201,16 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		for (int j = 0; j < inventory.length; j++) {
 			if (inventory[j] != null) {
 				if (inventory[j].itemID == id && inventory[j].getItemDamage() == meta) {
-					if (inventory[j].stackSize+size <= is.getMaxStackSize()) {
-						target = j;
-						j = inventory.length;
-					}
-					else {
-						int diff = is.getMaxStackSize() - inventory[j].stackSize;
-						inventory[j].stackSize += diff;
-						is.stackSize -= diff;
+					if (ItemStack.areItemStackTagsEqual(is, inventory[j])) {
+						if (inventory[j].stackSize+size <= is.getMaxStackSize()) {
+							target = j;
+							j = inventory.length;
+						}
+						else {
+							int diff = is.getMaxStackSize() - inventory[j].stackSize;
+							inventory[j].stackSize += diff;
+							is.stackSize -= diff;
+						}
 					}
 				}
 			}

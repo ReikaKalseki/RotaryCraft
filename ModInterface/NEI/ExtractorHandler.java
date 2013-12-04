@@ -171,7 +171,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			if (result.itemID == RotaryCraft.extracts.itemID && !RecipesExtractor.isFlakes(result))
 				return;
 			ModOreList ore = ExtractorModOres.getOreFromExtract(result);
-			if (ore != null && !ore.hasLoadedOres())
+			if (ore != null && !ore.existsInGame())
 				return;
 			ReikaOreHelper van = RecipesExtractor.getOreFromExtract(result);
 			arecipes.add(new ExtractorRecipe(ore, van, null));
@@ -184,7 +184,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			ModOreList ore = ModOreList.getModOreFromOre(ingredient);
 			if (ingredient.itemID == RotaryCraft.modextracts.itemID)
 				ore = ExtractorModOres.getOreFromExtract(ingredient);
-			if (ore != null && !ore.hasLoadedOres())
+			if (ore != null && !ore.existsInGame())
 				return;
 			ReikaOreHelper van = ReikaOreHelper.getEntryByOreDict(ingredient);
 			if (van == null)

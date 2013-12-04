@@ -43,7 +43,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	/** The number of ticks that the current item has been cooking for */
 	public int fermenterCookTime = 0;
 
-	public ItemStack[] slots = new ItemStack[4];
+	public ItemStack[] slots = new ItemStack[3];
 
 	public static final int MINUSEFULTEMP = 20;
 	public static final int OPTMULTIPLYTEMP = 25;
@@ -67,7 +67,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return i == 3;
+		return i == 2;
 	}
 
 	public static List<ItemStack> getAllValidPlants() {
@@ -105,11 +105,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				return null;
 		if (slots[0].itemID == Item.sugar.itemID) {
 			if (this.hasWater())
-				if(slots[2].itemID == Block.dirt.blockID)
+				if(slots[1].itemID == Block.dirt.blockID)
 					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
 		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
-			if (this.getPlantValue(slots[2]) > 0)
+			if (this.getPlantValue(slots[1]) > 0)
 				if (this.hasWater())
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
 		}
@@ -209,8 +209,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				//return;
 			}
 		}
-		if (slots[3] != null) {
-			if (product.itemID != slots[3].itemID) {
+		if (slots[2] != null) {
+			if (product.itemID != slots[2].itemID) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -222,8 +222,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			this.testYeastKill();
 			tickcount = 0;
 		}
-		if (slots[3] != null) {
-			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
+		if (slots[2] != null) {
+			if (slots[2].stackSize >= slots[2].getMaxStackSize()) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -243,11 +243,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		}
 		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
 			return false;
-		if (slots[3] != null) {
-			if (slots[3].stackSize >= slots[3].getMaxStackSize()) {
+		if (slots[2] != null) {
+			if (slots[2].stackSize >= slots[2].getMaxStackSize()) {
 				return false;
 			}
-			if (product.itemID != slots[3].itemID) {
+			if (product.itemID != slots[2].itemID) {
 				return false;
 			}
 		}
@@ -256,11 +256,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	private void make(ItemStack product) {
 		if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
-			if (slots[3] == null)
-				slots[3] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
-			else if (slots[3].itemID == ItemRegistry.YEAST.getShiftedID()) {
-				if (slots[3].stackSize < slots[3].getMaxStackSize())
-					slots[3].stackSize++;
+			if (slots[2] == null)
+				slots[2] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
+			else if (slots[2].itemID == ItemRegistry.YEAST.getShiftedID()) {
+				if (slots[2].stackSize < slots[3].getMaxStackSize())
+					slots[2].stackSize++;
 				else
 					return;
 			}
@@ -273,11 +273,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				ReikaInventoryHelper.decrStack(2, slots);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
-			if (slots[3] == null)
-				slots[3] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[2]), ItemStacks.sludge.getItemDamage());
-			else if (slots[3].itemID == ItemStacks.sludge.itemID && slots[3].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
-				if (slots[3].stackSize < slots[3].getMaxStackSize())
-					slots[3].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[2]), slots[3].getMaxStackSize()-slots[3].stackSize, "min");
+			if (slots[2] == null)
+				slots[2] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[1]), ItemStacks.sludge.getItemDamage());
+			else if (slots[2].itemID == ItemStacks.sludge.itemID && slots[3].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
+				if (slots[2].stackSize < slots[2].getMaxStackSize())
+					slots[2].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[1]), slots[2].getMaxStackSize()-slots[2].stackSize, "min");
 				else
 					return;
 			}
@@ -448,7 +448,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		if (i == 3)
+		if (i >= 2)
 			return false;
 		if (red) {
 			switch(i) {
@@ -456,8 +456,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				return is.itemID == ItemRegistry.YEAST.getShiftedID();
 			case 1:
 				return this.getPlantValue(is) > 0;
-			case 2:
-				return is.itemID == Item.bucketWater.itemID;
 			}
 		}
 		else {
@@ -465,8 +463,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			case 0:
 				return is.itemID == Item.sugar.itemID;
 			case 1:
-				return is.itemID == Item.bucketWater.itemID;
-			case 2:
 				return is.itemID == Block.dirt.blockID;
 			}
 		}
