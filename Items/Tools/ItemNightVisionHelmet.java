@@ -50,4 +50,9 @@ public class ItemNightVisionHelmet extends ItemRotaryArmor {
 		return false;
 	}
 
+	@Override
+	public double getDamageMultiplier() {
+		return 1;
+	}
+
 }

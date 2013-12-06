@@ -87,4 +87,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		return false;
 	}
 
+	@Override
+	public double getDamageMultiplier() {
+		return 0.35;
+	}
+
 }

@@ -66,4 +66,9 @@ public class ItemSteelArmor extends ItemRotaryArmor {
 		return true;
 	}
 
+	@Override
+	public double getDamageMultiplier() {
+		return 0.25;
+	}
+
 }

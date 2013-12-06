@@ -15,10 +15,12 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -49,7 +51,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				int id = world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep);
 				if (id != 0 && Block.blocksList[id].isFlammable(world, x+step*xstep, y+step*ystep, z+step*zstep, world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), ForgeDirection.UP))
 					this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
-				if (this.makeBeam(world, x, y, z, metadata, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
+				if (this.makeBeam(world, x, y, z, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
 					blocked = true;
 					tickcount = 0;
 				}
@@ -71,6 +73,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 						caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
 					if (caught instanceof EntityTNTPrimed)
 						world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
+					if (caught instanceof Laserable) {
+						((Laserable)caught).whenInBeam(power, step);
+					}
 				}
 			}
 		}
@@ -167,8 +172,17 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			world.setBlock(x, y, z-1, Block.fire.blockID);
 	}
 
-	public boolean makeBeam(World world, int x, int y, int z, int metadata, int step, int id, int maxdist) {
+	public boolean makeBeam(World world, int x, int y, int z, int step, int id, int metadata, int maxdist) {
 		boolean value = false;
+		if (id == 0)
+			return false;
+		Block b = Block.blocksList[id];
+		if (b.hasTileEntity(metadata)) {
+			TileEntity te = world.getBlockTileEntity(x+step*xstep, y+step*ystep, z+step*zstep);
+			if (te instanceof Laserable) {
+				((Laserable)te).whenInBeam(power, step);
+			}
+		}
 		if (ConfigRegistry.BLOCKDAMAGE.getState()) {
 			if (id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 32));

@@ -65,4 +65,9 @@ public class ItemIOGoggles extends ItemRotaryArmor {
 	public boolean canBeDamaged() {
 		return false;
 	}
+
+	@Override
+	public double getDamageMultiplier() {
+		return 1;
+	}
 }

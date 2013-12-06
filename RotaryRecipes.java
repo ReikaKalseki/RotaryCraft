@@ -56,9 +56,9 @@ public class RotaryRecipes {
 	}
 
 	public static void addProps() {
-		ItemMaterialController.addItem(ItemStacks.scrap, ItemMaterial.STEEL);
-		ItemMaterialController.addItem(ItemStacks.ironscrap, ItemMaterial.IRON);
-		ItemMaterialController.addItem(ItemStacks.steelblock, ItemMaterial.STEEL);
+		ItemMaterialController.instance.addItem(ItemStacks.scrap, ItemMaterial.STEEL);
+		ItemMaterialController.instance.addItem(ItemStacks.ironscrap, ItemMaterial.IRON);
+		ItemMaterialController.instance.addItem(ItemStacks.steelblock, ItemMaterial.STEEL);
 	}
 
 	public static void addThermalExpansion() {

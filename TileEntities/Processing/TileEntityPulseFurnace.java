@@ -262,9 +262,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return -1;
 		if (is.itemID == Item.ingotIron.itemID)
 			return 900; //steelmaking
-		if (ItemMaterialController.getMaterial(is) == ItemMaterial.OBSIDIAN)
-			return ItemMaterialController.getMeltingPoint(is);
-		return ItemMaterialController.getMeltingPoint(is)/2;
+		if (ItemMaterialController.instance.getMaterial(is) == ItemMaterial.OBSIDIAN)
+			return ItemMaterialController.instance.getMeltingPoint(is);
+		return ItemMaterialController.instance.getMeltingPoint(is)/2;
 	}
 
 	@Override

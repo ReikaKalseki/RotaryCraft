@@ -215,4 +215,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	public boolean canBeDamaged() {
 		return false;
 	}
+
+	@Override
+	public double getDamageMultiplier() {
+		return 1;
+	}
 }

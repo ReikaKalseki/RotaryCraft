@@ -100,8 +100,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	// Return the itemstack product from the input items.
 	private ItemStack getRecipe() {
-		for (int i = 0; i < 3; i++)
-			if (slots[i] == null && i != 1)
+		for (int i = 0; i < 2; i++)
+			if (slots[i] == null)
 				return null;
 		if (slots[0].itemID == Item.sugar.itemID) {
 			if (this.hasWater())
@@ -259,7 +259,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (slots[2] == null)
 				slots[2] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 			else if (slots[2].itemID == ItemRegistry.YEAST.getShiftedID()) {
-				if (slots[2].stackSize < slots[3].getMaxStackSize())
+				if (slots[2].stackSize < slots[2].getMaxStackSize())
 					slots[2].stackSize++;
 				else
 					return;
@@ -270,12 +270,12 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			}
 			ReikaInventoryHelper.decrStack(0, slots);
 			if (rand.nextInt(4) == 0)
-				ReikaInventoryHelper.decrStack(2, slots);
+				ReikaInventoryHelper.decrStack(1, slots);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
 			if (slots[2] == null)
 				slots[2] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[1]), ItemStacks.sludge.getItemDamage());
-			else if (slots[2].itemID == ItemStacks.sludge.itemID && slots[3].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
+			else if (slots[2].itemID == ItemStacks.sludge.itemID && slots[2].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
 				if (slots[2].stackSize < slots[2].getMaxStackSize())
 					slots[2].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[1]), slots[2].getMaxStackSize()-slots[2].stackSize, "min");
 				else
@@ -285,7 +285,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				fermenterCookTime = 0;
 				return;
 			}
-			ReikaInventoryHelper.decrStack(2, slots);
+			ReikaInventoryHelper.decrStack(1, slots);
 			if (rand.nextInt(2) == 0)
 				ReikaInventoryHelper.decrStack(0, slots);
 		}
