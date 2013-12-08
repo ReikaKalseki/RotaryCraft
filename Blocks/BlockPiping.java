@@ -9,13 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
@@ -43,7 +41,13 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	@Override
 	public int idDropped(int id, Random r, int fortune) {
-		return 0*RotaryCraft.pipeplacer.itemID;
+		return 0;
+	}
+
+	@Override
+	public boolean canRenderInPass(int pass)
+	{
+		return pass == 0 || pass == 1;
 	}
 
 	@Override
@@ -56,14 +60,6 @@ public class BlockPiping extends BlockBasicMultiTE {
 	public int quantityDropped(Random par1Random)
 	{
 		return 0;
-	}
-
-	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
-	{
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(RotaryCraft.pipeplacer.itemID, 1, metadata));
-		return ret;
 	}
 	/*
 	@Override

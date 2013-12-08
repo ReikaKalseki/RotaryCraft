@@ -17,6 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public final class ItemStacks {
 
@@ -41,9 +42,9 @@ public final class ItemStacks {
 	public static final ItemStack basepanel = new ItemStack(RotaryCraft.shaftcraft, 1, 0);
 	public static final ItemStack steelingot = new ItemStack(RotaryCraft.shaftcraft, 1, 1);
 
-	public static final ItemStack hose = new ItemStack(RotaryCraft.pipeplacer, 1, 0);
-	public static final ItemStack pipe = new ItemStack(RotaryCraft.pipeplacer, 1, 1);
-	public static final ItemStack fuelline = new ItemStack(RotaryCraft.pipeplacer, 1, 2);
+	public static final ItemStack hose = MachineRegistry.HOSE.getCraftedProduct();
+	public static final ItemStack pipe = MachineRegistry.PIPE.getCraftedProduct();
+	public static final ItemStack fuelline = MachineRegistry.FUELLINE.getCraftedProduct();
 
 	public static final ItemStack shaftitem = new ItemStack(RotaryCraft.shaftcraft, 1, 2);
 	public static final ItemStack mount = new ItemStack(RotaryCraft.shaftcraft, 1, 3);

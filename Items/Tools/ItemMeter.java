@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +24,7 @@ import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.API.Transducerable;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -87,6 +90,11 @@ public class ItemMeter extends ItemRotaryTool
 		if (tile instanceof ThermalMachine) {
 			ThermalMachine th = (ThermalMachine)tile;
 			ReikaChatHelper.writeString(String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
+		}
+		if (tile instanceof Transducerable) {
+			ArrayList<String> li = ((Transducerable)tile).getMessages(world, x, y, z, s);
+			for (int i = 0; i < li.size(); i++)
+				ReikaChatHelper.writeString(li.get(i));
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BLASTFURNACE) {

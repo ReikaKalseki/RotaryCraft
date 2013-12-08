@@ -191,7 +191,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.borecraft.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.misccraft.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.powders.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.pipeplacer.itemID, items[0]);
+		//MinecraftForgeClient.registerItemRenderer(RotaryCraft.pipeplacer.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.compacts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.extracts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gearunits.itemID, items[0]);

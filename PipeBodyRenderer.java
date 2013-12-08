@@ -15,13 +15,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
-
-	//add marker array to TileEntityPiping - cache connectivity of each side, maybe even
-	//update with onNeighborBlockChange in BlockPiping
 
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
@@ -31,13 +27,13 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
 
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		TileEntityPiping tile = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
+		RenderableDuct tile = (RenderableDuct)world.getBlockTileEntity(x, y, z);
 		for (int i = 0; i < 6; i++) {
 			this.renderFace(tile, x, y, z, dirs[i]);
 		}
@@ -54,7 +50,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		return renderID;
 	}
 
-	private void renderFace(TileEntityPiping tile, int x, int y, int z, ForgeDirection dir) {
+	private void renderFace(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -105,13 +101,13 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator v5 = Tessellator.instance;
 		v5.addTranslation(x, y, z);
 
-		int dx = tile.xCoord+dir.offsetX;
-		int dy = tile.yCoord+dir.offsetY;
-		int dz = tile.zCoord+dir.offsetZ;
-		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
+		int dx = tile.getX()+dir.offsetX;
+		int dy = tile.getY()+dir.offsetY;
+		int dz = tile.getZ()+dir.offsetZ;
+		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.getWorld(), tile.getX(), tile.getY(), tile.getZ());
 		v5.setBrightness(br);
 
-		if (tile.isInWorld() && tile.isConnectionValidForSide(dir)) {
+		if (tile.getWorld() != null && tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
 			case DOWN:
 				this.faceBrightness(ForgeDirection.SOUTH, v5);

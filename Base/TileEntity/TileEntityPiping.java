@@ -21,10 +21,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RenderableDuct;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct {
 
 	private boolean[] connections = new boolean[6];
 
@@ -206,13 +208,13 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 				}
 				else if (te instanceof IFluidHandler && dir.offsetY != 0) {
 					IFluidHandler fl = (IFluidHandler)te;
-					FluidStack fs = fl.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
+					FluidStack fs = fl.drain(dir, Integer.MAX_VALUE, false);
+					ReikaJavaLibrary.pConsole(fs);
 					if (fs != null) {
 						int level = this.getLiquidLevel();
 						int todrain = this.getPipeIntake(fs.amount-level);
 						if (todrain > 0) {
 							if (this.canIntakeFluid(fs.getFluid())) {
-								fl.drain(dir.getOpposite(), todrain, true);
 								this.addFluid(todrain);
 								this.setFluid(fs.getFluid());
 								this.onIntake(te);
@@ -354,7 +356,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
 	}
 
-	public enum TransferAmount {
+	public static enum TransferAmount {
 		UNITY(),
 		BUCKET(),
 		QUARTER(),
@@ -381,7 +383,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 		}
 	}
 
-	public enum Flow {
+	public static enum Flow {
 		INPUT(true, false),
 		OUTPUT(false, true),
 		DUAL(true, true),
@@ -394,5 +396,21 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity {
 			canIntake = in;
 			canOutput = out;
 		}
+	}
+
+	public final int getX() {
+		return xCoord;
+	}
+
+	public final int getY() {
+		return yCoord;
+	}
+
+	public final int getZ() {
+		return zCoord;
+	}
+
+	public final World getWorld() {
+		return worldObj;
 	}
 }

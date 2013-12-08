@@ -39,6 +39,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -288,7 +289,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
 		}
 		if (m.isPipe()) {
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, meta);
+			return ((TileEntityPiping)world.getBlockTileEntity(x, y, z)).getMachine().getCraftedProduct();
 		}
 		return null;
 	}

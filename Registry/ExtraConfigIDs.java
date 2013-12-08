@@ -27,7 +27,6 @@ public enum ExtraConfigIDs implements IDRegistry {
 	ENGINEITEMS("ItemBlock IDs", "Engine Items", 30634, Item.class),
 	POWDERS("Resource Item IDs", "Powders", 30635, Item.class),
 	SPAWNERS("ItemBlock IDs", "Spawner", 30636, Item.class),
-	PIPEITEMS("ItemBlock IDs", "Pipe Items", 30637, Item.class),
 	SHAFTITEMS("ItemBlock IDs", "Shaft Items", 30639, Item.class),
 	GEARBOXITEMS("ItemBlock IDs", "Gearbox Items", 30640, Item.class),
 	GEARUNITS("Crafting Item IDs", "Gear Units", 30641, Item.class),

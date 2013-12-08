@@ -809,6 +809,8 @@ public enum MachineRegistry {
 	}
 
 	public boolean hasModel() {
+		if (this.isPipe())
+			return true;
 		switch(this) {
 		case ENGINE:
 		case SHAFT:
@@ -822,8 +824,6 @@ public enum MachineRegistry {
 	}
 
 	public boolean hasCustomPlacerItem() {
-		if (this.isPipe())
-			return true;
 		switch(this) {
 		case ENGINE:
 		case SHAFT:
@@ -837,18 +837,6 @@ public enum MachineRegistry {
 	}
 
 	public ItemStack getCraftedProduct() {
-		if (this == HOSE)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 0);
-		if (this == PIPE)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 1);
-		if (this == FUELLINE)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 2);
-		if (this == VALVE)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 4);
-		if (this == BYPASS)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 5);
-		if (this == SEPARATION)
-			return new ItemStack(RotaryCraft.pipeplacer.itemID, 1, 6);
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 

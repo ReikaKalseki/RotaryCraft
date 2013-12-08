@@ -173,10 +173,6 @@ public class RotaryNames {
 			ItemStack powderstack = new ItemStack(RotaryCraft.powders, 1, i);
 			LanguageRegistry.addName(powderstack, getName(powderNames, powderstack.getItemDamage()));
 		}
-		for (int i = 0; i < pipeNames.length; i++) {
-			ItemStack pipestack = new ItemStack(RotaryCraft.pipeplacer, 1, i);
-			LanguageRegistry.addName(pipestack, getName(pipeNames, pipestack.getItemDamage()));
-		}
 		for (int i = 0; i < shaftItemNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), getName(shaftItemNames, i));
 		}

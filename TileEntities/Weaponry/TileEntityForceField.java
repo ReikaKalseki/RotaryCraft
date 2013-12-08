@@ -40,11 +40,13 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
+import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -138,6 +140,11 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 		double x = threat.posX;
 		double y = threat.posY;
 		double z = threat.posZ;
+		if (ModList.METEORCRAFT.isLoaded()) {
+			if (threat instanceof EntityMeteor) {
+				((EntityMeteor)threat).destroy();
+			}
+		}
 		if (this.isAtBorder(x, y, z) || threat instanceof EntityArrow) {
 			if (threat instanceof EntityWitherSkull) {
 				((EntityWitherSkull)threat).setDead();

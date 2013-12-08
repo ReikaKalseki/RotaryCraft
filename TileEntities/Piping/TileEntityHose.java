@@ -44,7 +44,7 @@ public class TileEntityHose extends TileEntityPiping {
 
 	@Override
 	public Fluid getLiquidType() {
-		return FluidRegistry.getFluid("lubricant");
+		return this.hasLiquid() ? FluidRegistry.getFluid("lubricant") : null;
 	}
 
 	@Override

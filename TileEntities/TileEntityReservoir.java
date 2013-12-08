@@ -62,8 +62,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 					TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(dx, dy, dz);
 					if (this.canMixWith(tile)) {
 						int diff = tile.getLevel()-this.getLevel();
-						tile.tank.removeLiquid(diff/2);
-						tank.addLiquid(diff/2, tile.getFluid());
+						if (diff > 1) {
+							tile.tank.removeLiquid(diff/2);
+							tank.addLiquid(diff/2, tile.getFluid());
+						}
 					}
 				}
 			}
