@@ -84,4 +84,9 @@ public class TileEntityHose extends TileEntityPiping {
 	public boolean canEmitToPipeOn(ForgeDirection side) {
 		return true;
 	}
+
+	@Override
+	public Block getPipeBlockType() {
+		return Block.planks;
+	}
 }

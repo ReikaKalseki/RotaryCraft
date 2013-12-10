@@ -125,6 +125,10 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
+		OreDictionary.registerOre("dustBedrock", ItemStacks.bedrockdust);
+		OreDictionary.registerOre("ingotBedrock", ItemStacks.bedingot);
+		OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
+		OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
 	}

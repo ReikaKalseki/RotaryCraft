@@ -13,11 +13,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 
-public class GuiFillingStation extends GuiNonPoweredMachine
+public class GuiFillingStation extends GuiPowerOnlyMachine
 {
 
 	private TileEntityFillingStation FillingStation;

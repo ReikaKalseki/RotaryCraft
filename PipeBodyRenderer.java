@@ -104,7 +104,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		int dx = tile.getX()+dir.offsetX;
 		int dy = tile.getY()+dir.offsetY;
 		int dz = tile.getZ()+dir.offsetZ;
-		int br = tile.getBlockType().getMixedBrightnessForBlock(tile.getWorld(), tile.getX(), tile.getY(), tile.getZ());
+		int br = tile.getPipeBlockType().getMixedBrightnessForBlock(tile.getWorld(), tile.getX(), tile.getY(), tile.getZ());
 		v5.setBrightness(br);
 
 		if (tile.getWorld() != null && tile.isConnectionValidForSide(dir)) {

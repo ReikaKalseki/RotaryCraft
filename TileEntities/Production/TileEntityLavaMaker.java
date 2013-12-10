@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -44,7 +45,7 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 
 	private HybridTank tank = new HybridTank("lavamaker", CAPACITY);
 
-	public static final int MELT_ENERGY = 880000; //approx
+	public static final int MELT_ENERGY = 2820000; //approx
 
 	public static final int MAXTEMP = 1500;
 
@@ -89,6 +90,8 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 	}
 
 	private boolean melt(int slot) {
+		if (worldObj.isRemote)
+			return false;
 		if (inv[slot] == null)
 			return false;
 		int id = inv[slot].itemID;
@@ -262,14 +265,22 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		if (fireside != null) {
+			Tamb += 200;
+		}
+		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
+		if (lavaside != null) {
+			Tamb += 600;
+		}
 		if (power > 0) {
 			temperature += 2.5*ReikaMathLibrary.logbase(power, 2);
 		}
 		if (temperature > Tamb) {
-			temperature -= (temperature-Tamb)/5;
+			temperature -= (temperature-Tamb)/12;
 		}
 		else {
-			temperature += (temperature-Tamb)/5;
+			temperature += (Tamb-temperature)/12;
 		}
 		if (temperature - Tamb <= 4 && temperature > Tamb)
 			temperature--;

@@ -16,7 +16,6 @@
 package Reika.RotaryCraft.Models.Animated.ShaftOnly;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.client.model.ModelRenderer;
 
@@ -203,7 +202,8 @@ public class ModelCross extends RotaryModelBase
 		this.setRotation(Shape6b, 0F, 0F, 0F);
 	}
 
-	public void renderAll(List li, float phi, float phi2)
+	@Override
+	public void renderAll(ArrayList li, float phi, float phi2) //using "theta" param as phi2
 	{
 		Shape1.render(f5);
 		Shape2.render(f5);
@@ -252,8 +252,5 @@ public class ModelCross extends RotaryModelBase
 		GL11.glRotatef(-phi2, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
 	}
-
-	@Override
-	public void renderAll(ArrayList conditions, float phi, float theta) {}
 
 }

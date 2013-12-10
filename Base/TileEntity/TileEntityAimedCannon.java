@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -236,6 +237,8 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	}
 
 	public final boolean playerIsSafe(EntityPlayer ep) {
+		if (!ConfigRegistry.TURRETPLAYERS.getState())
+			return true;
 		if (ep.capabilities.isCreativeMode)
 			return true;
 		String name = ep.getEntityName();

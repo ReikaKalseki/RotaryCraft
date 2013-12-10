@@ -61,7 +61,8 @@ public enum ConfigRegistry implements ConfigList {
 	CHESTGEN("Chest Generation Tier", 4),
 	HOSTILECRASH("Crash on hostile interference from other mods", true),
 	PROJECTORLINES("Render projector lines", true),
-	COLORBLIND("Color Blind Mode", false);
+	COLORBLIND("Color Blind Mode", false),
+	TURRETPLAYERS("Turrets can target players", true);
 
 	private String label;
 	private boolean defaultState;

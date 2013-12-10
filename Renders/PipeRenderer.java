@@ -324,7 +324,10 @@ public class PipeRenderer extends RotaryTERenderer {
 			//for (int i = 1; i < 2; i++) {
 			//this.renderFace(te, par2, par4, par6, dirs[i]);
 			//}
+			double s = 0.5;
+			GL11.glScaled(s, s, s);
 			this.renderBlock(te, par2, par4, par6);
+			GL11.glScaled(1/s, 1/s, 1/s);
 		}
 
 		if (MinecraftForgeClient.getRenderPass() == 1) {
@@ -399,11 +402,11 @@ public class PipeRenderer extends RotaryTERenderer {
 
 		//-----------------------------------
 
-		double g = 0.25;
+		double g = 0.35;
 		double g1 = g/2;
 		double g2 = 1-g/2;
 
-		ico = Block.cloth.getIcon(0, ReikaDyeHelper.GRAY.getWoolMeta());
+		ico = Block.cloth.getIcon(0, ReikaDyeHelper.BLACK.getWoolMeta());
 		u = ico.getMinU();
 		v = ico.getMinV();
 		du = ico.getMaxU();

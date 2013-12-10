@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -188,5 +189,10 @@ public class TileEntityPipe extends TileEntityPiping {
 	@Override
 	public boolean canEmitToPipeOn(ForgeDirection side) {
 		return true;
+	}
+
+	@Override
+	public Block getPipeBlockType() {
+		return RotaryCraft.decoblock;
 	}
 }

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft;
 
 import net.minecraft.block.Block;
@@ -13,7 +22,7 @@ public interface RenderableDuct {
 	public Icon getBlockIcon();
 
 	/** The block type used for most of the solid texture; usually also the main crafting ingredient */
-	public Block getBlockType();
+	public Block getPipeBlockType();
 
 	/** Return xCoord */
 	public int getX();

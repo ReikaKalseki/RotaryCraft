@@ -9,8 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.util.ArrayList;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -70,6 +74,23 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		API.hideItem(RotaryCraft.canola.blockID);
 		API.hideItem(RotaryCraft.miningpipe.blockID);
 		API.hideItem(RotaryCraft.waterblock.blockID);
+
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			ItemRegistry ir = ItemRegistry.itemList[i];
+			int max = ir.getNumberMetadatas()-1;
+			int id = ir.getShiftedID();
+			ArrayList<int[]> li = new ArrayList();
+			li.add(new int[]{0, max});
+			API.setItemDamageVariants(id, li);
+		}
+
+		ArrayList<Integer> li = new ArrayList();
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList[i];
+			if (m.isAvailableInCreativeInventory())
+				li.add(i);
+		}
+		API.setItemDamageVariants(RotaryCraft.machineplacer.itemID, li);
 	}
 
 	@Override

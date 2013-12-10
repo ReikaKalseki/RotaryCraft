@@ -109,9 +109,11 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	}
 
 	public void readPower() {
-		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
+		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata())) {
 			return;
-		super.getPower(false, false);
+		}
+		//ReikaJavaLibrary.pConsole(readx+", "+ready+", "+readz, power > 0);
+		this.getPower(false, false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 	}
 

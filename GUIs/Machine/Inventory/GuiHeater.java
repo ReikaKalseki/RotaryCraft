@@ -132,21 +132,22 @@ public class GuiHeater extends GuiMachine
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-20);
+		this.drawTexturedModalRect(xSize+var5, var6+4+ySize-20, 0, 157, 42, 6);
 
 		long frac = (heater.power*29L)/heater.MINPOWER;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-162, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-145, 0, 0, (int)frac, 4);
 
 		frac = heater.omega*29L/heater.MINSPEED;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-102, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-85, 0, 0, (int)frac, 4);
 
 		frac = heater.torque*29L/heater.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-42, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-25, 0, 0, (int)frac, 4);
 
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);

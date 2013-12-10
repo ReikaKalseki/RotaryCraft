@@ -87,4 +87,9 @@ public class TileEntityValve extends TileEntityPiping {
 		return true;
 	}
 
+	@Override
+	public Block getPipeBlockType() {
+		return Block.blockRedstone;
+	}
+
 }

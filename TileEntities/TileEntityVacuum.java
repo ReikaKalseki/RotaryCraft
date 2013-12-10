@@ -228,7 +228,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	public int getRange() {
-		return ReikaMathLibrary.extrema(8+(int)(power/MINPOWER), this.getMaxRange(), "min");
+		return ReikaMathLibrary.extrema(8+(int)(power*4/MINPOWER), this.getMaxRange(), "min");
 	}
 
 	/**

@@ -158,8 +158,11 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
 		if (devicein instanceof TileEntityShaft)
 			return;
-		if (!this.isPointingAt(world, x, y, z))
+		if (!this.isPointingAt(world, x, y, z)) {
+			omegain = 0;
+			torquein = 0;
 			return;
+		}
 		torquein = devicein.torque;
 		omegain = devicein.omega;
 	}
@@ -169,6 +172,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
 		if (devicein instanceof TileEntityBevelGear)
 			cy = true;
+		//ReikaJavaLibrary.pConsole(devicein.writez, devicein instanceof TileEntityBevelGear);
 		if (devicein.writex == xCoord && devicein.writez == zCoord) {
 			if (!cy || devicein.writey == yCoord) {
 				return true;

@@ -34,15 +34,14 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	public int storeTime;
 
 	public static final int CAPACITY = 240;
-	public static final int BASETIME = 9600/100; //70s at 0rpm
 	public static final int MINTIME = 10;
 
 	public boolean idle = false;
 
 	private static final ItemStack[] ingredients =
-		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(Item.coal.itemID, 1, 0),
-		new ItemStack(RotaryCraft.powders.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 1),
-		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream.itemID, 1, 0)};
+		{new ItemStack(Item.blazePowder), new ItemStack(Item.coal),
+		ItemStacks.netherrackdust, ItemStacks.tar,
+		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream)};
 
 	public static boolean isJetFuelIngredient(ItemStack is) {
 		for (int i = 0; i < ingredients.length; i++) {
@@ -257,7 +256,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 			return is.itemID == Item.bucketEmpty.itemID;
 		if (slot == ingredients.length)
 			return is.itemID == Item.ghastTear.itemID;
-		return ReikaInventoryHelper.locateInInventory(is.itemID, is.getItemDamage(), ingredients) == slot;
+		return ReikaItemHelper.matchStacks(is, ingredients[slot]);
 	}
 
 	@Override

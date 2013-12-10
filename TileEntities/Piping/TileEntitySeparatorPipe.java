@@ -95,4 +95,9 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	public boolean canEmitToPipeOn(ForgeDirection side) {
 		return side == this.getDirectionDir();
 	}
+
+	@Override
+	public Block getPipeBlockType() {
+		return Block.blockLapis;
+	}
 }

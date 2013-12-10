@@ -96,7 +96,6 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 		if (temperature >= 240) {
 			this.ignite(world, x, y, z);
 		}
-		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, z);
 	}
 
 	private void ignite(World world, int x, int y, int z) {
@@ -173,7 +172,8 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	}
 
 	private void transferHeat(World world, int x, int y, int z) {
-		ReikaWorldHelper.temperatureEnvironment(world, x, y-1, z, temperature);
+		if (!world.isRemote)
+			ReikaWorldHelper.temperatureEnvironment(world, x, y-1, z, temperature);
 		MachineRegistry id = MachineRegistry.getMachine(world, x, y, z);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (id == MachineRegistry.PULSEJET) {

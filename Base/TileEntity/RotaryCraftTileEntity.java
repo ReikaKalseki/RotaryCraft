@@ -87,7 +87,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	public void giveNoSuperWarning() {
-		ReikaJavaLibrary.spamConsole("TileEntity "+this.getName()+" does not call super()!");
+		ReikaJavaLibrary.pConsole("TileEntity "+this.getName()+" does not call super()!");
 		ReikaChatHelper.write("TileEntity "+this.getName()+" does not call super()!");
 	}
 

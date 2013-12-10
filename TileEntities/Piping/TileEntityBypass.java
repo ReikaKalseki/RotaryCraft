@@ -87,4 +87,9 @@ public class TileEntityBypass extends TileEntityPiping {
 		return true;
 	}
 
+	@Override
+	public Block getPipeBlockType() {
+		return Block.netherBrick;
+	}
+
 }

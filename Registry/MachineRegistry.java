@@ -144,6 +144,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulic;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -274,7 +275,8 @@ public enum MachineRegistry {
 	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17, "RenderVanDeGraff"),
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
-	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY);
+	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
+	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15);
 
 	private String name;
 	private Class te;
@@ -785,6 +787,7 @@ public enum MachineRegistry {
 		case LINEBUILDER:
 		case SONICBORER:
 		case BELT:
+		case HYDRAULIC:
 			return true;
 		default:
 			return false;
