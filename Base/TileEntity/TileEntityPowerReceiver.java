@@ -176,8 +176,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			powerin[slot][0] = powerin[slot][1]*powerin[slot][2];
 		}
-		else //We are not one of its write-to blocks
+		else { //We are not one of its write-to blocks
+			powerin[slot][0] = 0;
+			powerin[slot][1] = 0;
+			powerin[slot][2] = 0;
 			return;
+		}
 	}
 
 	public void getPower(boolean doublesided, boolean vertical) {

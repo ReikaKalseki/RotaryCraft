@@ -100,4 +100,14 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	public Block getPipeBlockType() {
 		return Block.blockLapis;
 	}
+
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return false;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return false;
+	}
 }

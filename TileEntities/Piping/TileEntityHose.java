@@ -29,7 +29,7 @@ public class TileEntityHose extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION;
+		return m == MachineRegistry.HOSE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.SUCTION;
 	}
 
 	@Override
@@ -88,5 +88,15 @@ public class TileEntityHose extends TileEntityPiping {
 	@Override
 	public Block getPipeBlockType() {
 		return Block.planks;
+	}
+
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return side == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return side != ForgeDirection.DOWN;
 	}
 }

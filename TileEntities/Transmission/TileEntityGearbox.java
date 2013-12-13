@@ -88,8 +88,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					torque = spl.torque/sratio*ratio;
 				}
 			}
-			else //We are not one of its write-to blocks
+			else { //We are not one of its write-to blocks
+				torque = 0;
+				omega = 0;
+				power = 0;
 				return;
+			}
 		}
 		else {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
@@ -118,8 +122,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					torque = spl.torque/sratio/ratio;
 				}
 			}
-			else //We are not one of its write-to blocks
+			else { //We are not one of its write-to blocks
+				torque = 0;
+				omega = 0;
+				power = 0;
 				return;
+			}
 		}
 	}
 

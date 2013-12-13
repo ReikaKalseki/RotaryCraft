@@ -57,6 +57,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -548,6 +549,9 @@ public abstract class BlockBasicMultiTE extends Block {
 				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
 				ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
+			if (m.hasNBTVariants()) {
+				is.stackTagCompound = (NBTTagCompound)((NBTMachine)te).getTagsToWriteToStack().copy();
+			}
 			if (m.isBroken((RotaryCraftTileEntity)te))
 				li = m.getBrokenProducts();
 			else
@@ -636,7 +640,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)tile;
 			if (!tr.isEmpty()) {
-				if (tr.getFluid().equals(FluidRegistry.LAVA)) {
+				if (tr.getFluid().equals(FluidRegistry.LAVA) || tr.getFluid().getTemperature(world, x, y, z) > 500) {
 					e.attackEntityFrom(DamageSource.lava, 4);
 					e.setFire(12);
 				}
@@ -699,7 +703,10 @@ public abstract class BlockBasicMultiTE extends Block {
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(RotaryCraft.machineplacer.itemID, 1, MachineRegistry.getMachineIndexFromIDandMetadata(blockID, metadata)));
+		int i = MachineRegistry.getMachineIndexFromIDandMetadata(blockID, metadata);
+		MachineRegistry m = MachineRegistry.machineList[i];
+		ItemStack is = new ItemStack(RotaryCraft.machineplacer.itemID, 1, i);
+		ret.add(is);
 		return ret;
 	}
 

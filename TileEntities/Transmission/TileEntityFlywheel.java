@@ -16,16 +16,18 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityFlywheel extends TileEntityIOMachine implements SimpleProvider {
+public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator {
 
 	public static final int MINTORQUERATIO = 4;
 	public static final int WOODFLYTORQUEMAX = 16;		// rho 0.8	-> 1	-> 1
@@ -37,6 +39,8 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	private int maxtorque;
 	public boolean failed = false;
 	private int soundtick = 0;
+
+	private int lasttorque;
 
 	public static int[] getLimitLoads() {
 		double r = 0.75;
@@ -59,7 +63,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 		case 3:
 			factor *= 1.25;
 		}
-		factor *= ReikaMathLibrary.doubpow(omega/65536D, 1.5); //tp reduce damage
+		factor *= ReikaMathLibrary.doubpow(omega/65536D, 1.5); //to reduce damage
 		double energy = ReikaEngLibrary.rotenergy(this.getDensity(), 0.25, omega, 0.75);
 		//ReikaJavaLibrary.pConsole(ReikaPhysicsHelper.getExplosionFromEnergy(energy/factor)+"  fails: "+ReikaEngLibrary.mat_rotfailure(this.getDensity(), 0.75, omega, 100*this.getStrength()));
 		if (ReikaEngLibrary.mat_rotfailure(this.getDensity(), 0.75, omega, 100*this.getStrength()))
@@ -195,10 +199,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 			readx = writex = xCoord;
 			break;
 		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.readx, this.readz));
-		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, this.yCoord, readz, 49);
-		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, this.yCoord+1, readz, 76);
-		//ReikaWorldHelper.legacySetBlockWithNotify(world, writex, this.yCoord, writez, 4);
 		ready = yCoord;
 		writey = yCoord;
 	}
@@ -240,29 +240,25 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 				torquein = devicein.torque;
 			}
 		}
-		if (torquein >= maxtorque/MINTORQUERATIO) {
-			if (omegain > 0) {
-				//ReikaJavaLibrary.pConsole(ReikaMathLibrary.extremad(torque*DECAY, torquein, "max")+" of   IN: "+torquein+" and  T*D: "+torque*DECAY);
-				torque = (int)ReikaMathLibrary.extremad(torque*DECAY, torquein, "max");
-			}
+		if (torquein >= maxtorque/MINTORQUERATIO) { //returns false if no input machine
 			if (omega <= omegain) {
 				omega = omegain;
 			}
 			else {
 				omega = (int)(omega*DECAY);
-				if (torquein > 0)
-					torque = (int)ReikaMathLibrary.extremad((Math.min(maxtorque, torque)*DECAY), Math.min(maxtorque, torque), "max");
-				else
-					torque = (int)ReikaMathLibrary.extremad((Math.min(maxtorque, torque)*DECAY), Math.min(maxtorque, torque), "min");
 			}
+			lasttorque = torquein;
+			lasttorque = Math.min(lasttorque, maxtorque);
+			torque = lasttorque;
 		}
 		else {
 			omega = (int)(omega*DECAY);
-			torque = (int)ReikaMathLibrary.extremad((maxtorque*DECAY), Math.min(maxtorque, torque), "max");
+			torque = lasttorque;
 		}
-		torque = torquein > 0 ? torquein : 1; //for now
-		if (omega == 0)
+		if (omega == 0) {
+			lasttorque = 0;
 			torque = 0;
+		}
 	}
 
 	public int readFromCross(TileEntityShaft cross, boolean isTorque) {
@@ -281,45 +277,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 			return 0; //not its output
 	}
 
-	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
-		int sratio = spl.getRatioFromMode();
-		if (sratio == 0)
-			return;
-		boolean favorbent = false;
-		if (sratio < 0) {
-			favorbent = true;
-			sratio = -sratio;
-		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-			omega = spl.omega; //omega always constant
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
-				return;
-			}
-			if (favorbent) {
-				torque = spl.torque/sratio;
-			}
-			else {
-				torque = (int)(spl.torque*((sratio-1D))/sratio);
-			}
-		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-			omega = spl.omega; //omega always constant
-			if (sratio == 1) { //Even split, favorbent irrelevant
-				torque = spl.torque/2;
-				return;
-			}
-			if (favorbent) {
-				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
-			}
-			else {
-				torque = spl.torque/sratio;
-			}
-		}
-		else //We are not one of its write-to blocks
-			return;
-	}
-
 	/**
 	 * Writes a tile entity to NBT.
 	 */
@@ -327,8 +284,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("torque", torque);
-		NBT.setInteger("omega", omega);
 		NBT.setBoolean("failed", failed);
 	}
 
@@ -339,8 +294,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		torque = NBT.getInteger("torque");
-		omega = NBT.getInteger("omega");
 		failed = NBT.getBoolean("failed");
 	}
 
@@ -359,11 +312,6 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	}
 
 	@Override
-	public boolean canProvidePower() {
-		return true;
-	}
-
-	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.FLYWHEEL.ordinal();
 	}
@@ -378,7 +326,7 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
+		return new PowerSourceList().addSource(this);
 	}
 
 	@Override
@@ -389,5 +337,20 @@ public class TileEntityFlywheel extends TileEntityIOMachine implements SimplePro
 	@Override
 	public void setFlipped(boolean set) {
 		isFlipped = set;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxtorque*omega;
+	}
+
+	@Override
+	public long getCurrentPower() {
+		return power;
+	}
+
+	@Override
+	public boolean canProvidePower() {
+		return true;
 	}
 }

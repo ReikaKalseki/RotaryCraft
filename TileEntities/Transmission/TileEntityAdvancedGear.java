@@ -22,15 +22,19 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.CVTController;
+import Reika.RotaryCraft.API.PowerGenerator;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.InertIInv;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory {
+public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator {
 
 	private boolean isReleasing = false;
 	public int releaseTorque = 0;
@@ -63,6 +67,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	//-ve ratio is torque mode for cvt
+	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -99,8 +104,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 					torque = (int)(spl.torque/sratio*this.getEffectiveRatio());
 				}
 			}
-			else //We are not one of its write-to blocks
+			else { //We are not one of its write-to blocks
+				torque = 0;
+				omega = 0;
+				power = 0;
 				return;
+			}
 		}
 		else {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
@@ -129,8 +138,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 					torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
 				}
 			}
-			else //We are not one of its write-to blocks
+			else { //We are not one of its write-to blocks
+				torque = 0;
+				omega = 0;
+				power = 0;
 				return;
+			}
 		}
 	}
 
@@ -534,5 +547,25 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public void setEnergyFromNBT(NBTTagCompound NBT) {
 		energy = NBT.getLong("energy");
+	}
+
+	@Override
+	public long getMaxPower() {
+		if (this.getType() != GearType.COIL)
+			return 0;
+		return releaseOmega*releaseTorque;
+	}
+
+	@Override
+	public long getCurrentPower() {
+		return power;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		if (this.getType() == GearType.COIL)
+			return new PowerSourceList().addSource(this);
+		else
+			return super.getPowerSources(io, caller);
 	}
 }

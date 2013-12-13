@@ -128,7 +128,7 @@ public class TileEntityPipe extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS;
+		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 
 	@Override
@@ -194,5 +194,15 @@ public class TileEntityPipe extends TileEntityPiping {
 	@Override
 	public Block getPipeBlockType() {
 		return RotaryCraft.decoblock;
+	}
+
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return side == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return side != ForgeDirection.DOWN;
 	}
 }

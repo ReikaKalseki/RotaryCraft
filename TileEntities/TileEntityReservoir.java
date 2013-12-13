@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -20,19 +22,22 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
+public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
 
 	public static final int CAPACITY = 64000;
 
 	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
-	public int getLiquidScaled(int par1)
-	{
+	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
+
+	public int getLiquidScaled(int par1) {
 		return (tank.getLevel()*par1)/CAPACITY;
 	}
 
@@ -246,5 +251,74 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side == ForgeDirection.DOWN ? Flow.OUTPUT: Flow.INPUT;
+	}
+
+	@Override
+	public NBTTagCompound getTagsToWriteToStack() {
+		NBTTagCompound NBT = new NBTTagCompound();
+		Fluid f = this.getFluid();
+		int level = this.getLevel();
+		ReikaNBTHelper.writeFluidToNBT(NBT, f);
+		NBT.setInteger("lvl", level);
+		return NBT;
+	}
+
+	@Override
+	public void setDataFromItemStackTag(NBTTagCompound NBT) {
+		if (NBT == null) {
+			tank.empty();
+			return;
+		}
+		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);
+		int level = NBT.getInteger("lvl");
+		tank.setContents(level, f);
+	}
+
+	public String getDisplayTag(NBTTagCompound nbt) {
+		Fluid f = ReikaNBTHelper.getFluidFromNBT(nbt);
+		String fluid = f.getLocalizedName();
+		int amt = nbt.getInteger("lvl");
+		String amount = String.format("%d", amt);
+		return "Contents: "+amount+" mB of "+fluid;
+	}
+
+	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		ArrayList<NBTTagCompound> li = new ArrayList();
+		for (int i = 0; i < creativeFluids.size(); i++) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("lvl", CAPACITY);
+			ReikaNBTHelper.writeFluidToNBT(nbt, creativeFluids.get(i));
+			li.add(nbt);
+		}
+		return li;
+	}
+
+	private static void addCreativeFluid(String name) {
+		Fluid f = FluidRegistry.getFluid(name);
+		if (f != null)
+			creativeFluids.add(f);
+	}
+
+	public static void initCreativeFluids() {
+		creativeFluids.clear();
+		addCreativeFluid("water");
+		addCreativeFluid("lava");
+		addCreativeFluid("lubricant");
+		addCreativeFluid("jet fuel");
+		addCreativeFluid("rc ethanol");
+		addCreativeFluid("ammonia");
+		addCreativeFluid("sodium");
+		addCreativeFluid("heavy water");
+		addCreativeFluid("fuel");
+		addCreativeFluid("oil");
+		addCreativeFluid("ender");
+		addCreativeFluid("redstone");
+		addCreativeFluid("glowstone");
+		addCreativeFluid("pyrotheum");
+		addCreativeFluid("cryotheum");
+		addCreativeFluid("coal");
+		addCreativeFluid("bop.springwater");
+		addCreativeFluid("poison");
+		addCreativeFluid("sewage");
 	}
 }

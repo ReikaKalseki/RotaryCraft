@@ -115,7 +115,7 @@ public class RenderReservoir extends RotaryTERenderer
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityReservoirAt((TileEntityReservoir)tile, par2, par4, par6, par8);
 
-		if (MinecraftForgeClient.getRenderPass() == 1) {
+		if (MinecraftForgeClient.getRenderPass() == 1 || !((RotaryCraftTileEntity)tile).isInWorld()) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
 	}
@@ -123,8 +123,9 @@ public class RenderReservoir extends RotaryTERenderer
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
-		if (!tr.isEmpty() && tr.isInWorld()) {
-			Fluid f = tr.getFluid();
+		int amt = tr.getLevel();
+		Fluid f = tr.getFluid();
+		if (f != null && amt > 0) {
 			if (!f.equals(FluidRegistry.LAVA)) {
 				GL11.glEnable(GL11.GL_BLEND);
 			}
@@ -134,9 +135,9 @@ public class RenderReservoir extends RotaryTERenderer
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
-			double h = 0.0625+14D/16D*tr.getLevel()/tr.CAPACITY;
+			double h = 0.0625+14D/16D*amt/tr.CAPACITY;
 			Tessellator v5 = Tessellator.instance;
-			if (f.getLuminosity(tr.getContents()) > 0)
+			if (f.getLuminosity() > 0 && tile.hasWorldObj())
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
@@ -145,7 +146,8 @@ public class RenderReservoir extends RotaryTERenderer
 			v5.addVertexWithUV(1, h, 0, du, v);
 			v5.addVertexWithUV(0, h, 0, u, v);
 			v5.draw();
-			ReikaRenderHelper.enableLighting();
+			if (tile.hasWorldObj())
+				ReikaRenderHelper.enableLighting();
 		}
 		GL11.glTranslated(-par2, -par4, -par6);
 		GL11.glDisable(GL11.GL_BLEND);

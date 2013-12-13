@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -17,10 +18,15 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.ItemMachineRenderer;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.PressureTE;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
@@ -82,10 +88,12 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (te instanceof PressureTE) {
 			((PressureTE)te).addPressure(101);
 		}
-
 		if (te instanceof EnchantableMachine) {
 			EnchantableMachine e = (EnchantableMachine)te;
 			e.applyEnchants(is);
+		}
+		if (te instanceof NBTMachine) {
+			((NBTMachine)te).setDataFromItemStackTag(is.stackTagCompound);
 		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
@@ -185,9 +193,21 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			if (!MachineRegistry.machineList[i].hasCustomPlacerItem() && MachineRegistry.machineList[i].isAvailableInCreativeInventory()) {
-				ItemStack item = new ItemStack(par1, 1, i);
+			MachineRegistry m = MachineRegistry.machineList[i];
+			if (!m.hasCustomPlacerItem() && m.isAvailableInCreativeInventory()) {
+				ItemStack item = m.getCraftedProduct();
 				par3List.add(item);
+				if (m.hasNBTVariants()) {
+					ItemMachineRenderer ir = ClientProxy.machineItems;
+					TileEntity te = ir.getRenderingInstance(m);
+					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
+					for (int k = 0; k < li.size(); k++) {
+						NBTTagCompound NBT = li.get(k);
+						ItemStack is = m.getCraftedProduct();
+						is.stackTagCompound = NBT;
+						par3List.add(is);
+					}
+				}
 			}
 		}
 	}
@@ -207,11 +227,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		return MachineRegistry.machineList[meta].getMachineMetadata();
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
-		if (MachineRegistry.machineList[i].isIncomplete()) {
+		MachineRegistry m = MachineRegistry.machineList[i];
+		if (m.isIncomplete()) {
 			li.add("This machine is in development. Use at your own risk.");
+		}
+		if (m.hasNBTVariants() && is.stackTagCompound != null) {
+			ItemMachineRenderer ir = ClientProxy.machineItems;
+			TileEntity te = ir.getRenderingInstance(m);
+			li.add(((NBTMachine)te).getDisplayTag(is.stackTagCompound));
 		}
 	}
 }

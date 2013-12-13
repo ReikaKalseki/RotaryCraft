@@ -100,6 +100,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	public float getLightLevel() {
 		if (broken)
 			return 0;
+		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord) != null)
+			return 0;
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
 		float sun = ReikaWorldHelper.getSunIntensity(worldObj);

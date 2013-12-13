@@ -161,7 +161,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return; //not its output
 	}
 
-	//FIX THIS;
 	private void crossReadFromSplitter(TileEntitySplitter spl, int dir) {
 		reading2Dir = true;
 		int sratio = spl.getRatioFromMode();
@@ -201,8 +200,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				readtorque[dir] = spl.torque/sratio;
 			}
 		}
-		else //We are not one of its write-to blocks
+		else { //We are not one of its write-to blocks
+			readtorque[dir] = 0;
+			readomega[dir] = 0;
 			return;
+		}
 	}
 
 	//FIX THIS;
@@ -245,8 +247,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				torque = spl.torque/sratio;
 			}
 		}
-		else  {	//We are not one of its write-to blocks
-			omega = torque = 0;
+		else { //We are not one of its write-to blocks
+			torque = 0;
+			omega = 0;
 			power = 0;
 			return;
 		}

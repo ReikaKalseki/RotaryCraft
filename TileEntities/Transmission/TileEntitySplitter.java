@@ -19,9 +19,10 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySplitter extends TileEntityIOMachine implements GuiController, ShaftMerger {
+public class TileEntitySplitter extends TileEntityTransmissionMachine implements GuiController, ShaftMerger {
 
 	public int[] writeinline = new int[2]; //xz coords
 	public int[] writebend = new int[2]; //xz coords
@@ -576,6 +577,7 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 		this.writeToPowerReceiverAt(world, x2, y, z2, omega, t2);
 	}
 
+	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		omegain = spl.omega; //omegain always constant
 		int ratio = spl.getRatioFromMode();
@@ -611,8 +613,11 @@ public class TileEntitySplitter extends TileEntityIOMachine implements GuiContro
 				torquein = spl.torque/ratio;
 			}
 		}
-		else //We are not one of its write-to blocks
+		else { //We are not one of its write-to blocks
+			torquein = 0;
+			omegain = 0;
 			return;
+		}
 	}
 
 	/**

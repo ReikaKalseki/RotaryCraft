@@ -38,7 +38,7 @@ public class TileEntityFuelLine extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS;
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 
 	@Override
@@ -99,5 +99,15 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	@Override
 	public Block getPipeBlockType() {
 		return Block.obsidian;
+	}
+
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return side == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return side != ForgeDirection.DOWN;
 	}
 }

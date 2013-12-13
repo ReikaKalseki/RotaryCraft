@@ -14,7 +14,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.SimpleProvider;
 
-public abstract class TileEntity1DTransmitter extends TileEntityIOMachine implements SimpleProvider {
+public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMachine implements SimpleProvider {
 
 	public int ratio;
 

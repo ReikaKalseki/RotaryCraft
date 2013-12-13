@@ -84,6 +84,7 @@ import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -263,6 +264,8 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaJavaLibrary.initClass(SoundRegistry.class);
 		ReikaJavaLibrary.initClass(PacketRegistry.class);
 		ReikaJavaLibrary.initClass(PowerReceivers.class);
+
+		TileEntityReservoir.initCreativeFluids();
 	}
 	/*
 	@VersionCheckHandler

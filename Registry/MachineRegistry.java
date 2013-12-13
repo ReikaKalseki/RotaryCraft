@@ -33,6 +33,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -113,6 +114,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
@@ -276,7 +278,8 @@ public enum MachineRegistry {
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
-	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15);
+	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15),
+	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer");
 
 	private String name;
 	private Class te;
@@ -1082,6 +1085,10 @@ public enum MachineRegistry {
 
 	public boolean canBeFrictionHeated() {
 		return FrictionHeatable.class.isAssignableFrom(te);
+	}
+
+	public boolean hasNBTVariants() {
+		return NBTMachine.class.isAssignableFrom(te);
 	}
 
 	static {

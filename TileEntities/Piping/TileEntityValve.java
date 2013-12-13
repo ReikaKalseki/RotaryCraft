@@ -92,4 +92,14 @@ public class TileEntityValve extends TileEntityPiping {
 		return Block.blockRedstone;
 	}
 
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return true;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return false;
+	}
+
 }

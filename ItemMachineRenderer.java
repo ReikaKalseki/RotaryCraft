@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -25,6 +26,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -37,6 +39,24 @@ public class ItemMachineRenderer implements IItemRenderer {
 
 	private int Renderid;
 	private int metadata;
+
+	private final HashMap<Class, TileEntity> TEs = new HashMap();
+	private final RenderBlocks rb = new RenderBlocks();
+
+	public TileEntity getRenderingInstance(MachineRegistry m) {
+		Class c = m.getTEClass();
+		TileEntity te = TEs.get(c);
+		if (te == null) {
+			try {
+				te = (TileEntity)c.newInstance();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			TEs.put(c, te);
+		}
+		return te;
+	}
 
 	public ItemMachineRenderer() {
 
@@ -61,14 +81,13 @@ public class ItemMachineRenderer implements IItemRenderer {
 		Map map = EnchantmentHelper.getEnchantments(item);
 		boolean enchant = map != null && !map.isEmpty();
 		if (Renderid == -1) {
-			RenderBlocks rb = new RenderBlocks();
-			//ModLoader.getMinecraftInstance().renderEngine.bindTexture("/terrain.png");
 			rb.renderBlockAsItem(Block.lockedChest, 0, 1);
 			return;
 		}
 		float a = 0; float b = 0;
 		if (item.itemID == RotaryCraft.engineitems.itemID) {
-			TileEntityEngine eng = new TileEntityEngine();
+			TileEntity te = this.getRenderingInstance(MachineRegistry.ENGINE);
+			TileEntityEngine eng = (TileEntityEngine)te;
 			eng.type = EngineType.DC;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
@@ -77,35 +96,43 @@ public class ItemMachineRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(eng, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.gbxitems.itemID) {
+			TileEntity te = this.getRenderingInstance(MachineRegistry.GEARBOX);
+			TileEntityGearbox gbx = (TileEntityGearbox)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityGearbox(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+			TileEntityRenderer.instance.renderTileEntityAt(gbx, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.advgearitems.itemID) {
+			TileEntity te = this.getRenderingInstance(MachineRegistry.ADVANCEDGEARS);
+			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityAdvancedGear(), a, -0.1D, b, -1000F*(item.getItemDamage()+1));
+			TileEntityRenderer.instance.renderTileEntityAt(adv, a, -0.1D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.flywheelitems.itemID) {
+			TileEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL);
+			TileEntityFlywheel fly = (TileEntityFlywheel)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRenderer.instance.renderTileEntityAt(new TileEntityFlywheel(), a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
+			TileEntityRenderer.instance.renderTileEntityAt(fly, a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.shaftitems.itemID) {
+			TileEntity te = this.getRenderingInstance(MachineRegistry.SHAFT);
+			TileEntityShaft sha = (TileEntityShaft)te;
 			if (type == type.ENTITY) {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 				a = -0.5F; b = -0.5F;
 			}
 			if (item.getItemDamage() == RotaryNames.getNumberShaftTypes()-1)
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -10000F);
+				TileEntityRenderer.instance.renderTileEntityAt(sha, a, 0.0D, b, -10000F);
 			else
-				TileEntityRenderer.instance.renderTileEntityAt(new TileEntityShaft(), a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+				TileEntityRenderer.instance.renderTileEntityAt(sha, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.machineplacer.itemID) {
 			if (type == type.ENTITY) {
@@ -117,15 +144,17 @@ public class ItemMachineRenderer implements IItemRenderer {
 				return;
 			MachineRegistry machine = MachineRegistry.machineList[item.getItemDamage()];
 			if (machine.hasModel()) {
-				TileEntity te = machine.createTEInstanceForRender();
+				TileEntity te = this.getRenderingInstance(machine);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;
 					em.applyEnchants(item);
 				}
+				if (machine.hasNBTVariants()) {
+					((NBTMachine)te).setDataFromItemStackTag(item.stackTagCompound);
+				}
 				TileEntityRenderer.instance.renderTileEntityAt(te, a, -0.1D, b, 0.0F);
 			}
 			else {
-				RenderBlocks rb = new RenderBlocks();
 				ReikaTextureHelper.bindTerrainTexture();
 				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
 					double d = 0.5;

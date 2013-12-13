@@ -21,7 +21,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RenderableDuct;
 import Reika.RotaryCraft.Auxiliary.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -45,6 +44,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public abstract boolean canReceiveFromPipeOn(ForgeDirection side);
 
 	public abstract boolean canEmitToPipeOn(ForgeDirection side);
+
+	public abstract boolean canIntakeFromIFluidHandler(ForgeDirection side);
+
+	public abstract boolean canOutputToIFluidHandler(ForgeDirection side);
 
 	public final boolean canIntakeFluid(Fluid f) {
 		if (f == null)
@@ -140,7 +143,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler && dir.offsetY == 0) {
+				else if (te instanceof IFluidHandler && this.canOutputToIFluidHandler(dir)) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
 						int toadd = this.getPipeOutput(this.getLiquidLevel());
@@ -206,10 +209,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 						}
 					}
 				}
-				else if (te instanceof IFluidHandler && dir.offsetY != 0) {
+				else if (te instanceof IFluidHandler && this.canIntakeFromIFluidHandler(dir)) {
 					IFluidHandler fl = (IFluidHandler)te;
-					FluidStack fs = fl.drain(dir, Integer.MAX_VALUE, false);
-					ReikaJavaLibrary.pConsole(fs);
+					FluidStack fs = fl.drain(dir, 500, false);
 					if (fs != null) {
 						int level = this.getLiquidLevel();
 						int todrain = this.getPipeIntake(fs.amount-level);
@@ -218,6 +220,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 								this.addFluid(todrain);
 								this.setFluid(fs.getFluid());
 								this.onIntake(te);
+								fl.drain(dir, fs.amount, true);
 							}
 						}
 					}
@@ -299,7 +302,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		int z = zCoord+dir.offsetZ;
 		MachineRegistry m = this.getMachine();
 		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
-		if (m == m2)
+		if (m != null && !m.isPipe() && m == m2)
 			return true;
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityPiping)

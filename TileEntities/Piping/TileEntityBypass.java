@@ -92,4 +92,14 @@ public class TileEntityBypass extends TileEntityPiping {
 		return Block.netherBrick;
 	}
 
+	@Override
+	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
+		return false;
+	}
+
+	@Override
+	public boolean canOutputToIFluidHandler(ForgeDirection side) {
+		return false;
+	}
+
 }
