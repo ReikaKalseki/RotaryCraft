@@ -19,14 +19,12 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
 import Reika.RotaryCraft.Auxiliary.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
@@ -77,7 +75,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (temperature > 100)
 			storedEnergy += power*200;
 
-		ReikaJavaLibrary.pConsole(storedEnergy/ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(storedEnergy/ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getSteam()+":"+storedEnergy+"/"+ReikaRailCraftHelper.getSteamBucketEnergy(), Side.SERVER);
 		if (storedEnergy >= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()) && !world.isRemote)

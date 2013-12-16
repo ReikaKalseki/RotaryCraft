@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RenderableDuct;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 
@@ -321,13 +322,12 @@ public class PipeRenderer extends RotaryTERenderer {
 		RenderableDuct te = (RenderableDuct)tile;
 		if (!tile.hasWorldObj()) {
 			ReikaTextureHelper.bindTerrainTexture();
-			//for (int i = 1; i < 2; i++) {
-			//this.renderFace(te, par2, par4, par6, dirs[i]);
-			//}
-			double s = 0.5;
-			GL11.glScaled(s, s, s);
-			this.renderBlock(te, par2, par4, par6);
-			GL11.glScaled(1/s, 1/s, 1/s);
+			double s = 1;
+			double sy = 1.05;
+			GL11.glScaled(s, sy, s);
+			//this.renderBlock(te, par2, par4, par6);
+			ClientProxy.pipe.renderBlockInInventory(te, par2, par4, par6);
+			GL11.glScaled(1/s, 1/sy, 1/s);
 		}
 
 		if (MinecraftForgeClient.getRenderPass() == 1) {

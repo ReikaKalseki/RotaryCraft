@@ -33,7 +33,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	public int mixTime;
 	public int storeTime;
 
-	public static final int CAPACITY = 240;
+	public static final int CAPACITY = 240000;
 	public static final int MINTIME = 10;
 
 	public boolean idle = false;
@@ -91,7 +91,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 		power = omega * torque;
 		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE*1000) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
-				inv[ingredients.length+1] = ItemStacks.fuelbucket;
+				inv[ingredients.length+1] = ItemStacks.fuelbucket.copy();
 				tank.removeLiquid(ItemFuelLubeBucket.JET_VALUE*1000);
 			}
 		}

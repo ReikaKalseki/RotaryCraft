@@ -1278,7 +1278,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				if (eng.type.requiresLubricant()) {
 					int it = eng.lubricant.getLevel();
 					int dL = lubricant.getLevel()-it;
-					if (dL > 0) {
+					if (dL > 3) {
 						eng.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("lubricant"));
 						lubricant.removeLiquid(dL/4);
 					}
@@ -1286,7 +1286,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			}
 		}
 		if (!lubricant.isEmpty() && omega > 0) {
-			if (rand.nextInt(5) == 0)
+			if (world.getWorldTime()%5 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}
@@ -1641,17 +1641,21 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (type == null)
 			return false;
 		if (type.isJetFueled())
-			return p == MachineRegistry.FUELLINE && side == ForgeDirection.UP;
+			if (p == MachineRegistry.FUELLINE && side == ForgeDirection.DOWN)
+				return true;
+		if (type.isEthanolFueled())
+			if (p == MachineRegistry.FUELLINE && side == ForgeDirection.DOWN)
+				return true;
 		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {
 			switch(side) {
 			case EAST:
-				return this.getBlockMetadata() == 1;
-			case SOUTH:
-				return this.getBlockMetadata() == 3;
-			case WEST:
 				return this.getBlockMetadata() == 0;
-			case NORTH:
+			case SOUTH:
 				return this.getBlockMetadata() == 2;
+			case WEST:
+				return this.getBlockMetadata() == 1;
+			case NORTH:
+				return this.getBlockMetadata() == 3;
 			default:
 				return false;
 			}

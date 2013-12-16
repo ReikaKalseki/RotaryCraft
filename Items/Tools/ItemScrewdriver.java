@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Screwdriverable;
@@ -28,6 +29,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHydraulicRouter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -201,6 +203,12 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					else
 						clicked.filling = true;
 					return true;
+				}
+			}
+			if (m == MachineRegistry.ROUTER) {
+				TileEntityHydraulicRouter tile = (TileEntityHydraulicRouter)te;
+				if (tile != null) {
+					tile.updateSide(ForgeDirection.VALID_DIRECTIONS[s]);
 				}
 			}
 			if (m == MachineRegistry.BELT) {

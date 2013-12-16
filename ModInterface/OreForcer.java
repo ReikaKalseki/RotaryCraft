@@ -108,8 +108,10 @@ public final class OreForcer {
 			break;
 		case RAILCRAFT:
 			intercraftFirestone();
+			break;
 		case IC2:
 			convertUranium();
+			break;
 		}
 	}
 
@@ -179,7 +181,7 @@ public final class OreForcer {
 	private static void registerOsmium() {
 		if (MekanismHandler.getInstance().oreID == -1)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.MEKANISM, "Null Item for Osmium");
-		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, 0));
+		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, MekanismHandler.osmiumMeta));
 	}
 
 	private static void addThaumAspects() {

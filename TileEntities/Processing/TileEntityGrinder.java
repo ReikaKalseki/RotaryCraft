@@ -242,9 +242,9 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inventory[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000) {
+		if (inventory[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000 && !world.isRemote) {
 			if (inventory[2].itemID == Item.bucketEmpty.itemID && inventory[2].stackSize == 1) {
-				inventory[2] = ItemStacks.lubebucket;
+				inventory[2] = ItemStacks.lubebucket.copy();
 				tank.removeLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000);
 			}
 		}
@@ -368,7 +368,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			return false;
 		if (slot == 2)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return RecipesGrinder.getRecipes().getSmeltingResult(is) != null || is.itemID == ItemRegistry.CANOLA.getShiftedID();
+		return is.itemID == ItemRegistry.CANOLA.getShiftedID() || RecipesGrinder.getRecipes().getSmeltingResult(is) != null;
 	}
 
 	@Override

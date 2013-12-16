@@ -80,10 +80,6 @@ public enum EngineType {
 		return this.getPowerMW();
 	}
 
-	public int getID() {
-		return this.ordinal();
-	}
-
 	public boolean isJetFueled() {
 		return (this == JET || this == MICRO);
 	}

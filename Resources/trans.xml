@@ -35,6 +35,6 @@
 	</multi>
 	<belt>
 		The belt hub can be used to transport power cheaply over a large distance. Simply place two hubs such that they are able to connect (clear line of sight and in-plane connection). To connect belts, right-click one with a stack of belts, then right-click the other with the same stack. For each meter travelled, you need one additional belt item (up to a maximum of 64 blocks).
-		The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent.
+		The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent. Shafts can only be connected if one is in output mode (shift-click with the screwdriver).
 	</belt>
 </trans>

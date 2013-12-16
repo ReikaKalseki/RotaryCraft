@@ -78,7 +78,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canOutputTo(side.getOpposite()) && this.canConnectToPipe(p);
+		return this.canOutputTo(side) && this.canConnectToPipe(p);
 	}
 
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {

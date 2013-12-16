@@ -123,7 +123,10 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (te == null)
 			return null;
 		int meta = te.getBlockMetadata();
-		int machine = te.getMachine().getMachineMetadata();
+		MachineRegistry m = te.getMachine();
+		if (te.hasIconOverride())
+			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
+		int machine = m.getMachineMetadata();
 		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
 		return icons[machine][meta][s][te.getTextureStateForSide(s)];
 	}
@@ -216,6 +219,8 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick()) {
 			return false;
 		}
+		if (is != null && ReikaItemHelper.matchStacks(is, m.getCraftedProduct()))
+			return false;
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
 			if (((EnchantableMachine)te).applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)
@@ -606,10 +611,6 @@ public abstract class BlockBasicMultiTE extends Block {
 			tile.resetOther();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
-	}
-
-	public final String getTextureFile(){
-		return "/Reika/RotaryCraft/Textures/Terrain/textures.png";
 	}
 
 	@Override

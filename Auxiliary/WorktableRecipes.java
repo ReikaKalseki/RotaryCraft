@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Data.ImmutableRecipeList;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class WorktableRecipes
@@ -31,7 +32,7 @@ public class WorktableRecipes
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
 	/** A list of all the recipes added */
-	private List recipes = new ArrayList();
+	private ImmutableRecipeList recipes = new ImmutableRecipeList();
 
 	/**
 	 * Returns the static instance of this class

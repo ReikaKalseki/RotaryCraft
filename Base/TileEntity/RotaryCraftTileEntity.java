@@ -12,7 +12,9 @@ package Reika.RotaryCraft.Base.TileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -20,6 +22,7 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -206,5 +209,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public boolean isFlipped() {
 		return isFlipped;
+	}
+
+	public Icon getIconForSide(ForgeDirection dir) {
+		return RotaryCraft.decoblock.getIcon(0, 0);
+	}
+
+	public boolean hasIconOverride() {
+		return false;
 	}
 }

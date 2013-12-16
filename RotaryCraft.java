@@ -35,14 +35,15 @@ import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
+import Reika.DragonAPI.Auxiliary.DonatorController;
+import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Base.DragonAPIMod;
-import Reika.DragonAPI.Exception.ModIncompatibilityException;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -68,7 +69,6 @@ import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
-import Reika.RotaryCraft.ModInterface.IntegrityChecker;
 import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -86,7 +86,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -236,20 +235,23 @@ public class RotaryCraft extends DragonAPIMod {
 		FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
 
 		RotaryRecipes.addThermalExpansion();
+
+		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
+		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);
+		DonatorController.instance.addDonation(instance, "EverRunes", 75.00F);
+		DonatorController.instance.addDonation(instance, "AnotherDeadBard", 25.00F);
+		DonatorController.instance.addDonation(instance, "MarkyRedstone", 35.00F);
+		DonatorController.instance.addDonation(instance, "Darkholme", 10.00F);
+
+		ReikaMystcraftHelper.disableFluidPage("jet fuel");
+		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
+
+		IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
 	}
 
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
-		//LoadAux.texMsg();
-		if (Loader.isModLoaded("OptiFine")) {
-			String msg = "Optifine breaks rendering of many RotaryCraft items and features.\nRemove it if possible for full RotaryCraft functionality.";
-			new ModIncompatibilityException(instance, "Optifine", msg, false);
-		}
-
-		if (!ReikaObfuscationHelper.isDeObfEnvironment())
-			IntegrityChecker.checkForTampering();
-
 		OreForcer.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();

@@ -220,8 +220,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			temperature += ReikaMathLibrary.extrema((MAXTEMP-temperature)/8, 4, "max");
 
 		if (water.getLevel() > 0) {
-			if (rand.nextInt(3) == 0)
-				water.removeLiquid((temperature*2/MAXTEMP)*50);
+			if (rand.nextInt(3) == 0) {
+				int rem = (temperature*2/MAXTEMP)*50;
+				if (rem > 0)
+					water.removeLiquid(rem);
+			}
 			temperature -= temperature/64;
 		}
 		if (temperature < 0)

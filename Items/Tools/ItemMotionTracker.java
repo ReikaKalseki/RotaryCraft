@@ -96,13 +96,13 @@ public class ItemMotionTracker extends ItemChargedTool {
 							if (ReikaMathLibrary.approxr(ed.targetX, ep.posX, 4))
 								if (ReikaMathLibrary.approxr(ed.targetY, ep.posY, 4))
 									if (ReikaMathLibrary.approxr(ed.targetZ, ep.posZ, 4))
-										ReikaChatHelper.writeFormattedString(EnumChatFormatting.RED, "Dragon is Attacking!");
+										ReikaChatHelper.writeFormattedString("Dragon is Attacking!", EnumChatFormatting.RED);
 						}
 						else if (ent instanceof EntityMob) {
 							EntityMob em = (EntityMob)ent;
 							PathEntity path = em.getNavigator().getPath();
 							if (em.getAttackTarget() == ep || em.getAITarget() == ep)
-								ReikaChatHelper.writeFormattedString(EnumChatFormatting.RED, "Mob is Attacking!");
+								ReikaChatHelper.writeFormattedString("Mob is Attacking!", EnumChatFormatting.RED);
 						}
 					}
 					/*double[] vel = ReikaPhysicsHelper.cartesianToPolar(ent.motionX, ent.motionY, ent.motionZ);

@@ -100,6 +100,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHydraulicRouter;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
@@ -112,6 +113,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityBypass;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
@@ -279,7 +281,9 @@ public enum MachineRegistry {
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
 	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15),
-	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer");
+	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
+	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
+	HYDRAULICLINE(		"machine.hyline",			BlockMMachine.class,		TileEntityHydraulicLine.class,		19);
 
 	private String name;
 	private Class te;

@@ -161,7 +161,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				if (is.itemID == Item.bucketEmpty.itemID) {
 					if (tile.type.isEthanolFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.ETHANOL_VALUE) {
-							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket);
+							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
 							tile.subtractFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {
@@ -172,7 +172,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 					}
 					if (tile.type.isJetFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.JET_VALUE) {
-							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket);
+							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
 							tile.subtractFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
 						}
 						else {

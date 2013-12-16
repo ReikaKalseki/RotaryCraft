@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -45,6 +46,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -110,6 +112,10 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
 			clicked.ticks = 512;
 		}
+		if (m == MachineRegistry.HYDRAULICLINE) {
+			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)world.getBlockTileEntity(x, y, z);
+			ReikaChatHelper.writeString(String.format("Pressure: %d.", clicked.getPressure()));
+		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
 			if (!clicked.isEmpty())
@@ -149,7 +155,9 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (tile instanceof ShaftPowerReceiver) {
 			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
-			ReikaChatHelper.writeString(String.format("%s receiving %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));
+			String pre = ReikaEngLibrary.getSIPrefix(sp.getPower());
+			double base = ReikaMathLibrary.getThousandBase(sp.getPower());
+			ReikaChatHelper.writeString(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			return true;
 		}
 		if (tile instanceof TileEntityIOMachine) {
@@ -184,6 +192,16 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.type.burnsFuel()) {
 					int time = clicked.getFuelDuration();
 					String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
+					ReikaChatHelper.writeString(sg);
+				}
+				if (clicked.type.requiresLubricant()) {
+					int amt = clicked.getLube();
+					String sg = String.format("Lubricant: %d mB", amt);
+					ReikaChatHelper.writeString(sg);
+				}
+				if (clicked.type.isWaterPiped()) {
+					int amt = clicked.getWater();
+					String sg = String.format("Water: %d mB", amt);
 					ReikaChatHelper.writeString(sg);
 				}
 				return true;

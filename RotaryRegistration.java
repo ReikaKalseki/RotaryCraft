@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -122,6 +123,8 @@ public class RotaryRegistration {
 
 	public static void loadOreDictionary() {
 		OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
+		if (ConfigRegistry.HSLADICT.getState())
+			OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
 		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);

@@ -18,12 +18,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.DragonAPI.Interfaces.RegistrationList;
+import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -62,7 +62,7 @@ import Reika.RotaryCraft.Items.Tools.ItemVacuum;
 import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public enum ItemRegistry implements RegistrationList, IDRegistry {
+public enum ItemRegistry implements RegistryEnum {
 
 	SCREWDRIVER(0, false, 		"item.screwdriver", 		ItemScrewdriver.class),
 	METER(16, false, 			"item.meter", 				ItemMeter.class),
@@ -373,6 +373,9 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 		if (!hasSubtypes)
 			return 1;
 		switch(this) {
+		case WORLDEDIT:
+		case CANOLA:
+			return 2;
 		case SPRING:
 		case STRONGCOIL:
 			return 65536;
@@ -496,23 +499,31 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public void addRecipe(Object... params) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOf(), params);
+			WorktableRecipes.getInstance().addRecipe(this.getStackOf(), params);
+		}
 	}
 
 	public void addSizedRecipe(int num, Object... params) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getCraftedProduct(num), params);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(num), params);
+		}
 	}
 
 	public void addMetaRecipe(int meta, Object... params) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOfMetadata(meta), params);
+			WorktableRecipes.getInstance().addRecipe(this.getStackOfMetadata(meta), params);
+		}
 	}
 
 	public void addSizedMetaRecipe(int meta, int num, Object... params) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+		}
 	}
 
 	public void addEnchantedRecipe(Enchantment e, int lvl, Object... params) {
@@ -520,6 +531,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			ItemStack is = this.getStackOf();
 			is.addEnchantment(e, lvl);
 			GameRegistry.addRecipe(is, params);
+			WorktableRecipes.getInstance().addRecipe(is, params);
 		}
 	}
 
@@ -528,6 +540,7 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 			ItemStack is = this.getStackOf();
 			is.addEnchantment(e, lvl);
 			GameRegistry.addShapelessRecipe(is, params);
+			WorktableRecipes.getInstance().addShapelessRecipe(is, params);
 		}
 	}
 
@@ -553,17 +566,17 @@ public enum ItemRegistry implements RegistrationList, IDRegistry {
 	}
 
 	public void addShapelessRecipe(Object... params) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addShapelessRecipe(this.getStackOf(), params);
+			WorktableRecipes.getInstance().addShapelessRecipe(this.getStackOf(), params);
+		}
 	}
 
 	public void addRecipe(IRecipe ir) {
-		if (!this.isDummiedOut())
+		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(ir);
-	}
-
-	public void addWorktableRecipe(Object... params) {
-
+			WorktableRecipes.addRecipe(ir);
+		}
 	}
 
 	public boolean isAvailableInCreativeInventory() {

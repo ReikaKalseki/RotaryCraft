@@ -12,8 +12,7 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
-import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.DragonAPI.Interfaces.RegistrationList;
+import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
@@ -35,7 +34,7 @@ import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 
-public enum BlockRegistry implements RegistrationList, IDRegistry {
+public enum BlockRegistry implements RegistryEnum {
 
 	ADVANCEDGEAR(BlockAdvGear.class, Material.iron),
 	DIR(BlockDMachine.class, Material.iron),

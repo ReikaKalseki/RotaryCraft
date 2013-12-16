@@ -10,11 +10,16 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
@@ -35,7 +40,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		RenderableDuct tile = (RenderableDuct)world.getBlockTileEntity(x, y, z);
 		for (int i = 0; i < 6; i++) {
-			this.renderFace(tile, x, y, z, dirs[i]);
+			this.renderFace(tile, world, x, y, z, dirs[i]);
 		}
 		return true;
 	}
@@ -50,7 +55,33 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		return renderID;
 	}
 
-	private void renderFace(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
+	public void renderBlockInInventory(RenderableDuct tile, double par2, double par4, double par6) {
+		GL11.glTranslated(par2, par4, par6);
+		Tessellator.instance.startDrawingQuads();
+		Tessellator.instance.setNormal(0, 1, 0);
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			World world = Minecraft.getMinecraft().theWorld;
+			this.doRenderFace(tile, world, dir);
+		}
+		Tessellator.instance.draw();
+		GL11.glTranslated(-par2, -par4, -par6);
+	}
+
+	private void renderFace(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		Tessellator v5 = Tessellator.instance;
+		v5.addTranslation(x, y, z);
+		int br = tile.getPipeBlockType().getMixedBrightnessForBlock(world, x, y, z);
+		v5.setBrightness(br);
+
+		this.doRenderFace(tile, world, dir);
+
+		v5.addTranslation(-x, -y, -z);
+	}
+
+	private void doRenderFace(RenderableDuct tile, IBlockAccess world, ForgeDirection dir) {
+		Tessellator v5 = Tessellator.instance;
+
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -98,16 +129,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		gu2 -= dgu/8;
 		gv2 -= dgv/8;
 
-		Tessellator v5 = Tessellator.instance;
-		v5.addTranslation(x, y, z);
-
-		int dx = tile.getX()+dir.offsetX;
-		int dy = tile.getY()+dir.offsetY;
-		int dz = tile.getZ()+dir.offsetZ;
-		int br = tile.getPipeBlockType().getMixedBrightnessForBlock(tile.getWorld(), tile.getX(), tile.getY(), tile.getZ());
-		v5.setBrightness(br);
-
-		if (tile.getWorld() != null && tile.isConnectionValidForSide(dir)) {
+		if (world != null && tile.isConnectionValidForSide(dir)) {
 			switch(dir) {
 			case DOWN:
 				this.faceBrightness(ForgeDirection.SOUTH, v5);
@@ -120,11 +142,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5+size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5+size, 	u2, v);
 				v5.addVertexWithUV(0.5-size+dd, 	0.5+size, 		0.5+size, 	u2-du, v);
-				/*
-				v5.addVertexWithUV(0.5-size+dd, 	0.5+size-dd, 	0.5+size, 	gu, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	0.5+size-dd, 	0.5+size, 	gu+dgu*size*2, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	1, 				0.5+size, 	gu+dgu*size*2, gv+dgv*size);
-				v5.addVertexWithUV(0.5-size+dd, 	1, 				0.5+size, 	gu, gv+dgv*size);*/
 
 				this.faceBrightness(ForgeDirection.EAST, v5);
 				v5.addVertexWithUV(0.5+size, 	0.5+size+dd, 	0.5+size-dd, 	u2-du, vo);
@@ -158,11 +175,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 		0.5+size, 		0.5-size, 	u2, v);
 				v5.addVertexWithUV(0.5-size, 		0.5+size+dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size+dd, 	0.5+size+dd, 	0.5-size, 	u2-du, vo);
-				/*
-				v5.addVertexWithUV(0.5-size+dd, 	0.5+size-dd, 	0.5-size, 	gu, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	0.5+size-dd, 	0.5-size, 	gu+dgu*size*2, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	1, 				0.5-size, 	gu+dgu*size*2, gv+dgv*size);
-				v5.addVertexWithUV(0.5-size+dd, 	1, 				0.5-size, 	gu, gv+dgv*size);*/
 				break;
 			case EAST:
 				this.faceBrightness(ForgeDirection.DOWN, v5);
@@ -348,11 +360,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(0.5-size, 		0.5-size-dd, 	0.5-size, 	u2, vo);
 				v5.addVertexWithUV(0.5-size, 		0.5-size, 		0.5-size, 	u2, v);
 				v5.addVertexWithUV(0.5-size+dd, 	0.5-size, 		0.5-size, 	u2-du, v);
-				/*
-				v5.addVertexWithUV(0.5-size+dd, 	0.5-size+dd, 	0.5-size, 	gu+dgu*size*2, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	0.5-size+dd, 	0.5-size, 	gu, gv);
-				v5.addVertexWithUV(0.5+size-dd, 	0, 				0.5-size, 	gu, gv+dgv*size);
-				v5.addVertexWithUV(0.5-size+dd, 	0, 				0.5-size, 	gu+dgu*size*2, gv+dgv*size);*/
 				break;
 			case WEST:
 				this.faceBrightness(ForgeDirection.DOWN, v5);
@@ -746,7 +753,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				break;
 			}
 		}
-		v5.addTranslation(-x, -y, -z);
 	}
 
 	private void faceBrightness(ForgeDirection dir, Tessellator v5) {

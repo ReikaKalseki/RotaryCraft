@@ -32,7 +32,7 @@
 	</grinder>
 	<floodlight>
 		<desc>
-			The floodlight creates a beam of light that illuminates everything in its path until blocked by an opaque, solid block. Perfect for lighting up large spaces where point-source light sources like torches will simply not cut it. The floodlight requires %dW of power for each light level produced, to a maximum of 16.384kW for light as bright as direct sunlight.
+			The floodlight creates a beam of light that illuminates everything in its path until blocked by an opaque, solid block. Perfect for lighting up large spaces where point-source light sources like torches will simply not cut it.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -910,4 +910,11 @@
 			Power Input: Back
 		</note>
 	</distiller>
+		<suction>
+		<desc>
+			The suction pipe draws fluid from other mods' tanks and machines. It is not designed to connect to other pipe systems, or to RotaryCraft machines.
+		</desc>
+		<note>
+		</note>
+	</suction>
 </machines>

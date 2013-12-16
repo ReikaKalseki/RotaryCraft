@@ -395,25 +395,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		public final boolean canIntake;
 		public final boolean canOutput;
 
+		public static final Flow[] list = values();
+
 		private Flow(boolean in, boolean out) {
 			canIntake = in;
 			canOutput = out;
 		}
-	}
-
-	public final int getX() {
-		return xCoord;
-	}
-
-	public final int getY() {
-		return yCoord;
-	}
-
-	public final int getZ() {
-		return zCoord;
-	}
-
-	public final World getWorld() {
-		return worldObj;
 	}
 }

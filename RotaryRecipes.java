@@ -267,6 +267,8 @@ public class RotaryRecipes {
 		MachineRegistry.DISTILLER.addCrafting("PGP", "gMg", "PGP", 'G', Block.thinGlass, 'M', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'g', Item.ingotIron);
 
 		MachineRegistry.BIGFURNACE.addCrafting("SFS", "FRF", "SRS", 'S', ItemStacks.basepanel, 'F', Block.furnaceIdle, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+
+		MachineRegistry.SUCTION.addSizedCrafting(4, "SGS", "SGS", "SGS", 'S', Block.sandStone, 'G', Block.glass);
 	}
 
 	private static void addCraftItems() {

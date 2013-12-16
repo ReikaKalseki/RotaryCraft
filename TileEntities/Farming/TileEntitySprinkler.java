@@ -259,7 +259,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side == ForgeDirection.DOWN;
+		return side == ForgeDirection.UP;
 	}
 
 	public boolean canFill(ForgeDirection side, Fluid f) {
