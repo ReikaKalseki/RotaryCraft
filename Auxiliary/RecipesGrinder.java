@@ -111,15 +111,15 @@ public class RecipesGrinder {
 		return metaSmeltingList;
 	}
 
-	private void addRecipe(Block b, ItemStack out, float xp) {
+	public void addRecipe(Block b, ItemStack out, float xp) {
 		this.addRecipe(new ItemStack(b), out, xp);
 	}
 
-	private void addRecipe(Item i, ItemStack out, float xp) {
+	public void addRecipe(Item i, ItemStack out, float xp) {
 		this.addRecipe(new ItemStack(i), out, xp);
 	}
 
-	private void addRecipe(ItemStack in, ItemStack out, float xp)
+	public void addRecipe(ItemStack in, ItemStack out, float xp)
 	{
 		metaSmeltingList.put(Arrays.asList(in.itemID, in.getItemDamage()), out);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));

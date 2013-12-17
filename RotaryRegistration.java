@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
@@ -130,10 +129,8 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
 
-		if (!ModList.THERMALEXPANSION.isLoaded()) { //TE3 causes problems with its induction smelter
-			OreDictionary.registerOre("dustBedrock", ItemStacks.bedrockdust);
-			OreDictionary.registerOre("ingotBedrock", ItemStacks.bedingot);
-		}
+		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
+		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 
 		OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 		OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
