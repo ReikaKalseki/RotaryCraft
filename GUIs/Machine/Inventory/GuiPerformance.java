@@ -39,12 +39,12 @@ public class GuiPerformance extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
-		int x = ReikaGuiAPI.instance.getMouseRealX();
-		int y = ReikaGuiAPI.instance.getMouseRealY();
-		if (ReikaGuiAPI.instance.isMouseInBox(j+81, j+88, k+16, k+71)) {
+		int x = api.getMouseRealX();
+		int y = api.getMouseRealY();
+		if (api.isMouseInBox(j+81, j+88, k+16, k+71)) {
 			int time = Engine.getFuelDuration();
 			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, x-j, y-k);
+			api.drawTooltipAt(fontRenderer, sg, x-j, y-k);
 		}
 	}
 

@@ -39,15 +39,15 @@ public class GuiCompactor extends GuiMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		if (ReikaGuiAPI.instance.isMouseInBox(j+146, j+151, k+15, k+70)) {
-			int mx = ReikaGuiAPI.instance.getMouseRealX();
-			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d kPa", comp.pressure), mx-j, my-k);
+		if (api.isMouseInBox(j+146, j+151, k+15, k+70)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRenderer, String.format("%d kPa", comp.pressure), mx-j, my-k);
 		}
-		if (ReikaGuiAPI.instance.isMouseInBox(j+117, j+127, k+15, k+70)) {
-			int mx = ReikaGuiAPI.instance.getMouseRealX();
-			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%dC", comp.temperature), mx-j, my-k);
+		if (api.isMouseInBox(j+117, j+127, k+15, k+70)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRenderer, String.format("%dC", comp.temperature), mx-j, my-k);
 		}
 	}
 
@@ -95,9 +95,9 @@ public class GuiCompactor extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", comp.power, comp.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

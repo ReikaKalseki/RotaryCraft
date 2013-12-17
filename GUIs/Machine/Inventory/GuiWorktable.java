@@ -35,7 +35,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		this.drawTexturedModalRect(j+79, k+35, 176, 35, 18, 15);
-		ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, table.getToCraft(), j+116, k+35);
+		api.drawItemStack(itemRenderer, fontRenderer, table.getToCraft(), j+116, k+35);
 	}
 
 	@Override

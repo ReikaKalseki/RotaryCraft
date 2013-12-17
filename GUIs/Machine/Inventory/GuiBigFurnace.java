@@ -50,7 +50,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine
 			c = 4;
 		else if (te.getTemperature() >= 100)
 			c = 2;
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.valueOf(te.getTemperature())+"C", xSize-13-c, 6, 4210752);
+		api.drawCenteredStringNoShadow(fontRenderer, String.valueOf(te.getTemperature())+"C", xSize-13-c, 6, 4210752);
 
 		if (!te.isEmpty()) {
 			int i2 = te.getLavaScaled(91);
@@ -61,10 +61,10 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine
 			ReikaLiquidRenderer.bindFluidTexture(FluidRegistry.LAVA);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 10, i2);
 		}
-		if (ReikaGuiAPI.instance.isMouseInBox(j+172, j+183, k+17, k+109)) {
-			int mx = ReikaGuiAPI.instance.getMouseRealX();
-			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx-j, my-k);
+		if (api.isMouseInBox(j+172, j+183, k+17, k+109)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRenderer, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx-j, my-k);
 		}
 	}
 

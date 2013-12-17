@@ -43,10 +43,10 @@ public class GuiReservoir extends GuiNonPoweredMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		if (ReikaGuiAPI.instance.isMouseInBox(j+83, j+92, k+25, k+70)) {
-			int mx = ReikaGuiAPI.instance.getMouseRealX();
-			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
+		if (api.isMouseInBox(j+83, j+92, k+25, k+70)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
 		}
 
 		if (!Reservoir.isEmpty()) {

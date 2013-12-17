@@ -139,7 +139,18 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		if (ir!= null && ir.overridesRightClick()) {
 			return false;
 		}
-		if (te instanceof TileEntityEngine) {
+		if (te instanceof TileEntityAdvancedGear) {
+			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
+			if (tile.getType().isLubricated() && !tile.hasLubricant()) {
+				if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
+					tile.addLubricant();
+					if (!ep.capabilities.isCreativeMode)
+						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+					return true;
+				}
+			}
+		}
+		else if (te instanceof TileEntityEngine) {
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
 				if (tile.type == EngineType.JET && tile.FOD > 0) {

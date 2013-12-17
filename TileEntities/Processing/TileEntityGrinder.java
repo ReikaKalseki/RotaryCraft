@@ -302,7 +302,6 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	 */
 	public void smeltItem()
 	{
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage("$#%#%$#");
 		if (!this.canSmelt())
 		{
 			return;
@@ -326,14 +325,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			inventory[1].stackSize += itemstack.stackSize;
 		}
 
-		//  if (inventory[0].getItem().func_46056_k())
-		//  {
-		//          inventory[0] = new ItemStack(inventory[0].getItem().setFull3D());
-		//  }
-		//  else
-		//   {
 		inventory[0].stackSize--;
-		//  }
 
 		if (inventory[0].stackSize <= 0)
 		{

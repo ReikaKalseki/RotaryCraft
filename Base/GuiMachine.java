@@ -44,6 +44,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected RotaryCraftTileEntity tile;
 	protected TileEntityPowerReceiver recv;
 	protected EntityPlayer ep;
+	protected static final ReikaGuiAPI api = ReikaGuiAPI.instance;
 
 	public GuiMachine(Container par1Container, RotaryCraftTileEntity te) {
 		super(par1Container);

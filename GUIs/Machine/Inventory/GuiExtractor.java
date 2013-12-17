@@ -80,9 +80,9 @@ public class GuiExtractor extends GuiMachine
 			this.drawTexturedModalRect(xSize+var5+7+7*i, ySize+var6-42+31-frac, 0, 200-frac, 5, frac);
 		}
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+60, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+111, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+60, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+111, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", ext.power, ext.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

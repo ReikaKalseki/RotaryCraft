@@ -357,8 +357,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		int x4 = basex3+(int)(30*Math.cos(theta)*Math.cos(phi));
 		int y4 = basey3+(int)(30*Math.cos(theta)*Math.sin(phi));
 
-		ReikaGuiAPI.instance.drawLine(basex1, basey1, x2, y2, 0xffffffff);
-		ReikaGuiAPI.instance.drawLine(basex3, basey3, x4, y4, 0xffffffff);
+		api.drawLine(basex1, basey1, x2, y2, 0xffffffff);
+		api.drawLine(basex3, basey3, x4, y4, 0xffffffff);
 	}
 
 	private void drawGrid(int j, int k) {
@@ -377,17 +377,17 @@ public class GuiCannon extends GuiPowerOnlyMachine
 				size = 80;
 			int x2 = basex1+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*15)));
 			int y2 = basey1-(int)(size*Math.sin(ReikaPhysicsHelper.degToRad(i*15)));
-			ReikaGuiAPI.instance.drawLine(basex1, basey1, x2, y2, color);
+			api.drawLine(basex1, basey1, x2, y2, color);
 		}
 		for (int i = 0; i < 8; i++) {
 			int size = 30;
 			int x4 = basex3-88+xSize/2+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*45)));
 			int y4 = basey3-118+ySize/2-(int)(size*Math.sin(ReikaPhysicsHelper.degToRad(i*45)));
-			ReikaGuiAPI.instance.drawLine(basex3, basey3, x4, y4, color);
+			api.drawLine(basex3, basey3, x4, y4, color);
 		}
 		for (int i = 0; i < 3; i++) {
 			int size = 30;
-			ReikaGuiAPI.instance.drawCircle(basex3, basey3, (int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*30))), color);
+			api.drawCircle(basex3, basey3, (int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*30))), color);
 		}
 	}
 

@@ -33,7 +33,7 @@ public class GuiCCTVScreen extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int a, int b) {
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Camera Select", xSize/2, 54, 4210752);
+		api.drawCenteredStringNoShadow(fontRenderer, "Camera Select", xSize/2, 54, 4210752);
 	}
 
 	@Override
@@ -59,9 +59,9 @@ public class GuiCCTVScreen extends GuiMachine {
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-31+a, 0, 0, (int)frac, 4);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+4+a, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+63+a, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+122+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+4+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+63+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+122+a, 0xff000000);
 	}
 
 	@Override

@@ -12,10 +12,15 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Icon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -126,6 +131,19 @@ public class GuiCVT extends GuiNonPoweredMachine
 		fontRenderer.drawString("Belt Ratio:", xSize/2-32, 31, 4210752);
 		if (!input.isFocused()) {
 			fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
+		}
+
+		if (cvt.hasLubricant()) {
+			Fluid f = FluidRegistry.getFluid("lubricant");
+			Icon ico = f.getIcon();
+			ReikaLiquidRenderer.bindFluidTexture(f);
+			GL11.glColor4f(1, 1, 1, 1);
+			this.drawTexturedModelRectFromIcon(186, 89, ico, 16, 48);
+		}
+
+		if (api.isMouseInBox(j+185, j+202, k+88, k+149)) {
+			String s = "Lubricant";
+			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-45-fontRenderer.getStringWidth(s), api.getMouseRealY());
 		}
 	}
 

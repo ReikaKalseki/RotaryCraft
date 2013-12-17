@@ -535,7 +535,7 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.basepanel);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45), ItemStacks.mount);
 
-		GameRegistry.addShapelessRecipe(new ItemStack(Item.bread), ItemStacks.flour, ItemStacks.flour);
+		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Item.bread), 0.2F);
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
 			"rrr", "rrr", "rr ", 'r', Block.rail});
@@ -640,7 +640,7 @@ public class RotaryRecipes {
 	private static void addItemBlocks() {
 
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(0, new Object[]{"SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear}); //Worm gear
-		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, new Object[]{"BSB", "BSB", "sMc", 'c', ItemStacks.screen, 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing}); //CVT
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, new Object[]{"BSB", "BSB", "sMc", 'c', ItemStacks.screen, 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft, 'B', ItemStacks.bearing}); //CVT
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, new Object[]{"BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil}); //Coil
 
 		MachineRegistry.FLYWHEEL.addMetaCrafting(0, new Object[]{"W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount});

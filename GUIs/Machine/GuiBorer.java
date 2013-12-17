@@ -231,9 +231,9 @@ public class GuiBorer extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5-13, ySize+var6-14, 0, 0, (int)frac, 4);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20-13, var6+4, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20-13, var6+63, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20-13, var6+122, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20-13, var6+4, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20-13, var6+63, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20-13, var6+122, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", borer.power, borer.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

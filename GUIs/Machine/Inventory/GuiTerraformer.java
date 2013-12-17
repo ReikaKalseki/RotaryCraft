@@ -88,21 +88,21 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 				ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
 				Icon ico = liq.getFluid().getIcon();
 				this.drawTexturedModelRectFromIcon(48, 17+i*39, ico, 16, 16);
-				ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), 56, 21+i*39, 0);
+				api.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), 56, 21+i*39, 0);
 			}
 			else {
-				ReikaGuiAPI.instance.drawLine(48, 17+i*39, 16+48, 16+17+i*39, 0);
-				ReikaGuiAPI.instance.drawLine(16+48, 17+i*39, 48, 16+17+i*39, 0);
+				api.drawLine(48, 17+i*39, 16+48, 16+17+i*39, 0);
+				api.drawLine(16+48, 17+i*39, 48, 16+17+i*39, 0);
 			}
 			List<ItemStack> items = terra.getItemsForTransform(from, to);
 			if (items != null && !items.isEmpty()) {
 				int step = (int)((System.nanoTime()/500000000)%items.size());
 				ItemStack is = items.get(step);
-				ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, is, 48, 19+16+i*39);
+				api.drawItemStack(itemRenderer, fontRenderer, is, 48, 19+16+i*39);
 			}
 			else {
-				ReikaGuiAPI.instance.drawLine(48, 18+17+i*39, 16+48, 18+16+17+i*39, 0);
-				ReikaGuiAPI.instance.drawLine(16+48, 18+17+i*39, 48, 18+16+17+i*39, 0);
+				api.drawLine(48, 18+17+i*39, 16+48, 18+16+17+i*39, 0);
+				api.drawLine(16+48, 18+17+i*39, 48, 18+16+17+i*39, 0);
 			}
 		}
 		String tex = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";

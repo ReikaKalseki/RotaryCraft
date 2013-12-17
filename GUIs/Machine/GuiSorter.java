@@ -39,7 +39,7 @@ public class GuiSorter extends GuiPowerOnlyMachine {
 		for (int k = 0; k < l*3; k++) {
 			ItemStack is = tile.getMapping(k);
 			if (is != null) {
-				ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, is, x+k%l*18, y+k/l*dy);
+				api.drawItemStack(itemRenderer, fontRenderer, is, x+k%l*18, y+k/l*dy);
 			}
 		}
 	}

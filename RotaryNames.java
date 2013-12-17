@@ -94,7 +94,7 @@ public class RotaryNames {
 
 	public static final String[] powderNames = {
 		"misc.netherdust", "misc.tar", "misc.sludge", "misc.sawdust", "misc.beddust", "misc.salt", "misc.nh4" , "misc.agi",
-		"misc.alum"
+		"misc.alum", "misc.flour"
 	};
 
 	public static final String[] extractNames = {

@@ -50,6 +50,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public ItemStack[] belts = new ItemStack[31];
 
+	private boolean hasLubricant = false;
+
 	public void setController(CVTController c) {
 		controller = c;
 	}
@@ -60,10 +62,26 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		COIL();
 
 		public static final GearType[] list = values();
+
+		public boolean isLubricated() {
+			return this == CVT;
+		}
+
+		public boolean hasLosses() {
+			return this == WORM;
+		}
 	}
 
 	public GearType getType() {
 		return GearType.list[this.getBlockMetadata()/4];
+	}
+
+	public void addLubricant() {
+		hasLubricant = true;
+	}
+
+	public boolean hasLubricant() {
+		return hasLubricant;
 	}
 
 	//-ve ratio is torque mode for cvt
@@ -337,7 +355,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 		}
 
-		if (this.getType() == GearType.WORM) {
+		switch(this.getType()) {
+		case WORM:
 			omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
 			if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
 				torque = torquein * WORMRATIO;
@@ -346,32 +365,38 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 			}
-		}
-		else if (this.getType() != GearType.COIL) { //CVT
-			boolean speed = true;
-			if (ratio > 0) {
-				if (omegain <= RotaryConfig.omegalimit/ratio)
-					omega = omegain * ratio;
-				else {
-					omega = RotaryConfig.omegalimit;
-					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+			break;
+		case CVT:
+			if (hasLubricant) {
+				boolean speed = true;
+				if (ratio > 0) {
+					if (omegain <= RotaryConfig.omegalimit/ratio)
+						omega = omegain * ratio;
+					else {
+						omega = RotaryConfig.omegalimit;
+						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					}
+					torque = torquein / ratio;
 				}
-				torque = torquein / ratio;
+				else {
+					if (torquein <= RotaryConfig.torquelimit/-ratio)
+						torque = torquein * -ratio;
+					else {
+						torque = RotaryConfig.torquelimit;
+						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					}
+					omega = omegain / -ratio;
+				}
 			}
 			else {
-				if (torquein <= RotaryConfig.torquelimit/-ratio)
-					torque = torquein * -ratio;
-				else {
-					torque = RotaryConfig.torquelimit;
-					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-				}
-				omega = omegain / -ratio;
+				omega = torque = 0;
 			}
-		}
-		else if (this.getType() == GearType.COIL) {
+			break;
+		case COIL:
 
+			break;
 		}
 	}
 
@@ -386,6 +411,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
+		NBT.setBoolean("lube", hasLubricant);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -414,6 +440,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		energy = NBT.getLong("e");
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
+		hasLubricant = NBT.getBoolean("lube");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		belts = new ItemStack[this.getSizeInventory()];

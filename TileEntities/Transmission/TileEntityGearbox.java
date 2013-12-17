@@ -52,6 +52,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public MaterialRegistry type;
 
+	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -191,9 +192,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			}
 			else if (type.consumesLubricant()) {
 				if (!tank.isEmpty() && omega > 0) {
-					int chance = type.ordinal()+1;
+					int chance = (type.ordinal()+1);
 					if (rand.nextInt(chance) == 0)
-						tank.removeLiquid((int)ReikaMathLibrary.logbase(omega, 2));
+						tank.removeLiquid(Math.max(1, (int)ReikaMathLibrary.logbase(omega, 2)/4));
 				}
 			}
 		}

@@ -106,7 +106,7 @@ public class GuiHeater extends GuiMachine
 	{
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
+		api.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
 		if (tile instanceof IInventory)
 			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) +3, 4210752);
 
@@ -149,9 +149,9 @@ public class GuiHeater extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-25, 0, 0, (int)frac, 4);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", heater.power, heater.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

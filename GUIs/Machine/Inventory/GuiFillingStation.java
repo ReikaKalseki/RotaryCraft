@@ -43,10 +43,10 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		if (ReikaGuiAPI.instance.isMouseInBox(j+81, j+94, k+20, k+87)) {
-			int mx = ReikaGuiAPI.instance.getMouseRealX();
-			int my = ReikaGuiAPI.instance.getMouseRealY();
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, String.format("%d/%d mB", FillingStation.getLevel(), FillingStation.CAPACITY), mx-j, my-k);
+		if (api.isMouseInBox(j+81, j+94, k+20, k+87)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRenderer, String.format("%d/%d mB", FillingStation.getLevel(), FillingStation.CAPACITY), mx-j, my-k);
 		}
 
 		if (!FillingStation.isEmpty()) {

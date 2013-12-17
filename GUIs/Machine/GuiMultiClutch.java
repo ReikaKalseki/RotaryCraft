@@ -66,7 +66,7 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		int k = (height - ySize) / 2;
 
 		for (int i = 0; i < 16; i++) {
-			ReikaGuiAPI.instance.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Item.redstone), 3+70*(i/8), 15+16*(i%8));
+			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Item.redstone), 3+70*(i/8), 15+16*(i%8));
 		}
 
 		for (int i = 0; i < 16; i++) {
