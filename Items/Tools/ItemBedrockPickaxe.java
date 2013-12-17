@@ -89,7 +89,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	private void forceSilkTouch(ItemStack is) {
 		if (ConfigRegistry.PREENCHANT.getState()) {
 			Map map = new HashMap();
-			map.put(Enchantment.silkTouch, 1);
+			map.put(Enchantment.silkTouch.effectId, 1);
 			EnchantmentHelper.setEnchantments(map, is);
 		}
 		else if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
