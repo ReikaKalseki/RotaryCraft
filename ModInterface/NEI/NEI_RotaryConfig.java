@@ -77,11 +77,13 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
-			int max = ir.getNumberMetadatas()-1;
-			int id = ir.getShiftedID();
-			ArrayList<int[]> li = new ArrayList();
-			li.add(new int[]{0, max});
-			API.setItemDamageVariants(id, li);
+			if (ir.isContinuousCreativeMetadatas()) {
+				int max = ir.getNumberMetadatas()-1;
+				int id = ir.getShiftedID();
+				ArrayList<int[]> li = new ArrayList();
+				li.add(new int[]{0, max});
+				API.setItemDamageVariants(id, li);
+			}
 		}
 
 		ArrayList<Integer> li = new ArrayList();

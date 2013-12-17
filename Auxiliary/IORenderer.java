@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -17,10 +19,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -52,13 +56,16 @@ public abstract class IORenderer {
 		par2 = p2;
 		par4 = p4;
 		par6 = p6;
+		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
+		boolean flag = ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf());
 		if (teb instanceof TileEntityIOMachine) {
 			TileEntityIOMachine te = (TileEntityIOMachine)teb;
+			if (flag)
+				te.iotick = 512;
 			if (te.iotick <= 0)
 				return;
 			if (teb instanceof TileEntitySplitter) {
 				TileEntitySplitter ts = (TileEntitySplitter)teb;
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d > %d %d", ts.splitmode, ts.writex, ts.writez));
 				if (ts.getBlockMetadata() < 8) { //Merging
 					double xdiff = ts.writex-ts.xCoord;
 					double zdiff = ts.writez-ts.zCoord;
@@ -179,6 +186,8 @@ public abstract class IORenderer {
 			if (teb instanceof ShaftPowerReceiver) {
 				ShaftPowerReceiver sr = (ShaftPowerReceiver)teb;
 				int io = sr.getIORenderAlpha();
+				if (flag)
+					io = 255;
 				if (io <= 0)
 					return;
 				for (int i = 0; i < 6; i++) {
@@ -194,6 +203,8 @@ public abstract class IORenderer {
 			if (teb instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter se = (ShaftPowerEmitter)teb;
 				int io = se.getIORenderAlpha();
+				if (flag)
+					io = 255;
 				if (io <= 0)
 					return;
 				for (int i = 0; i < 6; i++) {

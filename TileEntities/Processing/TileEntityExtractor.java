@@ -65,14 +65,14 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	private int getSmeltNumber(ModOreList ore) {
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
-			if (ore.isNetherOres()) {
-				if (ReikaRandomHelper.doWithChance(oreCopyNether/100D))
+			if (ore.isRare()) {
+				if (ReikaRandomHelper.doWithChance(oreCopyRare/100D))
 					return 2;
 				else
 					return 1;
 			}
-			if (ore.isRare()) {
-				if (ReikaRandomHelper.doWithChance(oreCopyRare/100D))
+			if (ore.isNetherOres()) {
+				if (ReikaRandomHelper.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
 					return 1;

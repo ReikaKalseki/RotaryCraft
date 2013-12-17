@@ -269,6 +269,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		TileEntityReservoir.initCreativeFluids();
 	}
+
 	/*
 	@VersionCheckHandler
 	public boolean isCompatibleVersion(String sg) {

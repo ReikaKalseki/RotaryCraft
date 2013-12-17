@@ -32,7 +32,7 @@ public enum PowerReceivers {
 	FRACTIONATOR(1, 8192, 65536),
 	FREEZEGUN(256, 1, 262144),
 	GPR(65536),
-	GRINDER(128, 1, 8192),
+	GRINDER(128, 1, 4096),
 	HEATER(16, 1, 8192),
 	HEATRAY(2097152),
 	IGNITER(1, 1024, 32768),
@@ -45,7 +45,7 @@ public enum PowerReceivers {
 	PLAYERDETECTOR(),
 	PROJECTOR(512),
 	PULSEJET(1, 131072, 1),
-	PUMP(128, 1, 8192),
+	PUMP(32, 1, 1024),
 	RAILGUN(4194304),
 	SCALECHEST(4096),
 	SONICWEAPON(262144),
@@ -84,14 +84,15 @@ public enum PowerReceivers {
 	VANDEGRAFF(),
 	DEFOLIATOR(16384),
 	BIGFURNACE(2048),
-	DISTILLER(512, 1, 1024);
+	DISTILLER(512, 1, 1024),
+	HYDRAULIC();
 
-	private int minT;
-	private int minS;
-	private int minP;
-	private int[] powers;
-	private int[] torques;
-	private int[] speeds;
+	private final int minT;
+	private final int minS;
+	private final int minP;
+	private final int[] powers;
+	private final int[] torques;
+	private final int[] speeds;
 
 	public static final PowerReceivers[] list = values();
 
@@ -100,18 +101,27 @@ public enum PowerReceivers {
 		minT = T;
 		minS = S;
 		minP = P;
+		powers = null;
+		torques = null;
+		speeds = null;
 	}
 
 	private PowerReceivers() {
 		minT = 1;
 		minS = 1;
 		minP = 1;
+		powers = null;
+		torques = null;
+		speeds = null;
 	}
 
 	private PowerReceivers(int P) {
 		minT = 1;
 		minS = 1;
 		minP = P;
+		powers = null;
+		torques = null;
+		speeds = null;
 	}
 
 	private PowerReceivers(int[] T, int[] S, int[] P) {

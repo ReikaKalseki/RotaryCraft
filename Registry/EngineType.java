@@ -37,8 +37,8 @@ public enum EngineType {
 	 * @author Reika
 	 */
 
-	private int torque = 0;
-	private int omega = 0;
+	private final int torque;
+	private final int omega;
 
 	public static final EngineType[] engineList = EngineType.values();
 

@@ -88,7 +88,7 @@ public enum ItemRegistry implements RegistryEnum {
 	RAILGUN(113, true, 			"#item.railgun", 			ItemRailGunAmmo.class),
 	BUCKET(104, 106, true, 		"#item.rcbucket", 			ItemFuelLubeBucket.class),
 	TARGET(98, false, 			"item.target", 				ItemTarget.class),
-	IOGOGGLES(1, true, 			"item.iogoggles", 			ItemIOGoggles.class),
+	IOGOGGLES(1, false,			"item.iogoggles", 			ItemIOGoggles.class),
 	SLIDE(2, true, 				"item.slide", 				ItemSlide.class),
 	KEY(4, false,				"item.key",					ItemCannonKey.class),
 	SHELL(5, false,				"item.shell",				ItemBasic.class),
@@ -323,6 +323,16 @@ public enum ItemRegistry implements RegistryEnum {
 		return false;
 	}
 
+	private boolean isSteelTool() {
+		if (this == STEELAXE)
+			return true;
+		if (this == STEELPICK)
+			return true;
+		if (this == STEELSHOVEL)
+			return true;
+		return false;
+	}
+
 	public String getUnlocalizedName() {
 		return ReikaStringParser.stripSpaces(name).toLowerCase();
 	}
@@ -372,10 +382,22 @@ public enum ItemRegistry implements RegistryEnum {
 	public int getNumberMetadatas() {
 		if (!hasSubtypes)
 			return 1;
+		if (this.isCharged())
+			return SPRING.getNumberMetadatas();
+		if (this.isBedrockTool())
+			return 1;
+		if (this.isBedrockArmor())
+			return 1;
+		if (this.isSteelArmor())
+			return 600;
+		if (this.isSteelTool())
+			return 600;
 		switch(this) {
 		case WORLDEDIT:
 		case CANOLA:
 			return 2;
+		case NVH:
+			return Item.helmetDiamond.getMaxDamage();
 		case SPRING:
 		case STRONGCOIL:
 			return 65536;
@@ -588,5 +610,19 @@ public enum ItemRegistry implements RegistryEnum {
 	@Override
 	public boolean overwritingItem() {
 		return false;
+	}
+
+	public boolean isContinuousCreativeMetadatas() {
+		if (this.isTool())
+			return false;
+		if (this.isArmor())
+			return false;
+		switch(this) {
+		case SPRING:
+		case STRONGCOIL:
+			return false;
+		default:
+			return true;
+		}
 	}
 }

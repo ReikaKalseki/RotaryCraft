@@ -9,13 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
@@ -54,6 +58,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	private int index;
 
+	private final ArrayList<Enchantment> forbiddenEnchants = new ArrayList();
+
 	public ItemBedrockPickaxe(int ID, int tex) {
 		super(ID, EnumToolMaterial.EMERALD);
 		this.setIndex(tex);
@@ -81,8 +87,12 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	private void forceSilkTouch(ItemStack is) {
-		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
-			is.stackTagCompound = null;
+		if (ConfigRegistry.PREENCHANT.getState()) {
+			Map map = new HashMap();
+			map.put(Enchantment.silkTouch, 1);
+			EnchantmentHelper.setEnchantments(map, is);
+		}
+		else if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
 			is.addEnchantment(Enchantment.silkTouch, 1);
 		}
 	}
@@ -230,9 +240,9 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	@Override
-	public final int getItemEnchantability()
+	public int getItemEnchantability()
 	{
-		return 0;
+		return ConfigRegistry.PREENCHANT.getState() ? 0 : Item.pickaxeIron.getItemEnchantability();
 	}
 
 	@Override

@@ -33,6 +33,8 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 
 	Random rand = new Random();
 
+	private static final ArrayList<Integer> farmBlocks = new ArrayList();
+
 	public BlockCanola(int ID) {
 		super(ID, Material.plants);
 		this.setHardness(0F);
@@ -140,7 +142,8 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	}
 
 	public void testStable(World world, int x, int y, int z) {
-		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || world.getBlockId(x, y-1, z) != Block.tilledField.blockID) {
+		int idbelow = world.getBlockId(x, y-1, z);
+		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || !this.isValidFarmBlock(idbelow)) {
 			this.die(world, x, y, z);
 		}
 	}
@@ -217,5 +220,16 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	@Override
 	public int getPlantMetadata(World world, int x, int y, int z) {
 		return 9;
+	}
+
+	public static boolean isValidFarmBlock(int id) {
+		if (id == Block.tilledField.blockID)
+			return true;
+		return farmBlocks.contains(id);
+	}
+
+	public static void addFarmBlock(int id) {
+		if (!farmBlocks.contains(id))
+			farmBlocks.add(id);
 	}
 }

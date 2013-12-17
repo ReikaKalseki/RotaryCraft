@@ -12,12 +12,9 @@ package Reika.RotaryCraft.Items.Tools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class ItemIOGoggles extends ItemRotaryArmor {
 
@@ -27,7 +24,7 @@ public class ItemIOGoggles extends ItemRotaryArmor {
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
+	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {/*
 		int x = (int)ep.posX;
 		int y = (int)ep.posY;
 		int z = (int)ep.posZ;
@@ -45,7 +42,7 @@ public class ItemIOGoggles extends ItemRotaryArmor {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override

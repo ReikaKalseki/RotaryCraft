@@ -63,7 +63,8 @@ public enum ConfigRegistry implements ConfigList {
 	PROJECTORLINES("Render projector lines", true),
 	COLORBLIND("Color Blind Mode", false),
 	TURRETPLAYERS("Turrets can target players", true),
-	HSLADICT("Allow RC steel to be used in other mods", false);
+	HSLADICT("Allow RC steel to be used in other mods", false),
+	PREENCHANT("Lock enchants on bedrock tools", true);
 
 	private String label;
 	private boolean defaultState;

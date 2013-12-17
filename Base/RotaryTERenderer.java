@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Base;
 import java.awt.Color;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -190,20 +189,21 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);/*
 		if (tile.isInWorld() && tile.isFlipped() && MinecraftForgeClient.getRenderPass() == 0) {
-			GL11.glScaled(1, -1, 1);
-			GL11.glTranslated(0, 0, -1);
-			GL11.glFrontFace(GL11.GL_CW);
-		}
-		else {
-			GL11.glTranslated(0, -2, -1);
-			GL11.glFrontFace(GL11.GL_CCW);
-		}
+			//GL11.glScaled(1, -1, 1);
+			//GL11.glTranslated(0, 0, -1);
+			//GL11.glFrontFace(GL11.GL_CW);
+			//GL11.glRotated(180, 1, 0, 0);
+			//GL11.glTranslated(0, 0, 1);
+		}*/
+		//else {
+		GL11.glTranslated(0, -2, -1);
+		//GL11.glFrontFace(GL11.GL_CCW);
+		//}
 	}
 
 	protected void closeGL(RotaryCraftTileEntity tile) {
-		GL11.glFrontFace(GL11.GL_CCW);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

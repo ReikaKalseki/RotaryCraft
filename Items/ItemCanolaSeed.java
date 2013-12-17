@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -19,6 +17,7 @@ import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Blocks.BlockCanola;
 
 public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 
@@ -32,7 +31,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 	public boolean onItemUse(ItemStack items, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 		if (items.getItemDamage() > 0)
 			return false;
-		if (!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z)) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
+		if (!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z))) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -46,7 +45,8 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 			if (side == 5)
 				++x;
 		}
-		if ((!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z))) || world.getBlockId(x, y-1, z) != Block.tilledField.blockID)
+		int idbelow = world.getBlockId(x, y-1, z);
+		if ((!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z))) || !BlockCanola.isValidFarmBlock(idbelow))
 			return false;
 		if (!player.canPlayerEdit(x, y, z, 0, items))
 			return false;
@@ -54,7 +54,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 		{
 			if (!player.capabilities.isCreativeMode)
 				--items.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, RotaryCraft.canola.blockID);
+			world.setBlock(x, y, z, RotaryCraft.canola.blockID);
 			return true;
 		}
 	}
