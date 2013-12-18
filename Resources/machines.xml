@@ -136,7 +136,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = 8+(Power-%d)/%d m
+			Range = 8+(Power*4)/%d m
 			Power Input: Back
 		</note>
 	</fan>

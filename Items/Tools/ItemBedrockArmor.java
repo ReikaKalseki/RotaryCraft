@@ -82,7 +82,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	private void forceEnchantments(ItemStack is) {
 		if (ConfigRegistry.PREENCHANT.getState()) {
 			Map map = new HashMap();
-			map.put(this.getDefaultEnchantment(), 4);
+			map.put(this.getDefaultEnchantment().effectId, 4);
 			EnchantmentHelper.setEnchantments(map, is);
 		}
 	}

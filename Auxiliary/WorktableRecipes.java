@@ -34,6 +34,9 @@ public class WorktableRecipes
 	/** A list of all the recipes added */
 	private ImmutableRecipeList recipes = new ImmutableRecipeList();
 
+	/** Uncrafting recipes */
+	private ImmutableRecipeList uncrafting = new ImmutableRecipeList();
+
 	/**
 	 * Returns the static instance of this class
 	 */

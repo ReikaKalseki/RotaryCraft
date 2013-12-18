@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -22,6 +23,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine {
 
 	public ItemStack[] inv = new ItemStack[1];
+	private boolean[] lastPower = new boolean[3];
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -59,6 +61,8 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 			tickcount = 0;
 			return;
 		}
+		if (!ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower))
+			return;
 		tickcount++;
 		if (!this.operationComplete(tickcount, 0))
 			return;

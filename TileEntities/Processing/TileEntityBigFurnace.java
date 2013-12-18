@@ -56,9 +56,8 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 		if (this.canSmelt()) {
 			smelter.update();
-			if (!world.isRemote)
-				if (smelter.checkCap())
-					this.smelt();
+			if (smelter.checkCap())
+				this.smelt();
 		}
 		else
 			smelter.reset();

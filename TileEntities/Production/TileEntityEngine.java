@@ -53,6 +53,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -84,7 +85,7 @@ public class TileEntityEngine extends TileEntityInventoryIOMachine implements Te
 PipeConnector, PowerGenerator, IFluidHandler {
 
 	/** Water capacity */
-	public static final int CAPACITY = 600*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 60*RotaryConfig.MILLIBUCKET;
 	public int MAXTEMP = 1000;
 
 	/** Fuel capacity */
@@ -103,11 +104,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public int soundtick = 2000;
 
 	/** Used in acPower */
-	private boolean lastpower = false;
-	private boolean lastpower2 = false;
-	private boolean lastpower3 = false;
-	private boolean lastpower4 = false;
-	private boolean lastpower5 = false;
+	private boolean[] lastPower = new boolean[3];
 
 	/** Used in combustion power */
 	public int additives;
@@ -647,19 +644,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return false;
 		if (is.stackTagCompound.getInteger("magnet") <= 0)
 			return false;
-		boolean currentpower = world.isBlockIndirectlyGettingPowered(x, y, z);
-		boolean ac = false;
-		lastpower5 = currentpower;
-		lastpower4 = currentpower;
-		if (lastpower != currentpower || lastpower2 != currentpower || lastpower3 != currentpower || lastpower4 != currentpower || lastpower5 != currentpower) {
-			ac = true;
-		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(currentpower+" "+lastpower+" "+lastpower2+" "+lastpower3+" "+lastpower4+" "+lastpower5));
-		lastpower5 = lastpower4;
-		lastpower4 = lastpower3;
-		lastpower3 = lastpower2;
-		lastpower2 = lastpower;
-		lastpower = currentpower;
+
+		boolean ac = ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
 
 		if (ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
