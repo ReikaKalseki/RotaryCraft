@@ -136,4 +136,10 @@ public class ItemGravelGun extends ItemChargedTool {
 		return (int)((ReikaMathLibrary.logbase(pow, 2)/4)*ReikaMathLibrary.doubpow(1.0001, is.getItemDamage()));
 	}
 
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
+		int dmg = this.getAttackDamage(is);
+		li.add(String.format("Dealing %.1f hearts of damage per shot", dmg/2F));
+	}
+
 }

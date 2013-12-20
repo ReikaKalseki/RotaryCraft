@@ -7,16 +7,12 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.Interfaces;
 
-import net.minecraft.world.World;
+public interface FrictionHeatable {
 
-public interface MultiBlockMachine {
+	public void addTemperature(int add);
 
-	public boolean isMultiBlock(World world, int x, int y, int z);
-
-	public int[] getMultiBlockPosition(World world, int x, int y, int z);
-
-	public int[] getMultiBlockSize(World world, int x, int y, int z);
+	public int getTemperature();
 
 }

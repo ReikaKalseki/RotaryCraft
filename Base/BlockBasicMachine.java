@@ -136,7 +136,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		if (ep.isSneaking() && !(te instanceof TileEntityCaveFinder))
 			return false;
 		ItemRegistry ir = ItemRegistry.getEntry(is);
-		if (ir!= null && ir.overridesRightClick()) {
+		if (ir!= null && ir.overridesRightClick(is)) {
 			return false;
 		}
 		if (te instanceof TileEntityAdvancedGear) {

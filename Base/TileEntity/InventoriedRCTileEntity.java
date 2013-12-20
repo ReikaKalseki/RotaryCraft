@@ -14,7 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 
 public abstract class InventoriedRCTileEntity extends RotaryCraftTileEntity implements ISidedInventory {
 

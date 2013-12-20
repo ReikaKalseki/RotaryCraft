@@ -7,12 +7,8 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.Interfaces;
 
-public interface SelectableTiles {
-
-	public int[] getUniqueID();
-
-	public void addTile(int x, int y, int z);
+public interface SimpleProvider {
 
 }

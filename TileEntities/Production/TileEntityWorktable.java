@@ -10,11 +10,15 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.ChargeableTool;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -28,8 +32,43 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.chargeTools();
-		this.makeJetplate();
+		if (!world.isRemote) {
+			this.chargeTools();
+			this.makeJetplate();
+			this.uncraft();
+		}
+	}
+
+	private void uncraft() {
+		ItemStack is = inventory[4];
+		if (is != null) {
+			IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
+			if (ir != null) {
+				ItemStack[] in = new ItemStack[9];
+				ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
+				for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
+					ReikaInventoryHelper.decrStack(4, inventory);
+				boolean flag = true;
+				for (int i = 0; i < 9; i++) {
+					if (inventory[i+9] != null) {
+						if (!ReikaItemHelper.matchStacks(inventory[i+9], in[i]))
+							flag = false;
+						if (inventory[i+9].stackSize >= Math.min(this.getInventoryStackLimit(), inventory[i+9].getMaxStackSize()))
+							flag = false;
+					}
+				}
+				if (flag) {
+					for (int i = 0; i < 9; i++) {
+						if (inventory[i+9] == null) {
+							inventory[i+9] = in[i];
+						}
+						else {
+							inventory[i+9] = ReikaItemHelper.getSizedItemStack(inventory[i+9], inventory[i+9].stackSize+1);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override

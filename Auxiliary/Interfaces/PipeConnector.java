@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,4 +61,7 @@ public interface PipeConnector {
 	//public TransferAmount getFluidRemoval();
 
 	//public TransferAmount getFluidAddition();
+
+	/** Get the minimum pressure allowable by this TE. Only meaningful on liquid pipes. */
+	//public int getMinimumSupplyPressure();
 }

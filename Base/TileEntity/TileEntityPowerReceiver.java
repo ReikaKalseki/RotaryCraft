@@ -18,7 +18,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
-import Reika.RotaryCraft.Auxiliary.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -308,6 +308,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		readz = readz2 = zCoord+stepz;
 		readz3 = zCoord+1+stepz;
 		readz4 = zCoord-1+stepz;
+		this.setPointingOffset(stepx, stepy, stepz);
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
 		MachineRegistry id1 = MachineRegistry.getMachine(worldObj, readx, ready, readz);

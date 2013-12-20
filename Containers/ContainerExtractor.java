@@ -53,19 +53,19 @@ public class ContainerExtractor extends CoreContainer
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			if (lastExtractorCookTime[i] != extractor.extractorCookTime[i])
+			if (lastExtractorCookTime[i] != extractor.getCookTime(i))
 			{
-				icrafting.sendProgressBarUpdate(this, 0, extractor.extractorCookTime[i]);
+				icrafting.sendProgressBarUpdate(this, 0, extractor.getCookTime(i));
 			}
 		}
 
-		lastExtractorCookTime[i] = extractor.extractorCookTime[i];
+		lastExtractorCookTime[i] = extractor.getCookTime(i);
 	}
 
 	public void updateProgressBar(int par1, int par2, int i)
 	{
 		switch(par1) {
-		case 0: extractor.extractorCookTime[i] = par2; break;
+		case 0: extractor.setCookTime(i, par2); break;
 		}
 	}
 }

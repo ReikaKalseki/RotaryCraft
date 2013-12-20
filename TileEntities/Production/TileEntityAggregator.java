@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

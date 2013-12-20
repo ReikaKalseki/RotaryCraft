@@ -49,6 +49,10 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	public int ready4 = Integer.MIN_VALUE;
 	public int readz4 = Integer.MIN_VALUE;
 
+	private int pointoffsetx = 0;
+	private int pointoffsety = 0;
+	private int pointoffsetz = 0;
+
 	public boolean isOmniSided = false;
 
 	protected int torquein;
@@ -172,13 +176,20 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
 		if (devicein instanceof TileEntityBevelGear)
 			cy = true;
+		//ReikaJavaLibrary.pConsole(devicein.writex+", "+devicein.writey+", "+devicein.writez, devicein instanceof TileEntityBevelGear && this instanceof TileEntitySpawnerController);
 		//ReikaJavaLibrary.pConsole(devicein.writez, devicein instanceof TileEntityBevelGear);
-		if (devicein.writex == xCoord && devicein.writez == zCoord) {
-			if (!cy || devicein.writey == yCoord) {
+		if (devicein.writex == xCoord+pointoffsetx && devicein.writez == zCoord+pointoffsetz) {
+			if (!cy || devicein.writey == yCoord+pointoffsety) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	protected void setPointingOffset(int x, int y, int z) {
+		pointoffsetx = x;
+		pointoffsety = y;
+		pointoffsetz = z;
 	}
 
 	public TileEntityIOMachine getInput() {

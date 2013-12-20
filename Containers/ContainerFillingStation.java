@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 
@@ -26,6 +27,10 @@ public class ContainerFillingStation extends CoreContainer {
 		this.addSlot(1, 54, 21);
 
 		this.addPlayerInventoryWithOffset(player, 0, 21);
+
+		for (int i = 0; i < 4; i++) {
+			this.addSlotToContainer(new Slot(player.inventory, player.inventory.getSizeInventory() - 1 - i, 20, 21 + i * 18));
+		}
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
-import Reika.RotaryCraft.Auxiliary.InertIInv;
+import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Renders.M.RenderDisplay;

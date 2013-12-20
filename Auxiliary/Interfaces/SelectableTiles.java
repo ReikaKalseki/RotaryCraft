@@ -7,12 +7,12 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.Interfaces;
 
-public interface FrictionHeatable {
+public interface SelectableTiles {
 
-	public void addTemperature(int add);
+	public int[] getUniqueID();
 
-	public int getTemperature();
+	public void addTile(int x, int y, int z);
 
 }

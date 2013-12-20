@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -127,7 +127,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 					if (!ent.isInLove() && !ent.isChild() && pathing && ent.getGrowingAge() == 0) {
 						ent.getNavigator().clearPathEntity();
 						PathEntity path = ent.getNavigator().getPathToXYZ(x, y, z);
-						ent.getNavigator().setPath(path, 0.3F);
+						ent.getNavigator().setPath(path, 1F);
 					}
 					else if (pathing) {
 						ent.getNavigator().clearPathEntity();

@@ -191,11 +191,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			{
 				Entity var13 = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
 
-				if (var13 == null)
-				{
-					return;
-				}
-
 				// This is the max-6 code int var4 = world.getEntitiesWithinAABB(var13.getClass(), AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)x, (double)y, (double)z, (double)(x + 1), (double)(y + 1), (double)(z + 1)).expand((double)(this.spawnRange * 2), 4.0D, (double)(this.spawnRange * 2))).size();
 
 				if (var13 != null)

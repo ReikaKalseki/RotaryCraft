@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.ModInteract.TinkerOreHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,11 +46,19 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block par2Block) {
-		if (par2Block == null)
+	public float getStrVsBlock(ItemStack is, Block b) {
+		if (b == null)
 			return 0;
+		if (b.blockMaterial == Material.grass)
+			return 12F;
+		if (b.blockMaterial == Material.ground)
+			return 12F;
+		if (b.blockMaterial == Material.sand)
+			return 12F;
+		if (b.blockID == TinkerOreHandler.getInstance().gravelOreID)
+			return 36F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == par2Block)
+			if (blocksEffectiveAgainst[i] == b)
 				return 12F;
 		}
 		return 1F;

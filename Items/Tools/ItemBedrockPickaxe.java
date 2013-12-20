@@ -41,6 +41,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
@@ -111,32 +112,24 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack block = new ItemStack(id, 1, meta);
-		if (ModList.THAUMCRAFT.isLoaded() && ThaumOreHandler.getInstance().isThaumOre(block) && ConfigRegistry.MODORES.getState() && ThaumOreHandler.getInstance().isShardOre(block)) {
-			world.setBlock(x, y, z, 0);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, ThaumOreHandler.getInstance().oreID);
+
+		if (ConfigRegistry.MODORES.getState()) {
+			if (ModList.THAUMCRAFT.isLoaded() && ThaumOreHandler.getInstance().isShardOre(block)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
 			}
-			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
-			return true;
-		}
-		if (ModList.DARTCRAFT.isLoaded() && DartOreHandler.getInstance().isDartOre(block) && ConfigRegistry.MODORES.getState()) {
-			world.setBlock(x, y, z, 0);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, DartOreHandler.getInstance().oreID);
+			if (ModList.DARTCRAFT.isLoaded() && DartOreHandler.getInstance().isDartOre(block)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
 			}
-			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
-			return true;
-		}
-		if (ModList.TRANSITIONAL.isLoaded() && TransitionalOreHandler.getInstance().isMagmaniteOre(block) && ConfigRegistry.MODORES.getState()) {
-			world.setBlock(x, y, z, 0);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, TransitionalOreHandler.getInstance().magmaID);
+			if (ModList.TRANSITIONAL.isLoaded() && TransitionalOreHandler.getInstance().isMagmaniteOre(block)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
 			}
-			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
-			return true;
+			if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.getInstance().isEssenceOre(id)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
+			}
 		}
 		if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Block.mobSpawner.blockID) {
 			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
@@ -169,6 +162,15 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
 		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
 		return true;
+	}
+
+	private void dropDirectBlock(ItemStack block, World world, int x, int y, int z) {
+		world.setBlock(x, y, z, 0);
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, block.itemID);
+		}
+		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 	}
 
 	@Override

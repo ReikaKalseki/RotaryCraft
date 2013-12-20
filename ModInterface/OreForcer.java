@@ -23,6 +23,7 @@ import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModInteract.IC2Handler;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
@@ -112,7 +113,18 @@ public final class OreForcer {
 		case IC2:
 			convertUranium();
 			break;
+		case MAGICCROPS:
+			if (ConfigRegistry.MODORES.getState())
+				registerEssence();
+			break;
 		}
+	}
+
+	private static void registerEssence() {
+		MagicCropHandler.getInstance().registerEssence();
+		ItemStack ore = new ItemStack(MagicCropHandler.getInstance().essenceID, 1, 0);
+		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
+		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
 	}
 
 	private static void convertUranium() {

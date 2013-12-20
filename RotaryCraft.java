@@ -102,7 +102,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="after:DragonAPI")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true,
 clientPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ClientPackets.class),
 serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, packetHandler = ServerPackets.class))
@@ -256,6 +256,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		//RotaryRecipes.addModInterface();
 		RotaryRecipes.addProps();
+		RotaryRecipes.addCompat();
 
 		ReikaJavaLibrary.initClass(DifficultyEffects.class);
 		ReikaJavaLibrary.initClass(ExtractorBonus.class);

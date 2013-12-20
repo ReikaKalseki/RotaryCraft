@@ -140,9 +140,11 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
-		Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantment();
-		if (ench != null)
-			is.addEnchantment(ench, 4);
+		if (itemID == ItemRegistry.BEDPACK.getShiftedID()) {
+			Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantment();
+			if (ench != null)
+				is.addEnchantment(ench, 4);
+		}
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("fuel", this.getMaxFuel(is));

@@ -49,6 +49,7 @@ import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
+import Reika.RotaryCraft.Items.Tools.ItemPump;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemSteelArmor;
 import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
@@ -107,7 +108,8 @@ public enum ItemRegistry implements RegistryEnum {
 	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
 	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
 	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class),
-	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class);
+	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class),
+	PUMP(29, true,				"item.handpump",			ItemPump.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -451,7 +453,7 @@ public enum ItemRegistry implements RegistryEnum {
 		return this.getCraftedMetadataProduct(1, meta);
 	}
 
-	public boolean overridesRightClick() {
+	public boolean overridesRightClick(ItemStack is) {
 		switch(this) {
 		case DEBUG:
 		case METER:
@@ -459,6 +461,8 @@ public enum ItemRegistry implements RegistryEnum {
 		case KEY:
 		case TILESELECTOR:
 			return true;
+		case PUMP:
+			return is.stackTagCompound != null;
 		default:
 			return false;
 		}

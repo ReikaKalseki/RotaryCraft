@@ -55,11 +55,11 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
@@ -216,7 +216,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		}
 		if (ep.isSneaking() && !((RotaryCraftTileEntity)te).getMachine().hasSneakActions())
 			return false;
-		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick()) {
+		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick(is)) {
 			return false;
 		}
 		if (is != null && ReikaItemHelper.matchStacks(is, m.getCraftedProduct()))
@@ -495,7 +495,11 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m.isEnchantable()) {
 			HashMap<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantments();
 			ReikaEnchantmentHelper.applyEnchantments(core, ench);
-			return core;
+		}
+		if (m.hasNBTVariants()) {
+			NBTMachine nb = (NBTMachine)tile;
+			NBTTagCompound nbt = nb.getTagsToWriteToStack();
+			//core.stackTagCompound = nbt;
 		}
 		return core;
 	}

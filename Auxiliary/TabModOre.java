@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

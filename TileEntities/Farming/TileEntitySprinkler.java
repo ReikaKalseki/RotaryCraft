@@ -21,8 +21,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.RangedEffect;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -244,7 +244,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 
 	@Override
 	public int getMaxRange() {
-		return 4;
+		return 8;
 	}
 
 	@Override

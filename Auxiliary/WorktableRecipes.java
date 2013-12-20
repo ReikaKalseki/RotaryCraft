@@ -25,6 +25,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.ImmutableRecipeList;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 public class WorktableRecipes
 {
@@ -33,9 +34,6 @@ public class WorktableRecipes
 
 	/** A list of all the recipes added */
 	private ImmutableRecipeList recipes = new ImmutableRecipeList();
-
-	/** Uncrafting recipes */
-	private ImmutableRecipeList uncrafting = new ImmutableRecipeList();
 
 	/**
 	 * Returns the static instance of this class
@@ -227,6 +225,17 @@ public class WorktableRecipes
 	public List getRecipeListCopy()
 	{
 		return ReikaJavaLibrary.copyList(recipes);
+	}
+
+	public IRecipe getInputRecipe(ItemStack is) {
+		for (int i = 0; i < recipes.size(); i++) {
+			IRecipe ir = (IRecipe)recipes.get(i);
+			ItemStack is2 = ir.getRecipeOutput();
+			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
+				return ir;
+			}
+		}
+		return null;
 	}
 }
 

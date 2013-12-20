@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RecipesPulseFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;

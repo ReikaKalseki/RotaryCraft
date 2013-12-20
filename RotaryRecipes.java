@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -30,9 +31,10 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -58,6 +60,23 @@ public class RotaryRecipes {
 		ItemMaterialController.instance.addItem(ItemStacks.scrap, ItemMaterial.STEEL);
 		ItemMaterialController.instance.addItem(ItemStacks.ironscrap, ItemMaterial.IRON);
 		ItemMaterialController.instance.addItem(ItemStacks.steelblock, ItemMaterial.STEEL);
+	}
+
+	public static void addCompat() {
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			String[] tags = ore.getOreDictIngots();
+			for (int k = 0; k < tags.length; k++) {
+				String tag = tags[k];
+				ArrayList<ItemStack> in = OreDictionary.getOres(tag);
+				for (int h = 0; h < in.size(); h++) {
+					ItemStack from = in.get(h);
+					ItemStack to = ItemStacks.getModOreIngot(ore);
+					if (from.itemID != RotaryCraft.modingots.itemID)
+						GameRegistry.addShapelessRecipe(to, from);
+				}
+			}
+		}
 	}
 
 	public static void addThermalExpansion() {
@@ -498,6 +517,8 @@ public class RotaryRecipes {
 		ItemRegistry.TILESELECTOR.addRecipe(" l ", "srs", "ses", 'e', Item.enderPearl, 'r', Item.redstone, 'l', ReikaItemHelper.lapisDye, 's', ItemStacks.steelingot);
 
 		ItemRegistry.JETPACK.addRecipe("CRC", "cBc", "d d", 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'B', ItemStacks.basepanel, 'd', ItemStacks.diffuser, 'c', ItemStacks.compressor, 'C', ItemStacks.combustor);
+
+		ItemRegistry.PUMP.addRecipe("Ps ", "sIs", "sRs", 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 's', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'I', ItemStacks.impeller);
 	}
 
 	private static void addMisc() {

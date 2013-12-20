@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
@@ -45,13 +46,15 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block par2Block) {
-		if (par2Block == null)
+	public float getStrVsBlock(ItemStack is, Block b) {
+		if (b == null)
 			return 0;
-		if (TwilightForestHandler.getInstance().isTowerWood(par2Block))
+		if (TwilightForestHandler.getInstance().isTowerWood(b))
 			return 30F;
+		if (b.blockMaterial == Material.wood)
+			return 12F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == par2Block)
+			if (blocksEffectiveAgainst[i] == b)
 				return 12F;
 		}
 		return 1F;

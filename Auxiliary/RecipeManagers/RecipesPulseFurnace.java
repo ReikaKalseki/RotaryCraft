@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesPulseFurnace
 {
@@ -74,6 +76,13 @@ public class RecipesPulseFurnace
 		this.addSmelting(Item.minecartEmpty.itemID, 0, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
 		this.addSmelting(Item.doorIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 6, 0), 0F);
 		this.addSmelting(Item.cauldron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
+		this.addSmelting(Item.horseArmorIron.itemID, 0, new ItemStack(Item.ingotIron, 7), 1F);
+		this.addSmelting(Item.horseArmorDiamond.itemID, 0, new ItemStack(Item.diamond, 7), 1F);
+		this.addSmelting(Item.horseArmorGold.itemID, 0, new ItemStack(Item.ingotGold, 7), 1F);
+		this.addSmelting(ItemRegistry.STEELHELMET.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 5, ItemStacks.steelingot.getItemDamage()), 0);
+		this.addSmelting(ItemRegistry.STEELBOOTS.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 4, ItemStacks.steelingot.getItemDamage()), 0);
+		this.addSmelting(ItemRegistry.STEELCHEST.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 8, ItemStacks.steelingot.getItemDamage()), 0);
+		this.addSmelting(ItemRegistry.STEELLEGS.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 7, ItemStacks.steelingot.getItemDamage()), 0);
 
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 10, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//scrap
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 9, new ItemStack(RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap

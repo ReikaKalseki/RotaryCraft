@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.RenderableDuct;
-import Reika.RotaryCraft.Auxiliary.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct {

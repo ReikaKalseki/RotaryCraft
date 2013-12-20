@@ -24,8 +24,8 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ExtractorModOres;
-import Reika.RotaryCraft.Auxiliary.RecipesExtractor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -39,11 +39,19 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	public static final int oreCopyRare = 90; //90% chance of doubling -> 1.9^4 = 13.1
 
 	/** The number of ticks that the current item has been cooking for */
-	public int[] extractorCookTime = new int[4];
+	private int[] extractorCookTime = new int[4];
 
 	public static final int CAPACITY = 16000;
 
 	public boolean idle = false;
+
+	public int getCookTime(int stage) {
+		return extractorCookTime[stage];
+	}
+
+	public void setCookTime(int stage, int time) {
+		extractorCookTime[stage] = time;
+	}
 
 	public void testIdle() {
 		for (int i = 0; i < 4; i++)

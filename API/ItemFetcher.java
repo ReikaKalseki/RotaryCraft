@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /** For fetching ItemRegistry items, not direct-coded ones
  * See source code to know which are which */
@@ -59,6 +61,14 @@ public class ItemFetcher {
 				return it;
 		}
 		return null;
+	}
+
+	public static boolean isPlayerHoldingBedrockPick(EntityPlayer ep) {
+		ItemStack is = ep.getCurrentEquippedItem();
+		if (is != null) {
+			return is.itemID == getItemByOrdinal(15).itemID;
+		}
+		return false;
 	}
 
 }

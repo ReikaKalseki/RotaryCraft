@@ -138,6 +138,8 @@
 			Required Power: %dW
 			Range = 8+(Power*4)/%d m
 			Power Input: Back
+			Harvesting Speed: %d rad/s
+			Fire Extinguish Speed: %d rad/s
 		</note>
 	</fan>
 	<compactor>
@@ -243,7 +245,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Min Delay: %d-log_2(Speed)
+			Min Delay: %d-2*log_2(Speed)
 			Power Input: Spawner Block
 		</note>
 	</spawnercontroller>
@@ -382,7 +384,7 @@
 	</projector>
 	<railgun>
 		<desc>
-			The railgun is a very powerful defence weapon. It uses strong magnetic fields to accelerate a heavy metallic projectile at the target, dealing very large amounts of damage. Note that more massive projectiles deal much more damage, and can destroy large areas of terrain. The railgun will automatically target the nearest visible mob; for maximum efficiency, mount it where it has a clear view of the surrounding area. You may also invert the railgun to target below itself rather than above.
+			The railgun is a very powerful defence weapon. It uses strong magnetic fields to accelerate heavy metallic ammunition at the target, dealing very large amounts of damage. Note that more massive projectiles deal much more damage, and can destroy large areas of terrain. The railgun will automatically target the nearest visible mob; for maximum efficiency, mount it where it has a clear view of the surrounding area. You may also invert the railgun to target below itself rather than above.
 		</desc>
 		<note>
 			Required Power: %dW

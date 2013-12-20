@@ -43,6 +43,10 @@ public class GrinderAPI {
 			ReikaJavaLibrary.pConsole("Error adding grinder recipe for "+in);
 			e.printStackTrace();
 		}
+		catch (NullPointerException e) {
+			ReikaJavaLibrary.pConsole("Cannot add recipe when the class failed to load!");
+			e.printStackTrace();
+		}
 	}
 
 	/** Adds a grindable seed, so that it may be used to make lubricant.
@@ -63,11 +67,15 @@ public class GrinderAPI {
 			ReikaJavaLibrary.pConsole("Error adding grindable seed recipe for "+seed);
 			e.printStackTrace();
 		}
+		catch (NullPointerException e) {
+			ReikaJavaLibrary.pConsole("Cannot add recipe when the class failed to load!");
+			e.printStackTrace();
+		}
 	}
 
 	static {
 		try {
-			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipesGrinder");
+			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
 			add = recipes.getMethod("addRecipe", ItemStack.class, ItemStack.class, float.class);

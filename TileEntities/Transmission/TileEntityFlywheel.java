@@ -20,7 +20,7 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
-import Reika.RotaryCraft.Auxiliary.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -34,7 +34,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public static final int STONEFLYTORQUEMAX = 128;	// rho 3	-> 4	-> 8
 	public static final int IRONFLYTORQUEMAX = 512;		// rho 8	-> 8	-> 32
 	public static final int GOLDFLYTORQUEMAX = 4096;	// rho 19.3	-> 32	-> 256
-	public double DECAY;
+	private int decayTime;
 
 	private int maxtorque;
 	public boolean failed = false;
@@ -155,23 +155,23 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		switch (meta) {
 		case 0:
 			maxtorque = WOODFLYTORQUEMAX;
-			DECAY = 0.9975;		//added two 9's right after decimal point to each
+			decayTime = 2;
 			break;
 		case 1:
 			maxtorque = STONEFLYTORQUEMAX;
-			DECAY = 0.99984375;
+			decayTime = 5;
 			break;
 		case 2:
 			maxtorque = IRONFLYTORQUEMAX;
-			DECAY = 0.999609375;		//except these two
+			decayTime = 15;
 			break;
 		case 3:
 			maxtorque = GOLDFLYTORQUEMAX;
-			DECAY = 0.999951171875;
+			decayTime = 40;
 			break;
 		default:
 			maxtorque = 0;
-			DECAY = 0;
+			decayTime = 1;
 			break;
 		}
 	}
@@ -206,6 +206,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void process(World world, int x, int y, int z) {
 		ready = y;
 		omegain = 0;
+		tickcount++;
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
@@ -242,22 +243,36 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		}
 		if (torquein >= maxtorque/MINTORQUERATIO) { //returns false if no input machine
 			if (omega <= omegain) {
-				omega = omegain;
+				if (omega == 0)
+					omega = 1; //initializes omega to a finite and positive value
+				if (tickcount >= decayTime/10) {
+					omega += (omegain-omega)/decayTime+1;
+					tickcount = 0;
+				}
+				if (omega > omegain)
+					omega = omegain; //to prevent oscillations once reached the input value
 			}
 			else {
-				omega = (int)(omega*DECAY);
+				this.decrSpeed();
 			}
 			lasttorque = torquein;
 			lasttorque = Math.min(lasttorque, maxtorque);
 			torque = lasttorque;
 		}
 		else {
-			omega = (int)(omega*DECAY);
+			this.decrSpeed();
 			torque = lasttorque;
 		}
 		if (omega == 0) {
 			lasttorque = 0;
 			torque = 0;
+		}
+	}
+
+	private void decrSpeed() {
+		if (omega > 0 && tickcount >= decayTime) {
+			omega--;
+			tickcount = 0;
 		}
 	}
 

@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.Auxiliary.FrictionHeatable;
-import Reika.RotaryCraft.Auxiliary.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -212,7 +212,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void meltFurnace(World world) {
-		if (world.getBlockId(fx, fy, fz) == 0)
+		int id = world.getBlockId(fx, fy, fz);
+		if (id != Block.furnaceIdle.blockID && id != Block.furnaceBurning.blockID)
 			return;
 		world.createExplosion(null, fx+0.5, fy+0.5, fz+0.5, 1F, false);
 		//world.setBlock(fx, fy, fz, Block.lavaMoving.blockID);
