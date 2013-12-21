@@ -95,4 +95,8 @@ public class PowerSourceList {
 		return sb.toString();
 	}
 
+	public boolean contains(PowerGenerator te) {
+		return engines.contains(te);
+	}
+
 }

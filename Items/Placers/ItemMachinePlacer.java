@@ -136,7 +136,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			return true;
 		}
 		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
-		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR) {
+		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR || m == MachineRegistry.DYNAMO || m == MachineRegistry.STATIC) {
 			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;
 		}

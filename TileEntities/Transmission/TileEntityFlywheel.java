@@ -27,7 +27,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator {
+public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator, ShaftMerger {
 
 	public static final int MINTORQUERATIO = 4;
 	public static final int WOODFLYTORQUEMAX = 16;		// rho 0.8	-> 1	-> 1
@@ -263,6 +263,13 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			this.decrSpeed();
 			torque = lasttorque;
 		}
+
+		PowerSourceList in = PowerSourceList.getAllFrom(world, readx, ready, readz, this, this);
+		if (in.contains(this)) {
+			//ReikaJavaLibrary.pConsole("!!");
+			omega--;
+		}
+
 		if (omega == 0) {
 			lasttorque = 0;
 			torque = 0;

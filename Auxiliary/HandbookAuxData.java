@@ -177,7 +177,7 @@ public final class HandbookAuxData {
 					out[2] = ExtractorModOres.getSolutionProduct(ore);
 					out[3] = ExtractorModOres.getFlakeProduct(ore);
 
-					oreName = ore.getName();
+					oreName = ore.displayName;
 				}
 			}
 			Object[][] obj = {in, out, new String[]{oreName}};
@@ -319,7 +319,7 @@ public final class HandbookAuxData {
 			}
 			else {
 				in = ExtractorModOres.getFlakeProduct(ModOreList.oreList[i]);
-				oreName = ModOreList.oreList[i].getName();
+				oreName = ModOreList.oreList[i].displayName;
 			}
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, in, dx+87, dy+28);
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, flakes.get(time), dx+145, dy+28);

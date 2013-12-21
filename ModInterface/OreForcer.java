@@ -26,6 +26,7 @@ import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
+import Reika.DragonAPI.ModInteract.MimicryHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -117,7 +118,16 @@ public final class OreForcer {
 			if (ConfigRegistry.MODORES.getState())
 				registerEssence();
 			break;
+		case MIMICRY:
+			intercraftMimichite();
+			break;
 		}
+	}
+
+	private static void intercraftMimichite() {
+		ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
+		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
+		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Mimicry mimichite!");
 	}
 
 	private static void registerEssence() {
@@ -185,7 +195,7 @@ public final class OreForcer {
 				if (is == null)
 					throw new ModReflectionException(RotaryCraft.instance, ModList.ARSMAGICA, "Null ItemStack for Ars Magica "+o);
 				GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(o));
-				RotaryCraft.logger.log(o.getName()+" can now be crafted with RotaryCraft equivalents!");
+				RotaryCraft.logger.log(o.displayName+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
 	}
@@ -316,7 +326,7 @@ public final class OreForcer {
 				GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(o));
 				if (is == null)
 					throw new ModReflectionException(RotaryCraft.instance, ModList.THAUMCRAFT, "Null ItemStack for Thaumcraft's "+o);
-				RotaryCraft.logger.log(o.getName()+" can now be crafted with RotaryCraft equivalents!");
+				RotaryCraft.logger.log(o.displayName+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
 	}

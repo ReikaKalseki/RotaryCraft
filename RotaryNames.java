@@ -157,11 +157,11 @@ public class RotaryNames {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), getName(extractNames, i));
 		}
 		for (int i = 0; i < ModOreList.oreList.length; i++) { //Need some way to parse
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), ModOreList.oreList[i].getName()+" Dust");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].getName()+" Slurry");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].getName()+" Solution");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), ModOreList.oreList[i].getName()+" Flakes");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].getName()+" "+ModOreList.oreList[i].getTypeName());
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), ModOreList.oreList[i].displayName+" Dust");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].displayName+" Slurry");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].displayName+" Solution");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), ModOreList.oreList[i].displayName+" Flakes");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].displayName+" "+ModOreList.oreList[i].getTypeName());
 		}
 		for (int i = 0; i < compactNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), getName(compactNames, i));

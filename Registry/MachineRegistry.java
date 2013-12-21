@@ -60,11 +60,13 @@ import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
 import Reika.RotaryCraft.ModInterface.TileEntityDistillery;
+import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityStatic;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
@@ -283,7 +285,9 @@ public enum MachineRegistry {
 	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
-	HYDRAULICLINE(		"machine.hyline",			BlockMMachine.class,		TileEntityHydraulicLine.class,		19);
+	HYDRAULICLINE(		"machine.hyline",			BlockMMachine.class,		TileEntityHydraulicLine.class,		19),
+	STATIC(				"machine.static", 			BlockModEngine.class,		TileEntityStatic.class,				5, "RenderStatic", ModList.THERMALEXPANSION),
+	DYNAMO(				"machine.dynamo",			BlockModEngine.class,		TileEntityDynamo.class,				6, "RenderDynamo", ModList.THERMALEXPANSION);
 
 	private String name;
 	private Class te;
@@ -777,6 +781,8 @@ public enum MachineRegistry {
 		case SORTING:
 		case FILLINGSTATION:
 		case DISTILLER:
+		case DYNAMO:
+		case STATIC:
 			return true;
 		default:
 			return false;

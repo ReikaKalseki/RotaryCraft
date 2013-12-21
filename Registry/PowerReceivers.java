@@ -85,7 +85,8 @@ public enum PowerReceivers {
 	DEFOLIATOR(16384),
 	BIGFURNACE(2048),
 	DISTILLER(512, 1, 1024),
-	HYDRAULIC();
+	HYDRAULIC(),
+	STATIC();
 
 	private final int minT;
 	private final int minS;
