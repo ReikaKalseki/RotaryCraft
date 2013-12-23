@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,6 +72,8 @@ public class GuiHandbook extends GuiScreen
 	private static int staticheight;
 
 	private float renderq = 22.5F;
+
+	private static final RenderBlocks rb = new RenderBlocks();
 
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
 	{
@@ -399,8 +402,6 @@ public class GuiHandbook extends GuiScreen
 			fontRenderer.drawSplitString(String.format("%s", h.getNotes()), posX+descX, posY+descY, 242, 0xffffff);
 		}
 
-		this.drawGraphics();
-
 		super.drawScreen(x, y, f);
 
 		if (subpage == 0)
@@ -412,9 +413,13 @@ public class GuiHandbook extends GuiScreen
 
 		if (subpage == 0)
 			this.drawMachineRender(posX, posY);
+
+		this.drawGraphics();
 	}
 
 	private void drawMachineRender(int posX, int posY) {
+		RenderHelper.enableGUIStandardItemLighting();
+		GL11.glTranslated(0, 0, 32);
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		double x = posX+167;
 		double y = posY+44;
@@ -487,7 +492,6 @@ public class GuiHandbook extends GuiScreen
 					GL11.glScaled(sc, -sc, sc);
 					GL11.glRotatef(renderq, 1, 0, 0);
 					GL11.glRotatef(r, 0, 1, 0);
-					RenderBlocks rb = new RenderBlocks();
 					ReikaTextureHelper.bindTerrainTexture();
 					rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
 					GL11.glRotatef(-r, 0, 1, 0);
@@ -497,5 +501,6 @@ public class GuiHandbook extends GuiScreen
 				}
 			}
 		}
+		GL11.glTranslated(0, 0, -32);
 	}
 }

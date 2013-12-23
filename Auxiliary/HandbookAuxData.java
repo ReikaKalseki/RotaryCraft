@@ -93,19 +93,21 @@ public final class HandbookAuxData {
 	public static void addPowerData() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
-			if (m.isPowerReceiver()) {
-				PowerReceivers p = m.getPowerReceiverEntry();
-				if (p != null) {
-					int minp = p.getMinPowerForDisplay();
-					int mint = p.getMinTorqueForDisplay();
-					int mins = p.getMinSpeedForDisplay();
+			if (!m.isDummiedOut()) {
+				if (m.isPowerReceiver()) {
+					PowerReceivers p = m.getPowerReceiverEntry();
+					if (p != null) {
+						int minp = p.getMinPowerForDisplay();
+						int mint = p.getMinTorqueForDisplay();
+						int mins = p.getMinSpeedForDisplay();
 
-					powerData.put(minp, m);
-					torqueData.put(mint, m);
-					speedData.put(mins, m);
+						powerData.put(minp, m);
+						torqueData.put(mint, m);
+						speedData.put(mins, m);
+					}
+					else
+						ReikaJavaLibrary.spamConsole(m);
 				}
-				else
-					ReikaJavaLibrary.spamConsole(m);
 			}
 		}
 	}

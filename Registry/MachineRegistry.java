@@ -26,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -48,6 +49,7 @@ import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
+import Reika.RotaryCraft.Blocks.BlockHydraulicLine;
 import Reika.RotaryCraft.Blocks.BlockIMachine;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
@@ -150,7 +152,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulic;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -282,10 +284,10 @@ public enum MachineRegistry {
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
-	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulic.class,			15),
+	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulicPump.class,			15),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
-	HYDRAULICLINE(		"machine.hyline",			BlockMMachine.class,		TileEntityHydraulicLine.class,		19),
+	HYDRAULICLINE(		"machine.hyline",			BlockHydraulicLine.class,	TileEntityHydraulicLine.class,		0),
 	STATIC(				"machine.static", 			BlockModEngine.class,		TileEntityStatic.class,				5, "RenderStatic", ModList.THERMALEXPANSION),
 	DYNAMO(				"machine.dynamo",			BlockModEngine.class,		TileEntityDynamo.class,				6, "RenderDynamo", ModList.THERMALEXPANSION);
 
@@ -1001,6 +1003,46 @@ public enum MachineRegistry {
 		}
 	}
 
+	public void addOreRecipe(Object... obj) {
+		if (!this.isDummiedOut()) {
+			ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getCraftedProduct(), obj);
+			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
+	}
+
+	public void addSizedOreRecipe(int size, Object... obj) {
+		if (!this.isDummiedOut()) {
+			ExpandedOreRecipe ir = new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
+			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
+	}
+
+	public void addMetaOreRecipe(int meta, Object... obj) {
+		if (!this.isDummiedOut()) {
+			ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
+			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
+	}
+
+	public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
+		if (!this.isDummiedOut()) {
+			ExpandedOreRecipe ir = new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
+			WorktableRecipes.getInstance().addRecipe(ir);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(ir);
+			}
+		}
+	}
+
 	public void addRecipe(ItemStack is, Object... obj) {
 		if (!this.isDummiedOut()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
@@ -1017,6 +1059,7 @@ public enum MachineRegistry {
 				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
 			}
 		}
+		//this.addOreRecipe(obj);
 	}
 
 	public void addSizedCrafting(int num, Object... obj) {
@@ -1026,6 +1069,7 @@ public enum MachineRegistry {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			}
 		}
+		//this.addSizedOreRecipe(num, obj);
 	}
 
 	public void addMetaCrafting(int metadata, Object... obj) {
@@ -1035,6 +1079,7 @@ public enum MachineRegistry {
 				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
 			}
 		}
+		//this.addMetaOreRecipe(metadata, obj);
 	}
 
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
@@ -1044,6 +1089,7 @@ public enum MachineRegistry {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 			}
 		}
+		//this.addSizedMetaOreRecipe(num, metadata, obj);
 	}
 
 	public TileEntity createTEInstanceForRender() {

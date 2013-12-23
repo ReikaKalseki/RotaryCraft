@@ -220,7 +220,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			return false;
 		}
 		if (is != null && ReikaItemHelper.matchStacks(is, m.getCraftedProduct()))
-			return false;
+			;//return false;
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
 			if (((EnchantableMachine)te).applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)

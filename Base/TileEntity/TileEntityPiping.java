@@ -114,7 +114,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
-					if (this.canConnectToPipe(tp.getMachine())) {
+					if (this.canConnectToPipe(tp.getMachine()) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
+						//ReikaJavaLibrary.pConsole(dir, this.getSide() == Side.SERVER && this instanceof TileEntitySeparatorPipe);
 						if (tp.canIntakeFluid(f)) {
 							int otherlevel = tp.getLiquidLevel();
 							int dL = level-otherlevel;
@@ -177,7 +178,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
-					if (this.canConnectToPipe(tp.getMachine())) {
+					if (this.canConnectToPipe(tp.getMachine()) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
 						Fluid f = tp.getLiquidType();
 						int amt = tp.getLiquidLevel();
 						int dL = amt-this.getLiquidLevel();

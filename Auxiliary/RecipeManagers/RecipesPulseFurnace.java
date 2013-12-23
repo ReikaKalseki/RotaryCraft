@@ -28,7 +28,6 @@ public class RecipesPulseFurnace
 	private static final RecipesPulseFurnace PulseFurnaceBase = new RecipesPulseFurnace();
 
 	/** The list of smelting results. */
-	private Map smeltingList = new HashMap();
 	private Map metaSmeltingList = new HashMap();
 
 	private List<ItemStack> outputs = new ArrayList();
@@ -79,40 +78,23 @@ public class RecipesPulseFurnace
 		this.addSmelting(Item.horseArmorIron.itemID, 0, new ItemStack(Item.ingotIron, 7), 1F);
 		this.addSmelting(Item.horseArmorDiamond.itemID, 0, new ItemStack(Item.diamond, 7), 1F);
 		this.addSmelting(Item.horseArmorGold.itemID, 0, new ItemStack(Item.ingotGold, 7), 1F);
-		this.addSmelting(ItemRegistry.STEELHELMET.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 5, ItemStacks.steelingot.getItemDamage()), 0);
-		this.addSmelting(ItemRegistry.STEELBOOTS.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 4, ItemStacks.steelingot.getItemDamage()), 0);
-		this.addSmelting(ItemRegistry.STEELCHEST.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 8, ItemStacks.steelingot.getItemDamage()), 0);
-		this.addSmelting(ItemRegistry.STEELLEGS.getShiftedID(), 0, new ItemStack(ItemStacks.steelingot.itemID, 7, ItemStacks.steelingot.getItemDamage()), 0);
+		this.addSmelting(ItemRegistry.STEELHELMET.getShiftedID(), 0, this.getSizedSteel(5), 0);
+		this.addSmelting(ItemRegistry.STEELBOOTS.getShiftedID(), 0, this.getSizedSteel(4), 0);
+		this.addSmelting(ItemRegistry.STEELCHEST.getShiftedID(), 0, this.getSizedSteel(8), 0);
+		this.addSmelting(ItemRegistry.STEELLEGS.getShiftedID(), 0, this.getSizedSteel(7), 0);
+		this.addSmelting(ItemRegistry.STEELAXE.getShiftedID(), 0, this.getSizedSteel(3), 0);
+		this.addSmelting(ItemRegistry.STEELPICK.getShiftedID(), 0, this.getSizedSteel(3), 0);
+		this.addSmelting(ItemRegistry.STEELSHOVEL.getShiftedID(), 0, this.getSizedSteel(1), 0);
+
 
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 10, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//scrap
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 9, new ItemStack(RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap
 		this.addSmelting(Block.railDetector.blockID, 0, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//1 ingot per block of rail
 		this.addSmelting(Block.railPowered.blockID, 0, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
-
-
-
 	}
 
-	/** Adds a smelting recipe. */
-	@Deprecated
-	public void addSmelting(int par1, ItemStack par2ItemStack)
-	{
-		smeltingList.put(Integer.valueOf(par1), par2ItemStack);
-	}
-
-	/**
-	 * Returns the smelting result of an item.
-	 * Deprecated in favor of a metadata sensitive version
-	 */
-	@Deprecated
-	public ItemStack getSmeltingResult(int par1)
-	{
-		return (ItemStack)smeltingList.get(Integer.valueOf(par1));
-	}
-
-	public Map getSmeltingList()
-	{
-		return smeltingList;
+	private ItemStack getSizedSteel(int size) {
+		return new ItemStack(ItemStacks.steelingot.itemID, size, ItemStacks.steelingot.getItemDamage());
 	}
 
 	/**
@@ -140,10 +122,7 @@ public class RecipesPulseFurnace
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
-		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
-		if (ret != null)
-			return ret;
-		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+		return (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
 	}
 
 	public List<ItemStack> getSources(ItemStack result) {

@@ -40,62 +40,36 @@ public class BlockPiping extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public int idDropped(int id, Random r, int fortune) {
+	public final int idDropped(int id, Random r, int fortune) {
 		return 0;
 	}
 
 	@Override
-	public boolean canRenderInPass(int pass)
+	public final boolean canRenderInPass(int pass)
 	{
 		return pass == 0 || pass == 1;
 	}
 
 	@Override
-	public int damageDropped(int par1)
+	public final int damageDropped(int par1)
 	{
 		return par1;
 	}
 
 	@Override
-	public int quantityDropped(Random par1Random)
+	public final int quantityDropped(Random par1Random)
 	{
 		return 0;
 	}
-	/*
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
-		this.setBlockBounds(0.33F, 0.33F, 0.33F, 0.67F, 0.67F, 0.67F);
-		float minx = (float)minX;
-		float maxx = (float)maxX;
-		float miny = (float)minY;
-		float maxy = (float)maxY;
-		float minz = (float)minZ;
-		float maxz = (float)maxZ;
-		TileEntityPiping te = (TileEntityPiping)iba.getBlockTileEntity(x, y, z);
-		if (te.isConnectionValidForIDAndSide(EnumLook.MINX))
-			minx = 0;
-		if (te.isConnectionValidForIDAndSide(EnumLook.PLUSX))
-			maxx = 1;
-		if (te.isConnectionValidForIDAndSide(EnumLook.DOWN))
-			miny = 0;
-		if (te.isConnectionValidForIDAndSide(EnumLook.UP))
-			maxy = 1;
-		if (te.isConnectionValidForIDAndSide(EnumLook.MINZ))
-			minz = 0;
-		if (te.isConnectionValidForIDAndSide(EnumLook.PLUSZ))
-			maxz = 1;
 
-		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
-	}
-	 */
 	@Override
-	public boolean renderAsNormalBlock()
+	public final boolean renderAsNormalBlock()
 	{
 		return false;
 	}
 
 	@Override
-	public boolean canHarvestBlock(EntityPlayer player, int meta)
+	public final boolean canHarvestBlock(EntityPlayer player, int meta)
 	{
 		return true;
 	}

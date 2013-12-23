@@ -32,7 +32,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public final int getRenderType() {
+	public int getRenderType() {
 		return -1;
 	}
 

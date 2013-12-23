@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
@@ -110,9 +111,8 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiTerraformer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-import Reika.RotaryCraft.ModInterface.ContainerPneumatic;
-import Reika.RotaryCraft.ModInterface.GuiPneumatic;
-import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.ContainerEnergyToPower;
+import Reika.RotaryCraft.ModInterface.GuiEnergyToPower;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -272,8 +272,8 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityTerraformer) {
 			return new ContainerTerraformer(player, (TileEntityTerraformer)te);
 		}
-		if (te instanceof TileEntityPneumaticEngine) {
-			return new ContainerPneumatic(player, (TileEntityPneumaticEngine)te);
+		if (te instanceof EnergyToPowerBase) {
+			return new ContainerEnergyToPower(player, (EnergyToPowerBase)te);
 		}
 		if (te instanceof TileEntityFillingStation) {
 			return new ContainerFillingStation(player, (TileEntityFillingStation) te);
@@ -458,8 +458,8 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityTerraformer) {
 			return new GuiTerraformer(player, (TileEntityTerraformer)te);
 		}
-		if (te instanceof TileEntityPneumaticEngine) {
-			return new GuiPneumatic(player, (TileEntityPneumaticEngine)te);
+		if (te instanceof EnergyToPowerBase) {
+			return new GuiEnergyToPower(player, (EnergyToPowerBase)te);
 		}
 		if (te instanceof TileEntityFillingStation) {
 			return new GuiFillingStation(player, (TileEntityFillingStation)te);

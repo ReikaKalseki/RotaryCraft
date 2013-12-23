@@ -1,12 +1,24 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cofh.api.energy.IEnergyHandler;
 
-public class TileEntityStatic extends TileEntityPowerReceiver {
+public class TileEntityStatic extends TileEntityPowerReceiver implements IEnergyHandler {
 
 	private ForgeDirection facingDir;
 
@@ -39,6 +51,17 @@ public class TileEntityStatic extends TileEntityPowerReceiver {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
+
+		if (power > 0) {
+			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
+			if (tile instanceof IEnergyHandler) {
+				IEnergyHandler rc = (IEnergyHandler)tile;
+				if (rc.canInterface(facingDir)) {
+					int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+					float used = rc.receiveEnergy(facingDir, rf, false);
+				}
+			}
+		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -70,6 +93,39 @@ public class TileEntityStatic extends TileEntityPowerReceiver {
 			facingDir = ForgeDirection.EAST;
 			break;
 		}
+	}
+
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return 0;
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		if (this.canInterface(from)) {
+			int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+			return rf;
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean canInterface(ForgeDirection from) {
+		return from.offsetY == 0 && from != this.getFacing() && from != this.getFacing().getOpposite();
+	}
+
+	private ForgeDirection getFacing() {
+		return facingDir != null ? facingDir : ForgeDirection.EAST;
+	}
+
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return 0;
 	}
 
 }

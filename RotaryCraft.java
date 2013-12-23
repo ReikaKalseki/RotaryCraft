@@ -207,6 +207,7 @@ public class RotaryCraft extends DragonAPIMod {
 		//version = evt.getModMetadata().version;
 
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
+		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
 	}
 
 	@Override
@@ -234,8 +235,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
 
-		RotaryRecipes.addThermalExpansion();
-
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
 		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);
 		DonatorController.instance.addDonation(instance, "EverRunes", 75.00F);
@@ -255,8 +254,7 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
-		RotaryRecipes.addProps();
-		RotaryRecipes.addCompat();
+		RotaryRecipes.addPostLoadRecipes();
 
 		ReikaJavaLibrary.initClass(DifficultyEffects.class);
 		ReikaJavaLibrary.initClass(ExtractorBonus.class);

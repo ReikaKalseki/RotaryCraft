@@ -79,6 +79,9 @@ public enum HandbookRegistry {
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
 	MULTI(MachineRegistry.MULTICLUTCH),
 	BELT(MachineRegistry.BELT),
+	HYDRAULIC(MachineRegistry.HYDRAULIC),
+	HYLINE(MachineRegistry.HYDRAULICLINE),
+	ROUTER(MachineRegistry.ROUTER),
 
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),
@@ -96,6 +99,7 @@ public enum HandbookRegistry {
 	MOTOR(MachineRegistry.ELECTRICMOTOR),
 	AGGREGATOR(MachineRegistry.AGGREGATOR),
 	FUELENGINE(MachineRegistry.FUELENGINE),
+	DYNAMO(MachineRegistry.DYNAMO),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -110,6 +114,7 @@ public enum HandbookRegistry {
 	BOILER(MachineRegistry.BOILER),
 	GENERATOR(MachineRegistry.GENERATOR),
 	FURNACE(MachineRegistry.BIGFURNACE),
+	STATIC(MachineRegistry.STATIC),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -189,6 +194,7 @@ public enum HandbookRegistry {
 	LINE(MachineRegistry.LINEBUILDER),
 	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
 	SONICBORER(MachineRegistry.SONICBORER),
+	DEFOLIATOR(MachineRegistry.DEFOLIATOR),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
@@ -213,6 +219,7 @@ public enum HandbookRegistry {
 	JETPACK("Jetpacks"),
 	STEELTOOLS("Steel Tools"),
 	STEELARMOR("Steel Armor"),
+	ITEMPUMP(ItemRegistry.PUMP),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),

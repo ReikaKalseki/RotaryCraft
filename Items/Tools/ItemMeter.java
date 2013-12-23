@@ -148,6 +148,13 @@ public class ItemMeter extends ItemRotaryTool
 			ReikaChatHelper.writeString(String.format("%s contains %.3f L of lubricant.", m.getName(), clicked.getLiquidLevel()/(double)RotaryConfig.MILLIBUCKET));
 			return true;
 		}
+		if (m == MachineRegistry.HYDRAULICLINE) {
+			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)world.getBlockTileEntity(x, y, z);
+			if (clicked == null)
+				return false;
+			ReikaChatHelper.writeString(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
+			return true;
+		}
 		if (tile instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
 			ReikaChatHelper.writeString(String.format("%s producing %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));

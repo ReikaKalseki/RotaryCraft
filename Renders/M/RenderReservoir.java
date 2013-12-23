@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -23,6 +24,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelReservoir;
@@ -131,6 +133,11 @@ public class RenderReservoir extends RotaryTERenderer
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			Icon ico = f.getIcon();
+			if (ico == null) {
+				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlockID()+") but has no icon! Registering bedrock texture as a placeholder!");
+				f.setIcons(Block.bedrock.getIcon(0, 0));
+				ico = Block.bedrock.getIcon(0, 0);
+			}
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

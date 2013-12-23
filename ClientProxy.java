@@ -64,6 +64,7 @@ public class ClientProxy extends CommonProxy
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();
 
 	public static PipeBodyRenderer pipe;
+	public static HydraulicLineRenderer line;
 	public static CubicalMachineRenderer cube;
 
 	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
@@ -94,6 +95,10 @@ public class ClientProxy extends CommonProxy
 		cubeRender = RenderingRegistry.getNextAvailableRenderId();
 		cube = new CubicalMachineRenderer(cubeRender);
 		RenderingRegistry.registerBlockHandler(cubeRender, cube);
+
+		lineRender = RenderingRegistry.getNextAvailableRenderId();
+		line = new HydraulicLineRenderer(lineRender);
+		RenderingRegistry.registerBlockHandler(lineRender, line);
 
 		this.loadModels();
 

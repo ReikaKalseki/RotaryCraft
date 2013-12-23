@@ -12,8 +12,10 @@ package Reika.RotaryCraft.Auxiliary;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -175,6 +177,12 @@ public final class ItemStacks {
 	public static final ItemStack lonsblock = new ItemStack(RotaryCraft.decoblock, 1, 2);
 
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
+
+	public static final PreferentialItemStack electric = new PreferentialItemStack(new ItemStack(Item.ingotGold), "ingotElectrum");
+	public static final PreferentialItemStack conductive = new PreferentialItemStack(new ItemStack(Item.ingotGold), "ingotCopper");
+	public static final PreferentialItemStack conductiveCheap = new PreferentialItemStack(ItemStacks.steelingot, "ingotCopper");
+	public static final PreferentialItemStack heavy = new PreferentialItemStack(new ItemStack(Item.ingotGold), "ingotLead");
+	public static final PreferentialItemStack reflective = new PreferentialItemStack(new ItemStack(Item.ingotIron), "ingotSilver");
 
 	public static List getModSteels() {
 		return modsteel;

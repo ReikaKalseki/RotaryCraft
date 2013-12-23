@@ -46,10 +46,13 @@ public class TileEntityHydraulicRouter extends RotaryCraftTileEntity {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		int input = this.getSupplyPressure(world, x, y, z);
+		int inp = this.getSupplyPressure(world, x, y, z);
+		int inf = this.getSupplyFlow(world, x, y, z);
 		int num = this.getNumberOutputs();
-		if (num > 0)
-			this.giveToOutputs(world, x, y, z, input, num);
+		if (num > 0) {
+			this.givePressureToOutputs(world, x, y, z, inp, num);
+			this.giveFlowToOutputs(world, x, y, z, inf, num);
+		}
 	}
 
 	@Override
@@ -88,7 +91,7 @@ public class TileEntityHydraulicRouter extends RotaryCraftTileEntity {
 		}
 	}
 
-	private void giveToOutputs(World world, int x, int y, int z, int input, int num) {
+	private void givePressureToOutputs(World world, int x, int y, int z, int input, int num) {
 		int togive = input/num-this.getLoss(input);
 		for (int i = 0; i < 6; i++) {
 			if (this.getConnection(i).canOutput) {
@@ -100,6 +103,23 @@ public class TileEntityHydraulicRouter extends RotaryCraftTileEntity {
 				if (m == MachineRegistry.HYDRAULICLINE) {
 					TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
 					te.setPressure(togive);
+				}
+			}
+		}
+	}
+
+	private void giveFlowToOutputs(World world, int x, int y, int z, int input, int num) {
+		int togive = input/num;
+		for (int i = 0; i < 6; i++) {
+			if (this.getConnection(i).canOutput) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.HYDRAULICLINE) {
+					TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
+					te.setFlowRate(togive);
 				}
 			}
 		}
@@ -121,6 +141,24 @@ public class TileEntityHydraulicRouter extends RotaryCraftTileEntity {
 				if (m == MachineRegistry.HYDRAULICLINE) {
 					TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
 					p += te.getPressure();
+				}
+			}
+		}
+		return p;
+	}
+
+	public int getSupplyFlow(World world, int x, int y, int z) {
+		int p = 0;
+		for (int i = 0; i < 6; i++) {
+			if (this.getConnection(i).canIntake) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.HYDRAULICLINE) {
+					TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
+					p += te.getFlowRate();
 				}
 			}
 		}

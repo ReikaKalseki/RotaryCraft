@@ -60,7 +60,7 @@ public class WorktableRecipes
 		int i = 0;
 		int j = 0;
 		int k = 0;
-
+		//ReikaJavaLibrary.spamConsole(Arrays.toString(par2ArrayOfObj));
 		if (par2ArrayOfObj[i] instanceof String[])
 		{
 			String[] astring = ((String[])par2ArrayOfObj[i++]);
@@ -104,6 +104,7 @@ public class WorktableRecipes
 				itemstack1 = (ItemStack)par2ArrayOfObj[i + 1];
 			}
 
+			//ReikaJavaLibrary.pConsole(character+" -> "+itemstack1);
 			hashmap.put(character, itemstack1);
 		}
 
@@ -115,6 +116,7 @@ public class WorktableRecipes
 
 			if (hashmap.containsKey(Character.valueOf(c0)))
 			{
+				//ReikaJavaLibrary.spamConsole(c0+":   "+(hashmap.get(Character.valueOf(c0))));
 				aitemstack[i1] = ((ItemStack)hashmap.get(Character.valueOf(c0))).copy();
 			}
 			else

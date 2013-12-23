@@ -12,12 +12,13 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 
-public class ContainerPneumatic extends CoreContainer {
+public class ContainerEnergyToPower extends CoreContainer {
 
-	TileEntityPneumaticEngine engine;
+	private EnergyToPowerBase engine;
 
-	public ContainerPneumatic(EntityPlayer player, TileEntityPneumaticEngine te) {
+	public ContainerEnergyToPower(EntityPlayer player, EnergyToPowerBase te) {
 		super(player, te);
 		engine = te;
 	}
@@ -34,7 +35,7 @@ public class ContainerPneumatic extends CoreContainer {
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 0, engine.getStoredEnergy());
+			icrafting.sendProgressBarUpdate(this, 0, engine.getStoredPower());
 		}
 	}
 
@@ -42,7 +43,7 @@ public class ContainerPneumatic extends CoreContainer {
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 0: engine.storedpower = par2; break;
+		case 0: engine.setStoredPower(par2); break;
 		}
 	}
 

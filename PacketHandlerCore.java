@@ -29,10 +29,10 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
-import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
@@ -87,7 +87,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityDisplay display;
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
-	private TileEntityPneumaticEngine eng;
+	private EnergyToPowerBase eng;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -425,7 +425,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				terra.setTarget(BiomeGenBase.biomeList[data[0]]);
 				break;
 			case PNEUMATIC:
-				eng = (TileEntityPneumaticEngine)te;
+				eng = (EnergyToPowerBase)te;
 				if (control == 50)
 					eng.decrement();
 				if (control == 51)

@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
+import Reika.RotaryCraft.Blocks.BlockHydraulicLine;
 import Reika.RotaryCraft.Blocks.BlockIMachine;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
@@ -54,14 +55,15 @@ public enum BlockRegistry implements RegistryEnum {
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
 	BCENGINE(BlockModEngine.class, Material.iron),
-	MODEL2(BlockMMachine.class, Material.iron);
+	MODEL2(BlockMMachine.class, Material.iron),
+	HYDRAULIC(BlockHydraulicLine.class, Material.iron);
 
 	private Class block;
 	private Material mat;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "BuildCraft Interface", "M-Machines 2"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Hydraulic Line"
 	};
 
 	private BlockRegistry(Class cl, Material m) {
@@ -99,7 +101,7 @@ public enum BlockRegistry implements RegistryEnum {
 			if (blockList[i].block == cl && blockList[i].isNthBlock(offset))
 				return i;
 		}
-		throw new RuntimeException("Unregistered block class "+cl);
+		throw new RuntimeException("Unregistered block class "+cl+" with metadata "+metadata);
 	}
 
 	public static int getOffsetFromBlockID(int id) {
@@ -125,15 +127,7 @@ public enum BlockRegistry implements RegistryEnum {
 		return blockNames[this.ordinal()];
 	}
 
-	public Material getBlockMaterial() {/*
-		if (this.ordinal() == MachineRegistry.HOSE.getBlockVariableIndex())
-			return Material.;
-		if (this.ordinal() == MachineRegistry.PIPE.getBlockVariableIndex())
-			return Material.ground;
-		if (this.ordinal() == MachineRegistry.FUELLINE.getBlockVariableIndex())
-			return Material.ground;
-		if (this.ordinal() == MachineRegistry.SPILLER.getBlockVariableIndex())
-			return Material.ground;*/
+	public Material getBlockMaterial() {
 		return mat;
 	}
 

@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 
 
 public enum PowerReceivers {
@@ -41,7 +43,7 @@ public enum PowerReceivers {
 	MOBRADAR(32768),
 	MUSICBOX(),
 	OBSIDIAN(1, 2048, 32768),
-	PILEDRIVER(80000, 1, 1), //4000kg hammer * 10 m/s^2 / 0.5m spool
+	PILEDRIVER(80000, 1, TileEntityPileDriver.BASEPOWER), //4000kg hammer * 10 m/s^2 / 0.5m spool
 	PLAYERDETECTOR(),
 	PROJECTOR(512),
 	PULSEJET(1, 131072, 1),
@@ -66,9 +68,9 @@ public enum PowerReceivers {
 	BUCKETFILLER(1, 512, 8192),
 	SELFDESTRUCT(),
 	COMPRESSOR(),
-	EMP(),
+	EMP((int)TileEntityEMP.BLAST_ENERGY),
 	LINEBUILDER(1024, 1, 131072),
-	TERRAFORMER(),
+	TERRAFORMER(1024),
 	FUELENHANCER(1, 1024, 1024),
 	ARROWGUN(1024),
 	BOILER(),

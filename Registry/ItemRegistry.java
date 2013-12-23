@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Interfaces.RegistryEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -599,6 +600,14 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public void addRecipe(IRecipe ir) {
+		if (!this.isDummiedOut()) {
+			GameRegistry.addRecipe(ir);
+			WorktableRecipes.addRecipe(ir);
+		}
+	}
+
+	public void addOreRecipe(Object... in) {
+		ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getStackOf(), in);
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(ir);
 			WorktableRecipes.addRecipe(ir);

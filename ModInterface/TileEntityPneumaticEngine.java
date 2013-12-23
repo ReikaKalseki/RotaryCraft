@@ -9,18 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import java.awt.Color;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.API.PowerGenerator;
-import Reika.RotaryCraft.API.ShaftMerger;
-import Reika.RotaryCraft.Auxiliary.PowerSourceList;
-import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import buildcraft.api.power.IPowerReceptor;
@@ -29,27 +26,17 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityPneumaticEngine extends TileEntityIOMachine implements IPowerReceptor, IPipeConnection, SimpleProvider,
-PowerGenerator, GuiController {
-
-	private int MJ;
+public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPowerReceptor, IPipeConnection {
 
 	private PowerHandler pp;
 
 	private ForgeDirection facingDir;
 
-	public static final int maxMJ = 36000; //up to 1 MC megajoule
+	public static final int maxMJ = 36000;
 
 	private StepTimer sound = new StepTimer(72);
 
 	private static final int GENOMEGA = 1024;
-
-	private int base = -1;
-
-	public int storedpower;
-
-	private static final int MINBASE = -1;
-	private static final int MAXBASE = 11; //2048 Nm -> 2.09 MW
 
 	public TileEntityPneumaticEngine()
 	{
@@ -60,60 +47,18 @@ PowerGenerator, GuiController {
 		sound.setTick(sound.getCap());
 	}
 
-	public boolean hasEnoughEnergy() {
-		float energy = pp.getEnergyStored();
-		return energy > this.getMJPerTick();
-	}
-
-	public long getPowerLevel() {
-		return GENOMEGA*this.getTorqueLevel();
-	}
-
-	public int getSpeed() {
-		if (base < 0)
-			return 0;
-		return GENOMEGA;
-	}
-
-	public int getTorqueLevel() {
-		if (base < 0)
-			return 0;
-		return ReikaMathLibrary.intpow2(2, base);
+	@Override
+	public int getConsumedUnitsPerTick() {
+		return (int)this.getMJPerTick();
 	}
 
 	public float getMJPerTick() {
 		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
 	}
 
-	public int getStoredEnergy() {
-		return storedpower;
-	}
-
-	public float getPercentStorage() {
-		return pp.getEnergyStored()/maxMJ;
-	}
-
-	public int getEnergyScaled(int h) {
-		return (int)(this.getPercentStorage()*h);
-	}
-
-	public int getTier() {
-		return base;
-	}
-
-	public void increment() {
-		if (base < MAXBASE)
-			base++;
-	}
-
-	public void decrement() {
-		if (base > MINBASE)
-			base--;
-	}
-
 	@Override
-	public boolean canProvidePower() {
-		return true;
+	public int getMaxStorage() {
+		return maxMJ;
 	}
 
 	@Override
@@ -149,9 +94,9 @@ PowerGenerator, GuiController {
 			pp.addEnergy(0.01F); //To nullify the mandatory power loss... why the HELL was that added?
 
 		if (!world.isRemote)
-			storedpower = (int)pp.getEnergyStored();
-		if (storedpower < 0)
-			storedpower = (int)pp.getMaxEnergyStored();
+			storedEnergy = (int)pp.getEnergyStored();
+		if (storedEnergy < 0)
+			storedEnergy = (int)pp.getMaxEnergyStored();
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 
@@ -233,18 +178,8 @@ PowerGenerator, GuiController {
 	}
 
 	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return new PowerSourceList().addSource(this);
-	}
-
-	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored());
-	}
-
-	@Override
-	public long getCurrentPower() {
-		return power;
 	}
 
 	/**
@@ -254,8 +189,6 @@ PowerGenerator, GuiController {
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("tier", base);
-		NBT.setInteger("storage", storedpower);
 		pp.writeToNBT(NBT);
 	}
 
@@ -266,8 +199,6 @@ PowerGenerator, GuiController {
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		base = NBT.getInteger("tier");
-		storedpower = NBT.getInteger("storage");
 		pp.readFromNBT(NBT);
 	}
 
@@ -289,6 +220,21 @@ PowerGenerator, GuiController {
 	@Override
 	public World getWorld() {
 		return worldObj;
+	}
+
+	@Override
+	public int getBaseOmega() {
+		return GENOMEGA;
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "MJ";
+	}
+
+	@Override
+	public Color getPowerColor() {
+		return new Color(90, 120, 255);
 	}
 
 }
