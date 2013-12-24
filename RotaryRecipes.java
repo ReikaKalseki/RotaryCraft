@@ -100,6 +100,12 @@ public class RotaryRecipes {
 			ItemRegistry.ETHANOL.getStackOf().writeToNBT(toSend.getCompoundTag("input"));
 			ethanol.writeToNBT(toSend.getCompoundTag("output"));
 			FMLInterModComms.sendMessage(ModList.THERMALEXPANSION.modLabel, "CrucibleRecipe", toSend);
+
+			ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
+			ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
+
+			MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', transmissionCoil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Item.redstone);
+			MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', "ingotCopper", 'C', conductanceCoil, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'l', "ingotLead", 's', "ingotSilver");
 		}
 	}
 
@@ -308,6 +314,8 @@ public class RotaryRecipes {
 		MachineRegistry.BIGFURNACE.addCrafting("SFS", "FRF", "SRS", 'S', ItemStacks.basepanel, 'F', Block.furnaceIdle, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 
 		MachineRegistry.SUCTION.addSizedCrafting(4, "SGS", "SGS", "SGS", 'S', Block.sandStone, 'G', Block.glass);
+
+		MachineRegistry.SORTING.addCrafting("SHS", " C ", "P P", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'H', Block.hopperBlock, 'C', ItemStacks.pcb);
 	}
 
 	private static void addCraftItems() {

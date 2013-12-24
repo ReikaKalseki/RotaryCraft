@@ -9,14 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IElectrical;
+import universalelectricity.api.electricity.IVoltageOutput;
+import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.core.electricity.ElectricityPack;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGenerator extends TileEntityPowerReceiver implements IElectrical {
+public class TileEntityGenerator extends TileEntityPowerReceiver implements IEnergyInterface, IVoltageOutput {
 
 	public static final int OUTPUT_VOLTAGE = 24000;
 	public static final float POWER_FACTOR = 0.875F;
@@ -49,6 +52,27 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEle
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
 		//ReikaJavaLibrary.pConsole(this.getGenCurrent()+"A * "+OUTPUT_VOLTAGE+"V = "+this.getGenCurrent()*OUTPUT_VOLTAGE+"W");
+
+		if (power > 0) {
+			int dx = x+facingDir.offsetX;
+			int dy = y+facingDir.offsetY;
+			int dz = z+facingDir.offsetZ;
+			int id = world.getBlockId(dx, dy, dz);
+			if (id != 0) {
+				Block b = Block.blocksList[id];
+				int metadata = world.getBlockMetadata(dx, dy, dz);
+				if (b.hasTileEntity(metadata)) {
+					TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+					if (te instanceof IEnergyInterface) {
+						IEnergyInterface ie = (IEnergyInterface)te;
+						if (ie.canConnect(facingDir)) {
+							long energy = (long)(this.getGenCurrent()*OUTPUT_VOLTAGE);
+							ie.onReceiveEnergy(facingDir, energy, true);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -87,31 +111,6 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEle
 		return direction == facingDir.getOpposite();
 	}
 
-	@Override
-	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
-		return 0;
-	}
-
-	@Override
-	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide) {
-		return this.getProduction();
-	}
-
-	@Override
-	public float getRequest(ForgeDirection direction) {
-		return 0;
-	}
-
-	@Override
-	public float getProvide(ForgeDirection direction) {
-		return this.getGenCurrent()*OUTPUT_VOLTAGE;
-	}
-
-	@Override
-	public float getVoltage() {
-		return OUTPUT_VOLTAGE;
-	}
-
 	public ElectricityPack getProduction() {
 		ElectricityPack e = new ElectricityPack(this.getGenCurrent(), OUTPUT_VOLTAGE);
 		return e;
@@ -119,6 +118,21 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEle
 
 	private float getGenCurrent() {
 		return power/(float)OUTPUT_VOLTAGE;//*POWER_FACTOR;
+	}
+
+	@Override
+	public long getVoltageOutput(ForgeDirection side) {
+		return side == facingDir ? OUTPUT_VOLTAGE : 0;
+	}
+
+	@Override
+	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive) {
+		return 0;
+	}
+
+	@Override
+	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract) {
+		return from == facingDir ? (long)(this.getGenCurrent()*OUTPUT_VOLTAGE) : 0;
 	}
 
 }

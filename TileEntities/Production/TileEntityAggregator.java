@@ -43,7 +43,8 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 				if (!tank.isFull()) {
 					BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 					float h = biome.rainfall; //Not used by any biome
-					tank.addLiquid((int)(40*ReikaWorldHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
+					double amt = 20+Math.sqrt(omega);
+					tank.addLiquid((int)(amt*ReikaWorldHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
 				}
 			}
 		}

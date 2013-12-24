@@ -67,8 +67,8 @@ import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
+import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityStatic;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
@@ -284,12 +284,12 @@ public enum MachineRegistry {
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
-	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulicPump.class,			15),
+	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulicPump.class,		15, "RenderHydraulic"),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
 	HYDRAULICLINE(		"machine.hyline",			BlockHydraulicLine.class,	TileEntityHydraulicLine.class,		0),
-	STATIC(				"machine.static", 			BlockModEngine.class,		TileEntityStatic.class,				5, "RenderStatic", ModList.THERMALEXPANSION),
-	DYNAMO(				"machine.dynamo",			BlockModEngine.class,		TileEntityDynamo.class,				6, "RenderDynamo", ModList.THERMALEXPANSION);
+	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
+	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION);
 
 	private String name;
 	private Class te;
@@ -580,6 +580,8 @@ public enum MachineRegistry {
 			return 0.5F;
 		if (this == FERTILIZER)
 			return 0.875F;
+		if (this == HYDRAULIC)
+			return ((TileEntityHydraulicPump)tile).isTurbine() ? 1 : 0.75F;
 		return 1;
 	}
 
@@ -681,6 +683,10 @@ public enum MachineRegistry {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
 			return RotaryNames.getAdvGearName(adv.getBlockMetadata()/4);
 		}
+		if (this == HYDRAULIC) {
+			TileEntityHydraulicPump hyd = (TileEntityHydraulicPump)tile;
+			return RotaryNames.getHydraulicName(hyd.getBlockMetadata()/6);
+		}
 		throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" has an unspecified multi name!");
 	}
 
@@ -691,6 +697,7 @@ public enum MachineRegistry {
 		case SHAFT:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
+		case HYDRAULIC:
 			return true;
 		default:
 			return false;
@@ -783,8 +790,7 @@ public enum MachineRegistry {
 		case SORTING:
 		case FILLINGSTATION:
 		case DISTILLER:
-		case DYNAMO:
-		case STATIC:
+		case MAGNETIC:
 			return true;
 		default:
 			return false;
@@ -803,6 +809,7 @@ public enum MachineRegistry {
 		case SONICBORER:
 		case BELT:
 		case HYDRAULIC:
+		case DYNAMO:
 			return true;
 		default:
 			return false;
@@ -848,6 +855,7 @@ public enum MachineRegistry {
 		case GEARBOX:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
+		case HYDRAULIC:
 			return true;
 		default:
 			return false;
@@ -861,6 +869,9 @@ public enum MachineRegistry {
 	public ItemStack getCraftedMetadataProduct(int metadata) {
 		if (this == ADVANCEDGEARS) {
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, metadata);
+		}
+		if (this == HYDRAULIC) {
+			return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, metadata);
 		}
 		if (this == FLYWHEEL) {
 			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata);
@@ -888,6 +899,7 @@ public enum MachineRegistry {
 		case SHAFT:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
+		case HYDRAULIC:
 			return true;
 		default:
 			return false;
@@ -986,6 +998,8 @@ public enum MachineRegistry {
 		if (this == COOLINGFIN)
 			return true;
 		if (this == COMPRESSOR)
+			return true;
+		if (this == DYNAMO)
 			return true;
 		return false;
 	}

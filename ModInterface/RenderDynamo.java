@@ -22,45 +22,67 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 public class RenderDynamo extends RotaryTERenderer
 {
 
-	private ModelDynamo DynamoModel = new ModelDynamo();
+	private ModelDynamo2 StaticModel = new ModelDynamo2();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityDynamoAt(TileEntityDynamo tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityStaticAt(TileEntityDynamo tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
 		if (!tile.isInWorld())
-			var9 = 0;
+			var9 = 2;
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelDynamo var14;
-		var14 = DynamoModel;
+		ModelDynamo2 var14;
+		var14 = StaticModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex.png");
+		if (tile.isInWorld() && tile.power > 0)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex2.png");
+		else
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
 		int var11 = 0;
-		float var13;
-		switch(var9) {
-		case 2:
-			var11 = 0;
-			break;
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+
+		if (tile.isInWorld()) {
+
+			switch(tile.getBlockMetadata()) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 0;
+				break;
+			case 3:
+				var11 = 90;
+				break;
+			case 4:
+				var11 = 180;
+				break;
+			case 5:
+				var11 = 270;
+				break;
+			}
+
+			if (tile.getBlockMetadata() < 2) {
+				GL11.glRotatef(var11, 0, 0, 1);
+				if (tile.getBlockMetadata() == 1)
+					GL11.glTranslated(0, -2, 0);
+			}
+			else {
+				GL11.glRotatef(90, 1, 0, 0);
+				GL11.glRotatef(var11, 0, 0, 1);
+				GL11.glTranslated(0, -1, -1);
+			}
 		}
 
-		GL11.glRotatef(var11+180, 0.0F, 1.0F, 0.0F);
 		var14.renderAll(null, -tile.phi, 0);
 
 		this.closeGL(tile);
@@ -70,7 +92,7 @@ public class RenderDynamo extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityDynamoAt((TileEntityDynamo)tile, par2, par4, par6, par8);
+			this.renderTileEntityStaticAt((TileEntityDynamo)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}

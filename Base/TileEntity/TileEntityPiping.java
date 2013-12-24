@@ -212,7 +212,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				}
 				else if (te instanceof IFluidHandler && this.canIntakeFromIFluidHandler(dir)) {
 					IFluidHandler fl = (IFluidHandler)te;
-					FluidStack fs = fl.drain(dir, 500, false);
+					FluidStack fs = fl.drain(ForgeDirection.UNKNOWN, 500, false);
+					//ReikaJavaLibrary.pConsole(fs);
 					if (fs != null) {
 						int level = this.getLiquidLevel();
 						int todrain = this.getPipeIntake(fs.amount-level);

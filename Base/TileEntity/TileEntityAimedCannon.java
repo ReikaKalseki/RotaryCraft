@@ -126,9 +126,9 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		//ReikaJavaLibrary.pConsole("PHI: "+phi2+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
 		if (tg[2] - phi2 > 180)
 			tg[2] -= 360;
-		if (!ReikaMathLibrary.approxr(theta, tg[1], 3))
+		if (!ReikaMathLibrary.approxr(theta, tg[1], 5))
 			return false;
-		if (!ReikaMathLibrary.approxr(phi2, tg[2], 3))
+		if (!ReikaMathLibrary.approxr(phi2, tg[2], 5))
 			return false;
 		return true;
 	}

@@ -64,6 +64,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
+import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -82,6 +83,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
@@ -203,7 +205,7 @@ public abstract class BlockBasicMultiTE extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
@@ -219,8 +221,6 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick(is)) {
 			return false;
 		}
-		if (is != null && ReikaItemHelper.matchStacks(is, m.getCraftedProduct()))
-			;//return false;
 		if (is != null && is.itemID == Item.enchantedBook.itemID && m.isEnchantable()) {
 			if (((EnchantableMachine)te).applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)
@@ -321,6 +321,13 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropItemFromInventory();
 			return true;
+		}
+		if (m == MachineRegistry.HYDRAULICLINE) {
+			TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
+			if (ReikaItemHelper.matchStacks(is, m.getCraftedProduct())) {
+				ForgeDirection dir = ForgeDirection.values()[side];
+				//th.setOutput(dir);
+			}
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
@@ -775,6 +782,10 @@ public abstract class BlockBasicMultiTE extends Block {
 				return 0;
 			Fluid f = te.getLiquidType();
 			return f.getLuminosity();
+		}
+		if (m == MachineRegistry.DYNAMO) {
+			TileEntityDynamo te = (TileEntityDynamo)world.getBlockTileEntity(x, y, z);
+			return te.power > 0 ? 7 : 0;
 		}
 		return 0;
 	}

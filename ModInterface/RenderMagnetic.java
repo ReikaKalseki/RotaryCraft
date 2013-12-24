@@ -19,27 +19,27 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 
-public class RenderStatic extends RotaryTERenderer
+public class RenderMagnetic extends RotaryTERenderer
 {
 
-	private ModelStatic StaticModel = new ModelStatic();
+	private ModelMagnetic DynamoModel = new ModelMagnetic();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityStaticAt(TileEntityStatic tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityDynamoAt(TileEntityMagnetic tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
 		if (!tile.isInWorld())
-			var9 = 2;
+			var9 = 0;
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelStatic var14;
-		var14 = StaticModel;
+		ModelMagnetic var14;
+		var14 = DynamoModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/staticgentex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/magneticmotortex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -70,7 +70,7 @@ public class RenderStatic extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityStaticAt((TileEntityStatic)tile, par2, par4, par6, par8);
+			this.renderTileEntityDynamoAt((TileEntityMagnetic)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
@@ -78,6 +78,6 @@ public class RenderStatic extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "staticgentex.png";
+		return "magneticmotortex.png";
 	}
 }

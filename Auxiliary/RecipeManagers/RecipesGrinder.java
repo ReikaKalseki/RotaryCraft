@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
@@ -60,6 +61,7 @@ public class RecipesGrinder {
 		this.addRecipe(Block.slowSand, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.tar.getItemDamage()), 0.3F); //create a tar
 		this.addRecipe(Item.wheat, new ItemStack(ItemStacks.flour.itemID, 4, ItemStacks.flour.getItemDamage()), 0.1F);
 		this.addRecipe(ItemStacks.bedingot.copy(), new ItemStack(ItemStacks.bedrockdust.itemID, 4, ItemStacks.bedrockdust.getItemDamage()), 0.5F);
+		this.addRecipe(Item.reed, new ItemStack(Item.sugar, 3), 0.2F);
 
 		this.addRecipe(Block.wood, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F); //sawdust
 		this.addRecipe(Block.planks, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
@@ -82,6 +84,27 @@ public class RecipesGrinder {
 		this.addRecipe(Item.stick, new ItemStack(ItemStacks.sawdust.itemID, 2, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.trapdoor, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.fenceGate, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
+
+
+		int ore_rate = 3;
+		this.addRecipe(Block.oreCoal, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 24), 0F);
+		this.addRecipe(Block.oreIron, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 25), 0F);
+		this.addRecipe(Block.oreGold, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 26), 0F);
+		this.addRecipe(Block.oreRedstone, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 27), 0F);
+		this.addRecipe(Block.oreLapis, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 28), 0F);
+		this.addRecipe(Block.oreDiamond, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 29), 0F);
+		this.addRecipe(Block.oreEmerald, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 30), 0F);
+		this.addRecipe(Block.oreNetherQuartz, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 31), 0.7F);
+
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			ArrayList<ItemStack> li = ore.getAllOreBlocks();
+			for (int k = 0; k < li.size(); k++) {
+				ItemStack is = li.get(k);
+				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
+			}
+		}
 	}
 
 	public boolean isGrindable(ItemStack item) {

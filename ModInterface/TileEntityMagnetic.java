@@ -9,56 +9,53 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.tileentity.TileEntity;
+import java.awt.Color;
+
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
 
-public class TileEntityStatic extends TileEntityPowerReceiver implements IEnergyHandler {
+public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
 
 	private ForgeDirection facingDir;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
-		if (!this.isInWorld()) {
-			phi = 0;
-			return;
-		}
-		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
-	}
-
-	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.STATIC.ordinal();
-	}
-
-	@Override
-	public boolean hasModelTransparency() {
-		return false;
-	}
-
-	@Override
-	public int getRedstoneOverride() {
-		return 0;
+	public long getMaxPower() {
+		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
 
-		if (power > 0) {
-			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
-			if (tile instanceof IEnergyHandler) {
-				IEnergyHandler rc = (IEnergyHandler)tile;
-				if (rc.canInterface(facingDir)) {
-					int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
-					float used = rc.receiveEnergy(facingDir, rf, false);
+		if (!this.hasEnoughEnergy()) {
+			torque = 0;
+			omega = 0;
+			power = 0;
+			return;
+		}
+		if (!world.isRemote) {
+
+			torque = this.getTorqueLevel();
+			omega = this.getSpeed();
+
+			power = (long)torque*(long)omega;
+
+			storedEnergy -= this.getConsumedUnitsPerTick();
+
+			this.basicPowerReceiver();
+
+			tickcount++;
+			if (power > 0) {
+				if (tickcount >= 85) {
+					tickcount = 0;
+					SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
 				}
 			}
 		}
@@ -96,22 +93,47 @@ public class TileEntityStatic extends TileEntityPowerReceiver implements IEnergy
 	}
 
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public void animateWithTick(World world, int x, int y, int z) {
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
+	}
+
+	@Override
+	public int getMachineIndex() {
+		return MachineRegistry.MAGNETIC.ordinal();
+	}
+
+	@Override
+	public boolean hasModelTransparency() {
+		return false;
+	}
+
+	@Override
+	public int getRedstoneOverride() {
 		return 0;
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		if (this.canInterface(from)) {
-			int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
-			return rf;
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		if (this.canInterface(from) && !simulate) {
+			int amt = Math.min(maxReceive, this.getMaxStorage()-storedEnergy);
+			storedEnergy += amt;
+			return amt;
 		}
 		return 0;
 	}
 
 	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		return 0;
+	}
+
+	@Override
 	public boolean canInterface(ForgeDirection from) {
-		return from.offsetY == 0 && from != this.getFacing() && from != this.getFacing().getOpposite();
+		return from == this.getFacing();
 	}
 
 	private ForgeDirection getFacing() {
@@ -120,12 +142,41 @@ public class TileEntityStatic extends TileEntityPowerReceiver implements IEnergy
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return 0;
+		return storedEnergy;
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return 0;
+		return this.getMaxStorage();
+	}
+
+	@Override
+	public int getMaxStorage() {
+		return TileEntityPneumaticEngine.maxMJ*10;
+	}
+
+	@Override
+	public int getBaseOmega() {
+		return 1024;
+	}
+
+	@Override
+	public int getConsumedUnitsPerTick() {
+		return (int)this.getRFPerTick();
+	}
+
+	public float getRFPerTick() {
+		return (float)(this.getPowerLevel()*10/ReikaBuildCraftHelper.getWattsPerMJ());
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "RF";
+	}
+
+	@Override
+	public Color getPowerColor() {
+		return Color.red;
 	}
 
 }

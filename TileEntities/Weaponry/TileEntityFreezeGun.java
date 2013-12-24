@@ -163,6 +163,7 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
 					if (!ent.isDead && ent.getHealth() > 0 && ent.getActivePotionEffect(Potion.moveSlowdown) == null) {
+						//ReikaJavaLibrary.pConsole(ent);
 						double dy = -(ent.posY-y);
 						double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
 						if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1))

@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -58,6 +59,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
@@ -111,10 +113,6 @@ public class ItemMeter extends ItemRotaryTool
 		if (m == MachineRegistry.COOLINGFIN) {
 			TileEntityCoolingFin clicked = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
 			clicked.ticks = 512;
-		}
-		if (m == MachineRegistry.HYDRAULICLINE) {
-			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)world.getBlockTileEntity(x, y, z);
-			ReikaChatHelper.writeString(String.format("Pressure: %d.", clicked.getPressure()));
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)world.getBlockTileEntity(x, y, z);
@@ -352,6 +350,22 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString(String.format("Liquid Pressure at %d kPa.", clicked.liquidPressure));
 				return true;
 			}
+
+			if (m == MachineRegistry.HYDRAULIC) {
+				TileEntityHydraulicPump clicked = (TileEntityHydraulicPump)world.getBlockTileEntity(x, y, z);
+				if (clicked.isTurbine()) {
+					power = clicked.power;
+					omega = clicked.omega;
+					name = clicked.getName();
+					if (power >= 1000000)
+						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					if (power >= 1000 && power < 1000000)
+						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					if (power < 1000)
+						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f W @ %d rad/s.", power, omega));
+					return true;
+				}
+			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
@@ -432,11 +446,17 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString(String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
 			}
 			if (m == MachineRegistry.COMPRESSOR) {
-				ratioclicked = 16;
 				TileEntityAirCompressor clicked = (TileEntityAirCompressor)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				ReikaChatHelper.writeString(String.format("Air Compressor generating %.3f MJ/t.", clicked.power/ReikaBuildCraftHelper.getWattsPerMJ()));
+				ReikaChatHelper.writeString(String.format("%s generating %.3f MJ/t.", clicked.getName(), clicked.power/ReikaBuildCraftHelper.getWattsPerMJ()));
+			}
+
+			if (m == MachineRegistry.DYNAMO) {
+				TileEntityDynamo clicked = (TileEntityDynamo)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				ReikaChatHelper.writeString(String.format("%s generating %.3f RF/t.", clicked.getName(), clicked.power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
 			}
 			if (m == MachineRegistry.FLYWHEEL) {
 				ratioclicked = 16;

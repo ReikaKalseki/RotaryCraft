@@ -12,10 +12,12 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IElectrical;
+import universalelectricity.api.electricity.IVoltageInput;
+import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.core.electricity.ElectricityPack;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -25,7 +27,7 @@ import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityElectricMotor extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IElectrical {
+public class TileEntityElectricMotor extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IEnergyInterface, IVoltageInput {
 
 	public static enum Tier {
 		LOW(240, 36, 32, 256),
@@ -60,10 +62,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	private int numberCoils = 0;
 
-	private float current;
-	private float voltage;
-
 	private ForgeDirection facingDir;
+
+	private boolean hasPower = false;
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		readx = x;
@@ -156,15 +157,12 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 				SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.36F, pit);
 				tickcount = 0;
 			}
-			current -= type.inputCurrent;
-			voltage -= type.inputVoltage;
 		}
 		else {
 			omega = torque = 0;
 			tickcount = 2000;
 		}
 		power = omega*torque;
-		ReikaJavaLibrary.pConsole(current+"/"+type.inputCurrent+"   :   "+voltage+"/"+type.inputVoltage);
 	}
 
 	public boolean addCoil() {
@@ -200,8 +198,8 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 		numberCoils = NBT.getInteger("coils");
 
-		voltage = NBT.getFloat("v");
-		current = NBT.getFloat("a");
+		//voltage = NBT.getFloat("v");
+		//current = NBT.getFloat("a");
 	}
 
 	/**
@@ -214,8 +212,8 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 		NBT.setInteger("coils", numberCoils);
 
-		NBT.setFloat("v", voltage);
-		NBT.setFloat("a", current);
+		//NBT.setFloat("v", voltage);
+		//NBT.setFloat("a", current);
 	}
 
 	public int getNumberCoils() {
@@ -226,51 +224,50 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	public boolean canConnect(ForgeDirection dir) {
 		return dir == facingDir || dir == ForgeDirection.DOWN;
 	}
-	//which of these is to receive power??
-	@Override
-	public float receiveElectricity(ForgeDirection from, ElectricityPack in, boolean doReceive) {
-		boolean fix = true;
-		float mult = 300470F;
-		if (fix) {
-			float e = in.amperes*in.voltage;
-			e *= mult;
-			int v = type.inputVoltage;
-			in = new ElectricityPack(e/v, v);
-		}
-		//ReikaJavaLibrary.pConsole(in.amperes+"/"+type.inputCurrent+"   :   "+in.voltage+"/"+type.inputVoltage);
-		//ReikaJavaLibrary.pConsole(current+"/"+type.inputCurrent+"   :   "+voltage+"/"+type.inputVoltage);
-		if (!doReceive)
-			return 0;
-		if (!this.canConnect(from))
-			return 0;
-		if (in.voltage < type.inputVoltage || in.amperes < type.inputCurrent)
-			;//return 0;
-		current += in.amperes;
-		voltage += in.voltage;
-		return type.inputCurrent*type.inputVoltage/mult;
-	}
-
-	@Override
-	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack in, boolean doProvide) {
-		return null;
-	}
-
-	@Override
-	public float getRequest(ForgeDirection dir) {
-		return this.canConnect(dir) ? type.inputCurrent*type.inputVoltage : 0;
-	}
-
-	@Override
-	public float getProvide(ForgeDirection direction) {
-		return 0;
-	}
-
-	@Override
-	public float getVoltage() {
-		return type.inputVoltage;
-	}
 
 	public boolean isGettingSufficientPower() {
-		return current >= type.inputCurrent && voltage >= type.inputVoltage;
+		return hasPower;//current >= type.inputCurrent && voltage >= type.inputVoltage;
+	}
+
+	@Override
+	public long getVoltageInput(ForgeDirection dir) {
+		return dir == facingDir ? type.inputVoltage : 0;
+	}
+
+	@Override
+	public void onWrongVoltage(ForgeDirection dir, long voltage) {
+		int req = type.inputVoltage;
+		float factor = voltage/(float)req;
+		if (factor > 100) {
+			worldObj.newExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 9F, true, true);
+		}
+		else if (factor > 10) {
+			ReikaParticleHelper.SMOKE.spawnAroundBlock(worldObj, xCoord, yCoord, zCoord, 12);
+			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.fizz");
+		}
+		else if (factor > 1) {
+			if (rand.nextInt(5) == 0) {
+				ReikaParticleHelper.SMOKE.spawnAroundBlock(worldObj, xCoord, yCoord, zCoord, 12);
+				ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.fizz");
+			}
+			if (rand.nextInt(15) == 0)
+				SoundRegistry.ELECTRIC.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.36F, 2F);
+		}
+		else if (factor < 1) {
+			omega = 0;
+			torque = 0;
+			power = 0;
+		}
+	}
+
+	@Override
+	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive) {
+		hasPower = true;
+		return receive;
+	}
+
+	@Override
+	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract) {
+		return 0;
 	}
 }

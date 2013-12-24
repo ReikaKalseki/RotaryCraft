@@ -30,6 +30,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHydraulicRouter;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -37,6 +38,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
@@ -145,6 +147,14 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					clicked.setBlockMetadata(damage-3);
 				return true;
 			}
+			if (m == MachineRegistry.HYDRAULIC) {
+				TileEntityHydraulicPump clicked = (TileEntityHydraulicPump)te;
+				if (damage != 5 && damage != 11)
+					clicked.setBlockMetadata(damage+1);
+				else
+					clicked.setBlockMetadata(damage-5);
+				return true;
+			}
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft ts = (TileEntityShaft)te;
 				MaterialRegistry type = ts.type;
@@ -238,6 +248,30 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				}
 				else {
 					clicked.phi += 5;
+				}
+				return true;
+			}
+			if (m == MachineRegistry.HYDRAULICLINE) {
+				TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
+				ForgeDirection dir = ForgeDirection.values()[s];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				MachineRegistry m2 = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (ep.isSneaking()) {
+					th.setInput(dir);
+				}
+				else {
+					th.setOutput(dir);
+				}
+				if (m2 == MachineRegistry.HYDRAULICLINE) {
+					TileEntityHydraulicLine th2 = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
+					if (ep.isSneaking()) {
+						th2.setOutput(dir.getOpposite());
+					}
+					else {
+						th2.setInput(dir.getOpposite());
+					}
 				}
 				return true;
 			}

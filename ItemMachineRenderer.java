@@ -33,6 +33,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class ItemMachineRenderer implements IItemRenderer {
@@ -121,6 +122,15 @@ public class ItemMachineRenderer implements IItemRenderer {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
 			TileEntityRenderer.instance.renderTileEntityAt(fly, a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
+		}
+		else if (item.itemID == RotaryCraft.hydraulicitems.itemID) {
+			TileEntity te = this.getRenderingInstance(MachineRegistry.HYDRAULIC);
+			TileEntityHydraulicPump hyd = (TileEntityHydraulicPump)te;
+			if (type == type.ENTITY) {
+				a = -0.5F; b = -0.5F;
+				GL11.glScalef(0.5F, 0.5F, 0.5F);
+			}
+			TileEntityRenderer.instance.renderTileEntityAt(hyd, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.shaftitems.itemID) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.SHAFT);

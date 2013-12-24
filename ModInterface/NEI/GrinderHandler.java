@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
@@ -114,6 +115,9 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (ingredient.itemID == ItemRegistry.CANOLA.getShiftedID()) {
 			arecipes.add(new CanolaRecipe());
+		}
+		if (ReikaBlockHelper.isOre(ingredient)) {
+			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
 		}
 		if (RecipesGrinder.getRecipes().isGrindable(ingredient)) {
 			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));

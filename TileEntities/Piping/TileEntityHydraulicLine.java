@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Piping;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -51,9 +52,15 @@ public class TileEntityHydraulicLine extends RotaryCraftTileEntity {
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
-			te.setPressure(pressure);
-			te.setFlowRate(flow);
-		}
+			if (te.getOutput() == this.getInput().getOpposite()) {
+				pressure = (int) (te.getPressure() > 0 ? te.getPressure()-64/ReikaMathLibrary.logbase(te.getPressure(), 2) : 0);
+				flow = te.getFlowRate();
+			}
+			else {
+				pressure = 0;
+				flow = 0;
+			}
+		}/*
 
 		dir = this.getOutput();
 		dx = x+dir.offsetX;
@@ -62,9 +69,11 @@ public class TileEntityHydraulicLine extends RotaryCraftTileEntity {
 		m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine te = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
-			te.setPressure(pressure);
-			te.setFlowRate(flow);
-		}
+			if (te.getInput() == this.getOutput().getOpposite()) {
+				te.setPressure(pressure);
+				te.setFlowRate(flow);
+			}
+		}*/
 	}
 
 	public int getPressure() {
@@ -88,11 +97,19 @@ public class TileEntityHydraulicLine extends RotaryCraftTileEntity {
 	}
 
 	public ForgeDirection getInput() {
-		return in != null ? in : ForgeDirection.UP;
+		return in != null ? in : ForgeDirection.UNKNOWN;
 	}
 
 	public ForgeDirection getOutput() {
-		return out != null ? out : ForgeDirection.DOWN;
+		return out != null ? out : ForgeDirection.UNKNOWN;
+	}
+
+	public ForgeDirection setInput(ForgeDirection side) {
+		return in = side;
+	}
+
+	public ForgeDirection setOutput(ForgeDirection side) {
+		return out = side;
 	}
 
 	@Override
@@ -115,6 +132,16 @@ public class TileEntityHydraulicLine extends RotaryCraftTileEntity {
 
 		NBT.setInteger("output", this.getOutput().ordinal());
 		NBT.setInteger("input", this.getInput().ordinal());
+	}
+
+	public boolean isConnectedToMachine(ForgeDirection dir) {
+		if (dir != this.getInput() && dir != this.getOutput())
+			return false;
+		int dx = xCoord+dir.offsetX;
+		int dy = yCoord+dir.offsetY;
+		int dz = zCoord+dir.offsetZ;
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, dx, dy, dz);
+		return m == MachineRegistry.HYDRAULIC || m == MachineRegistry.ROUTER;
 	}
 
 }

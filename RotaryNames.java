@@ -28,6 +28,10 @@ public class RotaryNames {
 		"advgear.worm", "advgear.cvt", "advgear.coil"
 	};
 
+	private static final String[] hydraulicItemNames = {
+		"hydraulic.pump", "hydraulic.turbine"
+	};
+
 	private static final String[] flywheelItemNames = {
 		"flywheel.wood", "flywheel.stone", "flywheel.iron", "flywheel.gold"
 	};
@@ -233,6 +237,10 @@ public class RotaryNames {
 		return getName(advGearItemNames, i);
 	}
 
+	public static String getHydraulicName(int i) {
+		return getName(hydraulicItemNames, i);
+	}
+
 	public static String getShaftName(int i) {
 		return getName(shaftItemNames, i);
 	}
@@ -251,5 +259,9 @@ public class RotaryNames {
 
 	public static int getNumberFlywheelTypes() {
 		return flywheelItemNames.length;
+	}
+
+	public static int getNumberHydraulicTypes() {
+		return hydraulicItemNames.length;
 	}
 }

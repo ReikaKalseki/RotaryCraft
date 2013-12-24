@@ -125,7 +125,6 @@ public class RenderAdvGear extends RotaryTERenderer
 		if (par8 <= -999F) {
 			itemMetadata = (int)-par8/1000;
 			par8 = 0F;
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
 		}
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityAdvancedGearAt((TileEntityAdvancedGear)tile, par2, par4, par6, par8);

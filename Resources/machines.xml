@@ -876,14 +876,14 @@
 			Power Input: Back
 		</note>
 	</fillingstation>
-	<vandegraaff>
+	<vandegraff>
 		<desc>
 			The van de graaff uses a belt to build a static charge on the upper metal sphere. If a conductive object - like a mob - comes close enough, that charge can be released into the object. The larger the charge, the longer a gap it can jump.
 		</desc>
 		<note>
 			Water dissipates static charge
 		</note>
-	</vandegraaff>
+	</vandegraff>
 	<defoliator>
 		<desc>
 			The defoliator is used for quickly clearing large areas of plant life. Note that animal life in the vicinity is also likely to die.
@@ -912,11 +912,29 @@
 			Power Input: Back
 		</note>
 	</distiller>
-		<suction>
+	<suction>
 		<desc>
 			The suction pipe draws fluid from other mods' tanks and machines. It is not designed to connect to other pipe systems, or to RotaryCraft machines.
 		</desc>
 		<note>
 		</note>
 	</suction>
+	<dynamo>
+		<desc>
+			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Unlike the air compressor, it has no inherent power limits, and is therefore capable of producing tens of thousands of RF per tick with sufficient shaft power.
+		</desc>
+		<note>
+			Orientation and Output: Like ThermalExpansion Dynamos
+			Power Input: Back
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			The magnetostatic engine functions much like the pneumatic engine. It accumulates RF provided to it, and its output torque can be selected to choose the total power output.
+		</desc>
+		<note>
+			Conduit Input: Back
+			Speed: 1024 rad/s
+		</note>
+	</magnetic>
 </machines>

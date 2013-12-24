@@ -99,7 +99,7 @@ public enum HandbookRegistry {
 	MOTOR(MachineRegistry.ELECTRICMOTOR),
 	AGGREGATOR(MachineRegistry.AGGREGATOR),
 	FUELENGINE(MachineRegistry.FUELENGINE),
-	DYNAMO(MachineRegistry.DYNAMO),
+	DYNAMO(MachineRegistry.MAGNETIC),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
@@ -114,7 +114,7 @@ public enum HandbookRegistry {
 	BOILER(MachineRegistry.BOILER),
 	GENERATOR(MachineRegistry.GENERATOR),
 	FURNACE(MachineRegistry.BIGFURNACE),
-	STATIC(MachineRegistry.STATIC),
+	STATIC(MachineRegistry.DYNAMO),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),

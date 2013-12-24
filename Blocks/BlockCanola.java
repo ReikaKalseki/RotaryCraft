@@ -143,7 +143,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 
 	public void testStable(World world, int x, int y, int z) {
 		int idbelow = world.getBlockId(x, y-1, z);
-		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || !this.isValidFarmBlock(idbelow)) {
+		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || !this.isValidFarmBlock(world, x, y, z, idbelow)) {
 			this.die(world, x, y, z);
 		}
 	}
@@ -222,10 +222,12 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 		return 9;
 	}
 
-	public static boolean isValidFarmBlock(int id) {
+	public static boolean isValidFarmBlock(World world, int x, int y, int z, int id) {
 		if (id == Block.tilledField.blockID)
 			return true;
-		return farmBlocks.contains(id);
+		Block b = Block.blocksList[id];
+		return b.isFertile(world, x, y, z);
+		//return farmBlocks.contains(id);
 	}
 
 	public static void addFarmBlock(int id) {

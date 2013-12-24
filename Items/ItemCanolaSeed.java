@@ -46,7 +46,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 				++x;
 		}
 		int idbelow = world.getBlockId(x, y-1, z);
-		if ((!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z))) || !BlockCanola.isValidFarmBlock(idbelow))
+		if ((!ReikaWorldHelper.softBlocks(world.getBlockId(x, y, z))) || !BlockCanola.isValidFarmBlock(world, x, y, z, idbelow))
 			return false;
 		if (!player.canPlayerEdit(x, y, z, 0, items))
 			return false;
