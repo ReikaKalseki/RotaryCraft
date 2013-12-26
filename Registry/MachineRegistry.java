@@ -39,7 +39,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
@@ -124,6 +123,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
@@ -238,7 +238,7 @@ public enum MachineRegistry {
 	SCALECHEST(			"machine.chest", 			BlockDMIMachine.class,		TileEntityScaleableChest.class,		4,	"RenderScaleChest"),
 	IGNITER(			"machine.firestarter", 		BlockIMachine.class,		TileEntityIgniter.class,			3),
 	MAGNETIZER(			"machine.magnetizer",		BlockDMIMachine.class,		TileEntityMagnetizer.class,			5,	"RenderMagnetizer"),
-	CONTAINMENT(		"machine.containment",		BlockMMachine.class,		TileEntityContainment.class,		10,	"RenderContainment"),
+	CONTAINMENT(		"machine.containment",		BlockMMachine.class,		TileEntityContainment.class,		10,	"RenderProtectionDome"),
 	SCREEN(				"machine.screen",			BlockDMIMachine.class,		TileEntityScreen.class,				6,	"RenderCCTVScreen"),
 	PURIFIER(			"machine.purifier",			BlockIMachine.class,		TileEntityPurifier.class,			4),
 	LASERGUN(			"machine.lasergun",			BlockMMachine.class,		TileEntityLaserGun.class,			11, "RenderLaserGun"),
@@ -289,7 +289,8 @@ public enum MachineRegistry {
 	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
 	HYDRAULICLINE(		"machine.hyline",			BlockHydraulicLine.class,	TileEntityHydraulicLine.class,		0),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
-	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION);
+	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
+	CRYSTALLIZER(		"machine.crystal",			BlockMIMachine.class,		TileEntityCrystallizer.class,		23);
 
 	private String name;
 	private Class te;
@@ -983,8 +984,6 @@ public enum MachineRegistry {
 	}
 
 	public boolean renderInPass1() {
-		if (this.hasModel() && TileEntityIOMachine.class.isAssignableFrom(te))
-			return true;
 		if (this == COOLINGFIN)
 			return true;
 		if (this == DISPLAY)

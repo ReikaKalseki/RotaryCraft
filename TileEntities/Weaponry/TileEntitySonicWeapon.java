@@ -245,7 +245,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 			//ReikaChatHelper.write(this.LETHALVOLUME);
 			//ReikaChatHelper.write(ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getMaxVolume()));
 			if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LETHALVOLUME)
-				ent.attackEntityFrom(DamageSource.outOfWorld, 200000);
+				ent.attackEntityFrom(DamageSource.outOfWorld, Integer.MAX_VALUE);
 		}
 	}
 

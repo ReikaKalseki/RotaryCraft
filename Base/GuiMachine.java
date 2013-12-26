@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -136,7 +135,8 @@ public abstract class GuiMachine extends GuiContainer {
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
 		if (ep == null && !(this instanceof GuiOneSlotInv))
 			ReikaJavaLibrary.pConsole("Gui for "+tile.getMultiValuedName()+" did not set player entity!");
-		RenderHelper.enableGUIStandardItemLighting();
+		//RenderHelper.enableGUIStandardItemLighting();
+		//RenderHelper.disableStandardItemLighting();
 	}
 
 	protected abstract void drawPowerTab(int j, int k);

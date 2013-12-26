@@ -15,6 +15,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -572,6 +576,20 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 			if (power < 1000)
 				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
+		}
+		if (m == null && tile instanceof IFluidHandler) {
+			FluidTankInfo[] info = ((IFluidHandler)tile).getTankInfo(ForgeDirection.VALID_DIRECTIONS[s]);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < info.length; i++) {
+				sb.append("Tank "+i+": ");
+				FluidStack fs = info[i].fluid;
+				if (fs != null)
+					sb.append(fs.amount+" mB of "+fs.getFluid().getLocalizedName());
+				else
+					sb.append("Empty");
+				sb.append("\n");
+			}
+			ReikaChatHelper.write(sb.toString());
 		}
 
 		return true;

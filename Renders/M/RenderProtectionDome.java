@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
+import java.awt.Color;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -21,81 +23,69 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelForce;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
+import Reika.RotaryCraft.Models.ModelDomeEmitter;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 
-public class RenderContainment extends RotaryTERenderer
+public class RenderProtectionDome extends RotaryTERenderer
 {
 
-	private ModelForce ContainmentModel = new ModelForce();
+	protected final ModelDomeEmitter model = new ModelDomeEmitter();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityContainmentAt(TileEntityContainment tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityProtectionDomeAt(TileEntityProtectionDome tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelDomeEmitter var14;
+		var14 = model;
 
-			{
-				//((BlockContainmentBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
-		}
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
 
-		if (true)
-		{
-			ModelForce var14;
-			var14 = ContainmentModel;
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
 
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/containtex.png");
+		float var13;
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
+		var14.renderAll(null, 0, 0);
 
-			float var13;
-
-			var14.renderAll(null, 0, 0);
-
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityContainmentAt((TileEntityContainment)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+			this.renderTileEntityProtectionDomeAt((TileEntityProtectionDome)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-		if (ConfigRegistry.RENDERFORCEFIELD.getState() && ((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			this.renderField(((TileEntityContainment)tile), par2+0.5, par4+0.5, par6+0.5);
+			if (ConfigRegistry.RENDERFORCEFIELD.getState())
+				this.renderField(((TileEntityProtectionDome)tile), par2+0.5, par4+0.5, par6+0.5);
+		}
 	}
 
-	private void renderField(TileEntityContainment te, double x, double y, double z) {
+	protected void renderField(TileEntityProtectionDome te, double x, double y, double z) {
 		if (!te.isInWorld())
 			return;
 		if (te.getRange() <= 0)
 			return;
-		int[] color = {120, 0, 150};
+		Color c = te.getDomeColor();
+		int[] color = new int[]{c.getRed(), c.getGreen(), c.getBlue()};
 		for (double k = -te.getRange(); k <= te.getRange(); k += 0.5*te.getRange()/8)
 			ReikaRenderHelper.renderCircle(Math.sqrt(te.getRange()*te.getRange()-k*k), x, y+k, z, color);
 		for (int k = 0; k < 360; k += 15)

@@ -89,7 +89,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		ArrayList<Integer> li = new ArrayList();
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
-			if (m.isAvailableInCreativeInventory())
+			if (m.isAvailableInCreativeInventory() && !m.hasCustomPlacerItem())
 				li.add(i);
 		}
 		API.setItemDamageVariants(RotaryCraft.machineplacer.itemID, li);

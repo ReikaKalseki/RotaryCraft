@@ -9,11 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -29,6 +31,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	public BlockModelledMultiTE(int id, Material mat) {
 		super(id, mat);
+		Block.opaqueCubeLookup[id] = false;
 	}
 
 	@Override
@@ -47,7 +50,9 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IconRegister ico) {
+		blockIcon = ico.registerIcon("rotarycraft:steel");
+	}
 
 	@Override
 	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
@@ -79,6 +84,23 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	public final boolean addBlockHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
 	{
 		return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, tg, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
+	}
+
+	@Override
+	public float getBlockBrightness(IBlockAccess iba, int x, int y, int z)
+	{
+		return iba.getBrightness(x, y+1, z, this.getLightValue(iba, x, y+1, z));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+
+	/**
+	 * Goes straight to getLightBrightnessForSkyBlocks for Blocks, does some fancy computing for Fluids
+	 */
+	public int getMixedBrightnessForBlock(IBlockAccess iba, int x, int y, int z)
+	{
+		return iba.getLightBrightnessForSkyBlocks(x, y+1, z, this.getLightValue(iba, x, y+1, z));
 	}
 
 }

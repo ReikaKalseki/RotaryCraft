@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import net.minecraft.client.model.ModelRenderer;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
-public class ModelForce extends RotaryModelBase
+public class ModelDomeEmitter extends RotaryModelBase
 {
 	//fields
 	ModelRenderer Shape1;
@@ -50,7 +50,7 @@ public class ModelForce extends RotaryModelBase
 	ModelRenderer Shape3;
 	ModelRenderer Shape4;
 
-	public ModelForce()
+	public ModelDomeEmitter()
 	{
 		textureWidth = 128;
 		textureHeight = 128;

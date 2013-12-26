@@ -35,38 +35,63 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		if (!world.isRemote) {
 			this.chargeTools();
 			this.makeJetplate();
-			this.uncraft();
+
+			if (world.isBlockIndirectlyGettingPowered(x, y, z))
+				if (this.canUncraft())
+					this.uncraft();
 		}
+	}
+
+	public boolean canUncraft() {
+		boolean can = false;
+		for (int i = 0; i < 9; i++) {
+			ItemStack is = inventory[i];
+			if (i == 4) {
+				if (is == null)
+					return false;
+				else {
+					IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
+					if (ir == null)
+						return false;
+					else {
+						ItemStack[] in = new ItemStack[9];
+						ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
+						boolean flag = true;
+						for (int k = 0; k < 9; k++) {
+							if (inventory[k+9] != null) {
+								if (!ReikaItemHelper.matchStacks(inventory[k+9], in[k]))
+									flag = false;
+								if (inventory[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inventory[k+9].getMaxStackSize()))
+									flag = false;
+							}
+						}
+						can = flag;
+					}
+				}
+			}
+			else {
+				if (is != null)
+					return false;
+			}
+		}
+		return can;
 	}
 
 	private void uncraft() {
 		ItemStack is = inventory[4];
-		if (is != null) {
-			IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
-			if (ir != null) {
-				ItemStack[] in = new ItemStack[9];
-				ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
-				for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
-					ReikaInventoryHelper.decrStack(4, inventory);
-				boolean flag = true;
-				for (int i = 0; i < 9; i++) {
-					if (inventory[i+9] != null) {
-						if (!ReikaItemHelper.matchStacks(inventory[i+9], in[i]))
-							flag = false;
-						if (inventory[i+9].stackSize >= Math.min(this.getInventoryStackLimit(), inventory[i+9].getMaxStackSize()))
-							flag = false;
-					}
-				}
-				if (flag) {
-					for (int i = 0; i < 9; i++) {
-						if (inventory[i+9] == null) {
-							inventory[i+9] = in[i];
-						}
-						else {
-							inventory[i+9] = ReikaItemHelper.getSizedItemStack(inventory[i+9], inventory[i+9].stackSize+1);
-						}
-					}
-				}
+		IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
+		ItemStack[] in = new ItemStack[9];
+		ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
+
+		for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
+			ReikaInventoryHelper.decrStack(4, inventory);
+
+		for (int i = 0; i < 9; i++) {
+			if (inventory[i+9] == null) {
+				inventory[i+9] = in[i];
+			}
+			else {
+				inventory[i+9] = ReikaItemHelper.getSizedItemStack(inventory[i+9], inventory[i+9].stackSize+1);
 			}
 		}
 	}

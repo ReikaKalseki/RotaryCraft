@@ -11,36 +11,23 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityContainment extends TileEntityPowerReceiver implements RangedEffect, GuiController {
+public class TileEntityContainment extends TileEntityProtectionDome {
 
 	public static final int DRAGONPOWER = 2097152;
 	public static final int WITHERPOWER = 524288;
 
 	public static final int FALLOFF = 8192;
-
-	public int setRange;
-
-	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
 
 	@Override
 	public int getMachineIndex() {
@@ -50,6 +37,7 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		this.setColor(120, 0, 150);
 		this.getPowerBelow();
 		if (power < MINPOWER)
 			return;
@@ -106,68 +94,18 @@ public class TileEntityContainment extends TileEntityPowerReceiver implements Ra
 		}
 	}
 
-	private void spawnParticles(World world, int x, int y, int z) {
-		for (int i = 0; i < 4; i++) {
-			world.spawnParticle("portal", x+rand.nextDouble(), y+rand.nextDouble()-0.5, z+rand.nextDouble(), rand.nextDouble()-0.5, rand.nextDouble(), rand.nextDouble()-0.5);
-		}
-	}
-
-	private AxisAlignedBB getRangedBox() {
-		int r = this.getRange();
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord).expand(r, r, r);
+	@Override
+	public String getParticleType() {
+		return "portal";
 	}
 
 	@Override
-	public boolean hasModelTransparency() {
-		return false;
+	public int getFallOff() {
+		return FALLOFF;
 	}
 
 	@Override
-	public int getRange() {
-		if (!this.isClear(worldObj, xCoord, yCoord, zCoord))
-			return 0;
-		if (setRange > this.getMaxRange())
-			return this.getMaxRange();
-		return setRange;
-	}
-
-	private boolean isClear(World world, int x, int y, int z) {
-		for (int i = 1; i <= setRange; i++) {
-			int id = world.getBlockId(x, y+i, z);
-			if (id != 0 && Block.blocksList[id].getLightOpacity(world, x, y+i, z) > 0)
-				return false;
-		}
-		return true;
-	}
-
-	public int getMaxRange() {
-		int range = (int)((power)/MINPOWER*FALLOFF);
-		if (range > ConfigRegistry.FORCERANGE.getValue())
-			return ConfigRegistry.FORCERANGE.getValue();
-		return range;
-	}
-
-	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return INFINITE_EXTENT_AABB;
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBT.setInteger("setRange", setRange);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		setRange = NBT.getInteger("setRange");
-	}
-
-	@Override
-	public int getRedstoneOverride() {
+	public int getRangeBoost() {
 		return 0;
 	}
 }

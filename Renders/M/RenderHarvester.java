@@ -87,6 +87,10 @@ public class RenderHarvester extends RotaryTERenderer
 				//EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
 				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
 		}
+		else if (!tile.hasWorldObj()) {
+			if (((TileEntityMobHarvester)tile).hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
+		}
 	}
 
 	private void renderLaser(TileEntityMobHarvester harv, double par2, double par4, double par6) {

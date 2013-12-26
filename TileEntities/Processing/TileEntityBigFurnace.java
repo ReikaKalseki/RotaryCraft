@@ -54,6 +54,8 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 
+		smelter.setCap(this.getDuration());
+
 		if (this.canSmelt()) {
 			smelter.update();
 			if (smelter.checkCap())
@@ -62,6 +64,10 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		else
 			smelter.reset();
 		smeltTick = smelter.getTick();
+	}
+
+	private int getDuration() {
+		return temperature >= 600 ? 15 : 20;
 	}
 
 	public int getNumberInputSlots() {

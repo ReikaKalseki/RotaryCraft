@@ -23,6 +23,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -157,6 +158,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				TileEntity te = this.getRenderingInstance(machine);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;
+					em.getEnchantments().clear();
 					em.applyEnchants(item);
 				}
 				if (machine.hasNBTVariants()) {
@@ -171,6 +173,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 					GL11.glTranslated(d, d, d);
 				}
 				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlockVariable(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
+				if (enchant) {
+					GL11.glRotated(90, 0, 0, 1);
+					ReikaSpriteSheets.renderEffect(type, item);
+				}
 			}
 		}
 		if (enchant) {

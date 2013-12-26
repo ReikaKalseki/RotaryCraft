@@ -130,11 +130,6 @@ public class RecipesGrinder {
 		return in;
 	}
 
-	public Map getSmeltingList()
-	{
-		return metaSmeltingList;
-	}
-
 	public void addRecipe(Block b, ItemStack out, float xp) {
 		this.addRecipe(new ItemStack(b), out, xp);
 	}

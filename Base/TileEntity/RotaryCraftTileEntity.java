@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -23,7 +22,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -107,6 +105,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return true;
 		if (pass == 0)
 			return true;
+		if (this.getMachine().hasModel() && this instanceof TileEntityIOMachine)
+			return true;
 		if (pass == 1 && (this.hasModelTransparency() || this.getMachine().renderInPass1()))
 			return true;
 		return false;
@@ -165,10 +165,11 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public boolean isIDTEMatch(World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof ShaftPowerEmitter)
-			return world.getBlockId(x, y, z) == te.getBlockType().blockID;
-		return super.isIDTEMatch(world, x, y, z);
+		//TileEntity te = world.getBlockTileEntity(x, y, z);
+		//if (te instanceof ShaftPowerEmitter)
+		//	return world.getBlockId(x, y, z) == te.getBlockType().blockID;
+		//return super.isIDTEMatch(world, x, y, z);
+		return true;
 	}
 
 	public boolean isShutdown() {

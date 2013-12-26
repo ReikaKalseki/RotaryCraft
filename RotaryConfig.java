@@ -9,23 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ExtraConfigIDs;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class RotaryConfig extends ControlledConfig {
 
@@ -49,21 +39,13 @@ public class RotaryConfig extends ControlledConfig {
 
 	//Initialization of the config
 	@Override
-	public void initProps(FMLPreInitializationEvent event) {
-
-		super.initProps(event);
-
-		config.load();
+	protected void loadAdditionalData() {
 		for (int i = 0; i < RotaryAchievements.list.length; i++) {
 			String name = RotaryAchievements.list[i].name();
 			achievementIDs[i] = config.get("Achievement IDs", name, 24000+i).getInt();
 		}
-
-		/*******************************/
-		//save the data
-		config.save();
 	}
-
+	/*
 	@Override
 	protected void resetConfigFile() {
 		String path = this.getConfigPath()+"_Old_Config_Backup.txt";
@@ -125,5 +107,5 @@ public class RotaryConfig extends ControlledConfig {
 			e.printStackTrace();
 		}
 		configFile.delete();
-	}
+	}*/
 }

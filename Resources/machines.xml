@@ -475,7 +475,7 @@
 	</freezegun>
 	<magnetizer>
 		<desc>
-			The magnetizer uses a rapidly rotating shaft to create a magnetic field inside a shaft core. This is one of the critical components of an AC Electric Engine.
+			The magnetizer uses a rapidly rotating shaft to create a magnetic field inside a shaft core. This is one of the critical components of an AC Electric Engine. It requires an AC redstone current and high speed.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -878,7 +878,7 @@
 	</fillingstation>
 	<vandegraff>
 		<desc>
-			The van de graaff uses a belt to build a static charge on the upper metal sphere. If a conductive object - like a mob - comes close enough, that charge can be released into the object. The larger the charge, the longer a gap it can jump.
+			The van de graaff uses a belt to build a static charge on the upper metal sphere. If a conductive object - like a mob - comes close enough, that charge can be released into the object. The larger the charge, the longer a gap it can jump. Note that some mobs may not react as predicted to the discharge. Excessive charges may attract even larger discharges from above.
 		</desc>
 		<note>
 			Water dissipates static charge

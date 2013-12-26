@@ -227,8 +227,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			TileEntity te = blocks.get(i);
 			this.shutdownTE(te);
 		}
-		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		world.setBlock(x, y, z, 0);
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		if (ReikaRandomHelper.doWithChance(50)) {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, this.getMachine().getCraftedProduct());
 		}

@@ -12,16 +12,19 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -29,7 +32,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.getItem() instanceof ItemBlock || is.itemID == Item.bucketLava.itemID || is.itemID == Item.bucketWater.itemID; //Blocks only
+		return ReikaItemHelper.isBlock(is) || FluidContainerRegistry.getFluidForFilledItem(is) != null;
 	}
 
 	@Override
@@ -58,6 +61,8 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		if (power < MINPOWER)
 			return;
 		this.fire(world, x, y, z);
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
+		ReikaParticleHelper.EXPLODE.spawnAt(world, x+0.5, y+0.5, z+0.5);
 	}
 
 	private double getBlockMass(ItemStack is) {
@@ -85,6 +90,17 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 					ReikaInventoryHelper.decrStack(i, inventory);
 					return new ItemStack(Block.lavaMoving);
 				}
+				else {
+					ItemStack is = inventory[i];
+					FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (fs != null) {
+						Fluid f = fs.getFluid();
+						if (f.canBePlacedInWorld()) {
+							ReikaInventoryHelper.decrStack(i, inventory);
+							return new ItemStack(f.getBlockID(), 1, 0);
+						}
+					}
+				}
 			}
 		}
 		return null;
@@ -92,7 +108,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	private void fireBlock(ItemStack is, World world, int x, int y, int z) {
 		EntityFallingSand e = new EntityFallingSand(world, x+0.5, y+1+0.5, z+0.5, is.itemID, is.getItemDamage());
-		double[] vel = ReikaPhysicsHelper.polarToCartesian(velocity, theta, phi);
+		double[] vel = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
 		e.motionX = vel[0];
 		e.motionY = vel[1];
 		e.motionZ = vel[2];
@@ -145,7 +161,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		ItemStack next = this.getNextToFire();
 		if (next == null)
 			return;
-		ReikaJavaLibrary.pConsole(this.getReqTorque(next));
+		//ReikaJavaLibrary.pConsole(this.getReqTorque(next));
 		if (torque < this.getReqTorque(next)) {
 			ReikaInventoryHelper.addToIInv(next, this);
 			return;

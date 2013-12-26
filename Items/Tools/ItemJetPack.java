@@ -122,11 +122,32 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 
 			nbtData.setByte("toggleTimer", toggleTimer);
 		}
+
+		if (this.getCurrentFuel(is) > 0) {
+			if (player.handleLavaMovement() && world.difficultySetting != 0) {
+				this.explode(world, player);
+			}
+			else if (player.isBurning() && world.difficultySetting > 1 && bool) {
+				this.explode(world, player);
+			}
+		}
+	}
+
+	private void explode(World world, EntityPlayer player) {
+		player.setCurrentItemOrArmor(3, null);
+		world.createExplosion(player, player.posX, player.posY, player.posZ, 2, false);
+		double v = 4;
+		double ang = itemRand.nextDouble()*360;
+		double vx = v*Math.cos(Math.toRadians(ang));
+		double vz = v*Math.sin(Math.toRadians(ang));
+		player.addVelocity(vx, 1.25, vz);
+		player.velocityChanged = true;
 	}
 
 	public int getMaxFuel(ItemStack is) {
 		return 30000;
 	}
+
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
 		if (is.stackTagCompound == null)

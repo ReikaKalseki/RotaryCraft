@@ -17,6 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -29,11 +32,11 @@ import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
-public class TileEntityFertilizer extends InventoriedPowerReceiver implements RangedEffect {
+public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect {
 
 	private ItemStack[] inv = new ItemStack[18];
 
@@ -183,6 +186,8 @@ public class TileEntityFertilizer extends InventoriedPowerReceiver implements Ra
 	}
 
 	public boolean hasFertilizer() {
+		if (tank.isEmpty())
+			return false;
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
 				if (this.isValidFertilizer(inv[i]))
@@ -249,5 +254,25 @@ public class TileEntityFertilizer extends InventoriedPowerReceiver implements Ra
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return FluidRegistry.WATER;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 6000;
 	}
 }

@@ -25,7 +25,6 @@ public class RecipesExtractor
 	private static final RecipesExtractor ExtractorBase = new RecipesExtractor();
 
 	/** The list of smelting results. */
-	private Map smeltingList = new HashMap();
 	private Map metaSmeltingList = new HashMap();
 
 	/**
@@ -49,28 +48,6 @@ public class RecipesExtractor
 		this.addSmelting(Block.oreDiamond.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 5), 0F);
 		this.addSmelting(Block.oreEmerald.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 6), 0F);
 		this.addSmelting(Block.oreNetherQuartz.blockID, 0, new ItemStack(RotaryCraft.extracts.itemID, 1, 7), 0.7F);
-	}
-
-	/** Adds a smelting recipe. */
-	@Deprecated
-	public void addSmelting(int par1, ItemStack par2ItemStack)
-	{
-		smeltingList.put(Integer.valueOf(par1), par2ItemStack);
-	}
-
-	/**
-	 * Returns the smelting result of an item.
-	 * Deprecated in favor of a metadata sensitive version
-	 */
-	@Deprecated
-	public ItemStack getSmeltingResult(int par1)
-	{
-		return (ItemStack)smeltingList.get(Integer.valueOf(par1));
-	}
-
-	public Map getSmeltingList()
-	{
-		return smeltingList;
 	}
 
 	/**
@@ -99,9 +76,7 @@ public class RecipesExtractor
 			item = ore.getOreBlock();
 		}
 		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
-		if (ret != null)
-			return ret;
-		return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+		return ret;
 	}
 
 	public static boolean isDust(ItemStack is) {

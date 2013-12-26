@@ -53,11 +53,6 @@ public class RecipesCompactor
 		return DifficultyEffects.COMPACTOR.getInt();
 	}
 
-	public Map getSmeltingList()
-	{
-		return metaSmeltingList;
-	}
-
 	/**
 	 * Add a metadata-sensitive furnace recipe
 	 * @param itemID The Item ID

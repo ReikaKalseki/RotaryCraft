@@ -411,10 +411,10 @@ public class GuiHandbook extends GuiScreen
 			this.drawTabIcons();
 		}
 
+		this.drawGraphics();
+
 		if (subpage == 0)
 			this.drawMachineRender(posX, posY);
-
-		this.drawGraphics();
 	}
 
 	private void drawMachineRender(int posX, int posY) {

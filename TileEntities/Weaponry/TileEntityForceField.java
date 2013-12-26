@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,50 +40,21 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityForceField extends TileEntityPowerReceiver implements GuiController, RangedEffect, EnchantableMachine {
+public class TileEntityForceField extends TileEntityProtectionDome implements EnchantableMachine {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	public static final int FALLOFF = 32768;
-
-	public int setRange;
-
-	public int[] RGB = new int[3];
-
-	public AxisAlignedBB getShield() {
-		int range = this.getRange();
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(range, range, range);
-	}
-
-	public int getRange() {
-		if (!this.isClear(worldObj, xCoord, yCoord, zCoord))
-			return 0;
-		if (setRange > this.getMaxRange())
-			return this.getMaxRange();
-		return setRange;
-	}
-
-	private boolean isClear(World world, int x, int y, int z) {
-		for (int i = 1; i <= setRange; i++) {
-			int id = world.getBlockId(x, y+i, z);
-			if (id != 0 && Block.blocksList[id].getLightOpacity(world, x, y+i, z) > 0)
-				return false;
-		}
-		return true;
-	}
 
 	public double[] getBoundaryCoord(double x, double y, double z) {
 		double[] xyz = new double[3];
@@ -97,14 +67,9 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 		return xyz;
 	}
 
-	public int getMaxRange() {
-		if (power < MINPOWER)
-			return 0;
-		int range = 2+(int)(power-MINPOWER)/FALLOFF;
-		range += 8*this.getEnchantment(Enchantment.protection);
-		if (range > ConfigRegistry.FORCERANGE.getValue())
-			return ConfigRegistry.FORCERANGE.getValue();
-		return range;
+	@Override
+	public int getRangeBoost() {
+		return 8*this.getEnchantment(Enchantment.protection);
 	}
 
 	@Override
@@ -116,23 +81,11 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			return;
 		this.spawnParticles(world, x, y, z);
 		this.setColor(64*4/tickcount, 128+128*4/tickcount, 255);
-		AxisAlignedBB field = this.getShield();
+		AxisAlignedBB field = this.getRangedBox();
 		List threats = world.getEntitiesWithinAABB(Entity.class, field);
 		for (int i = 0; i < threats.size(); i++) {
 			this.protect(world, threats, i);
 		}
-	}
-
-	private void spawnParticles(World world, int x, int y, int z) {
-		for (int i = 0; i < 4; i++) {
-			world.spawnParticle("magicCrit", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), rand.nextDouble()-0.5, rand.nextDouble(), rand.nextDouble()-0.5);
-		}
-	}
-
-	private void setColor(int r, int g, int b) {
-		RGB[0] = r;
-		RGB[1] = g;
-		RGB[2] = b;
 	}
 
 	private void protect(World world, List threats, int i) {
@@ -314,11 +267,6 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 	}
 
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return INFINITE_EXTENT_AABB;
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
@@ -346,31 +294,10 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			}
 		}
 	}
-	/*
-    @SideOnly(Side.CLIENT)
-    public double getMaxRenderDistanceSquared()
-    {
-        return 65536D;
-    }*/
-
-	@Override
-	public boolean hasModelTransparency() {
-		return false;
-	}
-
-	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
-
-	}
 
 	@Override
 	public int getMachineIndex() {
 		return MachineRegistry.FORCEFIELD.ordinal();
-	}
-
-	@Override
-	public int getRedstoneOverride() {
-		return 0;
 	}
 
 	@Override
@@ -416,5 +343,15 @@ public class TileEntityForceField extends TileEntityPowerReceiver implements Gui
 			return 0;
 		else
 			return this.getEnchantments().get(e);
+	}
+
+	@Override
+	public String getParticleType() {
+		return "magicCrit";
+	}
+
+	@Override
+	public int getFallOff() {
+		return FALLOFF;
 	}
 }

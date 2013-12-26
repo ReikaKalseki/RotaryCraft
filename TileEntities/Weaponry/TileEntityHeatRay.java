@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEffect {
 
 	/** Rate of conversion - one power++ = 1/falloff ++ blocks range */
-	public static final int FALLOFF = 1024; //1kW per block right now
+	public static final int FALLOFF = 256;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -82,7 +82,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	}
 
 	public int getBurnTime() {
-		return 2+(int)(4*power/MINPOWER);
+		return 2+(int)(16*power/MINPOWER);
 	}
 
 	public int getRange() {
@@ -185,7 +185,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 		if (ConfigRegistry.BLOCKDAMAGE.getState()) {
 			if (id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 32));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 8));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
@@ -193,14 +193,14 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id == Block.sand.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.glass.blockID);
 			}
 			if (id == Block.gravel.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
@@ -219,21 +219,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				value = true;
 			}
 			if (id == Block.dirt.blockID || id == Block.tilledField.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.sand.blockID);
 			}
 			if (id == Block.grass.blockID || id == Block.mycelium.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 16));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.dirt.blockID);
 			}
 			if (id == Block.ice.blockID || id == Block.blockSnow.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 4));
+				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
@@ -243,7 +243,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					id == Block.plantRed.blockID || id == Block.mushroomRed.blockID || id == Block.mushroomBrown.blockID ||
 					id == Block.deadBush.blockID || id == Block.crops.blockID || id == 142 || id == 141 || id == Block.vine.blockID ||
 					id == Block.melonStem.blockID || id == Block.pumpkinStem.blockID || id == Block.waterlily.blockID) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
+				int chance = (int)((power-MINPOWER)/(1024 * step / 2));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
@@ -254,7 +254,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 			if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
+				int chance = (int)((power-MINPOWER)/(1024 * step / 2));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {

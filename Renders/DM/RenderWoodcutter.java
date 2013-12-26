@@ -86,6 +86,26 @@ public class RenderWoodcutter extends RotaryTERenderer
 			if (((TileEntityWoodcutter)tile).hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
 		}
+		else if (!tile.hasWorldObj()) {
+			int var11 = 0;
+			switch(tile.getBlockMetadata()) {
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 0;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
+			}
+			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
+			if (((TileEntityWoodcutter)tile).hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
+		}
 	}
 
 	@Override

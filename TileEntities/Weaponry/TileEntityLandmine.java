@@ -106,20 +106,15 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, region);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)in.get(i);
-			boolean invuln = false;
 			if (e instanceof EntityPlayer) {
-				if (((EntityPlayer)e).capabilities.isCreativeMode)
-					invuln = true;
-				else
+				if (!((EntityPlayer)e).capabilities.isCreativeMode)
 					RotaryAchievements.LANDMINE.triggerAchievement((EntityPlayer) e);
 			}
-			if (!invuln) {
-				e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);
-				e.addPotionEffect(new PotionEffect(Potion.blindness.id, 400, 0));
-				e.addPotionEffect(new PotionEffect(Potion.confusion.id, 450, 5));
-				if (poison)
-					e.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-			}
+			e.attackEntityFrom(DamageSource.setExplosionSource(new Explosion(world, null, e.posX, e.posY, e.posZ, power)), (int)power*4);
+			e.addPotionEffect(new PotionEffect(Potion.blindness.id, 400, 0));
+			e.addPotionEffect(new PotionEffect(Potion.confusion.id, 450, 5));
+			if (poison)
+				e.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
 			if (e instanceof EntityCreeper) {
 				world.createExplosion(e, x+0.5, y+0.5, z+0.5, 3, true);
 			}

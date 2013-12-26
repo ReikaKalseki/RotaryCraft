@@ -46,6 +46,8 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 			return;
 		if (tickcount < 20)
 			return;
+		if (power < MINPOWER)
+			return;
 		tickcount = 0;
 		if (target[3] == 1) {
 			this.fire(world, target);
