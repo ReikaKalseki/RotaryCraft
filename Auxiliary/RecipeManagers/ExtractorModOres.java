@@ -48,10 +48,10 @@ public class ExtractorModOres {
 		return ModOreList.getEntryFromDamage(is.getItemDamage()/4) != null;
 	}
 
-	public static int getStageFromMetadata(ItemStack is) {
+	public static ExtractorStage getStageFromMetadata(ItemStack is) {
 		if (ModOreList.isModOre(is))
-			return -1;
-		return is.getItemDamage()%4;
+			return null;
+		return ExtractorStage.values()[is.getItemDamage()%4];
 	}
 
 	public static int getIndexOffsetForIngot(ItemStack is) {
@@ -150,5 +150,12 @@ public class ExtractorModOres {
 
 	public static ModOreList getOreFromExtract(ItemStack item) {
 		return ModOreList.oreList[(item.getItemDamage()/4)];
+	}
+
+	public static enum ExtractorStage {
+		DUST(),
+		SLURRY(),
+		SOLUTION(),
+		FLAKES();
 	}
 }

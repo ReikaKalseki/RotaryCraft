@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
@@ -42,7 +43,9 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(RecipesGrinder.getRecipes().getSmeltingResult(this.getEntry()), 131, 24);
+			ItemStack result = RecipesGrinder.getRecipes().getSmeltingResult(this.getEntry());
+			ItemStack is = ReikaItemHelper.getSizedItemStack(result, 1);
+			return is != null ? new PositionedStack(is, 131, 24) : null;
 		}
 
 		@Override

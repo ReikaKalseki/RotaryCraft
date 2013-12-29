@@ -11,7 +11,6 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
@@ -35,7 +34,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		this.drawTexturedModalRect(j+79, k+35, 176, 35, 18, 15);
-		api.drawItemStack(itemRenderer, fontRenderer, table.getToCraft(), j+116, k+35);
+		api.drawItemStackWithTooltip(itemRenderer, fontRenderer, table.getToCraft(), j+116, k+35);
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import Reika.RotaryCraft.RotaryCraft;
 public enum ConfigRegistry implements ConfigList {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
-	GPRORES("GPR Renders Ores", false),
+	GPRORES("GPR Renders Ores", true),
 	INSTACUT("Instant Woodcutter", false),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),

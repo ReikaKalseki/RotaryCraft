@@ -580,15 +580,23 @@ public class ItemMeter extends ItemRotaryTool
 		if (m == null && tile instanceof IFluidHandler) {
 			FluidTankInfo[] info = ((IFluidHandler)tile).getTankInfo(ForgeDirection.VALID_DIRECTIONS[s]);
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < info.length; i++) {
-				sb.append("Tank "+i+": ");
-				FluidStack fs = info[i].fluid;
-				if (fs != null)
-					sb.append(fs.amount+" mB of "+fs.getFluid().getLocalizedName());
-				else
-					sb.append("Empty");
-				sb.append("\n");
+			if (info != null) {
+				for (int i = 0; i < info.length; i++) {
+					if (info[i] != null) {
+						sb.append("Tank "+i+": ");
+						FluidStack fs = info[i].fluid;
+						if (fs != null && fs.getFluid() != null)
+							sb.append(fs.amount+" mB of "+fs.getFluid().getLocalizedName()+"/"+info[i].capacity+" mB Capacity");
+						else
+							sb.append("Empty");
+						sb.append("\n");
+					}
+				}
 			}
+			else {
+				sb.append("No Tank Data.");
+			}
+
 			ReikaChatHelper.write(sb.toString());
 		}
 

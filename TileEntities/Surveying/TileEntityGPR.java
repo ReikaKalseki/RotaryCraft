@@ -10,15 +10,14 @@
 package Reika.RotaryCraft.TileEntities.Surveying;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -27,7 +26,8 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	/** A depth-by-width array of the discovered block IDs, materials, colors
 	 * drawn downwards (first slots are top layer) */
 	public int[][] ids = new int[256][81]; //from 0-16 -> centred on 8 (8 above and below)
-	public Material[][] mats = new Material[256][81];
+	public int[][] metas = new int[256][81];
+
 	public int[][] colors = new int[256][81]; //these three arrays take 52KB RAM collectively (assuming Mat'l is 32bits)
 	public boolean xdir;
 
@@ -80,17 +80,24 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		power = omega * torque;
 		if (power < MINPOWER)
 			return;
-		int[] bounds = this.getBounds();
-		this.eval2(world, x, y, z, meta, bounds);
-		this.idToColor(bounds, y);
+		if (tickcount >= 20) {
+			int[] bounds = this.getBounds();
+			this.eval2(world, x, y, z, meta, bounds);
+			this.blockToColor(bounds, y);
+			tickcount = 0;
+		}
 	}
 
-	private void idToColor(int[] bounds, int y) {
+	private void blockToColor(int[] bounds, int y) {
 		for (int j = bounds[0]; j <= bounds[1]; j++) {
 			for (int i = 0; i < y; i++) {
-				colors[i][j] = ReikaWorldHelper.blockColors(ids[i][j], ConfigRegistry.GPRORES.getState());
+				colors[i][j] = this.getBlockColor(ids[i][j], metas[i][j]);
 			}
 		}
+	}
+
+	public int getBlockColor(int id, int meta) {
+		return BlockColorMapper.instance.getColorForBlock(id, meta);
 	}
 
 	private void eval2(World world, int x, int y, int z, int meta, int[] bounds) {
@@ -104,6 +111,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
 					ids[i][j] = world.getBlockId(x+j-bounds[0]-diff, y-i-1, z);
+					metas[i][j] = world.getBlockMetadata(x+j-bounds[0]-diff, y-i-1, z);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
 					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
 						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
@@ -116,6 +124,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
 					ids[i][j] = world.getBlockId(x, y-i-1, z+j-bounds[0]-diff);
+					metas[i][j] = world.getBlockMetadata(x, y-i-1, z+j-bounds[0]-diff);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
 					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
 						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());

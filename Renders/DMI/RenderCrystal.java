@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Renders.DM;
+package Reika.RotaryCraft.Renders.DMI;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -15,22 +15,21 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.Animated.ModelWoodcutter;
-import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
+import Reika.RotaryCraft.Models.Animated.ModelCrystallizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
-public class RenderWoodcutter extends RotaryTERenderer
+public class RenderCrystal extends RotaryTERenderer
 {
 
-	private ModelWoodcutter WoodcutterModel = new ModelWoodcutter();
+	private ModelCrystallizer CrystalModel = new ModelCrystallizer();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityWoodcutterAt(TileEntityWoodcutter tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityCrystallizerAt(TileEntityCrystallizer tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -39,9 +38,9 @@ public class RenderWoodcutter extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelWoodcutter var14;
-		var14 = WoodcutterModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/woodcuttertex.png");
+		ModelCrystallizer var14;
+		var14 = CrystalModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/crystaltex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -68,7 +67,7 @@ public class RenderWoodcutter extends RotaryTERenderer
 		}
 		float var13;
 
-		var14.renderAll(null, tile.phi, 0);
+		var14.renderAll(null, -tile.phi, 0);
 
 		this.closeGL(tile);
 	}
@@ -77,36 +76,14 @@ public class RenderWoodcutter extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityWoodcutterAt((TileEntityWoodcutter)tile, par2, par4, par6, par8);
+			this.renderTileEntityCrystallizerAt((TileEntityCrystallizer)tile, par2, par4, par6, par8);
 		if (MinecraftForgeClient.getRenderPass() != 0) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			if (((TileEntityWoodcutter)tile).hasEnchantments())
-				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
-		}
-		else if (!tile.hasWorldObj()) {
-			int var11 = 0;
-			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			}
-			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
-			if (((TileEntityWoodcutter)tile).hasEnchantments())
-				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
 		}
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "woodcuttertex.png";
+		return "crystaltex.png";
 	}
 }

@@ -203,7 +203,7 @@
 		<note>
 			Required Power: %dW
 			Field-of-View = 1+2*log_2(power-%d) m
-			Power Input: Back
+			Power Input: Any side
 		</note>
 	</gpr>	
 	<heater>
@@ -233,8 +233,7 @@
 			The player detector does exactly what its name implies - when a player comes within its configurable range, it will emit a redstone signal. The maximum range is determined by the power input, and the reaction time of the detector - the delay between a player entering a range and the signal output - is dependent on the speed input.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = (Power) m
+			Range = (Power)/%d m
 			Power Input: Bottom
 			Reaction Time: %d-(Speed/%d)
 		</note>
@@ -934,7 +933,17 @@
 		</desc>
 		<note>
 			Conduit Input: Back
-			Speed: 1024 rad/s
+			Speed: %d rad/s
 		</note>
 	</magnetic>
+	<crystallizer>
+		<desc>
+			The fluid crystallizer freezes fluids. Note that it must therefore be colder than the fluid's freezing point.
+		</desc>
+		<note>
+			Power Input: Back
+			Required Power: %d
+			Required Speed: %d rad/s
+		</note>
+	</crystallizer>
 </machines>

@@ -302,7 +302,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		if (m.isPipe()) {
 			return ((TileEntityPiping)world.getBlockTileEntity(x, y, z)).getMachine().getCraftedProduct();
 		}
-		return null;
+		return m.getCraftedProduct();
 	}
 
 	@Override

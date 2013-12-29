@@ -11,7 +11,6 @@ package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -159,14 +158,15 @@ public class RotaryNames {
 		}
 		for (int i = 0; i < extractNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), getName(extractNames, i));
-		}
-		for (int i = 0; i < ModOreList.oreList.length; i++) { //Need some way to parse
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), ModOreList.oreList[i].displayName+" Dust");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), ModOreList.oreList[i].displayName+" Slurry");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), ModOreList.oreList[i].displayName+" Solution");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), ModOreList.oreList[i].displayName+" Flakes");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), ModOreList.oreList[i].displayName+" "+ModOreList.oreList[i].getTypeName());
-		}
+		}/*
+		ArrayList<String> modOres = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class);
+		for (int i = 0; i < modOres.size(); i++) {
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), modOres.get(i)+" Dust");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), modOres.get(i)+" Slurry");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), modOres.get(i)+" Solution");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), modOres.get(i)+" Flakes");
+			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), modOres.get(i)+" "+ModOreList.oreList[i].getTypeName());
+		}*/
 		for (int i = 0; i < compactNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), getName(compactNames, i));
 		}

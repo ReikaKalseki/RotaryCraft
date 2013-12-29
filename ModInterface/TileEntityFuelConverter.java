@@ -105,7 +105,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	private void consumeItems() {
 		for (int i = 0; i < ingredients.length; i++) {
-			if (ReikaRandomHelper.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/16))
+			if (ReikaRandomHelper.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/32))
 				ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(ingredients[i], inv, false), inv);
 		}
 	}

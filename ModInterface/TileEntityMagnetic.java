@@ -24,6 +24,8 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	private ForgeDirection facingDir;
 
+	public static final int GEN_OMEGA = 1024;
+
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
@@ -157,7 +159,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public int getBaseOmega() {
-		return 1024;
+		return GEN_OMEGA;
 	}
 
 	@Override

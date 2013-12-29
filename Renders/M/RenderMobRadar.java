@@ -53,8 +53,6 @@ public class RenderMobRadar extends RotaryTERenderer
 			var9 = tile.getBlockMetadata();
 		ModelRadar var14;
 		var14 = RadarModel;
-		//ModelMobRadarV var15;
-		//var14 = this.MobRadarModelV;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/radartex.png");
 
 		GL11.glPushMatrix();
@@ -65,17 +63,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;	 //used to rotate the model about metadata
 
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
-
-
 		var14.renderAll(null, -tile.phi, 0);
-		// else
-		//var15.renderAll();
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
@@ -100,10 +88,8 @@ public class RenderMobRadar extends RotaryTERenderer
 			return;
 		if (te.inzone == null)
 			return;
-		if (te.owner == null)
-			return;
 		Minecraft mc = Minecraft.getMinecraft();
-		EntityPlayer ep = te.worldObj.getPlayerEntityByName(te.owner);
+		EntityPlayer ep = te.getPlacer();
 		if (ep == null)
 			return;
 		if (!ReikaInventoryHelper.checkForItem(ItemRegistry.MOTION.getShiftedID(), ep.inventory.mainInventory))
@@ -121,7 +107,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		for (int i = 0; i < te.inzone.size(); i++) {
 			EntityLivingBase ent = (EntityLivingBase)te.inzone.get(i);
 			if (ent != null && ent != mc.thePlayer) {

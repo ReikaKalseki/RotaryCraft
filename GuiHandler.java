@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
+import Reika.RotaryCraft.Containers.ContainerCrystallizer;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
@@ -89,6 +90,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCVT;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiEthanol;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
@@ -133,6 +135,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
@@ -283,6 +286,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBigFurnace) {
 			return new ContainerBigFurnace(player, (TileEntityBigFurnace) te);
+		}
+		if (te instanceof TileEntityCrystallizer) {
+			return new ContainerCrystallizer(player, (TileEntityCrystallizer) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -469,6 +475,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBigFurnace) {
 			return new GuiBigFurnace(player, (TileEntityBigFurnace) te);
+		}
+		if (te instanceof TileEntityCrystallizer) {
+			return new GuiCrystallizer(player, (TileEntityCrystallizer) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

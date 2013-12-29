@@ -33,14 +33,14 @@ public enum PowerReceivers {
 	FORCEFIELD(524288),
 	FRACTIONATOR(1, 8192, 65536),
 	FREEZEGUN(256, 1, 262144),
-	GPR(65536),
+	GPR(32768),
 	GRINDER(128, 1, 4096),
 	HEATER(16, 1, 8192),
 	HEATRAY(2097152),
 	IGNITER(1, 1024, 32768),
 	REFRESHER(16384),
 	MOBHARVESTER(16384),
-	MOBRADAR(32768),
+	MOBRADAR(8192),
 	MUSICBOX(),
 	OBSIDIAN(1, 2048, 32768),
 	PILEDRIVER(80000, 1, TileEntityPileDriver.BASEPOWER), //4000kg hammer * 10 m/s^2 / 0.5m spool
@@ -88,7 +88,8 @@ public enum PowerReceivers {
 	BIGFURNACE(2048),
 	DISTILLER(512, 1, 1024),
 	HYDRAULIC(),
-	DYNAMO();
+	DYNAMO(),
+	CRYSTALLIZER(1, 1024, 2048);
 
 	private final int minT;
 	private final int minS;

@@ -316,6 +316,8 @@ public class RotaryRecipes {
 		MachineRegistry.SUCTION.addSizedCrafting(4, "SGS", "SGS", "SGS", 'S', Block.sandStone, 'G', Block.glass);
 
 		MachineRegistry.SORTING.addCrafting("SHS", " C ", "P P", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'H', Block.hopperBlock, 'C', ItemStacks.pcb);
+
+		MachineRegistry.CRYSTALLIZER.addCrafting("SFS", "FIF", "BBB", 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'I', ItemStacks.impeller);
 	}
 
 	private static void addCraftItems() {

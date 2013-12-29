@@ -60,9 +60,10 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		this.getSummativeSidedPower();
 		if (power < MINPOWER)
 			return;
-		this.fire(world, x, y, z);
-		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
-		ReikaParticleHelper.EXPLODE.spawnAt(world, x+0.5, y+0.5, z+0.5);
+		if (this.fire(world, x, y, z)) {
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
+			ReikaParticleHelper.EXPLODE.spawnAt(world, x+0.5, y+0.5, z+0.5);
+		}
 	}
 
 	private double getBlockMass(ItemStack is) {
@@ -157,16 +158,17 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	protected void fire(World world, int x, int y, int z) {
+	protected boolean fire(World world, int x, int y, int z) {
 		ItemStack next = this.getNextToFire();
 		if (next == null)
-			return;
+			return false;
 		//ReikaJavaLibrary.pConsole(this.getReqTorque(next));
 		if (torque < this.getReqTorque(next)) {
 			ReikaInventoryHelper.addToIInv(next, this);
-			return;
+			return false;
 		}
 		this.fireBlock(next, world, x, y, z);
+		return true;
 	}
 
 	@Override

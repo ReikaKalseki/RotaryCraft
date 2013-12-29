@@ -14,7 +14,6 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
@@ -24,7 +23,6 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
@@ -176,12 +174,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				if (enchant) {
 					GL11.glRotated(90, 0, 0, 1);
 					ReikaSpriteSheets.renderEffect(type, item);
+					GL11.glRotated(-90, 0, 0, 1);
 				}
 			}
-		}
-		if (enchant) {
-			ReikaRenderHelper.disableLighting();
-			RenderHelper.enableStandardItemLighting();
 		}
 	}
 }

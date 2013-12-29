@@ -105,7 +105,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		if (power == 0)
 			jammed = false;
 		boolean nodig = true;

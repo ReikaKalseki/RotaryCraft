@@ -26,6 +26,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
+import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -421,5 +422,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
 		addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
 		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque());
+		addNotes(MachineRegistry.MAGNETIC, TileEntityMagnetic.GEN_OMEGA);
+		addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
 	}
 }

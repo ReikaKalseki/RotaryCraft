@@ -17,13 +17,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 public class RecipesCrystallizer
 {
 	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
 
 	/** The list of smelting results. */
-	private HashMap<FluidStack, ItemStack> recipeList = new HashMap();
+	private HashMap<Fluid, ItemStack> recipeList = new HashMap();
+	private HashMap<Fluid, Integer> amounts = new HashMap();
 
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
@@ -34,11 +36,6 @@ public class RecipesCrystallizer
 	}
 
 	private RecipesCrystallizer()
-	{
-
-	}
-
-	public void addRecipe(FluidStack in, ItemStack out)
 	{
 		this.addRecipe("ender", 250, new ItemStack(Item.enderPearl));
 		this.addRecipe("redstone", 100, new ItemStack(Item.redstone));
@@ -51,14 +48,15 @@ public class RecipesCrystallizer
 
 	public void addRecipe(Fluid f, int amount, ItemStack out)
 	{
-		this.addRecipe(new FluidStack(f, amount), out);
+		recipeList.put(f, out);
+		amounts.put(f, amount);
 	}
 
 	public void addRecipe(String s, int amount, ItemStack out)
 	{
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)
-			this.addRecipe(new FluidStack(f, amount), out);
+			this.addRecipe(f, amount, out);
 	}
 
 	/**
@@ -68,16 +66,32 @@ public class RecipesCrystallizer
 	 */
 	public ItemStack getSmeltingResult(FluidStack liquid)
 	{
-		for (FluidStack fs : recipeList.keySet()) {
+		Fluid f = liquid.getFluid();
+		if (amounts.containsKey(f)) {
+			int req = amounts.get(f);
+			if (req > liquid.amount)
+				return null;
+			return recipeList.get(f);
+		}
+		else
+			return null;
+	}
 
+	public Fluid getRecipe(ItemStack result) {
+		for (Fluid f : recipeList.keySet()) {
+			ItemStack is = recipeList.get(f);
+			if (ReikaItemHelper.matchStacks(result, is))
+				return f;
 		}
 		return null;
 	}
 
-	public ItemStack getSource(ItemStack result) {
-		for (FluidStack fs : recipeList.keySet()) {
-
+	public int getRecipeConsumption(ItemStack result) {
+		for (Fluid f : recipeList.keySet()) {
+			ItemStack is = recipeList.get(f);
+			if (ReikaItemHelper.matchStacks(result, is))
+				return amounts.get(f);
 		}
-		return null;
+		return 0;
 	}
 }

@@ -59,7 +59,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		sound.update();
 		if (omega > 0) {
 			if (sound.checkCap())
-				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, 0.7F, 1F);
+				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
 		}
 	}
 

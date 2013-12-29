@@ -14,9 +14,11 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.MultisheetItem;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
 import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,11 +60,7 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
-		int step = 0;
-		if (item.itemID == RotaryCraft.modextracts.itemID)
-			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[item.getItemDamage()/4]);
-		else
-			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[item.getItemDamage()]);
+		int step = ExtractorModOres.getSpritesheet(this.getModOre(item));
 		if (item.itemID == RotaryCraft.modingots.itemID)
 			return item.getItemDamage()*4+ExtractorModOres.getIndexOffsetForIngot(item)-step/256;
 		return item.getItemDamage()-step/256;
@@ -77,17 +75,35 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 		else if (is.itemID == RotaryCraft.modingots.itemID) {
 			base = "Textures/Items/modingots.png";
 		}
-		int step = 0;
-		if (is.itemID == RotaryCraft.modextracts.itemID)
-			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[is.getItemDamage()/4]);
-		else
-			step = ExtractorModOres.getSpritesheet(ModOreList.oreList[is.getItemDamage()]);
+		int step = ExtractorModOres.getSpritesheet(this.getModOre(is));
 		if (step > 0) {
 			base = base.substring(0, base.length()-4);
 			base += String.format("%d", 1+step);
 			base += ".png";
 		}
 		return base;
+	}
+
+	private ModOreList getModOre(ItemStack is) {
+		if (is.itemID == RotaryCraft.modextracts.itemID)
+			return ModOreList.oreList[is.getItemDamage()/4];
+		else
+			return ModOreList.oreList[is.getItemDamage()];
+	}
+
+	@Override
+	public String getItemDisplayName(ItemStack is)
+	{
+		ModOreList ore = this.getModOre(is);
+		if (ore == null)
+			return "Null Ore Item";
+		if (is.itemID == RotaryCraft.modextracts.itemID) {
+			ExtractorStage s = ExtractorModOres.getStageFromMetadata(is);
+			return s != null ? ore.displayName+" "+ReikaStringParser.capFirstChar(s.name()) : "null";
+		}
+		else {
+			return ore.displayName+" "+ore.getTypeName();
+		}
 	}
 
 }

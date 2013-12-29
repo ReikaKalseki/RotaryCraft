@@ -1272,7 +1272,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			}
 		}
 		if (!lubricant.isEmpty() && omega > 0) {
-			if (world.getWorldTime()%5 == 0)
+			if (world.getWorldTime()%10 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}

@@ -11,41 +11,24 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
-public class ContainerBigFurnace extends CoreContainer
+public class ContainerCrystallizer extends CoreContainer
 {
-	private TileEntityBigFurnace te;
+	private TileEntityCrystallizer te;
 
-	public ContainerBigFurnace(EntityPlayer player, TileEntityBigFurnace par2TileEntityBigFurnace)
+	public ContainerCrystallizer(EntityPlayer player, TileEntityCrystallizer par2TileEntityCrystallizer)
 	{
-		super(player, par2TileEntityBigFurnace);
-		te = par2TileEntityBigFurnace;
+		super(player, par2TileEntityCrystallizer);
+		te = par2TileEntityCrystallizer;
 		int posX = te.xCoord;
 		int posY = te.yCoord;
 		int posZ = te.zCoord;
 
-		int dx = 18;
-		int dy = 21;
-		for (int i = 0; i < te.getNumberInputSlots(); i++) {
-			int row = i%9;
-			int col = i/9;
-			Slot slot = new Slot(te, i, 8+row*dx, 18+col*dy);
-			this.addSlotToContainer(slot);
-		}
+		this.addSlot(0, 80, 35);
 
-		for (int i = 0; i < te.getNumberInputSlots(); i++) {
-			int row = i%9;
-			int col = i/9;
-			Slot slot = new SlotFurnace(player, te, i+te.getNumberInputSlots(), 8+row*dx, 72+col*dy);
-			this.addSlotToContainer(slot);
-		}
-
-
-		this.addPlayerInventoryWithOffset(player, 0, 41);
+		this.addPlayerInventory(player);
 	}
 
 	@Override

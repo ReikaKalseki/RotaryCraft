@@ -77,8 +77,9 @@ public abstract class EnchantmentRenderer {
 		GL11.glColor4f(0.5F * f11, 0.25F * f11, 0.8F * f11, 1.0F);
 		GL11.glRotatef(var11-90, 0.0F, 1.0F, 0.0F);
 		GL11.glDepthMask(false);
-		ReikaRenderHelper.disableLighting();
 
+		if (tile.hasWorldObj())
+			ReikaRenderHelper.disableLighting();
 
 		double d = 1.0125;
 		int p = 2;
@@ -99,7 +100,9 @@ public abstract class EnchantmentRenderer {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		GL11.glDepthMask(true);
-		ReikaRenderHelper.enableLighting();
+
+		if (tile.hasWorldObj())
+			ReikaRenderHelper.enableLighting();
 
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);

@@ -89,7 +89,7 @@ public class ItemMotionTracker extends ItemChargedTool {
 						color = EnumChatFormatting.DARK_PURPLE;
 					if (ent instanceof EntityWither)
 						color = EnumChatFormatting.DARK_GRAY;
-					if (!(ent instanceof EntityPlayer) && (dist <= 24 || ent instanceof EntityWither || ent instanceof EntityDragon) && !(lastmobname == mobname && dist == lastdist)) {
+					if (!(ent instanceof EntityPlayer) && (dist <= 32 || ent instanceof EntityWither || ent instanceof EntityDragon) && !(lastmobname == mobname && dist == lastdist)) {
 						ReikaChatHelper.write(color+mobname+EnumChatFormatting.WHITE+String.format(" %.2f", dist-1)+"m away.");
 						if (ent instanceof EntityDragon) {
 							EntityDragon ed = (EntityDragon)ent;

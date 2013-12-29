@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -94,7 +94,8 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 				int topy = ReikaWorldHelper.findTopBlockBelowY(world, x+i, z+j, y);
 				topY[i+range][j+range] = topy;
 				int id = world.getBlockId(x+i, topy, z+j);
-				topBlocks[(i+range)][j+range] = ReikaWorldHelper.blockColors(id, ConfigRegistry.GPRORES.getState());
+				int meta = world.getBlockMetadata(x+i, topy, z+j);
+				topBlocks[(i+range)][j+range] = BlockColorMapper.instance.getColorForBlock(id, meta);
 				if (world.getBlockId(x+i, y, z+j) != 0) {
 					//topBlocks[(i+range)][j+range] = 0;
 				}

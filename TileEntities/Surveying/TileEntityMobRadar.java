@@ -26,15 +26,12 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
-	/// Too RAM intensive
-	//public EntityLivingBase[][] mobs = new EntityLivingBase[49][49];
-
 	public int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
 	public int[][] mobs = new int[49][49];
 	public List inzone;
 	public String owner;
 
-	public static final int FALLOFF = 4096; //4kW per extra meter
+	public static final int FALLOFF = 1024; //1kW per extra meter
 
 	public boolean hostile = true;
 	public boolean animal = true;

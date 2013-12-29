@@ -211,13 +211,6 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 		tank.writeToNBT(NBT);
 	}
 
-	public void setLevel(int level) {
-		if (tank.isEmpty())
-			return;
-		else
-			tank.setContents(level, tank.getActualFluid());
-	}
-
 	public Fluid getFluid() {
 		return tank.getActualFluid();
 	}

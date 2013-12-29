@@ -290,7 +290,7 @@ public enum MachineRegistry {
 	HYDRAULICLINE(		"machine.hyline",			BlockHydraulicLine.class,	TileEntityHydraulicLine.class,		0),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
-	CRYSTALLIZER(		"machine.crystal",			BlockMIMachine.class,		TileEntityCrystallizer.class,		23);
+	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal");
 
 	private String name;
 	private Class te;
@@ -792,6 +792,7 @@ public enum MachineRegistry {
 		case FILLINGSTATION:
 		case DISTILLER:
 		case MAGNETIC:
+		case CRYSTALLIZER:
 			return true;
 		default:
 			return false;
@@ -864,6 +865,24 @@ public enum MachineRegistry {
 	}
 
 	public ItemStack getCraftedProduct() {
+		if (this == ADVANCEDGEARS) {
+			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, 0);
+		}
+		if (this == HYDRAULIC) {
+			return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, 0);
+		}
+		if (this == FLYWHEEL) {
+			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, 0);
+		}
+		if (this == ENGINE) {
+			return new ItemStack(RotaryCraft.engineitems.itemID, 1, 0);
+		}
+		if (this == SHAFT) {
+			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, 0);
+		}
+		if (this == GEARBOX) {
+			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, 0);
+		}
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 
@@ -1144,6 +1163,8 @@ public enum MachineRegistry {
 	}
 
 	public static MachineRegistry getMachineMapping(int id, int meta) {
+		if (id == BlockRegistry.GPR.getBlockID())
+			return GPR;
 		List li = Arrays.asList(id, meta);
 		return machineMappings.get(li);
 	}

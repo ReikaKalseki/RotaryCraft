@@ -46,7 +46,7 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver {
 
 	}
 
-	protected abstract void fire(World world, int x, int y, int z);
+	protected abstract boolean fire(World world, int x, int y, int z);
 
 	public abstract int getMaxLaunchVelocity();
 
