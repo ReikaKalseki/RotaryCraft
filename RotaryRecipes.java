@@ -135,9 +135,9 @@ public class RotaryRecipes {
 
 		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
 
-		MachineRegistry.BEVELGEARS.addCrafting("ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
+		MachineRegistry.BEVELGEARS.addSizedCrafting(4, "ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
-		MachineRegistry.SPLITTER.addCrafting("ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
+		MachineRegistry.SPLITTER.addSizedCrafting(2, "ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
 		MachineRegistry.CLUTCH.addCrafting("S", "M", "R", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'R', Item.redstone);
 		MachineRegistry.CLUTCH.addCrafting("S", "R", 'S', MachineRegistry.SHAFT.getCraftedMetadataProduct(2), 'R', Item.redstone);
@@ -709,11 +709,11 @@ public class RotaryRecipes {
 		MachineRegistry.FLYWHEEL.addMetaCrafting(2, "W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount);
 		MachineRegistry.FLYWHEEL.addMetaCrafting(3, "W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount);
 
-		MachineRegistry.SHAFT.addOreRecipe("BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', "stickWood");
-		MachineRegistry.SHAFT.addMetaCrafting(1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
-		MachineRegistry.SHAFT.addMetaCrafting(2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
-		MachineRegistry.SHAFT.addMetaCrafting(3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
-		MachineRegistry.SHAFT.addMetaCrafting(4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
+		MachineRegistry.SHAFT.addSizedOreRecipe(8, "BSB", "BBB", 'B', ExpandedOreRecipe.getWoodList(), 'S', "stickWood");
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
 
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.DC.ordinal(), "SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Item.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.WIND.ordinal(), "SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub);

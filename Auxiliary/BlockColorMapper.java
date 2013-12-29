@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
@@ -241,6 +243,19 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 		this.addModOres();
 		this.addModWood();
 		this.addModCrops();
+
+		this.loadModData();
+	}
+
+	private void loadModData() {
+		Set<List<Integer>> keys = BlockColorInterface.getMappedBlocks();
+		for (List<Integer> li : keys) {
+			int id = li.get(0);
+			int meta = li.get(1);
+			int color = BlockColorInterface.getColor(id, meta);
+			RotaryCraft.logger.log("Received mod request for block "+id+":"+meta+" to have color mapping "+color);
+			this.addOrSetColorMapping(id, meta, color, false);
+		}
 	}
 
 	private void addRotaryCraft() {
@@ -248,7 +263,7 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 			BlockRegistry r = BlockRegistry.blockList[i];
 			this.addBlockColor(r.getBlockVariable(), ReikaColorAPI.RGBtoHex(200, 200, 200));
 		}
-		this.addBlockColor(RotaryCraft.miningpipe, ReikaColorAPI.RGBtoHex(100, 100, 100));
+		this.addBlockColor(RotaryCraft.miningpipe, ReikaColorAPI.RGBtoHex(80, 80, 80));
 		this.addBlockColor(RotaryCraft.canola, 0x00bb00);
 		this.addBlockMimic(RotaryCraft.bedrockslice, Block.bedrock);
 		this.addBlockColor(RotaryCraft.lightblock, ReikaColorAPI.RGBtoHex(33, 33, 33));
@@ -473,10 +488,10 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 			return this.getColorForBlock(mimic.blockID, meta);
 		BlockColor c = map.get(b);
 		return c != null ? c.getColorInt(meta) : UNKNOWN_COLOR;
-	}
+	}/*
 
 	public void addModBlockColor(int blockID, int metadata, int color) {
 		this.addOrSetColorMapping(blockID, metadata, color, false);
-	}
+	}*/
 
 }
