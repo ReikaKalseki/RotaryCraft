@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Fuelable;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -123,12 +124,14 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 			nbtData.setByte("toggleTimer", toggleTimer);
 		}
 
-		if (this.getCurrentFuel(is) > 0) {
-			if (player.handleLavaMovement() && world.difficultySetting != 0) {
-				this.explode(world, player);
-			}
-			else if (player.isBurning() && world.difficultySetting > 1 && bool) {
-				this.explode(world, player);
+		if (ConfigRegistry.EXPLODEPACK.getState()) {
+			if (this.getCurrentFuel(is) > 0) {
+				if (player.handleLavaMovement() && world.difficultySetting != 0) {
+					this.explode(world, player);
+				}
+				else if (player.isBurning() && world.difficultySetting > 1 && bool) {
+					this.explode(world, player);
+				}
 			}
 		}
 	}

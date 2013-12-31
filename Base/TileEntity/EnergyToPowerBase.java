@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 import java.awt.Color;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -22,11 +23,14 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController {
 
 	private static final int MINBASE = -1;
-	private static final int MAXBASE = 11; //2048 Nm -> 2.09 MW
+	private static final int MAXBASE = 13;
 
 	protected int storedEnergy;
 
-	protected int base = -1;
+	protected int basetorque = -1;
+	protected int baseomega = -1;
+
+	protected ForgeDirection facingDir;
 
 	public final int getStoredPower() {
 		return storedEnergy;
@@ -36,24 +40,22 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		storedEnergy = e;
 	}
 
-	public abstract int getBaseOmega();
-
 	public abstract int getMaxStorage();
 
 	public final long getPowerLevel() {
-		return this.getSpeed()*this.getTorqueLevel();
+		return this.getSpeed()*this.getTorque();
 	}
 
 	public final int getSpeed() {
-		if (base < 0)
+		if (baseomega < 0 || basetorque < 0)
 			return 0;
-		return this.getBaseOmega();
+		return ReikaMathLibrary.intpow2(2, baseomega);
 	}
 
-	public final int getTorqueLevel() {
-		if (base < 0)
+	public final int getTorque() {
+		if (baseomega < 0 || basetorque < 0)
 			return 0;
-		return ReikaMathLibrary.intpow2(2, base);
+		return ReikaMathLibrary.intpow2(2, basetorque);
 	}
 
 	public final boolean hasEnoughEnergy() {
@@ -64,17 +66,27 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	public abstract int getConsumedUnitsPerTick();
 
 	public final int getTier() {
-		return base;
+		return basetorque;
 	}
 
-	public final void increment() {
-		if (base < MAXBASE)
-			base++;
+	public final void incrementTorque() {
+		if (basetorque < MAXBASE && baseomega+basetorque < MAXBASE*2-3)
+			basetorque++;
 	}
 
-	public final void decrement() {
-		if (base > MINBASE)
-			base--;
+	public final void decrementTorque() {
+		if (basetorque > MINBASE)
+			basetorque--;
+	}
+
+	public final void incrementOmega() {
+		if (baseomega < MAXBASE && baseomega+basetorque < MAXBASE*2-3)
+			baseomega++;
+	}
+
+	public final void decrementOmega() {
+		if (baseomega > MINBASE)
+			baseomega--;
 	}
 
 	public final int getEnergyScaled(int h) {
@@ -93,7 +105,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("storage", storedEnergy);
-		NBT.setInteger("tier", base);
+		NBT.setInteger("tier", basetorque);
+		NBT.setInteger("tiero", baseomega);
 	}
 
 	/**
@@ -104,7 +117,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	{
 		super.readFromNBT(NBT);
 		storedEnergy = NBT.getInteger("storage");
-		base = NBT.getInteger("tier");
+		basetorque = NBT.getInteger("tier");
+		baseomega = NBT.getInteger("tiero");
 	}
 
 	@Override
@@ -125,5 +139,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	public abstract String getUnitDisplay();
 
 	public abstract Color getPowerColor();
+
+	public final ForgeDirection getFacing() {
+		return facingDir != null ? facingDir : ForgeDirection.EAST;
+	}
 
 }

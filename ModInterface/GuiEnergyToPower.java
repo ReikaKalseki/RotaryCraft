@@ -46,8 +46,11 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		int inset = 23;
-		buttonList.add(new GuiButton(0, SHIFT+j+inset, k+ySize-30-48+25, 20, 20, "-"));;
-		buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
+		buttonList.add(new GuiButton(0, SHIFT+j+inset, k+ySize-30-48+0, 20, 20, "-"));;
+		buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+0, 20, 20, "+"));
+
+		buttonList.add(new GuiButton(2, SHIFT+j+inset, k+ySize-30-48+25, 20, 20, "-"));;
+		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		int torque = engine.getTorqueLevel();
+		int torque = engine.getTorque();
 		int omega = engine.getSpeed();
 		long power = engine.getPowerLevel();
 		int inset = 1;

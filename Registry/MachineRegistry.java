@@ -23,10 +23,10 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -1037,7 +1037,7 @@ public enum MachineRegistry {
 
 	public void addOreRecipe(Object... obj) {
 		if (!this.isDummiedOut()) {
-			ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getCraftedProduct(), obj);
+			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
@@ -1047,7 +1047,7 @@ public enum MachineRegistry {
 
 	public void addSizedOreRecipe(int size, Object... obj) {
 		if (!this.isDummiedOut()) {
-			ExpandedOreRecipe ir = new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
+			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
@@ -1057,7 +1057,7 @@ public enum MachineRegistry {
 
 	public void addMetaOreRecipe(int meta, Object... obj) {
 		if (!this.isDummiedOut()) {
-			ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
+			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
@@ -1067,7 +1067,7 @@ public enum MachineRegistry {
 
 	public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
 		if (!this.isDummiedOut()) {
-			ExpandedOreRecipe ir = new ExpandedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
+			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);

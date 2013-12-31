@@ -427,9 +427,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case PNEUMATIC:
 				eng = (EnergyToPowerBase)te;
 				if (control == 50)
-					eng.decrement();
+					eng.decrementTorque();
 				if (control == 51)
-					eng.increment();
+					eng.incrementTorque();
+				if (control == 52)
+					eng.decrementOmega();
+				if (control == 53)
+					eng.incrementOmega();
 				break;
 			case JETPACK:
 				boolean move = floatdata > 100;

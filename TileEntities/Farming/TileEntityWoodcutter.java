@@ -106,6 +106,8 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				}
 			}
 			this.checkAndMatchInventory(wood, vanilla);
+			
+			tree.reverseBlockOrder();
 		}
 
 		int id = world.getBlockId(x, y+1, z);

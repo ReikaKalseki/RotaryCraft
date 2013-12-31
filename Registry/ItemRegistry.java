@@ -16,10 +16,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Instantiable.ExpandedOreRecipe;
 import Reika.DragonAPI.Interfaces.RegistryEnum;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -607,10 +608,11 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public void addOreRecipe(Object... in) {
-		ExpandedOreRecipe ir = new ExpandedOreRecipe(this.getStackOf(), in);
 		if (!this.isDummiedOut()) {
-			GameRegistry.addRecipe(ir);
-			WorktableRecipes.addRecipe(ir);
+			ItemStack out = this.getStackOf();
+			boolean added = ReikaRecipeHelper.addOreRecipe(out, in);
+			if (added)
+				WorktableRecipes.addRecipe(new ShapedOreRecipe(out, in));
 		}
 	}
 

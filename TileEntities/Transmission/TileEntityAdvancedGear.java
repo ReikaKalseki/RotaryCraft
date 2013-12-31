@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -18,8 +19,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.CVTController;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -222,7 +226,25 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			torque = omega = 0;
 			power = 0;
 			if (energy + ((long)torquein*(long)omegain) < 0 || energy + ((long)torquein*(long)omegain) > Long.MAX_VALUE) {
-				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 6F, true);
+				for (int i = 0; i < 16; i++)
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 5, 0.2F);
+				ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 2);
+				int r = 20;
+				for (int i = -r; i <= r; i++) {
+					for (int j = -r; j <= r; j++) {
+						for (int k = -r; k <= r; k++) {
+							double dd = ReikaMathLibrary.py3d(i, j*2, k);
+							if (dd <= r+0.5) {
+								if (world.getBlockId(x+i, y+j, z+k) != Block.bedrock.blockID) {
+									world.setBlock(x+i, y+j, z+k, 0);
+									world.markBlockForUpdate(x+i, y+j, z+k);
+								}
+							}
+							if (!world.isRemote && rand.nextInt(8) == 0)
+								ReikaWorldHelper.ignite(world, x+i, y+j, z+k);
+						}
+					}
+				}
 			}
 			else
 				energy += ((long)torquein*(long)omegain);

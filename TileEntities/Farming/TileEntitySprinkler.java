@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -70,6 +71,8 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
 		soundtick++;
+		waterLevel= 1000;
+		waterPressure = 8000;
 		this.getLiq(world, x, y, z, meta);
 		if (waterLevel <= 0)
 			return;
@@ -83,7 +86,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 			soundtick = 0;
 		}
 		else {
-			//SoundManager.sndSystem.stop("Reika.RotaryCraft.sprinkler");
+
 		}
 	}
 
@@ -166,24 +169,21 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 
 	public void spawnParticles(World world, int x, int y, int z) {
 
+		int d = Math.min(0, ConfigRegistry.SPRINKLER.getValue());
 		double ypos = y+0.125;
 		double vel;
 		double r = this.getRange()/10D;
 
-		if (rand.nextInt(1) == 0) {
-			double py = y-0.1875D+0.5;
-			for (int i = 0; i < 4; i++) {
-				double px = x-1+2*rand.nextFloat();
-				double pz = z-1+2*rand.nextFloat();
-				world.spawnParticle("splash", px+0.5, py, pz+0.5, 0, 0, 0);
-			}
-
+		double py = y-0.1875D+0.5;
+		for (int i = 0; i < rand.nextInt(1+d); i++) {
+			double px = x-1+2*rand.nextFloat();
+			double pz = z-1+2*rand.nextFloat();
+			world.spawnParticle("splash", px+0.5, py, pz+0.5, 0, 0, 0);
 		}
 
-
 		for (vel = 0; vel < r; vel += 0.1) {
-			double py = y-0.1875D+0.5;
-			for (int i = 0; i < 16; i++) {
+			py = y-0.1875D+0.5;
+			for (int i = 0; i < rand.nextInt(1+d*4); i++) {
 				double vx = vel*(-1+rand.nextFloat()*2);
 				vx *= 1.05;
 				double vz = vel*(-1+rand.nextFloat()*2);

@@ -9,11 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -249,7 +251,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
 		if (mod != null && mod.isRipe(world.getBlockMetadata(x, y, z))) {
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, mod.getDrops(world, x, y, z, 0));
+			ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
+			mod.removeOneSeed(li);
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 			metato = mod.harvestedMeta;
 			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 		}

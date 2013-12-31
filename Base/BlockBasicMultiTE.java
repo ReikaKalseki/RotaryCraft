@@ -83,6 +83,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
@@ -368,6 +369,16 @@ public abstract class BlockBasicMultiTE extends Block {
 				return true;
 			}
 		}
+		if (m == MachineRegistry.FERTILIZER) {
+			TileEntityFertilizer fm = (TileEntityFertilizer)te;
+			if (fm.getLevel()+RotaryConfig.MILLIBUCKET <= fm.getCapacity() && is != null && is.itemID == Item.bucketWater.itemID) {
+				fm.addLiquid(RotaryConfig.MILLIBUCKET);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+				}
+				return true;
+			}
+		}
 		if (m == MachineRegistry.BIGFURNACE) {
 			TileEntityBigFurnace bf = (TileEntityBigFurnace)te;
 			if (bf.getLevel()+RotaryConfig.MILLIBUCKET <= bf.getCapacity() && is != null && is.itemID == Item.bucketLava.itemID) {
@@ -640,7 +651,9 @@ public abstract class BlockBasicMultiTE extends Block {
 			return;
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		if (m.dealsContactDamage(e)) {
-			e.attackEntityFrom(DamageSource.generic, m.getContactDamage(tile));
+			int dmg = m.getContactDamage(tile);
+			if (dmg > 0)
+				e.attackEntityFrom(DamageSource.generic, dmg);
 		}
 		if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
 			int dmg = ((TemperatureTE)tile).getThermalDamage();

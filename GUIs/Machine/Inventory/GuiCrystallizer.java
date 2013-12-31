@@ -16,6 +16,8 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
@@ -87,6 +89,29 @@ public class GuiCrystallizer extends GuiMachine
 
 	@Override
 	protected void drawPowerTab(int j, int k) {
+		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
+		this.drawTexturedModalRect(xSize+j, k+4, 0, 4, 42, ySize-4);
 
+		long frac = (te.power*29L)/te.MINPOWER;
+		if (frac > 29)
+			frac = 29;
+		this.drawTexturedModalRect(xSize+j+5, ySize+k-144, 0, 0, (int)frac, 4);
+
+		frac = (int)(te.omega*29L)/te.MINSPEED;
+		if (frac > 29)
+			frac = 29;
+		this.drawTexturedModalRect(xSize+j+5, ySize+k-84, 0, 0, (int)frac, 4);
+
+		frac = (int)(te.torque*29L)/te.MINTORQUE;
+		if (frac > 29)
+			frac = 29;
+		this.drawTexturedModalRect(xSize+j+5, ySize+k-24, 0, 0, (int)frac, 4);
+
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+j+20, k+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+j+20, k+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+j+20, k+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", te.power, te.MINPOWER), xSize+j+16, k+16, 0xff000000);
 	}
 }

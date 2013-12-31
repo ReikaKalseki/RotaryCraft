@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -190,11 +191,19 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 				id = 0;
 				break;
 			}
-			if ((id == 7) || (id == RotaryCraft.bedrockslice.blockID))
+			if (this.isBedrock(id))
 				return true;
 			if (id == 10 || id == 11) //If lava
 				return false;
 		}
+		return false;
+	}
+
+	private boolean isBedrock(int id) {
+		if (id == Block.bedrock.blockID)
+			return true;
+		if (id == RotaryCraft.bedrockslice.blockID)
+			return true;
 		return false;
 	}
 

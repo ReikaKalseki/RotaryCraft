@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -17,8 +19,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -113,13 +117,28 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver {
 		}
 	}
 
+	private boolean hasSawdust() {
+		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
+		if (sawdust)
+			return true;
+		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
+		for (int i = 0; i < inventory.length; i++) {
+			ItemStack is = inventory[i];
+			if (is != null) {
+				if (ReikaItemHelper.listContainsItemStack(li, is))
+					return true;
+			}
+		}
+		return false;
+	}
+
 	public void getRainMode() {
 		boolean isRain = worldObj.isRaining();
 		boolean isThunder = worldObj.isThundering();
 		int oldrain = rainmode;
 		ItemStack is = null;
 		ItemStack is2 = null;
-		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
+		boolean sawdust = this.hasSawdust();
 		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
 		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inventory);
 		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inventory);

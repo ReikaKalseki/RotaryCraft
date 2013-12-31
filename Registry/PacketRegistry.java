@@ -40,11 +40,11 @@ public enum PacketRegistry {
 	CHESTRELOAD(43),
 	REDGEAR(46),
 	TERRAFORMER(47),
-	PNEUMATIC(50, 51),
-	JETPACK(52),
-	FERTILIZER(53),
-	GRAVELGUN(54),
-	SLIDE(55);
+	PNEUMATIC(50, 54),
+	JETPACK(55),
+	FERTILIZER(56),
+	GRAVELGUN(57),
+	SLIDE(58);
 
 	private int min;
 	private int max;

@@ -30,13 +30,9 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	private PowerHandler pp;
 
-	private ForgeDirection facingDir;
-
 	public static final int maxMJ = 36000;
 
 	private StepTimer sound = new StepTimer(72);
-
-	private static final int GENOMEGA = 1024;
 
 	public TileEntityPneumaticEngine()
 	{
@@ -109,7 +105,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		if (!world.isRemote) {
 			float mj = pp.getEnergyStored();
 
-			torque = this.getTorqueLevel();
+			torque = this.getTorque();
 			omega = this.getSpeed();
 
 			power = (long)torque*(long)omega;
@@ -220,11 +216,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	@Override
 	public World getWorld() {
 		return worldObj;
-	}
-
-	@Override
-	public int getBaseOmega() {
-		return GENOMEGA;
 	}
 
 	@Override

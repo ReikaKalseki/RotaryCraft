@@ -22,10 +22,6 @@ import cofh.api.energy.IEnergyHandler;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
 
-	private ForgeDirection facingDir;
-
-	public static final int GEN_OMEGA = 1024;
-
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
@@ -44,7 +40,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		}
 		if (!world.isRemote) {
 
-			torque = this.getTorqueLevel();
+			torque = this.getTorque();
 			omega = this.getSpeed();
 
 			power = (long)torque*(long)omega;
@@ -138,10 +134,6 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		return from == this.getFacing();
 	}
 
-	private ForgeDirection getFacing() {
-		return facingDir != null ? facingDir : ForgeDirection.EAST;
-	}
-
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
 		return storedEnergy;
@@ -155,11 +147,6 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	@Override
 	public int getMaxStorage() {
 		return TileEntityPneumaticEngine.maxMJ*10;
-	}
-
-	@Override
-	public int getBaseOmega() {
-		return GEN_OMEGA;
 	}
 
 	@Override
