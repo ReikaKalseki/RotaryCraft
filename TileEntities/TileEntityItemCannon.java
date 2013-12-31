@@ -75,7 +75,8 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver {
 			return;
 		if (this.getTargetTE() == null) {
 			//ReikaChatHelper.write("Item Cannon At "+xCoord+", "+yCoord+", "+zCoord+" has an invalid target!");
-			//ReikaChatHelper.writeBlockAtCoords(world, target[0], target[1], target[2]);
+			//ReikaChatHelper.writeBlockAtCoords(world, target[0], target[1], target[2])
+			//ReikaJavaLibrary.pConsole(this);
 			return;
 		}
 		if (!ReikaInventoryHelper.hasSpaceFor(is, this.getTargetTE()))

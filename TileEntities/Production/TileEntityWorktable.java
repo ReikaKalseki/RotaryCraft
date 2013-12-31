@@ -19,6 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.ChargeableTool;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -35,10 +36,22 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		if (!world.isRemote) {
 			this.chargeTools();
 			this.makeJetplate();
+			this.makeBedjump();
 
 			if (world.isBlockIndirectlyGettingPowered(x, y, z))
 				if (this.canUncraft())
 					this.uncraft();
+		}
+	}
+
+	private void makeBedjump() {
+		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getShiftedID(), inventory);
+		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getShiftedID(), inventory);
+		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
+			inventory[jumpslot] = null;
+			inventory[armorslot] = null;
+			ItemStack is = ItemRegistry.BEDJUMP.getEnchantedStack();
+			inventory[9] = is;
 		}
 	}
 
@@ -139,7 +152,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		for (int i = 0; i < 9; i++) {
 			ItemStack is = inventory[i];
 			if (is != null) {
-				if (is.getItem() instanceof ItemChargedTool || is.itemID == ItemRegistry.NVG.getShiftedID() || is.getItem() instanceof ChargeableTool)
+				if (is.getItem() instanceof ItemChargedTool || is.getItem() instanceof ItemChargedArmor || is.getItem() instanceof ChargeableTool)
 					return inventory[i].itemID;
 			}
 		}

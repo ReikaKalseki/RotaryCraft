@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -70,6 +71,7 @@ import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemHydraulicPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
+import Reika.RotaryCraft.Items.Tools.ItemSpringBoots;
 import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -124,6 +126,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
 	public static EnumArmorMaterial JETPACK = EnumHelper.addArmorMaterial("Jetpack", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static EnumArmorMaterial JUMP = EnumHelper.addArmorMaterial("Jump", 65536, new int[]{0, 0, 0, 0}, 0);
 
 	public static EnumArmorMaterial BEDROCK = EnumHelper.addArmorMaterial("Bedrock", Integer.MAX_VALUE, new int[]{6, 12, 10, 5}, 18);
 	public static EnumArmorMaterial HSLA = EnumHelper.addArmorMaterial("HSLA", 24, new int[]{3, 7, 5, 3}, EnumArmorMaterial.IRON.getEnchantability());
@@ -343,6 +346,25 @@ public class RotaryCraft extends DragonAPIMod {
 				int y = event.Y;
 				int z = event.Z;
 				event.setResult(Event.Result.DENY);
+			}
+		}
+	}
+
+	@ForgeSubscribe
+	public void fallEvent (LivingFallEvent event)
+	{
+		EntityLivingBase e = event.entityLiving;
+		ItemStack is = e.getCurrentItemOrArmor(1);
+
+		if (is != null) {
+			if (is.getItem() instanceof ItemSpringBoots) {
+				if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID() || is.getItemDamage() > 0) {
+					//ReikaJavaLibrary.pConsole(event.distance);
+					event.distance *= 0.6F;
+					//ReikaJavaLibrary.pConsole(event.distance);
+					if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
+						event.distance = Math.min(event.distance, 25);
+				}
 			}
 		}
 	}

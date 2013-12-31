@@ -53,7 +53,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return ItemRegistry.CANOLA.getStackOf();
+		return ItemRegistry.CANOLA.getStackOf	();
 	}
 
 	@Override
@@ -225,7 +225,11 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	public static boolean isValidFarmBlock(World world, int x, int y, int z, int id) {
 		if (id == Block.tilledField.blockID)
 			return true;
+		if (id == 0)
+			return false;
 		Block b = Block.blocksList[id];
+		if (b == null)
+			return false;
 		return b.isFertile(world, x, y, z);
 		//return farmBlocks.contains(id);
 	}

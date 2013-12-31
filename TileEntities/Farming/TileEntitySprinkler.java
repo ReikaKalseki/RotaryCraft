@@ -71,8 +71,6 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tickcount++;
 		soundtick++;
-		waterLevel= 1000;
-		waterPressure = 8000;
 		this.getLiq(world, x, y, z, meta);
 		if (waterLevel <= 0)
 			return;

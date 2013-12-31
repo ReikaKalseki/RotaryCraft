@@ -157,7 +157,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
-		if (world.getBlockId(xread, yread, zread) != 0 && !(world.getBlockMaterial(xread, yread, zread) == Material.water || world.getBlockMaterial(xread, yread, zread) == Material.lava)) {
+		int id = world.getBlockId(xread, yread, zread);
+		if (id != 0 && !(world.getBlockMaterial(xread, yread, zread) == Material.water || world.getBlockMaterial(xread, yread, zread) == Material.lava)) {
 			reqpow += (int)(DIGPOWER*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread));
 			if (ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread))) > mintorque)
 				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));
@@ -167,6 +168,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (this.isLabyBedrock(world, xread, yread, zread)) {
 				mintorque = 8192;
 				reqpow += 262144;
+			}
+			else if (id == TwilightForestHandler.getInstance().mazeStoneID) {
+				mintorque = 2048;
+				reqpow += 65536;
 			}
 		}
 		//ReikaJavaLibrary.pConsole(mintorque);

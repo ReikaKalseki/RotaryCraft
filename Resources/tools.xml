@@ -19,7 +19,7 @@
 		The knockback gun deals no direct damage, but can be used to send mobs flying back and keep them away. Using shift-right-click, its powerful sound blast can also be used to punch out connected areas of loose material, like gravel, leaves, and ores.
 	</stun>
 	<gravel>
-		The gravel gun launches pieces of flint at high speed at a target. At higher charge levels, the pieces can deal enough damage to kill most mobs in one hit. Due to its low mass and enormous velocity, the flint is not affected by gravity over its trajectory. This tool uses gravel as ammunition.
+		The gravel gun launches pieces of flint at high speed at a target. At higher charge levels, the pieces can deal enough damage to kill most mobs in one hit. Due to its low mass and enormous velocity, the flint is not affected by gravity over its trajectory. This tool uses gravel as ammunition, and can only fire at a living entity, not things like blocks, machines, or dropped items.
 	</gravel>
 	<fireball>
 		The fireball launcher fires ghast-style fireballs at a target. It can be charged like a bow, up to maximum power at dark blue. Higher charge levels mean a more powerful explosion, up to twice that of a TNT blast. This tool requires fire charges as ammunition.

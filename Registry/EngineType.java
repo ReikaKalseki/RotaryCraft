@@ -198,6 +198,8 @@ public enum EngineType {
 	}
 
 	public boolean isValidFuel(ItemStack is) {
+		if (this == STEAM)
+			return is.itemID == Item.bucketWater.itemID;
 		if (this == GAS)
 			return is.itemID == ItemRegistry.ETHANOL.getShiftedID();
 		if (this == SPORT)
@@ -299,5 +301,28 @@ public enum EngineType {
 
 	public boolean requiresLubricant() {
 		return this == HYDRO;
+	}
+
+	public int getSizeInventory() {
+		switch(this) {
+		case STEAM:
+		case GAS:
+		case AC:
+			return 1;
+		case SPORT:
+			return 2;
+		default:
+			return 0;
+		}
+	}
+
+	public boolean allowInventoryStacking() {
+		switch(this) {
+		case GAS:
+		case SPORT:
+			return true;
+		default:
+			return false;
+		}
 	}
 }

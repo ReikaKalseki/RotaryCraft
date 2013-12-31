@@ -106,7 +106,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				}
 			}
 			this.checkAndMatchInventory(wood, vanilla);
-			
+
 			tree.reverseBlockOrder();
 		}
 
@@ -126,8 +126,10 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 			return;
 		tickcount = 0;
 
-		if (!tree.isValidTree())
+		if (!tree.isValidTree()) {
+			tree.clear();
 			return;
+		}
 
 		int[] xyz = tree.getNextAndMoveOn();
 		int drop = world.getBlockId(xyz[0], xyz[1], xyz[2]);

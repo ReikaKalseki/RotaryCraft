@@ -20,16 +20,14 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
+import Reika.RotaryCraft.Base.ItemChargedArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemNightVisionGoggles extends ItemRotaryArmor {
+public class ItemNightVisionGoggles extends ItemChargedArmor {
 
 	public ItemNightVisionGoggles(int ID, int tex, int render) {
 		super(ID, RotaryCraft.NVGM, render, 0, tex);
-		this.setNoRepair();
-		hasSubtypes = true;
 	}
 
 	@Override

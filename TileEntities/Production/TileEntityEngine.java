@@ -52,6 +52,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -146,7 +147,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	 */
 	public int getInventoryStackLimit()
 	{
-		return 64;
+		return type.allowInventoryStacking() ? 64 : 1;
 	}
 
 	/**
@@ -1272,7 +1273,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			}
 		}
 		if (!lubricant.isEmpty() && omega > 0) {
-			if (world.getWorldTime()%10 == 0)
+			if (world.getWorldTime()%20 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}
@@ -1398,6 +1399,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (!type.isValidFuel(is))
 			return false;
+		if (i >= type.getSizeInventory())
+			return false;
 		switch(type) {
 		case GAS:
 		case AC:
@@ -1416,6 +1419,12 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		if (type == EngineType.AC) {
+			return ReikaItemHelper.matchStacks(itemstack, ItemStacks.shaftcore) && itemstack.stackTagCompound == null;
+		}
+		if (type == EngineType.STEAM) {
+			return itemstack.itemID == Item.bucketEmpty.itemID;
+		}
 		return false;
 	}
 

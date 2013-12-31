@@ -27,6 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
@@ -53,6 +54,7 @@ import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
 import Reika.RotaryCraft.Items.Tools.ItemPump;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Items.Tools.ItemSpringBoots;
 import Reika.RotaryCraft.Items.Tools.ItemSteelArmor;
 import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
 import Reika.RotaryCraft.Items.Tools.ItemSteelPick;
@@ -111,7 +113,9 @@ public enum ItemRegistry implements RegistryEnum {
 	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
 	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class),
 	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class),
-	PUMP(29, true,				"item.handpump",			ItemPump.class);
+	PUMP(29, true,				"item.handpump",			ItemPump.class),
+	JUMP(30, true,				"item.jumpboots",			ItemSpringBoots.class),
+	BEDJUMP(31, false,			"item.bedrockjump",			ItemSpringBoots.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -171,8 +175,8 @@ public enum ItemRegistry implements RegistryEnum {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
-			if (this.isJetpack())
-				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Armor render, Sprite index
+			if (this.isJetpack() || this.isJumpBoots())
+				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Material, Armor render, Sprite index
 			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
 		}
 
@@ -195,7 +199,7 @@ public enum ItemRegistry implements RegistryEnum {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
-			else if (this.isJetpack())
+			else if (this.isJetpack() || this.isJumpBoots())
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getArmorMaterial(), this.getTextureIndex(), this.getArmorRender()};
 			else
 				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
@@ -205,10 +209,12 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	private EnumArmorMaterial getArmorMaterial() {
-		if (this == BEDPACK)
+		if (this == BEDPACK || this == BEDJUMP)
 			return RotaryCraft.BEDROCK;
 		if (this == JETPACK)
 			return RotaryCraft.JETPACK;
+		if (this == JUMP)
+			return RotaryCraft.JUMP;
 		return null;
 	}
 
@@ -218,10 +224,18 @@ public enum ItemRegistry implements RegistryEnum {
 		return false;
 	}
 
+	private boolean isJumpBoots() {
+		if (this == JUMP || this == BEDJUMP)
+			return true;
+		return false;
+	}
+
 	public int getArmorType() {
 		switch(this) {
 		case BEDBOOTS:
 		case STEELBOOTS:
+		case JUMP:
+		case BEDJUMP:
 			return 3;
 		case BEDCHEST:
 		case STEELCHEST:
@@ -312,6 +326,8 @@ public enum ItemRegistry implements RegistryEnum {
 			return RotaryCraft.proxy.armor;
 		if (this.isJetpack())
 			return RotaryCraft.proxy.armor;
+		if (this.isJumpBoots())
+			return RotaryCraft.proxy.armor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
 	}
 
@@ -364,7 +380,7 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public boolean isCharged() {
-		return ItemChargedTool.class.isAssignableFrom(itemClass) || this == NVG;
+		return ItemChargedTool.class.isAssignableFrom(itemClass) || ItemChargedArmor.class.isAssignableFrom(itemClass);
 	}
 
 	public boolean isBedrockTool() {
@@ -431,6 +447,8 @@ public enum ItemRegistry implements RegistryEnum {
 		case STEELCHEST:
 		case STEELLEGS:
 		case STEELBOOTS:
+		case JUMP:
+		case BEDJUMP:
 			return true;
 		default:
 			return false;
@@ -588,6 +606,8 @@ public enum ItemRegistry implements RegistryEnum {
 		case BEDPICK:
 			is.addEnchantment(Enchantment.silkTouch, 1);
 			return is;
+		case BEDJUMP:
+			is.addEnchantment(((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantment(), 4);
 		default:
 			return is;
 		}
