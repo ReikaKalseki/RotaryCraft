@@ -27,13 +27,13 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -68,6 +68,9 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		super.updateTileEntity();
 		tickcount++;
 
+		tree.setWorld(world);
+		treeCopy.setWorld(world);
+
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
 
@@ -93,8 +96,13 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
 						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.setModTree(wood);
-						tree.addModTree(world, editx+i, edity, editz+j);
+						tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
+						if (tree.isEmpty() || !tree.isValidTree()) {
+							tree.clear();
+							tree.setModTree(wood);
+							tree.addModTree(world, editx+i, edity, editz+j);
+						}
+						//ReikaJavaLibrary.pConsole(tree, Side.SERVER);
 					}
 				}
 			}
@@ -102,8 +110,12 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
 						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.setTree(vanilla);
-						tree.addTree(world, editx+i, edity, editz+j);
+						tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
+						if (tree.isEmpty() || !tree.isValidTree()) {
+							tree.clear();
+							tree.setTree(vanilla);
+							tree.addTree(world, editx+i, edity, editz+j);
+						}
 					}
 				}
 			}
@@ -130,7 +142,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		tickcount = 0;
 
 		if (!tree.isValidTree()) {
-			tree.clear();
+			//tree.clear();
 			return;
 		}
 
@@ -141,7 +153,6 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		if (drop != 0) {
 			Material mat = world.getBlockMaterial(xyz[0], xyz[1], xyz[2]);
 			if (ConfigRegistry.INSTACUT.getState()) {
-
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
@@ -290,7 +301,9 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	public ItemStack getPlantedSapling() {
 		if (!this.shouldPlantSapling())
 			return null;
-		if (treeCopy.isVanillaTree())
+		if (treeCopy.isDyeTree())
+			return new ItemStack(TreeGetter.getSaplingID(), 1, treeCopy.getDyeTreeMeta());
+		else if (treeCopy.isVanillaTree())
 			return treeCopy.getVanillaTree().getSapling();
 		else if (treeCopy.isModTree())
 			return treeCopy.getModTree().getCorrespondingSapling();
@@ -301,8 +314,10 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	private boolean shouldPlantSapling() {
 		if (this.hasEnchantment(Enchantment.infinity))
 			return true;
-		ReikaJavaLibrary.pConsole(tree);
-		if (treeCopy.isVanillaTree()) {
+		if (treeCopy.isDyeTree()) {
+			return inv[0] != null && inv[0].stackSize > 0 && inv[0].itemID == TreeGetter.getSaplingID();
+		}
+		else if (treeCopy.isVanillaTree()) {
 			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getVanillaTree().getSapling());
 		}
 		else if (treeCopy.getModTree() != null)

@@ -83,7 +83,8 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (tickcount >= 20) {
 			int[] bounds = this.getBounds();
 			this.eval2(world, x, y, z, meta, bounds);
-			this.blockToColor(bounds, y);
+			if (world.isRemote)
+				this.blockToColor(bounds, y);
 			tickcount = 0;
 		}
 	}

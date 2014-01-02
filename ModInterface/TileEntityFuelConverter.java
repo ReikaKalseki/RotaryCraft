@@ -76,7 +76,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 		//ReikaJavaLibrary.pConsole(input+":"+output);
 
-		int factor = 1;
+		int factor = 10;
 
 		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.CLIENT);
 
@@ -105,7 +105,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	private void consumeItems() {
 		for (int i = 0; i < ingredients.length; i++) {
-			if (ReikaRandomHelper.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/32))
+			if (ReikaRandomHelper.doWithChance(DifficultyEffects.CONSUMEFRAC.getChance()/32D/100D))
 				ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(ingredients[i], inv, false), inv);
 		}
 	}

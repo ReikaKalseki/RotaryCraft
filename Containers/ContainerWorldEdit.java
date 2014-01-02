@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
@@ -79,6 +78,6 @@ public class ContainerWorldEdit extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
 	{
-		return new ItemStack(Block.stone);
+		return this.getSlot(0).getStack();
 	}
 }
