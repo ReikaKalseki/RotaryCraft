@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -169,7 +170,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				mintorque = 8192;
 				reqpow += 262144;
 			}
-			else if (id == TwilightForestHandler.getInstance().mazeStoneID) {
+			else if (this.isTwilightForestToughBlock(id)) {
 				mintorque = 2048;
 				reqpow += 65536;
 			}
@@ -177,8 +178,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		//ReikaJavaLibrary.pConsole(mintorque);
 	}
 
-	private boolean isLabyBedrock(World world, int x, int y, int z) {
-		return y > 4 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID();
+	public static boolean isTwilightForestToughBlock(int id) {
+		return id == TwilightForestHandler.getInstance().mazeStoneID || id == TwilightForestHandler.getInstance().shieldID;
+	}
+
+	public static boolean isLabyBedrock(World world, int x, int y, int z) {
+		return y > 4 && y < 40 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID();
 	}
 
 	public void calcReqPower(World world, int x, int y, int z, int metadata) {
@@ -252,7 +257,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (drops && id != 0) {
 			if (this.isLabyBedrock(world, xread, yread, zread)) {
-				ItemStack is = ItemStacks.bedrockdust.copy();
+				ItemStack is = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt());
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}

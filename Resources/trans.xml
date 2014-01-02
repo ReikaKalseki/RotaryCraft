@@ -25,7 +25,7 @@
 		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent 16:1 ratio. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
 	</worm>
 	<cvt>
-		A CVT (continuously variable transmission) Unit is essentially a dynamic gearbox. Rather than using toothed wheels, it uses a series of belts to change the gear ratio. This gives them the advantage of being efficient and highly flexible, allowing you to select the desired gear ratio on demand. Note that higher ratios require more belts, with each power of 2 doubling the maximum ratio (capped at 32:1).
+		A CVT (continuously variable transmission) Unit is essentially a dynamic gearbox. Rather than using toothed wheels, it uses a series of belts to change the gear ratio. This gives them the advantage of being efficient and highly flexible, allowing you to select the desired gear ratio on demand. Note that higher ratios require more belts, with each power of 2 doubling the maximum ratio (capped at 32:1). This machine also requires lubricant, but will not consume it.
 	</cvt>
 	<coil>
 		The industrial coil stores energy in a large spring that can be unwound on command with redstone. Due to the fact that its output torque and speed can be chosen at will, it can be used to store energy for later or as a sort of capacitor, to store low-power energy accumulated over a long time and then release it in one powerful burst.

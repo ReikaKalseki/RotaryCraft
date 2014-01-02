@@ -27,6 +27,7 @@ import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.MimicryHandler;
+import Reika.DragonAPI.ModInteract.QuantumOreHandler;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -121,7 +122,17 @@ public final class OreForcer {
 		case MIMICRY:
 			intercraftMimichite();
 			break;
+		case QCRAFT:
+			if (ConfigRegistry.MODORES.getState())
+				registerQuantum();
 		}
+	}
+
+	private static void registerQuantum() {
+		QuantumOreHandler.getInstance().forceOreRegistration();
+		ItemStack ore = new ItemStack(QuantumOreHandler.getInstance().dustID, 1, 0);
+		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.QUANTUM));
+		RotaryCraft.logger.log("RotaryCraft quantum dust can now be crafted into QCraft quantum dust!");
 	}
 
 	private static void intercraftMimichite() {

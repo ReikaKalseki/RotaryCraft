@@ -66,7 +66,8 @@ public enum ConfigRegistry implements ConfigList {
 	HSLADICT("Allow RC steel to be used in other mods", false),
 	PREENCHANT("Lock enchants on bedrock tools", true),
 	EXPLODEPACK("Explode jetpack if player is in lava", true),
-	SPRINKLER("Sprinkler Particle Density", 4);
+	SPRINKLER("Sprinkler Particle Density", 4),
+	HANDBOOK("Spawn with RC Handbook", true);
 
 	private String label;
 	private boolean defaultState;

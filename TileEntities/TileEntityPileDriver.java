@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -31,12 +32,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -235,9 +241,22 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 	}
 
-	public int[] getBlockProduct(int id, int meta) {
+	private void dropItems(World world, int x, int y, int z) {
+		ReikaItemHelper.dropItems(world, x, y, z, this.getDrops(world, x, y, z));
+	}
+
+	private ArrayList<ItemStack> getDrops(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		Block b = Block.blocksList[id];
+		if (TileEntityBorer.isLabyBedrock(world, x, y, z))
+			return ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt()));
+		else
+			return b != null ? b.getBlockDropped(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
+	}
+
+	public int[] getBlockProduct(World world, int x, int y, int z, int id, int meta) {
 		int[] to = {0,0};
-		if (id == Block.bedrock.blockID) //does not break bedrock
+		if (id == Block.bedrock.blockID && !TileEntityBorer.isLabyBedrock(world, x, y, z)) //does not break bedrock unless TF
 			to[0] = id;
 		if (id == Block.stone.blockID)
 			to[0] = Block.cobblestone.blockID;
@@ -399,10 +418,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 						//this.step++;
 					}
 					int meta = world.getBlockMetadata(x+i, y, z+j);
-					int[] blockTo = this.getBlockProduct(id, meta);
+					int[] blockTo = this.getBlockProduct(world, x, y, z, id, meta);
 					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+i, y, z+j, blockTo[0], blockTo[1]);
 					if (blockTo[0] == 0) {
-						Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
+						//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
+						this.dropItems(world, x+i, y, z+j);
 					}
 					world.markBlockForUpdate(x+i, y, z+j);
 				}

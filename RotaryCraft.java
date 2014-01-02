@@ -38,6 +38,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.DonatorController;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
@@ -46,12 +47,14 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
+import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Base.ItemMulti;
 import Reika.RotaryCraft.Blocks.BlockBeam;
 import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
@@ -254,6 +257,8 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
 
 		IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
+
+		PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
 	}
 
 	@Override
@@ -275,6 +280,8 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaJavaLibrary.initClass(PowerReceivers.class);
 
 		TileEntityReservoir.initCreativeFluids();
+
+		RecipesGrinder.getRecipes().addOreRecipes();
 	}
 
 	/*

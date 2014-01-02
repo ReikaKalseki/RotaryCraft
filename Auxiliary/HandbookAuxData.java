@@ -347,14 +347,27 @@ public final class HandbookAuxData {
 		else if (h == HandbookRegistry.JETPACK) {
 			int k = (int)((System.nanoTime()/2000000000)%2);
 			if (k == 0) {
-				ItemStack out = ItemRegistry.JETPACK.getStackOf();
+				ItemStack out = ItemRegistry.JETPACK.getEnchantedStack();
 				List li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
 				ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 			}
 			else {
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDCHEST.getStackOf(), dx+72, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDCHEST.getEnchantedStack(), dx+72, dy+10);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.JETPACK.getStackOf(), dx+90, dy+10);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDPACK.getStackOf(), dx+166, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDPACK.getEnchantedStack(), dx+166, dy+28);
+			}
+		}
+		else if (h == HandbookRegistry.JUMPBOOTS) {
+			int k = (int)((System.nanoTime()/2000000000)%2);
+			if (k == 0) {
+				ItemStack out = ItemRegistry.JUMP.getStackOf();
+				List li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
+				ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
+			}
+			else {
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDBOOTS.getEnchantedStack(), dx+72, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.JUMP.getStackOf(), dx+90, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDJUMP.getEnchantedStack(), dx+166, dy+28);
 			}
 		}
 		else if (h == HandbookRegistry.YEAST) {

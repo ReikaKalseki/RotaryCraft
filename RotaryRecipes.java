@@ -674,10 +674,14 @@ public class RotaryRecipes {
 	}
 
 	private static void addSlideRecipes() {
-		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(0), new Object[]{
+		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(4), new Object[]{
 			"PPP", "PGP", "PPP", 'G', Block.thinGlass, 'P', Item.paper});
-		GameRegistry.addRecipe(ItemRegistry.SLIDE.getCraftedProduct(24), new Object[]{
-			"rPr", "PGP", "rPr", 'G', Block.thinGlass, 'P', Item.paper, 'r', Item.redstone});
+
+		ItemStack is = ItemRegistry.SLIDE.getCraftedMetadataProduct(2, 24);
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setString("file", "[NO FILE]");
+		GameRegistry.addRecipe(is, new Object[]{
+				"rPr", "PGP", "rPr", 'G', Block.thinGlass, 'P', Item.paper, 'r', Item.redstone});
 
 		Random r = new Random();
 		HashMap<Integer, Integer> colors = new HashMap<Integer, Integer>();

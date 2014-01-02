@@ -84,7 +84,7 @@
 			This machine will, when its enormous power requirement is satisfied, emit a beam of solid, tangible light which can be walked upon and will support any mass placed on it. Nothing can destroy this beam, but it will be blocked by any non-air block. Note that it requires bright light above it - or a view of the sky - in order to be able to make the beam.
 		</desc>
 		<note>
-			Required Power: %dW
+			Required Power: %dW for full range, or %dW per meter
 			Power Input: Back
 		</note>
 	</lightbridge>
@@ -854,10 +854,10 @@
 		<desc>
 			The sonic borer uses shock waves to dig tunnels. This allows it to be aimed in any direction and work more quickly than the standard borer. The only disadvantage is the sonic borer drops the blocks at their original locations, rather than transporting them to the machine for easy collection. If you supply too much power, this machine will suffer a violent failure.
 		</desc>
+		<note>
 		Required Power: %dW
 		Required Torque: %d Nm
 		Power Input: Back
-		<note>
 		</note>
 	</sonicborer>
 	<sorting>

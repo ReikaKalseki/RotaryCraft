@@ -26,6 +26,8 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 public class RecipesGrinder {
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
 
+	public static final int ore_rate = 3;
+
 	/** The list of smelting results. */
 	private Map metaSmeltingList = new HashMap();
 
@@ -86,7 +88,6 @@ public class RecipesGrinder {
 		this.addRecipe(Block.fenceGate, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
 
 
-		int ore_rate = 3;
 		this.addRecipe(Block.oreCoal, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 24), 0F);
 		this.addRecipe(Block.oreIron, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 25), 0F);
 		this.addRecipe(Block.oreGold, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 26), 0F);
@@ -95,16 +96,6 @@ public class RecipesGrinder {
 		this.addRecipe(Block.oreDiamond, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 29), 0F);
 		this.addRecipe(Block.oreEmerald, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 30), 0F);
 		this.addRecipe(Block.oreNetherQuartz, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 31), 0.7F);
-
-		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ModOreList ore = ModOreList.oreList[i];
-			ArrayList<ItemStack> li = ore.getAllOreBlocks();
-			for (int k = 0; k < li.size(); k++) {
-				ItemStack is = li.get(k);
-				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
-			}
-		}
 	}
 
 	public boolean isGrindable(ItemStack item) {
@@ -164,5 +155,18 @@ public class RecipesGrinder {
 		if (ret != null)
 			return ret;
 		return (ItemStack)metaSmeltingList.get(Integer.valueOf(item.itemID));
+	}
+
+	public void addOreRecipes() {
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			ArrayList<ItemStack> li = ore.getAllOreBlocks();
+			for (int k = 0; k < li.size(); k++) {
+				ItemStack is = li.get(k);
+				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
+				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
+			}
+		}
 	}
 }

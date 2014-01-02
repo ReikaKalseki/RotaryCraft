@@ -65,4 +65,10 @@
 	<steelarmor>
 		Armor can also be made of HSLA steel. It provides slightly better protection than iron and lasts rather longer.
 	</steelarmor>
+	<itempump>
+		The spring-powered pump allows you to pick up large quantities of liquid from the world into the tool's internal tank. This liquid can then be deposited into a tank by right-clicking on it.
+	</itempump>
+	<jumpboots>
+		Spring Boots give the wearer greater agility and mobility by increasing their effective jump height and sprinting speed. They also double as shock absorbers, dampening fall damage.
+	</jumpboots>
 </tools>

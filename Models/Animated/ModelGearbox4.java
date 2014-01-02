@@ -309,8 +309,6 @@ public class ModelGearbox4 extends RotaryModelBase
 		Shape11.render(f5);
 		Shape28.render(f5);
 		Shape29.render(f5);
-		Shape30.render(f5);
-		Shape31.render(f5);
 
 		double d1 = 0;
 		double d2 = 1.092;
@@ -343,6 +341,9 @@ public class ModelGearbox4 extends RotaryModelBase
 		Shape17.render(f5);
 		Shape18.render(f5);
 		Shape19.render(f5);
+
+		Shape30.render(f5);
+		Shape31.render(f5);
 		GL11.glTranslated(d1, d2, d3);
 		GL11.glRotatef(phi*1.25F, 1, 0, 0);
 		GL11.glTranslated(-d1, -d2, -d3);

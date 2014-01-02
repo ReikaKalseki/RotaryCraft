@@ -27,6 +27,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -360,7 +361,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*500, TileEntityBorer.OBSIDIANTORQUE);
 		addNotes(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER, PowerReceivers.PILEDRIVER.getMinTorque());
 		addNotes(MachineRegistry.AEROSOLIZER, PowerReceivers.AEROSOLIZER.getMinPower());
-		addNotes(MachineRegistry.LIGHTBRIDGE, PowerReceivers.LIGHTBRIDGE.getMinPower());
+		addNotes(MachineRegistry.LIGHTBRIDGE, PowerReceivers.LIGHTBRIDGE.getMinPower(), PowerReceivers.LIGHTBRIDGE.getMinPower()/ConfigRegistry.BRIDGERANGE.getValue());
 		addNotes(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3), PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3), PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2));
 		addNotes(MachineRegistry.PULSEJET, PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP);
 		addNotes(MachineRegistry.PUMP, PowerReceivers.PUMP.getMinPower(), PowerReceivers.PUMP.getMinTorque());

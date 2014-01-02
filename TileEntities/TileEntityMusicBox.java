@@ -368,6 +368,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
 			if (f.exists())
 				f.delete();
+			f.createNewFile();
 			PrintWriter p = new PrintWriter(f);
 			f.createNewFile();
 			for (int i = 0; i < 8192; i++) {
@@ -384,8 +385,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			p.close();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
+			e.printStackTrace();
 		}
 	}
 
@@ -428,8 +429,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			p.close();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
+			e.printStackTrace();
 		}
 	}
 

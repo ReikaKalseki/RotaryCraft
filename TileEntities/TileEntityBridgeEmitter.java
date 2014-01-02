@@ -17,6 +17,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements RangedEffect {
 
@@ -60,24 +61,27 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID)
 		//	blocked = true;
 		int range = this.getRange();
-		if (power >= MINPOWER && world.getBlockLightValue(x, y+1, z) >= 13) //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
-			//if (!Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)]) {
-			for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
-				int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
-				int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
-				if (idview == 0 || ReikaWorldHelper.softBlocks(idview) || idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID || idview == RotaryCraft.lightbridge.blockID) { //Only overwrite air blocks
-					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
-					world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightbridge.blockID, dir, 3);
-					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d @ %d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
-					//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
-					//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
-				}
-				if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && (idview != RotaryCraft.lightbridge.blockID) || animtick > range) {
-					animtick--;
-					blocked = true;
+		if (world.getBlockLightValue(x, y+1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
+			if (!world.isRemote) {
+				//if (!Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)]) {
+				for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
+					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
+					int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
+					int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
+					if (idview == 0 || ReikaWorldHelper.softBlocks(idview) || idview == RotaryCraft.lightblock.blockID || idview == RotaryCraft.beamblock.blockID || idview == RotaryCraft.lightbridge.blockID) { //Only overwrite air blocks
+						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
+						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, RotaryCraft.lightbridge.blockID, dir, 3);
+						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d @ %d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
+						//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
+						//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
+					}
+					if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && (idview != RotaryCraft.lightbridge.blockID) || animtick > range) {
+						animtick--;
+						blocked = true;
+					}
 				}
 			}
+		}
 		//}
 		else
 			this.lightsOut(world, x, y, z);
@@ -142,7 +146,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 
 	@Override
 	public int getRange() {
-		return distancelimit;
+		return Math.min(distancelimit, PowerReceivers.LIGHTBRIDGE.getMinPower()/distancelimit);
 	}
 
 	@Override

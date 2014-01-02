@@ -73,7 +73,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {
 				if (ConfigRegistry.BLOCKDAMAGE.getState())
-					ReikaWorldHelper.temperatureEnvironment(world, x+i, y, z+j, temp);
+					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, temp);
 				AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
 				List in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 				for (int k = 0; k < in.size(); k++) {

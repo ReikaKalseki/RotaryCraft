@@ -142,9 +142,7 @@ public class BlockColorMapper {
 		this.addBlockColor(Block.cake, ReikaColorAPI.RGBtoHex(165, 83, 37));
 		this.addBlockMimic(Block.redstoneRepeaterIdle, Block.redstoneRepeaterActive);
 		this.addBlockColor(Block.redstoneRepeaterActive, ReikaColorAPI.RGBtoHex(145, 32, 48));
-
-		this.addDyeGlass();
-
+		this.addBlockMimic(Block.lockedChest, Block.cloth); //dye glass
 		this.addBlockColor(Block.trapdoor, ReikaColorAPI.RGBtoHex(141, 106, 55));
 		this.addBlockColor(Block.silverfish, ReikaColorAPI.RGBtoHex(156, 156, 156));
 		this.addBlockColor(Block.stoneBrick, ReikaColorAPI.RGBtoHex(135, 135, 135));
@@ -370,19 +368,6 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 		if (c.colorInts.containsKey(meta) && !allowOverwrite)
 			throw new IllegalArgumentException("Cannot overwrite color mapping for "+id+":"+meta+"!");
 		c.addMetaColor(meta, color);
-	}
-
-	private void addDyeGlass() {
-		BlockColor glass = new BlockColor();
-		for (int i = 0; i < 16; i++) {
-			ReikaDyeHelper color = ReikaDyeHelper.dyes[i];
-			int meta = color.getWoolMeta();
-			float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-			hsb[1] *= 0.8;
-			int newColor = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
-			glass.addMetaColor(meta, newColor);
-		}
-		map.put(Block.lockedChest, glass);
 	}
 
 	private void addSlabs() {

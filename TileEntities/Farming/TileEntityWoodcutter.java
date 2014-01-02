@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
@@ -60,6 +61,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	public int stepz;
 
 	private TreeReader tree = new TreeReader();
+	private TreeReader treeCopy = new TreeReader();
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -108,6 +110,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 			this.checkAndMatchInventory(wood, vanilla);
 
 			tree.reverseBlockOrder();
+			treeCopy = tree.copy();
 		}
 
 		int id = world.getBlockId(x, y+1, z);
@@ -287,10 +290,10 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	public ItemStack getPlantedSapling() {
 		if (!this.shouldPlantSapling())
 			return null;
-		if (tree.isVanillaTree())
-			return tree.getVanillaTree().getSapling();
-		else if (tree.isModTree())
-			return tree.getModTree().getCorrespondingSapling();
+		if (treeCopy.isVanillaTree())
+			return treeCopy.getVanillaTree().getSapling();
+		else if (treeCopy.isModTree())
+			return treeCopy.getModTree().getCorrespondingSapling();
 		else
 			return null;
 	}
@@ -298,10 +301,14 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	private boolean shouldPlantSapling() {
 		if (this.hasEnchantment(Enchantment.infinity))
 			return true;
-		if (tree.isVanillaTree()) {
-			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], tree.getVanillaTree().getSapling());
+		ReikaJavaLibrary.pConsole(tree);
+		if (treeCopy.isVanillaTree()) {
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getVanillaTree().getSapling());
 		}
-		return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], tree.getModTree().getCorrespondingSapling());
+		else if (treeCopy.getModTree() != null)
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getModTree().getCorrespondingSapling());
+			else
+				return false;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

@@ -25,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -105,6 +106,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 
 	public void die(World world, int x, int y, int z) {
 		world.setBlock(x, y, z, 0);
+		ReikaItemHelper.dropItem(world, x, y, z, ItemRegistry.CANOLA.getStackOf());
 	}
 
 	public ItemStack getDrops(int metadata) {

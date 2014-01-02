@@ -108,7 +108,7 @@ public enum SoundRegistry implements SoundList {
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this.getPlayableReference(), x, y, z, vol*this.getModVolume(), pitch);
+		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this.getPlayableReference(), world, x, y, z, vol*this.getModVolume(), pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {

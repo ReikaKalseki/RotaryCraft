@@ -36,7 +36,8 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-		phi = 1-timer.getFraction()-0.01F;
+		if (power >= MINPOWER && torque >= MINTORQUE)
+			phi = 1-timer.getFraction()-0.01F;
 	}
 
 	@Override

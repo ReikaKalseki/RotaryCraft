@@ -114,7 +114,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		ItemStack block = new ItemStack(id, 1, meta);
 
 		if (ConfigRegistry.MODORES.getState()) {
-			if (ModList.THAUMCRAFT.isLoaded() && ThaumOreHandler.getInstance().isShardOre(block)) {
+			if (ModList.THAUMCRAFT.isLoaded() && ThaumOreHandler.getInstance().isThaumOre(block)) {
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}

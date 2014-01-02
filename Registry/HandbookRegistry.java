@@ -221,6 +221,7 @@ public enum HandbookRegistry {
 	STEELTOOLS("Steel Tools"),
 	STEELARMOR("Steel Armor"),
 	ITEMPUMP(ItemRegistry.PUMP),
+	JUMPBOOTS("Spring Boots"),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
@@ -696,6 +697,8 @@ public enum HandbookRegistry {
 			return false;
 		if (this == JETPACK)
 			return false;
+		if (this == JUMPBOOTS)
+			return false;
 		return true;
 	}
 
@@ -922,6 +925,8 @@ public enum HandbookRegistry {
 			return ItemRegistry.STEELHELMET.getEnchantedStack();
 		if (this == JETPACK)
 			return ItemRegistry.BEDPACK.getEnchantedStack();
+		if (this == JUMPBOOTS)
+			return ItemRegistry.JUMP.getStackOf();
 		if (this.isCrafting())
 			return this.getCrafting().get(this.getTabIconIndex());
 		if (this.isSmelting())
