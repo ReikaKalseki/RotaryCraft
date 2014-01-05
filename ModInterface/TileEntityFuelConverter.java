@@ -87,10 +87,10 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		if (omega < MINSPEED)
 			convert = false;
 
-		if (convert && input.getFluid() != null && input.getFluid().amount >= 8*factor && this.hasItems()) {
-			FluidStack drain = input.drain(8*factor, true);
+		if (convert && input.getFluid() != null && input.getFluid().amount >= 2*factor && this.hasItems()) {
+			FluidStack drain = input.drain(2*factor, true);
 			output.fill(FluidRegistry.getFluidStack("jet fuel", factor), true);
-			if (!world.isRemote) //chance^2
+			if (!world.isRemote)
 				this.consumeItems();
 		}
 	}

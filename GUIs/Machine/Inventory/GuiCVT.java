@@ -9,9 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -34,6 +37,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	private TileEntityAdvancedGear cvt;
 	public int ratio;
 	private boolean reduction;
+	private boolean redstone;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
@@ -53,44 +57,71 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		reduction = ratio < 0;
+		redstone = cvt.isRedstoneControlled;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
 	}
 
 	@Override
 	public void initGui() {
+		buttonList.clear();
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		if (ratio > 0)
-			buttonList.add(new GuiButton(0, j+xSize/2-6, -1+k+64, 80, 20, "Speed"));
-		else
-			buttonList.add(new GuiButton(0, j+xSize/2-6, -1+k+64, 80, 20, "Torque"));
-		input = new GuiTextField(fontRenderer, j+xSize/2+24, k+39, 26, 16);
-		input.setFocused(false);
-		input.setMaxStringLength(3);
+
+		if (redstone) {
+			buttonList.add(new GuiButton(1, j+xSize/2+25, -1+k+44, 71, 20, ""));
+			buttonList.add(new GuiButton(2, j+xSize/2+25, -1+k+67, 71, 20, ""));
+		}
+		else {
+			if (ratio > 0)
+				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Speed"));
+			else
+				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Torque"));
+			input = new GuiTextField(fontRenderer, j+xSize/2+24, k+39, 26, 16);
+			input.setFocused(false);
+			input.setMaxStringLength(3);
+		}
+
+		buttonList.add(new GuiButton(0, j+xSize/2+84, -1+k+19, 20, 20, ""));
 	}
 
 	@Override
 	public void keyTyped(char c, int i){
 		super.keyTyped(c, i);
-		input.textboxKeyTyped(c, i);
+		if (!redstone)
+			input.textboxKeyTyped(c, i);
 	}
 
 	@Override
 	public void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
-		input.mouseClicked(i, j, k);
+		if (!redstone)
+			input.mouseClicked(i, j, k);
 	}
 
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		if (ratio > cvt.getMaxRatio())
-			ratio = cvt.getMaxRatio();
-		ratio = -ratio;
-		reduction = ratio < 0;
-		if (button.id == 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
+		if (button.id == 0) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, 0);
+			redstone = !redstone;
+		}
+
+		if (redstone) {
+			if (button.id == 1)
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ep, 0);
+			if (button.id == 2)
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+2, cvt, ep, 0);
+		}
+		else {
+			if (button.id == 1) {
+				if (ratio > cvt.getMaxRatio())
+					ratio = cvt.getMaxRatio();
+				ratio = -ratio;
+				reduction = ratio < 0;
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ep, ratio);
+			}
+		}
 
 		super.updateScreen();
 		x = Mouse.getX();
@@ -104,19 +135,24 @@ public class GuiCVT extends GuiNonPoweredMachine
 		x = Mouse.getX();
 		y = Mouse.getY();
 
-		if (input.getText().isEmpty())
-			return;
-		if (!(input.getText().matches("^[0-9 ]+$"))) {
-			ratio = 1;
-			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
-			return;
+		if (redstone) {
+
 		}
-		ratio = ReikaJavaLibrary.safeIntParse(input.getText());
-		if (reduction)
-			ratio = -ratio;
-		if (ratio != 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, ratio);
+		else {
+			if (input.getText().isEmpty())
+				return;
+			if (!(input.getText().matches("^[0-9 ]+$"))) {
+				ratio = 1;
+				input.deleteFromCursor(-1);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ep, ratio);
+				return;
+			}
+			ratio = ReikaJavaLibrary.safeIntParse(input.getText());
+			if (reduction)
+				ratio = -ratio;
+			if (ratio != 0)
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ep, ratio);
+		}
 	}
 
 	/**
@@ -128,9 +164,21 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
-		fontRenderer.drawString("Belt Ratio:", xSize/2-32, 31, 4210752);
-		if (!input.isFocused()) {
-			fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
+		int dy = redstone ? 16 : 0;
+		int dx = redstone ? -14 : 0;
+		fontRenderer.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
+
+		if (redstone) {
+			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneActive), 129, 31);
+			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneIdle), 129, 54);
+
+			this.drawCenteredString(fontRenderer, cvt.getCVTString(true), 187, 37, 0xffffff);
+			this.drawCenteredString(fontRenderer, cvt.getCVTString(false), 187, 60, 0xffffff);
+		}
+		else {
+			if (!input.isFocused()) {
+				fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
+			}
 		}
 
 		if (cvt.hasLubricant()) {
@@ -145,6 +193,13 @@ public class GuiCVT extends GuiNonPoweredMachine
 			String s = "Lubricant";
 			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-45-fontRenderer.getStringWidth(s), api.getMouseRealY());
 		}
+
+		api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Item.redstone), xSize/2+94, 7);
+
+		if (api.isMouseInBox(j+xSize/2+92, j+xSize/2+112, -1+k+7, -1+k+27)) {
+			String s = "Redstone Control";
+			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-5-fontRenderer.getStringWidth(s), api.getMouseRealY());
+		}
 	}
 
 	/**
@@ -157,18 +212,24 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		input.drawTextBox();
-		if (ratio > cvt.getMaxRatio())
-			ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
-		else if (ratio == 0)
-			ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, "(1)", j+xSize/2+88, k+31, 0xff0000);
-		else
-			ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", Math.abs(cvt.ratio)), j+xSize/2+88, k+31, 4210752);
+
+		if (redstone) {
+
+		}
+		else {
+			input.drawTextBox();
+			if (ratio > cvt.getMaxRatio())
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
+			else if (ratio == 0)
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, "(1)", j+xSize/2+88, k+31, 0xff0000);
+			else
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", Math.abs(cvt.ratio)), j+xSize/2+88, k+31, 4210752);
+		}
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "cvtgui";
+		return redstone ? "cvtgui2" : "cvtgui";
 	}
 
 }

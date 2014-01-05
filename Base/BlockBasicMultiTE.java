@@ -81,6 +81,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntityScreen;
+import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
@@ -754,14 +755,18 @@ public abstract class BlockBasicMultiTE extends Block {
 	@Override
 	public int isProvidingWeakPower(IBlockAccess iba, int x, int y, int z, int par5)
 	{
-		RotaryCraftTileEntity te = (RotaryCraftTileEntity)iba.getBlockTileEntity(x, y, z);
-		if (!(te instanceof TileEntityPlayerDetector))
+		MachineRegistry m = MachineRegistry.getMachine(iba, x, y, z);
+		if (m == MachineRegistry.PLAYERDETECTOR) {
+			TileEntityPlayerDetector tp = (TileEntityPlayerDetector)iba.getBlockTileEntity(x, y, z);
+			return tp.isActive() ? 15 : 0;
+		}
+		else if (m == MachineRegistry.SMOKEDETECTOR) {
+			TileEntitySmokeDetector tp = (TileEntitySmokeDetector)iba.getBlockTileEntity(x, y, z);
+			return tp.isAlarming() ? 15 : 0;
+		}
+		else {
 			return 0;
-		TileEntityPlayerDetector tp = (TileEntityPlayerDetector)te;
-		if (tp.isActive)
-			return 15;
-		else
-			return 0;
+		}
 	}
 
 	@Override

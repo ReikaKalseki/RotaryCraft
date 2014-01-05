@@ -83,7 +83,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 	private void fill() {
 		ItemStack is = inv[0];
 		Fuelable i = (Fuelable)is.getItem();
-		int added = i.addFuel(is, 1);
+		int added = i.addFuel(is, tank.getActualFluid(), 1);
 		tank.removeLiquid(added);
 	}
 
@@ -98,8 +98,8 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 		Fuelable i = (Fuelable)is.getItem();
 		int current = i.getCurrentFuel(is);
 		int max = i.getCapacity(is);
-		Fluid f = i.getFuel();
-		return tank.getActualFluid().equals(f) && max > current;
+		Fluid f = i.getFuelType(is);
+		return (f == null || tank.getActualFluid().equals(f)) && max > current;
 	}
 
 	private boolean canIntakeFluid(Fluid f) {

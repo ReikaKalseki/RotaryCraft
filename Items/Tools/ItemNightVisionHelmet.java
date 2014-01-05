@@ -47,7 +47,7 @@ public class ItemNightVisionHelmet extends ItemRotaryArmor {
 
 	@Override
 	public boolean canBeDamaged() {
-		return false;
+		return true;
 	}
 
 	@Override

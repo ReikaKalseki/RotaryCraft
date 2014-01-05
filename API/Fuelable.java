@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 public interface Fuelable {
 
 	/** The fuel type. */
-	public Fluid getFuel();
+	public Fluid getFuelType(ItemStack is);
 
 	/** The max amount of fuel (in millibuckets) the item can take. */
 	public int getCapacity(ItemStack is);
@@ -25,6 +25,6 @@ public interface Fuelable {
 	public int getCurrentFuel(ItemStack is);
 
 	/** This adds fuel to the item and returns how much was successfully added. */
-	public int addFuel(ItemStack is, int amt);
+	public int addFuel(ItemStack is, Fluid f, int amt);
 
 }

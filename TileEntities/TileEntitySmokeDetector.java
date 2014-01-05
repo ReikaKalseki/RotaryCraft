@@ -24,13 +24,17 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 	//public static int MINPOWER = 16; //runs off of 4AAA's (max power = 4W) , so 16W (one DC engine can run 64, or 8 at max range)
 	//public static int BASESPEED = 0;
 
-	public boolean isAlarm = false;
-	public boolean isLowBatt = false;
+	private boolean isAlarm = false;
+	private boolean isLowBatt = false;
 
 
 	private int unwindtick = 0;
 
 	public int soundDelay = -1;
+
+	public boolean isAlarming() {
+		return isAlarm;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

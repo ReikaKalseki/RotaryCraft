@@ -34,8 +34,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	private StepTimer sound = new StepTimer(72);
 
-	public TileEntityPneumaticEngine()
-	{
+	public TileEntityPneumaticEngine() {
 		super();
 		pp = new PowerHandler(this, PowerHandler.Type.MACHINE);
 		pp.configure(0, maxMJ, 0, maxMJ);
@@ -88,6 +87,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 		if (pp.getEnergyStored() > 0)
 			pp.addEnergy(0.01F); //To nullify the mandatory power loss... why the HELL was that added?
+
+		pp.configure(0, maxMJ, 0, maxMJ);
 
 		if (!world.isRemote)
 			storedEnergy = (int)pp.getEnergyStored();
@@ -225,7 +226,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	@Override
 	public Color getPowerColor() {
-		return new Color(90, 120, 255);
+		return new Color(50, 170, 255);
 	}
 
 }

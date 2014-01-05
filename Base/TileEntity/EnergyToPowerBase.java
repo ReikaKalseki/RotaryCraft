@@ -12,7 +12,9 @@ package Reika.RotaryCraft.Base.TileEntity;
 import java.awt.Color;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -23,7 +25,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController {
 
 	private static final int MINBASE = -1;
-	private static final int MAXBASE = 13;
+	private static final int MAXBASE = DragonAPICore.isReikasComputer() ? 15 : 13;
 
 	protected int storedEnergy;
 
@@ -142,6 +144,14 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final ForgeDirection getFacing() {
 		return facingDir != null ? facingDir : ForgeDirection.EAST;
+	}
+
+	public final TileEntity getProvidingTileEntity() {
+		int x = xCoord+this.getFacing().offsetX;
+		int y = yCoord+this.getFacing().offsetY;
+		int z = zCoord+this.getFacing().offsetZ;
+		TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+		return te;
 	}
 
 }

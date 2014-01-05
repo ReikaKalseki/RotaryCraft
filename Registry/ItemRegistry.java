@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
+import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
@@ -115,7 +116,8 @@ public enum ItemRegistry implements RegistryEnum {
 	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class),
 	PUMP(29, true,				"item.handpump",			ItemPump.class),
 	JUMP(30, true,				"item.jumpboots",			ItemSpringBoots.class),
-	BEDJUMP(31, false,			"item.bedrockjump",			ItemSpringBoots.class);
+	BEDJUMP(31, false,			"item.bedrockjump",			ItemSpringBoots.class),
+	FUEL(27, false,				"item.fueltank",			ItemFuelTank.class);
 
 	private int index;
 	private boolean hasSubtypes;

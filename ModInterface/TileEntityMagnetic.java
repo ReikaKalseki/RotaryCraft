@@ -21,7 +21,6 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
-
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());

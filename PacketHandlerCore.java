@@ -160,13 +160,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", control, data));
 				borer = (TileEntityBorer)te;
 				if (borer != null) {
-					if (control == 2) {
+					if (control == PacketRegistry.BORER.getMinValue()+2) {
 						borer.mode = data[0];
 					}
-					if (control == 3) {
+					if (control == PacketRegistry.BORER.getMinValue()+3) {
 						borer.step = 1;
 					}
-					if (control == 1) {
+					if (control == PacketRegistry.BORER.getMinValue()+1) {
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", data));
 						if (borer.drops) {
 							borer.drops = false;
@@ -175,7 +175,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 							borer.drops = true;
 						}
 					}
-					if (control == 0) {
+					if (control == PacketRegistry.BORER.getMinValue()) {
 						if (data[0] > 0 && data[0] < 100) {
 							int roworld = data[0]/7;
 							int cols = data[0]-roworld*7;
@@ -209,7 +209,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case SPLITTER: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 				splitter = (TileEntitySplitter)te;
-				if (control == 6) {
+				if (control == PacketRegistry.SPLITTER.getMinValue()) {
 					splitter.splitmode = data[0];
 				}
 			}
@@ -241,23 +241,34 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case CVT: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 				adv = (TileEntityAdvancedGear)te;
-				adv.ratio = data[0];
+				if (control == PacketRegistry.CVT.getMinValue()) {
+					adv.isRedstoneControlled = !adv.isRedstoneControlled;
+				}
+				else if (control == PacketRegistry.CVT.getMinValue()+1) {
+					if (adv.isRedstoneControlled)
+						adv.incrementCVTState(true);
+					else
+						adv.ratio = data[0];
+				}
+				else if (control == PacketRegistry.CVT.getMinValue()+2) {
+					adv.incrementCVTState(false);
+				}
 			}
 			break;
 			case CANNON: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 				cannon = (TileEntityLaunchCannon)te;
 				if (data[0] == 0) {
-					if (control == 12) {
+					if (control == PacketRegistry.CANNON.getMinValue()) {
 						cannon.phi = data[1];
 					}
-					if (control == 13) {
+					if (control == PacketRegistry.CANNON.getMinValue()+1) {
 						if (data[1] > cannon.getMaxTheta())
 							cannon.theta = cannon.getMaxTheta();
 						else
 							cannon.theta = data[1];
 					}
-					if (control == 14) {
+					if (control == PacketRegistry.CANNON.getMinValue()+2) {
 						if (data[1] > cannon.getMaxLaunchVelocity())
 							cannon.velocity = cannon.getMaxLaunchVelocity();
 						else
@@ -265,13 +276,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					}
 				}
 				else {
-					if (control == 12) {
+					if (control == PacketRegistry.CANNON.getMinValue()) {
 						cannon.target[0] = data[1];
 					}
-					if (control == 13) {
+					if (control == PacketRegistry.CANNON.getMinValue()+1) {
 						cannon.target[1] = data[1];
 					}
-					if (control == 14) {
+					if (control == PacketRegistry.CANNON.getMinValue()+2) {
 						cannon.target[2] = data[1];
 					}
 					double dx = cannon.target[0]-cannon.xCoord;
@@ -287,10 +298,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 			case SONIC: {
 				sonic = (TileEntitySonicWeapon)te;
-				if (control == 15) {
+				if (control == PacketRegistry.SONIC.getMinValue()) {
 					sonic.setpitch = longdata;
 				}
-				if (control == 16) {
+				if (control == PacketRegistry.SONIC.getMinValue()+1) {
 					sonic.setvolume = longdata;
 				}
 			}
@@ -309,43 +320,41 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			}
 			case COIL:
 				adv = (TileEntityAdvancedGear)te;
-				if (control == 19) {
+				if (control == PacketRegistry.COIL.getMinValue()) {
 					adv.releaseOmega = data[0];
 				}
-				if (control == 20) {
+				if (control == PacketRegistry.COIL.getMinValue()+1) {
 					adv.releaseTorque = data[0];
 				}
 				break;
 			case MUSIC:
 				music = (TileEntityMusicBox)te;
-				switch(control) {
-				case 21:
+				if (control == PacketRegistry.MUSIC.getMinValue()) {
 					music.chooseNoteType(data[0]);
-					break;
-				case 22:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+1) {
 					music.setEntryData(data[0], data[1], data[2], data[3]);
 					music.addNote();
-					break;
-				case 23:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+2) {
 					music.addNote();
 					music.backSpace();
-					break;
-				case 24:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+3) {
 					music.clearMusic();
-					break;
-				case 25:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+4) {
 					music.clearChannel(data[0]);
-					break;
-				case 26:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+5) {
 					music.save();
-					break;
-				case 27:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+6) {
 					music.read();
-					break;
-				case 28:
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+7) {
 					music.loadDemo();
 					music.isOneTimePlaying = true;
-					break;
 				}
 				break;
 			case VACUUM:
@@ -373,13 +382,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case ITEMCANNON: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 				icannon = (TileEntityItemCannon)te;
-				if (control == 33) {
+				if (control == PacketRegistry.ITEMCANNON.getMinValue()) {
 					icannon.target[0] = data[0];
 				}
-				if (control == 34) {
+				if (control == PacketRegistry.ITEMCANNON.getMinValue()+1) {
 					icannon.target[1] = data[0];
 				}
-				if (control == 35) {
+				if (control == PacketRegistry.ITEMCANNON.getMinValue()+2) {
 					icannon.target[2] = data[0];
 				}
 				break;
@@ -426,13 +435,13 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				break;
 			case PNEUMATIC:
 				eng = (EnergyToPowerBase)te;
-				if (control == 50)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue())
 					eng.decrementTorque();
-				if (control == 51)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+1)
 					eng.incrementTorque();
-				if (control == 52)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+2)
 					eng.decrementOmega();
-				if (control == 53)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+3)
 					eng.incrementOmega();
 				break;
 			case JETPACK:

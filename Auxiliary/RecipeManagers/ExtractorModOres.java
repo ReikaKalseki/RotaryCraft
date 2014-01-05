@@ -26,8 +26,6 @@ public class ExtractorModOres {
 				OreDictionary.registerOre(ingots[j], new ItemStack(RotaryCraft.modingots.itemID, 1, i));
 			}
 		}
-		OreDictionary.registerOre("ingotLead", getSmeltedIngot(ModOreList.GALENA));
-		OreDictionary.registerOre("ingotSilver", getSmeltedIngot(ModOreList.GALENA));
 	}
 
 	public static void addSmelting() {

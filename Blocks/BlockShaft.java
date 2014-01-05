@@ -267,7 +267,7 @@ public class BlockShaft extends BlockModelledMachine {
 		if (ts == null)
 			return false;
 		MaterialRegistry type = ts.type;
-		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
+		return type != null ? type.isHarvestablePickaxe(player.inventory.getCurrentItem()) : false;
 	}
 
 	@Override

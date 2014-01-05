@@ -117,7 +117,7 @@
 	</pulsejet>
 	<pump>
 		<desc>
-			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transsport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access. Excess power to the pump generates pressure, which is essential for the operation of sprinklers.
+			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access. Excess power to the pump generates pressure, which is essential for the operation of sprinklers.
 		</desc>
 		<note>
 			Required Power: %d W
@@ -677,7 +677,7 @@
 	</terraformer>
 	<fuelenhancer>
 		<desc>
-			The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify and refine it further, ultimately producing jet fuel. Note that the purification process causes an eight-fold decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and tar.
+			The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify and refine it further, ultimately producing jet fuel. Note that the purification process causes an twofold decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and tar.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -743,7 +743,7 @@
 	</beammirror>
 	<fertilizer>
 		<desc>
-			The fertilizer, when given apatite or bonemeal, can accelerate the growth of nearby crops, saplings, and other plants.
+			The fertilizer, when given apatite or bonemeal, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
 		</desc>
 		<note>
 			Power Input: Bottom

@@ -112,10 +112,12 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 
 	private void consumeItem() {
 		tank.removeLiquid(5);
-		for (int i = 0; i < inv.length; i++) {
-			if (inv[i] != null) {
-				ReikaInventoryHelper.decrStack(i, inv);
-				return;
+		if (rand.nextInt(4) == 0) {
+			for (int i = 0; i < inv.length; i++) {
+				if (inv[i] != null) {
+					ReikaInventoryHelper.decrStack(i, inv);
+					return;
+				}
 			}
 		}
 	}

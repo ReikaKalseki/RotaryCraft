@@ -52,9 +52,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	private CVTController controller;
 
-	public ItemStack[] belts = new ItemStack[31];
+	private ItemStack[] belts = new ItemStack[31];
 
 	private boolean hasLubricant = false;
+
+	private CVTState[] cvtState = new CVTState[2];
+
+	public boolean isRedstoneControlled;
 
 	public void setController(CVTController c) {
 		controller = c;
@@ -175,9 +179,19 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return 1;
 		if (type == GearType.WORM)
 			return WORMRATIO;
-		if (ratio < 0)
-			return -ratio;
-		return ratio;
+		return this.getCVTRatio();
+	}
+
+	private int getCVTRatio() {
+		if (isRedstoneControlled) {
+			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			return this.getCVTState(red).gearRatio;
+		}
+		else {
+			if (ratio < 0)
+				return -ratio;
+			return ratio;
+		}
 	}
 
 	private double getPowerLossFraction(int speed) {
@@ -389,6 +403,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 			break;
 		case CVT:
+			int ratio = this.getCVTRatio();
 			if (hasLubricant) {
 				boolean speed = true;
 				if (ratio > 0) {
@@ -434,6 +449,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
 		NBT.setBoolean("lube", hasLubricant);
+		NBT.setBoolean("redstone", isRedstoneControlled);
+		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
+		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -463,6 +481,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
 		hasLubricant = NBT.getBoolean("lube");
+		isRedstoneControlled = NBT.getBoolean("redstone");
+		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
+		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		belts = new ItemStack[this.getSizeInventory()];
@@ -616,5 +637,63 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return new PowerSourceList().addSource(this);
 		else
 			return super.getPowerSources(io, caller);
+	}
+
+	public void incrementCVTState(boolean on) {
+		int i = on ? 1 : 0;
+		cvtState[i] = this.getCVTState(on).next();
+		while (!this.getCVTState(on).isValid(this)) {
+			cvtState[i] = this.getCVTState(on).next();
+		}
+	}
+
+	private CVTState getCVTState(boolean on) {
+		int i = on ? 1 : 0;
+		return cvtState[i] != null ? cvtState[i] : CVTState.S1;
+	}
+
+	public String getCVTString(boolean on) {
+		return this.getCVTState(on).toString();
+	}
+
+	private static enum CVTState {
+		S1(1),
+		S2(2),
+		S4(4),
+		S8(8),
+		S16(16),
+		S32(32),
+		T1(-1),
+		T2(-2),
+		T4(-4),
+		T8(-8),
+		T16(-16),
+		T32(-32);
+
+		public final int gearRatio;
+
+		public static final CVTState[] list = values();
+
+		private CVTState(int ratio) {
+			gearRatio = ratio;
+		}
+
+		public CVTState next() {
+			if (this.ordinal() == list.length-1)
+				return list[0];
+			else
+				return list[this.ordinal()+1];
+		}
+
+		public boolean isValid(TileEntityAdvancedGear te) {
+			int abs = Math.abs(gearRatio);
+			int max = Math.abs(te.getMaxRatio());
+			return max >= abs;
+		}
+
+		@Override
+		public String toString() {
+			return Math.abs(gearRatio)+"x "+(gearRatio > 0 ? "Speed" : "Torque");
+		}
 	}
 }

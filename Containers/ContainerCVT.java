@@ -32,7 +32,7 @@ public class ContainerCVT extends CoreContainer
 		int k = 0;
 		int a = 0;
 		int b = 0;
-		for (int i = 0; i < ReikaMathLibrary.logbase(CVT.belts.length+1, 2); i++) {
+		for (int i = 0; i < ReikaMathLibrary.logbase(32, 2); i++) {
 			for (int j = 0; j < ReikaMathLibrary.intpow(2, i); j++) {
 				if (k > 22) {
 					a = -144;

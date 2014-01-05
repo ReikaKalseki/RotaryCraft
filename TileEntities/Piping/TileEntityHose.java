@@ -92,11 +92,11 @@ public class TileEntityHose extends TileEntityPiping {
 
 	@Override
 	public boolean canIntakeFromIFluidHandler(ForgeDirection side) {
-		return side == ForgeDirection.DOWN;
+		return side.offsetY != 0;
 	}
 
 	@Override
 	public boolean canOutputToIFluidHandler(ForgeDirection side) {
-		return side != ForgeDirection.DOWN;
+		return side.offsetY == 0;
 	}
 }

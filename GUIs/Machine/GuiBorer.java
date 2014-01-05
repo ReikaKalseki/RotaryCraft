@@ -24,10 +24,10 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -98,7 +98,7 @@ public class GuiBorer extends GuiMachine
 			drops = true;
 		}
 
-		this.sendPacket(1);
+		this.sendPacket(PacketRegistry.BORER.getMinValue()+1);
 	}
 
 	public void updateMode(int md) {
@@ -112,11 +112,11 @@ public class GuiBorer extends GuiMachine
 			this.toggleDrops();
 		}
 		if (button.id == 8)
-			this.sendPacket(3);
+			this.sendPacket(PacketRegistry.BORER.getMinValue()+3);
 		if (button.id < 7) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			this.sendPacket(2);
+			this.sendPacket(PacketRegistry.BORER.getMinValue()+2);
 		}
 		if (button.id >= 10 && button.id < 50) {
 			int rows = (button.id-10)/7;
@@ -126,7 +126,7 @@ public class GuiBorer extends GuiMachine
 			packetID = (button.id-10);
 			if (button.id == 10)
 				packetID = 100;
-			this.sendPacket(0);
+			this.sendPacket(PacketRegistry.BORER.getMinValue());
 		}
 		if (button.id >= 50 && button.id < 24000) {
 			int rows = (button.id-50)/7;
@@ -136,7 +136,7 @@ public class GuiBorer extends GuiMachine
 			packetID = (button.id-50);
 			if (button.id == 50)
 				packetID = 100;
-			this.sendPacket(0);
+			this.sendPacket(PacketRegistry.BORER.getMinValue());
 		}
 		this.updateScreen();
 
@@ -149,18 +149,18 @@ public class GuiBorer extends GuiMachine
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
-			if (a == 1) {
+			if (a == PacketRegistry.BORER.getMinValue()+1) {
 				if (drops)
 					outputStream.writeInt(1); //set drops to 0 (false)
 				else
 					outputStream.writeInt(0);
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			}
-			if (a == 2)
+			if (a == PacketRegistry.BORER.getMinValue()+2)
 				outputStream.writeInt(mode);
-			if (a > 2)
+			if (a > PacketRegistry.BORER.getMinValue()+2)
 				outputStream.writeInt(-1);
-			if (a == 0) {
+			if (a == PacketRegistry.BORER.getMinValue()) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(3434));
 				int rows = packetID/7;
 				int cols = packetID-rows*7;

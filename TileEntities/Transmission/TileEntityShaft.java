@@ -69,7 +69,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			if (world.isRemote)
 				return;
 			ei.velocityChanged = true;
-			world.spawnEntityInWorld(ei);
+			if (rand.nextInt(24) == 0)
+				world.spawnEntityInWorld(ei);
 		}
 		else {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.break", 1F, 1F);
@@ -98,7 +99,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			if (world.isRemote)
 				return;
 			ei.velocityChanged = true;
-			world.spawnEntityInWorld(ei);
+			if (rand.nextInt(24) == 0)
+				world.spawnEntityInWorld(ei);
 		}
 	}
 
@@ -208,6 +210,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	//FIX THIS;
+	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		reading2Dir = true;
 		int sratio = spl.getRatioFromMode();

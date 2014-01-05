@@ -85,41 +85,46 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 			tree.reset();
 			ModWoodList wood = ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
-			if (wood == ModWoodList.SEQUOIA) {
-				for (int i = -32; i < 255; i += 16)
-					tree.addSequoia(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
+
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
+					if (tree.isEmpty() || !tree.isValidTree())
+						tree.clear();
+				}
 			}
-			else if (wood == ModWoodList.DARKWOOD) {
-				tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
-			}
-			else if (wood != null) {
-				for (int i = -1; i <= 1; i++) {
-					for (int j = -1; j <= 1; j++) {
-						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
-						if (tree.isEmpty() || !tree.isValidTree()) {
-							tree.clear();
+
+			if (tree.isEmpty()) {
+
+				if (wood == ModWoodList.SEQUOIA) {
+					for (int i = -32; i < 255; i += 16)
+						tree.addSequoia(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
+				}
+				else if (wood == ModWoodList.DARKWOOD) {
+					tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
+				}
+				else if (wood != null) {
+					for (int i = -1; i <= 1; i++) {
+						for (int j = -1; j <= 1; j++) {
+							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
 							tree.setModTree(wood);
 							tree.addModTree(world, editx+i, edity, editz+j);
 						}
 						//ReikaJavaLibrary.pConsole(tree, Side.SERVER);
 					}
 				}
-			}
-			else if (vanilla != null) {
-				for (int i = -1; i <= 1; i++) {
-					for (int j = -1; j <= 1; j++) {
-						//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-						tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
-						if (tree.isEmpty() || !tree.isValidTree()) {
-							tree.clear();
+				else if (vanilla != null) {
+					for (int i = -1; i <= 1; i++) {
+						for (int j = -1; j <= 1; j++) {
+							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
 							tree.setTree(vanilla);
 							tree.addTree(world, editx+i, edity, editz+j);
 						}
 					}
 				}
 			}
-			this.checkAndMatchInventory(wood, vanilla);
+
+			this.checkAndMatchInventory();
 
 			tree.reverseBlockOrder();
 			treeCopy = tree.copy();
@@ -142,7 +147,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		tickcount = 0;
 
 		if (!tree.isValidTree()) {
-			//tree.clear();
+			tree.clear();
 			return;
 		}
 
@@ -227,19 +232,19 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		}
 	}
 
-	private void checkAndMatchInventory(ModWoodList wood, ReikaTreeHelper vanilla) {
-		ItemStack sapling;
-		if (wood != null) {
-			sapling = wood.getCorrespondingSapling();
-			if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
-				this.dumpInventory();
-			}
+	private void checkAndMatchInventory() {
+		ItemStack sapling = null;
+		if (tree.isDyeTree()) {
+			sapling = new ItemStack(TreeGetter.getSaplingID(), 1, tree.getDyeTreeMeta());
 		}
-		else if (vanilla != null) {
-			sapling = vanilla.getSapling();
-			if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
-				this.dumpInventory();
-			}
+		else if (tree.getModTree() != null) {
+			sapling = tree.getModTree().getCorrespondingSapling();
+		}
+		else if (tree.getVanillaTree() != null) {
+			sapling = tree.getVanillaTree().getSapling();
+		}
+		if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
+			this.dumpInventory();
 		}
 	}
 

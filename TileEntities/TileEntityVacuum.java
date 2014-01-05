@@ -76,23 +76,25 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 					int size = ii.getSizeInventory();
 					for (int k = 0; k < size; k++) {
 						ItemStack inslot = ii.getStackInSlot(k);
-						boolean cansuck = true;
-						if (te instanceof ISidedInventory)
-							cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
 						if (inslot != null) {
-							if (this.canSuckStacks()) {
-								if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
-									ii.setInventorySlotContents(k, null);
+							boolean cansuck = true;
+							if (te instanceof ISidedInventory)
+								cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
+							if (inslot != null) {
+								if (this.canSuckStacks()) {
+									if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
+										ii.setInventorySlotContents(k, null);
+									}
 								}
-							}
-							else {
-								int newsize = inslot.stackSize-1;
-								ItemStack is2 = new ItemStack(inslot.itemID, 1, inslot.getItemDamage());
-								ItemStack is3 = new ItemStack(inslot.itemID, newsize, inslot.getItemDamage());
-								if (newsize <= 0)
-									is3 = null;
-								if (ReikaInventoryHelper.addToIInv(is2, this)) {
-									ii.setInventorySlotContents(k, is3);
+								else {
+									int newsize = inslot.stackSize-1;
+									ItemStack is2 = new ItemStack(inslot.itemID, 1, inslot.getItemDamage());
+									ItemStack is3 = new ItemStack(inslot.itemID, newsize, inslot.getItemDamage());
+									if (newsize <= 0)
+										is3 = null;
+									if (ReikaInventoryHelper.addToIInv(is2, this)) {
+										ii.setInventorySlotContents(k, is3);
+									}
 								}
 							}
 						}

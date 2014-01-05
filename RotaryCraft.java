@@ -66,6 +66,7 @@ import Reika.RotaryCraft.Blocks.BlockLightBridge;
 import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Blocks.BlockObsidianGlass;
+import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
@@ -280,6 +281,7 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaJavaLibrary.initClass(PowerReceivers.class);
 
 		TileEntityReservoir.initCreativeFluids();
+		ItemFuelTank.initCreativeFluids();
 
 		RecipesGrinder.getRecipes().addOreRecipes();
 	}

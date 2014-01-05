@@ -28,12 +28,16 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	public static final int BASESPEED = 100; //5s reaction time by default
 
 	public boolean analog = false;
-	public boolean isActive = false;
+	private boolean isActive = false;
 	public int powerLevel = 0;
 	public int selectedrange;
 
 	/** Used to determine reaction time */
 	private int ticksdetected = 0;
+
+	public boolean isActive() {
+		return isActive;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {

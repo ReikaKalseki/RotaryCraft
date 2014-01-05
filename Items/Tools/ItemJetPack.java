@@ -188,7 +188,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	}*/
 
 	@Override
-	public Fluid getFuel() {
+	public Fluid getFuelType(ItemStack is) {
 		return FluidRegistry.getFluid("rc ethanol");
 	}
 
@@ -203,7 +203,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	}
 
 	@Override
-	public int addFuel(ItemStack is, int amt) {
+	public int addFuel(ItemStack is, Fluid f, int amt) {
+		if (f == null || !f.equals(FluidRegistry.getFluid("rc ethanol")))
+			return 0;
 		NBTTagCompound nbt = is.stackTagCompound;
 		if (nbt == null) {
 			is.stackTagCompound = new NBTTagCompound();
@@ -215,9 +217,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 			int cur = nbt.getInteger("fuel");
 			int sum = cur+amt;
 			if (sum > cap) {
-				int diff = sum-cap;
 				is.stackTagCompound.setInteger("fuel", cap);
-				return sum-diff;
+				return cap-cur;
 			}
 			else {
 				is.stackTagCompound.setInteger("fuel", sum);
