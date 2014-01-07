@@ -35,7 +35,7 @@ public class ContainerEnergyToPower extends CoreContainer {
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 0, engine.getStoredPower());
+			icrafting.sendProgressBarUpdate(this, 0, engine.getStoredPower()/2);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class ContainerEnergyToPower extends CoreContainer {
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 0: engine.setStoredPower(par2); break;
+		case 0: engine.setStoredPower(par2*2); break;
 		}
 	}
 

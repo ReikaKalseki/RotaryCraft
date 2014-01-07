@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
+import Reika.RotaryCraft.Blocks.BlockAuxEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -24,7 +25,6 @@ import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
-import Reika.RotaryCraft.Blocks.BlockHydraulicLine;
 import Reika.RotaryCraft.Blocks.BlockIMachine;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
@@ -56,14 +56,14 @@ public enum BlockRegistry implements RegistryEnum {
 	SOLAR(BlockSolar.class, Material.iron),
 	BCENGINE(BlockModEngine.class, Material.iron),
 	MODEL2(BlockMMachine.class, Material.iron),
-	HYDRAULIC(BlockHydraulicLine.class, Material.iron);
+	AUXENGINE(BlockAuxEngine.class, Material.iron);
 
 	private Class block;
 	private Material mat;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Hydraulic Line"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Auxiliary Engine"
 	};
 
 	private BlockRegistry(Class cl, Material m) {

@@ -69,7 +69,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 	@Override
 	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
-		ItemStack is = new ItemStack(id, 1, 0);
+		ItemStack is = new ItemStack(id, 1, 24000);
 		if (itemID == ItemRegistry.BEDJUMP.getShiftedID()) {
 			Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance()).getDefaultEnchantment();
 			if (ench != null)

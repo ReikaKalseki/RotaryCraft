@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
+import Reika.RotaryCraft.Blocks.BlockAuxEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -48,7 +49,6 @@ import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
-import Reika.RotaryCraft.Blocks.BlockHydraulicLine;
 import Reika.RotaryCraft.Blocks.BlockIMachine;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
@@ -103,7 +103,6 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHydraulicRouter;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
@@ -116,7 +115,6 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityBypass;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
@@ -133,10 +131,12 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityCoalGas;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityMagmatic;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
@@ -152,7 +152,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -284,13 +283,12 @@ public enum MachineRegistry {
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
-	HYDRAULIC(			"machine.hydraulic",		BlockDMMachine.class,		TileEntityHydraulicPump.class,		15, "RenderHydraulic"),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
-	ROUTER(				"machine.router",			BlockMachine.class,			TileEntityHydraulicRouter.class,	7),
-	HYDRAULICLINE(		"machine.hyline",			BlockHydraulicLine.class,	TileEntityHydraulicLine.class,		0),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
-	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal");
+	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
+	MAGMATIC(			"machine.magmatic",			BlockAuxEngine.class,		TileEntityMagmatic.class,			0),
+	COALGAS(			"machine.coalgas",			BlockAuxEngine.class,		TileEntityCoalGas.class,			1);
 
 	private String name;
 	private Class te;
@@ -581,8 +579,8 @@ public enum MachineRegistry {
 			return 0.5F;
 		if (this == FERTILIZER)
 			return 0.875F;
-		if (this == HYDRAULIC)
-			return ((TileEntityHydraulicPump)tile).isTurbine() ? 1 : 0.75F;
+		//if (this == HYDRAULIC)
+		//	return ((TileEntityHydraulicPump)tile).isTurbine() ? 1 : 0.75F;
 		return 1;
 	}
 
@@ -684,10 +682,10 @@ public enum MachineRegistry {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
 			return RotaryNames.getAdvGearName(adv.getBlockMetadata()/4);
 		}
-		if (this == HYDRAULIC) {
-			TileEntityHydraulicPump hyd = (TileEntityHydraulicPump)tile;
-			return RotaryNames.getHydraulicName(hyd.getBlockMetadata()/6);
-		}
+		//if (this == HYDRAULIC) {
+		//	TileEntityHydraulicPump hyd = (TileEntityHydraulicPump)tile;
+		//	return RotaryNames.getHydraulicName(hyd.getBlockMetadata()/6);
+		//}
 		throw new RegistrationException(RotaryCraft.instance, "Machine "+this.getName()+" has an unspecified multi name!");
 	}
 
@@ -698,7 +696,7 @@ public enum MachineRegistry {
 		case SHAFT:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
-		case HYDRAULIC:
+			//case HYDRAULIC:
 			return true;
 		default:
 			return false;
@@ -810,7 +808,7 @@ public enum MachineRegistry {
 		case LINEBUILDER:
 		case SONICBORER:
 		case BELT:
-		case HYDRAULIC:
+			//case HYDRAULIC:
 		case DYNAMO:
 			return true;
 		default:
@@ -857,7 +855,7 @@ public enum MachineRegistry {
 		case GEARBOX:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
-		case HYDRAULIC:
+			//case HYDRAULIC:
 			return true;
 		default:
 			return false;
@@ -868,9 +866,9 @@ public enum MachineRegistry {
 		if (this == ADVANCEDGEARS) {
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, 0);
 		}
-		if (this == HYDRAULIC) {
-			return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, 0);
-		}
+		//if (this == HYDRAULIC) {
+		//	return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, 0);
+		//}
 		if (this == FLYWHEEL) {
 			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, 0);
 		}
@@ -890,9 +888,9 @@ public enum MachineRegistry {
 		if (this == ADVANCEDGEARS) {
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, metadata);
 		}
-		if (this == HYDRAULIC) {
-			return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, metadata);
-		}
+		//if (this == HYDRAULIC) {
+		//	return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, metadata);
+		//}
 		if (this == FLYWHEEL) {
 			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata);
 		}
@@ -919,7 +917,7 @@ public enum MachineRegistry {
 		case SHAFT:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
-		case HYDRAULIC:
+			//case HYDRAULIC:
 			return true;
 		default:
 			return false;

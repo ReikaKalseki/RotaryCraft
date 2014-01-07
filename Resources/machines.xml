@@ -333,7 +333,7 @@
 	</sonicweapon>
 	<blastfurnace>
 		<desc>
-			The blast furnace is the main way to make steel. Simply supply carbon (in the form of coal) at the left, gunpowder at the bottom-left, and fill any or all of the middle nine slots with iron ingots. Heat the machine to %dC to start the alloying process. The machine will operate more efficiently with more slots full of iron, and will give higher bonuses (up to a 49%% chance of a bonus with size up to 100%% (11%% chance). Note that the coal is not fuel - an external heat source is required.
+			The blast furnace is the main way to make steel. Simply supply carbon (in the form of coal) at the left, gunpowder at the bottom-left, and fill any or all of the middle nine slots with iron ingots. Heat the machine to %dC to start the alloying process. The machine will operate more efficiently with more slots full of iron, and will give higher bonuses (up to a 49%% chance of a bonus with size up to 100%% (11%% chance). Note that the coal is not fuel - an external heat source is required. This machine is also used to make bedrock ingots. To make that, put 4 bedrock dust in the left, one steel ingot in the top-left of the grid.
 		</desc>
 		<note>
 			Requires: Coal/Charcoal in left slot, gunpowder in bottom-left, Iron in middle slots

@@ -123,7 +123,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		else {
 			temperature += (temperature-Tamb)/40;
 		}
-		if (temperature - Tamb <= 4 && temperature > Tamb)
+		if (temperature - Tamb <= 40 && temperature > Tamb)
 			temperature--;
 		if (temperature > MAXTEMP) {
 			temperature = MAXTEMP;

@@ -34,7 +34,7 @@
 		Buckets of lubricant or jet fuel can be made by placing empty buckets in the appropriate slots of the grinder or fractionator. They can then be carried to a machine that needs them, to save on piping for long distances. Ethanol can also be bucketed in and out of engines and tanks.
 	</buckets>
 	<bedtools>
-		Bedrock tools are made from bedrock ingots. They have infinite durability, and are faster than the diamond tools while being just as effective at harvesting blocks. Also, because of their hardness, a bedrock pickaxe can cleanly harvest any block, as if it was permanently enchanted with Silk Touch.
+		Bedrock tools are made from bedrock ingots. They have infinite durability, and are faster than the diamond tools while being just as effective at harvesting blocks. Also, because of their hardness, bedrock tools are extremely sharp. A bedrock pickaxe can cleanly harvest any block, as if it was permanently enchanted with Silk Touch, and a bedrock sword is very effective against armor and can harvest mobs much more cleanly. The sharpness of bedrock shears makes them able to harvest even the most delicate of plants. A bedrock hoe can be used to till a 5x5 area, or, while sneaking, to use seeds to replant grass.
 	</bedtools>
 	<bedarmor>
 		Armor can also be made of bedrock ingots. Like bedrock tools, it has infinite durability.

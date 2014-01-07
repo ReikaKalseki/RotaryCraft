@@ -132,8 +132,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			int power = world.getBlockPowerInput(x, y, z);
 			setting = power == 15 ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
 		}
+		//ReikaJavaLibrary.pConsole(tank);
 		if (tank.isEmpty())
 			return;
+		if (tank.getActualFluid().equals(FluidRegistry.getFluid("bioethanol")))
+			tank.setFluidType(FluidRegistry.getFluid("rc ethanol"));
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
 			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
 	}
@@ -254,6 +257,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("bioethanol")))
 			return true;
 		return false;
 	}

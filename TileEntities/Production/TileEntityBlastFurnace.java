@@ -21,6 +21,7 @@ import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
@@ -32,10 +33,11 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable {
 
 	private int temperature;
-	public ItemStack[] inventory = new ItemStack[14];
-	public int meltTime = 0;
+	public ItemStack[] inv = new ItemStack[14];
+	public int smeltTime = 0;
 
 	public static final int SMELTTEMP = 600;
+	public static final int BEDROCKTEMP = 1000;
 	public static final int MAXTEMP = 1200;
 	public static final float SMELT_XP = 0.6F;
 
@@ -43,7 +45,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	protected int getActiveTexture() {
-		return (temperature >= SMELTTEMP && this.haveIngredients() ? 1 : 0);
+		return (temperature >= SMELTTEMP && this.hasSteelIngredients() ? 1 : 0);
 	}
 
 	@Override
@@ -53,37 +55,78 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			this.updateTemperature(world, x, y, z, meta);
 			tickcount = 0;
 		}
-		if (temperature < SMELTTEMP) {
-			meltTime = 0;
+
+		boolean steel = false;
+		boolean bedrock = false;
+
+		if (this.canMakeSteel()) {
+			steel = true;
+		}
+		else if (this.canMakeBedrock()) {
+			bedrock = true;
+		}
+		else {
+			smeltTime = 0;
 			return;
 		}
-		if (!this.haveIngredients()) {
-			meltTime = 0;
-			return;
-		}
-		meltTime++;
-		if (meltTime >= this.getMeltTime()) {
-			this.smelt();
+
+		smeltTime++;
+		if (smeltTime >= this.getMeltTime()) {
+			if (steel)
+				this.makeSteel();
+			else if (bedrock)
+				this.makeBedrock();
 		}
 	}
 
-	private boolean haveIngredients() {
-		if (inventory[0] == null)
-			return false;
-		if (inventory[0].itemID != Item.coal.itemID)
-			return false;
-		if (inventory[11] == null)
-			return false;
-		if (inventory[11].itemID != Item.gunpowder.itemID)
-			return false;
+	private void makeBedrock() {
+		smeltTime = 0;
+		if (worldObj.isRemote)
+			return;
 
+		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 10))
+			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 12))
+				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 13))
+					if (!this.checkSpreadFit(ItemStacks.bedingot, 1))
+						return;
 
-		if (inventory[10] != null) {
-			if (inventory[10].itemID != ItemStacks.steelingot.itemID || inventory[10].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inventory[10].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
-				if (inventory[13] != null) {
-					if (inventory[13].itemID != ItemStacks.steelingot.itemID || inventory[13].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inventory[13].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
-						if (inventory[12] != null) {
-							if (inventory[12].itemID != ItemStacks.steelingot.itemID || inventory[12].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inventory[12].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
+		for (int i = 0; i < 4; i++)
+			ReikaInventoryHelper.decrStack(0, inv);
+		ReikaInventoryHelper.decrStack(1, inv);
+	}
+
+	public boolean canMakeSteel() {
+		return temperature >= SMELTTEMP && this.hasSteelIngredients();
+	}
+
+	public boolean canMakeBedrock() {
+		return temperature >= BEDROCKTEMP && this.hasBedrockIngredients();
+	}
+
+	private boolean hasBedrockIngredients() {
+		if (inv[0] == null)
+			return false;
+		if (!ReikaItemHelper.matchStacks(inv[0], ItemStacks.bedrockdust))
+			return false;
+		if (inv[0].stackSize < 4)
+			return false;
+		if (inv[11] != null)
+			return false;
+		if (inv[1] == null)
+			return false;
+		if (!ReikaItemHelper.matchStacks(inv[1], ItemStacks.steelingot))
+			return false;
+		for (int i = 2; i < 10; i++) {
+			if (inv[i] != null)
+				return false;
+		}
+
+		if (inv[10] != null) {
+			if (inv[10].itemID != ItemStacks.bedingot.itemID || inv[10].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[10].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
+				if (inv[13] != null) {
+					if (inv[13].itemID != ItemStacks.bedingot.itemID || inv[13].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[13].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
+						if (inv[12] != null) {
+							if (inv[12].itemID != ItemStacks.bedingot.itemID || inv[12].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[12].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
 								return false;
 							}
 						}
@@ -91,7 +134,35 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				}
 			}
 		}
-		if (!ReikaInventoryHelper.checkForItem(Item.ingotIron.itemID, inventory))
+
+		return true;
+	}
+
+	private boolean hasSteelIngredients() {
+		if (inv[0] == null)
+			return false;
+		if (inv[0].itemID != Item.coal.itemID)
+			return false;
+		if (inv[11] == null)
+			return false;
+		if (inv[11].itemID != Item.gunpowder.itemID)
+			return false;
+
+
+		if (inv[10] != null) {
+			if (inv[10].itemID != ItemStacks.steelingot.itemID || inv[10].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[10].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
+				if (inv[13] != null) {
+					if (inv[13].itemID != ItemStacks.steelingot.itemID || inv[13].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[13].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
+						if (inv[12] != null) {
+							if (inv[12].itemID != ItemStacks.steelingot.itemID || inv[12].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[12].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (!ReikaInventoryHelper.checkForItem(Item.ingotIron.itemID, inv))
 			return false;
 		return true;
 	}
@@ -100,28 +171,28 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		return ((p1*temperature)/MAXTEMP);
 	}
 
-	private void smelt() {
-		meltTime = 0;
+	private void makeSteel() {
+		smeltTime = 0;
 		if (worldObj.isRemote)
 			return;
-		ReikaInventoryHelper.decrStack(0, inventory);
-		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inventory);
+		ReikaInventoryHelper.decrStack(0, inv);
+		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inv);
 		if ((int)Math.sqrt(num) >= 1 && rand.nextInt(3) == 0) {
-			ReikaInventoryHelper.decrStack(11, inventory);
+			ReikaInventoryHelper.decrStack(11, inv);
 		}
 		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1))) {
 			num *= 1+rand.nextFloat();
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
-		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 10))
-			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 12))
-				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inventory, 13))
-					if (!this.checkSpreadFit(num))
+		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 10))
+			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 12))
+				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 13))
+					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
 						return;
-		for (int i = 1; i < inventory.length-1; i++) {
-			if (inventory[i] != null) {
-				if (inventory[i].itemID == Item.ingotIron.itemID) {
-					ReikaInventoryHelper.decrStack(i, inventory);
+		for (int i = 1; i < inv.length-1; i++) {
+			if (inv[i] != null) {
+				if (inv[i].itemID == Item.ingotIron.itemID) {
+					ReikaInventoryHelper.decrStack(i, inv);
 				}
 			}
 		}
@@ -141,36 +212,36 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		xp = 0;
 	}
 
-	private boolean checkSpreadFit(int num) {
+	private boolean checkSpreadFit(ItemStack is, int num) {
 		int maxfit = 0;
-		int f1 = ItemStacks.steelingot.getMaxStackSize()-inventory[10].stackSize;
-		int f2 = ItemStacks.steelingot.getMaxStackSize()-inventory[12].stackSize;
-		int f3 = ItemStacks.steelingot.getMaxStackSize()-inventory[13].stackSize;
+		int f1 = is.getMaxStackSize()-inv[10].stackSize;
+		int f2 = is.getMaxStackSize()-inv[12].stackSize;
+		int f3 = is.getMaxStackSize()-inv[13].stackSize;
 		maxfit = f1+f2+f3;
 		if (num > maxfit)
 			return false;
 		if (f1 > num) {
-			inventory[10].stackSize += num;
+			inv[10].stackSize += num;
 			return true;
 		}
 		else {
-			inventory[10].stackSize = inventory[10].getMaxStackSize();
+			inv[10].stackSize = inv[10].getMaxStackSize();
 			num -= f1;
 		}
 		if (f2 > num) {
-			inventory[12].stackSize += num;
+			inv[12].stackSize += num;
 			return true;
 		}
 		else {
-			inventory[12].stackSize = inventory[12].getMaxStackSize();
+			inv[12].stackSize = inv[12].getMaxStackSize();
 			num -= f2;
 		}
 		if (f3 > num) {
-			inventory[12].stackSize += num;
+			inv[12].stackSize += num;
 			return true;
 		}
 		else {
-			inventory[13].stackSize = inventory[13].getMaxStackSize();
+			inv[13].stackSize = inv[13].getMaxStackSize();
 			num -= f3;
 		}
 		return true;
@@ -186,7 +257,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public int getCookScaled(int p1) {
 		if (temperature < SMELTTEMP)
 			return 0;
-		return ((p1*meltTime)/this.getMeltTime());
+		return ((p1*smeltTime)/this.getMeltTime());
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -235,7 +306,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	 */
 	public int getSizeInventory()
 	{
-		return inventory.length;
+		return inv.length;
 	}
 
 	/**
@@ -243,7 +314,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	 */
 	public ItemStack getStackInSlot(int par1)
 	{
-		return inventory[par1];
+		return inv[par1];
 	}
 
 	/**
@@ -251,7 +322,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	 */
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		inventory[par1] = par2ItemStack;
+		inv[par1] = par2ItemStack;
 
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
 		{
@@ -271,19 +342,19 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("melt", meltTime);
+		NBT.setInteger("melt", smeltTime);
 		NBT.setInteger("temp", temperature);
 		NBT.setFloat("exp", xp);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < inventory.length; i++)
+		for (int i = 0; i < inv.length; i++)
 		{
-			if (inventory[i] != null)
+			if (inv[i] != null)
 			{
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
+				inv[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
 			}
 		}
@@ -298,21 +369,21 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		meltTime = NBT.getInteger("melt");
+		smeltTime = NBT.getInteger("melt");
 		temperature = NBT.getInteger("temp");
 		xp = NBT.getFloat("exp");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
+		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
-			if (byte0 >= 0 && byte0 < inventory.length)
+			if (byte0 >= 0 && byte0 < inv.length)
 			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 	}
@@ -358,7 +429,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.haveIngredients())
+		if (!this.hasSteelIngredients())
 			return 15;
 		return 0;
 	}

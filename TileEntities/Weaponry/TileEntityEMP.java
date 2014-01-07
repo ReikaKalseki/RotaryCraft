@@ -28,6 +28,9 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.world.World;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
+import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -95,6 +98,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("thaumcraft.common.tiles.TileResearchTable", ModList.THAUMCRAFT);
 		addEntry("thaumcraft.common.tiles.TileSensor", ModList.THAUMCRAFT);
 		addEntry("thaumcraft.common.tiles.TileTable", ModList.THAUMCRAFT);
+		addEntry("thaumcraft.common.tiles.TileEtherealBloom", ModList.THAUMCRAFT);
+		addEntry("thaumcraft.common.tiles.TileThaumcraft", ModList.THAUMCRAFT);
 
 		addEntry("forestry.core.gadgets.TileNaturalistChest", ModList.FORESTRY);
 		addEntry("forestry.core.gadgets.TileMill", ModList.FORESTRY);
@@ -118,6 +123,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityReceiver", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityToggle", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityWeather", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityRedstonePump", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityHopperTicker", ModList.EXPANDEDREDSTONE);
 	}
 
 	private static void addEntry(Class<? extends TileEntity> cl) {
@@ -225,7 +232,10 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		fired = true;
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i);
-			this.shutdownTE(te);
+			if (te instanceof INode)
+				this.chargeNode((INode)te);
+			else
+				this.shutdownTE(te);
 		}
 		world.setBlock(x, y, z, 0);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
@@ -242,6 +252,32 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 		else {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(16)));
+		}
+	}
+
+	private void chargeNode(INode te) {
+		te.addToContainer(Aspect.ENERGY, 32000);
+		te.addToContainer(Aspect.WEAPON, 9000);
+		te.addToContainer(Aspect.MECHANISM, 18000);
+		switch(te.getNodeType()) {
+		case UNSTABLE:
+			if (rand.nextInt(2) == 0) {
+				te.setNodeType(NodeType.DARK);
+			}
+			else
+				te.setNodeType(NodeType.PURE);
+			break;
+		case DARK:
+			te.setNodeType(NodeType.TAINTED);
+			break;
+		case NORMAL:
+			te.setNodeType(NodeType.UNSTABLE);
+			break;
+		case TAINTED:
+			te.setNodeType(NodeType.HUNGRY);
+			break;
+		default:
+			break;
 		}
 	}
 

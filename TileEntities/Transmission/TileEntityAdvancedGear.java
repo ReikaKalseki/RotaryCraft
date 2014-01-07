@@ -179,7 +179,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return 1;
 		if (type == GearType.WORM)
 			return WORMRATIO;
-		return this.getCVTRatio();
+		return Math.abs(this.getCVTRatio());
 	}
 
 	private int getCVTRatio() {
@@ -188,8 +188,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return this.getCVTState(red).gearRatio;
 		}
 		else {
-			if (ratio < 0)
-				return -ratio;
 			return ratio;
 		}
 	}

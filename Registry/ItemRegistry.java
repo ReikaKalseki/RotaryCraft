@@ -40,8 +40,11 @@ import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockPickaxe;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockShears;
 import Reika.RotaryCraft.Items.Tools.ItemBedrockShovel;
+import Reika.RotaryCraft.Items.Tools.ItemBedrockSword;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
@@ -58,8 +61,11 @@ import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemSpringBoots;
 import Reika.RotaryCraft.Items.Tools.ItemSteelArmor;
 import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
+import Reika.RotaryCraft.Items.Tools.ItemSteelHoe;
 import Reika.RotaryCraft.Items.Tools.ItemSteelPick;
+import Reika.RotaryCraft.Items.Tools.ItemSteelShears;
 import Reika.RotaryCraft.Items.Tools.ItemSteelShovel;
+import Reika.RotaryCraft.Items.Tools.ItemSteelSword;
 import Reika.RotaryCraft.Items.Tools.ItemStunGun;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
 import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
@@ -105,9 +111,9 @@ public enum ItemRegistry implements RegistryEnum {
 	BEDBOOTS(8, false,			"item.bedboots",			ItemBedrockArmor.class),
 	TILESELECTOR(11, false,		"item.tileselector",		ItemTileSelector.class),
 	BEDPACK(12, false,			"item.jetchest",			ItemJetPack.class),
-	STEELPICK(13, true,			"item.steelpick",			ItemSteelPick.class),
-	STEELAXE(14, true,			"item.steelaxe",			ItemSteelAxe.class),
-	STEELSHOVEL(15, true,		"item.steelshovel",			ItemSteelShovel.class),
+	STEELPICK(13, false,		"item.steelpick",			ItemSteelPick.class),
+	STEELAXE(14, false,			"item.steelaxe",			ItemSteelAxe.class),
+	STEELSHOVEL(15, false,		"item.steelshovel",			ItemSteelShovel.class),
 	STEELHELMET(17, false,		"item.steelhelmet",			ItemSteelArmor.class),
 	STEELCHEST(18, false,		"item.steelchest",			ItemSteelArmor.class),
 	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
@@ -117,7 +123,13 @@ public enum ItemRegistry implements RegistryEnum {
 	PUMP(29, true,				"item.handpump",			ItemPump.class),
 	JUMP(30, true,				"item.jumpboots",			ItemSpringBoots.class),
 	BEDJUMP(31, false,			"item.bedrockjump",			ItemSpringBoots.class),
-	FUEL(27, false,				"item.fueltank",			ItemFuelTank.class);
+	FUEL(27, false,				"item.fueltank",			ItemFuelTank.class),
+	BEDHOE(21, false,			"item.bedrockhoe",			ItemBedrockHoe.class),
+	STEELHOE(22, false,			"item.steelhoe",			ItemSteelHoe.class),
+	BEDSWORD(23, false,			"item.bedrocksword",		ItemBedrockSword.class),
+	STEELSWORD(24, false,		"item.steelsword",			ItemSteelSword.class),
+	BEDSHEARS(25, false,		"item.bedrockshears",		ItemBedrockShears.class),
+	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -574,19 +586,17 @@ public enum ItemRegistry implements RegistryEnum {
 		}
 	}
 
-	public void addEnchantedRecipe(Enchantment e, int lvl, Object... params) {
+	public void addEnchantedRecipe(Object... params) {
 		if (!this.isDummiedOut()) {
-			ItemStack is = this.getStackOf();
-			is.addEnchantment(e, lvl);
+			ItemStack is = this.getEnchantedStack();
 			GameRegistry.addRecipe(is, params);
 			WorktableRecipes.getInstance().addRecipe(is, params);
 		}
 	}
 
-	public void addShapelessEnchantedRecipe(Enchantment e, int lvl, Object... params) {
+	public void addShapelessEnchantedRecipe(Object... params) {
 		if (!this.isDummiedOut()) {
-			ItemStack is = this.getStackOf();
-			is.addEnchantment(e, lvl);
+			ItemStack is = this.getEnchantedStack();
 			GameRegistry.addShapelessRecipe(is, params);
 			WorktableRecipes.getInstance().addShapelessRecipe(is, params);
 		}
@@ -602,17 +612,23 @@ public enum ItemRegistry implements RegistryEnum {
 		case BEDHELM:
 		case BEDLEGS:
 			is.addEnchantment(((ItemBedrockArmor)is.getItem()).getDefaultEnchantment(), 4);
-			return is;
+			break;
 		case BEDPACK:
 			is.addEnchantment(((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantment(), 4);
+			break;
 		case BEDPICK:
 			is.addEnchantment(Enchantment.silkTouch, 1);
-			return is;
+			break;
 		case BEDJUMP:
 			is.addEnchantment(((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantment(), 4);
+			break;
+		case BEDSWORD:
+			is.addEnchantment(Enchantment.sharpness, 5);
+			is.addEnchantment(Enchantment.looting, 5);
 		default:
-			return is;
+			break;
 		}
+		return is;
 	}
 
 	public void addShapelessRecipe(Object... params) {

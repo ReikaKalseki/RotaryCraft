@@ -225,7 +225,7 @@ public class RotaryNames {
 
 	public static String getBucketName(int i) {
 		String liq = StatCollector.translateToLocal(liquidNames[i]);
-		String item = StatCollector.translateToLocal("item.bucket");
+		String item = StatCollector.translateToLocal("item.rcbucket");
 		return liq+" "+item;
 	}
 

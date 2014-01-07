@@ -29,8 +29,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHydraulicRouter;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -38,7 +36,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
@@ -146,7 +143,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				else
 					clicked.setBlockMetadata(damage-3);
 				return true;
-			}
+			}/*
 			if (m == MachineRegistry.HYDRAULIC) {
 				TileEntityHydraulicPump clicked = (TileEntityHydraulicPump)te;
 				if (damage != 5 && damage != 11)
@@ -154,7 +151,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				else
 					clicked.setBlockMetadata(damage-5);
 				return true;
-			}
+			}*/
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft ts = (TileEntityShaft)te;
 				MaterialRegistry type = ts.type;
@@ -214,13 +211,13 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 						clicked.filling = true;
 					return true;
 				}
-			}
+			}/*
 			if (m == MachineRegistry.ROUTER) {
 				TileEntityHydraulicRouter tile = (TileEntityHydraulicRouter)te;
 				if (tile != null) {
 					tile.updateSide(ForgeDirection.VALID_DIRECTIONS[s]);
 				}
-			}
+			}*/
 			if (m == MachineRegistry.BELT) {
 				if (ep.isSneaking()) {
 					TileEntityBeltHub clicked = (TileEntityBeltHub)te;
@@ -250,7 +247,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					clicked.phi += 5;
 				}
 				return true;
-			}
+			}/*
 			if (m == MachineRegistry.HYDRAULICLINE) {
 				TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
 				ForgeDirection dir = ForgeDirection.values()[s];
@@ -274,7 +271,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					}
 				}
 				return true;
-			}
+			}*/
 			if (m == MachineRegistry.GEARBOX) {
 				if (ep.isSneaking()) {
 					TileEntityGearbox clicked = (TileEntityGearbox)te;

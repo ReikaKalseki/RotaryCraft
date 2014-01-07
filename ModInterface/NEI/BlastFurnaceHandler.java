@@ -29,7 +29,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
-	public class BlastFurnaceRecipe extends CachedRecipe {
+	public class SteelRecipe extends CachedRecipe {
 
 		@Override
 		public PositionedStack getResult() {
@@ -50,6 +50,27 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 			stacks.add(new PositionedStack(new ItemStack(Item.coal), 21, 24));
 			stacks.add(new PositionedStack(new ItemStack(Item.gunpowder), 21, 43));
+
+			return stacks;
+		}
+	}
+
+	public class BedrockRecipe extends CachedRecipe {
+
+		@Override
+		public PositionedStack getResult() {
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.bedingot, 1), 143, 24);
+		}
+
+		@Override
+		public ArrayList<PositionedStack> getIngredients()
+		{
+			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+			int dx = 57;
+			int dy = 6;
+			stacks.add(new PositionedStack(ItemStacks.steelingot, dx, dy));
+
+			stacks.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), 21, 24));
 
 			return stacks;
 		}
@@ -85,14 +106,20 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.steelingot)) {
-			arecipes.add(new BlastFurnaceRecipe());
+			arecipes.add(new SteelRecipe());
+		}
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.bedingot)) {
+			arecipes.add(new BedrockRecipe());
 		}
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (ingredient.itemID == Item.ingotIron.itemID || ingredient.itemID == Item.coal.itemID || ingredient.itemID == Item.gunpowder.itemID) {
-			arecipes.add(new BlastFurnaceRecipe());
+			arecipes.add(new SteelRecipe());
+		}
+		if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, ingredient) || ReikaItemHelper.matchStacks(ItemStacks.bedrockdust, ingredient)) {
+			arecipes.add(new BedrockRecipe());
 		}
 	}
 

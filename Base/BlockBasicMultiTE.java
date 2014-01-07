@@ -85,7 +85,6 @@ import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
@@ -323,14 +322,14 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropItemFromInventory();
 			return true;
-		}
+		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
 			if (ReikaItemHelper.matchStacks(is, m.getCraftedProduct())) {
 				ForgeDirection dir = ForgeDirection.values()[side];
 				//th.setOutput(dir);
 			}
-		}
+		}*/
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
 			if (ex.getLevel()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {

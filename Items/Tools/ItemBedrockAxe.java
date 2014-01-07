@@ -30,11 +30,9 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	public ItemBedrockAxe(int ID, int tex) {
 		super(ID, EnumToolMaterial.GOLD);
 		this.setIndex(tex);
-		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
-		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 6;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.tabRotaryTools);

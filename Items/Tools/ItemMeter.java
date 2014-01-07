@@ -51,7 +51,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -63,7 +62,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityHydraulicPump;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
@@ -149,14 +147,14 @@ public class ItemMeter extends ItemRotaryTool
 				return false;
 			ReikaChatHelper.writeString(String.format("%s contains %.3f L of lubricant.", m.getName(), clicked.getLiquidLevel()/(double)RotaryConfig.MILLIBUCKET));
 			return true;
-		}
+		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
 			ReikaChatHelper.writeString(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
 			return true;
-		}
+		}*/
 		if (tile instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
 			ReikaChatHelper.writeString(String.format("%s producing %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));
@@ -353,8 +351,7 @@ public class ItemMeter extends ItemRotaryTool
 					RotaryAux.writeMessage("minpower");
 				ReikaChatHelper.writeString(String.format("Liquid Pressure at %d kPa.", clicked.liquidPressure));
 				return true;
-			}
-
+			}/*
 			if (m == MachineRegistry.HYDRAULIC) {
 				TileEntityHydraulicPump clicked = (TileEntityHydraulicPump)world.getBlockTileEntity(x, y, z);
 				if (clicked.isTurbine()) {
@@ -369,7 +366,7 @@ public class ItemMeter extends ItemRotaryTool
 						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f W @ %d rad/s.", power, omega));
 					return true;
 				}
-			}
+			}*/
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)

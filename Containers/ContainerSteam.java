@@ -44,7 +44,7 @@ public class ContainerSteam extends CoreContainer
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
 			icrafting.sendProgressBarUpdate(this, 1, Steam.temperature);
-			icrafting.sendProgressBarUpdate(this, 2, Steam.getWater());
+			icrafting.sendProgressBarUpdate(this, 2, Steam.getWater()/2);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class ContainerSteam extends CoreContainer
 	{
 		switch(par1) {
 		case 1: Steam.temperature = par2; break;
-		case 2: Steam.setWater(par2); break;
+		case 2: Steam.setWater(par2*2); break;
 		}
 	}
 }

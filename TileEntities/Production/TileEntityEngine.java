@@ -891,126 +891,131 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			AxisAlignedBB zone = this.getSuctionZone(this.getBlockMetadata(), step);
 			List inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
 			for (int i = 0; i < inzone.size(); i++) {
-				if (inzone.get(i) instanceof Entity) {
-					boolean immune = false;
-					if (inzone.get(i) instanceof EntityPlayer) {
-						EntityPlayer caughtpl = (EntityPlayer)inzone.get(i);
-						if (caughtpl.capabilities.isCreativeMode)
+				boolean immune = false;
+				if (inzone.get(i) instanceof EntityPlayer) {
+					EntityPlayer caughtpl = (EntityPlayer)inzone.get(i);
+					if (caughtpl.capabilities.isCreativeMode)
+						immune = true;
+					ItemStack is = caughtpl.getCurrentArmor(0);
+					if (is != null) {
+						if (is.itemID == ItemRegistry.BEDBOOTS.getShiftedID())
+							immune = true;
+						if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
 							immune = true;
 					}
-					if (inzone.get(i) instanceof EntityTurretShot)
-						immune = true;
-					Entity caught = (Entity)inzone.get(i);
-					if (!immune){// && ReikaWorldHelper.canBlockSee(worldObj, xCoord, yCoord, zCoord, caught.posX, caught.posY, caught.posZ, 8)) {
-						caught.motionX += (xCoord+0.5D - caught.posX)/20;
-						caught.motionY += (yCoord+0.5D - caught.posY)/20;
-						caught.motionZ += (zCoord+0.5D - caught.posZ)/20;
-						if (!worldObj.isRemote)
-							caught.velocityChanged = true;/*
+				}
+				if (inzone.get(i) instanceof EntityTurretShot)
+					immune = true;
+				Entity caught = (Entity)inzone.get(i);
+				if (!immune){// && ReikaWorldHelper.canBlockSee(worldObj, xCoord, yCoord, zCoord, caught.posX, caught.posY, caught.posZ, 8)) {
+					caught.motionX += (xCoord+0.5D - caught.posX)/20;
+					caught.motionY += (yCoord+0.5D - caught.posY)/20;
+					caught.motionZ += (zCoord+0.5D - caught.posZ)/20;
+					if (!worldObj.isRemote)
+						caught.velocityChanged = true;/*
 	    				while (ReikaMathLibrary.py3d(caught.motionX, caught.motionY, caught.motionZ) > 2) {
 	    					caught.motionX *= 0.9;
 	    					caught.motionY *= 0.9;
 	    					caught.motionZ *= 0.9;
 	    				}*/
+				}
+				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5))));
+				if (ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5)) < 1.2) { // Kill the adjacent entities, except items, which are teleported
+					if (caught instanceof EntityItem) {/*
+    						caught.posX = dumpx+0.5D;
+    						caught.posY = this.yCoord+0.375D;
+    						caught.posZ = dumpz+0.5D;*/
+						//caught.motionX = dumpvx*1D;
+						//caught.motionY = 0.1;
+						//caught.motionZ = dumpvz*1D;
+						if (!caught.isDead) {
+							ItemStack is = ((EntityItem) caught).getEntityItem();
+							caught.setDead();
+							//ReikaChatHelper.writeItemStack(this.worldObj, is);
+							int trycount = 0;
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
+								if (dumpvx == 1)
+									dumpx++;
+								if (dumpvx == -1)
+									dumpx--;
+								if (dumpvz == 1)
+									dumpz++;
+								if (dumpvz == -1)
+									dumpz--;
+								trycount++;
+							}
+							EntityItem item = new EntityItem(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, is);
+							if (!worldObj.isRemote)
+								worldObj.spawnEntityInWorld(item);
+							item.motionX = dumpvx*1.5D;
+							item.motionY = 0.15;
+							item.motionZ = dumpvz*1.5D;
+							if (!worldObj.isRemote)
+								caught.velocityChanged = true;
+							if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
+								caught.setDead();
+								FOD = 2;
+								isJetFailing = true;
+							}
+						}
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
 					}
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5))));
-					if (ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5)) < 1.2) { // Kill the adjacent entities, except items, which are teleported
-						if (caught instanceof EntityItem) {/*
+					else if (caught instanceof EntityXPOrb) {/*
     						caught.posX = dumpx+0.5D;
     						caught.posY = this.yCoord+0.375D;
     						caught.posZ = dumpz+0.5D;*/
-							//caught.motionX = dumpvx*1D;
-							//caught.motionY = 0.1;
-							//caught.motionZ = dumpvz*1D;
-							if (!caught.isDead) {
-								ItemStack is = ((EntityItem) caught).getEntityItem();
-								caught.setDead();
-								//ReikaChatHelper.writeItemStack(this.worldObj, is);
-								int trycount = 0;
-								while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
-									if (dumpvx == 1)
-										dumpx++;
-									if (dumpvx == -1)
-										dumpx--;
-									if (dumpvz == 1)
-										dumpz++;
-									if (dumpvz == -1)
-										dumpz--;
-									trycount++;
-								}
-								EntityItem item = new EntityItem(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, is);
-								if (!worldObj.isRemote)
-									worldObj.spawnEntityInWorld(item);
-								item.motionX = dumpvx*1.5D;
-								item.motionY = 0.15;
-								item.motionZ = dumpvz*1.5D;
-								if (!worldObj.isRemote)
-									caught.velocityChanged = true;
-								if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
-									caught.setDead();
-									FOD = 2;
-									isJetFailing = true;
-								}
+						//caught.motionX = dumpvx*1D;
+						//caught.motionY = 0.1;
+						//caught.motionZ = dumpvz*1D;
+						if (!caught.isDead) {
+							int xp = ((EntityXPOrb)caught).getXpValue();
+							caught.setDead();
+							//ReikaChatHelper.writeItemStack(this.worldObj, is);
+							int trycount = 0;
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
+								if (dumpvx == 1)
+									dumpx++;
+								if (dumpvx == -1)
+									dumpx--;
+								if (dumpvz == 1)
+									dumpz++;
+								if (dumpvz == -1)
+									dumpz--;
+								trycount++;
 							}
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
+							EntityXPOrb item = new EntityXPOrb(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, xp);
+							if (!worldObj.isRemote)
+								worldObj.spawnEntityInWorld(item);
+							item.motionX = dumpvx*1.5D;
+							item.motionY = 0.15;
+							item.motionZ = dumpvz*1.5D;
+							if (!worldObj.isRemote)
+								caught.velocityChanged = true;
 						}
-						else if (caught instanceof EntityXPOrb) {/*
-    						caught.posX = dumpx+0.5D;
-    						caught.posY = this.yCoord+0.375D;
-    						caught.posZ = dumpz+0.5D;*/
-							//caught.motionX = dumpvx*1D;
-							//caught.motionY = 0.1;
-							//caught.motionZ = dumpvz*1D;
-							if (!caught.isDead) {
-								int xp = ((EntityXPOrb)caught).getXpValue();
-								caught.setDead();
-								//ReikaChatHelper.writeItemStack(this.worldObj, is);
-								int trycount = 0;
-								while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
-									if (dumpvx == 1)
-										dumpx++;
-									if (dumpvx == -1)
-										dumpx--;
-									if (dumpvz == 1)
-										dumpz++;
-									if (dumpvz == -1)
-										dumpz--;
-									trycount++;
-								}
-								EntityXPOrb item = new EntityXPOrb(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, xp);
-								if (!worldObj.isRemote)
-									worldObj.spawnEntityInWorld(item);
-								item.motionX = dumpvx*1.5D;
-								item.motionY = 0.15;
-								item.motionZ = dumpvz*1.5D;
-								if (!worldObj.isRemote)
-									caught.velocityChanged = true;
-							}
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
-						}
-						else if (caught instanceof EntityLivingBase && !(caught instanceof EntityPlayer && immune)) {
-							caught.setFire(2);
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
-							//ReikaChatHelper.writeInt(FOD);
-							if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
-								FOD++;
-							if (FOD > 8)
-								FOD = 8;
-							if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
-								chickenCount++;
-								if (chickenCount >= 50) {
-									RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
-								}
-							}
-							caught.attackEntityFrom(DamageSource.generic, 1000);
-							if (caught instanceof EntityPlayer) {
-								RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
-							}
-						}
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
+					}
+					else if (caught instanceof EntityLivingBase && !(caught instanceof EntityPlayer && immune)) {
+						caught.setFire(2);
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
 						//ReikaChatHelper.writeInt(FOD);
+						if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
+							FOD++;
+						if (FOD > 8)
+							FOD = 8;
+						if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
+							chickenCount++;
+							if (chickenCount >= 50) {
+								RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
+							}
+						}
+						caught.attackEntityFrom(DamageSource.generic, 1000);
+						if (caught instanceof EntityPlayer) {
+							RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
+						}
 					}
+					//ReikaChatHelper.writeInt(FOD);
 				}
 			}
 		}
@@ -1829,6 +1834,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return from == ForgeDirection.DOWN;
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("rc ethanol"))) {
+			return from == ForgeDirection.DOWN;
+		}
+		else if (fluid.equals(FluidRegistry.getFluid("bioethanol"))) {
 			return from == ForgeDirection.DOWN;
 		}
 		return false;

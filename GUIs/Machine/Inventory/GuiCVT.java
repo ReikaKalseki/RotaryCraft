@@ -38,6 +38,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	public int ratio;
 	private boolean reduction;
 	private boolean redstone;
+	private int buttontimer = 0;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
@@ -63,7 +64,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 	@Override
 	public void initGui() {
-		buttonList.clear();
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
@@ -102,6 +102,10 @@ public class GuiCVT extends GuiNonPoweredMachine
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
+		if (buttontimer > 0)
+			return;
+		else
+			buttontimer = 12;
 		if (button.id == 0) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, ep, 0);
 			redstone = !redstone;
@@ -161,25 +165,14 @@ public class GuiCVT extends GuiNonPoweredMachine
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
+		if (buttontimer > 0)
+			buttontimer--;
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
 		int dy = redstone ? 16 : 0;
 		int dx = redstone ? -14 : 0;
 		fontRenderer.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
-
-		if (redstone) {
-			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneActive), 129, 31);
-			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneIdle), 129, 54);
-
-			this.drawCenteredString(fontRenderer, cvt.getCVTString(true), 187, 37, 0xffffff);
-			this.drawCenteredString(fontRenderer, cvt.getCVTString(false), 187, 60, 0xffffff);
-		}
-		else {
-			if (!input.isFocused()) {
-				fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
-			}
-		}
 
 		if (cvt.hasLubricant()) {
 			Fluid f = FluidRegistry.getFluid("lubricant");
@@ -199,6 +192,19 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (api.isMouseInBox(j+xSize/2+92, j+xSize/2+112, -1+k+7, -1+k+27)) {
 			String s = "Redstone Control";
 			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-5-fontRenderer.getStringWidth(s), api.getMouseRealY());
+		}
+
+		if (redstone) {
+			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneActive), 129, 31);
+			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneIdle), 129, 54);
+
+			this.drawCenteredString(fontRenderer, cvt.getCVTString(true), 188, 37, 0xffffff);
+			this.drawCenteredString(fontRenderer, cvt.getCVTString(false), 188, 60, 0xffffff);
+		}
+		else {
+			if (!input.isFocused()) {
+				fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
+			}
 		}
 	}
 

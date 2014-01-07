@@ -21,8 +21,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.input.Keyboard;
+
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
@@ -36,7 +41,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHydraulicLine;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -136,13 +141,13 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				break;
 			}
 			return true;
-		}
+		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
 			ForgeDirection dir = ForgeDirection.values()[side];
 			//th.setInput(dir.getOpposite());
 			//th.setOutput(dir);
-		}
+		}*/
 		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
 		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR || m == MachineRegistry.MAGNETIC) {
 			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
@@ -247,6 +252,34 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			ItemMachineRenderer ir = ClientProxy.machineItems;
 			TileEntity te = ir.getRenderingInstance(m);
 			li.add(((NBTMachine)te).getDisplayTag(is.stackTagCompound));
+		}
+		if (m.isPowerReceiver()) {
+			PowerReceivers p = m.getPowerReceiverEntry();
+			int pow = p.getMinPowerForDisplay();
+			int trq = p.getMinTorqueForDisplay();
+			int spd = p.getMinSpeedForDisplay();
+			boolean minp = !p.hasNoDirectMinPower();
+			boolean mint = !p.hasNoDirectMinTorque();
+			boolean mins = !p.hasNoDirectMinSpeed();
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				if (minp)
+					li.add(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow)));
+				if (mint)
+					li.add(String.format("Minimum Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(trq), ReikaEngLibrary.getSIPrefix(trq)));
+				if (mins)
+					li.add(String.format("Minimum Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(spd), ReikaEngLibrary.getSIPrefix(spd)));
+			}
+			else {
+				if (minp || mint || mins) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Hold ");
+					sb.append(EnumChatFormatting.GREEN.toString());
+					sb.append("Shift");
+					sb.append(EnumChatFormatting.GRAY.toString());
+					sb.append(" for power data");
+					li.add(sb.toString());
+				}
+			}
 		}
 	}
 }

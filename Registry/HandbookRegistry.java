@@ -79,9 +79,9 @@ public enum HandbookRegistry {
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
 	MULTI(MachineRegistry.MULTICLUTCH),
 	BELT(MachineRegistry.BELT),
-	HYDRAULIC(MachineRegistry.HYDRAULIC),
-	HYLINE(MachineRegistry.HYDRAULICLINE),
-	ROUTER(MachineRegistry.ROUTER),
+	//HYDRAULIC(MachineRegistry.HYDRAULIC),
+	//HYLINE(MachineRegistry.HYDRAULICLINE),
+	//ROUTER(MachineRegistry.ROUTER),
 
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),
@@ -770,6 +770,9 @@ public enum HandbookRegistry {
 			li.add(ItemRegistry.BEDPICK.getStackOf());
 			li.add(ItemRegistry.BEDSHOVEL.getStackOf());
 			li.add(ItemRegistry.BEDAXE.getStackOf());
+			li.add(ItemRegistry.BEDSWORD.getStackOf());
+			li.add(ItemRegistry.BEDHOE.getStackOf());
+			li.add(ItemRegistry.BEDSHEARS.getStackOf());
 			return li;
 		}
 		if (this == BEDARMOR) {
@@ -785,6 +788,9 @@ public enum HandbookRegistry {
 			li.add(ItemRegistry.STEELPICK.getStackOf());
 			li.add(ItemRegistry.STEELSHOVEL.getStackOf());
 			li.add(ItemRegistry.STEELAXE.getStackOf());
+			li.add(ItemRegistry.STEELSWORD.getStackOf());
+			li.add(ItemRegistry.STEELHOE.getStackOf());
+			li.add(ItemRegistry.STEELSHEARS.getStackOf());
 			return li;
 		}
 		if (this == STEELARMOR) {

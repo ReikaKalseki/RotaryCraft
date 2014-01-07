@@ -72,7 +72,6 @@ import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
-import Reika.RotaryCraft.Items.Placers.ItemHydraulicPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.Items.Tools.ItemSpringBoots;
@@ -157,7 +156,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item machineplacer;
 	public static Item flywheelitems;
 	public static Item advgearitems;
-	public static Item hydraulicitems;
+	//public static Item hydraulicitems;
 	public static Item modextracts;
 	public static Item modingots;
 	public static Item spawner;
@@ -259,7 +258,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
 
-		PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
+		if (ConfigRegistry.HANDBOOK.getState())
+			PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
 	}
 
 	@Override
@@ -313,7 +313,7 @@ public class RotaryCraft extends DragonAPIMod {
 		machineplacer = new ItemMachinePlacer(ExtraConfigIDs.MACHINEPLACER.getValue()).setUnlocalizedName("machineplacer");
 		advgearitems = new ItemAdvGearPlacer(ExtraConfigIDs.ADVGEARITEMS.getValue()).setUnlocalizedName("advgearitem");
 		flywheelitems = new ItemFlywheelPlacer(ExtraConfigIDs.FLYWHEELITEMS.getValue()).setUnlocalizedName("flywheelitem");
-		hydraulicitems = new ItemHydraulicPlacer(ExtraConfigIDs.HYDRAULICITEMS.getValue()).setUnlocalizedName("hydraulicitem");
+		//hydraulicitems = new ItemHydraulicPlacer(ExtraConfigIDs.HYDRAULICITEMS.getValue()).setUnlocalizedName("hydraulicitem");
 
 		modextracts = new ItemModOre(ExtraConfigIDs.MODEXTRACTS.getValue()).setUnlocalizedName("modextracts");
 		modingots = new ItemModOre(ExtraConfigIDs.MODINGOTS.getValue()).setUnlocalizedName("modingots");

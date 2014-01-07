@@ -32,7 +32,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	GEARUNITS("Crafting Item IDs", "Gear Units", 30641, Item.class),
 	ADVGEARITEMS("ItemBlock IDs", "Advanced Gear Items", 30642, Item.class),
 	FLYWHEELITEMS("ItemBlock IDs", "Flywheel Items", 30643, Item.class),
-	HYDRAULICITEMS("ItemBlock IDs", "Hydraulic Items", 30646, Item.class),
+	//HYDRAULICITEMS("ItemBlock IDs", "Hydraulic Items", 30646, Item.class),
 	MODEXTRACTS("Resource Item IDs", "Mod Ore Extractor Items", 30644, Item.class),
 	MODINGOTS("Resource Item IDs", "Mod Ore Ingots", 30645, Item.class),
 

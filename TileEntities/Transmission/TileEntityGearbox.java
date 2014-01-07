@@ -189,6 +189,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					if (rand.nextInt(1+damage/3) > 0)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
+				else {
+					damage = 0;
+				}
 			}
 			else if (type.consumesLubricant()) {
 				if (!tank.isEmpty() && omega > 0) {
