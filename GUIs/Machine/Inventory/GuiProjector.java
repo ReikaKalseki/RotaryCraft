@@ -12,7 +12,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerProjector;
-import Reika.RotaryCraft.TileEntities.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 
 public class GuiProjector extends GuiPowerOnlyMachine {
 

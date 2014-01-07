@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 
 public class GuiMusic extends GuiNonPoweredMachine
 {

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,11 +26,13 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Fuelable;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -39,6 +42,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
+
+	private static final HashMap<String, Long> onGround = new HashMap();
 
 	public ItemJetPack(int ID, EnumArmorMaterial mat, int tex, int render) {
 		super(ID, mat, render, 1, tex);
@@ -111,11 +116,16 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 		NBTTagCompound nbtData = is.stackTagCompound;
 		byte toggleTimer = nbtData.getByte("toggleTimer");
 		boolean jetpackUsed = false;
+		boolean flying = false;
 
-		boolean bool = ReikaReflectionHelper.getPrivateBoolean(player, ReikaObfuscationHelper.getLabelName("isJumping"), RotaryCraft.logger);
-		//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
-		if (bool) {
-			jetpackUsed = this.useJetpack(player);
+		//ReikaJavaLibrary.pConsole(player.onGround+":"+Keyboard.isKeyDown(Keyboard.KEY_SPACE));
+
+		if (!ConfigRegistry.CONSERVEPACK.getState() || this.canFly(player)) {
+			flying = ReikaReflectionHelper.getPrivateBoolean(player, ReikaObfuscationHelper.getLabelName("isJumping"), RotaryCraft.logger);
+			//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
+			if (flying) {
+				jetpackUsed = this.useJetpack(player);
+			}
 		}
 
 		if (!world.isRemote && (toggleTimer > 0)) {
@@ -129,10 +139,29 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 				if (player.handleLavaMovement() && world.difficultySetting != 0) {
 					this.explode(world, player);
 				}
-				else if (player.isBurning() && world.difficultySetting > 1 && bool) {
+				else if (player.isBurning() && world.difficultySetting > 1 && flying) {
 					this.explode(world, player);
 				}
 			}
+		}
+	}
+
+	private boolean canFly(EntityPlayer player) {
+		long millis = System.currentTimeMillis();
+		if (player.onGround) {
+			onGround.put(player.getEntityName(), millis);
+			return false;
+		}
+		Long prev = onGround.get(player.getEntityName());
+		if (prev == null) {
+			prev = new Long(0);
+			onGround.put(player.getEntityName(), prev);
+			return true;
+		}
+		else {
+			long diff = millis - prev.longValue();
+			ReikaJavaLibrary.pConsole(diff, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
+			return diff > 120;
 		}
 	}
 

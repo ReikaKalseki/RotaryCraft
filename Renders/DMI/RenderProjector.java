@@ -29,7 +29,7 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelProjector;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 
 public class RenderProjector extends RotaryTERenderer {
 

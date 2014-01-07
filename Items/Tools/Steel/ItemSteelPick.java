@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Items.Tools;
+package Reika.RotaryCraft.Items.Tools.Steel;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;

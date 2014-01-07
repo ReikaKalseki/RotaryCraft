@@ -69,7 +69,7 @@ import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoryIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
+import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -1747,8 +1747,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					if (eng.type == EngineType.HYDRO) {
 						if (eng.hydroCheck(worldObj, xyz[0], xyz[1], xyz[2], eng.getBlockMetadata())) {
 							if (eng.omega == omega) {
-								float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
-								size += 1*fac;
+								//float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
+								size += 1;//*fac;
 							}
 							else {
 								ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, xyz[0], xyz[1], xyz[2], 5);

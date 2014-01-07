@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Items.Tools;
+package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

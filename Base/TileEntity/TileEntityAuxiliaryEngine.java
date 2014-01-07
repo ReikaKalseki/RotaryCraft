@@ -13,8 +13,9 @@ import net.minecraft.world.World;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 
-public abstract class TileEntityAuxiliaryEngine extends TileEntityIOMachine implements PowerGenerator {
+public abstract class TileEntityAuxiliaryEngine extends TileEntityIOMachine implements PowerGenerator, SimpleProvider {
 
 	@Override
 	public final boolean canProvidePower() {

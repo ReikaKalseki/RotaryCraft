@@ -67,7 +67,8 @@ public enum ConfigRegistry implements ConfigList {
 	PREENCHANT("Lock enchants on bedrock tools", true),
 	EXPLODEPACK("Explode jetpack if player is in lava", true),
 	SPRINKLER("Sprinkler Particle Density", 4),
-	HANDBOOK("Spawn with RC Handbook", true);
+	HANDBOOK("Spawn with RC Handbook", true),
+	CONSERVEPACK("Conservative Jetpack Firing", true);
 
 	private String label;
 	private boolean defaultState;

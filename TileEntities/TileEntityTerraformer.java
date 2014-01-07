@@ -99,6 +99,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 		//ReikaJavaLibrary.pConsoleSideOnly(String.format("Tick %2d: ", tickcount)+coords, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(this.getValidTargetBiomes(this.getCentralBiome()));
+		//ReikaJavaLibrary.pConsole(coords.getSize(), Side.SERVER);
 
 		if (coords.isEmpty()) {
 			return;
@@ -112,11 +113,14 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		if (this.operationComplete(tickcount, 0)) {
 			int index = rand.nextInt(coords.getSize());
 			int[] xz = coords.getNthColumn(index);
-			if (this.setBiome(world, xz[0], xz[1])) {
-				//ReikaJavaLibrary.pConsole("Removing "+x+", "+z);
-				coords.remove(index);
+			if (!world.isRemote) {
+				if (this.setBiome(world, xz[0], xz[1])) {
+					//ReikaJavaLibrary.pConsole(Arrays.toString(xz), Side.SERVER);
+					//ReikaJavaLibrary.pConsole("Removing "+x+", "+z);
+					coords.remove(index);
+				}
+				tickcount = 0;
 			}
-			tickcount = 0;
 		}
 	}
 

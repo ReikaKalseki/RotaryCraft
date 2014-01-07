@@ -33,45 +33,45 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
-import Reika.RotaryCraft.Items.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockArmor;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockAxe;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockHoe;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockPickaxe;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockShears;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockShovel;
-import Reika.RotaryCraft.Items.Tools.ItemBedrockSword;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
-import Reika.RotaryCraft.Items.Tools.ItemFireballLauncher;
-import Reika.RotaryCraft.Items.Tools.ItemGravelGun;
+import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
-import Reika.RotaryCraft.Items.Tools.ItemMotionTracker;
-import Reika.RotaryCraft.Items.Tools.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
-import Reika.RotaryCraft.Items.Tools.ItemPump;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
-import Reika.RotaryCraft.Items.Tools.ItemSpringBoots;
-import Reika.RotaryCraft.Items.Tools.ItemSteelArmor;
-import Reika.RotaryCraft.Items.Tools.ItemSteelAxe;
-import Reika.RotaryCraft.Items.Tools.ItemSteelHoe;
-import Reika.RotaryCraft.Items.Tools.ItemSteelPick;
-import Reika.RotaryCraft.Items.Tools.ItemSteelShears;
-import Reika.RotaryCraft.Items.Tools.ItemSteelShovel;
-import Reika.RotaryCraft.Items.Tools.ItemSteelSword;
-import Reika.RotaryCraft.Items.Tools.ItemStunGun;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
 import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
-import Reika.RotaryCraft.Items.Tools.ItemUltrasound;
-import Reika.RotaryCraft.Items.Tools.ItemVacuum;
 import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShovel;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSword;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemFireballLauncher;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemGravelGun;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemMotionTracker;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemNightVisionGoggles;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemPump;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemStunGun;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemUltrasound;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemVacuum;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelArmor;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelAxe;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelHoe;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelPick;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShears;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements RegistryEnum {
@@ -357,14 +357,8 @@ public enum ItemRegistry implements RegistryEnum {
 		return false;
 	}
 
-	private boolean isSteelTool() {
-		if (this == STEELAXE)
-			return true;
-		if (this == STEELPICK)
-			return true;
-		if (this == STEELSHOVEL)
-			return true;
-		return false;
+	public boolean isSteelTool() {
+		return this == STEELPICK || this == STEELAXE || this == STEELSHOVEL || this == STEELSWORD || this == STEELSHEARS || this == STEELHOE;
 	}
 
 	public String getUnlocalizedName() {
@@ -390,6 +384,8 @@ public enum ItemRegistry implements RegistryEnum {
 	public boolean isTool() {
 		if (this.isBedrockTool())
 			return true;
+		if (this.isSteelTool())
+			return true;
 		return ItemRotaryTool.class.isAssignableFrom(itemClass);
 	}
 
@@ -398,7 +394,7 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public boolean isBedrockTool() {
-		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL;
+		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL || this == BEDSWORD || this == BEDSHEARS || this == BEDHOE;
 	}
 
 	public boolean isCreativeOnly() {

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Items.Tools;
+package Reika.RotaryCraft.Items.Tools.Charged;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemSpringBoots extends ItemChargedArmor {

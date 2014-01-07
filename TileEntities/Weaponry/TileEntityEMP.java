@@ -189,7 +189,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 
 		//ReikaJavaLibrary.pConsoleSideOnly(check.getSize(), Side.SERVER);
-		//ReikaJavaLibrary.pConsoleSideOnly(blocks, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(blocks.size(), Side.SERVER);
 
 		if (!world.isRemote)
 			this.createListing();
@@ -201,6 +201,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 				world.spawnParticle("portal", x-0.5+dx*2, y+rand.nextDouble()+0.4, z-0.5+dz*2, -1+dx*2, 0.2, -1+dz*2);
 			}
 		}
+
+		//power = (long)BLAST_ENERGY+800;
 
 		if (power >= BLAST_ENERGY && !loading && !world.isRemote)
 			this.fire(world, x, y, z);
@@ -256,9 +258,11 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void chargeNode(INode te) {
-		te.addToContainer(Aspect.ENERGY, 32000);
-		te.addToContainer(Aspect.WEAPON, 9000);
-		te.addToContainer(Aspect.MECHANISM, 18000);
+		//ReikaJavaLibrary.pConsole(te.getNodeType()+":"+te.getAspects().aspects);
+		te.setNodeVisBase((short)32000);
+		te.addToContainer(Aspect.ENERGY, (short)8000);
+		te.addToContainer(Aspect.WEAPON, (short)1000);
+		te.addToContainer(Aspect.MECHANISM, (short)2000);
 		switch(te.getNodeType()) {
 		case UNSTABLE:
 			if (rand.nextInt(2) == 0) {
@@ -279,6 +283,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		default:
 			break;
 		}
+		//ReikaJavaLibrary.pConsole(te.getNodeType()+":"+te.getAspects().aspects);
 	}
 
 	private void shutdownTE(TileEntity te) {

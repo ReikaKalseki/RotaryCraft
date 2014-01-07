@@ -50,6 +50,12 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
+	public int getLightOpacity(World world, int x, int y, int z)
+	{
+		return 0; //out of 255
+	}
+
+	@Override
 	public final void registerIcons(IconRegister ico) {
 		blockIcon = ico.registerIcon("rotarycraft:steel");
 	}

@@ -25,7 +25,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelDisplay;
-import Reika.RotaryCraft.TileEntities.TileEntityDisplay;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 
 public class RenderDisplay extends RotaryTERenderer {
 

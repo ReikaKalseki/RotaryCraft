@@ -7,61 +7,44 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Items.Tools;
+package Reika.RotaryCraft.Items.Tools.Steel;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.DragonAPI.ModInteract.TinkerOreHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
+public class ItemSteelAxe extends ItemAxe implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockShovel(int ID, int tex) {
-		super(ID, EnumToolMaterial.GOLD);
+	public ItemSteelAxe(int ID, int tex) {
+		super(ID, EnumToolMaterial.IRON);
+		damageVsEntity += 1;
+		this.setMaxDamage(600);
 		this.setIndex(tex);
-		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
-		maxStackSize = 1;
-		this.setMaxDamage(0);
-		efficiencyOnProperMaterial = 12F;
-		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
-		damageVsEntity = 4;
-		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block b) {
-		return true;
+	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block)
+	{
+		float amt = super.getStrVsBlock(par1ItemStack, par2Block);
+		return amt > 1 ? amt*1.2F : 1;
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block b) {
-		if (b == null)
-			return 0;
-		if (b.blockMaterial == Material.grass)
-			return 12F;
-		if (b.blockMaterial == Material.ground)
-			return 12F;
-		if (b.blockMaterial == Material.sand)
-			return 12F;
-		if (b.blockID == TinkerOreHandler.getInstance().gravelOreID)
-			return 36F;
-		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == b)
-				return 12F;
-		}
-		return 1F;
+	public float getStrVsBlock(ItemStack stack, Block block, int meta)
+	{
+		float amt = super.getStrVsBlock(stack, block, meta);
+		return amt > 1 ? amt*1.2F : 1;
 	}
 
 	public String getTextureFile() {
@@ -81,8 +64,8 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	public final void registerIcons(IconRegister ico) {}
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) {
-		return Item.shovelStone.getIconFromDamage(0);
+	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return Item.pickaxeStone.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {
@@ -93,4 +76,5 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	public String getTexture(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Items/items2.png";
 	}
+
 }
