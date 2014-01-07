@@ -211,7 +211,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		if (y <= 0)
 			return;
 		if (!world.isRemote) {
-			if (world.getBlockId(harvestx, harvesty, harvestz) == 7) {
+			if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0);
 			}
@@ -225,9 +225,9 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
 					if (this.isInventoryFull())
-						this.dropItem(world, x, y, z, meta, ItemStacks.bedrockdust.copy());
+						this.dropItem(world, x, y, z, meta, this.getDrops());
 					else
-						ReikaInventoryHelper.addOrSetStack(ItemStacks.bedrockdust, inv, 0);
+						ReikaInventoryHelper.addOrSetStack(this.getDrops(), inv, 0);
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 				}
 			}
