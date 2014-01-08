@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class ContainerPerformance extends CoreContainer
@@ -46,10 +48,12 @@ public class ContainerPerformance extends CoreContainer
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
 			icrafting.sendProgressBarUpdate(this, 1, Engine.temperature);
-			icrafting.sendProgressBarUpdate(this, 2, Engine.getWater()/2);
-			icrafting.sendProgressBarUpdate(this, 3, Engine.getFuelLevel());
+			//icrafting.sendProgressBarUpdate(this, 2, Engine.getWater()/2);
+			//icrafting.sendProgressBarUpdate(this, 3, Engine.getFuelLevel());
 			icrafting.sendProgressBarUpdate(this, 4, Engine.additives);
 		}
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Engine, "water");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Engine, "fuel");
 	}
 
 	@Override
@@ -57,8 +61,8 @@ public class ContainerPerformance extends CoreContainer
 	{
 		switch(par1) {
 		case 1: Engine.temperature = par2; break;
-		case 2: Engine.setWater(par2*2); break;
-		case 3: Engine.setFuelLevel(par2); break;
+		//case 2: Engine.setWater(par2*2); break;
+		//case 3: Engine.setFuelLevel(par2); break;
 		case 4: Engine.additives = par2; break;
 		}
 	}

@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class ContainerGearbox extends CoreContainer
@@ -45,18 +47,20 @@ public class ContainerGearbox extends CoreContainer
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			icrafting.sendProgressBarUpdate(this, 1, gearbox.getLubricant());
+			//icrafting.sendProgressBarUpdate(this, 1, gearbox.getLubricant());
 			icrafting.sendProgressBarUpdate(this, 2, gearbox.damage);
 			icrafting.sendProgressBarUpdate(this, 3, gearbox.omega);
 			icrafting.sendProgressBarUpdate(this, 4, gearbox.torque);
 		}
+
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, gearbox, "tank");
 	}
 
 	@Override
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: gearbox.setLubricant(par2); break;
+		//case 1: gearbox.setLubricant(par2); break;
 		case 2: gearbox.damage = par2; break;
 		case 3: gearbox.omega = par2; break;
 		case 4: gearbox.torque = par2; break;

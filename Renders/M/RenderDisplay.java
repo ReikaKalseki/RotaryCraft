@@ -87,6 +87,7 @@ public class RenderDisplay extends RotaryTERenderer {
 			this.renderTileEntityDisplayAt((TileEntityDisplay)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			if (((TileEntityDisplay)tile).canDisplay() && ((TileEntityDisplay)tile).hasSpace()) {
+				((TileEntityDisplay)tile).loadColorData();
 				int dir = 0;
 				int dx = 0;
 				int dz = 0;

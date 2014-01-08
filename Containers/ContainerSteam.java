@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class ContainerSteam extends CoreContainer
@@ -44,8 +46,9 @@ public class ContainerSteam extends CoreContainer
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
 			icrafting.sendProgressBarUpdate(this, 1, Steam.temperature);
-			icrafting.sendProgressBarUpdate(this, 2, Steam.getWater()/2);
+			//icrafting.sendProgressBarUpdate(this, 2, Steam.getWater()/2);
 		}
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Steam, "water");
 	}
 
 	@Override
@@ -53,7 +56,7 @@ public class ContainerSteam extends CoreContainer
 	{
 		switch(par1) {
 		case 1: Steam.temperature = par2; break;
-		case 2: Steam.setWater(par2*2); break;
+		//case 2: Steam.setWater(par2*2); break;
 		}
 	}
 }

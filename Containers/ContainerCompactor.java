@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SlotMachineOut;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
@@ -56,10 +58,12 @@ public class ContainerCompactor extends CoreContainer
 				icrafting.sendProgressBarUpdate(this, 0, compactor.compactorCookTime);
 			}
 			icrafting.sendProgressBarUpdate(this, 1, compactor.temperature);
-			icrafting.sendProgressBarUpdate(this, 2, compactor.pressure);
+			//icrafting.sendProgressBarUpdate(this, 2, compactor.pressure);
 		}
 
 		lastCompactorCookTime = compactor.compactorCookTime;
+
+		ReikaPacketHelper.sendSyncPacket(RotaryCraft.packetChannel, compactor, "pressure");
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class ContainerCompactor extends CoreContainer
 		switch(par1) {
 		case 0: compactor.compactorCookTime = par2; break;
 		case 1: compactor.temperature = par2; break;
-		case 2: compactor.pressure = par2; break;
+		//case 2: compactor.pressure = par2; break;
 		}
 	}
 }

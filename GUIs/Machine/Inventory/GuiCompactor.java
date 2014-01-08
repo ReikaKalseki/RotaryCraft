@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
@@ -42,7 +41,7 @@ public class GuiCompactor extends GuiMachine
 		if (api.isMouseInBox(j+146, j+151, k+15, k+70)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("%d kPa", comp.pressure), mx-j, my-k);
+			api.drawTooltipAt(fontRenderer, String.format("%d kPa", comp.getPressure()), mx-j, my-k);
 		}
 		if (api.isMouseInBox(j+117, j+127, k+15, k+70)) {
 			int mx = api.getMouseRealX();

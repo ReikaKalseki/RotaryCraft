@@ -14,6 +14,8 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
 public class ContainerPulseFurnace extends CoreContainer {
@@ -52,10 +54,13 @@ public class ContainerPulseFurnace extends CoreContainer {
 			icrafting.sendProgressBarUpdate(this, 0, pulseFurnace.pulseFurnaceCookTime);
 			icrafting.sendProgressBarUpdate(this, 1, pulseFurnace.temperature);
 			icrafting.sendProgressBarUpdate(this, 2, pulseFurnace.smelttick);
-			icrafting.sendProgressBarUpdate(this, 3, pulseFurnace.getFuel());
+			//icrafting.sendProgressBarUpdate(this, 3, pulseFurnace.getFuel());
 			icrafting.sendProgressBarUpdate(this, 4, pulseFurnace.omega);
-			icrafting.sendProgressBarUpdate(this, 5, pulseFurnace.getWater());
+			//icrafting.sendProgressBarUpdate(this, 5, pulseFurnace.getWater());
 		}
+
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "water");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "fuel");
 	}
 
 	@Override
@@ -65,9 +70,9 @@ public class ContainerPulseFurnace extends CoreContainer {
 		case 0: pulseFurnace.pulseFurnaceCookTime = par2; break;
 		case 1: pulseFurnace.temperature = par2; break;
 		case 2: pulseFurnace.smelttick = par2; break;
-		case 3: pulseFurnace.setFuel(par2); break;
+		//case 3: pulseFurnace.setFuel(par2); break;
 		case 4: pulseFurnace.omega = par2; break;
-		case 5: pulseFurnace.setWater(par2); break;
+		//case 5: pulseFurnace.setWater(par2); break;
 		}
 	}
 }

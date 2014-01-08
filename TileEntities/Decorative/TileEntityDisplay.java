@@ -25,14 +25,18 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Renders.M.RenderDisplay;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController, OneSlotMachine {
 
 	private float scroll;
+
+
 	private int[] rgb = new int[3];
+
 	private int[] Brgb = new int[3];
+
 	private static final int[] ArRGB = {0, 128, 255};
+
 	private static final int[] ArBRGB = {0, 255, 255};
 	private String message = "";
 	public static final int displayHeight = 12; //in lines
@@ -41,6 +45,13 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	public static final int charWidth = 10;
 
 	private boolean display;
+
+	private ReikaDyeHelper color;
+	private boolean isArgonBlue = true;
+
+	public ReikaDyeHelper getDyeColor() {
+		return color != null ? color : ReikaDyeHelper.BLACK;
+	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -145,29 +156,36 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		return true;
 	}
 
+
 	public int getRed() {
 		return rgb[0];
 	}
+
 
 	public int getGreen() {
 		return rgb[1];
 	}
 
+
 	public int getBlue() {
 		return rgb[2];
 	}
+
 
 	public int getBorderRed() {
 		return Brgb[0];
 	}
 
+
 	public int getBorderGreen() {
 		return Brgb[1];
 	}
 
+
 	public int getBorderBlue() {
 		return Brgb[2];
 	}
+
 
 	public int getTextColor() {
 		return 0xffffff;
@@ -185,16 +203,26 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		message = "";
 	}
 
-	public void setColor(ReikaDyeHelper dye) {
-		int r = dye.getRed();
-		int g = dye.getGreen();
-		int b = dye.getBlue();
-		rgb[0] = r;
-		rgb[1] = g;
-		rgb[2] = b;
-		Brgb[0] = r;
-		Brgb[1] = g;
-		Brgb[2] = b;
+	public void setDyeColor(ReikaDyeHelper dye) {
+		color = dye;
+		isArgonBlue = false;
+	}
+
+
+	public void loadColorData() {
+		if (isArgonBlue)
+			this.loadArgonColor();
+		else {
+			int r = this.getDyeColor().getRed();
+			int g = this.getDyeColor().getGreen();
+			int b = this.getDyeColor().getBlue();
+			rgb[0] = r;
+			rgb[1] = g;
+			rgb[2] = b;
+			Brgb[0] = r;
+			Brgb[1] = g;
+			Brgb[2] = b;
+		}
 	}
 
 	/**
@@ -204,8 +232,11 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setIntArray("color", rgb);
-		NBT.setIntArray("Bcolor", Brgb);
+		//NBT.setIntArray("color", rgb);
+		//NBT.setIntArray("Bcolor", Brgb);
+		NBT.setInteger("dye", this.getDyeColor().ordinal());
+
+		NBT.setBoolean("argon", isArgonBlue);
 
 		NBT.setString("msg", message);
 	}
@@ -218,13 +249,21 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	{
 		super.readFromNBT(NBT);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(NBT.getIntArray("Bcolor")));
-		rgb = NBT.getIntArray("color");
-		Brgb = NBT.getIntArray("Bcolor");
+		//rgb = NBT.getIntArray("color");
+		//Brgb = NBT.getIntArray("Bcolor");
+
+		isArgonBlue = NBT.getBoolean("argon");
+		color = ReikaDyeHelper.dyes[NBT.getInteger("dye")];
 
 		message = NBT.getString("msg");
 	}
 
 	public void setColorToArgon() {
+		isArgonBlue = true;
+	}
+
+
+	public void loadArgonColor() {
 		rgb[0] = ArRGB[0];
 		rgb[1] = ArRGB[1];
 		rgb[2] = ArRGB[2];
@@ -233,7 +272,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		Brgb[2] = ArBRGB[2];
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	public List<String> getMessageForDisplay() {
 		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
 		return f.listFormattedStringToWidth(message, displayWidth*f.FONT_HEIGHT);

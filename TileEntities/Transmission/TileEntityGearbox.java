@@ -531,12 +531,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
-	public void setLubricant(int amt) {
-		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
-	}
-
 	public int getLubricant() {
 		return tank.getLevel();
+	}
+
+	public void setLubricant(int amt) {
+		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
 	@Override

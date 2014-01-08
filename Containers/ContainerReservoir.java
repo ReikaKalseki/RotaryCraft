@@ -10,8 +10,9 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 
 public class ContainerReservoir extends CoreContainer
@@ -35,21 +36,6 @@ public class ContainerReservoir extends CoreContainer
 	{
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < crafters.size(); i++)
-		{
-			ICrafting icrafting = (ICrafting)crafters.get(i);
-
-			//icrafting.sendProgressBarUpdate(this, 1, Reservoir.get);
-			icrafting.sendProgressBarUpdate(this, 2, Reservoir.getLevel()/2); //Because MC's update packets say "F*** you, I like shorts"
-		}
-	}
-
-	@Override
-	public void updateProgressBar(int par1, int par2)
-	{
-		switch(par1) {
-		//case 1: Reservoir.liquidID = par2; break;
-		case 2: Reservoir.setLevel(par2*2); break;
-		}
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Reservoir, "tank");
 	}
 }

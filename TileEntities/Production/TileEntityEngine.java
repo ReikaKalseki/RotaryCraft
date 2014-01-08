@@ -1864,16 +1864,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		fuel.removeLiquid(amt);
 	}
 
-	public void setFuelLevel(int amt) {
-		fuel.setContents(amt, type.getFuelType());
-	}
-
 	public void addWater(int amt) {
 		water.addLiquid(amt, FluidRegistry.WATER);
-	}
-
-	public void setWater(int amt) {
-		water.setContents(amt, FluidRegistry.WATER);
 	}
 
 	public void setLube(int amt) {

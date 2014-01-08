@@ -524,16 +524,16 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return fuel.getLevel();
 	}
 
-	public void setFuel(int amt) {
-		fuel.setContents(amt, RotaryCraft.jetFuelFluid);
-	}
-
-	public void setWater(int amt) {
-		water.setContents(amt, FluidRegistry.WATER);
-	}
-
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side.offsetY == 0 ? Flow.INPUT : Flow.NONE;
+	}
+
+	public void addFuel(int amt) {
+		fuel.addLiquid(amt, FluidRegistry.getFluid("jet fuel"));
+	}
+
+	public void addWater(int amt) {
+		water.addLiquid(amt, FluidRegistry.WATER);
 	}
 }

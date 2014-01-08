@@ -10,8 +10,9 @@
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 
 public class ContainerEnergyToPower extends CoreContainer {
@@ -31,20 +32,7 @@ public class ContainerEnergyToPower extends CoreContainer {
 	{
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < crafters.size(); i++)
-		{
-			ICrafting icrafting = (ICrafting)crafters.get(i);
-
-			icrafting.sendProgressBarUpdate(this, 0, engine.getStoredPower()/2);
-		}
-	}
-
-	@Override
-	public void updateProgressBar(int par1, int par2)
-	{
-		switch(par1) {
-		case 0: engine.setStoredPower(par2*2); break;
-		}
+		ReikaPacketHelper.sendSyncPacket(RotaryCraft.packetChannel, engine, "storedEnergy");
 	}
 
 }

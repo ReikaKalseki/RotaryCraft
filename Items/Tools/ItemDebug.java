@@ -157,8 +157,8 @@ public class ItemDebug extends ItemRotaryTool {
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getWater(), tile.temperature, tile.getFuel()));
 				if (player.isSneaking()) {
-					tile.setFuel(tile.MAXFUEL);
-					tile.setWater(tile.CAPACITY);
+					tile.addFuel(tile.MAXFUEL);
+					tile.addWater(tile.CAPACITY);
 					ReikaChatHelper.write("Filled to capacity.");
 				}
 			}

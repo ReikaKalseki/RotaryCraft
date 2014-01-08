@@ -344,7 +344,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			TileEntityPulseFurnace ex = (TileEntityPulseFurnace)te;
 			int f = ex.getFuel();
 			if (f+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-				ex.setFuel(RotaryConfig.MILLIBUCKET*ItemFuelLubeBucket.JET_VALUE);
+				ex.addFuel(RotaryConfig.MILLIBUCKET*ItemFuelLubeBucket.JET_VALUE);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
@@ -352,7 +352,7 @@ public abstract class BlockBasicMultiTE extends Block {
 			}
 			int water = ex.getWater();
 			if (water+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
-				ex.setWater(RotaryConfig.MILLIBUCKET);
+				ex.addWater(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
@@ -414,7 +414,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.DISPLAY && is != null) {
 			if (ReikaDyeHelper.isDyeItem(is)) {
 				TileEntityDisplay td = (TileEntityDisplay)te;
-				td.setColor(ReikaDyeHelper.getColorFromItem(is));
+				td.setDyeColor(ReikaDyeHelper.getColorFromItem(is));
 				return true;
 			}
 			if (is.itemID == Item.glowstone.itemID) {

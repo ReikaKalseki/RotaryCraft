@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
@@ -277,10 +276,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 
 	public void setEmpty() {
 		tank.empty();
-	}
-
-	public void setFuelLevel(int amt) {
-		tank.setContents(amt, RotaryCraft.jetFuelFluid);
 	}
 
 	@Override

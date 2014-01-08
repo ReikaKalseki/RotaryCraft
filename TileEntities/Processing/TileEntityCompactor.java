@@ -45,7 +45,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	public static final int REQTEMP = 800; 		//real temp/2
 	public static final int REQPRESS = 550000; //real pressure
 
-	public int pressure = 0; //1 atm
+	private int pressure;
 	public int temperature;
 
 	public boolean idle = false;

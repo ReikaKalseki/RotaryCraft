@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
 public class ContainerObsidian extends CoreContainer
@@ -58,11 +60,14 @@ public class ContainerObsidian extends CoreContainer
 			{
 				icrafting.sendProgressBarUpdate(this, 0, obsidian.mixTime);
 			}
-			icrafting.sendProgressBarUpdate(this, 1, obsidian.getWater());
-			icrafting.sendProgressBarUpdate(this, 2, obsidian.getLava());
+			//icrafting.sendProgressBarUpdate(this, 1, obsidian.getWater());
+			//icrafting.sendProgressBarUpdate(this, 2, obsidian.getLava());
 		}
 
 		lastObsidianCookTime = obsidian.mixTime;
+
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, obsidian, "lava");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, obsidian, "water");
 	}
 
 	@Override
@@ -70,8 +75,8 @@ public class ContainerObsidian extends CoreContainer
 	{
 		switch(par1) {
 		case 0: obsidian.mixTime = par2; break;
-		case 1: obsidian.setWater(par2); break;
-		case 2: obsidian.setLava(par2); break;
+		//case 1: obsidian.setWater(par2); break;
+		//case 2: obsidian.setLava(par2); break;
 		}
 	}
 }

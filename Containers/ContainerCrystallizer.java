@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
 public class ContainerCrystallizer extends CoreContainer
@@ -41,15 +43,17 @@ public class ContainerCrystallizer extends CoreContainer
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
 			icrafting.sendProgressBarUpdate(this, 0, te.smeltTick);
-			icrafting.sendProgressBarUpdate(this, 1, te.getLevel());
+			//icrafting.sendProgressBarUpdate(this, 1, te.getLevel());
 		}
+
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
 	}
 
 	@Override
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: te.setLevel(par2); break;
+		//case 1: te.setLevel(par2); break;
 		case 0: te.smeltTick = par2; break;
 		}
 	}

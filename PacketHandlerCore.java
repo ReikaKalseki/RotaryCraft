@@ -26,6 +26,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -144,6 +145,22 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				pack = PacketRegistry.getEnum(control);
 				floatdata = inputStream.readFloat();
 				break;
+			case SYNC:
+				x = inputStream.readInt();
+				y = inputStream.readInt();
+				z = inputStream.readInt();
+				String name = Packet.readString(inputStream, Short.MAX_VALUE);
+				int value = inputStream.readInt();
+				ReikaPacketHelper.updateTileEntityData(world, x, y, z, name, value);
+				return;
+			case TANK:
+				x = inputStream.readInt();
+				y = inputStream.readInt();
+				z = inputStream.readInt();
+				String tank = Packet.readString(inputStream, Short.MAX_VALUE);
+				int level = inputStream.readInt();
+				ReikaPacketHelper.updateTileEntityTankData(world, x, y, z, tank, level);
+				return;
 			}
 			x = inputStream.readInt();
 			y = inputStream.readInt();
