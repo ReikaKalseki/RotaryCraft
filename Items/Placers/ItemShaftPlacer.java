@@ -17,7 +17,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -93,6 +99,30 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		for (int i = 0; i < RotaryNames.getNumberShaftTypes(); i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
+		int i = is.getItemDamage();
+		if (i < MaterialRegistry.matList.length-1) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				MaterialRegistry mat = MaterialRegistry.matList[i];
+				double torque = mat.getMaxShaftTorque();
+				double speed = mat.getMaxShaftSpeed();
+				li.add(String.format("Max Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed)));
+				li.add(String.format("Max Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque)));
+			}
+			else {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Hold ");
+				sb.append(EnumChatFormatting.GREEN.toString());
+				sb.append("Shift");
+				sb.append(EnumChatFormatting.GRAY.toString());
+				sb.append(" for load data");
+				li.add(sb.toString());
+			}
 		}
 	}
 }

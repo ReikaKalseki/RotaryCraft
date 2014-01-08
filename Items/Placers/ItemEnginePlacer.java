@@ -18,8 +18,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
@@ -269,6 +275,30 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		for (int i = 0; i < EngineType.engineList.length; i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
+		int i = is.getItemDamage();
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			EngineType type = EngineType.engineList[i];
+			double power = type.getPower();
+			double speed = type.getSpeed();
+			double torque = type.getTorque();
+			li.add(String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)));
+			li.add(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque)));
+			li.add(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed)));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for power data");
+			li.add(sb.toString());
 		}
 	}
 }

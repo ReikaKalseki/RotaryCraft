@@ -23,7 +23,7 @@ public enum EngineType {
 	GAS(512, 128),
 	AC(256, 512),
 	SPORT(1024, 256),
-	HYDRO(32, 16384),
+	HYDRO(32, 16384), //double speed, add new lava engine as 524kW?
 	MICRO(131072, 16),
 	JET(65536, 1024);
 

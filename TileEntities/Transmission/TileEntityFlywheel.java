@@ -34,6 +34,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public static final int STONEFLYTORQUEMAX = 128;	// rho 3	-> 4	-> 8
 	public static final int IRONFLYTORQUEMAX = 512;		// rho 8	-> 8	-> 32
 	public static final int GOLDFLYTORQUEMAX = 4096;	// rho 19.3	-> 32	-> 256
+
 	private int decayTime;
 
 	private int maxtorque;
@@ -53,6 +54,21 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			loads[i] = (int)base;
 		}
 		return loads;
+	}
+
+	public static int getMinTorque(int i) {
+		switch(i) {
+		case 0:
+			return WOODFLYTORQUEMAX;
+		case 1:
+			return STONEFLYTORQUEMAX;
+		case 2:
+			return IRONFLYTORQUEMAX;
+		case 3:
+			return GOLDFLYTORQUEMAX;
+		default:
+			return 0;
+		}
 	}
 
 	public void testFailure() {

@@ -17,7 +17,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -86,6 +90,27 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 		for (int i = 0; i < RotaryNames.getNumberFlywheelTypes(); i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
+		int i = is.getItemDamage();
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			int[] loads = TileEntityFlywheel.getLimitLoads();
+			int torque = TileEntityFlywheel.getMinTorque(i);
+			li.add(String.format("Max Speed: %d rad/s", loads[i]));
+			li.add(String.format("Required Torque: %d Nm", torque));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for load data");
+			li.add(sb.toString());
 		}
 	}
 }

@@ -17,7 +17,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
-import Reika.RotaryCraft.Blocks.BlockAuxEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -55,8 +54,7 @@ public enum BlockRegistry implements RegistryEnum {
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
 	BCENGINE(BlockModEngine.class, Material.iron),
-	MODEL2(BlockMMachine.class, Material.iron),
-	AUXENGINE(BlockAuxEngine.class, Material.iron);
+	MODEL2(BlockMMachine.class, Material.iron);
 
 	private Class block;
 	private Material mat;

@@ -136,12 +136,16 @@ public enum MaterialRegistry {
 	}
 
 	public double getMaxShaftTorque() {
+		if (this.isInfiniteStrength())
+			return Double.POSITIVE_INFINITY;
 		double r = 0.0625;
 		double tau = this.getShearStrength();
 		return 0.5*Math.PI*r*r*r*tau/16D;
 	}
 
 	public double getMaxShaftSpeed() {
+		if (this.isInfiniteStrength())
+			return Double.POSITIVE_INFINITY;
 		double f = 1D/(1-(0.11D*this.ordinal()));
 		double rho = this.getDensity();
 		double r = 0.0625;

@@ -41,7 +41,6 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
-import Reika.RotaryCraft.Blocks.BlockAuxEngine;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
@@ -131,12 +130,10 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityCoalGas;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityMagmatic;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
@@ -286,9 +283,7 @@ public enum MachineRegistry {
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
-	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
-	MAGMATIC(			"machine.magmatic",			BlockAuxEngine.class,		TileEntityMagmatic.class,			0),
-	COALGAS(			"machine.coalgas",			BlockAuxEngine.class,		TileEntityCoalGas.class,			1);
+	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal");
 
 	private String name;
 	private Class te;
