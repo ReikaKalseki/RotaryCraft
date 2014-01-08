@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -328,5 +329,9 @@ public enum EngineType {
 		default:
 			return false;
 		}
+	}
+
+	public boolean canWorkInWorld(World world) {
+		return true;
 	}
 }

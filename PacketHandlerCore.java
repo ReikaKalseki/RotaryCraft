@@ -443,6 +443,8 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					eng.decrementOmega();
 				if (control == PacketRegistry.PNEUMATIC.getMinValue()+3)
 					eng.incrementOmega();
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+4)
+					eng.incrementRedstoneState();
 				break;
 			case JETPACK:
 				boolean move = floatdata > 100;

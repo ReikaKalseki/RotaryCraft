@@ -14,6 +14,7 @@ import java.awt.Color;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -30,6 +31,9 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
+
+		if (world.getWorldTime()%20 == 0)
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (!this.hasEnoughEnergy()) {
 			torque = 0;

@@ -130,4 +130,25 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		return false;
 	}
 
+	@Override
+	public float getStrVsBlock(ItemStack is, Block b)
+	{
+		float f = 0.75F;
+		if (b != null) {
+			if (b instanceof IShearable) {
+				f = 8F;
+			}
+			else if (b.blockMaterial == Material.plants) {
+				f = 8F;
+			}
+			else if (b.blockMaterial == Material.web || b.blockID == Block.web.blockID) {
+				f = 40F;
+			}
+			else if (b.blockMaterial == Material.cloth || b.blockID == Block.cloth.blockID) {
+				f = 16;
+			}
+		}
+		return f;
+	}
+
 }

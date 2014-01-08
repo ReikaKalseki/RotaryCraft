@@ -43,11 +43,9 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("#@$@#$", (this.power)/1000.0D, omega));
 		this.readPower(false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d   %d", this.power, this.torque, this.omega));
 		if (this.operationComplete(tickcount, 0)) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("Hi %d", par5Random.nextInt(60)));
 			this.process(world, x, y, z, meta);
 			tickcount = 0;
 		}

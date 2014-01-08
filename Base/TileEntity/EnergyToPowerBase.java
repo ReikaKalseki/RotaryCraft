@@ -11,6 +11,9 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.awt.Color;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -34,6 +37,64 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	protected ForgeDirection facingDir;
 
+	private RedstoneState rsState;
+
+	private RedstoneState getRedstoneState() {
+		return rsState != null ? rsState : RedstoneState.IGNORE;
+	}
+
+	private static enum RedstoneState {
+		IGNORE(Item.gunpowder),
+		LOW(Block.torchRedstoneIdle),
+		HI(Block.torchRedstoneActive);
+
+		private final ItemStack iconItem;
+
+		public static final RedstoneState[] list = values();
+
+		private RedstoneState(Item i) {
+			this(new ItemStack(i));
+		}
+
+		private RedstoneState(Block i) {
+			this(new ItemStack(i));
+		}
+
+		private RedstoneState(ItemStack is) {
+			iconItem = is.copy();
+		}
+
+		public ItemStack getDisplayIcon() {
+			return iconItem.copy();
+		}
+
+		public RedstoneState next() {
+			return this.ordinal() < list.length-1 ? list[this.ordinal()+1] : list[0];
+		}
+	}
+
+	public boolean isRedstoneControlEnabled() {
+		return this.getRedstoneState() != RedstoneState.IGNORE;
+	}
+
+	public ItemStack getRedstoneStateIcon() {
+		return this.getRedstoneState().getDisplayIcon();
+	}
+
+	public boolean isEmitting() {
+		if (this.isRedstoneControlEnabled()) {
+			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			RedstoneState rs = this.getRedstoneState();
+			return red ? rs == RedstoneState.HI : rs == RedstoneState.LOW;
+		}
+		else
+			return true;
+	}
+
+	public void incrementRedstoneState() {
+		rsState = this.getRedstoneState().next();
+	}
+
 	public final int getStoredPower() {
 		return storedEnergy;
 	}
@@ -45,16 +106,20 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	public abstract int getMaxStorage();
 
 	public final long getPowerLevel() {
-		return this.getSpeed()*this.getTorque();
+		return this.isEmitting() ? (long)this.getSpeed()*(long)this.getTorque() : 0;
 	}
 
 	public final int getSpeed() {
+		if (!this.isEmitting())
+			return 0;
 		if (baseomega < 0 || basetorque < 0)
 			return 0;
 		return ReikaMathLibrary.intpow2(2, baseomega);
 	}
 
 	public final int getTorque() {
+		if (!this.isEmitting())
+			return 0;
 		if (baseomega < 0 || basetorque < 0)
 			return 0;
 		return ReikaMathLibrary.intpow2(2, basetorque);
@@ -109,6 +174,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		NBT.setInteger("storage", storedEnergy);
 		NBT.setInteger("tier", basetorque);
 		NBT.setInteger("tiero", baseomega);
+
+		NBT.setInteger("rs", this.getRedstoneState().ordinal());
 	}
 
 	/**
@@ -121,6 +188,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		storedEnergy = NBT.getInteger("storage");
 		basetorque = NBT.getInteger("tier");
 		baseomega = NBT.getInteger("tiero");
+
+		rsState = RedstoneState.list[NBT.getInteger("rs")];
 	}
 
 	@Override

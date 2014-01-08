@@ -180,7 +180,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit);
 
-		MachineRegistry.VACUUM.addCrafting("SIS", "ICI", "SIS", 'C', Block.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller);
+		MachineRegistry.VACUUM.addCrafting("SwS", "wIw", "SCS", 'C', Block.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'w', ReikaItemHelper.blackWool);
 
 		MachineRegistry.BORER.addCrafting("SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb);
 

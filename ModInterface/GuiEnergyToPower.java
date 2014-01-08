@@ -51,12 +51,17 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 
 		buttonList.add(new GuiButton(2, SHIFT+j+inset, k+ySize-30-48+25, 20, 20, "-"));;
 		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
+
+		buttonList.add(new GuiButton(4, SHIFT+j+xSize-20-inset, k+ySize-30-48+50, 20, 20, ""));
 	}
 
 	@Override
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
-		if (b.id < 24000) {
+		if (b.id == 4) {
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+4, engine);
+		}
+		else if (b.id < 24000) {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id, engine);
 		}
 		this.initGui();
@@ -93,6 +98,14 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 			String sg = String.format("%d/%d %s", e, engine.getMaxStorage(), engine.getUnitDisplay());
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
 		}
+
+		if (ReikaGuiAPI.instance.isMouseInBox(-12+j+xSize-20-23, -12+j+xSize-23, k+ySize-30-48+50, k+ySize-30-28+50)) {
+			String sg = "Redstone Control";
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-24-fontRenderer.getStringWidth(sg), ReikaGuiAPI.instance.getMouseRealY()-k);
+		}
+
+		int ddy = engine.isRedstoneControlEnabled() ? 0 : 1;
+		api.drawItemStack(itemRenderer, fontRenderer, engine.getRedstoneStateIcon(), 146, 71+ddy);
 	}
 
 	@Override
