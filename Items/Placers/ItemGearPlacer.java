@@ -41,7 +41,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
-		if (is.stackTagCompound.hasKey("damage"))
+		if (is.stackTagCompound.hasKey("damage") && MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length].isDamageableGear())
 			par3List.add("Damage: "+(int)(100*(1-ReikaMathLibrary.doubpow(0.99, is.stackTagCompound.getInteger("damage"))))+"%");
 		else
 			;//par3List.add("ERROR");

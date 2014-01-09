@@ -635,7 +635,7 @@
 	</compressor>
 	<pneuengine>
 		<desc>
-			The pneumatic engine uses a turbine to convert pressurized air from BuildCraft conductive pipes into shaft power. Use its GUI to choose the torque output. Higher torques will require more air pressure (more MJ per tick).
+			The pneumatic engine uses a turbine to convert pressurized air from BuildCraft conductive pipes into shaft power. Use its GUI to choose the torque and speed output. Higher power outputs will require more air pressure (more MJ per tick).
 		</desc>
 		<note>
 			Conductive Pipe Input: Back
@@ -931,7 +931,7 @@
 	</dynamo>
 	<magnetic>
 		<desc>
-			The magnetostatic engine functions much like the pneumatic engine. It accumulates RF provided to it, and its output torque can be selected to choose the total power output.
+			The magnetostatic engine functions much like the pneumatic engine. It accumulates RF provided to it, and its output torque and speed can be selected to choose the total power output.
 		</desc>
 		<note>
 			Conduit Input: Back

@@ -97,11 +97,13 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 			int e = engine.getStoredPower();
 			String sg = String.format("%d/%d %s", e, engine.getMaxStorage(), engine.getUnitDisplay());
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
 		}
 
 		if (ReikaGuiAPI.instance.isMouseInBox(-12+j+xSize-20-23, -12+j+xSize-23, k+ySize-30-48+50, k+ySize-30-28+50)) {
 			String sg = "Redstone Control";
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-24-fontRenderer.getStringWidth(sg), ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
 		}
 
 		int ddy = engine.isRedstoneControlEnabled() ? 0 : 1;

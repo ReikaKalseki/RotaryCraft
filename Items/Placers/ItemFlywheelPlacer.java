@@ -102,6 +102,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 			int torque = TileEntityFlywheel.getMinTorque(i);
 			li.add(String.format("Max Speed: %d rad/s", loads[i]));
 			li.add(String.format("Required Torque: %d Nm", torque));
+			li.add(String.format("Max Torque: %d Nm", torque*TileEntityFlywheel.MINTORQUERATIO));
 		}
 		else {
 			StringBuilder sb = new StringBuilder();

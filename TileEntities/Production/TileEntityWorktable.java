@@ -163,7 +163,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inventory);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getShiftedID(), inventory);
 		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
-			int original = inventory[jetslot].stackTagCompound.getInteger("fuel");
+			ItemStack jet = inventory[jetslot];
+			int original = jet.stackTagCompound != null ? jet.stackTagCompound.getInteger("fuel") : 0;
 			inventory[jetslot] = null;
 			inventory[plateslot] = null;
 			ItemStack is = ItemRegistry.BEDPACK.getEnchantedStack();

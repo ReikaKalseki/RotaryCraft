@@ -26,7 +26,6 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -160,7 +159,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 		}
 		else {
 			long diff = millis - prev.longValue();
-			ReikaJavaLibrary.pConsole(diff, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
+			//ReikaJavaLibrary.pConsole(diff, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
 			return diff > 120;
 		}
 	}

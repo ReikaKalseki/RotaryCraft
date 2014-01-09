@@ -106,7 +106,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
-		if (i < MaterialRegistry.matList.length-1) {
+		if (i < MaterialRegistry.matList.length) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				MaterialRegistry mat = MaterialRegistry.matList[i];
 				double torque = mat.getMaxShaftTorque();
