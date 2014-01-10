@@ -23,11 +23,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunkProvider;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -144,6 +147,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.reqpow));
 			if (power > reqpow && reqpow != -1) {
 				this.calcReqPower(world, x, y, z, meta);
+
+				this.forceGenAndPopulate(world, x, y, z, meta);
+
 				this.dig(world, x, y, z, meta);
 				jammed = false;
 			}
@@ -154,6 +160,17 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (reqpow == -1) {
 				//step = ReikaMathLibrary.extrema(step-1, 1, "max");
 			}
+		}
+	}
+
+	private void forceGenAndPopulate(World world, int x, int y, int z, int meta) {
+		int xread = x+step*xstep;
+		int zread = z+step*zstep;
+		Chunk ch = world.getChunkFromBlockCoords(xread, zread);
+		IChunkProvider p = world.getChunkProvider();
+		if (!ch.isTerrainPopulated) {
+			p.populate(p, xread >> 4, zread >> 4);
+			ReikaJavaLibrary.pConsole(xread+", "+zread);
 		}
 	}
 
@@ -226,7 +243,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
+					xread = x+step*xstep+a*(i-3);
+					yread = y+step*ystep+(4-j);
+					zread = z+step*zstep+b*(i-3);
 					int id = world.getBlockId(xread, yread+1, zread);
 					if (id == Block.sand.blockID || id == Block.gravel.blockID)
 						if (this.checkTop(i, j)) {
@@ -318,6 +337,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean canSilk(int id, int meta) {
 		if (id == 0)
 			return false;
+		if (id == Block.fire.blockID)
+			return false;
 		Block b = Block.blocksList[id];
 		if (b.blockMaterial == Material.water)
 			return false;
@@ -403,7 +424,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
+					xread = x+step*xstep+a*(i-3);
+					yread = y+step*ystep+(4-j);
+					zread = z+step*zstep+b*(i-3);
 					if (this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlockId(xread, yread, zread), world.getBlockMetadata(xread, yread, zread)))
 						world.setBlock(xread, yread, zread, RotaryCraft.miningpipe.blockID, pipemeta, 3);
 					else {

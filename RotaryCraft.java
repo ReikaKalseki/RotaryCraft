@@ -241,6 +241,10 @@ public class RotaryCraft extends DragonAPIMod {
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
 
+		MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);
+		MinecraftForge.setToolClass(ItemRegistry.STEELPICK.getItemInstance(), "pickaxe", 2);
+		MinecraftForge.setToolClass(ItemRegistry.STEELSHOVEL.getItemInstance(), "shovel", 2);
+
 		FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
 
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
