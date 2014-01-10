@@ -30,7 +30,6 @@ import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -170,7 +169,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		IChunkProvider p = world.getChunkProvider();
 		if (!ch.isTerrainPopulated) {
 			p.populate(p, xread >> 4, zread >> 4);
-			ReikaJavaLibrary.pConsole(xread+", "+zread);
+			//ReikaJavaLibrary.pConsole(xread+", "+zread);
 		}
 	}
 
