@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -121,7 +122,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	}
 
 	public boolean process() {
-		if (tank.getLevel() >= CAPACITY)
+		ReikaJavaLibrary.pConsole(tank.getLevel()+":"+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*RotaryConfig.MILLIBUCKET)+":"+CAPACITY);
+		if (tank.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*RotaryConfig.MILLIBUCKET) >= CAPACITY)
 			return false;
 		boolean allitems = this.getAllIngredients();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));

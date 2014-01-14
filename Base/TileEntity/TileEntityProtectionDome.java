@@ -56,8 +56,9 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 		if (power < MINPOWER)
 			return 0;
 		int range = 2+(int)(power-MINPOWER)/this.getFallOff()+this.getRangeBoost();
-		if (range > ConfigRegistry.FORCERANGE.getValue())
-			return ConfigRegistry.FORCERANGE.getValue();
+		int max = Math.max(64, ConfigRegistry.FORCERANGE.getValue());
+		if (range > max)
+			return max;
 		return range;
 	}
 

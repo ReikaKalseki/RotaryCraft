@@ -36,7 +36,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect {
 
-	public static final int MAXRANGE = ConfigRegistry.AERORANGE.getValue();
+	public static final int MAXRANGE = Math.max(64, ConfigRegistry.AERORANGE.getValue());
 	public static final int CAPACITY = 64;
 
 	public int potionLevel[] = new int[9];

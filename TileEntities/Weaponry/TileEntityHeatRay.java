@@ -298,7 +298,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 	@Override
 	public int getMaxRange() {
-		return ConfigRegistry.HEATRAYRANGE.getValue();
+		return Math.max(64, ConfigRegistry.HEATRAYRANGE.getValue());
 	}
 
 	@Override

@@ -8,8 +8,12 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
+import java.util.List;
 import java.util.Random;
 
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -28,6 +32,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -38,6 +43,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
@@ -53,7 +63,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
-public abstract class BlockBasicMachine extends BlockContainer implements SidedTextureIndex {
+public abstract class BlockBasicMachine extends BlockContainer implements SidedTextureIndex, IWailaBlock {
 
 	protected Random par5Random = new Random();
 
@@ -346,5 +356,58 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 
 	public final String getTextureFile(){
 		return "/Reika/RotaryCraft/Textures/Terrain/textures.png"; //return the block texture where the block texture is saved in
+	}
+
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return MachineRegistry.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
+	}
+
+	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return currenttip;
+	}
+
+	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
+		if (te instanceof TemperatureTE)
+			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+		if (te instanceof PressureTE)
+			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+		if (te instanceof PoweredLiquidIO) {
+			PoweredLiquidIO liq = (PoweredLiquidIO)te;
+			Fluid in = liq.getFluidInInput();
+			Fluid out = liq.getFluidInOutput();
+			int amtin = liq.getInputLevel();
+			int amtout = liq.getOutputLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String output = in != null ? String.format("%d/%d mB of %s", amtout, liq.getCapacity(), out.getLocalizedName()) : "Empty";
+			currenttip.add("Input Tank: "+input);
+			currenttip.add("Output Tank: "+output);
+		}
+		if (te instanceof PoweredLiquidReceiver) {
+			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
+			Fluid in = liq.getContainedFluid();
+			int amt = liq.getLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			currenttip.add("Tank: "+input);
+		}
+		if (te instanceof PoweredLiquidProducer) {
+			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
+			Fluid in = liq.getContainedFluid();
+			int amt = liq.getLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			currenttip.add("Tank: "+input);
+		}
+		if (te instanceof TileEntityGearbox) {
+			TileEntityGearbox gbx = (TileEntityGearbox)te;
+			if (gbx.type.isDamageableGear()) {
+				currenttip.add(String.format("Damage: %d%s", gbx.damage, "%"));
+				currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
+			}
+		}
+		return currenttip;
+	}
+
+	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return currenttip;
 	}
 }

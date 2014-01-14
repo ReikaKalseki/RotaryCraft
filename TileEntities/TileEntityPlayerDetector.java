@@ -114,8 +114,8 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 
 	public int getRange() {
 		int range = (int)(power/FALLOFF);
-		if (range > ConfigRegistry.DETECTORRANGE.getValue())
-			range = ConfigRegistry.DETECTORRANGE.getValue();
+		if (range > this.getMaxRange())
+			range = this.getMaxRange();
 		if (range > selectedrange)
 			return selectedrange;
 		return range;
@@ -123,8 +123,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 
 	public int getMaxRange() {
 		int range = (int)(power/FALLOFF);
-		if (range > ConfigRegistry.DETECTORRANGE.getValue())
-			range = ConfigRegistry.DETECTORRANGE.getValue();
+		int max = Math.max(64, ConfigRegistry.DETECTORRANGE.getValue());
+		if (range > max)
+			range = max;
 		return range;
 	}
 

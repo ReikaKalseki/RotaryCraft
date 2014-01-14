@@ -157,4 +157,31 @@ public enum DifficultyEffects {
 		return EnumDifficulty.getDifficulty(ConfigRegistry.DIFFICULTY.getValue());
 	}
 
+	public int getMaxAmount() {
+		if (isRandom) {
+			switch(getDifficulty()) {
+			case EASY:
+				return easyMaximum;
+			case MEDIUM:
+				return mediumMaximum;
+			case HARD:
+				return hardMaximum;
+			default:
+				return mediumMaximum;
+			}
+		}
+		else {
+			switch(getDifficulty()) {
+			case EASY:
+				return easyInt;
+			case MEDIUM:
+				return mediumInt;
+			case HARD:
+				return hardInt;
+			default:
+				return mediumInt;
+			}
+		}
+	}
+
 }

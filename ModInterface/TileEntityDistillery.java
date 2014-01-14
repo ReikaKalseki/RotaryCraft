@@ -21,8 +21,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPowerBelow();
 		Conversion conv = this.getConversion();
 		if (this.canMake(conv))
 			this.make(conv);
@@ -42,31 +41,6 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 		if (torque < MINTORQUE)
 			return false;
 		return input.getLevel() >= conv.getRequiredAmount() && output.canTakeIn(conv.outputFluid, conv.getProductionAmount());
-	}
-
-	public void getIOSides(World world, int x, int y, int z, int meta) {
-		switch(meta) {
-		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
-			break;
-		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
-			break;
-		case 2:
-			readz = z+1;
-			readx = x;
-			ready = y;
-			break;
-		case 3:
-			readz = z-1;
-			readx = x;
-			ready = y;
-			break;
-		}
 	}
 
 	private Conversion getConversion() {

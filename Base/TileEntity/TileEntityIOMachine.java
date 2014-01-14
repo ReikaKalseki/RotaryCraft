@@ -19,7 +19,9 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
@@ -174,7 +176,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	private boolean isPointingAt(World world, int x, int y, int z) {
 		boolean cy = false;
 		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
-		if (devicein instanceof TileEntityBevelGear)
+		if (devicein instanceof TileEntityBevelGear || devicein instanceof TileEntityMultiClutch || devicein instanceof TileEntityBeltHub)
 			cy = true;
 		//ReikaJavaLibrary.pConsole(devicein.writex+", "+devicein.writey+", "+devicein.writez, devicein instanceof TileEntityBevelGear && this instanceof TileEntitySpawnerController);
 		//ReikaJavaLibrary.pConsole(devicein.writez, devicein instanceof TileEntityBevelGear);

@@ -333,7 +333,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 
 	@Override
 	public int getMaxRange() {
-		return ConfigRegistry.SONICRANGE.getValue();
+		return Math.max(64, ConfigRegistry.SONICRANGE.getValue());
 	}
 
 	@Override

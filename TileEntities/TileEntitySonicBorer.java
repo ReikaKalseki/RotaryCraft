@@ -116,7 +116,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	private int getDistanceToSurface(World world, int x, int y, int z) {
-		for (int m = 1; m < ConfigRegistry.SONICBORERRANGE.getValue(); m++) {
+		for (int m = 1; m < this.getMaxRange(); m++) {
 			int dx = x+m*xstep;
 			int dy = y+m*ystep;
 			int dz = z+m*zstep;
@@ -147,6 +147,10 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			}
 		}
 		return -1;
+	}
+
+	private int getMaxRange() {
+		return Math.max(ConfigRegistry.SONICBORERRANGE.getValue(), 64);
 	}
 
 	public static boolean canDrop(World world, int x, int y, int z) {

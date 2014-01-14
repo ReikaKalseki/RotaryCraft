@@ -20,30 +20,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFluidHandler, PipeConnector, TemperatureTE {
+public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, TemperatureTE {
 
 	private ItemStack[] inv = new ItemStack[9];
 
 	public static final int CAPACITY = 64000;
-
-	private HybridTank tank = new HybridTank("lavamaker", CAPACITY);
 
 	public static final int MELT_ENERGY = 2820000; //approx
 
@@ -127,43 +121,6 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE;
-	}
-
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p);
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, resource.getFluid()))
-			return null;
-		return tank.drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.LAVA);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 	@Override
@@ -326,10 +283,6 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 		return tank.isEmpty();
 	}
 
-	public int getLevel() {
-		return tank.getLevel();
-	}
-
 	public boolean hasStone() {
 		return !ReikaInventoryHelper.isEmpty(inv);
 	}
@@ -343,8 +296,13 @@ public class TileEntityLavaMaker extends InventoriedPowerReceiver implements IFl
 	}
 
 	@Override
-	public Flow getFlowForSide(ForgeDirection side) {
-		return Flow.OUTPUT;
+	public boolean canOutputTo(ForgeDirection to) {
+		return to.offsetY == 0;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
 	}
 
 }

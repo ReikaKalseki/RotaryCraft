@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
 
-	public int distancelimit = ConfigRegistry.FLOODLIGHTRANGE.getValue();
+	public int distancelimit = Math.max(64, ConfigRegistry.FLOODLIGHTRANGE.getValue());
 	public boolean beammode = false;
 
 	/** Used to detect if floodlight just turned off */

@@ -85,11 +85,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	private int maxMobs() { //Omega + config file
-		return ConfigRegistry.BAITMOBS.getValue();
+		return Math.max(24, ConfigRegistry.BAITMOBS.getValue());
 	}
 
 	public int getMaxRange() {
-		return ConfigRegistry.BAITRANGE.getValue();
+		return Math.max(64, ConfigRegistry.BAITRANGE.getValue());
 	}
 
 	private void silverfishStone(World world, int x, int y, int z) {

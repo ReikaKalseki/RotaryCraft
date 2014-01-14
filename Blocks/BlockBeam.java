@@ -109,7 +109,7 @@ public class BlockBeam extends BlockBasic {
     		boolean nz = true;*/
 			int i = 1;
 			//(px || py || pz || nx || ny || nz) &&
-			while (i <= ConfigRegistry.FLOODLIGHTRANGE.getValue()) {
+			while (i <= Math.max(64, ConfigRegistry.FLOODLIGHTRANGE.getValue())) {
 				//if (px)
 				world.notifyBlocksOfNeighborChange(x + i, y, z, 0);
 				//if (nx)

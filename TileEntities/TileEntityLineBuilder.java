@@ -194,7 +194,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 
 	@Override
 	public int getMaxRange() {
-		return ConfigRegistry.LINEBUILDER.getValue();
+		return Math.max(64, ConfigRegistry.LINEBUILDER.getValue());
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 	}
 
 	public int getMaxRange() {
-		return ConfigRegistry.BREEDERRANGE.getValue();
+		return Math.max(24, ConfigRegistry.BREEDERRANGE.getValue());
 	}
 
 	public void testIdle() {

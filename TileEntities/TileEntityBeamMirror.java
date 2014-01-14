@@ -176,7 +176,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 
 	@Override
 	public int getMaxRange() {
-		return ConfigRegistry.FLOODLIGHTRANGE.getValue();
+		return Math.max(ConfigRegistry.FLOODLIGHTRANGE.getValue(), 64);
 	}
 
 	public void lightsOut() {

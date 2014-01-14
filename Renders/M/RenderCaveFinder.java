@@ -19,7 +19,6 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -93,7 +92,6 @@ public class RenderCaveFinder extends RotaryTERenderer {
 			return;
 		if (!te.on)
 			return;
-		int range = te.getRange();
 		ReikaRenderHelper.disableLighting();
 		GL11.glPushMatrix();
 		GL11.glTranslated(p2, p4+2, p6+1);
@@ -111,12 +109,15 @@ public class RenderCaveFinder extends RotaryTERenderer {
 		//ReikaJavaLibrary.pConsole(te.getSourceZ());
 		GL11.glTranslated(-te.xCoord+te.getSourceX(), -te.yCoord+te.getSourceY(), -te.zCoord+te.getSourceZ());
 		GL11.glBegin(GL11.GL_POINTS);
-		for (int i = -range; i <= range+1; i++) {
-			for (int j = -range; j <= range+1; j++) {
-				for (int k = -range; k <= range+1; k++) {
-					if (ReikaWorldHelper.cornerHasAirAdjacent(te.worldObj, i+te.getSourceX(), j+te.getSourceY(), k+te.getSourceZ())) {
+		int cx = te.getSourceX();
+		int cy = te.getSourceY();
+		int cz = te.getSourceZ();
+		int range = te.getRange();
+		for (int i = -range; i <= range; i++) {
+			for (int j = -range; j <= range; j++) {
+				for (int k = -range; k <= range; k++) {
+					if (te.hasPointAt(te.getSourceX()+i, te.getSourceY()+j, te.getSourceZ()+k)) {
 						//ReikaJavaLibrary.pConsole(range+"    "+i+"  "+j+"  "+k);
-
 						double[] color = new double[3];
 						int sc = 32;
 						int vsc = 64;
@@ -129,16 +130,6 @@ public class RenderCaveFinder extends RotaryTERenderer {
 						color[2] = ReikaRenderHelper.HextoColorMultiplier(hexcolor, 2);
 						GL11.glColor3d(color[0], color[1], color[2]);
 						GL11.glVertex3d(p2+i, p4+j, p6+k);
-						double spread = 0*0.03125/8;
-						if (spread > 0) {
-							for (double m = -spread; m <= spread; m+= spread/2D) {
-								for (double l = -spread; l <= spread; l+= spread/2D) {
-									for (double n = -spread; n <= spread; n+= spread/2D) {
-										GL11.glVertex3d(p2+i+m, p4+j+l, p6+k+n);
-									}
-								}
-							}
-						}
 					}
 				}
 			}

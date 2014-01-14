@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <misc>
 	<lube>
-		All inline gearboxes need to be lubricated to maintain their ability to transmit power. Operated without lubricant, they will gradually wear down and transmit less and less torque, and thus less power. To keep them lubricated, simply run a line of lubricant hose from a grinder to the gearbox, put some seeds in the grinder, and watch the hose transmit the oil (or just use buckets to carry it). Gearboxes do consume the lubricant, and more of it at higher speeds, so keep an eye on the meter in the GUI.
+		Most inline gearboxes need to be lubricated to maintain their ability to transmit power. Operated without lubricant, they will gradually wear down and transmit less and less torque, and thus less power. To keep them lubricated, simply run a line of lubricant hose from a grinder to the gearbox, put some seeds in the grinder, and watch the hose transmit the oil (or just use buckets to carry it). Most gearboxes do consume the lubricant, and more of it at higher speeds, so keep an eye on the meter in the GUI.
 	</lube>
 	<canola>
 		Find some canola seeds in tall grass, plant them on farmland, and watch them grow. When covered in little yellow flowers, the plants are ready to be harvested and will drop seeds. They share the same requirements as wheat in terms of light level, water supply, and so on. Canola plants require lots of water, so do not be surprised if they die on dry farmland. Canola seeds can also be compacted into a dense clump for easier storage.

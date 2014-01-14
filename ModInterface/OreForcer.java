@@ -143,7 +143,7 @@ public final class OreForcer {
 
 	private static void registerEssence() {
 		MagicCropHandler.getInstance().registerEssence();
-		ItemStack ore = new ItemStack(MagicCropHandler.getInstance().essenceID, 1, 0);
+		ItemStack ore = MagicCropHandler.getInstance().getWeakEssence();
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
 		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
 	}

@@ -141,6 +141,10 @@ public class ExtractorModOres {
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.TIN.ordinal());
 		case NETHERPLATINUM:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.PLATINUM.ordinal());
+		case NETHERURANIUM:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.URANIUM.ordinal());
+		case NETHERIRIDIUM:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.IRIDIUM.ordinal());
 		default:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
 		}

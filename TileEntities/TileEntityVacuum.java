@@ -333,7 +333,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	@Override
 	public int getMaxRange() {
-		return ConfigRegistry.VACUUMRANGE.getValue();
+		return Math.max(32, ConfigRegistry.VACUUMRANGE.getValue());
 	}
 
 	@Override

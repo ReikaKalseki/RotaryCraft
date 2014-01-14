@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
-	public int distancelimit = ConfigRegistry.FANRANGE.getValue();
+	public int distancelimit = Math.max(32, ConfigRegistry.FANRANGE.getValue());
 
 	public static final long MAXPOWER = 2097152;
 	/** Rate of conversion - one power++ = 1/falloff ++ light levels */

@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -33,6 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
@@ -59,7 +63,11 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
@@ -98,7 +106,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
-public abstract class BlockBasicMultiTE extends Block {
+public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 
 	protected Random par5Random = new Random();
 
@@ -490,7 +498,7 @@ public abstract class BlockBasicMultiTE extends Block {
 		if (m == MachineRegistry.CAVESCANNER) {
 			TileEntityCaveFinder tc = (TileEntityCaveFinder)te;
 			ForgeDirection dir = ReikaPlayerAPI.getDirectionFromPlayerLook(ep, true);
-			int mov = tc.getRange()/4;
+			int mov = 4;
 			if (ep.isSneaking())
 				mov *= -1;
 			tc.moveSrc(mov, dir);
@@ -577,7 +585,8 @@ public abstract class BlockBasicMultiTE extends Block {
 				ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
 			if (m.hasNBTVariants()) {
-				is.stackTagCompound = (NBTTagCompound)((NBTMachine)te).getTagsToWriteToStack().copy();
+				NBTTagCompound nbt = ((NBTMachine)te).getTagsToWriteToStack();
+				is.stackTagCompound = (NBTTagCompound)(nbt != null ? nbt.copy() : null);
 			}
 			if (m.isBroken((RotaryCraftTileEntity)te))
 				li = m.getBrokenProducts();
@@ -805,6 +814,64 @@ public abstract class BlockBasicMultiTE extends Block {
 			return te.power > 0 ? 7 : 0;
 		}
 		return 0;
+	}
+
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return MachineRegistry.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
+	}
+
+	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		return currenttip;
+	}
+
+	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
+		if (te instanceof TemperatureTE)
+			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+		if (te instanceof PressureTE)
+			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+		if (te instanceof PoweredLiquidIO) {
+			PoweredLiquidIO liq = (PoweredLiquidIO)te;
+			Fluid in = liq.getFluidInInput();
+			Fluid out = liq.getFluidInOutput();
+			int amtin = liq.getInputLevel();
+			int amtout = liq.getOutputLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String output = in != null ? String.format("%d/%d mB of %s", amtout, liq.getCapacity(), out.getLocalizedName()) : "Empty";
+			currenttip.add("Input Tank: "+input);
+			currenttip.add("Output Tank: "+output);
+		}
+		if (te instanceof PoweredLiquidReceiver) {
+			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
+			Fluid in = liq.getContainedFluid();
+			int amt = liq.getLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			currenttip.add("Tank: "+input);
+		}
+		if (te instanceof PoweredLiquidProducer) {
+			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
+			Fluid in = liq.getContainedFluid();
+			int amt = liq.getLevel();
+			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			currenttip.add("Tank: "+input);
+		}
+		if (te.getMachine().isEnchantable()) {
+			if (((EnchantableMachine)te).hasEnchantments()) {
+				currenttip.add("Enchantments: ");
+				ArrayList<Enchantment> li = ((EnchantableMachine)te).getValidEnchantments();
+				for (int i = 0; i < li.size(); i++) {
+					Enchantment e = li.get(i);
+					int level = ((EnchantableMachine)te).getEnchantment(e);
+					if (level > 0)
+						currenttip.add("  "+EnumChatFormatting.LIGHT_PURPLE.toString()+e.getTranslatedName(level));
+				}
+			}
+		}
+		return currenttip;
+	}
+
+	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		return currenttip;
 	}
 
 }

@@ -257,7 +257,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 							}
 						}
 
-						AxisAlignedBB splash = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(3, 3, 3);
+						AxisAlignedBB splash = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(6, 6, 6);
 						//world.createExplosion(this, x, y, z, 3F, false);
 						List dmgd = world.getEntitiesWithinAABB(Entity.class, splash);
 						for (int l = 0; l < dmgd.size(); l++) {

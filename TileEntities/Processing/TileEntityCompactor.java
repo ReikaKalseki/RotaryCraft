@@ -494,10 +494,8 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 			//this.phi = 1;
 			return;
 		}
-		if (!worldObj.isRemote) {
-			if (power < MINPOWER || torque < MINTORQUE)
-				return;
-		}
+		if (power < MINPOWER || torque < MINTORQUE)
+			return;
 		if (phi >= 1.5F || phi <= 0.5F)
 			if (rand.nextInt(40) > 0)
 				return;

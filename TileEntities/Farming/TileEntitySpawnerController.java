@@ -127,7 +127,11 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		String mobname = lgc.getEntityNameToSpawn();
 		Entity ent = EntityList.createEntityByName(mobname, world);
 		int num = this.getNumberSpawns(world, x, y, z, ent);
-		return (num < ConfigRegistry.SPAWNERLIMIT.getValue());
+		return (num < this.getSpawnLimit());
+	}
+
+	private int getSpawnLimit() {
+		return Math.max(24, ConfigRegistry.SPAWNERLIMIT.getValue());
 	}
 
 	/** Fetches from real spawner! */

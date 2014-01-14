@@ -23,7 +23,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 
 	private int animtick = 0;
 
-	public static final int distancelimit = ConfigRegistry.BRIDGERANGE.getValue();
+	public static final int distancelimit = Math.max(64, ConfigRegistry.BRIDGERANGE.getValue());
 
 	/** Minimum power required to turn on */
 	//public static final long MINPOWER = 90000000; //90MW is about the energy from the sun from a 16-acre farm -> think Portal 2

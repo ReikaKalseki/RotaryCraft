@@ -22,7 +22,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.CVTController;
@@ -103,31 +102,31 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (this.getType() == GearType.WORM || this.getType() == GearType.CVT && ratio < 0) {
+		if (this.getType() == GearType.WORM || this.getType() == GearType.CVT && this.getEffectiveRatio() < 0) {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-				omega = (int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				omega = -(int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
-					torque = (int)(spl.torque/2*this.getEffectiveRatio());
+					torque = -(int)(spl.torque/2*this.getEffectiveRatio());
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque/sratio*this.getEffectiveRatio());
+					torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
 				}
 				else {
-					torque = (int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+					torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
 				}
 			}
 			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-				omega = (int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+				omega = -(int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
-					torque = (int)(spl.torque/2*this.getEffectiveRatio());
+					torque = -(int)(spl.torque/2*this.getEffectiveRatio());
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+					torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
 				}
 				else {
-					torque = (int)(spl.torque/sratio*this.getEffectiveRatio());
+					torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
 				}
 			}
 			else { //We are not one of its write-to blocks
@@ -158,7 +157,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((sratio-1D)/(sratio)));
+					torque = (int)(spl.torque*((sratio-1D)/(sratio))/this.getEffectiveRatio());
 				}
 				else {
 					torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
@@ -179,7 +178,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return 1;
 		if (type == GearType.WORM)
 			return WORMRATIO;
-		return Math.abs(this.getCVTRatio());
+		return this.getCVTRatio();
 	}
 
 	private int getCVTRatio() {
@@ -216,16 +215,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				int r = controller.getControlledRatio();
 				ratio = torque ? r : -r;
 			}
-			else {
-				if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
-					ratio = -ratio;
-			}
 		}
 		if (this.getType() != GearType.COIL)
 			this.transferPower(world, x, y, z, meta);
 		else
 			this.store(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
+		//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 
 		this.basicPowerReceiver();
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
@@ -381,6 +377,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
 			if (devicein.getBlockMetadata() >= 8) {
 				this.readFromSplitter(devicein);
+				//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 				return;
 			}
 			else if (devicein.writex == x && devicein.writez == z) {

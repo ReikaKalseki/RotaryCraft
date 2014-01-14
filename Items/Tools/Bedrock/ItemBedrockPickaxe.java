@@ -42,6 +42,8 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.DragonAPI.ModInteract.MekanismHandler;
+import Reika.DragonAPI.ModInteract.OpenBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
@@ -118,6 +120,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}
+			if (ModList.THAUMCRAFT.isLoaded() && ThaumBlockHandler.getInstance().isCrystalCluster(block)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
+			}
 			if (ModList.DARTCRAFT.isLoaded() && DartOreHandler.getInstance().isDartOre(block)) {
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
@@ -174,48 +180,52 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block par2Block) {
-		if (par2Block == null)
+	public float getStrVsBlock(ItemStack is, Block b) {
+		if (b == null)
 			return 0;
-		if (par2Block.blockID == Block.obsidian.blockID)
+		if (b.blockID == Block.obsidian.blockID)
 			return 48F;
-		if (par2Block.blockID == RotaryCraft.blastglass.blockID)
+		if (b.blockID == RotaryCraft.blastglass.blockID)
 			return 32F;
-		if (par2Block.blockID == RotaryCraft.obsidianglass.blockID)
+		if (b.blockID == RotaryCraft.obsidianglass.blockID)
 			return 48F;
-		if (par2Block.blockID == MachineRegistry.SHAFT.getBlockID())
+		if (b.blockID == MachineRegistry.SHAFT.getBlockID())
 			return 32F;
-		if (par2Block.blockID == MachineRegistry.GEARBOX.getBlockID())
+		if (b.blockID == MachineRegistry.GEARBOX.getBlockID())
 			return 32F;
-		if (par2Block.blockID == Block.mobSpawner.blockID)
+		if (b.blockID == Block.mobSpawner.blockID)
 			return 18F;
-		if (par2Block.blockID == Block.silverfish.blockID)
+		if (b.blockID == Block.silverfish.blockID)
 			return 6F;
-		if (par2Block.blockID == Block.glowStone.blockID)
-			return 6F;
+		if (b.blockID == Block.glowStone.blockID)
+			return 8F;
 
-		if (par2Block.blockID == ThaumBlockHandler.getInstance().totemID)
+		if (b.blockID == ThaumBlockHandler.getInstance().totemID)
 			return 48F;
-		if (TwilightForestHandler.getInstance().isMazeStone(par2Block))
+		if (b.blockID == MekanismHandler.getInstance().cableID)
+			return 20F;
+		if (b.blockID == OpenBlockHandler.getInstance().tankID)
+			return 20F;
+		if (TwilightForestHandler.getInstance().isMazeStone(b))
 			return 60F;
 
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == par2Block)
+			if (blocksEffectiveAgainst[i] == b)
 				return 12F;
 		}
 		for (int i = 0; i < ItemSpade.blocksEffectiveAgainst.length; i++) { //Also can dig dirt, etc
-			if (ItemSpade.blocksEffectiveAgainst[i] == par2Block)
+			if (ItemSpade.blocksEffectiveAgainst[i] == b)
 				return 6F;
 		}
-		if (par2Block.blockMaterial == Material.rock || par2Block.blockMaterial == Material.iron)
+		if (b.blockMaterial == Material.rock || b.blockMaterial == Material.iron)
 			return 12F;
-		if (par2Block.blockMaterial == Material.glass)
+		if (b.blockMaterial == Material.glass)
 			return 12F;
-		if (par2Block == RotaryCraft.decoblock)
+		if (b == RotaryCraft.decoblock)
 			return 12F;
-		if (par2Block instanceof BlockBasicMachine)
+		if (b instanceof BlockBasicMachine)
 			return 12F;
-		if (par2Block instanceof BlockBasicMultiTE)
+		if (b instanceof BlockBasicMultiTE)
 			return 12F;
 		return 1F;
 	}

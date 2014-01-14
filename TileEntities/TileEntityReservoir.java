@@ -249,6 +249,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public NBTTagCompound getTagsToWriteToStack() {
+		if (this.isEmpty())
+			return null;
 		NBTTagCompound NBT = new NBTTagCompound();
 		Fluid f = this.getFluid();
 		int level = this.getLevel();

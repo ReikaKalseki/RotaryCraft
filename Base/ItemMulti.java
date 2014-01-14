@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -96,6 +97,16 @@ public class ItemMulti extends ItemBasic {
 							TileEntityBeltHub rec = (TileEntityBeltHub)world.getBlockTileEntity(rx, ry, rz);
 
 							//ReikaJavaLibrary.pConsole(rec+"\n"+em);
+							if (em == null) {
+								ReikaChatHelper.writeString("Belt Hub missing at "+ex+", "+ey+", "+ez);
+								is.stackTagCompound = null;
+								return false;
+							}
+							if (rec == null) {
+								ReikaChatHelper.writeString("Belt Hub missing at "+rx+", "+ry+", "+rz);
+								is.stackTagCompound = null;
+								return false;
+							}
 							boolean src = em.setSource(rx, ry, rz);
 							boolean tg = rec.setTarget(ex, ey, ez);
 							//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);

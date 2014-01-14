@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFurnace;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -32,7 +33,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	public int fy;
 	public int fz;
 
-	public static final int MAXTEMP = 1200;
+	public static final int MAXTEMP = 2000;
 	private int smeltTime = 0;
 	private int soundtick = 0;
 
@@ -149,8 +150,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
 		TileEntity te = world.getBlockTileEntity(fx, fy, fz);
 		TileEntityFurnace tile = (TileEntityFurnace)te;
-		tile.currentItemBurnTime = this.getBurnTimeFromTemperature();
-		tile.furnaceBurnTime = this.getBurnTimeFromTemperature();
+		int burn = Math.max(this.getBurnTimeFromTemperature(), tile.furnaceBurnTime);
+		this.setFurnaceBlock(world, burn > 0);
+		tile.currentItemBurnTime = burn;
+		tile.furnaceBurnTime = burn;
 		this.smeltCalculation();
 		smeltTime++;
 		tile.furnaceCookTime = Math.min(smeltTime, 195);
@@ -184,6 +187,13 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z+1, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 			break;
 		}
+	}
+
+	private void setFurnaceBlock(World world, boolean isOn) {
+		int id = world.getBlockId(fx, fy, fz);
+		Block b = Block.blocksList[id];
+		BlockFurnace furn = (BlockFurnace)b;
+		//furn.updateFurnaceBlockState(isOn, world, fx, fy, fz);
 	}
 
 	private void smeltCalculation() {
@@ -236,7 +246,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private int getSpeedFactorFromTemperature() {
 		if (temperature < 500)
 			return 1;
-		return 1+(int)((temperature-500)/100F)*2;
+		if (temperature == 2000)
+			return 2000;
+		return 1+(int)Math.sqrt((Math.pow(2, ((temperature-500)/100F))));
 	}
 
 	@Override
