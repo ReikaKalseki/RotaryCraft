@@ -17,10 +17,11 @@ import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine {
+public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction {
 
 	public ItemStack[] inv = new ItemStack[1];
 	private boolean[] lastPower = new boolean[3];
@@ -64,7 +65,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		if (!ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower))
 			return;
 		tickcount++;
-		if (!this.operationComplete(tickcount, 0))
+		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
 		this.magnetize();
@@ -172,6 +173,11 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		if (!this.hasCore())
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return (400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 	}
 
 }

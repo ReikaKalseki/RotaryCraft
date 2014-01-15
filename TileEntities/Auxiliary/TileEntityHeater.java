@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -39,7 +40,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
-public class TileEntityHeater extends InventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityHeater extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
 
 	public ItemStack[] inventory = new ItemStack[18];
 	public int temperature;
@@ -88,7 +89,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 		if (power < MINPOWER)
 			return;
 		this.testIdle();
-		if (this.operationComplete(tickcount, 0)) {
+		if (tickcount >= this.getOperationTime()) {
 			this.addHeat();
 			tickcount = 0;
 		}
@@ -487,5 +488,10 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	@Override
 	public int getTemperature() {
 		return temperature;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 200-(int)(10*ReikaMathLibrary.logbase(omega, 2));
 	}
 }

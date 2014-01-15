@@ -21,13 +21,14 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implements InertIInv {
+public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implements InertIInv, DiscreteFunction {
 	private int harvestx;
 	private int harvesty;
 	private int harvestz;
@@ -45,7 +46,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		tickcount++;
 		this.readPower(false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d   %d", this.power, this.torque, this.omega));
-		if (this.operationComplete(tickcount, 0)) {
+		if (tickcount >= this.getOperationTime()) {
 			this.process(world, x, y, z, meta);
 			tickcount = 0;
 		}
@@ -363,5 +364,10 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
 	}
 }

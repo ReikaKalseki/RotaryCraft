@@ -18,10 +18,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityItemCannon extends InventoriedPowerReceiver {
+public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction {
 
 	private ItemStack[] inv = new ItemStack[9];
 	public int[] target = new int[3];
@@ -68,7 +69,7 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver {
 		this.getPowerBelow();
 		if (power < MINPOWER)
 			return;
-		if (tickcount < 8)
+		if (tickcount < this.getOperationTime())
 			return;
 		ItemStack is = this.getFirstStack();
 		if (is == null)
@@ -187,5 +188,10 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver {
 		if (ReikaInventoryHelper.isEmpty(inv))
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 8;
 	}
 }

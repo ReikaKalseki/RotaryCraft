@@ -170,7 +170,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			if (!disabled)
 				input.drawTextBox();
 			int color = 4210752;
-			if (timer < spawnercontroller.getMinDelay())
+			if (timer < spawnercontroller.getOperationTime())
 				color = 0xff0000;
 			if (disabled) {
 				color = 0xaaaaaa;

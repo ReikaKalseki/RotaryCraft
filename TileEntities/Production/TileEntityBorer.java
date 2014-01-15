@@ -37,6 +37,7 @@ import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
@@ -45,7 +46,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController {
+public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
@@ -140,7 +141,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(cutShape[0][0]));
 		if (omega <= 0)
 			return;
-		if (this.operationComplete((int)(tickcount*ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency))), 0)) {
+		if (tickcount >= this.getOperationTime()) {
 			this.calcReqPower(world, x, y, z, meta);
 
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.reqpow));
@@ -566,5 +567,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	static {
 
+	}
+
+	@Override
+	public int getOperationTime() {
+		int base = 720-(int)(40*ReikaMathLibrary.logbase(omega, 2));
+		float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency));
+		return (int)(base/ench);
 	}
 }

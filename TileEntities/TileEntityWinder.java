@@ -18,13 +18,14 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.TensionStorage;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlotMachine, SimpleProvider {
+public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlotMachine, SimpleProvider, DiscreteFunction {
 
 	public ItemStack[] inslot = new ItemStack[1];
 
@@ -69,7 +70,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			return;
 		}
 		if (winding) {
-			if (tickcount < this.getWindTime())
+			if (tickcount < this.getOperationTime())
 				return;
 			tickcount = 0;
 			if (inslot[0].getItemDamage() >= this.getMaxWind())
@@ -120,7 +121,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 		return rand;
 	}
 
-	private int getWindTime() {
+	public int getOperationTime() {
 		int base = (int)ReikaMathLibrary.logbase(inslot[0].getItemDamage(), 2);
 		double factor = 1D/(int)(ReikaMathLibrary.logbase(omega, 2));
 		//ReikaJavaLibrary.pConsole(factor);

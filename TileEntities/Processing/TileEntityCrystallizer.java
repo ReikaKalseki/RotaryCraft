@@ -22,13 +22,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE {
+public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction {
 
 	private ItemStack[] inv = new ItemStack[1];
 	private StepTimer timer = new StepTimer(400);
@@ -50,9 +51,8 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false, false);
 
-		int dur = Math.max(1, 400 - (int)(24*ReikaMathLibrary.logbase(omega-MINSPEED+1, 2)));
 		//ReikaJavaLibrary.pConsole((omega-MINSPEED)+":"+dur);
-		timer.setCap(dur);
+		timer.setCap(this.getOperationTime());
 
 		tempTimer.update();
 		if (tempTimer.checkCap())
@@ -250,6 +250,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			}
 		}
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getOperationTime() {
+		return Math.max(1, 400 - (int)(24*ReikaMathLibrary.logbase(omega-MINSPEED+1, 2)));
 	}
 
 }

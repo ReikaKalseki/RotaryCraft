@@ -23,13 +23,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
 
 	private ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
@@ -79,13 +81,13 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 			return;
 		if (filling) {
 			//ReikaJavaLibrary.pConsole(fuelLevel);
-			if (!this.operationComplete(tickcount, 0))
+			if (tickcount <= this.getOperationTime())
 				return;
 			tickcount = 0;
 			this.fillBuckets();
 		}
 		else {
-			if (!this.operationComplete(tickcount, 0))
+			if (tickcount <= this.getOperationTime())
 				return;
 			tickcount = 0;
 			this.emptyBuckets();
@@ -251,5 +253,10 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	public Fluid getContainedFluid() {
 		return tank.getActualFluid();
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
 	}
 }

@@ -29,13 +29,14 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
 
 	private BlockArray blocks = new BlockArray();
 
@@ -87,7 +88,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
 		if (blocks.isEmpty())
 			return;
-		if (this.operationComplete(tickcount, 0) && power >= MINPOWER && this.getLevel() < CAPACITY) {
+		if (power >= MINPOWER && this.getLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
 			//int loc[] = this.findSourceBlock(world, x, y, z);
 			int[] loc = blocks.getNextAndMoveOn();
 			//ReikaJavaLibrary.pConsole(loc[0]+"  "+loc[1]+"  "+loc[2]+"  for side "+FMLCommonHandler.instance().getEffectiveSide());
@@ -328,5 +329,10 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side.offsetY == 0 ? Flow.OUTPUT : Flow.NONE;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 4*(int)(50D/(1+ReikaMathLibrary.logbase(omega, 2)));
 	}
 }

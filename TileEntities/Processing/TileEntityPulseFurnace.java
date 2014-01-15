@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
@@ -39,7 +40,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
+public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction {
 
 	private ItemStack inv[] = new ItemStack[3];
 
@@ -145,7 +146,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		pulseFurnaceCookTime = NBT.getShort("CookTime");
 
 		water.readFromNBT(NBT);
-		fuel.writeToNBT(NBT);
+		fuel.readFromNBT(NBT);
 
 		temperature = NBT.getInteger("temp");
 	}
@@ -307,7 +308,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			if (this.canSmelt()) {
 				pulseFurnaceCookTime++;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-				if (pulseFurnaceCookTime >= 20) {
+				if (pulseFurnaceCookTime >= this.getOperationTime()) {
 					pulseFurnaceCookTime = 0;
 					this.smeltItem();
 					flag1 = true;
@@ -535,5 +536,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	public void addWater(int amt) {
 		water.addLiquid(amt, FluidRegistry.WATER);
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 20;
 	}
 }

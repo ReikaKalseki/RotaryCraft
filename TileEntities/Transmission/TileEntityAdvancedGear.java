@@ -507,15 +507,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public ItemStack decrStackSize(int var1, int var2) {
-		if (belts[var1] == null)
-			return null;
-		belts[var1] = null;
-		return new ItemStack(ItemStacks.belt.itemID, 1, ItemStacks.belt.getItemDamage());
+		return ReikaInventoryHelper.decrStackSize(this, var1, var2);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
-		return null;
+		return ReikaInventoryHelper.getStackInSlotOnClosing(this, var1);
 	}
 
 	@Override

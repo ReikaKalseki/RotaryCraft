@@ -61,7 +61,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 			return;
 		if (!this.isAimingAtTarget(world, x, y, z, target))
 			return;
-		if (tickcount < 20)
+		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
 		if (target[3] == 1) {

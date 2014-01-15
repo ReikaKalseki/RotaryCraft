@@ -61,6 +61,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -854,6 +855,11 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 			int amt = liq.getLevel();
 			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
+		}
+		if (te instanceof DiscreteFunction) {
+			int ticks = ((DiscreteFunction)te).getOperationTime();
+			float sec = Math.max(0.05F, ticks/20F);
+			currenttip.add(String.format("Operation Time: %.2fs", sec));
 		}
 		if (te.getMachine().isEnchantable()) {
 			if (((EnchantableMachine)te).hasEnchantments()) {

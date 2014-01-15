@@ -27,8 +27,6 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	public static final double gTNT = 7.5;	//Calculated from EntityTNTPrimed; vy -= 0.04, *0.98, 20x a sec
 
-	public int delay = 20;
-
 	public static final double torquecap = 32768D;
 
 	public boolean isCreative = false;
@@ -70,7 +68,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 		if (power < MINPOWER)
 			return;
 		tickcount++;
-		if (tickcount < delay)
+		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
 		if (targetMode)

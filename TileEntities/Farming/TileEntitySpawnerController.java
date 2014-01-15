@@ -20,11 +20,12 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController {
+public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction {
 	public static final int FALLOFF = 128; // rad/s per spawn tick
 	public static final int BASEDELAY = 800; //40s default max spawner delay
 
@@ -35,7 +36,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	public int setDelay = BASEDELAY;
 
-	public int getMinDelay() {
+	public int getOperationTime() {
 		int time = BASEDELAY-40*(int)ReikaMathLibrary.logbase(omega, 2);
 		if (time < 0)
 			time = 0; //0 tick minimum
@@ -43,10 +44,10 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	public int getDelay() {
-		if (setDelay > this.getMinDelay())
+		if (setDelay > this.getOperationTime())
 			return setDelay;
 		else
-			return this.getMinDelay();
+			return this.getOperationTime();
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
@@ -32,7 +33,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE
+public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, DiscreteFunction
 {
 	private ItemStack inv[];
 
@@ -221,7 +222,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	public int getCookProgressScaled(int par1)
 	{
 		if (this.compressTime() != -1)
-			return (compactorCookTime * par1) / this.operationTime(omega, this.getStage());
+			return (compactorCookTime * par1) / this.getOperationTime();
 		else
 			return 0;
 	}
@@ -398,7 +399,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 			if (this.canSmelt()) {
 				compactorCookTime++;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-				if (this.operationComplete(compactorCookTime, this.getStage())) {
+				if (compactorCookTime >= this.getOperationTime()) {
 					compactorCookTime = 0;
 					this.smeltItem();
 					flag1 = true;
@@ -559,5 +560,12 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	public void overpressure(World world, int x, int y, int z) {
 		world.createExplosion(null, x, y, z, 4, ConfigRegistry.BLOCKDAMAGE.getState());
 		pressure = MAXPRESSURE;
+	}
+
+	@Override
+	public int getOperationTime() {
+		int time = (10*(60-(int)(3*ReikaMathLibrary.logbase(omega, 2))))/2;
+		time *= this.getStage();
+		return time;
 	}
 }

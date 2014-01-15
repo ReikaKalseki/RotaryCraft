@@ -18,11 +18,12 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedEffect {
+public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedEffect, DiscreteFunction {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -36,7 +37,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
 
-		if (tickcount >= this.getFireRate()&& !world.isRemote) {
+		if (tickcount >= this.getOperationTime()&& !world.isRemote) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
 			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {
@@ -75,7 +76,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		return ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
-	private int getFireRate() {
+	public int getOperationTime() {
 		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
 	}
 

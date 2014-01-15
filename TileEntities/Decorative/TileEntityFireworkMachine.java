@@ -22,12 +22,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine {
+public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine, DiscreteFunction {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
@@ -48,7 +50,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			return;
 		if (omega < MINSPEED)
 			return;
-		if (!this.operationComplete(tickcount, 0))
+		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
 		if (!this.canCraftARocket()) {
@@ -707,5 +709,10 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			return 0;
 		else
 			return this.getEnchantments().get(e);
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 300-(int)(16*ReikaMathLibrary.logbase(omega, 2));
 	}
 }

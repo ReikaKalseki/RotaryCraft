@@ -18,9 +18,11 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -28,7 +30,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
+public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements DiscreteFunction {
 
 	public int mixTime;
 	public int storeTime;
@@ -81,7 +83,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	public int getMixScaled(int par1)
 	{
 		//ReikaChatHelper.writeInt(this.omega);
-		return (mixTime*par1)/this.operationTime(omega, 0);
+		return (mixTime*par1)/this.getOperationTime();
 	}
 
 	@Override
@@ -102,7 +104,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 		if (this.process()) {
 			mixTime++;
 			//ReikaChatHelper.writeInt(this.operationTime(this.omega, 0));
-			if (this.operationComplete(mixTime, 0)) {
+			if (mixTime >= this.getOperationTime()) {
 				mixTime = 0;
 				this.make();
 			}
@@ -288,5 +290,10 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer {
 	@Override
 	public int getCapacity() {
 		return CAPACITY;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 	}
 }

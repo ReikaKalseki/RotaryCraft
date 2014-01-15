@@ -13,8 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 
-public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver {
+public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver implements DiscreteFunction {
 
 	protected ItemStack[] inventory = new ItemStack[9];
 
@@ -104,6 +105,10 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver {
 		}
 
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	public int getOperationTime() {
+		return 15;
 	}
 
 }

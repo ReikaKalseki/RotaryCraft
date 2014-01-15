@@ -36,13 +36,14 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv {
+public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
@@ -142,7 +143,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		if (tree.isEmpty())
 			return;
 
-		if (!this.operationComplete((int)(tickcount*ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency))), 0) && ConfigRegistry.INSTACUT.getState())
+		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
 
@@ -571,5 +572,15 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
+	}
+
+	@Override
+	public int getOperationTime() {
+		if (ConfigRegistry.INSTACUT.getState()) {
+			int base = (300-(int)(20*ReikaMathLibrary.logbase(omega, 2)))/8;
+			float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency));
+			return (int)(base/ench);
+		}
+		return 0;
 	}
 }

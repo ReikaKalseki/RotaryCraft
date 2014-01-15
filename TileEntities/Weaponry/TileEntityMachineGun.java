@@ -26,12 +26,13 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine {
+public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine, DiscreteFunction {
 
 	private ItemStack[] inv = new ItemStack[27];
 
@@ -49,7 +50,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 
 		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
 
-		if (tickcount >= this.getFireRate() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
+		if (tickcount >= this.getOperationTime() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
 			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false) && !(li.size() == 1 && li.get(0).getEntityName().equals("Reika_Kalseki"))) {
@@ -110,7 +111,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		return this.getEnchantment(Enchantment.power)*0.5+ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
-	private int getFireRate() {
+	public int getOperationTime() {
 		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
 	}
 

@@ -44,7 +44,7 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 		this.convertSnow();
 		if (!this.hasAmmo())
 			return;
-		if (tickcount < 20)
+		if (tickcount < this.getOperationTime())
 			return;
 		if (power < MINPOWER)
 			return;

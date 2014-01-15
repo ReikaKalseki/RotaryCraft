@@ -23,11 +23,12 @@ import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer {
+public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction {
 
 	public static final int HEIGHT = 2;
 	public static final int WIDTH = 9;
@@ -54,7 +55,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		if (tempTimer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 
-		smelter.setCap(this.getDuration());
+		smelter.setCap(this.getOperationTime());
 
 		if (!worldObj.isRemote) {
 			if (this.canSmelt()) {
@@ -67,10 +68,6 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 				smelter.reset();
 		}
 		smeltTick = smelter.getTick();
-	}
-
-	private int getDuration() {
-		return temperature >= 600 ? 150 : 200;
 	}
 
 	public int getNumberInputSlots() {
@@ -286,6 +283,11 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 			}
 		}
 		NBT.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getOperationTime() {
+		return temperature >= 600 ? 150 : 200;
 	}
 
 }

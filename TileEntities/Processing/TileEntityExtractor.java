@@ -237,7 +237,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 			}
 			if (this.canSmelt(i)) {
 				extractorCookTime[i]++;
-				if (this.operationComplete(extractorCookTime[i], i+1)) {
+				if (extractorCookTime[i] >= this.getOperationTime(i+1)) {
 					extractorCookTime[i] = 0;
 					if (!this.processModOre(i))
 						this.smeltItem(i);
@@ -466,5 +466,24 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
 		return m == MachineRegistry.PIPE;
+	}
+
+	public int getOperationTime(int stage) {
+		int time = 0;
+		switch (stage) {
+		case 1:
+			time = 900-(int)(60*ReikaMathLibrary.logbase(omega, 2));
+			break;
+		case 2:
+			time = 400-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+			break;
+		case 3:
+			time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+			break;
+		case 4:
+			time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+			break;
+		}
+		return time;
 	}
 }

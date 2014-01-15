@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -36,7 +37,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler {
+public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
 
 	private ItemStack inventory[];
 
@@ -205,7 +206,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	public int getCookProgressScaled(int par1)
 	{
 		//ReikaChatHelper.writeInt(this.tickcount);
-		return (grinderCookTime * par1)/2 / this.operationTime(omega, 0);
+		return (grinderCookTime * par1)/2 / this.getOperationTime();
 	}
 
 	/**
@@ -231,7 +232,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 		if (this.canSmelt()) {
 			grinderCookTime++;
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-			if (this.operationComplete(grinderCookTime, 0)) {
+			if (grinderCookTime >= this.getOperationTime()) {
 				grinderCookTime = 0;
 				tickcount = 0;
 				this.smeltItem();
@@ -432,5 +433,10 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side != ForgeDirection.UP ? Flow.OUTPUT : Flow.NONE;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return (3600-(int)(240*ReikaMathLibrary.logbase(omega, 2)))/4;
 	}
 }

@@ -20,14 +20,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE {
+public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
 
 	private ItemStack[] inv = new ItemStack[7];
 
@@ -68,7 +70,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 			tickcount = 0;
 			return;
 		}
-		if (!this.operationComplete(tickcount, 0))
+		if (tickcount < this.getOperationTime())
 			return;
 		this.smelt();
 	}
@@ -90,7 +92,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	}
 
 	public int getCookScaled(int par1) {
-		return (par1*cookTime)/this.operationTime(omega, 0);
+		return (par1*cookTime)/this.getOperationTime();
 	}
 
 	private boolean canSmelt() {
@@ -273,5 +275,10 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public int getOperationTime() {
+		return 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+	}
 
 }

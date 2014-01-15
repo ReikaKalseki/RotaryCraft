@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -33,7 +34,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler {
+public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction {
 
 	public int mixTime;
 
@@ -73,7 +74,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		if (power < MINPOWER || omega < MINSPEED || water.isEmpty() || lava.isEmpty())
 			return;
 		this.testIdle();
-		if (this.operationComplete(tickcount, 0)) {
+		if (tickcount >= this.getOperationTime()) {
 			tickcount = 0;
 			this.mix();
 		}
@@ -372,5 +373,10 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side.offsetY == 0 ? Flow.INPUT : Flow.NONE;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 800-(int)(60*ReikaMathLibrary.logbase(omega, 2));
 	}
 }

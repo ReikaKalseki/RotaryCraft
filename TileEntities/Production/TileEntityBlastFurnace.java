@@ -24,13 +24,14 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable {
+public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction {
 
 	private int temperature;
 	public ItemStack[] inv = new ItemStack[14];
@@ -71,7 +72,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 
 		smeltTime++;
-		if (smeltTime >= this.getMeltTime()) {
+		if (smeltTime >= this.getOperationTime()) {
 			if (steel)
 				this.makeSteel();
 			else if (bedrock)
@@ -247,7 +248,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		return true;
 	}
 
-	public int getMeltTime() {
+	public int getOperationTime() {
 		int time = 2*((MAXTEMP-(temperature-SMELTTEMP))/12);
 		if (time < 1)
 			return 1;
@@ -257,7 +258,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public int getCookScaled(int p1) {
 		if (temperature < SMELTTEMP)
 			return 0;
-		return ((p1*smeltTime)/this.getMeltTime());
+		return ((p1*smeltTime)/this.getOperationTime());
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {

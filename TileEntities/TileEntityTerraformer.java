@@ -29,15 +29,17 @@ import Reika.DragonAPI.Instantiable.Data.ColumnArray;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles {
+public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {
 
 	private static final ObjectWeb transforms = new ObjectWeb(BiomeGenBase.class);
 	private static final HashMap<List<BiomeGenBase>, List<ItemReq>> itemReqs = new HashMap<List<BiomeGenBase>, List<ItemReq>>();
@@ -109,7 +111,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.operationComplete(tickcount, 0));
 
-		if (this.operationComplete(tickcount, 0)) {
+		if (tickcount >= this.getOperationTime()) {
 			int index = rand.nextInt(coords.getSize());
 			int[] xz = coords.getNthColumn(index);
 			if (!world.isRemote) {
@@ -381,5 +383,10 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
 		return true;
+	}
+
+	@Override
+	public int getOperationTime() {
+		return 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
 	}
 }

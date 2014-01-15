@@ -31,13 +31,14 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 
-public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE
+public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction
 {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -229,7 +230,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			}
 		}
 		fermenterCookTime++;
-		if (fermenterCookTime*this.getFermentRate() >= this.operationTime(omega, 0)) {
+		if (fermenterCookTime >= this.getOperationTime()) {
 			this.make(product);
 			fermenterCookTime = 0;
 		}
@@ -421,7 +422,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public int getCookProgressScaled(int par1)
 	{
 		//ReikaChatHelper.writeInt(this.operationTime(0));
-		return ((int)(fermenterCookTime * par1*this.getFermentRate()))/2 / this.operationTime(omega, 0);
+		return (fermenterCookTime * par1)/2 / this.getOperationTime();
 	}
 
 	public int getTemperatureScaled(int par1)
@@ -518,5 +519,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	public void setLiquid(int amt) {
 		tank.setContents(amt, FluidRegistry.WATER);
+	}
+
+	@Override
+	public int getOperationTime() {
+		int base = 600-(int)(40*ReikaMathLibrary.logbase(omega, 2));
+		return (int)(base/this.getFermentRate());
 	}
 }
