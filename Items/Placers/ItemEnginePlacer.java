@@ -81,6 +81,8 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				eng.type = EngineType.setType(is.getItemDamage());
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				eng.placer = ep.getEntityName();
+				if (is.stackTagCompound != null)
+					eng.FOD = is.stackTagCompound.getInteger("damage");
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 					eng.setFlipped(true);
 				}
@@ -299,6 +301,10 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			sb.append(EnumChatFormatting.GRAY.toString());
 			sb.append(" for power data");
 			li.add(sb.toString());
+		}
+		if (is.stackTagCompound != null) {
+			int dmg = is.stackTagCompound.getInteger("damage");
+			li.add(String.format("Damage: %.1f%s", dmg*12.5F, "%"));
 		}
 	}
 }

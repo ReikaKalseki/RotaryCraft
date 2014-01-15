@@ -15,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -146,6 +147,8 @@ public class BlockEngine extends BlockModelledMachine {
 			else {
 				int metat = eng.type.ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
+				todrop.stackTagCompound = new NBTTagCompound();
+				todrop.stackTagCompound.setInteger("damage", eng.FOD);
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
@@ -187,7 +190,10 @@ public class BlockEngine extends BlockModelledMachine {
 		TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (tile == null)
 			return ret;
-		ret.add(new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.type.ordinal()));
+		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.type.ordinal());
+		ret.add(is);
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("damage", tile.FOD);
 		return ret;
 	}
 }

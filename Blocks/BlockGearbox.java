@@ -229,7 +229,10 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
-		ret.add(new ItemStack(RotaryCraft.gbxitems.itemID, 1, (metadata/4)*5+gbx.type.ordinal()));
+		ItemStack is = new ItemStack(RotaryCraft.gbxitems.itemID, 1, (metadata/4)*5+gbx.type.ordinal());
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("damage", gbx.damage);
+		ret.add(is);
 		return ret;
 	}
 }
