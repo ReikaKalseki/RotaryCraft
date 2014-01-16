@@ -33,7 +33,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
-		efficiencyOnProperMaterial = 12F;
+		efficiencyOnProperMaterial = 20F;
 		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
@@ -50,16 +50,16 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		if (b == null)
 			return 0;
 		if (b.blockMaterial == Material.grass)
-			return 12F;
+			return 24F;
 		if (b.blockMaterial == Material.ground)
-			return 12F;
+			return 24F;
 		if (b.blockMaterial == Material.sand)
-			return 12F;
+			return 24F;
 		if (b.blockID == TinkerOreHandler.getInstance().gravelOreID)
 			return 36F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == b)
-				return 12F;
+				return 24F;
 		}
 		return 1F;
 	}

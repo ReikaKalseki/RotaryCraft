@@ -43,6 +43,7 @@ import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -101,6 +102,12 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (te instanceof NBTMachine) {
 			((NBTMachine)te).setDataFromItemStackTag(is.stackTagCompound);
+		}
+		if (m == MachineRegistry.POWERBUS) {
+			((TileEntityPowerBus)te).findNetwork(world, x, y, z);
+		}
+		if (m == MachineRegistry.BUSCONTROLLER) {
+
 		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;

@@ -61,7 +61,7 @@ public enum BlockRegistry implements RegistryEnum {
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Auxiliary Engine"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Transmission Bus"
 	};
 
 	private BlockRegistry(Class cl, Material m) {

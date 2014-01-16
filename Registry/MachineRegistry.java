@@ -146,11 +146,13 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAirGun;
@@ -283,7 +285,9 @@ public enum MachineRegistry {
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
-	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal");
+	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
+	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
+	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5);
 
 	private String name;
 	private Class te;
@@ -786,6 +790,7 @@ public enum MachineRegistry {
 		case DISTILLER:
 		case MAGNETIC:
 		case CRYSTALLIZER:
+		case BUSCONTROLLER:
 			return true;
 		default:
 			return false;
@@ -876,6 +881,9 @@ public enum MachineRegistry {
 		if (this == GEARBOX) {
 			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, 0);
 		}
+		//if (this == POWERBUS) {
+		//	return new ItemStack(RotaryCraft.gbxitems.itemID, 1, 0);
+		//}
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 

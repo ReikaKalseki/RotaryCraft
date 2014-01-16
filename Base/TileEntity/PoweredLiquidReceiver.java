@@ -67,7 +67,7 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 	}
 
 	public boolean isValidFluid(Fluid f) {
-		return f.equals(this.getInputFluid());
+		return f != null && f.equals(this.getInputFluid());
 	}
 
 	@Override

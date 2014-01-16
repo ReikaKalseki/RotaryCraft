@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
@@ -23,7 +22,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -61,6 +59,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
@@ -104,23 +103,18 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
-public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
-
-	protected Random par5Random = new Random();
+public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
 	public Icon[][][][] icons = new Icon[16][16][6][8];
 
 	public BlockBasicMultiTE(int ID, Material mat) {
 		super(ID, mat);
-		this.setHardness(4F);
-		this.setResistance(15F);
-		this.setLightValue(0F);
-		if (mat == Material.iron)
-			this.setStepSound(soundMetalFootstep);
 	}
 
 	@Override
@@ -164,16 +158,6 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 		this.setBlockBounds(0, 0, 0, 1, 1, 1);
 	}
 
-	@Override
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return true;
-	}
-
 	/** Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
 	@Override
 	public abstract void registerIcons(IconRegister ico);
@@ -198,20 +182,6 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 	public int quantityDropped(Random par1Random)
 	{
 		return 1;
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z)
-	{
-		this.setBlockBounds(0F, 0F, 0F, 1F, 1F, 1F);
-		float minx = (float)minX;
-		float maxx = (float)maxX;
-		float miny = (float)minY;
-		float maxy = (float)maxY;
-		float minz = (float)minZ;
-		float maxz = (float)maxZ;
-
-		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
 	}
 
 	@Override
@@ -532,27 +502,9 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 	}
 
 	@Override
-	public final boolean canBeReplacedByLeaves(World world, int x, int y, int z)
-	{
-		return false;
-	}
-
-	@Override
 	public final boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
 	{
 		return false;
-	}
-
-	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face)
-	{
-		return 0;
-	}
-
-	@Override
-	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
-	{
-		return e instanceof EntityDragon;
 	}
 
 	@Override
@@ -619,6 +571,12 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 		}
 		if (te instanceof TileEntityBeamMirror) {
 			((TileEntityBeamMirror)te).lightsOut();
+		}
+		if (te instanceof TileEntityPowerBus) {
+			((TileEntityPowerBus)te).removeFromBus();
+		}
+		if (te instanceof TileEntityBusController) {
+			((TileEntityBusController)te).clear();
 		}
 		if (te instanceof TileEntityPiping) {
 			((TileEntityPiping)te).deleteFromAdjacentConnections(world, x, y, z);
@@ -860,6 +818,11 @@ public abstract class BlockBasicMultiTE extends Block implements IWailaBlock {
 			int ticks = ((DiscreteFunction)te).getOperationTime();
 			float sec = Math.max(0.05F, ticks/20F);
 			currenttip.add(String.format("Operation Time: %.2fs", sec));
+		}
+		if (te instanceof TileEntityBusController) {
+			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
+			if (bus != null)
+				currenttip.add(bus.toString());
 		}
 		if (te.getMachine().isEnchantable()) {
 			if (((EnchantableMachine)te).hasEnchantments()) {
