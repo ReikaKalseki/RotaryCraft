@@ -30,7 +30,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 	private HybridTank lubricant = new HybridTank("buslube", 8000);
 
-	private ForgeDirection intakeSide;
+	private ForgeDirection inputSide;
 
 	private ShaftPowerBus bus;
 
@@ -63,8 +63,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		for (int i = 0; i < inv.length; i++)
-			inv[i] = ItemStacks.gearunit.copy();
+
 	}
 
 	private int getAbsRatio(ForgeDirection dir) {
@@ -87,7 +86,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 		return 0;
 	}
 
-	private boolean isSideSpeedMode(ForgeDirection dir) {
+	public boolean isSideSpeedMode(ForgeDirection dir) {
 		return modes.get(dir);
 	}
 
@@ -101,11 +100,11 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 	}
 
 	public boolean canOutputToSide(ForgeDirection dir) {
-		return !this.isIntakingFromSide(dir) && this.hasValidItem(dir);
+		return !this.isReceivingFromSide(dir) && this.hasValidItem(dir);
 	}
 
-	public boolean isIntakingFromSide(ForgeDirection dir) {
-		return false;
+	public boolean isReceivingFromSide(ForgeDirection dir) {
+		return dir == this.getInputSide();
 	}
 
 	private boolean hasValidItem(ForgeDirection dir) {
@@ -174,7 +173,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 	}
 
 	public ForgeDirection getInputSide() {
-		return intakeSide != null ? intakeSide : ForgeDirection.EAST;
+		return inputSide != null ? inputSide : ForgeDirection.EAST;
 	}
 
 	@Override
@@ -183,7 +182,11 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 		lubricant.readFromNBT(NBT);
 
-		intakeSide = dirs[NBT.getInteger("in")];
+		inputSide = dirs[NBT.getInteger("in")];
+
+		for (int i = 2; i < 6; i++) {
+			modes.put(dirs[i], NBT.getBoolean("spd"+i));
+		}
 	}
 
 	@Override
@@ -193,6 +196,10 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 		lubricant.writeToNBT(NBT);
 
 		NBT.setInteger("in", this.getInputSide().ordinal());
+
+		for (int i = 2; i < 6; i++) {
+			NBT.setBoolean("spd"+i, modes.get(dirs[i]));
+		}
 	}
 
 	public void findNetwork(World world, int x, int y, int z) {
@@ -208,7 +215,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 				if (bus != null) {
 					bus.addBlock(this);
 					this.bus = bus;
-					intakeSide = dir;
+					inputSide = dir;
 					return;
 				}
 			}
@@ -218,7 +225,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 				if (bus != null) {
 					bus.addBlock(this);
 					this.bus = bus;
-					intakeSide = dir;
+					inputSide = dir;
 					return;
 				}
 			}

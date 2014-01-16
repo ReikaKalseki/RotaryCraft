@@ -49,6 +49,7 @@ import Reika.RotaryCraft.Containers.ContainerJet;
 import Reika.RotaryCraft.Containers.ContainerLandmine;
 import Reika.RotaryCraft.Containers.ContainerObsidian;
 import Reika.RotaryCraft.Containers.ContainerPerformance;
+import Reika.RotaryCraft.Containers.ContainerPowerBus;
 import Reika.RotaryCraft.Containers.ContainerProjector;
 import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
 import Reika.RotaryCraft.Containers.ContainerPurifier;
@@ -103,6 +104,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiLandmine;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiObsidian;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPerformance;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPowerBus;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiProjector;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPurifier;
@@ -154,6 +156,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -289,6 +292,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityCrystallizer) {
 			return new ContainerCrystallizer(player, (TileEntityCrystallizer) te);
+		}
+		if (te instanceof TileEntityPowerBus) {
+			return new ContainerPowerBus(player, (TileEntityPowerBus) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -478,6 +484,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityCrystallizer) {
 			return new GuiCrystallizer(player, (TileEntityCrystallizer) te);
+		}
+		if (te instanceof TileEntityPowerBus) {
+			return new GuiPowerBus(player, (TileEntityPowerBus) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

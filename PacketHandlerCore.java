@@ -23,6 +23,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -54,6 +55,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -89,6 +91,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
 	private EnergyToPowerBase eng;
+	private TileEntityPowerBus bus;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -505,6 +508,12 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				ItemStack is = ep.getCurrentEquippedItem();
 				is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setString("file", stringdata);
+				break;
+			case POWERBUS:
+				bus = (TileEntityPowerBus)te;
+				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[data[0]+2];
+				bus.setMode(dir, !bus.isSideSpeedMode(dir));
+				ReikaJavaLibrary.pConsole(bus.isSideSpeedMode(dir));
 				break;
 			}
 		}
