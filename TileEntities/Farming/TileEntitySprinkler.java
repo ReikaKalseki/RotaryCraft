@@ -129,7 +129,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 					for (int k = y-1; k >= 0 && !top; k--) {
 						int foundid = world.getBlockId(x+i, k, z+j);
 						int meta2 = world.getBlockMetadata(x+i, k, z+j);
-						if (rand.nextInt(20) == 0) {
+						if (rand.nextInt(15) == 0) {
 							ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
 							ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
 							if (crop != null && !crop.isRipe(meta2)) {

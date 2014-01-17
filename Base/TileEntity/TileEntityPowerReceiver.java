@@ -192,7 +192,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
 			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx, ready, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 0);
 					torquein = (int) powerin[0][1];
@@ -214,7 +214,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx, ready, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 0);
 					torquein = (int) powerin[0][1];
@@ -251,7 +251,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx2, ready2, readz2)) {
 			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx2, ready2, readz2);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 1);
 					torquein = (int) powerin[1][1];
@@ -273,7 +273,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx2, yCoord, readz2);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 1);
 					torquein = (int) powerin[1][1];
@@ -321,7 +321,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		if (this.isProvider(te1) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
 			if (id1 == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx, ready, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te1;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 0);
 					torquein = (int) powerin[0][1];
@@ -343,7 +343,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (id1 == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx, ready, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te1;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 0);
 					torquein = (int) powerin[0][1];
@@ -364,7 +364,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		if (this.isProvider(te2) && this.isIDTEMatch(worldObj, readx2, ready2, readz2)) {
 			if (id2 == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx2, ready2, readz2);
+				TileEntityShaft devicein = (TileEntityShaft)te2;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 1);
 					torquein = (int) powerin[1][1];
@@ -387,7 +387,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (id2 == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx2, ready2, readz2);
+				TileEntitySplitter devicein = (TileEntitySplitter)te2;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 1);
 					torquein = (int) powerin[1][1];
@@ -408,7 +408,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		if (this.isProvider(te3) && this.isIDTEMatch(worldObj, readx3, ready3, readz3)) {
 			if (id3 == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx3, ready3, readz3);
+				TileEntityShaft devicein = (TileEntityShaft)te3;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 2);
 					torquein = (int) powerin[2][1];
@@ -430,7 +430,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (id3 == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx3, ready3, readz3);
+				TileEntitySplitter devicein = (TileEntitySplitter)te3;
 				// ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(devicein));
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 2);
@@ -451,7 +451,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		if (this.isProvider(te4) && this.isIDTEMatch(worldObj, readx4, ready4, readz4)) {
 			if (id4 == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)worldObj.getBlockTileEntity(readx4, ready4, readz4);
+				TileEntityShaft devicein = (TileEntityShaft)te4;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein, 3);
 					torquein = (int) powerin[3][1];
@@ -474,7 +474,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			if (id4 == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)worldObj.getBlockTileEntity(readx4, ready4, readz4);
+				TileEntitySplitter devicein = (TileEntitySplitter)te4;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(devicein));
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein, 3);

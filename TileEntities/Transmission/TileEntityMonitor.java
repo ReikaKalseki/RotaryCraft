@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -49,7 +50,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, y, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein);
 					return;
@@ -58,6 +59,12 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+			}
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
@@ -70,7 +77,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein);
 					return;

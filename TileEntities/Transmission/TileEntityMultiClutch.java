@@ -35,7 +35,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
 			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein);
 					return;
@@ -56,7 +56,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein);
 					return;

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -22,6 +23,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
@@ -152,6 +154,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 	protected boolean isProvider(TileEntity te) {
 		if (te instanceof ShaftPowerEmitter)
+			return true;
+		if (te instanceof TileEntityPowerBus)
 			return true;
 		if (!(te instanceof TileEntityIOMachine))
 			return false;
@@ -288,4 +292,26 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	public abstract PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller);
+
+	public final ForgeDirection getInputForgeDirection() {
+		int dx = readx-xCoord;
+		int dy = ready-yCoord;
+		int dz = readz-zCoord;
+		if (dx == 1 && dy == 0 && dz == 0)
+			return ForgeDirection.EAST;
+		if (dx == -1 && dy == 0 && dz == 0)
+			return ForgeDirection.WEST;
+
+		if (dx == 0 && dy == 0 && dz == 1)
+			return ForgeDirection.SOUTH;
+		if (dx == 0 && dy == 0 && dz == -1)
+			return ForgeDirection.NORTH;
+
+		if (dx == 0 && dy == 1 && dz == 0)
+			return ForgeDirection.UP;
+		if (dx == 0 && dy == -1 && dz == 0)
+			return ForgeDirection.DOWN;
+
+		return ForgeDirection.UNKNOWN;
+	}
 }

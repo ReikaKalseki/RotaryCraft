@@ -353,7 +353,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 		MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, y, readz);
+			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.getBlockMetadata() >= 6) {
 				this.readFromCross(devicein);
 				return;
@@ -374,7 +374,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
+			TileEntitySplitter devicein = (TileEntitySplitter)te;
 			if (devicein.getBlockMetadata() >= 8) {
 				this.readFromSplitter(devicein);
 				//ReikaJavaLibrary.pConsole(torque+" @ "+omega);

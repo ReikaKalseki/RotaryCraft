@@ -59,10 +59,25 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		if (b.id == 4) {
+			engine.incrementRedstoneState();
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+4, engine);
 		}
 		else if (b.id < 24000) {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id, engine);
+			switch(b.id) {
+			case 0:
+				engine.decrementTorque();
+				break;
+			case 1:
+				engine.incrementTorque();
+				break;
+			case 2:
+				engine.decrementOmega();
+				break;
+			case 3:
+				engine.incrementOmega();
+				break;
+			}
 		}
 		this.initGui();
 	}

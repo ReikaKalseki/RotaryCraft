@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.client.gui.GuiButton;
@@ -5,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerPowerBus;
@@ -32,12 +42,14 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 
 		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
 
-		int[] dx = {j+66+18+2, j+66-19, j+9, j+125};
-		int[] dy = {k+8+11, k+123+11, k+66-9, k+66+18+11};
+		int[] dx = {j+103, j+103, j+49, j+139+18};
+		int[] dy = {k+26, k+134, k+66+18-4, k+66+18-4};
 
 		for (int i = 0; i < 4; i++) {
-			int v = tile.isSideSpeedMode(ForgeDirection.VALID_DIRECTIONS[i+2]) ? 18 : 0;
-			buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, "", 18, v, 0, false, file, RotaryCraft.class));
+			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
+			//int u = tile.isSideSpeedMode(dir) ? 18 : 0;
+			if (!tile.isReceivingFromSide(dir))
+				buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, "", 18, 18, 0, false, file, RotaryCraft.class));
 		}
 	}
 
@@ -47,6 +59,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[button.id+2];
 			tile.setMode(dir, !tile.isSideSpeedMode(dir));
+			ReikaJavaLibrary.pConsole(button.id+":"+dir);
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.getMinValue(), tile, ep, button.id);
 		}
 		this.initGui();

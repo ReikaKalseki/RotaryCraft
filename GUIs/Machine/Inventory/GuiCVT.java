@@ -112,10 +112,14 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 
 		if (redstone) {
-			if (button.id == 1)
+			if (button.id == 1) {
 				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ep, 0);
-			if (button.id == 2)
+				cvt.incrementCVTState(true);
+			}
+			if (button.id == 2) {
 				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+2, cvt, ep, 0);
+				cvt.incrementCVTState(false);
+			}
 		}
 		else {
 			if (button.id == 1) {

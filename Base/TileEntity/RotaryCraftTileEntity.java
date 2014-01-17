@@ -164,6 +164,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	@Override
+	@Deprecated
 	public boolean isIDTEMatch(World world, int x, int y, int z) {
 		//TileEntity te = world.getBlockTileEntity(x, y, z);
 		//if (te instanceof ShaftPowerEmitter)

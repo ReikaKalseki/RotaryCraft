@@ -247,7 +247,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, y, readz);
+			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.getBlockMetadata() >= 6) {
 				this.readFromCross(devicein);
 				return;
@@ -268,7 +268,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
+			TileEntitySplitter devicein = (TileEntitySplitter)te;
 			if (devicein.getBlockMetadata() >= 8) {
 				this.readFromSplitter(devicein);
 				return;

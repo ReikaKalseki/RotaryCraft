@@ -316,5 +316,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		addCreativeFluid("bop.springwater");
 		addCreativeFluid("poison");
 		addCreativeFluid("sewage");
+		addCreativeFluid("potion crystal");
 	}
 }

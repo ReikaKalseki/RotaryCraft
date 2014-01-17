@@ -17,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -53,7 +52,9 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		if (b.id < 16) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.REDGEAR.getMinValue(), multi, ep, b.id, multi.getNextSideForState(b.id));
+			int side = multi.getNextSideForState(b.id);
+			multi.setSideOfState(b.id, side);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.REDGEAR.getMinValue(), multi, ep, b.id, side);
 		}
 		this.initGui();
 	}

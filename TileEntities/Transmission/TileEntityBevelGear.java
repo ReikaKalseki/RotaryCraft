@@ -254,7 +254,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
 			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein);
 					return;
@@ -275,7 +275,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 				}
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, y, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein);
 					return;

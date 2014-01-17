@@ -343,7 +343,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
 			if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
 				if (m == MachineRegistry.SHAFT) {
-					TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
+					TileEntityShaft devicein = (TileEntityShaft)te;
 					if (devicein.getBlockMetadata() >= 6) {
 						this.mergeReadFromCross(devicein, 0);
 						//  return;
@@ -372,7 +372,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						torquein2 = omegain2 = 0;
 				}
 				if (m == MachineRegistry.SPLITTER) {
-					TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
+					TileEntitySplitter devicein = (TileEntitySplitter)te;
 					if (devicein.getBlockMetadata() >= 8) {
 						this.readFromSplitter(devicein);
 					}
@@ -387,7 +387,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			}
 			if (this.isProvider(te2) && this.isIDTEMatch(world, readx2, ready2, readz2)) {
 				if (m2 == MachineRegistry.SHAFT) {
-					TileEntityShaft devicein2 = (TileEntityShaft)world.getBlockTileEntity(readx2, ready2, readz2);
+					TileEntityShaft devicein2 = (TileEntityShaft)te2;
 					if (devicein2.getBlockMetadata() >= 6) {
 						this.mergeReadFromCross(devicein2, 1);
 						// ReikaChatHelper.writeInt(this.omegain2);
@@ -417,7 +417,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						torquein2 = omegain2 = 0;
 				}
 				if (m2 == MachineRegistry.SPLITTER) {
-					TileEntitySplitter devicein2 = (TileEntitySplitter)world.getBlockTileEntity(readx2, ready2, readz2);
+					TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
 					if (devicein2.getBlockMetadata() >= 8) {
 						this.readFromSplitter(devicein2);
 					}
@@ -470,7 +470,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				return;
 			}
 			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
+				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
 					this.readFromCross(devicein);
 					//ReikaChatHelper.writeInt(this.torque);
@@ -502,7 +502,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					torque = omega = 0;
 			}
 			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.getBlockMetadata() >= 8) {
 					this.readFromSplitter(devicein);
 					torque = torquein;

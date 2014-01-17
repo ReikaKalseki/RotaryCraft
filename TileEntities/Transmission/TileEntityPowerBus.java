@@ -128,6 +128,8 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 	}
 
 	public int getTorqueToSide(ForgeDirection dir) {
+		if (dir == ForgeDirection.UNKNOWN)
+			return 0;
 		int tbase = this.getTorquePerSide();
 		int ratio = this.getAbsRatio(dir);
 		if (ratio == 0)
@@ -138,6 +140,8 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 	public int getSpeedToSide(ForgeDirection dir) {
 		if (bus == null)
+			return 0;
+		if (dir == ForgeDirection.UNKNOWN)
 			return 0;
 		int sbase = bus.getSpeed();
 		int ratio = this.getAbsRatio(dir);
