@@ -190,7 +190,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -249,7 +249,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		te = worldObj.getBlockTileEntity(readx2, ready2, readz2);
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx2, ready2, readz2)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx2, ready2, readz2);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {

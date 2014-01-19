@@ -27,6 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -469,21 +470,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	}
 
 	public int getOperationTime(int stage) {
-		int time = 0;
-		switch (stage) {
-		case 1:
-			time = 900-(int)(60*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		case 2:
-			time = 400-(int)(20*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		case 3:
-			time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		case 4:
-			time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		}
-		return time;
+		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage);
 	}
 }

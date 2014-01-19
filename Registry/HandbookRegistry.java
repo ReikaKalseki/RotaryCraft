@@ -44,6 +44,7 @@ public enum HandbookRegistry {
 	FLYWHEELS("Flywheel Load Limits"),
 	TRANSFER("Basics of Power Transfer"),
 	TIERS("Machine Tiers"),
+	TIMING("Duration Time"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -82,6 +83,8 @@ public enum HandbookRegistry {
 	//HYDRAULIC(MachineRegistry.HYDRAULIC),
 	//HYLINE(MachineRegistry.HYDRAULICLINE),
 	//ROUTER(MachineRegistry.ROUTER),
+	BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
+	BUS(MachineRegistry.POWERBUS),
 
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),
@@ -905,6 +908,8 @@ public enum HandbookRegistry {
 			return MachineRegistry.COMPRESSOR.getCraftedProduct();
 		if (this == ENCHANTING)
 			return new ItemStack(Item.enchantedBook);
+		if (this == TIMING)
+			return new ItemStack(Item.pocketSundial);
 		if (this == TRANSFER)
 			return ItemStacks.gearunit;
 		if (this == ENGINES)

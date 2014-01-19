@@ -127,7 +127,7 @@ public final class ItemStacks {
 	public static final ItemStack saw = new ItemStack(RotaryCraft.borecraft, 1, 7);
 	public static final ItemStack bearing = new ItemStack(RotaryCraft.borecraft, 1, 8);
 	public static final ItemStack belt = new ItemStack(RotaryCraft.borecraft, 1, 9);
-	public static final ItemStack bearingitem = new ItemStack(RotaryCraft.borecraft, 1, 10);
+	public static final ItemStack ballbearing = new ItemStack(RotaryCraft.borecraft, 1, 10);
 	public static final ItemStack brake = new ItemStack(RotaryCraft.borecraft, 1, 11);
 	public static final ItemStack tenscoil = new ItemStack(RotaryCraft.borecraft, 1, 12);
 

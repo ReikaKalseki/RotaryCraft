@@ -189,6 +189,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
+
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
@@ -821,8 +822,11 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
-			if (bus != null)
-				currenttip.add(bus.toString());
+			if (bus != null) {
+				currenttip.add("Power Bus Receiving "+bus.getInputTorque()+" Nm @ "+bus.getSpeed()+" rad/s");
+				currenttip.add(bus.getInputPower()+"W is being split to "+bus.getTotalOutputSides()+" devices");
+				currenttip.add("(Power per side is "+bus.getInputPower()/bus.getTotalOutputSides()+"W)");
+			}
 		}
 		if (te.getMachine().isEnchantable()) {
 			if (((EnchantableMachine)te).hasEnchantments()) {

@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, DiscreteFunction
@@ -564,8 +565,6 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 	@Override
 	public int getOperationTime() {
-		int time = (10*(60-(int)(3*ReikaMathLibrary.logbase(omega, 2))))/2;
-		time *= this.getStage();
-		return time;
+		return DurationRegistry.COMPACTOR.getOperationTime(omega, this.getStage());
 	}
 }

@@ -12,9 +12,12 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerPowerBus;
@@ -47,9 +50,9 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 
 		for (int i = 0; i < 4; i++) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
-			//int u = tile.isSideSpeedMode(dir) ? 18 : 0;
-			if (!tile.isReceivingFromSide(dir))
-				buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, "", 18, 18, 0, false, file, RotaryCraft.class));
+			int u = tile.isSideSpeedMode(dir) ? 54 : 36;
+			if (tile.canHaveItemInSlot(dir))
+				buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, "", u, 36, 0, false, file, RotaryCraft.class));
 		}
 	}
 
@@ -59,10 +62,49 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[button.id+2];
 			tile.setMode(dir, !tile.isSideSpeedMode(dir));
-			ReikaJavaLibrary.pConsole(button.id+":"+dir);
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.getMinValue(), tile, ep, button.id);
 		}
 		this.initGui();
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		int[] x = {101, 101, 65, 137};
+		int[] y = {32, 104, 68, 68};
+		for (int i = 0; i < 4; i++) {
+			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
+			int dx = x[i];
+			int dy = y[i];
+			if (tile.canHaveItemInSlot(dir)) {
+				this.drawRect(dx, dy, dx+18, dy+18, this.getColorForSide(dir));
+			}
+			else {
+				String tex = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";
+				ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
+				GL11.glColor3f(1, 1, 1);
+				this.drawTexturedModalRect(dx, dy, 8, 8, 18, 18);
+			}
+		}
+	}
+
+	private int getColorForSide(ForgeDirection dir) {
+		switch(dir) {
+		case EAST:
+			return 0x44ffff00;
+		case NORTH:
+			return 0x440000ff;
+		case SOUTH:
+			return 0x44ff0000;
+		case WEST:
+			return 0x4400ff00;
+		default:
+			return 0x44ffffff;
+		}
 	}
 
 	@Override

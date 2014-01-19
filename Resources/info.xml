@@ -45,4 +45,7 @@
 	<tiers>
 		Not all machines are created equal; some are much more difficult to operate than others. A good metric of the relative position of a machine in the techtree is its power requirement, if applicable. There are exceptions to this rule, and of course different play styles can mean different paths to take, but it is generally recommended to be aware of this hierarchy. Also note that a zero minimum only means that there is no minimum cutoff, and that the effects of increased power are more complex.
 	</tiers>
+	<timing>
+		Machines which perform discrete operations often take less time per operation as the input speed increases. Hover over a machine to get its timing data. The "x" in these formulae is the input speed, and the times are in ticks (0.05s per tick).
+	</timing>
 </info>

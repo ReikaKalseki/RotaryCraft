@@ -41,6 +41,11 @@ public class ModelFin extends RotaryModelBase
 	ModelRenderer Shape2b;
 	ModelRenderer Shape2a;
 
+	ModelRenderer Shape3;
+	ModelRenderer Shape3a;
+	ModelRenderer Shape3b;
+	ModelRenderer Shape3c;
+
 	public ModelFin()
 	{
 		textureWidth = 128;
@@ -148,6 +153,31 @@ public class ModelFin extends RotaryModelBase
 		Shape2a.setTextureSize(128, 128);
 		Shape2a.mirror = true;
 		this.setRotation(Shape2a, 0F, 0F, 0F);
+
+		Shape3 = new ModelRenderer(this, 14, 17);
+		Shape3.addBox(0F, 0F, 0F, 1, 16, 1);
+		Shape3.setRotationPoint(7.5F, 24F, 7.5F);
+		Shape3.setTextureSize(128, 128);
+		Shape3.mirror = true;
+		this.setRotation(Shape3, 0F, 0F, 0F);
+		Shape3a = new ModelRenderer(this, 14, 17);
+		Shape3a.addBox(0F, 0F, 0F, 1, 16, 1);
+		Shape3a.setRotationPoint(-8.5F, 24F, 7.5F);
+		Shape3a.setTextureSize(128, 128);
+		Shape3a.mirror = true;
+		this.setRotation(Shape3a, 0F, 0F, 0F);
+		Shape3b = new ModelRenderer(this, 14, 17);
+		Shape3b.addBox(0F, 0F, 0F, 1, 16, 1);
+		Shape3b.setRotationPoint(-8.5F, 24F, -8.5F);
+		Shape3b.setTextureSize(128, 128);
+		Shape3b.mirror = true;
+		this.setRotation(Shape3b, 0F, 0F, 0F);
+		Shape3c = new ModelRenderer(this, 14, 17);
+		Shape3c.addBox(0F, 0F, 0F, 1, 16, 1);
+		Shape3c.setRotationPoint(7.5F, 24F, -8.5F);
+		Shape3c.setTextureSize(128, 128);
+		Shape3c.mirror = true;
+		this.setRotation(Shape3c, 0F, 0F, 0F);
 	}
 
 	@Override
@@ -170,6 +200,14 @@ public class ModelFin extends RotaryModelBase
 		Shape2c.render(f5);
 		Shape2b.render(f5);
 		Shape2a.render(f5);
+
+		boolean inWorld = li != null && !li.isEmpty() ? (Boolean)li.get(0) : false;
+		if (inWorld) {
+			Shape3.render(f5);
+			Shape3a.render(f5);
+			Shape3b.render(f5);
+			Shape3c.render(f5);
+		}
 	}
 
 	@Override

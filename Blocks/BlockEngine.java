@@ -147,8 +147,10 @@ public class BlockEngine extends BlockModelledMachine {
 			else {
 				int metat = eng.type.ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
-				todrop.stackTagCompound = new NBTTagCompound();
-				todrop.stackTagCompound.setInteger("damage", eng.FOD);
+				if (eng.type == EngineType.JET && eng.FOD > 0) {
+					todrop.stackTagCompound = new NBTTagCompound();
+					todrop.stackTagCompound.setInteger("damage", eng.FOD);
+				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
@@ -192,8 +194,10 @@ public class BlockEngine extends BlockModelledMachine {
 			return ret;
 		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.type.ordinal());
 		ret.add(is);
-		is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("damage", tile.FOD);
+		if (tile.type == EngineType.JET && tile.FOD > 0) {
+			is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setInteger("damage", tile.FOD);
+		}
 		return ret;
 	}
 }

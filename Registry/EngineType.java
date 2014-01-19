@@ -132,6 +132,7 @@ public enum EngineType {
 			return (int)(105*factor);
 		}
 		if (this.jetNoise()) {
+			FOD = Math.min(7, FOD);
 			return (int)((79+FOD*11)*factor);
 		}
 		if (this.turbineNoise()) {

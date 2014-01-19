@@ -37,4 +37,10 @@
 		The belt hub can be used to transport power cheaply over a large distance. Simply place two hubs such that they are able to connect (clear line of sight and in-plane connection). To connect belts, right-click one with a stack of belts, then right-click the other with the same stack. For each meter travelled, you need one additional belt item (up to a maximum of 64 blocks).
 		The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent. Shafts can only be connected if one is in output mode (shift-click with the screwdriver).
 	</belt>
+	<buscontroller>
+		The shaft power bus controller is the brain of a shaft power bus unit. This multiblock structure can distribute power intelligently depending on the number of selected outputs. This makes it far easier to use one engine for multiple machines. Each selected output receives an equal fraction of the input torque, at the input speed. The bus requires lubricant to function.
+	</buscontroller>
+	<bus>
+		The power bus pieces actually distribute the power depending on their selected options. Each side has a corresponding item slot; put a shaft or gear unit there to control the outputted speed and torque. Invalid or missing items cause the side to be ignored. Use the adjecent buttons to control the torque(τ)/speed(ω) options.
+	</bus>
 </trans>

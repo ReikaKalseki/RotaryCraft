@@ -513,7 +513,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				bus = (TileEntityPowerBus)te;
 				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[data[0]+2];
 				bus.setMode(dir, !bus.isSideSpeedMode(dir));
-				ReikaJavaLibrary.pConsole(bus.isSideSpeedMode(dir));
 				break;
 			}
 		}

@@ -1001,7 +1001,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
 						//ReikaChatHelper.writeInt(FOD);
 						if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
-							FOD++;
+							this.damageEngine();
 						if (FOD > 8)
 							FOD = 8;
 						if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
@@ -1010,7 +1010,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 								RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
 							}
 						}
-						caught.attackEntityFrom(DamageSource.generic, 1000);
+						if (!caught.isDead && !(caught instanceof EntityLivingBase && ((EntityLivingBase)caught).getHealth() < 0))
+							SoundRegistry.INGESTION.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.4F);
+						caught.attackEntityFrom(RotaryCraft.jetingest, 10000);
 						if (caught instanceof EntityPlayer) {
 							RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
 						}
@@ -1019,6 +1021,11 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				}
 			}
 		}
+	}
+
+	private void damageEngine() {
+		FOD++;
+		//SoundRegistry.JETDAMAGE.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	private boolean canDamageEngine(Entity caught) {
@@ -1396,11 +1403,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (!type.isValidFuel(is))
 			return false;
@@ -1504,7 +1506,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		int dx = x-backx;
 		int dz = z-backz;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 16; i++) {
 			ReikaWorldHelper.temperatureEnvironment(world, x+dx*i, y, z+dz*i, 800);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
@@ -1530,9 +1532,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 
 		if (temperature > 1000) {
-			for (int i = -6; i <= 6; i++) {
-				for (int j = -6; j <= 6; j++) {
-					for (int k = -6; k <= 6; k++) {
+			int r = 6;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
 						if (ConfigRegistry.BLOCKDAMAGE.getState())
 							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
 						world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
@@ -1543,7 +1546,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (!world.isRemote) {
 				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, ConfigRegistry.BLOCKDAMAGE.getState());
 				for (int m = 0; m < 6; m++)
-					world.newExplosion(null, x-4+rand.nextInt(5), y-4+rand.nextInt(5), z-4+rand.nextInt(5), 4F+rand.nextFloat(), true, ConfigRegistry.BLOCKDAMAGE.getState());
+					world.newExplosion(null, x-4+rand.nextInt(11), y-4+rand.nextInt(11), z-4+rand.nextInt(11), 4F+rand.nextFloat()*2, true, ConfigRegistry.BLOCKDAMAGE.getState());
 			}
 		}
 	}
@@ -1552,6 +1555,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		double vx = (x-backx)/2D;
 		double vz = (z-backz)/2D;
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2*rand.nextFloat(), false);
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 1, 0.5F);
 		for (int i = 0; i < 32; i++) {
 			String part;
 			if (i%2 == 0)

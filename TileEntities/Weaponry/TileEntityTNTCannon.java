@@ -31,6 +31,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	public boolean isCreative = false;
 
+	//private final ArrayList<EntityTNTPrimed> fired = new ArrayList();
+
 	//Make torque affect max incline angle, speed max distance
 
 	@Override
@@ -75,6 +77,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 			this.calcTarget(world, x, y, z);
 		if (this.canFire())
 			this.fire(world, x, y, z);
+		//this.syncTNTData(world, x, y, z);
 		if (targetMode) {
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(256, 256, 256);
 			List in = world.getEntitiesWithinAABB(EntityTNTPrimed.class, box);
@@ -95,6 +98,29 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 				}
 			}
 		}
+	}
+	/*
+	private void syncTNTData(World world, int x, int y, int z) {
+		if (!world.isRemote)
+			return;
+		Iterator<EntityTNTPrimed> it = fired.iterator();
+		while (it.hasNext()) {
+			EntityTNTPrimed tnt = it.next();
+			if (tnt.ticksExisted < this.getMinFuse()) {
+				//ReikaJavaLibrary.pConsole(tnt+":"+this.getSide());
+				tnt.fuse = this.getFuseTime();
+			}
+			else {
+				if (tnt.fuse < 0)
+					tnt.setDead();
+				if (tnt.isDead)
+					it.remove();
+			}
+		}
+	}*/
+
+	private int getMinFuse() {
+		return 10;
 	}
 
 	private void calcTarget(World world, int x, int y, int z) {
@@ -132,13 +158,18 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 			tnt.motionX = xyz[0];
 			tnt.motionY = xyz[1];
 			tnt.motionZ = xyz[2];
-			tnt.fuse = 80;
+			tnt.fuse = this.getFuseTime();
 			if (!world.isRemote) {
 				tnt.velocityChanged = true;
 				world.spawnEntityInWorld(tnt);
 			}
+			//fired.add(tnt);
 		}
 		return true;
+	}
+
+	private int getFuseTime() {
+		return Math.max(this.getMinFuse(), 80);
 	}
 
 	/**

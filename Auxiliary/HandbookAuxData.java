@@ -35,6 +35,7 @@ import Reika.DragonAPI.Instantiable.Data.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
@@ -47,6 +48,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -267,8 +269,7 @@ public final class HandbookAuxData {
 		}
 	}
 
-	public static void drawPage(FontRenderer f, int screen, int page, int subpage, int dx, int dy) {
-		RenderItem ri = new RenderItem();
+	public static void drawPage(FontRenderer f, RenderItem ri, int screen, int page, int subpage, int dx, int dy) {
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		if (h.isMachine() || h.isTrans() || h.isEngine()) {
 			List<ItemStack> out = h.getCrafting();
@@ -450,7 +451,7 @@ public final class HandbookAuxData {
 		}
 	}
 
-	public static void drawGraphics(HandbookRegistry h, int posX, int posY, int xSize, int ySize, FontRenderer font, int subpage) {
+	public static void drawGraphics(HandbookRegistry h, int posX, int posY, int xSize, int ySize, FontRenderer font, RenderItem item, int subpage) {
 		try {
 			if (h == HandbookRegistry.TERMS) {
 				int xc = posX+xSize/2; int yc = posY+43; int r = 35;
@@ -462,8 +463,7 @@ public final class HandbookAuxData {
 				String s = "One radian";
 				font.drawString(s, xc+r+10, yc-4, 0x000000);
 			}
-
-			if (h == HandbookRegistry.PHYSICS) {
+			else if (h == HandbookRegistry.PHYSICS) {
 				int xc = posX+xSize/8; int yc = posY+45; int r = 5;
 				ReikaGuiAPI.instance.drawCircle(xc, yc, r, 0);
 				ReikaGuiAPI.instance.drawLine(xc, yc, xc+45, yc, 0x0000ff);
@@ -493,7 +493,7 @@ public final class HandbookAuxData {
 				font.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
 			}
 			if (h == HandbookRegistry.BAITBOX && subpage == 1) {
-				RenderItem ri = new RenderItem();
+				RenderItem ri = item;
 				int k = (int)((System.nanoTime()/2000000000)%MobBait.baitList.length);
 				MobBait b = MobBait.baitList[k];
 				int u = b.getMobIconU();
@@ -511,8 +511,8 @@ public final class HandbookAuxData {
 				font.drawString("Repellent", posX+110, posY+48, 0);
 				//RenderManager.instance.renderEntityWithPosYaw(new EntityCreeper(Minecraft.getMinecraft().theWorld), 120, 60, 0, 0, 0);
 			}
-			if (h == HandbookRegistry.TERRA && subpage == 1) {
-				RenderItem ri = new RenderItem();
+			else if (h == HandbookRegistry.TERRA && subpage == 1) {
+				RenderItem ri = item;
 				ArrayList<Object[]> transforms = TileEntityTerraformer.getTransformList();
 				int time = 2000000000;
 				int k = (int)((System.nanoTime()/time)%transforms.size());
@@ -553,7 +553,7 @@ public final class HandbookAuxData {
 					ReikaGuiAPI.instance.drawItemStack(ri, font, is, posX+190, posY+8+i*18);
 				}
 			}
-			if (h == HandbookRegistry.TIERS) {
+			else if (h == HandbookRegistry.TIERS) {
 				int maxw = 11;
 				NavigableSet<Integer> s = powerData.keySet();
 				int t = 0;
@@ -572,13 +572,42 @@ public final class HandbookAuxData {
 							}
 							int x = posX+k*18+10;
 							int y = posY+n*18+29;
-							ReikaGuiAPI.instance.drawItemStackWithTooltip(new RenderItem(), font, is, x, y);
+							ReikaGuiAPI.instance.drawItemStackWithTooltip(item, font, is, x, y);
 							k++;
 						}
 					}
 					t++;
 				}
 				RenderHelper.disableStandardItemLighting();
+			}
+			else if (h == HandbookRegistry.TIMING) {
+				int k = 0;
+				int n = 0;
+				for (int i = 0; i < DurationRegistry.durationList.length; i++) {
+					DurationRegistry d = DurationRegistry.durationList[i];
+					MachineRegistry m = d.getMachine();
+					ItemStack is = m.getCraftedProduct();
+					int maxw = 11;
+					if (k > maxw) {
+						k = 0;
+						n++;
+					}
+					int x = posX+k*18+10;
+					int y = posY+n*18+29;
+
+					ReikaGuiAPI.instance.drawItemStack(item, font, is, x, y);
+
+					GL11.glColor4f(1, 1, 1, 1);
+					if (ReikaGuiAPI.instance.isMouseInBox(x, x+18, y, y+18)) {
+						for (int j = 0; j < d.getNumberStages(); j++) {
+							//ReikaGuiAPI.instance.drawTooltipAt(font, d.getDisplayTime(j), mx, my);
+							ReikaRenderHelper.disableLighting();
+							font.drawString(d.getDisplayTime(j), posX+10, posY+150+j*10, 0xffffff);
+						}
+					}
+
+					k++;
+				}
 			}
 		}
 		catch (Exception e) {

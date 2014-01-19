@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelFin;
@@ -97,7 +98,7 @@ public class RenderFin extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isInWorld()), -tile.phi, 0);
 		// else
 		//var15.renderAll();
 		if (tile.isInWorld())

@@ -75,6 +75,8 @@ public class GuiHandbook extends GuiScreen
 
 	private static final RenderBlocks rb = new RenderBlocks();
 
+	private static final RenderItem ri = new RenderItem();
+
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
 	{
 		//super();
@@ -295,7 +297,7 @@ public class GuiHandbook extends GuiScreen
 		int posX = (width - xSize) / 2;
 		int posY = (height - ySize) / 2;
 		try {
-			HandbookAuxData.drawPage(fontRenderer, screen, page, subpage, posX, posY);
+			HandbookAuxData.drawPage(fontRenderer, ri, screen, page, subpage, posX, posY);
 		}
 		catch (Exception e) {
 			ReikaChatHelper.write(Arrays.toString(e.getStackTrace()));
@@ -322,7 +324,7 @@ public class GuiHandbook extends GuiScreen
 
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 
-		HandbookAuxData.drawGraphics(h, posX, posY, xSize, ySize, fontRenderer, subpage);
+		HandbookAuxData.drawGraphics(h, posX, posY, xSize, ySize, fontRenderer, ri, subpage);
 	}
 
 	@Override

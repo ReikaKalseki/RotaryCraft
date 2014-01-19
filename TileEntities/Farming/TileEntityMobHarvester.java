@@ -20,11 +20,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -62,11 +62,10 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 				//this.laser = true;
 				world.markBlockForRenderUpdate(x, y, z);
 				if (ep != null && this.getDamage() > 0) {
-					ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getDamage());
+					ent.attackEntityFrom(new HarvesterDamage(this), this.getDamage());
 					if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)
 						ReikaEntityHelper.dropHead(ent);
-					if (this.getEnchantment(Enchantment.looting) > 0)
-						; //Needs some way to fetch drops from entity
+					//Looting is handled with the LivingDropsEvent
 					if (this.getEnchantment(Enchantment.fireAspect) > 0)
 						ent.setFire(this.getEnchantment(Enchantment.fireAspect)*2);
 				}
@@ -109,6 +108,10 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 			enchantments.put(Enchantment.looting, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.looting, is));
 			return true;
 		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is))	 {
+			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
+			return true;
+		}
 		return false;
 	}
 
@@ -118,6 +121,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		li.add(Enchantment.fireAspect);
 		li.add(Enchantment.silkTouch);
 		li.add(Enchantment.looting);
+		li.add(Enchantment.infinity);
 		return li;
 	}
 

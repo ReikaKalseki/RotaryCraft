@@ -289,10 +289,10 @@ public enum MachineRegistry {
 	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
 	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5);
 
-	private String name;
-	private Class te;
-	private Class blockClass;
-	private int meta;
+	private final String name;
+	private final Class te;
+	private final Class blockClass;
+	private final int meta;
 	private boolean hasRender = false;
 	private String renderClass;
 	private int rollover;

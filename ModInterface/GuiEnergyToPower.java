@@ -53,6 +53,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
 
 		buttonList.add(new GuiButton(4, SHIFT+j+xSize-20-inset, k+ySize-30-48+50, 20, 20, ""));
+
 	}
 
 	@Override
@@ -66,16 +67,16 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id, engine);
 			switch(b.id) {
 			case 0:
-				engine.decrementTorque();
+				//engine.decrementTorque();
 				break;
 			case 1:
-				engine.incrementTorque();
+				//engine.incrementTorque();
 				break;
 			case 2:
-				engine.decrementOmega();
+				//engine.decrementOmega();
 				break;
 			case 3:
-				engine.incrementOmega();
+				//engine.incrementOmega();
 				break;
 			}
 		}

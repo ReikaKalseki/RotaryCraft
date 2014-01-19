@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -51,6 +52,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	private HybridTank tank = new HybridTank("gear", MAXLUBE);
 
 	public MaterialRegistry type;
+
+	private boolean lastPower;
 
 	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
@@ -138,9 +141,13 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		if (type == null)
 			type = MaterialRegistry.STEEL;
 		tickcount++;
-		power = omega*torque;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
+
+		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
+			ratio = -ratio;
+
 		this.transferPower(world, x, y, z, meta);
+		power = (long)omega*(long)torque;
 		if (tickcount >= 20) { // Every 1s
 			this.getLube(world, x, y, z, this.getBlockMetadata());
 			tickcount = 0;
@@ -153,6 +160,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		}
 
 		this.basicPowerReceiver();
+		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
 	public void getLube(World world, int x, int y, int z, int metadata) {
@@ -196,7 +204,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			else if (type.consumesLubricant()) {
 				if (!tank.isEmpty() && omega > 0) {
 					int chance = (type.ordinal()+1);
-					if (rand.nextInt(chance) == 0)
+					if (rand.nextInt(chance*4) == 0)
 						tank.removeLiquid(Math.max(1, (int)ReikaMathLibrary.logbase(omega, 2)/4));
 				}
 			}

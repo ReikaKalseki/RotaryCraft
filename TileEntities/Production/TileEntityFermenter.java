@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
@@ -523,7 +524,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public int getOperationTime() {
-		int base = 600-(int)(40*ReikaMathLibrary.logbase(omega, 2));
+		int base = DurationRegistry.FERMENTER.getOperationTime(omega);
 		return (int)(base/this.getFermentRate());
 	}
 }

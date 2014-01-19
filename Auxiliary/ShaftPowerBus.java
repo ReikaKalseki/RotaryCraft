@@ -29,26 +29,9 @@ public class ShaftPowerBus {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Hub @ ");
-		sb.append(hub.xCoord);
-		sb.append(",");
-		sb.append(hub.yCoord);
-		sb.append(",");
-		sb.append(hub.zCoord);
-		sb.append(" ");
-		sb.append(String.format("(%d Nm @ %d rad/s)", hub.torque, hub.omega));
-		sb.append("  ");
-		for (int i = 0; i < blocks.size(); i++) {
-			TileEntityPowerBus te = blocks.get(i);
-			sb.append("[");
-			sb.append(te.xCoord);
-			sb.append(",");
-			sb.append(te.yCoord);
-			sb.append(",");
-			sb.append(te.zCoord);
-			sb.append("]");
-			sb.append(" ");
-		}
+		sb.append("Power Bus Receiving "+this.getInputTorque()+" Nm @ "+this.getSpeed()+" rad/s");
+		sb.append(this.getInputPower()+"W is being split to "+this.getTotalOutputSides()+" devices");
+		sb.append("(Power per side is "+this.getInputPower()/this.getTotalOutputSides()+"W)");
 		return sb.toString();
 	}
 

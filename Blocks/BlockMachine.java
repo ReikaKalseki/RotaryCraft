@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -47,13 +48,14 @@ public class BlockMachine extends BlockBasicMultiTE {
 			icons[MachineRegistry.LAMP.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:lamp");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.EMP.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
-
-		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.FUELENHANCER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
-
-		for (int i = 0; i < 6; i++)
 			icons[MachineRegistry.SPILLER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
 		icons[MachineRegistry.SPILLER.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:spiller");
+
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.NORTH.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_north");
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.EAST.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_east");
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.SOUTH.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_south");
+		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.WEST.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_west");
 	}
 }

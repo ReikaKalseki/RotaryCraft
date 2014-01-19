@@ -72,6 +72,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id == 9)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMaxValue(), splitter, ep, 0);
 		this.updateScreen();
+		this.updateMode(mode);
 
 	}
 

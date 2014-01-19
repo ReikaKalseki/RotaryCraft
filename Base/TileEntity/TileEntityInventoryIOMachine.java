@@ -52,4 +52,9 @@ public abstract class TileEntityInventoryIOMachine extends TileEntityIOMachine i
 
 	public void closeChest() {}
 
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
 }

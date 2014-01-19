@@ -19,6 +19,7 @@ import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction {
@@ -177,7 +178,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public int getOperationTime() {
-		return (400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+		return DurationRegistry.MAGNETIZER.getOperationTime(omega);
 	}
 
 }

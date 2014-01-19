@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
@@ -492,6 +493,6 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 
 	@Override
 	public int getOperationTime() {
-		return 200-(int)(10*ReikaMathLibrary.logbase(omega, 2));
+		return DurationRegistry.HEATER.getOperationTime(omega);
 	}
 }

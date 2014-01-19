@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction {
@@ -377,6 +378,6 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	@Override
 	public int getOperationTime() {
-		return 800-(int)(60*ReikaMathLibrary.logbase(omega, 2));
+		return DurationRegistry.OBSIDIAN.getOperationTime(omega);
 	}
 }

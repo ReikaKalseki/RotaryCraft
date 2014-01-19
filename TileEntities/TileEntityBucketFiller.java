@@ -23,12 +23,12 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
@@ -257,6 +257,6 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	@Override
 	public int getOperationTime() {
-		return 200-(int)(20*ReikaMathLibrary.logbase(omega, 2));
+		return DurationRegistry.BUCKETFILLER.getOperationTime(omega);
 	}
 }

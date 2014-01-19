@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -254,7 +255,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	@Override
 	public int getOperationTime() {
-		return Math.max(1, 400 - (int)(24*ReikaMathLibrary.logbase(omega-MINSPEED+1, 2)));
+		return DurationRegistry.CRYSTALLIZER.getOperationTime(Math.max(0, omega-MINSPEED));
 	}
 
 }

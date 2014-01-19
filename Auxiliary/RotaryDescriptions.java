@@ -204,6 +204,11 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = transtabs[i];
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase());
+
+			if (XMLInterface.NULL_VALUE.equals(desc))
+				desc = "There is no handbook data for this machine yet.";
+			//ReikaJavaLibrary.pConsole(h.name().toLowerCase()+":"+desc);
+
 			desc = String.format(desc, machineData.get(m));
 			addEntry(h, desc);
 		}

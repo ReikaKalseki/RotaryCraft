@@ -74,14 +74,23 @@ public class BlockDMachine extends BlockBasicMultiTE {
 			icons[MachineRegistry.SORTING.getMachineMetadata()][j][1][0] = ico.registerIcon("RotaryCraft:sorter_top");
 		}
 
-		//2 is perfect
-		//3 *red side missingtex
-		//1 - flip red/green *green side missingtex
-		//0 - green->blue, blue->red, red->green *blue side missingtex
-
 		icons[k][1][4][0] = ico.registerIcon("RotaryCraft:sorter_input");
 		icons[k][0][5][0] = ico.registerIcon("RotaryCraft:sorter_input");
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:sorter_input");
 		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:sorter_input");
+
+		k = MachineRegistry.BUSCONTROLLER.getMachineMetadata();
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 4; j++) {
+				icons[k][j][i][0] = ico.registerIcon("RotaryCraft:buscontroller");
+				icons[k][j][0][0] = ico.registerIcon("RotaryCraft:steel");
+				icons[k][j][1][0] = ico.registerIcon("RotaryCraft:steel");
+			}
+		}
+
+		icons[k][0][5][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[k][1][4][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:borer_back");
+		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:borer_back");
 	}
 }

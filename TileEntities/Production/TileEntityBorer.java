@@ -43,6 +43,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -571,7 +572,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	@Override
 	public int getOperationTime() {
-		int base = 720-(int)(40*ReikaMathLibrary.logbase(omega, 2));
+		int base = DurationRegistry.BORER.getOperationTime(omega);
 		float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency));
 		return (int)(base/ench);
 	}

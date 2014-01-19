@@ -9,14 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBusController extends TileEntityPowerReceiver {
+public class TileEntityBusController extends PoweredLiquidReceiver {
 
 	private ShaftPowerBus bus = new ShaftPowerBus(this);
+
+	private StepTimer timer = new StepTimer(20);
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -40,8 +47,21 @@ public class TileEntityBusController extends TileEntityPowerReceiver {
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, false);
+
+		timer.update();
+
+		if (tank.isEmpty()) {
+			torque = 0;
+			omega = 0;
+		}
+		else {
+			if (timer.checkCap())
+				tank.removeLiquid(1);
+		}
+
 		power = (long)torque*(long)omega;
 		if (tickcount%10 == 0)
 			bus.update();
@@ -80,6 +100,40 @@ public class TileEntityBusController extends TileEntityPowerReceiver {
 	public void clear() {
 		bus.clear();
 		bus = null;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		tank.readFromNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return FluidRegistry.getFluid("lubricant");
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY != 0;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 8000;
 	}
 
 }

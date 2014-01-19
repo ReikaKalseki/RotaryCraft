@@ -19,12 +19,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -192,6 +194,8 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			}
 			if (this.isBedrock(id))
 				return true;
+			if (id == RotaryCraft.bedrockslice.blockID)
+				return true;
 			if (id == 10 || id == 11) //If lava
 				return false;
 		}
@@ -201,7 +205,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	private boolean isBedrock(int id) {
 		if (id == Block.bedrock.blockID)
 			return true;
-		if (id == RotaryCraft.bedrockslice.blockID)
+		if (id == FactorizationHandler.getInstance().bedrockID)
 			return true;
 		return false;
 	}
@@ -368,6 +372,6 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	@Override
 	public int getOperationTime() {
-		return 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+		return DurationRegistry.BEDROCK.getOperationTime(omega);
 	}
 }

@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -333,6 +334,6 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	@Override
 	public int getOperationTime() {
-		return 4*(int)(50D/(1+ReikaMathLibrary.logbase(omega, 2)));
+		return DurationRegistry.PUMP.getOperationTime(omega);
 	}
 }

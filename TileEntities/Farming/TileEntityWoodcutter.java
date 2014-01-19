@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction {
@@ -577,7 +578,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	@Override
 	public int getOperationTime() {
 		if (ConfigRegistry.INSTACUT.getState()) {
-			int base = (300-(int)(20*ReikaMathLibrary.logbase(omega, 2)))/8;
+			int base = DurationRegistry.WOODCUTTER.getOperationTime(omega);
 			float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency));
 			return (int)(base/ench);
 		}

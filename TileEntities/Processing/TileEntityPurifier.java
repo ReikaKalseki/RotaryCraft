@@ -20,13 +20,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
@@ -278,7 +278,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 
 	@Override
 	public int getOperationTime() {
-		return 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+		return DurationRegistry.PURIFIER.getOperationTime(omega);
 	}
 
 }

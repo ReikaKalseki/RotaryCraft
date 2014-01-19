@@ -13,26 +13,31 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoryIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPowerBus extends InventoriedRCTileEntity implements InertIInv {
+public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv {
 
 	private ItemStack[] inv = new ItemStack[4];
 	private HashMap<ForgeDirection, Boolean> modes = new HashMap();
 
-	private HybridTank lubricant = new HybridTank("buslube", 8000);
-
 	private ForgeDirection inputSide;
 
 	private ShaftPowerBus bus;
+
+	private int hubX = Integer.MIN_VALUE;
+	private int hubY = Integer.MIN_VALUE;
+	private int hubZ = Integer.MIN_VALUE;
 
 	public TileEntityPowerBus() {
 		for (int i = 2; i < 6; i++) {
@@ -63,7 +68,25 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (bus == null && this.hasHubCoordinates()) {
+			MachineRegistry m = MachineRegistry.getMachine(world, hubX, hubY, hubZ);
+			if (m == MachineRegistry.BUSCONTROLLER) {
+				TileEntityBusController hub = (TileEntityBusController)world.getBlockTileEntity(hubX, hubY, hubZ);
+				if (hub != null) {
+					ShaftPowerBus bus = hub.getBus();
+					this.configureBusData(bus);
+				}
+			}
+		}
+	}
 
+	public boolean canHaveItemInSlot(ForgeDirection dir) {
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
+		return m != MachineRegistry.BUSCONTROLLER && m != MachineRegistry.POWERBUS;
+	}
+
+	private boolean hasHubCoordinates() {
+		return hubX != Integer.MIN_VALUE && hubY != Integer.MIN_VALUE && hubZ != Integer.MIN_VALUE;
 	}
 
 	private int getAbsRatio(ForgeDirection dir) {
@@ -184,26 +207,59 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		lubricant.readFromNBT(NBT);
-
 		inputSide = dirs[NBT.getInteger("in")];
 
 		for (int i = 2; i < 6; i++) {
 			modes.put(dirs[i], NBT.getBoolean("spd"+i));
 		}
+
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		inv = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < inv.length)
+			{
+				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
+
+		hubX = NBT.getInteger("hx");
+		hubY = NBT.getInteger("hy");
+		hubZ = NBT.getInteger("hz");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		lubricant.writeToNBT(NBT);
-
 		NBT.setInteger("in", this.getInputSide().ordinal());
 
 		for (int i = 2; i < 6; i++) {
 			NBT.setBoolean("spd"+i, modes.get(dirs[i]));
 		}
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++)
+		{
+			if (inv[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
+
+		NBT.setInteger("hx", hubX);
+		NBT.setInteger("hy", hubY);
+		NBT.setInteger("hz", hubZ);
 	}
 
 	public void findNetwork(World world, int x, int y, int z) {
@@ -217,8 +273,7 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 				TileEntityBusController te = (TileEntityBusController)world.getBlockTileEntity(dx, dy, dz);
 				ShaftPowerBus bus = te.getBus();
 				if (bus != null) {
-					bus.addBlock(this);
-					this.bus = bus;
+					this.configureBusData(bus);
 					inputSide = dir;
 					return;
 				}
@@ -227,13 +282,21 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 				TileEntityPowerBus te = (TileEntityPowerBus)world.getBlockTileEntity(dx, dy, dz);
 				ShaftPowerBus bus = te.getBus();
 				if (bus != null) {
-					bus.addBlock(this);
-					this.bus = bus;
+					this.configureBusData(bus);
 					inputSide = dir;
 					return;
 				}
 			}
 		}
+	}
+
+	private void configureBusData(ShaftPowerBus bus) {
+		bus.addBlock(this);
+		this.bus = bus;
+		TileEntityBusController hub = bus.getController();
+		hubX = hub.xCoord;
+		hubY = hub.yCoord;
+		hubZ = hub.zCoord;
 	}
 
 	public void removeFromBus() {
@@ -247,5 +310,15 @@ public class TileEntityPowerBus extends InventoriedRCTileEntity implements Inert
 
 	public void clearBus() {
 		bus = null;
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		return bus != null && bus.getController() != null ? bus.getController().getPowerSources(io, caller) : new PowerSourceList();
+	}
+
+	@Override
+	public boolean canProvidePower() {
+		return true;
 	}
 }

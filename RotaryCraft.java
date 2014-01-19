@@ -11,11 +11,14 @@ package Reika.RotaryCraft;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -42,12 +46,15 @@ import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
+import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
+import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -141,6 +148,10 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final Fluid jetFuelFluid = new Fluid("jet fuel").setDensity(810).setViscosity(800);//.setColor(0xFB5C90);
 	public static final Fluid lubeFluid = new Fluid("lubricant").setDensity(750).setViscosity(1200);//.setColor(0xE4E18E);
 	public static final Fluid ethanolFluid = new Fluid("rc ethanol").setDensity(789).setViscosity(950);//.setColor(0x5CC5B2);
+
+	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
+
+	private static final Random rand = new Random();
 
 	public static Item shaftcraft;
 	public static Item enginecraft;
@@ -380,6 +391,31 @@ public class RotaryCraft extends DragonAPIMod {
 						event.distance = Math.min(event.distance, 25);
 				}
 			}
+		}
+	}
+
+	@ForgeSubscribe
+	public void enforceHarvesterLooting(LivingDropsEvent ev) {
+		if (ev.source instanceof HarvesterDamage) {
+			HarvesterDamage dmg = (HarvesterDamage)ev.source;
+			int looting = dmg.getLootingLevel();
+			EntityLivingBase e = ev.entityLiving;
+			ArrayList<EntityItem> li = ev.drops;
+			li.clear();
+			e.captureDrops = true;
+			try {
+				ReikaObfuscationHelper.getMethod("dropFewItems").invoke(e, true, looting);
+				ReikaObfuscationHelper.getMethod("dropEquipment").invoke(e, true, dmg.hasInfinity() ? 100 : looting*4);
+				int rem = rand.nextInt(200) - looting*4;
+				if (rem <= 5 || dmg.hasInfinity())
+					ReikaObfuscationHelper.getMethod("dropRareDrop").invoke(e, 1);
+			}
+			catch (Exception ex) {
+				logger.debug("Could not fire harvester drops event!");
+				if (logger.shouldDebug())
+					ex.printStackTrace();
+			}
+			e.captureDrops = false;
 		}
 	}
 

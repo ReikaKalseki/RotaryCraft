@@ -29,7 +29,6 @@ import Reika.DragonAPI.Instantiable.Data.ColumnArray;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -37,6 +36,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {
@@ -387,6 +387,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 	@Override
 	public int getOperationTime() {
-		return 2*(400-(int)(20*ReikaMathLibrary.logbase(omega, 2)));
+		return DurationRegistry.TERRAFORMER.getOperationTime(omega);
 	}
 }

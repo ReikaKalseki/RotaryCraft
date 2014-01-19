@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -437,6 +438,6 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 
 	@Override
 	public int getOperationTime() {
-		return (3600-(int)(240*ReikaMathLibrary.logbase(omega, 2)))/4;
+		return DurationRegistry.GRINDER.getOperationTime(omega);
 	}
 }

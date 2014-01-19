@@ -59,7 +59,9 @@ public enum SoundRegistry implements SoundList {
 	BELT("#belt"),
 	FAN("#fan"),
 	SPARK("spark"),
-	DYNAMO("#dynamo");
+	DYNAMO("#dynamo"),
+	JETDAMAGE("jetdamage"),
+	INGESTION("ingest_short");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

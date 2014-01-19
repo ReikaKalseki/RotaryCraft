@@ -331,6 +331,10 @@ public class RotaryRecipes {
 		MachineRegistry.SORTING.addCrafting("SHS", " C ", "P P", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'H', Block.hopperBlock, 'C', ItemStacks.pcb);
 
 		MachineRegistry.CRYSTALLIZER.addCrafting("SFS", "FIF", "BBB", 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel, 'F', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'I', ItemStacks.impeller);
+
+		MachineRegistry.POWERBUS.addCrafting("SMS", "MCM", "SMS", 'S', ItemStacks.steelingot, 'M', ItemStacks.bearing, 'C', ItemStacks.belt);
+
+		MachineRegistry.BUSCONTROLLER.addCrafting("SMS", "MCM", "SMS", 'S', ItemStacks.steelingot, 'M', ItemStacks.bearing, 'C', ItemStacks.pcb);
 	}
 
 	private static void addCraftItems() {
@@ -416,9 +420,9 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.belt, DifficultyEffects.BELTCRAFT.getInt()), new Object[]{
 			"LLL", "LSL", "LLL", 'L', Item.leather, 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.bearing, new Object[]{
-				"LLL", "LSL", "LLL", 'L', ItemStacks.bearingitem, 'S', ItemStacks.steelingot});
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.bearingitem, 4), ItemStacks.steelingot);
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.bearingitem, 16), "SS", "SS", 'S', ItemStacks.steelingot);
+				"LLL", "LSL", "LLL", 'L', ItemStacks.ballbearing, 'S', ItemStacks.steelingot});
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, 4), ItemStacks.steelingot);
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, 16), "SS", "SS", 'S', ItemStacks.steelingot);
 
 		GameRegistry.addRecipe(ItemStacks.brake, new Object[]{
 				" g ", "SBS", " G ", 'g', ItemStacks.gearunit, 'G', ItemStacks.steelgear, 'S', ItemStacks.shaftitem, 'B', ItemStacks.bearing});

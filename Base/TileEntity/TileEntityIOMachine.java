@@ -23,7 +23,6 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
@@ -154,8 +153,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 	protected boolean isProvider(TileEntity te) {
 		if (te instanceof ShaftPowerEmitter)
-			return true;
-		if (te instanceof TileEntityPowerBus)
 			return true;
 		if (!(te instanceof TileEntityIOMachine))
 			return false;
