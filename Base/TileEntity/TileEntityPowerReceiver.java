@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -20,6 +21,7 @@ import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
@@ -203,6 +205,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
 			}
@@ -261,6 +269,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+			}
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx2, ready2, readz2);
@@ -332,6 +346,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+			if (id1 == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te1;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
 			if (te1 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx, ready, readz);
 			}
@@ -376,6 +396,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+			if (id2 == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
 			if (te2 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx2, ready2, readz2);
 			}
@@ -419,6 +445,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+			if (id3 == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te3;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
 			if (te3 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx3, ready3, readz3);
 			}
@@ -461,6 +493,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+			}
+			if (id4 == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te4;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (te4 instanceof SimpleProvider) {
 				this.copyStandardPower(worldObj, readx4, ready4, readz4);

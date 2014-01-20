@@ -16,17 +16,17 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction {
-	public static final int FALLOFF = 128; // rad/s per spawn tick
 	public static final int BASEDELAY = 800; //40s default max spawner delay
 
 	public boolean disable;
@@ -89,12 +89,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			worldObj.spawnParticle("reddust", var11, var3, var15, 0.0D, 0.0D, 0.0D);
 			worldObj.spawnParticle("crit", var1, var3, var5, -0.3+0.6*worldObj.rand.nextFloat(), 0.4*worldObj.rand.nextFloat(), -0.3+0.6*worldObj.rand.nextFloat());
 		}
-
-		// This is to hide the particle effects
-		//tile.xCoord = 0;
-		//tile.yCoord = 0;
-		//tile.zCoord = 0;
-		//ReikaChatHelper.writeInt(tile.xCoord);
 	}
 
 	private void applyToSpawner(World world, int x, int y, int z) {
@@ -115,8 +109,9 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		this.hijackSpawn(world, x, y-1, z, tile);
 	}
 
-	private int getNumberSpawns(World world, int x, int y, int z, Entity ent) {
-		int num = ReikaChunkHelper.getChunkRangePopln(world, ent.getClass(), x-32, z-32, x+32, z+32);
+	private int getNumberSpawns(World world, int x, int y, int z, Class ent) {
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8);
+		int num = world.getEntitiesWithinAABB(ent, box).size();
 		return num;
 	}
 
@@ -125,10 +120,13 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		if (tile == null)
 			return false;
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
-		String mobname = lgc.getEntityNameToSpawn();
-		Entity ent = EntityList.createEntityByName(mobname, world);
+		Class ent = this.getEntityClass(lgc);
 		int num = this.getNumberSpawns(world, x, y, z, ent);
-		return (num < this.getSpawnLimit());
+		return num < this.getSpawnLimit();
+	}
+
+	private Class getEntityClass(MobSpawnerBaseLogic lgc) {
+		return (Class)EntityList.stringToClassMapping.get(lgc.getEntityNameToSpawn());
 	}
 
 	private int getSpawnLimit() {
@@ -155,7 +153,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	public boolean isValidLocation(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y-1, z);
-		return (id == Block.mobSpawner.blockID);
+		return id == Block.mobSpawner.blockID;
 	}
 
 	private void hijackSpawn(World world, int x, int y, int z, TileEntityMobSpawner tile) //y = y-1, since spawner below
@@ -190,34 +188,27 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 			hijackdelay = this.getDelay();
 
-			boolean var12 = false;
-
-			for (int var2 = 0; var2 < spawnCount; ++var2)
+			for (int i = 0; i < spawnCount; ++i)
 			{
-				Entity var13 = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
+				Entity toSpawn = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
 
 				// This is the max-6 code int var4 = world.getEntitiesWithinAABB(var13.getClass(), AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)x, (double)y, (double)z, (double)(x + 1), (double)(y + 1), (double)(z + 1)).expand((double)(this.spawnRange * 2), 4.0D, (double)(this.spawnRange * 2))).size();
 
-				if (var13 != null)
+				if (toSpawn != null)
 				{
 					var5 = x + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange;
 					double var7 = y + world.rand.nextInt(3) - 1;
 					double var9 = z + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange;
-					EntityLiving var11 = var13 instanceof EntityLiving ? (EntityLiving)var13 : null;
-					var13.setLocationAndAngles(var5, var7, var9, world.rand.nextFloat() * 360.0F, 0.0F);
+					EntityLiving livingSpawn = toSpawn instanceof EntityLiving ? (EntityLiving)toSpawn : null;
+					toSpawn.setLocationAndAngles(var5, var7, var9, world.rand.nextFloat() * 360.0F, 0.0F);
 
-					if (var11 == null || var11.getCanSpawnHere())
-					{
-						lgc.func_98265_a(var13);
-						world.spawnEntityInWorld(var13);
+					if (livingSpawn == null || livingSpawn.getCanSpawnHere()) {
+
+						lgc.func_98265_a(toSpawn);
 						world.playAuxSFX(2004, x, y, z, 0);
 
-						if (var11 != null)
-						{
-							var11.spawnExplosionParticle();
-						}
-
-						var12 = true;
+						if (livingSpawn != null)
+							livingSpawn.spawnExplosionParticle();
 					}
 				}
 			}
