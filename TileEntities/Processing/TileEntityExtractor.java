@@ -470,6 +470,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 	}
 
 	public int getOperationTime(int stage) {
-		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage);
+		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage-1);
 	}
 }

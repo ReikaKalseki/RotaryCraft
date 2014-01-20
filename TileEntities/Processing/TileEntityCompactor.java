@@ -565,6 +565,6 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 	@Override
 	public int getOperationTime() {
-		return DurationRegistry.COMPACTOR.getOperationTime(omega, this.getStage());
+		return DurationRegistry.COMPACTOR.getOperationTime(omega, this.getStage()-1);
 	}
 }

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools.Steel;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
@@ -43,6 +44,8 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 	@Override
 	public float getStrVsBlock(ItemStack stack, Block block, int meta)
 	{
+		if (block.blockMaterial == Material.glass)
+			return 8F;
 		float amt = super.getStrVsBlock(stack, block, meta);
 		return amt > 1 ? amt*1.2F : 1;
 	}
