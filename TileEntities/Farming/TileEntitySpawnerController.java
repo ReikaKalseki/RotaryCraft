@@ -98,7 +98,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
 		lgc.spawnDelay = 5; //Disable "real" spawner
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", lgc.spawnDelay));
-		if (disable) {
+		if (disable || world.isBlockIndirectlyGettingPowered(x, y-1, z)) {
 			hijackdelay = 255;
 			this.shutdownSpawner(world, x, y, z);
 		}
