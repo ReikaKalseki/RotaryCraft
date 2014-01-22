@@ -50,10 +50,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		if (TwilightForestHandler.getInstance().isTowerWood(b))
 			return 30F;
 		if (b.blockMaterial == Material.wood)
-			return 12F;
+			return 20F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == b)
-				return 12F;
+				return 20F;
 		}
 		return 1F;
 	}
