@@ -36,7 +36,6 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
@@ -48,6 +47,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
+import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -146,9 +146,9 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block blastglass;
 	public static Block obsidianglass;
 
-	public static final Fluid jetFuelFluid = new Fluid("jet fuel").setDensity(810).setViscosity(800);//.setColor(0xFB5C90);
-	public static final Fluid lubeFluid = new Fluid("lubricant").setDensity(750).setViscosity(1200);//.setColor(0xE4E18E);
-	public static final Fluid ethanolFluid = new Fluid("rc ethanol").setDensity(789).setViscosity(950);//.setColor(0x5CC5B2);
+	public static final EnhancedFluid jetFuelFluid = (EnhancedFluid)new EnhancedFluid("jet fuel").setColor(0xFB5C90).setDensity(810).setViscosity(800);
+	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
+	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950);
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 
