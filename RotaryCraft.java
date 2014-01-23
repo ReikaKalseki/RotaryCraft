@@ -43,6 +43,7 @@ import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.DonatorController;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
+import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
@@ -273,6 +274,17 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
 
 		IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
+
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockRedstone);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockLapis);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.planks);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.stone);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.netherBrick);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockEmerald);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.obsidian);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.sandStone);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockNetherQuartz);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.cloth);
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));

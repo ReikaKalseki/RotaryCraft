@@ -27,7 +27,6 @@ public class RenderSpawner extends RotaryTERenderer
 {
 
 	private ModelSpawner SpawnerModel = new ModelSpawner();
-	//private ModelSpawnerV SpawnerModelV = new ModelSpawnerV();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -37,55 +36,36 @@ public class RenderSpawner extends RotaryTERenderer
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelSpawner var14;
+		var14 = SpawnerModel;
 
-			{
-				//((BlockSpawnerBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/spawnertex.png");
+
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
+
+		float var13;
+
+		if (!tile.isInWorld()) {
+			GL11.glTranslated(0, -0.4, 0);
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(true), 0, 0);
 		}
+		else
+			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0, 0);
 
-		if (true)
-		{
-			ModelSpawner var14;
-			var14 = SpawnerModel;
-			//ModelSpawnerV var15;
-			//var14 = this.SpawnerModelV;
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/spawnertex.png");
-
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
-			if (!tile.isInWorld()) {
-				var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0, 0);
-			}
-			else
-				var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0, 0);
-			// else
-			//var15.renderAll();
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

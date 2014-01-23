@@ -25,10 +25,13 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -88,7 +91,7 @@ public class GuiHandbook extends GuiScreen
 		screen = s;
 		page = p;
 
-		if (ConfigRegistry.DYNAMICHANDBOOK.getState())
+		if (ConfigRegistry.DYNAMICHANDBOOK.getState() || (DragonAPICore.isReikasComputer() && ReikaObfuscationHelper.isDeObfEnvironment()))
 			RotaryDescriptions.reload();
 	}
 
@@ -319,8 +322,12 @@ public class GuiHandbook extends GuiScreen
 		int posX = (width - xSize) / 2-2;
 		int posY = (height - ySize) / 2-8;
 
-		if (!(this instanceof GuiHandbookPage))
-			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, String.format("Page %d", screen), posX+xSize-45, posY+12, 0);
+		if (!(this instanceof GuiHandbookPage)) {
+			ReikaRenderHelper.disableLighting();
+			String s = String.format("Page %d/%d", screen, this.getMaxPage());
+			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, s, posX+xSize+23, posY+5, 0xffffff);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, s, posX+12+xSize+fontRenderer.getStringWidth(s), posY+20);
+		}
 
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 

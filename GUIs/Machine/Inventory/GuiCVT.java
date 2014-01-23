@@ -174,7 +174,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
-		int dy = redstone ? 16 : 0;
+		int dy = redstone ? 17 : 0;
 		int dx = redstone ? -14 : 0;
 		fontRenderer.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
