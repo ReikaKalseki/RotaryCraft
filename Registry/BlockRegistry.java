@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
@@ -59,6 +62,10 @@ public enum BlockRegistry implements RegistryEnum {
 	private Class block;
 	private Material mat;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
+
+	private static final HashMap<Integer, BlockRegistry> IDMap = new HashMap();
+	private static final HashMap<Class, ArrayList<BlockRegistry>> classMap = new HashMap();
+
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
 		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Transmission Bus"
@@ -78,10 +85,17 @@ public enum BlockRegistry implements RegistryEnum {
 	}
 
 	public static BlockRegistry getMachineBlock(int id) {
-		for (int i = 0; i < blockList.length; i++) {
-			if (blockList[i].getBlockID() == id)
-				return blockList[i];
+		BlockRegistry block = IDMap.get(id);
+		if (block == null) {
+			for (int i = 0; i < blockList.length; i++) {
+				if (blockList[i].getBlockID() == id) {
+					IDMap.put(id, blockList[i]);
+					return blockList[i];
+				}
+			}
 		}
+		else
+			return block;
 		return null;
 	}
 
@@ -94,19 +108,19 @@ public enum BlockRegistry implements RegistryEnum {
 	}
 
 	public static int getBlockVariableIndexFromClassAndMetadata(Class cl, int metadata) {
+		ArrayList<BlockRegistry> blocks = classMap.get(cl);
 		int offset = 1+metadata/16;
-		for (int i = 0; i < blockList.length; i++) {
-			if (blockList[i].block == cl && blockList[i].isNthBlock(offset))
-				return i;
+		for (int i = 0; i < blocks.size(); i++) {
+			if (blocks.get(i).isNthBlock(offset))
+				return blocks.get(i).ordinal();
 		}
 		throw new RuntimeException("Unregistered block class "+cl+" with metadata "+metadata);
 	}
 
 	public static int getOffsetFromBlockID(int id) {
-		for (int i = 0; i < blockList.length; i++) {
-			if (blockList[i].getBlockID() == id)
-				return blockList[i].getOffset();
-		}
+		BlockRegistry b = getMachineBlock(id);
+		if (b != null)
+			return b.getOffset();
 		//throw new RuntimeException("Unregistered block ID "+id);
 		RotaryCraft.logger.logError("Unregistered block ID "+id);
 		Thread.dumpStack();
@@ -210,5 +224,19 @@ public enum BlockRegistry implements RegistryEnum {
 	@Override
 	public boolean overwritingItem() {
 		return false;
+	}
+
+	static {
+		for (int i = 0; i < blockList.length; i++) {
+			BlockRegistry block = blockList[i];
+			Class c = block.block;
+			ArrayList<BlockRegistry> li = classMap.get(c);
+			if (li == null) {
+				li = new ArrayList();
+				classMap.put(c, li);
+			}
+			if (!li.contains(block));
+			li.add(block);
+		}
 	}
 }

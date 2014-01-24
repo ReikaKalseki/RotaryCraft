@@ -297,7 +297,7 @@ public enum MachineRegistry {
 	private String renderClass;
 	private int rollover;
 	private ModList requirement;
-	private static HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
+	private static final HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
 	private PowerReceivers receiver;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
@@ -421,6 +421,9 @@ public enum MachineRegistry {
 	}
 
 	public static int getMachineIndexFromIDandMetadata(int id, int metad) {
+		BlockRegistry r = BlockRegistry.getMachineBlock(id);
+		if (r == null)
+			return -1;
 		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
 		MachineRegistry m = getMachineMapping(id, metad);
 		if (m == null)
@@ -446,12 +449,7 @@ public enum MachineRegistry {
 	}
 
 	public static MachineRegistry getMachineFromIDandMetadata(int id, int metad) {
-		int index = getMachineIndexFromIDandMetadata(id, metad);
-		if (index == -1) {
-			RotaryCraft.logger.logError("ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
-			return null;
-		}
-		return machineList[index];
+		return getMachineMapping(id, metad);
 	}
 
 	public int getMachineMetadata() {
@@ -1180,6 +1178,73 @@ public enum MachineRegistry {
 
 	public boolean hasNBTVariants() {
 		return NBTMachine.class.isAssignableFrom(te);
+	}
+
+	/** Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal) */
+	public boolean isCrucial() {
+		if (this.isPipe())
+			return true;
+		switch(this) {
+		case BEDROCKBREAKER:
+		case ENGINE:
+		case SHAFT:
+		case BEVELGEARS:
+		case SPLITTER:
+		case GEARBOX:
+		case DYNAMOMETER:
+		case FERMENTER:
+		case GRINDER:
+		case BORER:
+		case PUMP:
+		case EXTRACTOR:
+		case FAN:
+		case FRACTIONATOR:
+		case WOODCUTTER:
+		case SPAWNERCONTROLLER:
+		case HEATER:
+		case HEATRAY:
+		case ECU:
+		case WINDER:
+		case ADVANCEDGEARS:
+		case BLASTFURNACE:
+		case MOBHARVESTER:
+		case MAGNETIZER:
+		case FRICTION:
+		case MIRROR:
+		case SOLARTOWER:
+		case COOLINGFIN:
+		case WORKTABLE:
+		case COMPRESSOR:
+		case DYNAMO:
+		case MULTICLUTCH:
+		case SORTING:
+		case FERTILIZER:
+		case MAGNETIC:
+		case LAVAMAKER:
+		case AGGREGATOR:
+		case FILLINGSTATION:
+		case BELT:
+		case VANDEGRAFF:
+		case BUSCONTROLLER:
+		case POWERBUS:
+		case BIGFURNACE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean canBeDisabledInOverworld() {
+		switch(this) {
+		case BORER:
+		case SONICBORER:
+		case EMP:
+		case RAILGUN:
+		case LASERGUN:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	static {

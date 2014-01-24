@@ -135,7 +135,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 							if (crop != null && !crop.isRipe(meta2)) {
 								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
 							}
-							if (modcrop != null && !modcrop.isRipe(meta2)) {
+							if (modcrop != null && !modcrop.isRipe(world, x+i, k, z+j)) {
 								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
 							}
 						}

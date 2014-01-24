@@ -68,7 +68,9 @@ public enum ConfigRegistry implements ConfigList {
 	EXPLODEPACK("Explode jetpack if player is in lava", true),
 	SPRINKLER("Sprinkler Particle Density", 4),
 	HANDBOOK("Spawn with RC Handbook", true),
-	CONSERVEPACK("Conservative Jetpack Firing", true);
+	CONSERVEPACK("Conservative Jetpack Firing", true),
+	ALLOWBAN("Allow Build Blocking of Some Machines", false),
+	LOGBLOCKS("Log Block Placement and Removal", false);
 
 	private String label;
 	private boolean defaultState;

@@ -11,31 +11,19 @@ package Reika.RotaryCraft;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.Achievement;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
-import net.minecraftforge.event.entity.player.BonemealEvent;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
@@ -51,11 +39,9 @@ import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
-import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -82,7 +68,6 @@ import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
-import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -152,7 +137,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 
-	private static final Random rand = new Random();
+	static final Random rand = new Random();
 
 	public static Item shaftcraft;
 	public static Item enginecraft;
@@ -212,6 +197,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 
+		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		MinecraftForge.EVENT_BUS.register(this);
 
 		config.loadSubfolderedConfigFile(evt);
@@ -285,6 +271,8 @@ public class RotaryCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.sandStone);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockNetherQuartz);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.cloth);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
@@ -371,74 +359,6 @@ public class RotaryCraft extends DragonAPIMod {
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
 		RotaryRegistration.setupLiquidIcons(event);
-	}
-
-	@ForgeSubscribe
-	public void bonemealEvent (BonemealEvent event)
-	{
-		if (!event.world.isRemote)  {
-			if (event.ID == canola.blockID) {
-				World world = event.world;
-				int x = event.X;
-				int y = event.Y;
-				int z = event.Z;
-				event.setResult(Event.Result.DENY);
-			}
-		}
-	}
-
-	@ForgeSubscribe
-	public void fallEvent (LivingFallEvent event)
-	{
-		EntityLivingBase e = event.entityLiving;
-		ItemStack is = e.getCurrentItemOrArmor(1);
-
-		if (is != null) {
-			if (is.getItem() instanceof ItemSpringBoots) {
-				if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID() || is.getItemDamage() > 0) {
-					//ReikaJavaLibrary.pConsole(event.distance);
-					event.distance *= 0.6F;
-					//ReikaJavaLibrary.pConsole(event.distance);
-					if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
-						event.distance = Math.min(event.distance, 25);
-				}
-			}
-		}
-	}
-
-	@ForgeSubscribe
-	public void enforceHarvesterLooting(LivingDropsEvent ev) {
-		if (ev.source instanceof HarvesterDamage) {
-			HarvesterDamage dmg = (HarvesterDamage)ev.source;
-			int looting = dmg.getLootingLevel();
-			EntityLivingBase e = ev.entityLiving;
-			ArrayList<EntityItem> li = ev.drops;
-			li.clear();
-			e.captureDrops = true;
-			try {
-				ReikaObfuscationHelper.getMethod("dropFewItems").invoke(e, true, looting);
-				ReikaObfuscationHelper.getMethod("dropEquipment").invoke(e, true, dmg.hasInfinity() ? 100 : looting*4);
-				int rem = rand.nextInt(200) - looting*4;
-				if (rem <= 5 || dmg.hasInfinity())
-					ReikaObfuscationHelper.getMethod("dropRareDrop").invoke(e, 1);
-			}
-			catch (Exception ex) {
-				logger.debug("Could not fire harvester drops event!");
-				if (logger.shouldDebug())
-					ex.printStackTrace();
-			}
-			e.captureDrops = false;
-		}
-	}
-
-	@ForgeSubscribe
-	public void disallowDespawn(AllowDespawn ad) {
-		EntityLivingBase e = ad.entityLiving;
-		PotionEffect pe = e.getActivePotionEffect(Potion.jump);
-		if (pe == null)
-			return;
-		if (pe.getAmplifier() == -9 || pe.getAmplifier() == -29) //the two freeze gun call values
-			ad.setResult(Result.DENY);
 	}
 
 	@Override

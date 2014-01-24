@@ -250,12 +250,15 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		ModCropList mod = ModCropList.getModCrop(id, world.getBlockMetadata(x, y, z));
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
-		if (mod != null && mod.isRipe(world.getBlockMetadata(x, y, z))) {
+		if (mod != null && mod.isRipe(world, x, y, z)) {
 			ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
 			mod.removeOneSeed(li);
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 			metato = mod.harvestedMeta;
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
+			if (mod.isTileEntity())
+				mod.runTEHarvestCode(world, x, y, z);
+			else
+				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 		}
 		if (crop != null && crop.isRipe(world.getBlockMetadata(x, y, z))) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));

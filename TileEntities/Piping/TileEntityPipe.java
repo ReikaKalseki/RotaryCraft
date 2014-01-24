@@ -18,6 +18,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -97,6 +98,22 @@ public class TileEntityPipe extends TileEntityPiping {
 			int dp = tile.fluidPressure-fluidPressure;
 			if (dp > 0) {
 				fluidPressure += dp/4;
+			}
+		}
+
+		if (liquid != null) {
+			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
+
+			if (temp > 2500) {
+				BlockArray blocks = new BlockArray();
+				blocks.recursiveAddWithMetadata(worldObj, xCoord, yCoord, zCoord, this.getMachine().getBlockID(), this.getMachine().getMachineMetadata());
+
+				for (int i = 0; i < blocks.getSize(); i++) {
+					int[] xyz = blocks.getNthBlock(i);
+					ReikaSoundHelper.playSoundAtBlock(worldObj, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
+					ReikaParticleHelper.LAVA.spawnAroundBlock(worldObj, xyz[0], xyz[1], xyz[2], 36);
+					worldObj.setBlock(xyz[0], xyz[1], xyz[2], Block.lavaMoving.blockID);
+				}
 			}
 		}
 	}

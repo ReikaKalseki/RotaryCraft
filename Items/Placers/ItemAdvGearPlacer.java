@@ -80,6 +80,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		}
 		return true;
 	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {

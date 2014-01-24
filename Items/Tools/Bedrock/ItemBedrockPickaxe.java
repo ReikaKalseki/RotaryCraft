@@ -199,6 +199,24 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 6F;
 		if (b.blockID == Block.glowStone.blockID)
 			return 8F;
+		if (b.blockID == Block.pistonBase.blockID)
+			return 8F;
+		if (b.blockID == Block.pistonStickyBase.blockID)
+			return 8F;
+		if (b.blockID == Block.lever.blockID)
+			return 18F;
+		if (b.blockID == Block.stoneButton.blockID)
+			return 18F;
+		if (b.blockID == Block.pressurePlateStone.blockID)
+			return 18F;
+		if (b.blockID == Block.pressurePlateIron.blockID)
+			return 18F;
+		if (b.blockID == Block.pressurePlateGold.blockID)
+			return 18F;
+		if (b.blockID == Block.redstoneLampActive.blockID || b.blockID == Block.redstoneLampIdle.blockID)
+			return 10F;
+		if (b.blockID == Block.doorIron.blockID)
+			return 18F;
 
 		if (b.blockID == ThaumBlockHandler.getInstance().totemID)
 			return 48F;

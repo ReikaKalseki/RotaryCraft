@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -23,6 +24,9 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -53,6 +57,32 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		if (tank.getActualFluid() == null || this.getLevel() <= 0)
 			tank.empty();
+
+		if (!this.isEmpty() && rand.nextInt(10) == 0 && !world.isRemote) {
+			int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+			int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
+			int dT = temp-Tamb;
+			int r = 2;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						double dd = ReikaMathLibrary.py3d(i, j, k)+1;
+						int hiT = (int)(Tamb+dT/dd/2D);
+						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
+						if (temp > 2500)
+							ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);
+					}
+				}
+			}
+			if (temp > 2500) {
+				world.setBlock(x, y, z, Block.lavaMoving.blockID);
+				world.setBlock(x+1, y, z, Block.lavaMoving.blockID);
+				world.setBlock(x-1, y, z, Block.lavaMoving.blockID);
+				world.setBlock(x, y, z+1, Block.lavaMoving.blockID);
+				world.setBlock(x, y, z-1, Block.lavaMoving.blockID);
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
+			}
+		}
 	}
 
 	private void transferBetween(World world, int x, int y, int z) {
