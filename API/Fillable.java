@@ -13,18 +13,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
 /** For items that use fuel and can be filled in the filling station. */
-public interface Fuelable {
+public interface Fillable {
 
-	/** The fuel type. */
-	public Fluid getFuelType(ItemStack is);
+	/** The current fluid type. */
+	public Fluid getFluidType(ItemStack is);
 
-	/** The max amount of fuel (in millibuckets) the item can take. */
+	/** The max amount of fluid (in millibuckets) the item can take. */
 	public int getCapacity(ItemStack is);
 
-	/** The current fuel level in millibuckets. */
-	public int getCurrentFuel(ItemStack is);
+	/** The current fluid level in millibuckets. */
+	public int getCurrentFillLevel(ItemStack is);
 
-	/** This adds fuel to the item and returns how much was successfully added. */
-	public int addFuel(ItemStack is, Fluid f, int amt);
+	/** This adds fluid to the item and returns how much was successfully added. */
+	public int addFluid(ItemStack is, Fluid f, int amt);
+
+	public boolean isFull(ItemStack is);
 
 }

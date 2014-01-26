@@ -17,14 +17,18 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	public final int renderID;
+	public int renderPass;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public PipeBodyRenderer(int ID) {
@@ -33,14 +37,72 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
+		Tessellator v5 = Tessellator.instance;
 
+		GL11.glColor3f(1, 1, 1);
+		v5.startDrawingQuads();
+
+		Icon ico = block.getIcon(0, metadata);
+		float u = ico.getMinU();
+		float du = ico.getMaxU();
+		float v = ico.getMinV();
+		float dv = ico.getMaxV();
+
+		float dx = -0.5F;
+		float dy = -0.5F;
+		float dz = -0.5F;
+		v5.addTranslation(dx, dy, dz);
+		v5.setNormal(1, 1, 1);
+
+		this.faceBrightness(ForgeDirection.UP, v5);
+		v5.addVertexWithUV(1, 1, 0, u, v);
+		v5.addVertexWithUV(0, 1, 0, du, v);
+		v5.addVertexWithUV(0, 1, 1, du, dv);
+		v5.addVertexWithUV(1, 1, 1, u, dv);
+
+		this.faceBrightness(ForgeDirection.DOWN, v5);
+		v5.addVertexWithUV(0, 0, 0, du, v);
+		v5.addVertexWithUV(1, 0, 0, u, v);
+		v5.addVertexWithUV(1, 0, 1, u, dv);
+		v5.addVertexWithUV(0, 0, 1, du, dv);
+
+		this.faceBrightness(ForgeDirection.EAST, v5);
+		v5.addVertexWithUV(1, 0, 0, du, v);
+		v5.addVertexWithUV(1, 1, 0, u, v);
+		v5.addVertexWithUV(1, 1, 1, u, dv);
+		v5.addVertexWithUV(1, 0, 1, du, dv);
+
+		this.faceBrightness(ForgeDirection.WEST, v5);
+		v5.addVertexWithUV(0, 1, 0, u, v);
+		v5.addVertexWithUV(0, 0, 0, du, v);
+		v5.addVertexWithUV(0, 0, 1, du, dv);
+		v5.addVertexWithUV(0, 1, 1, u, dv);
+
+		this.faceBrightness(ForgeDirection.SOUTH, v5);
+		v5.addVertexWithUV(0, 1, 1, u, v);
+		v5.addVertexWithUV(0, 0, 1, du, v);
+		v5.addVertexWithUV(1, 0, 1, du, dv);
+		v5.addVertexWithUV(1, 1, 1, u, dv);
+
+		this.faceBrightness(ForgeDirection.NORTH, v5);
+		v5.addVertexWithUV(0, 0, 0, du, v);
+		v5.addVertexWithUV(0, 1, 0, u, v);
+		v5.addVertexWithUV(1, 1, 0, u, dv);
+		v5.addVertexWithUV(1, 0, 0, du, dv);
+
+		v5.addTranslation(-dx, -dy, -dz);
+
+		v5.draw();
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		RenderableDuct tile = (RenderableDuct)world.getBlockTileEntity(x, y, z);
 		for (int i = 0; i < 6; i++) {
-			this.renderFace(tile, world, x, y, z, dirs[i]);
+			if (renderPass == 0)
+				this.renderFace(tile, world, x, y, z, dirs[i]);
+			else
+				this.renderLiquid(tile, x, y, z, dirs[i]);
 		}
 		return true;
 	}
@@ -53,6 +115,294 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public int getRenderId() {
 		return renderID;
+	}
+
+	private void renderLiquid(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
+		Fluid f = tile.getLiquidType();
+		if (f == null)
+			return;
+		Tessellator v5 = Tessellator.instance;
+		v5.draw();
+
+		float size = 0.75F/2F;
+		float window = 0.5F/2F;
+		float dl = size-window;
+		float dd = 0.5F-size;
+		double in = 0.5+size-0.01;
+		double in2 = 0.5-size+0.01;
+		double dd2 = in-in2;
+
+		Icon ico = f.getIcon();
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float u2 = ico.getMaxU();
+		float v2 = ico.getMaxV();
+		double du = dd2*(u2-u)/4D;
+
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		v5.startDrawingQuads();
+		v5.addTranslation(x, y, z);
+		int mix = tile.getPipeBlockType().getMixedBrightnessForBlock(Minecraft.getMinecraft().theWorld, x, y, z);
+		ReikaLiquidRenderer.bindFluidTexture(f);
+		v5.setColorOpaque(255, 255, 255);
+		if (f.getLuminosity() > 0) {
+			v5.setBrightness(240);
+			//ReikaRenderHelper.disableLighting();
+		}
+		else {
+			v5.setBrightness(mix);
+		}
+
+		v5.setNormal(dir.offsetX, -dir.offsetY, -dir.offsetZ);
+		//this.faceBrightness(ForgeDirection.DOWN, v5);
+		if (!tile.isConnectionValidForSide(dir)) {
+			switch(dir) {
+			case DOWN:
+				v5.addVertexWithUV(in2, in, in, u, v2);
+				v5.addVertexWithUV(in, in, in, u2, v2);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in, in2, u, v);
+				break;
+			case UP:
+				v5.addVertexWithUV(in2, in2, in2, u, v);
+				v5.addVertexWithUV(in, in2, in2, u2, v);
+				v5.addVertexWithUV(in, in2, in, u2, v2);
+				v5.addVertexWithUV(in2, in2, in, u, v2);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u2, v);
+				v5.addVertexWithUV(in2, in2, in, u2, v2);
+				v5.addVertexWithUV(in, in2, in, u, v2);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(in, in2, in2, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u2, v2);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in, in, in2, u, v);
+				break;
+			case EAST:
+				v5.addVertexWithUV(in, in2, in, u, v2);
+				v5.addVertexWithUV(in, in2, in2, u2, v2);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, in, in, u, v);
+				break;
+			case WEST:
+				v5.addVertexWithUV(in2, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v2);
+				v5.addVertexWithUV(in2, in2, in, u, v2);
+			default:
+				break;
+			}
+		}
+		else { //is connected on side
+			switch(dir) {
+			case UP:
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, in2, in, u, v);
+				v5.addVertexWithUV(in2, in2, in2, u2, v);
+				v5.addVertexWithUV(in2, 0, in2, u2, v+du);
+				v5.addVertexWithUV(in2, 0, in, u, v+du);
+
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, 0, in, u, v+du);
+				v5.addVertexWithUV(in, 0, in2, u2, v+du);
+				v5.addVertexWithUV(in, in2, in2, u2, v);
+				v5.addVertexWithUV(in, in2, in, u, v);
+
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(in, 0, in2, u, v+du);
+				v5.addVertexWithUV(in2, 0, in2, u2, v+du);
+				v5.addVertexWithUV(in2, in2, in2, u2, v);
+				v5.addVertexWithUV(in, in2, in2, u, v);
+
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(in, in2, in, u, v);
+				v5.addVertexWithUV(in2, in2, in, u2, v);
+				v5.addVertexWithUV(in2, 0, in, u2, v+du);
+				v5.addVertexWithUV(in, 0, in, u, v+du);
+				break;
+			case DOWN:
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, 1, in, u, v+du);
+				v5.addVertexWithUV(in2, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, in, in, u, v);
+
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, in, in, u, v);
+				v5.addVertexWithUV(in, in, in2, u2, v);
+				v5.addVertexWithUV(in, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in, 1, in, u, v+du);
+
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(in, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u2, v);
+				v5.addVertexWithUV(in2, 1, in2, u2, v+du);
+				v5.addVertexWithUV(in, 1, in2, u, v+du);
+
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(in, 1, in, u, v+du);
+				v5.addVertexWithUV(in2, 1, in, u2, v+du);
+				v5.addVertexWithUV(in2, in, in, u2, v);
+				v5.addVertexWithUV(in, in, in, u, v);
+				break;
+			case SOUTH:
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, in2, 0, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in2, in, in2, u+du, v);
+				v5.addVertexWithUV(in2, in, 0, u, v);
+
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, in, 0, u, v);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in, in2, 0, u, v2);
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(in2, in, 0, u, v2);
+				v5.addVertexWithUV(in2, in, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(in, in, 0, u, v);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(in, in2, 0, u, v);
+				v5.addVertexWithUV(in, in2, in2, u+du, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in2, in2, 0, u, v2);
+				break;
+			case NORTH:
+				v5.setNormal(-1, 0, 0);
+				v5.addVertexWithUV(in2, in, 1, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
+				v5.addVertexWithUV(in2, in2, 1, u, v2);
+
+				v5.setNormal(1, 0, 0);
+				v5.addVertexWithUV(in, in2, 1, u, v2);
+				v5.addVertexWithUV(in, in2, in, u+du, v2);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(in, in, 1, u, v);
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(in, in, 1, u, v);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in, in, u+du, v2);
+				v5.addVertexWithUV(in2, in, 1, u, v2);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(in2, in2, 1, u, v2);
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
+				v5.addVertexWithUV(in, in2, in, u+du, v);
+				v5.addVertexWithUV(in, in2, 1, u, v);
+				break;
+			case EAST:
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(1, in, in, u, v);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(in, in2, in, u+du, v2);
+				v5.addVertexWithUV(1, in2, in, u, v2);
+
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v);
+				v5.addVertexWithUV(1, in, in2, u, v);
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(1, in, in2, u, v2);
+				v5.addVertexWithUV(in, in, in2, u+du, v2);
+				v5.addVertexWithUV(in, in, in, u+du, v);
+				v5.addVertexWithUV(1, in, in, u, v);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(1, in2, in, u, v);
+				v5.addVertexWithUV(in, in2, in, u+du, v);
+				v5.addVertexWithUV(in, in2, in2, u+du, v2);
+				v5.addVertexWithUV(1, in2, in2, u, v2);
+				break;
+			case WEST:
+				v5.setNormal(0, 0, 1);
+				v5.addVertexWithUV(0, in2, in, u, v2);
+				v5.addVertexWithUV(in2, in2, in, u+du, v2);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
+				v5.addVertexWithUV(0, in, in, u, v);
+
+				v5.setNormal(0, 0, -1);
+				v5.addVertexWithUV(0, in, in2, u, v);
+				v5.addVertexWithUV(in2, in, in2, u+du, v);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(0, in2, in2, u, v2);
+
+				v5.setNormal(0, 1, 0);
+				v5.addVertexWithUV(0, in, in, u, v);
+				v5.addVertexWithUV(in2, in, in, u+du, v);
+				v5.addVertexWithUV(in2, in, in2, u+du, v2);
+				v5.addVertexWithUV(0, in, in2, u, v2);
+
+				v5.setNormal(0, -1, 0);
+				v5.addVertexWithUV(0, in2, in2, u, v2);
+				v5.addVertexWithUV(in2, in2, in2, u+du, v2);
+				v5.addVertexWithUV(in2, in2, in, u+du, v);
+				v5.addVertexWithUV(0, in2, in, u, v);
+				break;
+			default:
+				break;
+			}
+
+		}
+		if (tile.isConnectedToNonSelf(dir)) {
+			v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
+			switch(dir) {
+			case DOWN:
+				v5.addVertexWithUV(in2, 0.99, in, u, v2);
+				v5.addVertexWithUV(in, 0.99, in, u2, v2);
+				v5.addVertexWithUV(in, 0.99, in2, u2, v);
+				v5.addVertexWithUV(in2, 0.99, in2, u, v);
+				break;
+			case UP:
+				v5.addVertexWithUV(in2, 0.01, in2, u, v);
+				v5.addVertexWithUV(in, 0.01, in2, u2, v);
+				v5.addVertexWithUV(in, 0.01, in, u2, v2);
+				v5.addVertexWithUV(in2, 0.01, in, u, v2);
+				break;
+			case NORTH:
+				v5.addVertexWithUV(in, in, 0.99, u, v);
+				v5.addVertexWithUV(in2, in, 0.99, u2, v);
+				v5.addVertexWithUV(in2, in2, 0.99, u2, v2);
+				v5.addVertexWithUV(in, in2, 0.99, u, v2);
+				break;
+			case SOUTH:
+				v5.addVertexWithUV(in, in2, 0.01, u, v2);
+				v5.addVertexWithUV(in2, in2, 0.01, u2, v2);
+				v5.addVertexWithUV(in2, in, 0.01, u2, v);
+				v5.addVertexWithUV(in, in, 0.01, u, v);
+				break;
+			case EAST:
+				v5.addVertexWithUV(0.99, in2, in, u, v2);
+				v5.addVertexWithUV(0.99, in2, in2, u2, v2);
+				v5.addVertexWithUV(0.99, in, in2, u2, v);
+				v5.addVertexWithUV(0.99, in, in, u, v);
+				break;
+			case WEST:
+				v5.addVertexWithUV(0.01, in, in, u, v);
+				v5.addVertexWithUV(0.01, in, in2, u2, v);
+				v5.addVertexWithUV(0.01, in2, in2, u2, v2);
+				v5.addVertexWithUV(0.01, in2, in, u, v2);
+			default:
+				break;
+			}
+		}
+		v5.addTranslation(-x, -y, -z);
+		//GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+
+		//GL11.glTranslated(-x, -y, -z);
+		//GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	public void renderBlockInInventory(RenderableDuct tile, double par2, double par4, double par6) {

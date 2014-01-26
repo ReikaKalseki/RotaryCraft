@@ -63,7 +63,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			for (int i = 0; i < beam.getSize(); i++) {
 				int[] xyz = beam.getNthBlock(i);
 				int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-				if (id == RotaryCraft.lightblock.blockID) {
+				if (this.isLightBlock(id)) {
 					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 					world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
@@ -71,16 +71,24 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			}
 			beam.clear();
 			if (r > 0)
-				beam.addLineOfClear(world, x+xstep, y+ystep, z+ystep, r, xstep, ystep, zstep);
+				beam.addLineOfClear(world, x, y, z, r, xstep, ystep, zstep);
 			lastRange = r;
 		}
 
 		for (int i = 0; i < beam.getSize(); i++) {
 			int[] xyz = beam.getNthBlock(i);
 			if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == 0)
-				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
+				world.setBlock(xyz[0], xyz[1], xyz[2], this.getPlacedBlockID(), 15, 3);
 			world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
 		}
+	}
+
+	private int getPlacedBlockID() {
+		return beammode ? RotaryCraft.beamblock.blockID : RotaryCraft.lightblock.blockID;
+	}
+
+	private boolean isLightBlock(int id) {
+		return id == RotaryCraft.beamblock.blockID || id == RotaryCraft.lightblock.blockID;
 	}
 
 	public void lightsOut(World world, int x, int y, int z) {
@@ -90,10 +98,11 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		for (int i = 0; i < beam.getSize(); i++) {
 			int[] xyz = beam.getNthBlock(i);
 			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (id == RotaryCraft.lightblock.blockID) {
+			if (this.isLightBlock(id)) {
 				//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
 				world.markBlockForRenderUpdate(xyz[0], xyz[1], xyz[2]);
+				world.markBlockForUpdate(xyz[0], xyz[1], xyz[2]);
 			}
 		}
 	}

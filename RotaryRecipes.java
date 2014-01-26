@@ -29,6 +29,7 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
@@ -121,9 +122,10 @@ public class RotaryRecipes {
 	public static void addPostLoadRecipes() {
 
 		addProps();
-		addCompat();
+		//addCompat();
 
-		//MachineRegistry.DYNAMO.addRecipe(new ShapedOreRecipe(MachineRegistry.DYNAMO.getCraftedProduct()));
+		if (ModList.TINKERER.isLoaded())
+			GameRegistry.addRecipe(new ItemStack(RotaryCraft.decoTank.blockID, 4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
 	}
 
 	private static void addMachines() {
@@ -697,6 +699,8 @@ public class RotaryRecipes {
 			" s ", "sns", " s ", 's', ItemStacks.steelingot, 'n', ItemStacks.nitrate});
 
 		addSlideRecipes();
+
+		GameRegistry.addRecipe(new ItemStack(RotaryCraft.decoTank.blockID, 4, 0), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', Block.thinGlass);
 	}
 
 	private static void addSlideRecipes() {

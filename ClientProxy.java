@@ -66,6 +66,7 @@ public class ClientProxy extends CommonProxy
 	public static PipeBodyRenderer pipe;
 	//public static HydraulicLineRenderer line;
 	public static CubicalMachineRenderer cube;
+	public static DecoTankRenderer tank;
 
 	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
 	//public static final ForcedTextureArmorModel bed2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
@@ -95,6 +96,10 @@ public class ClientProxy extends CommonProxy
 		cubeRender = RenderingRegistry.getNextAvailableRenderId();
 		cube = new CubicalMachineRenderer(cubeRender);
 		RenderingRegistry.registerBlockHandler(cubeRender, cube);
+
+		tankRender = RenderingRegistry.getNextAvailableRenderId();
+		tank = new DecoTankRenderer(tankRender);
+		RenderingRegistry.registerBlockHandler(tankRender, tank);
 
 		//lineRender = RenderingRegistry.getNextAvailableRenderId();
 		//line = new HydraulicLineRenderer(lineRender);

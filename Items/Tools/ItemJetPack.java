@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Fuelable;
+import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -40,7 +40,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
+public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	private static final HashMap<String, Long> onGround = new HashMap();
 
@@ -134,7 +134,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 		}
 
 		if (ConfigRegistry.EXPLODEPACK.getState()) {
-			if (this.getCurrentFuel(is) > 0) {
+			if (this.getCurrentFillLevel(is) > 0) {
 				if (player.handleLavaMovement() && world.difficultySetting != 0) {
 					this.explode(world, player);
 				}
@@ -216,7 +216,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	}*/
 
 	@Override
-	public Fluid getFuelType(ItemStack is) {
+	public Fluid getFluidType(ItemStack is) {
 		return FluidRegistry.getFluid("rc ethanol");
 	}
 
@@ -226,12 +226,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	}
 
 	@Override
-	public int getCurrentFuel(ItemStack is) {
+	public int getCurrentFillLevel(ItemStack is) {
 		return this.getFuel(is);
 	}
 
 	@Override
-	public int addFuel(ItemStack is, Fluid f, int amt) {
+	public int addFluid(ItemStack is, Fluid f, int amt) {
 		if (f == null || !f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return 0;
 		NBTTagCompound nbt = is.stackTagCompound;
@@ -274,5 +274,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fuelable {
 	@Override
 	public double getDamageMultiplier() {
 		return 1;
+	}
+
+	@Override
+	public boolean isFull(ItemStack is) {
+		return this.getCurrentFillLevel(is) >= this.getCapacity(is);
 	}
 }

@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
 import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 
 public class EntityLiquidBlock extends Entity {
@@ -100,7 +99,7 @@ public class EntityLiquidBlock extends Entity {
 		int dx = this.getIntegerX()+side.offsetX;
 		int dy = this.getIntegerY()+side.offsetY;
 		int dz = this.getIntegerZ()+side.offsetZ;
-		return BlockFallingLiquid.canMoveInto(worldObj, dx, dy, dz);
+		return false;
 	}
 
 	public int getBlockID(ForgeDirection side) {

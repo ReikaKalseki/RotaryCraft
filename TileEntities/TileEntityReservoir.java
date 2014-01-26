@@ -37,6 +37,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	public static final int CAPACITY = 64000;
 
+	public boolean isCovered = false;
+
 	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
@@ -49,16 +51,24 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.transferBetween(world, x, y, z);
 
-		if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
-			if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
-				this.addLiquid(25, FluidRegistry.WATER);
+		if (!isCovered) {
+			if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
+				if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
+					this.addLiquid(25, FluidRegistry.WATER);
+				}
+			}
+
+			if (!tank.isEmpty()) {
+				if (tank.getActualFluid().getDensity(world, x, y, z) < 0 && tank.getActualFluid().isGaseous()) {
+					tank.removeLiquid(100); //evaporate
+				}
 			}
 		}
 
 		if (tank.getActualFluid() == null || this.getLevel() <= 0)
 			tank.empty();
 
-		if (!this.isEmpty() && rand.nextInt(10) == 0 && !world.isRemote) {
+		if (!world.isRemote && !this.isEmpty() && rand.nextInt(this.getThermalTickChance()) == 0) {
 			int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
 			int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
 			int dT = temp-Tamb;
@@ -83,6 +93,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
 			}
 		}
+	}
+
+	private int getThermalTickChance() {
+		return isCovered ? 20 : 10;
 	}
 
 	private void transferBetween(World world, int x, int y, int z) {
@@ -126,6 +140,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		super.writeToNBT(NBT);
 
 		tank.writeToNBT(NBT);
+
+		NBT.setBoolean("cover", isCovered);
 	}
 
 	@Override
@@ -134,6 +150,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		super.readFromNBT(NBT);
 
 		tank.readFromNBT(NBT);
+
+		isCovered = NBT.getBoolean("cover");
 	}
 
 	@Override
@@ -170,7 +188,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void onEMP() {}
 
 	public AxisAlignedBB getHitbox() {
-		if (this.isEdgePiece(worldObj, xCoord, yCoord, zCoord))
+		if (isCovered || this.isEdgePiece(worldObj, xCoord, yCoord, zCoord))
 			return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord);
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+0.0625, zCoord+1);
 	}
@@ -334,6 +352,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		addCreativeFluid("rc ethanol");
 		addCreativeFluid("ammonia");
 		addCreativeFluid("sodium");
+		addCreativeFluid("chlorine");
 		addCreativeFluid("heavy water");
 		addCreativeFluid("fuel");
 		addCreativeFluid("oil");

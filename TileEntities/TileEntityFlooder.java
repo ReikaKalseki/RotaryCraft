@@ -13,20 +13,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
-	//Make pick random coord in 16-block radius, find top block (solid or source block), ++y, then add liquid
 
 	public int oldLevel;
 
@@ -34,8 +33,10 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 
 	private StepTimer waterTimer = new StepTimer(5);
 
+	private BlockArray blocks = new BlockArray();
+
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public void updateEntity(World world, int x, int y, int z, int meta) {/*
 		tickcount++;/*
 		if (BlockFallingLiquid.canMoveInto(world, x, y-1, z)) {
 			waterTimer.update();
@@ -43,7 +44,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 				tank.removeLiquid(1000);
 				world.setBlock(x, y-1, z, RotaryCraft.waterblock.blockID);
 			}
-		}*/
+		}*//*
 		tank.addLiquid(1000, FluidRegistry.WATER);
 		//Do with entities?
 		if (tickcount > 20 && tank.getLevel() >= 1000) {
@@ -51,8 +52,39 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			if (!world.isRemote)
 				world.spawnEntityInWorld(new EntityLiquidBlock(world, x, y-1, z, tank.getActualFluid(), this));
 			tank.removeLiquid(1000);
-			world.setBlock(x, y, z, 0);
+		}*/
+		this.legacyFunction(world, x, y, z, meta);
+	}
+
+	private void legacyFunction(World world, int x, int y, int z, int meta) {
+		tickcount++;
+		if (!tank.isEmpty()) {
+			if (blocks.isEmpty()) {
+				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, this.getFluidID(), x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.sortBlocksByHeight();
+			}
+			boolean drain = false;
+			if (drain) {
+				for (int i = 8; i <= 11; i++)
+					ReikaChunkHelper.removeBlocksFromChunk(world, x, z, i, -1);
+			}
+			else if (tickcount > 1 && !blocks.isEmpty()) {
+				tickcount = 0;
+				int[] coord = blocks.getNextAndMoveOn();
+				world.setBlock(coord[0], coord[1], coord[2], this.getFluidID());
+				//ReikaJavaLibrary.pConsole(coord[0]+" "+coord[1]+" "+coord[2]);
+				world.markBlockForUpdate(coord[0], coord[1], coord[2]);
+				tank.drain(1000, true);
+			}
 		}
+		else {
+			blocks.clear();
+		}
+	}
+
+	private int getFluidID() {
+		return !tank.isEmpty() && tank.getActualFluid().canBePlacedInWorld() ? tank.getActualFluid().getBlockID() : 0;
 	}
 
 	private boolean canTakeLiquid(Fluid f) {

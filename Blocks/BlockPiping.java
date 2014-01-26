@@ -15,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
@@ -45,9 +46,15 @@ public class BlockPiping extends BlockBasicMultiTE {
 	}
 
 	@Override
+	public int getRenderBlockPass() {
+		return 1;
+	}
+
+	@Override
 	public final boolean canRenderInPass(int pass)
 	{
-		return pass == 0 || pass == 1;
+		ClientProxy.pipe.renderPass = pass;
+		return true;
 	}
 
 	@Override

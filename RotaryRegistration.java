@@ -29,12 +29,14 @@ import Reika.RotaryCraft.Entities.EntityIceBlock;
 import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
+import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -58,7 +60,7 @@ public class RotaryRegistration {
 		//GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
 		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
-		GameRegistry.registerBlock(RotaryCraft.waterblock, "WaterBlock");
+		GameRegistry.registerBlock(RotaryCraft.decoTank, ItemBlockDecoTank.class, "DecoTank");
 		/*
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			String regname = BlockRegistry.blockList[i].getName(0).toLowerCase().replaceAll("\\s","");
@@ -77,6 +79,7 @@ public class RotaryRegistration {
 			GameRegistry.registerTileEntity(MachineRegistry.machineList[i].getTEClass(), label);
 			ReikaJavaLibrary.initClass(MachineRegistry.machineList[i].getTEClass());
 		}
+		GameRegistry.registerTileEntity(TileEntityDecoTank.class, "RCDecoTank");
 	}
 
 	public static void addEntities() {

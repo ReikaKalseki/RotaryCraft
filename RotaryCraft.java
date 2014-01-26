@@ -55,7 +55,7 @@ import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
 import Reika.RotaryCraft.Blocks.BlockBlastGlass;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Blocks.BlockDeco;
-import Reika.RotaryCraft.Blocks.BlockFallingLiquid;
+import Reika.RotaryCraft.Blocks.BlockDecoTank;
 import Reika.RotaryCraft.Blocks.BlockLightBridge;
 import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
@@ -164,7 +164,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block lightblock;
 	public static Block beamblock;
 	public static Block lightbridge;
-	public static Block waterblock;
+	public static Block decoTank;
 
 	//public static Block gravlog;
 	//public static Block gravleaves;
@@ -273,6 +273,7 @@ public class RotaryCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.cloth);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
+		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.glass);
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
@@ -350,7 +351,7 @@ public class RotaryCraft extends DragonAPIMod {
 		beamblock = new BlockBeam(ExtraConfigIDs.BEAMBLOCK.getValue()).setUnlocalizedName("BeamBlock");
 		lightbridge = new BlockLightBridge(ExtraConfigIDs.BRIDGEBLOCK.getValue()).setUnlocalizedName("Bridge");
 		bedrockslice = new BlockBedrockSlice(ExtraConfigIDs.BEDROCKSLICE.getValue()).setUnlocalizedName("BedrockSlice");
-		waterblock = new BlockFallingLiquid(ExtraConfigIDs.WATERBLOCK.getValue()).setUnlocalizedName("WaterBlock");
+		decoTank = new BlockDecoTank(ExtraConfigIDs.DECOTANK.getValue()).setUnlocalizedName("DecoTank");
 
 		RotaryRegistration.setupLiquids();
 	}

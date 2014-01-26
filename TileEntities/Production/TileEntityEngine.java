@@ -648,7 +648,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		boolean ac = ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
 
-		if (ac && timer.checkCap("fuel")) {
+		if (ac && timer.checkCap("fuel") && !world.isRemote) {
 			int m = is.stackTagCompound.getInteger("magnet");
 			m--;
 			is.stackTagCompound.setInteger("magnet", m);

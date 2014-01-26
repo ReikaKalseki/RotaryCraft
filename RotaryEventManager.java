@@ -121,6 +121,8 @@ public class RotaryEventManager {
 		int x = ev.x;
 		int y = ev.y;
 		int z = ev.z;
+		if (ev.block == null)
+			return;
 		int id = ev.block.blockID;
 		int meta = ev.blockMetadata;
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);

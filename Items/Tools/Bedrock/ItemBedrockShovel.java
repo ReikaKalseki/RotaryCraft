@@ -18,7 +18,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.DragonAPI.ModInteract.TinkerOreHandler;
+import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -55,7 +55,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 			return 24F;
 		if (b.blockMaterial == Material.sand)
 			return 24F;
-		if (b.blockID == TinkerOreHandler.getInstance().gravelOreID)
+		if (b.blockID == TinkerBlockHandler.getInstance().gravelOreID)
 			return 36F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == b)

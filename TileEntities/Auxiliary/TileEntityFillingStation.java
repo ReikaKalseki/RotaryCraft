@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.API.Fuelable;
+import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -82,23 +82,23 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	private void fill() {
 		ItemStack is = inv[0];
-		Fuelable i = (Fuelable)is.getItem();
-		int added = i.addFuel(is, tank.getActualFluid(), 1);
+		Fillable i = (Fillable)is.getItem();
+		int added = i.addFluid(is, tank.getActualFluid(), 1);
 		tank.removeLiquid(added);
 	}
 
 	private boolean hasFillable() {
-		return inv[0] != null && inv[0].getItem() instanceof Fuelable;
+		return inv[0] != null && inv[0].getItem() instanceof Fillable;
 	}
 
 	private boolean canFill() {
 		if (tank.isEmpty())
 			return false;
 		ItemStack is = inv[0];
-		Fuelable i = (Fuelable)is.getItem();
-		int current = i.getCurrentFuel(is);
+		Fillable i = (Fillable)is.getItem();
+		int current = i.getCurrentFillLevel(is);
 		int max = i.getCapacity(is);
-		Fluid f = i.getFuelType(is);
+		Fluid f = i.getFluidType(is);
 		return (f == null || tank.getActualFluid().equals(f)) && max > current;
 	}
 
@@ -108,6 +108,11 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		if (i == 0) {
+			if (itemstack != null && itemstack.getItem() instanceof Fillable) {
+				return ((Fillable)itemstack.getItem()).isFull(itemstack);
+			}
+		}
 		return false;
 	}
 
@@ -134,7 +139,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (i == 0)
-			return itemstack.getItem() instanceof Fuelable;
+			return itemstack.getItem() instanceof Fillable;
 		if (i == 1) {
 			boolean container = FluidContainerRegistry.isFilledContainer(itemstack);
 			return container || itemstack.itemID == ItemRegistry.ETHANOL.getShiftedID();

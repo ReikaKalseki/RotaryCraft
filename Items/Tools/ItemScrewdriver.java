@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Screwdriverable;
@@ -170,7 +169,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			if (m == MachineRegistry.FLOODLIGHT) {
 				if (ep.isSneaking()) {
 					TileEntityFloodlight clicked = (TileEntityFloodlight)te;
-					if (clicked != null) {
+					if (clicked != null && clicked.getBlockMetadata() >= 4) {
 						if (clicked.beammode)
 							clicked.beammode = false;
 						else

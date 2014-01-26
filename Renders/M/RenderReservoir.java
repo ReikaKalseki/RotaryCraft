@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -114,12 +115,38 @@ public class RenderReservoir extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityReservoirAt((TileEntityReservoir)tile, par2, par4, par6, par8);
+		TileEntityReservoir tr = (TileEntityReservoir)tile;
+		if (this.isValidMachineRenderpass(tr)) {
+			this.renderTileEntityReservoirAt(tr, par2, par4, par6, par8);
+			if (tr.isInWorld() && tr.isCovered) {
+				this.renderCover(tr, par2, par4, par6);
+			}
+		}
 
 		if (MinecraftForgeClient.getRenderPass() == 1 || !((RotaryCraftTileEntity)tile).isInWorld()) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
+	}
+
+	private void renderCover(TileEntityReservoir tr, double par2, double par4, double par6) {
+		GL11.glTranslated(par2, par4, par6);
+		ReikaTextureHelper.bindTerrainTexture();
+		Icon ico = Block.glass.getIcon(0, 0);
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float du = ico.getMaxU();
+		float dv = ico.getMaxV();
+		float h = 0.99F;
+		float dd = 0;//.03125F;
+		Tessellator v5 = Tessellator.instance;
+		v5.startDrawingQuads();
+		v5.setNormal(0, 1, 0);
+		v5.addVertexWithUV(dd, h, 1-dd, u, dv);
+		v5.addVertexWithUV(1-dd, h, 1-dd, du, dv);
+		v5.addVertexWithUV(1-dd, h, dd, du, v);
+		v5.addVertexWithUV(dd, h, dd, u, v);
+		v5.draw();
+		GL11.glTranslated(-par2, -par4, -par6);
 	}
 
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {

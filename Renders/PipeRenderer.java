@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
@@ -328,12 +327,6 @@ public class PipeRenderer extends RotaryTERenderer {
 			//this.renderBlock(te, par2, par4, par6);
 			ClientProxy.pipe.renderBlockInInventory(te, par2, par4, par6);
 			GL11.glScaled(1/s, 1/sy, 1/s);
-		}
-
-		if (MinecraftForgeClient.getRenderPass() == 1) {
-			for (int i = 0; i < 6; i++) {
-				this.renderLiquid(te, par2, par4, par6, dirs[i]);
-			}
 		}
 	}
 

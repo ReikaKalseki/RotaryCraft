@@ -47,7 +47,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	BLASTPANE("Extra Block IDs", "Blast Glass Pane", 458, Block.class),
 	BLASTGLASS("Extra Block IDs", "Blast Glass", 459, Block.class),
 	BEAMBLOCK("Extra Block IDs", "Beam Block", 460, Block.class),
-	WATERBLOCK("Extra Block IDs", "Water Block", 452, Block.class);
+	DECOTANK("Extra Block IDs", "Decorative Tank", 452, Block.class);
 
 	private String name;
 	private String category;

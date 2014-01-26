@@ -119,8 +119,11 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 				return;
 			s.onDischarge(charge, ReikaMathLibrary.py3d(xCoord-x, yCoord-y, zCoord-z));
 		}
+		float dx = s.getAimX();
+		float dy = s.getAimY();
+		float dz = s.getAimZ();
 		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1.5F, 1F);
-		EntityDischarge d = new EntityDischarge(worldObj, xCoord+0.5, yCoord+0.75, zCoord+0.5, charge, x+0.5, y+0.5, z+0.5);
+		EntityDischarge d = new EntityDischarge(worldObj, xCoord+0.5, yCoord+0.75, zCoord+0.5, charge, x+dx, y+dy, z+dz);
 		if (!worldObj.isRemote)
 			worldObj.spawnEntityInWorld(d);
 		charge = 0;

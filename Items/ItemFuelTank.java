@@ -21,14 +21,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.API.Fuelable;
+import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
+public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
@@ -37,7 +37,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
 	}
 
 	@Override
-	public Fluid getFuelType(ItemStack is) {
+	public Fluid getFluidType(ItemStack is) {
 		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
 	}
 
@@ -47,12 +47,12 @@ public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
 	}
 
 	@Override
-	public int getCurrentFuel(ItemStack is) {
+	public int getCurrentFillLevel(ItemStack is) {
 		return is.stackTagCompound != null ? is.stackTagCompound.getInteger("fuel") : 0;
 	}
 
 	@Override
-	public int addFuel(ItemStack is, Fluid f, int amt) {
+	public int addFluid(ItemStack is, Fluid f, int amt) {
 		int fuel = 0;
 		if (!this.isValidFluid(f)) {
 			return 0;
@@ -131,7 +131,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
 		if (is.stackTagCompound != null) {
 			Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
-			int amt = this.getCurrentFuel(is);
+			int amt = this.getCurrentFillLevel(is);
 			int slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.JETPACK.getShiftedID(), ep.inventory);
 			if (slot == -1) {
 				slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.BEDPACK.getShiftedID(), ep.inventory);
@@ -139,8 +139,8 @@ public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
 			if (slot != -1) {
 				ItemStack jet = ep.inventory.getStackInSlot(slot);
 				ItemJetPack item = (ItemJetPack)jet.getItem();
-				int fuel = this.getCurrentFuel(is);
-				int added = item.addFuel(jet, f, fuel);
+				int fuel = this.getCurrentFillLevel(is);
+				int added = item.addFluid(jet, f, fuel);
 				int newfuel = fuel-added;
 				is.stackTagCompound.setInteger("fuel", newfuel);
 				if (newfuel <= 0)
@@ -148,6 +148,11 @@ public class ItemFuelTank extends ItemRotaryTool implements Fuelable {
 			}
 		}
 		return is;
+	}
+
+	@Override
+	public boolean isFull(ItemStack is) {
+		return this.getCurrentFillLevel(is) >= this.getCapacity(is);
 	}
 
 }

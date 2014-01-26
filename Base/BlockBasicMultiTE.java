@@ -229,7 +229,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (!tr.isPlayerAccessible(ep))
 				return false;
 			if (is != null) {
-				if (FluidContainerRegistry.isFilledContainer(is)) {
+				if (is.itemID == Block.thinGlass.blockID) {
+					if (!tr.isCovered) {
+						tr.isCovered = true;
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(is, is.stackSize-1));
+						return true;
+					}
+				}
+				else if (FluidContainerRegistry.isFilledContainer(is)) {
 					boolean bucket = FluidContainerRegistry.isBucket(is);
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
 					if (f != null) {
@@ -819,6 +827,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			int ticks = ((DiscreteFunction)te).getOperationTime();
 			float sec = Math.max(0.05F, ticks/20F);
 			currenttip.add(String.format("Operation Time: %.2fs", sec));
+		}
+		if (te instanceof TileEntityPiping) {
+			TileEntityPiping tp = (TileEntityPiping)te;
+			Fluid f = tp.getLiquidType();
+			if (f != null)
+				currenttip.add(String.format("%s", f.getLocalizedName()));
 		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
