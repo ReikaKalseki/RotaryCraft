@@ -11,17 +11,20 @@ package Reika.RotaryCraft.Blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {
+
+	private Icon[] iconBlocks = new Icon[16];
 
 	public BlockPiping(int par1, Material par3Material) {
 		super(par1, par3Material);
@@ -84,11 +87,19 @@ public class BlockPiping extends BlockBasicMultiTE {
 	@Override
 	public void registerIcons(IconRegister ico) {
 		for (int i = 0; i < 6; i++) {
-			icons[MachineRegistry.HOSE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:hose");
-			icons[MachineRegistry.PIPE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:pipe");
-			icons[MachineRegistry.FUELLINE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:fuelline");
-			icons[MachineRegistry.SPILLER.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:spiller");
+			iconBlocks[0] = Block.planks.getIcon(0, 0);
+			iconBlocks[1] = RotaryCraft.decoblock.getIcon(0, 0);
+			iconBlocks[2] = Block.obsidian.getIcon(0, 0);
+			iconBlocks[4] = Block.blockRedstone.getIcon(0, 0);
+			iconBlocks[5] = Block.netherBrick.getIcon(0, 0);
+			iconBlocks[6] = Block.blockLapis.getIcon(0, 0);
+			iconBlocks[7] = Block.sandStone.getIcon(0, 0);
 		}
+	}
+
+	@Override
+	public Icon getIcon(int s, int meta) {
+		return iconBlocks[meta];
 	}
 
 	@Override

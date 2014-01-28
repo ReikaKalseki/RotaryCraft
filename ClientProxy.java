@@ -176,7 +176,7 @@ public class ClientProxy extends CommonProxy
 
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
-			if (m.hasRender()) {
+			if (m.hasRender() && !m.isPipe()) {
 				RotaryTERenderer render = RotaryRenderList.instantiateRenderer(m);
 				//int[] renderLists = render.createLists();
 				//GLListData.addListData(m, renderLists);

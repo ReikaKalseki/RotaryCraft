@@ -50,7 +50,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.transferBetween(world, x, y, z);
-
 		if (!isCovered) {
 			if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
 				if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
@@ -106,8 +105,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
 			if (tank.getLevel() < CAPACITY) {
-				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (m == MachineRegistry.RESERVOIR) {
+				if (this.matchMachine(world, dx, dy, dz)) {
 					TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(dx, dy, dz);
 					if (this.canMixWith(tile)) {
 						int diff = tile.getLevel()-this.getLevel();
@@ -278,8 +276,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		int dx = xCoord+dir.offsetX;
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
-		MachineRegistry m = MachineRegistry.getMachine(worldObj, dx, dy, dz);
-		if (m == MachineRegistry.RESERVOIR) {
+		if (this.matchMachine(worldObj, dx, dy, dz)) {
 			TileEntityReservoir te = (TileEntityReservoir)worldObj.getBlockTileEntity(dx, dy, dz);
 			return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
 		}
@@ -350,9 +347,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		addCreativeFluid("lubricant");
 		addCreativeFluid("jet fuel");
 		addCreativeFluid("rc ethanol");
-		addCreativeFluid("ammonia");
-		addCreativeFluid("sodium");
-		addCreativeFluid("chlorine");
+		addCreativeFluid("rc ammonia");
+		addCreativeFluid("rc sodium");
+		addCreativeFluid("rc chlorine");
 		addCreativeFluid("heavy water");
 		addCreativeFluid("fuel");
 		addCreativeFluid("oil");

@@ -361,6 +361,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
 	}
 
+	@Override
+	public boolean needsToCauseBlockUpdates() {
+		return true;
+	}
+
 	public static enum TransferAmount {
 		UNITY(),
 		BUCKET(),

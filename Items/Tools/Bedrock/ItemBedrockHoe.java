@@ -34,6 +34,16 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
+	@Override
+	public int getItemEnchantability() {
+		return 0;
+	}
+
+	@Override
+	public boolean isItemTool(ItemStack is) {
+		return true;
+	}
+
 	private void setIndex(int tex) {
 		index = tex;
 	}

@@ -26,6 +26,7 @@ import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -151,7 +152,14 @@ public class ItemMachineRenderer implements IItemRenderer {
 			if (item.getItemDamage() >= MachineRegistry.machineList.length)
 				return;
 			MachineRegistry machine = MachineRegistry.machineList[item.getItemDamage()];
-			if (machine.hasModel()) {
+			if (machine.isPipe()) {
+				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
+					double d = 0.5;
+					GL11.glTranslated(d, d, d);
+				}
+				rb.renderBlockAsItem(BlockRegistry.PIPING.getBlockVariable(), machine.getMachineMetadata(), 1);
+			}
+			else if (machine.hasModel()) {
 				TileEntity te = this.getRenderingInstance(machine);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;

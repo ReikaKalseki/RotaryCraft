@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -88,8 +89,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 								}
 								else {
 									int newsize = inslot.stackSize-1;
-									ItemStack is2 = new ItemStack(inslot.itemID, 1, inslot.getItemDamage());
-									ItemStack is3 = new ItemStack(inslot.itemID, newsize, inslot.getItemDamage());
+									ItemStack is2 = ReikaItemHelper.getSizedItemStack(inslot, 1);
+									ItemStack is3 = ReikaItemHelper.getSizedItemStack(inslot, newsize);
 									if (newsize <= 0)
 										is3 = null;
 									if (ReikaInventoryHelper.addToIInv(is2, this)) {

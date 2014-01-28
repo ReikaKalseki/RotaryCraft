@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
@@ -38,61 +39,30 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
 		Tessellator v5 = Tessellator.instance;
+		ReikaTextureHelper.bindTerrainTexture();
 
 		GL11.glColor3f(1, 1, 1);
+		double s = 1.25;
+		GL11.glScaled(s, s, s);
 		v5.startDrawingQuads();
 
 		Icon ico = block.getIcon(0, metadata);
-		float u = ico.getMinU();
-		float du = ico.getMaxU();
-		float v = ico.getMinV();
-		float dv = ico.getMaxV();
 
 		float dx = -0.5F;
 		float dy = -0.5F;
 		float dz = -0.5F;
 		v5.addTranslation(dx, dy, dz);
-		v5.setNormal(1, 1, 1);
+		v5.setNormal(0, 0.75F, 0);
 
-		this.faceBrightness(ForgeDirection.UP, v5);
-		v5.addVertexWithUV(1, 1, 0, u, v);
-		v5.addVertexWithUV(0, 1, 0, du, v);
-		v5.addVertexWithUV(0, 1, 1, du, dv);
-		v5.addVertexWithUV(1, 1, 1, u, dv);
-
-		this.faceBrightness(ForgeDirection.DOWN, v5);
-		v5.addVertexWithUV(0, 0, 0, du, v);
-		v5.addVertexWithUV(1, 0, 0, u, v);
-		v5.addVertexWithUV(1, 0, 1, u, dv);
-		v5.addVertexWithUV(0, 0, 1, du, dv);
-
-		this.faceBrightness(ForgeDirection.EAST, v5);
-		v5.addVertexWithUV(1, 0, 0, du, v);
-		v5.addVertexWithUV(1, 1, 0, u, v);
-		v5.addVertexWithUV(1, 1, 1, u, dv);
-		v5.addVertexWithUV(1, 0, 1, du, dv);
-
-		this.faceBrightness(ForgeDirection.WEST, v5);
-		v5.addVertexWithUV(0, 1, 0, u, v);
-		v5.addVertexWithUV(0, 0, 0, du, v);
-		v5.addVertexWithUV(0, 0, 1, du, dv);
-		v5.addVertexWithUV(0, 1, 1, u, dv);
-
-		this.faceBrightness(ForgeDirection.SOUTH, v5);
-		v5.addVertexWithUV(0, 1, 1, u, v);
-		v5.addVertexWithUV(0, 0, 1, du, v);
-		v5.addVertexWithUV(1, 0, 1, du, dv);
-		v5.addVertexWithUV(1, 1, 1, u, dv);
-
-		this.faceBrightness(ForgeDirection.NORTH, v5);
-		v5.addVertexWithUV(0, 0, 0, du, v);
-		v5.addVertexWithUV(0, 1, 0, u, v);
-		v5.addVertexWithUV(1, 1, 0, u, dv);
-		v5.addVertexWithUV(1, 0, 0, du, dv);
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			this.renderInventoryFace(ico, dir);
+		}
 
 		v5.addTranslation(-dx, -dy, -dz);
 
 		v5.draw();
+		GL11.glScaled(1D/s, 1D/s, 1D/s);
 	}
 
 	@Override
@@ -419,6 +389,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	private void renderFace(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		if (tile == null)
+			return;
 		Tessellator v5 = Tessellator.instance;
 		v5.addTranslation(x, y, z);
 		int br = tile.getPipeBlockType().getMixedBrightnessForBlock(world, x, y, z);
@@ -1130,6 +1102,218 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			break;
 		}
 		v5.setColorOpaque_F(f, f, f);
+	}
+
+	private void renderInventoryFace(Icon ico, ForgeDirection dir) {
+		Tessellator v5 = Tessellator.instance;
+
+		float size = 0.75F/2F;
+		float window = 0.5F/2F;
+		float dl = size-window;
+		float dd = 0.5F-size;
+
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float u2 = ico.getMaxU();
+		float v2 = ico.getMaxV();
+
+		float ddu = u2-u;
+		float ddv = v2-v;
+		float uo = u;
+		float vo = v;
+		float u2o = u2;
+		float v2o = v2;
+
+		u += ddu*(1-size)/5;
+		v += ddv*(1-size)/5;
+		u2 -= ddu*(1-size)/5;
+		v2 -= ddv*(1-size)/5;
+
+		float du = ddu*dd;
+		float dv = ddv*dd;
+
+		float lx = dd+dl;
+		float ly = dd+dl;
+		float mx = 1-dd-dl;
+		float my = 1-dd-dl;
+
+		Icon gico = Block.glass.getIcon(0, 0);
+		float gu = gico.getMinU();
+		float gv = gico.getMinV();
+		float gu2 = gico.getMaxU();
+		float gv2 = gico.getMaxV();
+		float dgu = gu2-gu;
+		float dgv = gv2-gv;
+
+		float guu = gu+dgu*dl;
+		float gvv = gv+dgv*dl;
+
+		gu += dgu/8;
+		gv += dgv/8;
+		gu2 -= dgu/8;
+		gv2 -= dgv/8;
+
+		this.faceBrightness(dir, v5);
+		switch(dir) {
+		case DOWN:
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+			v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
+			v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v2);
+			v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(1-dd-dl, 1-dd, 	1-dd, 		u2-du, 	v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v2);
+
+			v5.addVertexWithUV(dd, 		1-dd, 	dd+dl, 		u, 		v2-dv);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	dd+dl, 		u2, 	v2-dv);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd-dl, 	u2, 	v+dv);
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u, 		v+dv);
+
+			v5.addVertexWithUV(mx, 1-dd, ly, gu2, gv);
+			v5.addVertexWithUV(lx, 1-dd, ly, gu, gv);
+			v5.addVertexWithUV(lx, 1-dd, my, gu, gv2);
+			v5.addVertexWithUV(mx, 1-dd, my, gu2, gv2);
+			break;
+		case NORTH:
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v2);
+			v5.addVertexWithUV(dd+dl, 	dd, 	1-dd, 		u+du, 	v2);
+			v5.addVertexWithUV(dd+dl, 	1-dd, 	1-dd, 		u+du, 	v);
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u, 		v);
+
+			v5.addVertexWithUV(1-dd-dl, dd, 	1-dd, 		u2-du, 	v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd-dl, 1-dd, 	1-dd, 		u2-du, 	v);
+
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 	dd+dl, 	1-dd, 		u2, 	v2-dv);
+			v5.addVertexWithUV(dd, 		dd+dl, 	1-dd, 		u, 		v2-dv);
+
+			v5.addVertexWithUV(dd, 		1-dd-dl, 	1-dd, 	u, 		v+dv);
+			v5.addVertexWithUV(1-dd, 	1-dd-dl, 	1-dd, 	u2, 	v+dv);
+			v5.addVertexWithUV(1-dd, 	1-dd, 		1-dd, 	u2, 	v);
+			v5.addVertexWithUV(dd, 		1-dd, 		1-dd, 	u, 		v);
+
+			v5.addVertexWithUV(mx, my, 1-dd, gu2, gv2);
+			v5.addVertexWithUV(lx, my, 1-dd, gu, gv2);
+			v5.addVertexWithUV(lx, ly, 1-dd, gu, gv);
+			v5.addVertexWithUV(mx, ly, 1-dd, gu2, gv);
+			break;
+		case EAST:
+			v5.addVertexWithUV(1-dd, 		1-dd, 	dd, 		u, 		v);
+			v5.addVertexWithUV(1-dd, 		1-dd, 	dd+dl, 		u+du, 	v);
+			v5.addVertexWithUV(1-dd, 		dd, 	dd+dl, 		u+du, 	v2);
+			v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+			v5.addVertexWithUV(1-dd, 		1-dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
+
+			v5.addVertexWithUV(1-dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+			v5.addVertexWithUV(1-dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+			v5.addVertexWithUV(1-dd, 		dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 		dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(1-dd, 		1-dd, 		dd, 	u, 		v);
+			v5.addVertexWithUV(1-dd, 		1-dd, 		1-dd, 	u2, 	v);
+			v5.addVertexWithUV(1-dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+			v5.addVertexWithUV(1-dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+
+			v5.addVertexWithUV(1-dd, ly, mx, gu2, gv);
+			v5.addVertexWithUV(1-dd, ly, lx, gu, gv);
+			v5.addVertexWithUV(1-dd, my, lx, gu, gv2);
+			v5.addVertexWithUV(1-dd, my, mx, gu2, gv2);
+			break;
+		case WEST:
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+			v5.addVertexWithUV(dd, 		dd, 	dd+dl, 		u+du, 	v2);
+			v5.addVertexWithUV(dd, 		1-dd, 	dd+dl, 		u+du, 	v);
+			v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v);
+
+			v5.addVertexWithUV(dd, 		dd, 	1-dd-dl, 	u2-du, 	v2);
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(dd, 		1-dd, 	1-dd-dl, 	u2-du, 	v);
+
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u2, 	v2);
+			v5.addVertexWithUV(dd, 		dd+dl, 	1-dd, 		u2, 	v2-dv);
+			v5.addVertexWithUV(dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+
+			v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+			v5.addVertexWithUV(dd, 		1-dd-dl, 	1-dd, 	u2, 	v+dv);
+			v5.addVertexWithUV(dd, 		1-dd, 		1-dd, 	u2, 	v);
+			v5.addVertexWithUV(dd, 		1-dd, 		dd, 	u, 		v);
+
+			v5.addVertexWithUV(dd, my, mx, gu2, gv2);
+			v5.addVertexWithUV(dd, my, lx, gu, gv2);
+			v5.addVertexWithUV(dd, ly, lx, gu, gv);
+			v5.addVertexWithUV(dd, ly, mx, gu2, gv);
+			break;
+		case UP:
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+			v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
+			v5.addVertexWithUV(dd+dl, 	dd, 	1-dd, 		u+du, 	v);
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v);
+
+			v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd-dl, dd, 	1-dd, 		u2-du, 	v);
+
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd, 	dd, 	dd+dl, 		u2, 	v2-dv);
+			v5.addVertexWithUV(dd, 		dd, 	dd+dl, 		u, 		v2-dv);
+
+			v5.addVertexWithUV(dd, 		dd, 	1-dd-dl, 	u, 		v+dv);
+			v5.addVertexWithUV(1-dd, 	dd, 	1-dd-dl, 	u2, 	v+dv);
+			v5.addVertexWithUV(1-dd, 	dd, 	1-dd, 		u2, 	v);
+			v5.addVertexWithUV(dd, 		dd, 	1-dd, 		u, 		v);
+
+			v5.addVertexWithUV(mx, dd, my, gu2, gv2);
+			v5.addVertexWithUV(lx, dd, my, gu, gv2);
+			v5.addVertexWithUV(lx, dd, ly, gu, gv);
+			v5.addVertexWithUV(mx, dd, ly, gu2, gv);
+			break;
+		case SOUTH:
+			v5.addVertexWithUV(dd, 		1-dd, 	dd, 		u, 		v);
+			v5.addVertexWithUV(dd+dl, 	1-dd, 	dd, 		u+du, 	v);
+			v5.addVertexWithUV(dd+dl, 	dd, 	dd, 		u+du, 	v2);
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(1-dd-dl, 1-dd, 	dd, 		u2-du, 	v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 	dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(1-dd-dl, dd, 	dd, 		u2-du, 	v2);
+
+			v5.addVertexWithUV(dd, 		dd+dl, 	dd, 		u, 		v2-dv);
+			v5.addVertexWithUV(1-dd, 	dd+dl, 	dd, 		u2, 	v2-dv);
+			v5.addVertexWithUV(1-dd, 	dd, 	dd, 		u2, 	v2);
+			v5.addVertexWithUV(dd, 		dd, 	dd, 		u, 		v2);
+
+			v5.addVertexWithUV(dd, 		1-dd, 		dd, 		u, 		v);
+			v5.addVertexWithUV(1-dd, 	1-dd, 		dd, 		u2, 	v);
+			v5.addVertexWithUV(1-dd, 	1-dd-dl, 	dd, 	u2, 	v+dv);
+			v5.addVertexWithUV(dd, 		1-dd-dl, 	dd, 	u, 		v+dv);
+
+			v5.addVertexWithUV(mx, ly, dd, gu2, gv);
+			v5.addVertexWithUV(lx, ly, dd, gu, gv);
+			v5.addVertexWithUV(lx, my, dd, gu, gv2);
+			v5.addVertexWithUV(mx, my, dd, gu2, gv2);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

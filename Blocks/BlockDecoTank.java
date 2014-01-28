@@ -10,10 +10,12 @@
 package Reika.RotaryCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -256,6 +258,18 @@ public class BlockDecoTank extends Block {
 			}
 		}
 		return is;
+	}
+
+	@Override
+	public int damageDropped(int dmg) {
+		return dmg;
+	}
+
+	@Override
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		par3List.add(new ItemStack(par1, 1, 0));
+		par3List.add(new ItemStack(par1, 1, 1));
 	}
 
 }

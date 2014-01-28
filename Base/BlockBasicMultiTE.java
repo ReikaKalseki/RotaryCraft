@@ -45,6 +45,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -76,7 +78,6 @@ import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
@@ -138,7 +139,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	@Override
-	public final Icon getIcon(int s, int meta) {
+	public Icon getIcon(int s, int meta) {
 		try {
 			return icons[meta][0][s][0];
 		}
@@ -465,8 +466,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			}
 		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isPlayerAccessible(ep)) {
-			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
-			return true;
+			//ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
+			//return true;
 		}
 		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;
@@ -809,19 +810,30 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}
-		if (te instanceof PoweredLiquidReceiver) {
+		else if (te instanceof PoweredLiquidReceiver) {
 			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
 			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
-		if (te instanceof PoweredLiquidProducer) {
+		else if (te instanceof PoweredLiquidProducer) {
 			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
 			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
+		}
+		else if (te instanceof IFluidHandler) {
+			FluidTankInfo[] tanks = ((IFluidHandler)te).getTankInfo(ForgeDirection.UP);
+			if (tanks != null) {
+				for (int i = 0; i < tanks.length; i++) {
+					FluidTankInfo info = tanks[i];
+					FluidStack fs = info.fluid;
+					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName()) : "Empty";
+					currenttip.add("Tank "+i+": "+input);
+				}
+			}
 		}
 		if (te instanceof DiscreteFunction) {
 			int ticks = ((DiscreteFunction)te).getOperationTime();

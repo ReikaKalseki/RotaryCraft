@@ -61,6 +61,7 @@ public enum BlockRegistry implements RegistryEnum {
 
 	private Class block;
 	private Material mat;
+	public final int indexOffset;
 	public static final BlockRegistry[] blockList = BlockRegistry.values();
 
 	private static final HashMap<Integer, BlockRegistry> IDMap = new HashMap();
@@ -74,10 +75,18 @@ public enum BlockRegistry implements RegistryEnum {
 	private BlockRegistry(Class cl, Material m) {
 		block = cl;
 		mat = m;
+		indexOffset = this.getOffsetFromName();
+	}
+
+	private int getOffsetFromName() {
+		String s = this.name().toLowerCase();
+		String last = s.substring(s.length()-1);
+		int off = ReikaJavaLibrary.safeIntParse(last);
+		return off > 0 ? off-1 : 0;
 	}
 
 	public boolean isNthBlock(int n) {
-		return this.getOffset() == n-1;
+		return indexOffset == n-1;
 	}
 
 	public static boolean isMachineBlock(int id) {
@@ -99,14 +108,6 @@ public enum BlockRegistry implements RegistryEnum {
 		return null;
 	}
 
-	public int getOffset() {
-		String name = this.getBlockVariableName();
-		String num = name.substring(name.length()-1);
-		if (!ReikaJavaLibrary.isValidInteger(num))
-			return 0;
-		return (Integer.parseInt(num)-1);
-	}
-
 	public static int getBlockVariableIndexFromClassAndMetadata(Class cl, int metadata) {
 		ArrayList<BlockRegistry> blocks = classMap.get(cl);
 		int offset = 1+metadata/16;
@@ -120,7 +121,7 @@ public enum BlockRegistry implements RegistryEnum {
 	public static int getOffsetFromBlockID(int id) {
 		BlockRegistry b = getMachineBlock(id);
 		if (b != null)
-			return b.getOffset();
+			return b.indexOffset;
 		//throw new RuntimeException("Unregistered block ID "+id);
 		RotaryCraft.logger.logError("Unregistered block ID "+id);
 		Thread.dumpStack();

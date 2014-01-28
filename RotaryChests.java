@@ -58,7 +58,7 @@ public class RotaryChests {
 		data.addItem(3, Location.STRONGHOLD_CROSSING, ItemStacks.lonsda, 1, 2, 20);
 		data.addItem(2, Location.STRONGHOLD_CROSSING, new ItemStack(RotaryCraft.obsidianglass), 1, 6, 30);
 
-		data.addItem(2, Location.STRONGHOLD_LIBRARY, ItemRegistry.HANDBOOK.getStackOf(), 1, 1, 50);
+		//data.addItem(2, Location.STRONGHOLD_LIBRARY, ItemRegistry.HANDBOOK.getStackOf(), 1, 1, 50);
 		data.addItem(3, Location.STRONGHOLD_LIBRARY, ItemRegistry.METER.getStackOf(), 1, 1, 5);
 
 		data.addItem(1, Location.VILLAGE, ItemStacks.steelingot, 1, 3, 20);

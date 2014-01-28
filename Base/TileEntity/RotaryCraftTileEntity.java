@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
@@ -84,7 +85,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public final int getTileEntityBlockID() {
-		return MachineRegistry.machineList[this.getMachineIndex()].getBlockID();
+		return this.getMachine().getBlockID();
 	}
 
 	public void giveNoSuperWarning() {
@@ -219,5 +220,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public boolean hasIconOverride() {
 		return false;
+	}
+
+	public boolean matchMachine(IBlockAccess world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		int id2 = this.getTileEntityBlockID();
+		int meta2 = this.getMachine().getMachineMetadata();
+		return id2 == id && meta2 == meta;
 	}
 }

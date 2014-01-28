@@ -41,6 +41,11 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	@Override
+	public boolean isItemTool(ItemStack is) {
+		return true;
+	}
+
+	@Override
 	public boolean canHarvestBlock(Block b) {
 		return true;
 	}

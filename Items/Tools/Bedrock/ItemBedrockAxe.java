@@ -39,6 +39,11 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	}
 
 	@Override
+	public boolean isItemTool(ItemStack is) {
+		return true;
+	}
+
+	@Override
 	public boolean canHarvestBlock(Block b) {
 		return true;
 	}
