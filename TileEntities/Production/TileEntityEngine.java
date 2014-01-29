@@ -47,6 +47,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -647,8 +648,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return false;
 
 		boolean ac = ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
+		//ReikaJavaLibrary.pConsole(timer.getTickOf("fuel")+"/"+timer.getCapOf("fuel"));
 
-		if (ac && timer.checkCap("fuel") && !world.isRemote) {
+		if (!world.isRemote && ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
 			m--;
 			is.stackTagCompound.setInteger("magnet", m);
@@ -838,7 +840,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				torque = 0;
 			if (soundtick == 0 && omega == 0)
 				soundtick = 2000;
-			timer.resetTicker("fuel");
+			if (type != EngineType.AC)
+				timer.resetTicker("fuel");
 		}
 	}
 

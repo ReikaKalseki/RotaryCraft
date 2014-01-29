@@ -23,10 +23,10 @@ public class CompactorAPI {
 	private static Method add;
 
 	/** Adds a compactor recipe. Note that it will follow the general rules of
-	 * 4 items in, one item out, producing 1 or 2 of the product. */
-	public static void addCompactorRecipe(ItemStack in, ItemStack out) {
+	 * 4 items in, one item out, producing 1 or 2 of the product. 'Pressure' is required pressure. */
+	public static void addCompactorRecipe(ItemStack in, ItemStack out, int pressure, int temperature) {
 		try {
-			add.invoke(instance, in.itemID, in.getItemDamage(), out, 0);
+			add.invoke(instance, in.itemID, in.getItemDamage(), out, 0, pressure, temperature);
 		}
 		catch (IllegalAccessException e) {
 			ReikaJavaLibrary.pConsole("Error adding compactor recipe for "+in);
@@ -47,7 +47,7 @@ public class CompactorAPI {
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipesCompactor");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
-			add = recipes.getMethod("addSmelting", int.class, int.class, ItemStack.class, float.class);
+			add = recipes.getMethod("addCompacting", int.class, int.class, ItemStack.class, float.class, int.class, int.class);
 		}
 		catch (ClassNotFoundException e) {
 			ReikaJavaLibrary.pConsole("Could not load RotaryCraft class!");

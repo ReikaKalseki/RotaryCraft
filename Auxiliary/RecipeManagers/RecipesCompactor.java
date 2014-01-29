@@ -22,18 +22,17 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
 public class RecipesCompactor
 {
 	private static final RecipesCompactor CompactorBase = new RecipesCompactor();
 
-	/** The list of smelting results. */
-	private Map metaSmeltingList = new HashMap();
+	private Map metaCompactingList = new HashMap();
+	private Map pressureMap = new HashMap();
+	private Map temperatureMap = new HashMap();
 	private List<ItemStack> compactables = new ArrayList();
 
-	/**
-	 * Used to call methods addSmelting and getSmeltingResult.
-	 */
 	public static final RecipesCompactor getRecipes()
 	{
 		return CompactorBase;
@@ -41,12 +40,14 @@ public class RecipesCompactor
 
 	private RecipesCompactor()
 	{
-		this.addSmelting(Item.coal, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F); //No charcoal
-		this.addSmelting(ItemStacks.anthracite, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F);
-		this.addSmelting(ItemStacks.prismane, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F);
-		this.addSmelting(ItemStacks.lonsda, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F);
+		int rp = TileEntityCompactor.REQPRESS;
+		int rt = TileEntityCompactor.REQTEMP;
+		this.addCompacting(Item.coal, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F, rp, rt); //No charcoal
+		this.addCompacting(ItemStacks.anthracite, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F, rp, rt);
+		this.addCompacting(ItemStacks.prismane, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F, rp, rt);
+		this.addCompacting(ItemStacks.lonsda, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F, rp, rt);
 
-		this.addSmelting(Item.blazePowder, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F);
+		this.addCompacting(Item.blazePowder, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F, 2000, 600);
 	}
 
 	public final int getNumberPerStep() {
@@ -54,26 +55,28 @@ public class RecipesCompactor
 	}
 
 	/**
-	 * Add a metadata-sensitive furnace recipe
+	 * Add a metadata-sensitive compactor recipe
 	 * @param itemID The Item ID
 	 * @param metadata The Item Metadata
 	 * @param itemstack The ItemStack for the result
 	 */
-	public void addSmelting(ItemStack in, ItemStack itemstack, float xp)
+	public void addCompacting(ItemStack in, ItemStack itemstack, float xp, int pressure, int temperature)
 	{
-		metaSmeltingList.put(Arrays.asList(in.itemID, in.getItemDamage()), itemstack);
+		metaCompactingList.put(Arrays.asList(in.itemID, in.getItemDamage()), itemstack);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
 		compactables.add(in.copy());
+		pressureMap.put(Arrays.asList(in.itemID, in.getItemDamage()), pressure);
+		temperatureMap.put(Arrays.asList(in.itemID, in.getItemDamage()), temperature);
 	}
 
-	public void addSmelting(Item in, ItemStack itemstack, float xp)
+	public void addCompacting(Item in, ItemStack itemstack, float xp, int pressure, int temperature)
 	{
-		this.addSmelting(new ItemStack(in), itemstack, xp);
+		this.addCompacting(new ItemStack(in), itemstack, xp, pressure, temperature);
 	}
 
-	public void addSmelting(Block in, ItemStack itemstack, float xp)
+	public void addCompacting(Block in, ItemStack itemstack, float xp, int pressure, int temperature)
 	{
-		this.addSmelting(new ItemStack(in), itemstack, xp);
+		this.addCompacting(new ItemStack(in), itemstack, xp, pressure, temperature);
 	}
 
 	/**
@@ -81,17 +84,22 @@ public class RecipesCompactor
 	 * @param item The Source ItemStack
 	 * @return The result ItemStack
 	 */
-	public ItemStack getSmeltingResult(ItemStack item)
+	public ItemStack getCompactingResult(ItemStack item)
 	{
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
-		ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		ItemStack ret = (ItemStack)metaCompactingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
 		return ret;
 	}
 
 	public boolean isCompactable(ItemStack item) {
-		return this.getSmeltingResult(item) != null;
+		return this.getCompactingResult(item) != null;
+	}
+
+	public int getReqPressure(ItemStack item) {
+		Integer ret = (Integer)pressureMap.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		return ret != null ? ret.intValue() : 0;
 	}
 
 	public List<ItemStack> getCompactables() {
@@ -101,10 +109,15 @@ public class RecipesCompactor
 	public ItemStack getSource(ItemStack result) {
 		for (int i = 0; i < compactables.size(); i++) {
 			ItemStack in = compactables.get(i);
-			ItemStack out = this.getSmeltingResult(in);
+			ItemStack out = this.getCompactingResult(in);
 			if (ReikaItemHelper.matchStacks(result, out))
 				return in;
 		}
 		return null;
+	}
+
+	public int getReqTemperature(ItemStack item) {
+		Integer ret = (Integer)temperatureMap.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		return ret != null ? ret.intValue() : 0;
 	}
 }

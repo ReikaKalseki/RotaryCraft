@@ -430,7 +430,7 @@ public enum ItemRegistry implements RegistryEnum {
 			return Item.helmetDiamond.getMaxDamage();
 		case SPRING:
 		case STRONGCOIL:
-			return 65536;
+			return 32000;
 		case SLIDE:
 			return 25;
 		case RAILGUN:

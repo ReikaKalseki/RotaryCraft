@@ -420,10 +420,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	{
 		this.readPower();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", power));
-		if (!(power >= MINPOWER/(5-this.getStage()) && torque >= MINTORQUE))
-			return false;
-
-		if (pressure < REQPRESS || temperature < REQTEMP)
+		if (power < MINPOWER || torque < MINTORQUE)
 			return false;
 
 		for (int i = 0; i < 4; i++)
@@ -443,7 +440,10 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 		if (inv[0].getItemDamage() != inv[3].getItemDamage())
 			return false;
 
-		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(inv[0]);
+		if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]) || temperature < RecipesCompactor.getRecipes().getReqTemperature(inv[0]))
+			return false;
+
+		ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(inv[0]);
 		if (itemstack == null)
 			return false;
 		if (inv[4] != null) {
@@ -466,7 +466,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	{
 		if (!this.canSmelt())
 			return;
-		ItemStack itemstack = RecipesCompactor.getRecipes().getSmeltingResult(inv[0]);
+		ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(inv[0]);
 		if (inv[4] == null)
 			inv[4] = itemstack.copy();
 		else if (inv[4].itemID == itemstack.itemID)

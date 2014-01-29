@@ -35,11 +35,9 @@ public class ItemCoil extends ItemBasic implements TensionStorage
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
-		for (int i = 0; i < 30000; i++)
+		for (int i = 0; i <= 32000; i++)
 			if (ReikaMathLibrary.isPowerOf(i, 2) || i == 0)
 				par3List.add(new ItemStack(par1, 1, i));
-		par3List.add(new ItemStack(par1, 1, 24000));
-		par3List.add(new ItemStack(par1, 1, 30000));
 	}
 
 	@Override

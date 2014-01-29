@@ -136,8 +136,8 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 		int id = inslot[0].itemID;
 		int max = 0;
 		max = torque/((TensionStorage)inslot[0].getItem()).getStiffness(inslot[0]);
-		if (max > 30000) //technical limit
-			return 30000;
+		if (max > ItemRegistry.SPRING.getNumberMetadatas()) //technical limit
+			return ItemRegistry.SPRING.getNumberMetadatas();
 		return max;
 	}
 

@@ -14,6 +14,7 @@ import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 
@@ -36,7 +37,7 @@ public class CompactorHandler extends TemplateRecipeHandler {
 
 		public CompactorRecipe(ItemStack in) {
 			input = in;
-			output = RecipesCompactor.getRecipes().getSmeltingResult(in);
+			output = RecipesCompactor.getRecipes().getCompactingResult(in);
 		}
 
 		@Override
@@ -116,6 +117,21 @@ public class CompactorHandler extends TemplateRecipeHandler {
 	{
 		drawTexturedModalRect(142, 26, 176, 37, 4, 44);
 		drawTexturedModalRect(112, 25, 181, 41, 11, 46);
+
+		int pressure = this.getPressure(recipe);
+		int temperature = this.getTemperature(recipe);
+		Minecraft.getMinecraft().fontRenderer.drawString(String.format("Required Pressure: %d kPa", pressure), 0, 85, 0x333333, false);
+		Minecraft.getMinecraft().fontRenderer.drawString(String.format("Required Temperature: %dC", temperature), 0, 95, 0x333333, false);
+	}
+
+	private int getPressure(int recipe) {
+		CompactorRecipe comp = (CompactorRecipe)arecipes.get(recipe);
+		return RecipesCompactor.getRecipes().getReqPressure(comp.input);
+	}
+
+	private int getTemperature(int recipe) {
+		CompactorRecipe comp = (CompactorRecipe)arecipes.get(recipe);
+		return RecipesCompactor.getRecipes().getReqTemperature(comp.input);
 	}
 
 }

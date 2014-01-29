@@ -1194,6 +1194,7 @@ public enum MachineRegistry {
 		case DYNAMOMETER:
 		case FERMENTER:
 		case GRINDER:
+		case COMPACTOR:
 		case BORER:
 		case PUMP:
 		case EXTRACTOR:
