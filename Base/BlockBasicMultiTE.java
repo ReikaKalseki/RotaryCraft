@@ -78,6 +78,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
@@ -466,8 +467,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			}
 		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isPlayerAccessible(ep)) {
-			//ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
-			//return true;
+			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
+			return true;
 		}
 		if (m == MachineRegistry.SCREEN) {
 			TileEntityScreen tc = (TileEntityScreen)te;

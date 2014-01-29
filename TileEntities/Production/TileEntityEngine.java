@@ -1334,7 +1334,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		water.writeToNBT(NBT);
 		fuel.writeToNBT(NBT);
 
-		NBT.setInteger("fuelburn", timer.getTickOf("fuel"));
+		timer.writeToNBT(NBT, "engine");
+
 		NBT.setInteger("additive", additives);
 		NBT.setBoolean("choke", isChoking);
 		NBT.setBoolean("jetfail", isJetFailing);
@@ -1372,7 +1373,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		lubricant.readFromNBT(NBT);
 
-		timer.setTickOf("fuel", NBT.getInteger("fuelburn"));
+		timer.readFromNBT(NBT, "engine");
 
 		additives = NBT.getInteger("additive");
 		isChoking = NBT.getBoolean("choke");
