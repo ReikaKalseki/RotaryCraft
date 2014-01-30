@@ -297,7 +297,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 			pressure += ReikaMathLibrary.extrema((Pamb-pressure)/40, 1, "max");
 
 		if (omega > 0) {
-			pressure += power/(1500*omega); //not direct this.torque since need omega > 0
+			pressure += 128*ReikaMathLibrary.logbase(torque, 2);
 		}
 
 		if (pressure >= 0.8*MAXPRESSURE) {
@@ -522,7 +522,9 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 4)
 			return false;
-		return (is.itemID == Item.coal.itemID || is.itemID == RotaryCraft.compacts.itemID);
+		if (is.itemID == Item.coal.itemID || is.itemID == RotaryCraft.compacts.itemID)
+			return true;
+		return RecipesCompactor.getRecipes().isCompactable(is);
 	}
 
 	@Override
