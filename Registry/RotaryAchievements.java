@@ -9,159 +9,126 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
-import net.minecraft.stats.StatList;
 import net.minecraftforge.common.AchievementPage;
-import Reika.DragonAPI.Exception.IDConflictException;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 
 public enum RotaryAchievements {
 
-	MAKESTEEL("Steelmaker", 				4, -2, AchievementList.acquireIron, false),
-	MAKEYEAST("Fermenter", 					4, -1, null, false),
-	EXTRACTOR("Processor", 					4, 0, null, false),
-	BORER("Getting Bored", 					4, 1, null, false),
-	RECYCLE("Green", 						3, -2, null, false),
-	MAKEJET("Jet Engine", 					3, -1, null, true),
-	MAKERAILGUN("Overkill", 				3, 0, null, true),
-	SUCKEDINTOJET("This Really Sucks", 		3, 1, MAKEJET.ordinal(), false),
-	BEDROCKBREAKER("Unbreakable?", 			2, -2, MAKESTEEL.ordinal(), false), //break bedrock with
-	STEAMENGINE("Steam", 					2, -1, MAKESTEEL.ordinal(), false), //turn on
-	STEELSHAFT("Engaged", 					2, 0, MAKESTEEL.ordinal(), false), //make
-	CVT("Adaptability", 					2, 1, STEELSHAFT.ordinal(), false), //make
-	BEDROCKSHAFT("Unbreakable",  			1, -2, STEELSHAFT.ordinal(), false), //make
-	BEDROCKTOOLS("Durability",  			1, -1, BEDROCKBREAKER.ordinal(), false), //make
-	JETFUEL("Liquid Power",  				1, 0, null, false), //make
-	JETCHICKEN("Doing It Wrong",  			1, 1, MAKEJET.ordinal(), false), //suck 50 chickens into jet engine
-	JETFAIL("...Oops",  					0, -2, MAKEJET.ordinal(), false), //cause violent failure
-	LIGHTFALL("Oh nooooo",  				0, -1, null, false), //light bridge turns off, drops you to death
-	SPRINKLER("Green Thumb",  				0, 0, null, false), //turn on
-	FLOODLIGHT("Illuminating",  			0, 1, null, false), //turn on at Light 15
-	DAMAGEGEARS("Grind My Gears", 			-1, -2, null, false),
-	DIAMONDGEARS("Crystal",  				-1, -1, DAMAGEGEARS.ordinal(), false), //make
-	MRADS32("Overspeed",  					-1, 0, null, true), //transmit power at 32Mrad/s
-	GIGAWATT("Overpowered",  				-1, 1, null, true), //transmit 1GW of power in one shaft w/o breaking
-	TNTCANNON("Sharpshooter", 				-2, -2, null, true), //hit mob at >= 100 blocks with TNT cannon
-	RAILDRAGON("Blown Out of the Sky", 		-2, -1, MAKERAILGUN.ordinal(), true), //kill dragon with railgun
-	RAILKILLED("Too Close For Comfort", 	-2, 0, MAKERAILGUN.ordinal(), false), //kill self with railgun
-	GRAVELGUN("Sniped",  					-2, 1, null, false), //one hit kill with
-	LANDMINE("Watch Your Step", 			-3, -2, null, false), //step on
-	GPRENDPORTAL("Who Needs Ender Eyes?", 	-3, -1, null, true), //gpr thru end portal
-	NETHERHEATRAY("Boom Miner", 			-3, 0, null, true), //dig 500m with heat ray in nether
-	GPRSPAWNER("Spawner",					-3, 1, null, true),
-	CUTKNOT("Cutting the Knot",				-3, 2, null, true);
+	MAKESTEEL(		0, 0,	ItemStacks.steelingot, 											null,			false),
+	MAKEYEAST(		2, -2,	ItemRegistry.YEAST.getStackOf(), 								MAKESTEEL,		false),
+	EXTRACTOR(		2, 0,	ItemStacks.goldoreflakes, 										MAKESTEEL,		false),
+	PCB(			0, 4,	ItemStacks.pcb,													MAKESTEEL,		false),
+	PUMP(			-6, 0,	MachineRegistry.PUMP,											MAKESTEEL,		false),
+	GPR(			-2, 4,	MachineRegistry.GPR,											PCB,			false),
+	BORER(			2, 4,	MachineRegistry.BORER, 											PCB,			false),
+	JETFUEL(		4, -4,	ItemRegistry.BUCKET.getStackOfMetadata(1), 						MAKEYEAST,		false), //make
+	RECYCLE(		4, -8,	ItemStacks.scrap, 												JETFUEL,		false),
+	JETENGINE(		6, -4,	EngineType.JET.getItem(), 										JETFUEL,		true),
+	MAKERAILGUN(	0, 6,	MachineRegistry.RAILGUN, 										MAKESTEEL,		true),
+	SUCKEDINTOJET(	6, -6,	Item.rottenFlesh, 												JETENGINE,		false),
+	BEDROCKBREAKER(	-4, 2,	ItemStacks.bedrockdust, 										MAKESTEEL,		false), //break bedrock with
+	STEAMENGINE(	-8, 0,	EngineType.STEAM.getItem(), 									PUMP,			false), //turn on
+	STEELSHAFT(		-2, -2,	MaterialRegistry.STEEL.getShaftItem(), 							MAKESTEEL,		false), //make
+	CVT(			-2, -4,	MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), 	STEELSHAFT,		false), //make
+	BEDROCKSHAFT(	-4, 4,	MaterialRegistry.BEDROCK.getShaftItem(), 						BEDROCKBREAKER,	false), //make
+	BEDROCKTOOLS(	-6, 2,	ItemRegistry.BEDPICK.getStackOf(), 								BEDROCKBREAKER, false), //make
+	JETCHICKEN(		8, -4,	Item.feather, 													JETENGINE,		false), //suck 50 chickens into jet engine
+	JETFAIL(		8, -2,	Block.fire, 													JETENGINE,		false), //cause violent failure
+	LIGHTFALL(		8, -6,	MachineRegistry.LIGHTBRIDGE, 									JETENGINE,		false), //light bridge turns off, drops you to death
+	SPRINKLER(		-6, -2,	MachineRegistry.SPRINKLER, 										PUMP,			false), //turn on
+	FLOODLIGHT(		-1, -1,	MachineRegistry.FLOODLIGHT, 									MAKESTEEL,		false), //turn on at Light 15
+	DAMAGEGEARS(	-4, -2,	ItemStacks.gearunit, 											STEELSHAFT,		false),
+	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearItem(8), 						DAMAGEGEARS,	false), //make
+	MRADS32(		2, -6,	ItemRegistry.METER.getStackOf(),								JETFUEL,		true), //transmit power at 32Mrad/s
+	GIGAWATT(		6, -2,	Block.blockRedstone, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
+	RAILDRAGON(		0, 10,	Block.dragonEgg, 												MAKERAILGUN,	true), //kill dragon with railgun
+	RAILKILLED(		0, 8,	new ItemStack(Item.skull.itemID, 1, 0), 						MAKERAILGUN,	false), //kill self with railgun
+	GRAVELGUN(		0, -4,	ItemRegistry.GRAVELGUN.getStackOf(),							MAKESTEEL,		false), //one hit kill with
+	LANDMINE(		2, 2,	MachineRegistry.LANDMINE, 										MAKESTEEL,		false), //step on
+	NETHERHEATRAY(	4, -2,	MachineRegistry.HEATRAY, 										JETFUEL,		true), //dig 500m with heat ray in nether
+	GPRSPAWNER(		-2, 6,	RotaryCraft.spawner, 											GPR,			true),
+	GPRENDPORTAL(	-2, 8,	Block.endPortalFrame, 											GPRSPAWNER,		true), //gpr thru end portal
+	CUTKNOT(		4, 4,	ItemStacks.drill, 												BORER,			true),
+	RAREEXTRACT(	4, 0,	ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM),			EXTRACTOR,		true),
+	MASSIVEHIT(		0, -6,	Item.flint,														GRAVELGUN,		true),
+	OVERPRESSURE(	-8, 2,	MachineRegistry.COOLINGFIN,										STEAMENGINE,	false);
 
-	//private int id;
-	private String label;
-	private int x;
-	private int y;
-	private ItemStack icon;
-	private Achievement parent;
-	private boolean special;
-	//private String desc;
-	private int selfReference = -1;
+	public static final RotaryAchievements[] list = values();
 
-	public static final RotaryAchievements[] list = RotaryAchievements.values();
+	public final RotaryAchievements dependency;
+	public final int xPosition;
+	public final int yPosition;
+	public final boolean isSpecial;
+	private final ItemStack iconItem;
 
-	private RotaryAchievements(String l, int xc, int yc, Achievement p, boolean s) {
-		//id = RotaryConfig.achievementIDs[this.ordinal()];
-		label = l;
-		x = xc;
-		y = yc;
-		parent = p;
-		special = s;
-		//desc = AchievementAuxiliary.getDesc(this.ordinal());
+	private RotaryAchievements(int x, int y, Item icon, RotaryAchievements preReq, boolean special) {
+		this(x, y, new ItemStack(icon), preReq, special);
 	}
 
-	private RotaryAchievements(String l, int xc, int yc, int p, boolean s) {
-		//id = RotaryConfig.achievementIDs[this.ordinal()];
-		label = l;
-		x = xc;
-		y = yc;
-		selfReference = p;
-		special = s;
-		//desc = AchievementAuxiliary.getDesc(this.ordinal());
+	private RotaryAchievements(int x, int y, Block icon, RotaryAchievements preReq, boolean special) {
+		this(x, y, new ItemStack(icon), preReq, special);
+	}
+
+	private RotaryAchievements(int x, int y, MachineRegistry icon, RotaryAchievements preReq, boolean special) {
+		this(x, y, icon.getCraftedProduct(), preReq, special);
+	}
+
+	private RotaryAchievements(int x, int y, ItemStack icon, RotaryAchievements preReq, boolean special) {
+		xPosition = x;
+		yPosition = y;
+		dependency = preReq;
+		iconItem = icon;
+		isSpecial = special;
 	}
 
 	public Achievement get() {
 		return RotaryCraft.achievements[this.ordinal()];
 	}
 
-	@Override
-	public String toString() {
-		return this.getName();
-	}
-
 	public void triggerAchievement(EntityPlayer ep) {
 		if (!ConfigRegistry.ACHIEVEMENTS.getState())
 			return;
 		if (ep == null) {
-			ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
-			ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
+			//ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
+			//ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
+			RotaryCraft.logger.debug("Player does not exist to receive their achievement \""+this+"\"!");
 		}
 		else {
 			ep.triggerAchievement(this.get());
 		}
 	}
 
-	public static void registerAcheivements() {
-		RotaryCraft.achievements = new Achievement[RotaryAchievements.list.length];
+	public boolean hasDependency() {
+		return dependency != null;
+	}
+
+	public static void registerAchievements() {
+		//ReikaJavaLibrary.pConsole(Arrays.toString(RotaryCraft.config.achievementIDs));
 		for (int i = 0; i < list.length; i++) {
-			Achievement parent;
-			if (list[i].isSelfReferenced())
-				parent = list[i].getSelfReference();
-			else
-				parent = list[i].parent;
-			list[i].icon = AchievementAuxiliary.icons[i];
-			RotaryCraft.achievements[i] = new Achievement(RotaryCraft.config.achievementIDs[i], list[i].getName(), list[i].x, list[i].y, list[i].icon, list[i].parent);
-			int id = RotaryCraft.achievements[i].statId;
-			if (StatList.getOneShotStat(id) != null)
-				throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another at ID "+id+" (trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");
-			RotaryCraft.achievements[i].registerAchievement();
-			if (list[i].isSpecial())
-				RotaryCraft.achievements[i].setSpecial();
-			RotaryCraft.logger.log("Registering achievement "+list[i].name()+" with ID "+RotaryCraft.achievements[i].statId+" and ingame name \""+list[i].getName()+"\" (slot "+i+").");
+			RotaryAchievements a = list[i];
+			int id = RotaryCraft.config.achievementIDs[i];
+			Achievement dep = a.hasDependency() ? a.dependency.get() : null;
+			Achievement ach = new Achievement(id, a.name().toLowerCase(), a.xPosition, a.yPosition, a.iconItem, dep);
+			id = ach.statId;
+			//ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));
+			//if (StatList.getOneShotStat(id) != null)
+			//	throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another at ID "+id+" ("+a+" is trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");
+			if (a.isSpecial)
+				ach.setSpecial();
+			RotaryCraft.achievements[i] = ach;
+			ach.registerAchievement();
+			RotaryCraft.logger.log("Registering achievement "+a+" with ID "+id+" and ingame name \""+a+"\" (slot "+i+").");
 		}
 		AchievementPage.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));
-	}
-
-	public String getKey() {
-		return "achievement."+this.name()+".desc";
-	}
-
-	public boolean isSelfReferenced() {
-		return selfReference != -1;
-	}
-
-	public Achievement getSelfReference() {
-		return RotaryCraft.achievements[this.referencedOrdinal()];
-	}
-
-	public int referencedOrdinal() {
-		return selfReference;
-	}
-
-	public String getDesc() {
-		return AchievementAuxiliary.getDesc(this.ordinal());
-	}
-
-	public String getName() {
-		return label;
-	}
-
-	public boolean hasParent() {
-		return parent != null;
-	}
-
-	public boolean isSpecial() {
-		return special;
 	}
 
 }

@@ -229,4 +229,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		int meta2 = this.getMachine().getMachineMetadata();
 		return id2 == id && meta2 == meta;
 	}
+
+	@Override
+	public final int getPacketDelay() {
+		return Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
+	}
 }

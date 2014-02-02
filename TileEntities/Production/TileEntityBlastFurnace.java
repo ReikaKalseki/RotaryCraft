@@ -39,7 +39,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	public static final int SMELTTEMP = 600;
 	public static final int BEDROCKTEMP = 1000;
-	public static final int MAXTEMP = 1200;
+	public static final int MAXTEMP = 1500;
 	public static final float SMELT_XP = 0.6F;
 
 	private float xp;
@@ -452,4 +452,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
 }

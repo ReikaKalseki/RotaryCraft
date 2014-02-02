@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -83,8 +84,12 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 	private void fill() {
 		ItemStack is = inv[0];
 		Fillable i = (Fillable)is.getItem();
-		int added = i.addFluid(is, tank.getActualFluid(), 1);
+		int added = i.addFluid(is, tank.getActualFluid(), this.getFluidToAdd());
 		tank.removeLiquid(added);
+	}
+
+	private int getFluidToAdd() {
+		return (int)ReikaMathLibrary.logbase(omega, 2);
 	}
 
 	private boolean hasFillable() {

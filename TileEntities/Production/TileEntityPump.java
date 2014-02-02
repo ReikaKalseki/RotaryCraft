@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
@@ -148,6 +149,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			mult++;
 		if (power/MINPOWER >= 4096)
 			mult++;
+		if (fluid.equals(FluidRegistry.WATER))
+			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
 		tank.addLiquid(RotaryConfig.MILLIBUCKET*mult, fluid);
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}

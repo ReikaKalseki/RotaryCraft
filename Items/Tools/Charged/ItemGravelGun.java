@@ -81,9 +81,13 @@ public class ItemGravelGun extends ItemChargedTool {
 						EntityDragon ed = (EntityDragon)ent;
 						ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
 					}
-					else
-						ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
-					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 100)
+					else {
+						int dmg = this.getAttackDamage(is);
+						ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), dmg);
+						if (dmg >= 500)
+							RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
+					}
+					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 80)
 						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 					//ent.setRevengeTarget(ep);

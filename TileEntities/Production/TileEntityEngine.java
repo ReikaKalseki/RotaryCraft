@@ -389,7 +389,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		List in = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase ent = (EntityLivingBase)in.get(i);
-			ent.attackEntityFrom(DamageSource.generic, 1);
+			ent.attackEntityFrom(RotaryCraft.hydrokinetic, 1);
 		}
 	}
 
@@ -591,7 +591,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (omega > 0 && torque > 0) { //If engine is on
 				temperature += 1;
 				if (water.getLevel() > 0 && temperature > Tamb) {
-					water.removeLiquid(RotaryConfig.MILLIBUCKET);
+					water.removeLiquid(20);
 					temperature--;
 				}
 				if (temperature > MAXTEMP/2) {
@@ -600,8 +600,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 					}
 				}
-				if (temperature > MAXTEMP/1.1) {
-					if (rand.nextInt(5) == 0) {
+				if (temperature > MAXTEMP/1.25) {
+					if (rand.nextInt(3) == 0) {
 						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
 					}
 					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
@@ -628,9 +628,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
 		}
 		else if (type == EngineType.STEAM) {
-			world.setBlockToAir(x, y, z);
 			ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, false, 1F, false, true, 2F);
+			RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());
 		}
+		world.setBlockToAir(x, y, z);
 	}
 
 	private boolean acPower (World world, int x, int y, int z) {
@@ -663,7 +664,11 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (FOD >= 8)
 				return false;
 		}
-		return (fuel.getLevel() > 0);
+		if (fuel.getLevel() <= 0)
+			return false;
+		if (type == EngineType.JET)
+			RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
+		return true;
 	}
 
 	public float getChokedFraction(World world, int x, int y, int z, int meta) {
@@ -730,7 +735,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			MAXTEMP = 150;
 			break;
 		case SPORT:
-			MAXTEMP = 1000;
+			MAXTEMP = 240;
 			break;
 		default:
 			break;

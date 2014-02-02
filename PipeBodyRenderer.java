@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
@@ -39,14 +40,16 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
 		Tessellator v5 = Tessellator.instance;
-		ReikaTextureHelper.bindTerrainTexture();
 
 		GL11.glColor3f(1, 1, 1);
 		double s = 1.25;
 		GL11.glScaled(s, s, s);
 		v5.startDrawingQuads();
 
-		Icon ico = block.getIcon(0, metadata);
+		Icon ico = BlockRegistry.PIPING.getBlockVariable().getIcon(0, metadata);
+		if (metadata == 1)
+			ico = RotaryCraft.decoblock.getIcon(0, 0);
+		ReikaTextureHelper.bindTerrainTexture();
 
 		float dx = -0.5F;
 		float dy = -0.5F;

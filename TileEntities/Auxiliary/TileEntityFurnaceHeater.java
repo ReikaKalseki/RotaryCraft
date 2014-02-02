@@ -139,7 +139,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	private void heatMachine(World world) {
 		FrictionHeatable te = (FrictionHeatable)world.getBlockTileEntity(fx, fy, fz);
-		int tdiff = temperature-te.getTemperature();
+		int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
 		te.addTemperature(tdiff);
 	}
 

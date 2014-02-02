@@ -335,4 +335,8 @@ public enum EngineType {
 	public boolean canWorkInWorld(World world) {
 		return true;
 	}
+
+	public ItemStack getItem() {
+		return MachineRegistry.ENGINE.getCraftedMetadataProduct(this.ordinal());
+	}
 }

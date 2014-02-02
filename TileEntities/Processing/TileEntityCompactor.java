@@ -365,9 +365,9 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 	public int getStage() {
 		if (inv[0] == null)
-			return -1;
+			return 1;
 		if (!RecipesCompactor.getRecipes().isCompactable(inv[0]))
-			return -1;
+			return 1;
 		if (inv[0].itemID == Item.coal.itemID)
 			return 1;
 		if (ReikaItemHelper.matchStacks(ItemStacks.anthracite, inv[0]))

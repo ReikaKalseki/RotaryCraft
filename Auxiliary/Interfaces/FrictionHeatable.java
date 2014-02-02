@@ -15,4 +15,6 @@ public interface FrictionHeatable {
 
 	public int getTemperature();
 
+	public int getMaxTemperature();
+
 }

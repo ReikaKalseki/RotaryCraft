@@ -75,18 +75,19 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		super.updateTileEntity();
 		if (y > 96)
 			return;
-		tickcount++;
 		this.getSummativeSidedPower();
-		power = omega * torque;
+		power = (long)omega * (long)torque;
 		if (power < MINPOWER)
 			return;
-		if (tickcount >= 20) {
+		RotaryAchievements.GPR.triggerAchievement(this.getPlacer());
+		if (tickcount == 0) {
 			int[] bounds = this.getBounds();
 			this.eval2(world, x, y, z, meta, bounds);
 			if (world.isRemote)
 				this.blockToColor(bounds, y);
-			tickcount = 0;
+			tickcount = 20;
 		}
+		tickcount--;
 	}
 
 	private void blockToColor(int[] bounds, int y) {

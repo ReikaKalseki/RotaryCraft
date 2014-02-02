@@ -50,7 +50,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		super.getPower(false, true);/*
 		lightlevel = ReikaMathLibrary.extrema(-1+(int)power/FALLOFF, 0, "max");
 		lightlevel = ReikaMathLibrary.extrema(lightlevel, 15, "absmin");*/
-		if (power > MINPOWER)
+		if (power >= MINPOWER)
 			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 	}
 

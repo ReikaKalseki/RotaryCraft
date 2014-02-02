@@ -14,6 +14,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
@@ -163,5 +164,15 @@ public enum MaterialRegistry {
 			loads[i+1] = (int)m.getMaxShaftSpeed();
 		}
 		return loads;
+	}
+
+	public ItemStack getShaftItem() {
+		return MachineRegistry.SHAFT.getCraftedMetadataProduct(this.ordinal());
+	}
+
+	public ItemStack getGearItem(int ratio) {
+		int type = this.ordinal();
+		ratio = (int)ReikaMathLibrary.logbase(ratio, 2)-1;
+		return MachineRegistry.GEARBOX.getCraftedMetadataProduct(5*ratio+type);
 	}
 }

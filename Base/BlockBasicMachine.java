@@ -401,8 +401,8 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			TileEntityGearbox gbx = (TileEntityGearbox)te;
 			if (gbx.type.isDamageableGear()) {
 				currenttip.add(String.format("Damage: %d%s", gbx.damage, "%"));
-				currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
 			}
+			currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
 		}
 		return currenttip;
 	}

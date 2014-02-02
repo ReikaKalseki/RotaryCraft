@@ -30,6 +30,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 
@@ -345,22 +346,18 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
 			inv[i+4].stackSize += num;
 
-		if (i == 3)
+		if (i == 3) {
 			this.bonusItems(inv[i]);
+			RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
+		}
 
 		inv[i].stackSize--;
 		if (i == 1 || i == 2)
 			tank.removeLiquid(RotaryConfig.MILLIBUCKET/8); //millis
 
 		if (inv[i].stackSize <= 0)
-			inv[i] = null;/*
-        if (i == 3) {
-        	int xp = 0;
-        	switch(inv[i+4].getItemDamage()) {
+			inv[i] = null;
 
-        	}
-        	ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord, yCoord, zCoord, xp);
-        }*/
 	}
 
 	private void bonusItems(ItemStack is) {
@@ -406,6 +403,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						this.bonusItems(inv[i]);
+						RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
+						if (m.isRare())
+							RotaryAchievements.RAREEXTRACT.triggerAchievement(this.getPlacer());
 					}
 					return true;
 				}

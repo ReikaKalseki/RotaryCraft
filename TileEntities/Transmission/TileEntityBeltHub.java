@@ -373,4 +373,16 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		//return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(a, a, a);
 	}
 
+	public int getTargetX() {
+		return target[0];
+	}
+
+	public int getTargetY() {
+		return target[1];
+	}
+
+	public int getTargetZ() {
+		return target[2];
+	}
+
 }

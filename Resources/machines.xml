@@ -801,7 +801,7 @@
 	</fuelline>
 	<valve>
 		<desc>
-			The valve pipe, like other pipe types extracts liquid from reservoirs if placed below it. However, the valve pipe remains inert until given a redstone signal.
+			The valve pipe, like other pipe types, extracts liquid from reservoirs if placed below it. However, the valve pipe remains inert until given a redstone signal.
 		</desc>
 		<note>
 		</note>

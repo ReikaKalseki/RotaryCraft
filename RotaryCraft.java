@@ -40,7 +40,6 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
-import Reika.RotaryCraft.Auxiliary.AchievementAuxiliary;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -84,7 +83,6 @@ import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -109,23 +107,27 @@ serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, 
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
-	public static CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
-	public static CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
-	public static CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(),"RotaryTools");
-	public static CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(),"RotaryModOres");
-	public static CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(),"Spawners");
+	public static final CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
+	public static final CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
+	public static final CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(),"RotaryTools");
+	public static final CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(),"RotaryModOres");
+	public static final CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(),"Spawners");
 
-	private static int[] dmgs = {EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(1),
-		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(2), EnumArmorMaterial.DIAMOND.getDamageReductionAmount(3)};
+	private static final int[] dmgs = {
+		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0),
+		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(1),
+		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(2),
+		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(3)
+	};
 
-	public static EnumArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", EnumArmorMaterial.DIAMOND.getDurability(0), dmgs, EnumArmorMaterial.GOLD.getEnchantability());
-	public static EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
-	public static EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
-	public static EnumArmorMaterial JETPACK = EnumHelper.addArmorMaterial("Jetpack", 65536, new int[]{0, 0, 0, 0}, 0);
-	public static EnumArmorMaterial JUMP = EnumHelper.addArmorMaterial("Jump", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static final EnumArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", EnumArmorMaterial.DIAMOND.getDurability(0), dmgs, EnumArmorMaterial.GOLD.getEnchantability());
+	public static final EnumArmorMaterial NVGM = EnumHelper.addArmorMaterial("NVGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static final EnumArmorMaterial IOGM = EnumHelper.addArmorMaterial("IOGoggles", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static final EnumArmorMaterial JETPACK = EnumHelper.addArmorMaterial("Jetpack", 65536, new int[]{0, 0, 0, 0}, 0);
+	public static final EnumArmorMaterial JUMP = EnumHelper.addArmorMaterial("Jump", 65536, new int[]{0, 0, 0, 0}, 0);
 
-	public static EnumArmorMaterial BEDROCK = EnumHelper.addArmorMaterial("Bedrock", Integer.MAX_VALUE, new int[]{6, 12, 10, 5}, 18);
-	public static EnumArmorMaterial HSLA = EnumHelper.addArmorMaterial("HSLA", 24, new int[]{3, 7, 5, 3}, EnumArmorMaterial.IRON.getEnchantability());
+	public static final EnumArmorMaterial BEDROCK = EnumHelper.addArmorMaterial("Bedrock", Integer.MAX_VALUE, new int[]{6, 12, 10, 5}, 18);
+	public static final EnumArmorMaterial HSLA = EnumHelper.addArmorMaterial("HSLA", 24, new int[]{3, 7, 5, 3}, EnumArmorMaterial.IRON.getEnchantability());
 
 	public static Block decoblock;
 	public static Block blastglass;
@@ -136,6 +138,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950);
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
+	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
 
 	static final Random rand = new Random();
 
@@ -153,7 +156,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item machineplacer;
 	public static Item flywheelitems;
 	public static Item advgearitems;
-	//public static Item hydraulicitems;
 	public static Item modextracts;
 	public static Item modingots;
 	public static Item spawner;
@@ -166,11 +168,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Block lightbridge;
 	public static Block decoTank;
 
-	//public static Block gravlog;
-	//public static Block gravleaves;
-
-	public static Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
-	public static Item[] basicItems = new Item[ItemRegistry.itemList.length];
+	public static final Block[] machineBlocks = new Block[BlockRegistry.blockList.length];
+	public static final Item[] basicItems = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
 	public static Entity fallblock;
@@ -208,6 +207,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 		this.setupClassFiles();
 
+		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+			achievements = new Achievement[RotaryAchievements.list.length];
+			RotaryAchievements.registerAchievements();
+		}
+
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);
 		//version = evt.getModMetadata().version;
@@ -226,9 +230,7 @@ public class RotaryCraft extends DragonAPIMod {
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
 		RotaryRegistration.addEntities();
-		AchievementAuxiliary.loadDesc();
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ConfigRegistry.ACHIEVEMENTS.getState())
-			RotaryAchievements.registerAcheivements();
+
 		RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 

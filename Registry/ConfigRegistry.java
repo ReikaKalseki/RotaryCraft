@@ -9,9 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import net.minecraftforge.common.Configuration;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
-import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -21,7 +19,7 @@ public enum ConfigRegistry implements ConfigList {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", true),
-	INSTACUT("Instant Woodcutter", false),
+	INSTACUT("Instant Woodcutter", true, true),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
 	LOGLOADING("Console Loading Info", true),
@@ -44,7 +42,7 @@ public enum ConfigRegistry implements ConfigList {
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
-	ACHIEVEMENTS("Enable Achievements", false, true),
+	ACHIEVEMENTS("Enable Achievements", true, true),
 	MODORES("Force Inter-Mod Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
@@ -70,14 +68,15 @@ public enum ConfigRegistry implements ConfigList {
 	HANDBOOK("Spawn with RC Handbook", true),
 	CONSERVEPACK("Conservative Jetpack Firing", true),
 	ALLOWBAN("Allow Build Blocking of Some Machines", false),
-	LOGBLOCKS("Log Block Placement and Removal", false);
+	LOGBLOCKS("Log Block Placement and Removal", false),
+	PACKETDELAY("Sync Packet Interval in Ticks", 1);
 
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
 	private float defaultFloat;
 	private Class type;
-	private boolean isLocked;
+	private boolean enforcing = false;
 
 	public static final ConfigRegistry[] optionList = ConfigRegistry.values();
 
@@ -87,11 +86,11 @@ public enum ConfigRegistry implements ConfigList {
 		type = boolean.class;
 	}
 
-	private ConfigRegistry(String l, boolean d, boolean lock) {
+	private ConfigRegistry(String l, boolean d, boolean tag) {
 		label = l;
 		defaultState = d;
 		type = boolean.class;
-		isLocked = true;
+		enforcing = true;
 	}
 
 	private ConfigRegistry(String l, int d) {
@@ -122,31 +121,11 @@ public enum ConfigRegistry implements ConfigList {
 		return type;
 	}
 
-	public int setValue(Configuration config) {
-		if (!this.isNumeric())
-			throw new RegistrationException(RotaryCraft.instance, "Config Property \""+this.getLabel()+"\" is not numerical!");
-		return config.get("Control Setup", this.getLabel(), defaultValue).getInt();
-	}
-
-	public float setDecimal(Configuration config) {
-		if (!this.isDecimal())
-			throw new RegistrationException(RotaryCraft.instance, "Config Property \""+this.getLabel()+"\" is not decimal!");
-		return (float)config.get("Control Setup", this.getLabel(), defaultFloat).getDouble(defaultFloat);
-	}
-
 	public String getLabel() {
 		return label;
 	}
 
-	public boolean setState(Configuration config) {
-		if (!this.isBoolean())
-			throw new RegistrationException(RotaryCraft.instance, "Config Property \""+this.getLabel()+"\" is not boolean!");
-		return config.get("Control Setup", this.getLabel(), defaultState).getBoolean(defaultState);
-	}
-
 	public boolean getState() {
-		if (isLocked)
-			return defaultState;
 		return (Boolean)RotaryCraft.config.getControl(this.ordinal());
 	}
 
@@ -163,6 +142,26 @@ public enum ConfigRegistry implements ConfigList {
 
 	public boolean isDummiedOut() {
 		return type == null;
+	}
+
+	@Override
+	public boolean getDefaultState() {
+		return defaultState;
+	}
+
+	@Override
+	public int getDefaultValue() {
+		return defaultValue;
+	}
+
+	@Override
+	public float getDefaultFloat() {
+		return defaultFloat;
+	}
+
+	@Override
+	public boolean isEnforcingDefaults() {
+		return enforcing;
 	}
 
 }

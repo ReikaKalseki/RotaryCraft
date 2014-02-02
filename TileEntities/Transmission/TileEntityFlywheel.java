@@ -20,6 +20,7 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.TorqueUsage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
@@ -43,6 +44,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	private int lasttorque;
 
+	public int oppTorque = 0;
+	private int updateticks = 0;
+
 	public static int[] getLimitLoads() {
 		double r = 0.75;
 		int[] loads = new int[4];
@@ -59,13 +63,13 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public static int getMinTorque(int i) {
 		switch(i) {
 		case 0:
-			return WOODFLYTORQUEMAX;
+			return WOODFLYTORQUEMAX/MINTORQUERATIO;
 		case 1:
-			return STONEFLYTORQUEMAX;
+			return STONEFLYTORQUEMAX/MINTORQUERATIO;
 		case 2:
-			return IRONFLYTORQUEMAX;
+			return IRONFLYTORQUEMAX/MINTORQUERATIO;
 		case 3:
-			return GOLDFLYTORQUEMAX;
+			return GOLDFLYTORQUEMAX/MINTORQUERATIO;
 		default:
 			return 0;
 		}
@@ -226,7 +230,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
+			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
 			if (devicein.getBlockMetadata() >= 6) {
 				omegain = this.readFromCross(devicein, false);
 				torquein = this.readFromCross(devicein, true);
@@ -247,7 +251,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
+			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
 			if (devicein.getBlockMetadata() >= 8) {
 				this.readFromSplitter(devicein);
 				return;
@@ -257,38 +261,97 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				torquein = devicein.torque;
 			}
 		}
-		if (torquein >= maxtorque/MINTORQUERATIO) { //returns false if no input machine
-			if (omega <= omegain) {
-				if (omega == 0)
-					omega = 1; //initializes omega to a finite and positive value
-				if (tickcount >= decayTime/10) {
-					omega += (omegain-omega)/decayTime+1;
-					tickcount = 0;
+		if (te == null) {
+			torquein = 0;
+			omegain = 0;
+		}
+		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
+		double h = 0.4;
+		double iner = (h*r*r*Math.PI)*this.getDensity()*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
+		updateticks = 0;
+		if (torquein > 0) {
+			oppTorque = TorqueUsage.getTorque(world, x, y, z); //gets the minimum torque requirement of all machines connected to the flywheel
+			if (oppTorque <= torquein) {
+				if (omega <= omegain) {
+					if ((torquein-oppTorque)/iner < 1 && (torquein-oppTorque) > 0) { //making up for the fact that numbers are integers
+						int i = 1;
+						while ((((double)torquein-oppTorque)/iner*i) < 1) {
+							i++;
+						}
+						updateticks = i;
+						if (tickcount >= updateticks) {
+							tickcount=0;
+							omega++;
+						}
+					}
+					else {
+						omega += (torquein-oppTorque)/iner; //increasing omega, following the formula torque=inertia*ang.acceleration
+					}
+					if (omega > omegain)
+						omega = omegain; //to prevent oscillations once reached the input value
 				}
-				if (omega > omegain)
-					omega = omegain; //to prevent oscillations once reached the input value
+				else {
+					if ((torquein+oppTorque)/iner < 1) { //same as before, but to reduce omega if it's greater than the input omega
+						int i = 1;
+						while ((((double)torquein+oppTorque)/iner*i) < 1) {
+							i++;
+						}
+						updateticks=i;
+						if (tickcount >= updateticks) {
+							tickcount = 0;
+							omega--;
+						}
+					}
+					else
+						omega -= (torquein+oppTorque)/iner;
+				}
+				lasttorque = torquein;
+				lasttorque = Math.min(lasttorque, maxtorque);
+				torque = lasttorque;
 			}
 			else {
-				this.decrSpeed();
+				if ((oppTorque-torquein)/iner < 1) { //this applies the same formula to reduce omega in the case the input is smaller than the required output
+					int i = 1;
+					while (((oppTorque-torquein)/iner*i) < 1) {
+						i++;
+					}
+					updateticks = i;
+					if (tickcount >= updateticks) {
+						tickcount = 0;
+						omega--;
+					}
+				}
+				else
+					omega -= (oppTorque-torquein)/iner;
+				if (omega < 0)
+					omega = 0;
 			}
-			lasttorque = torquein;
-			lasttorque = Math.min(lasttorque, maxtorque);
-			torque = lasttorque;
 		}
 		else {
-			this.decrSpeed();
-			torque = lasttorque;
-		}
-
-		PowerSourceList in = PowerSourceList.getAllFrom(world, readx, ready, readz, this, this);
-		if (in.contains(this)) {
-			//ReikaJavaLibrary.pConsole("!!");
-			omega--;
-		}
-
-		if (omega == 0) {
-			lasttorque = 0;
-			torque = 0;
+			if (omega == 0) {
+				lasttorque = 0;
+				torque = 0;
+				tickcount = 0;
+			}
+			else { //same as before, but without input
+				oppTorque = TorqueUsage.getTorque(world, x, y, z);
+				if (oppTorque/iner < 1 && oppTorque > 0) {
+					int i = 1;
+					while ((oppTorque/iner*i) < 1) {
+						i++;
+					}
+					updateticks = i;
+					if (tickcount>=updateticks) {
+						tickcount = 0;
+						omega--;
+					}
+				}
+				else
+					omega -= oppTorque/iner;
+				torque = lasttorque;
+				if (omega < 0)
+					omega = 0;
+			}
 		}
 	}
 
