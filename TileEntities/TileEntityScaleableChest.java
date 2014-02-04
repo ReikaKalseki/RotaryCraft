@@ -32,8 +32,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	public static final int FALLOFF = 128;
 	public static final int MAXROWS = 6;
-	public static final int MAXSIZE = 560;
-	public int page = 0;
+	public static final int MAXSIZE = 594;
 
 	public static final int POWERCHANGEAGE = 20; //1s
 	private ArrayList<Integer> powerchanges = new ArrayList<Integer>();
@@ -49,7 +48,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	public int numUsingPlayers;
 
-	public ItemStack[] inventory = new ItemStack[MAXSIZE];
+	private ItemStack[] inventory = new ItemStack[MAXSIZE];
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -76,14 +75,14 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		int size = this.getSizeInventory();
 		size /= 9D;
 		size /= MAXROWS;
-		return (int)Math.ceil(size);
+		return Math.min(this.getMaxPages(), (int)Math.ceil(size));
 	}
 
 	public static int getMaxPages() {
 		int size = MAXSIZE;
 		size /= 9D;
 		size /= MAXROWS;
-		return (int)Math.ceil(size);
+		return Math.min((int)Math.ceil(size), 10);
 	}
 
 	private boolean testInconsistentPower() {
@@ -104,12 +103,12 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		}
 		numchanges = powerchanges.size();
 		lastpower = pw;
-		if (numchanges > 18) {
+		if (numchanges > 10 && !worldObj.isRemote) {
 			Block.blocksList[this.getTileEntityBlockID()].dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2F, ConfigRegistry.BLOCKDAMAGE.getState());
+			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 4F, ConfigRegistry.BLOCKDAMAGE.getState());
 		}
-		else if (numchanges > 10) {
+		else if (numchanges > 8) {
 			for (int i = 0; i < numchanges/3; i++)
 				worldObj.spawnParticle("smoke", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), 0, 0, 0);
 			if (rand.nextInt(19-numchanges) == 0)
@@ -147,11 +146,6 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	@Override
@@ -166,8 +160,6 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		this.getPower(false, false);
 		if (this.testInconsistentPower())
 			return;
-		if (page > this.getMaxPage())
-			page = this.getMaxPage();
 		if (power < MINPOWER) {
 			lidAngle = 0;
 			prevLidAngle = 0;
@@ -288,11 +280,10 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBT.setInteger("page", page);
 		//for (int i = 0; i < powerchanges.size(); i++)
 		//	NBT.setInteger("pwr"+String.valueOf(i), powerchanges.get(i));
 
-		NBT.setInteger("pwr", numchanges);
+		NBT.setInteger("chng", numchanges);
 		NBT.setInteger("player", numUsingPlayers);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -302,7 +293,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 			if (inventory[i] != null)
 			{
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
+				nbttagcompound.setShort("Slot", (short)i);
 				inventory[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
 			}
@@ -318,13 +309,10 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		page = NBT.getInteger("page");
-		if (page < 0)
-			page = 0;
 
 		//ArrayList<Integer> pwr = new ArrayList<Integer>();
 
-		numchanges = NBT.getInteger("pwr");
+		numchanges = NBT.getInteger("chng");
 		numUsingPlayers = NBT.getInteger("player");
 
 
@@ -334,11 +322,11 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
+			short short0 = nbttagcompound.getShort("Slot");
 
-			if (byte0 >= 0 && byte0 < inventory.length)
+			if (short0 >= 0 && short0 < inventory.length)
 			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+				inventory[short0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 	}

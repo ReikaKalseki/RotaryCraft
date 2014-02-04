@@ -88,7 +88,10 @@ public class RenderAdvGear extends RotaryTERenderer
 				var15.renderAll(null, 0, 0);
 				break;
 			case 3:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
+				if (tile.isBedrockCoil())
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex_bed.png");
+				else
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
 				var16.renderAll(null, 0, 0);
 				break;
 			}
@@ -112,7 +115,10 @@ public class RenderAdvGear extends RotaryTERenderer
 			var15.renderAll(null, tile.phi, 0);
 		}
 		else if (tile.getBlockMetadata() < 12) {
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
+			if (tile.isBedrockCoil())
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex_bed.png");
+			else
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
 			var16.renderAll(null, tile.phi, 0);
 		}
 

@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -307,7 +308,12 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		if (m == MachineRegistry.ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 			meta = adv.getBlockMetadata();
-			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
+			ItemStack is = new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
+			if (adv.isBedrockCoil()) {
+				is.stackTagCompound = new NBTTagCompound();
+				is.stackTagCompound.setBoolean("bedrock", true);
+			}
+			return is;
 		}
 		if (m.isPipe()) {
 			return ((TileEntityPiping)world.getBlockTileEntity(x, y, z)).getMachine().getCraftedProduct();
@@ -409,5 +415,21 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		return currenttip;
+	}
+
+	@Override
+	public final boolean hasComparatorInputOverride()
+	{
+		return true;
+	}
+
+	/**
+	 * If hasComparatorInputOverride returns true, the return value from this is used instead of the redstone signal
+	 * strength when this block inputs to a comparator.
+	 */
+	@Override
+	public final int getComparatorInputOverride(World world, int x, int y, int z, int par5)
+	{
+		return ((RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z)).getRedstoneOverride();
 	}
 }

@@ -20,6 +20,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
@@ -102,6 +103,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityFireworkMachine;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
@@ -287,7 +289,8 @@ public enum MachineRegistry {
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
 	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
 	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
-	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5);
+	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5),
+	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7);
 
 	private final String name;
 	private final Class te;
@@ -1108,6 +1111,18 @@ public enum MachineRegistry {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+			}
+		}
+		//this.addMetaOreRecipe(metadata, obj);
+	}
+
+	public void addNBTMetaCrafting(NBTTagCompound NBT, int metadata, Object... obj) {
+		ItemStack is = this.getCraftedMetadataProduct(metadata);
+		is.stackTagCompound = (NBTTagCompound)NBT.copy();
+		if (!this.isDummiedOut()) {
+			WorktableRecipes.getInstance().addRecipe(is, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
 			}
 		}
 		//this.addMetaOreRecipe(metadata, obj);

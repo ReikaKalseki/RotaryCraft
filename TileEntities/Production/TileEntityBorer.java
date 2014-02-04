@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -149,7 +150,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power > reqpow && reqpow != -1) {
 				this.calcReqPower(world, x, y, z, meta);
 
-				this.forceGenAndPopulate(world, x, y, z, meta);
+				if (!world.isRemote)
+					this.forceGenAndPopulate(world, x, y, z, meta);
 
 				this.dig(world, x, y, z, meta);
 				jammed = false;
@@ -170,8 +172,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		Chunk ch = world.getChunkFromBlockCoords(xread, zread);
 		IChunkProvider p = world.getChunkProvider();
 		if (!ch.isTerrainPopulated) {
-			p.populate(p, xread >> 4, zread >> 4);
-			//ReikaJavaLibrary.pConsole(xread+", "+zread);
+			try {
+				p.populate(p, xread >> 4, zread >> 4);
+			}
+			catch (ConcurrentModificationException e) {
+				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population due to a ConcurrentModificationException! Contact Reika with information on any mods that might be multithreading worldgen!");
+			}
 		}
 	}
 

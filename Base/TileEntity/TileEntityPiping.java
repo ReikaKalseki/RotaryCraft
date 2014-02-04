@@ -59,8 +59,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.intakeFluid(world, x, y, z);
-		this.dumpContents(world, x, y, z);
+		if (!world.isRemote) {
+			this.intakeFluid(world, x, y, z);
+			this.dumpContents(world, x, y, z);
+		}
 		if (this.getLiquidLevel() <= 0) {
 			this.setLevel(0);
 			this.setFluid(null);
@@ -89,16 +91,16 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	public final int getPipeIntake(int otherlevel) {
-		return TransferAmount.FORCEDQUARTER.getTransferred(otherlevel);
+		return TransferAmount.QUARTER.getTransferred(otherlevel);
 	}
 
 	public final int getPipeOutput(int max) {
-		return Math.min(TransferAmount.FORCEDQUARTER.getTransferred(max), this.getLiquidLevel()-5);
+		return Math.min(TransferAmount.QUARTER.getTransferred(max), this.getLiquidLevel()-5);
 	}
 
 	public void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getLiquidType();
-		if (this.getLiquidLevel() <= 0 || f == null)
+		if (this.getLiquidLevel() <= 1 || f == null)
 			return;
 		for (int i = 0; i < 6; i++) {
 			int level = this.getLiquidLevel();

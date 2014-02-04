@@ -28,7 +28,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController {
 
 	private static final int MINBASE = -1;
-	private static final int MAXBASE = DragonAPICore.isReikasComputer() ? 15 : 13;
 
 	protected int storedEnergy;
 
@@ -39,8 +38,18 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	private RedstoneState rsState;
 
+	private static final boolean reika = DragonAPICore.isReikasComputer();
+
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
+	}
+
+	private int getMaxBase() {
+		return this.isFlexibleMode() ? 15 : 11;
+	}
+
+	public final boolean isFlexibleMode() {
+		return reika;
 	}
 
 	private static enum RedstoneState {
@@ -122,7 +131,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 			return 0;
 		if (baseomega < 0 || basetorque < 0)
 			return 0;
-		return ReikaMathLibrary.intpow2(2, basetorque);
+		return this.isFlexibleMode() ? ReikaMathLibrary.intpow2(2, basetorque) : 2048;
 	}
 
 	public final boolean hasEnoughEnergy() {
@@ -137,7 +146,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final void incrementTorque() {
-		if (basetorque < MAXBASE && baseomega+basetorque < MAXBASE*2-3)
+		if (basetorque < this.getMaxBase() && baseomega+basetorque < this.getMaxBase()*2-3)
 			basetorque++;
 	}
 
@@ -147,7 +156,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final void incrementOmega() {
-		if (baseomega < MAXBASE && baseomega+basetorque < MAXBASE*2-3)
+		if (baseomega < this.getMaxBase() && baseomega+basetorque < this.getMaxBase()*2-3)
 			baseomega++;
 	}
 
@@ -172,6 +181,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("storage", storedEnergy);
+
+		if (!this.isFlexibleMode())
+			basetorque = 0;
 		NBT.setInteger("tier", basetorque);
 		NBT.setInteger("tiero", baseomega);
 
@@ -187,6 +199,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		super.readFromNBT(NBT);
 		storedEnergy = NBT.getInteger("storage");
 		basetorque = NBT.getInteger("tier");
+		if (!this.isFlexibleMode())
+			basetorque = 0;
 		baseomega = NBT.getInteger("tiero");
 
 		rsState = RedstoneState.list[NBT.getInteger("rs")];

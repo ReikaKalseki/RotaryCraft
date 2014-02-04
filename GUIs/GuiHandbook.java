@@ -42,6 +42,7 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -476,6 +477,9 @@ public class GuiHandbook extends GuiScreen
 					p8 = -2000F;
 				}
 				if (h == HandbookRegistry.COIL) {
+					int tick = (int)((System.nanoTime()/SECOND)%2);
+					if (tick == 1)
+						((TileEntityAdvancedGear)te).setBedrock(true);
 					p8 = -3000F;
 				}
 				double sc = 48;

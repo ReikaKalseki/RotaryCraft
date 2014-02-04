@@ -33,8 +33,8 @@ public enum RotaryAchievements {
 	JETFUEL(		4, -4,	ItemRegistry.BUCKET.getStackOfMetadata(1), 						MAKEYEAST,		false), //make
 	RECYCLE(		4, -8,	ItemStacks.scrap, 												JETFUEL,		false),
 	JETENGINE(		6, -4,	EngineType.JET.getItem(), 										JETFUEL,		true),
-	MAKERAILGUN(	0, 6,	MachineRegistry.RAILGUN, 										MAKESTEEL,		true),
-	SUCKEDINTOJET(	6, -6,	Item.rottenFlesh, 												JETENGINE,		false),
+	MAKERAILGUN(	0, 6,	MachineRegistry.RAILGUN, 										PCB,			true),
+	SUCKEDINTOJET(	6, -8,	Item.rottenFlesh, 												JETENGINE,		false),
 	BEDROCKBREAKER(	-4, 2,	ItemStacks.bedrockdust, 										MAKESTEEL,		false), //break bedrock with
 	STEAMENGINE(	-8, 0,	EngineType.STEAM.getItem(), 									PUMP,			false), //turn on
 	STEELSHAFT(		-2, -2,	MaterialRegistry.STEEL.getShaftItem(), 							MAKESTEEL,		false), //make
@@ -49,8 +49,8 @@ public enum RotaryAchievements {
 	DAMAGEGEARS(	-4, -2,	ItemStacks.gearunit, 											STEELSHAFT,		false),
 	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearItem(8), 						DAMAGEGEARS,	false), //make
 	MRADS32(		2, -6,	ItemRegistry.METER.getStackOf(),								JETFUEL,		true), //transmit power at 32Mrad/s
-	GIGAWATT(		6, -2,	Block.blockRedstone, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
-	RAILDRAGON(		0, 10,	Block.dragonEgg, 												MAKERAILGUN,	true), //kill dragon with railgun
+	GIGAWATT(		6, 0,	Block.blockRedstone, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
+	RAILDRAGON(		2, 6,	Block.dragonEgg, 												MAKERAILGUN,	true), //kill dragon with railgun
 	RAILKILLED(		0, 8,	new ItemStack(Item.skull.itemID, 1, 0), 						MAKERAILGUN,	false), //kill self with railgun
 	GRAVELGUN(		0, -4,	ItemRegistry.GRAVELGUN.getStackOf(),							MAKESTEEL,		false), //one hit kill with
 	LANDMINE(		2, 2,	MachineRegistry.LANDMINE, 										MAKESTEEL,		false), //step on

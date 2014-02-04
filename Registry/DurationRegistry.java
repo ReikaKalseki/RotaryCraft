@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.Instantiable.Formula.InverseLogExpression;
 import Reika.DragonAPI.Instantiable.Formula.LogarithmExpression;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 
@@ -28,7 +27,7 @@ public enum DurationRegistry {
 	HEATER(MachineRegistry.HEATER, 				200, 10),
 	MAGNETIZER(MachineRegistry.MAGNETIZER, 		400, 20),
 	OBSIDIAN(MachineRegistry.OBSIDIAN, 			800, 60),
-	PUMP(MachineRegistry.PUMP, 					new InverseLogExpression(0, 200, 2)),
+	PUMP(MachineRegistry.PUMP, 					200, 20),
 	PURIFIER(MachineRegistry.PURIFIER, 			800, 40),
 	TERRAFORMER(MachineRegistry.TERRAFORMER, 	800, 40),
 	WOODCUTTER(MachineRegistry.WOODCUTTER, 		40, 4);

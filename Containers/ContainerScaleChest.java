@@ -20,25 +20,28 @@ public class ContainerScaleChest extends CoreContainer
 	private IInventory lowerScaleChestInventory;
 	private TileEntityScaleableChest chest;
 	private int size;
+	private int page;
 
-	public ContainerScaleChest(EntityPlayer player, TileEntityScaleableChest par2IInventory)
+	public ContainerScaleChest(EntityPlayer player, TileEntityScaleableChest te, int page)
 	{
-		super(player, par2IInventory);
-		lowerScaleChestInventory = par2IInventory;
-		chest = par2IInventory;
-		size = par2IInventory.getSizeInventory();
-		par2IInventory.openChest();
-		int page = chest.page;
-		this.setSlots(player, par2IInventory, page);
+		super(player, te);
+		lowerScaleChestInventory = te;
+		chest = te;
+		size = te.getSizeInventory();
+		te.openChest();
+		this.page = page;
+		this.setSlots(player, te, page);
 	}
 
-	public void reset(EntityPlayer player, TileEntityScaleableChest te) {
-		//inventorySlots.clear();
-		//this.func_94533_d();
-		//this.setSlots(par1IInventory, te);
+	private int getPageOffset() {
+		return page*9*chest.MAXROWS;
 	}
 
 	private void setSlots(EntityPlayer player, TileEntityScaleableChest te, int page) {
+		int offset = this.getPageOffset();
+		for (int i = 0; i < offset; i++) {
+			this.addSlotToContainer(new Slot(te, i, -200, -200));
+		}
 		int var3 = 0;
 		int var4 = 8;
 		int var5 = 18;
@@ -46,7 +49,7 @@ public class ContainerScaleChest extends CoreContainer
 		if (rowsize > chest.MAXROWS*9)
 			rowsize = chest.MAXROWS*9;
 		if (page == chest.getMaxPage()) {
-			rowsize = size-(page*9*chest.MAXROWS);
+			rowsize = size-offset;
 		}
 		int rows = (int)Math.ceil(rowsize/9D);
 		int x = 0; int y = 0;
@@ -57,7 +60,9 @@ public class ContainerScaleChest extends CoreContainer
 		for (var3 = 0; var3 < rowsize; var3++) {
 			y = var5+var3/9*18; x = var4+18*(var3%9);
 			//ReikaJavaLibrary.pConsole(var3+"  ->   "+x+", "+y);
-			this.addSlotToContainer(new Slot(te, var3+page*9*chest.MAXROWS, x, y));
+			int id = var3+offset;
+			//ReikaJavaLibrary.pConsole(id+":"+chest.getStackInSlot(id));
+			this.addSlotToContainer(new Slot(te, id, x, y));
 		}
 		var5 = chest.MAXROWS*18+31;//rows*18+31;
 		//var4 = 44+18*(rows-1);

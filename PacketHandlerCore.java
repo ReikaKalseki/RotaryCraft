@@ -48,6 +48,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
@@ -92,6 +93,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityTerraformer terra;
 	private EnergyToPowerBase eng;
 	private TileEntityPowerBus bus;
+	private TileEntityParticleEmitter emitter;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -333,9 +335,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			break;
 			case CHEST: {
 				chest = (TileEntityScaleableChest)te;
-				int oldpg = chest.page;
-				chest.page = data[0];
-				//ep.openGui(RotaryCraft.instance, 0, chest.worldObj, chest.xCoord, chest.yCoord, chest.zCoord);
+				ep.openGui(RotaryCraft.instance, 24000+data[0], chest.worldObj, chest.xCoord, chest.yCoord, chest.zCoord);
 				break;
 			}
 			case COIL:
@@ -513,6 +513,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				bus = (TileEntityPowerBus)te;
 				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[data[0]+2];
 				bus.setMode(dir, !bus.isSideSpeedMode(dir));
+				break;
+			case PARTICLES:
+				emitter = (TileEntityParticleEmitter)te;
+				emitter.particleType = ReikaParticleHelper.values()[data[0]];
 				break;
 			}
 		}

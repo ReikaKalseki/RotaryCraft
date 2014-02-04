@@ -57,5 +57,9 @@ public class BlockMachine extends BlockBasicMultiTE {
 		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.EAST.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_east");
 		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.SOUTH.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_south");
 		icons[MachineRegistry.POWERBUS.getMachineMetadata()][0][ForgeDirection.WEST.ordinal()][0] = ico.registerIcon("RotaryCraft:bus_west");
+
+		for (int i = 0; i < 6; i++)
+			icons[MachineRegistry.PARTICLE.getMachineMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.PARTICLE.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:particle_top");
 	}
 }

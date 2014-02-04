@@ -217,7 +217,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void heatAmbient(World world, int x, int y, int z, int meta) {
-		if (fuel.getLevel() > 0 && this.canSmelt())
+		if (fuel.getLevel() > 0 && this.canHeatUp())
 			temperature += ReikaMathLibrary.extrema((MAXTEMP-temperature)/8, 4, "max");
 
 		if (water.getLevel() > 0) {
@@ -243,6 +243,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			temperature -= 2;
 		if (temperature < Tamb)
 			temperature = Tamb;
+	}
+
+	private boolean canHeatUp() {
+		return power >= MINPOWER && omega >= MINSPEED && !fuel.isEmpty();
 	}
 
 	public void smeltHeat() {
@@ -282,11 +286,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			this.heatAmbient(world, x, y, z, meta);
 			tickcount = 0;
 		}
+		if (soundtick >= 18 && this.canHeatUp()) {
+			soundtick = 0;
+			SoundRegistry.PULSEJET.playSoundAtBlock(world, x, y, z, 1, 1);
+		}
 		if (this.canSmelt()) {
-			if (soundtick >= 18 && temperature > reqtemp && reqtemp != -1) {
-				soundtick = 0;
-				SoundRegistry.PULSEJET.playSoundAtBlock(world, x, y, z, 1, 1);
-			}
 			if (!flag2)
 				this.getFuel(world, x, y, z, meta);
 			this.updateTemperature(world, x, y, z, meta);
@@ -294,7 +298,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 		tickcount++;
 		tickcount2++;
-		if (temperature > reqtemp && reqtemp != -1)
+		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt())
 			smelttick++;
 		else
 			smelttick = 0;
@@ -332,6 +336,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return false;
 		if (fuel.isEmpty())
 			return false;
+
+		int mintemp = this.getReqTemps(inv[0]);
+		if (mintemp == -1 || mintemp > temperature)
+			return false;
+
 		if (this.hasScrap()) {
 			if (inv[0].stackSize < 9 && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage() && inv[0].itemID == ItemStacks.scrap.itemID)
 				return false;
@@ -345,9 +354,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		}
 		//if (this.fuelLevel <= 0)
 		//return false;
-		int mintemp = this.getReqTemps(inv[0]);
-		if (mintemp == -1 || mintemp > temperature)
-			return false;
 
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
 		if (itemstack == null)

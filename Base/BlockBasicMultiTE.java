@@ -187,7 +187,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
+	public final boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
@@ -242,6 +242,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				else if (FluidContainerRegistry.isFilledContainer(is)) {
 					boolean bucket = FluidContainerRegistry.isBucket(is);
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					f.amount *= 48;
 					if (f != null) {
 						Fluid fluid = f.getFluid();
 						int size = is.stackSize;
@@ -708,7 +709,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		int i = MachineRegistry.getMachineIndexFromIDandMetadata(blockID, metadata);
-		MachineRegistry m = MachineRegistry.machineList[i];
 		ItemStack is = new ItemStack(RotaryCraft.machineplacer.itemID, 1, i);
 		ret.add(is);
 		return ret;

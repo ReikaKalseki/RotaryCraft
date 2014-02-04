@@ -103,6 +103,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiLandmine;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiObsidian;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiParticle;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPerformance;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPowerBus;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiProjector;
@@ -133,6 +134,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
@@ -167,9 +169,11 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class GuiHandler implements IGuiHandler {
 
 	public static final GuiHandler instance = new GuiHandler();
-	//returns an instance of the Container you made earlier
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		if (id >= 24000) {
+			return new ContainerScaleChest(player, (TileEntityScaleableChest)world.getBlockTileEntity(x, y, z), id-24000);
+		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
 		ItemStack is = player.getCurrentEquippedItem();
 		if (!gr.hasContainer())
@@ -252,7 +256,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerBlastFurnace(player, (TileEntityBlastFurnace) te);
 		}
 		if (te instanceof TileEntityScaleableChest) {
-			return new ContainerScaleChest(player, (TileEntityScaleableChest) te);
+			return new ContainerScaleChest(player, (TileEntityScaleableChest) te, 0);
 		}
 		if (te instanceof TileEntityProjector) {
 			return new ContainerProjector(player, (TileEntityProjector) te);
@@ -296,6 +300,9 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityPowerBus) {
 			return new ContainerPowerBus(player, (TileEntityPowerBus) te);
 		}
+		if (te instanceof TileEntityParticleEmitter) {
+			return new OneSlotContainer(player, te, 28);
+		}
 
 		if (te instanceof OneSlotMachine)
 			return new OneSlotContainer(player, te);
@@ -309,6 +316,9 @@ public class GuiHandler implements IGuiHandler {
 	//returns an instance of the Gui you made earlier
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		if (id >= 24000) {
+			return new GuiScaleChest(player, (TileEntityScaleableChest)world.getBlockTileEntity(x, y, z), id-24000);
+		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (gr == GuiRegistry.HANDCRAFT)
@@ -432,7 +442,7 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiBasicRange(player, (TileEntityContainment) te);
 		}
 		if (te instanceof TileEntityScaleableChest) {
-			return new GuiScaleChest(player, (TileEntityScaleableChest) te, (TileEntityScaleableChest) te);
+			return new GuiScaleChest(player, (TileEntityScaleableChest) te, 0);
 		}
 		if (te instanceof TileEntityMusicBox) {
 			return new GuiMusic(player, (TileEntityMusicBox)te);
@@ -487,6 +497,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityPowerBus) {
 			return new GuiPowerBus(player, (TileEntityPowerBus) te);
+		}
+		if (te instanceof TileEntityParticleEmitter) {
+			return new GuiParticle(player, (TileEntityParticleEmitter) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

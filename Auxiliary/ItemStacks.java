@@ -94,6 +94,7 @@ public final class ItemStacks {
 	public static final ItemStack railbase = new ItemStack(RotaryCraft.misccraft, 1, 10);
 	public static final ItemStack railaim = new ItemStack(RotaryCraft.misccraft, 1, 11);
 	public static final ItemStack compoundturb = new ItemStack(RotaryCraft.misccraft, 1, 12);
+	public static final ItemStack bedrockcoil = new ItemStack(RotaryCraft.misccraft, 1, 13);
 
 	public static final ItemStack impeller = new ItemStack(RotaryCraft.enginecraft, 1, 0);
 	public static final ItemStack compressor = new ItemStack(RotaryCraft.enginecraft, 1, 1);

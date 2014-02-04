@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -35,25 +34,24 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	private int numrows;
 	private int page;
 
-	private ContainerScaleChest[] pages = new ContainerScaleChest[TileEntityScaleableChest.getMaxPages()];
-
 	int x;
 	int y;
 
 	private int invsize = 0;
 
-	public GuiScaleChest(EntityPlayer p5ep, IInventory par2IInventory, TileEntityScaleableChest te)
+	public GuiScaleChest(EntityPlayer p5ep, TileEntityScaleableChest te, int page)
 	{
-		super(new ContainerScaleChest(p5ep, te), te);
+		super(new ContainerScaleChest(p5ep, te, page), te);
 		upperScaleChestInventory = p5ep.inventory;
 		allowUserInput = false;
 		short var3 = 222;
 		int var4 = var3 - 108;
-		invsize = par2IInventory.getSizeInventory();
+		invsize = te.getSizeInventory();
 		scale = te;
 		ySize = var4 + 18*scale.MAXROWS;//ReikaMathLibrary.extrema(numrows, scale.MAXROWS, "min")*18;
 		ep = p5ep;
 		this.setValues();
+		this.page = page;
 	}
 
 	@Override
@@ -71,7 +69,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		if (numrows > scale.MAXROWS) {
 			numrows = scale.MAXROWS;
 		}
-		page = scale.page;
 		if (page == scale.getMaxPage()) {
 			numrows = (int)Math.ceil((invsize-(page*9*scale.MAXROWS))/9D);
 		}
@@ -97,26 +94,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		//this.setValues();
 	}
 
-	private void refreshContainer() {
-		int lastx = x;
-		int lasty = y;
-		mc.thePlayer.closeScreen();
-		ep.openGui(RotaryCraft.instance, 0, scale.worldObj, scale.xCoord, scale.yCoord, scale.zCoord);
-		Mouse.setCursorPosition(lastx, lasty);
-		invsize = scale.getSizeInventory();
-		numrows = (int)Math.ceil(invsize/9D);
-		if (numrows > scale.MAXROWS) {
-			numrows = scale.MAXROWS;
-		}
-		if (page == scale.getMaxPage()) {
-			numrows = (int)Math.ceil((invsize-(page*9*scale.MAXROWS))/9D);
-		}
-		short var3 = 222;
-		int var4 = var3 - 108;
-		//ySize = var4 + ReikaMathLibrary.extrema(numrows, scale.MAXROWS, "min")*18;
-		this.initGui();
-	}
-
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 	 */
@@ -125,7 +102,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	{
 		this.setValues();
 		super.drawGuiContainerForegroundLayer(a, b);
-		fontRenderer.drawString("Page "+String.valueOf(scale.page), xSize-48, 6, 4210752);
+		fontRenderer.drawString("Page "+String.valueOf(page), xSize-48, 6, 4210752);
 		int var3 = 0;
 		int pageinv = invsize-page*9*scale.MAXROWS;
 		int pagerows = numrows;

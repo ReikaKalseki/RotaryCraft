@@ -26,7 +26,6 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -75,11 +74,12 @@ public class BlockAdvGear extends BlockModelledMachine {
 		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		if (te != null) {
 			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
-			if (te.getType() == GearType.COIL) {
+			if (te.getType().storesEnergy()) {
 				long e = te.getEnergy();
 				if (is.stackTagCompound == null)
 					is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setLong("energy", e);
+				is.stackTagCompound.setBoolean("bedrock", te.isBedrockCoil());
 			}
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}
@@ -96,7 +96,15 @@ public class BlockAdvGear extends BlockModelledMachine {
 	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(RotaryCraft.advgearitems.itemID, 1, metadata/4));
+		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+		ItemStack is = new ItemStack(RotaryCraft.advgearitems.itemID, 1, adv.getBlockMetadata()/4);
+		if (adv.getType().storesEnergy()) {
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setLong("energy", adv.getEnergy());
+			is.stackTagCompound.setBoolean("bedrock", adv.isBedrockCoil());
+		}
+		ret.add(is);
 		return ret;
 	}
 }

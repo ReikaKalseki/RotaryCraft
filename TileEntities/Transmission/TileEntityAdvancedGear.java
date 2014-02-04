@@ -18,8 +18,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -35,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator {
@@ -59,8 +62,30 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public boolean isRedstoneControlled;
 
+	private boolean isBedrockCoil = false;
+
+	private boolean isCreative;
+
+	private StepTimer redstoneTimer = new StepTimer(20);
+
 	public void setController(CVTController c) {
 		controller = c;
+	}
+
+	public long getMaxStorageCapacity() {
+		return this.getType().storesEnergy() ? this.getMaxStorageCapacity(isBedrockCoil) : 0;
+	}
+
+	public static long getMaxStorageCapacity(boolean bedrock) {
+		return bedrock ? 240L*ReikaMathLibrary.longpow(10, 12) : 720*ReikaMathLibrary.intpow2(10, 6);
+	}
+
+	public void setBedrock(boolean bedrock) {
+		isBedrockCoil = bedrock;
+	}
+
+	public void setCreative(boolean flag) {
+		isCreative = flag;
 	}
 
 	public enum GearType {
@@ -76,6 +101,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 		public boolean hasLosses() {
 			return this == WORM;
+		}
+
+		public boolean storesEnergy() {
+			return this == COIL;
 		}
 	}
 
@@ -225,48 +254,81 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 		this.basicPowerReceiver();
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+
+		if (this.getType().storesEnergy()) {
+			redstoneTimer.update();
+			if (redstoneTimer.checkCap())
+				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
+		}
+	}
+
+	public boolean isBedrockCoil() {
+		return isBedrockCoil;
 	}
 
 	private void store(World world, int x, int y, int z, int meta) {
 		this.transferPower(world, x, y, z, meta);
 		isReleasing = world.isBlockIndirectlyGettingPowered(x, y, z);
+		//ReikaJavaLibrary.pConsole(isCreative);
+		//ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Side.SERVER);
 		if (!isReleasing) {
 			torque = omega = 0;
 			power = 0;
 			if (energy + ((long)torquein*(long)omegain) < 0 || energy + ((long)torquein*(long)omegain) > Long.MAX_VALUE) {
-				for (int i = 0; i < 16; i++)
-					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 5, 0.2F);
-				ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 2);
-				int r = 20;
-				for (int i = -r; i <= r; i++) {
-					for (int j = -r; j <= r; j++) {
-						for (int k = -r; k <= r; k++) {
-							double dd = ReikaMathLibrary.py3d(i, j*2, k);
-							if (dd <= r+0.5) {
-								if (world.getBlockId(x+i, y+j, z+k) != Block.bedrock.blockID) {
-									world.setBlock(x+i, y+j, z+k, 0);
-									world.markBlockForUpdate(x+i, y+j, z+k);
-								}
-							}
-							if (!world.isRemote && rand.nextInt(8) == 0)
-								ReikaWorldHelper.ignite(world, x+i, y+j, z+k);
-						}
+				this.destroy(world, x, y, z);
+			}
+			else if (energy/20 < this.getMaxStorageCapacity() && !isCreative) {
+				energy += ((long)torquein*(long)omegain);
+			}
+			else if (!isCreative) {
+				if (!world.isRemote) {
+					world.setBlock(x, y, z, 0);
+					int num = isBedrockCoil ? 24 : 3;
+					int pow = isBedrockCoil ? 20 : 8;
+					int r = isBedrockCoil ? 9 : 1;
+					for (int i = 0; i < num; i++) {
+						double rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
+						double ry = ReikaRandomHelper.getRandomPlusMinus(y, r);
+						double rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
+						world.createExplosion(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState());
 					}
+					world.createExplosion(null, x, y, z, 8, ConfigRegistry.BLOCKDAMAGE.getState());
 				}
 			}
-			else
-				energy += ((long)torquein*(long)omegain);
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {
 			torque = releaseTorque;
 			omega = releaseOmega;
 			power = (long)torque*(long)omega;
-			energy -= power;
+			if (!isCreative)
+				energy -= power;
 			if (energy <= 0) {
 				energy = 0;
 				torque = 0;
 				omega = 0;
 				power = 0;
+			}
+		}
+	}
+
+	private void destroy(World world, int x, int y, int z) {
+		for (int i = 0; i < 16; i++)
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 5, 0.2F);
+		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 2);
+		int r = 20;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					double dd = ReikaMathLibrary.py3d(i, j*2, k);
+					if (dd <= r+0.5) {
+						if (world.getBlockId(x+i, y+j, z+k) != Block.bedrock.blockID) {
+							world.setBlock(x+i, y+j, z+k, 0);
+							world.markBlockForUpdate(x+i, y+j, z+k);
+						}
+					}
+					if (!world.isRemote && rand.nextInt(8) == 0)
+						ReikaWorldHelper.ignite(world, x+i, y+j, z+k);
+				}
 			}
 		}
 	}
@@ -447,6 +509,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setBoolean("redstone", isRedstoneControlled);
 		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
+		NBT.setBoolean("bedrock", isBedrockCoil);
+		NBT.setBoolean("creative", isCreative);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -479,6 +543,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		isRedstoneControlled = NBT.getBoolean("redstone");
 		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
 		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
+		isBedrockCoil = NBT.getBoolean("bedrock");
+		isCreative = NBT.getBoolean("creative");
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		belts = new ItemStack[this.getSizeInventory()];
@@ -569,6 +635,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public int getRedstoneOverride() {
+		if (this.getType().storesEnergy()) {
+			int level = (int)(15L*energy/20L/this.getMaxStorageCapacity());
+			return level;
+		}
 		return 0;
 	}
 

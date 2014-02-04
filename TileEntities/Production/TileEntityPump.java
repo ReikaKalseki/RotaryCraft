@@ -71,7 +71,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		tickcount++;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
 		this.getPower(true, false);
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		int idbelow = world.getBlockId(x, y-1, z);
 		if (idbelow == 0)
 			return;
@@ -81,7 +81,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			return;
 		if (blocks.isEmpty()) {
 			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
-			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, 0, z-16, x+16, y-1, z+16);
+			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, y-2, z-16, x+16, y-1, z+16);
 			blocks.reverseBlockOrder();
 		}
 		if (damage > 400)
@@ -90,7 +90,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
 		if (blocks.isEmpty())
 			return;
-		if (power >= MINPOWER && this.getLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
+		if (power >= MINPOWER && torque >= MINTORQUE && this.getLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
 			//int loc[] = this.findSourceBlock(world, x, y, z);
 			int[] loc = blocks.getNextAndMoveOn();
 			//ReikaJavaLibrary.pConsole(loc[0]+"  "+loc[1]+"  "+loc[2]+"  for side "+FMLCommonHandler.instance().getEffectiveSide());
@@ -170,26 +170,6 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		boolean liq = (f2.equals(f) || f == null);
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(liq)+"  "+String.valueOf(dmg0));
 		return (dmg0 && liq);
-	}
-
-	public int[] findSourceBlock(World world, int x, int y, int z) {
-		int[] loc = {x,y-1,z};
-		int tries = 0;
-		boolean found = false;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", world.getBlockId(x, y-1, z)));
-		while (!this.isSource(world, loc[0], loc[1], loc[2]) && tries < 200 && !found) {
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
-			loc[0] += -1 + rand.nextInt(3);
-			loc[1] = y -6 + rand.nextInt(7);
-			loc[2] += -1 + rand.nextInt(3);
-			tries++;	// to prevent 1fps
-			if (ReikaMathLibrary.py3d(loc[0]-x, 0, loc[2]-z) > 16) {
-				loc[0] = x;
-				loc[2] = z;
-			}
-		}
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
-		return loc;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

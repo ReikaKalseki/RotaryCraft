@@ -46,7 +46,8 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(ReikaItemHelper.getSizedItemStack(output, TileEntityFermenter.getPlantValue(this.getEntry(this.getBottomSlot()))), 111, 36);
+			ItemStack is = output.itemID == ItemRegistry.YEAST.getShiftedID() ? output : ReikaItemHelper.getSizedItemStack(output, TileEntityFermenter.getPlantValue(this.getEntry(this.getBottomSlot())));
+			return new PositionedStack(is, 111, 36);
 		}
 
 		@Override
@@ -135,7 +136,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			if (this.isYeastIngredient(ingredient))
 				arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
 			else
-				arecipes.add(new FermenterRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, TileEntityFermenter.getPlantValue(ingredient))));
+				arecipes.add(new FermenterRecipe(ItemStacks.sludge.copy()));
 		}
 	}
 

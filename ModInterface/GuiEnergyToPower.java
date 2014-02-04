@@ -30,6 +30,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 	private EnergyToPowerBase engine;
 	private int base;
 	private static final int SHIFT = -12;
+	private boolean flexible = false;
 
 	public GuiEnergyToPower(EntityPlayer pl, EnergyToPowerBase te) {
 		super(new ContainerEnergyToPower(pl, te), te);
@@ -38,6 +39,8 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		xSize = 199;
 		ep = pl;
 		base = te.getTier();
+
+		flexible = te.isFlexibleMode();
 	}
 
 	@Override
@@ -46,9 +49,10 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		int inset = 23;
-		buttonList.add(new GuiButton(0, SHIFT+j+inset, k+ySize-30-48+0, 20, 20, "-"));;
-		buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+0, 20, 20, "+"));
-
+		if (flexible) {
+			buttonList.add(new GuiButton(0, SHIFT+j+inset, k+ySize-30-48+0, 20, 20, "-"));;
+			buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+0, 20, 20, "+"));
+		}
 		buttonList.add(new GuiButton(2, SHIFT+j+inset, k+ySize-30-48+25, 20, 20, "-"));;
 		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
 
@@ -60,25 +64,10 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 	public void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		if (b.id == 4) {
-			engine.incrementRedstoneState();
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+4, engine);
 		}
 		else if (b.id < 24000) {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id, engine);
-			switch(b.id) {
-			case 0:
-				//engine.decrementTorque();
-				break;
-			case 1:
-				//engine.incrementTorque();
-				break;
-			case 2:
-				//engine.decrementOmega();
-				break;
-			case 3:
-				//engine.incrementOmega();
-				break;
-			}
 		}
 		this.initGui();
 	}

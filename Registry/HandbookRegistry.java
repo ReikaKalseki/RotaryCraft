@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -179,6 +180,7 @@ public enum HandbookRegistry {
 	PROJECTOR(MachineRegistry.PROJECTOR),
 	WEATHER(MachineRegistry.WEATHERCONTROLLER),
 	DISPLAY(MachineRegistry.DISPLAY),
+	PARTICLE(MachineRegistry.PARTICLE),
 
 	UTILMACHINEDESC("Utility Machines", "Utility"),
 	FLOODLIGHT(MachineRegistry.FLOODLIGHT),
@@ -720,6 +722,16 @@ public enum HandbookRegistry {
 			for (int i = 0; i < MaterialRegistry.values().length; i++) {
 				li.add(MachineRegistry.GEARBOX.getCraftedMetadataProduct(i));
 			}
+			return li;
+		}
+		if (this == COIL) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(2);
+			li.add(is);
+			is = is.copy();
+			is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setBoolean("bedrock", true);
+			li.add(is);
 			return li;
 		}
 		if (this == FLYWHEEL) {

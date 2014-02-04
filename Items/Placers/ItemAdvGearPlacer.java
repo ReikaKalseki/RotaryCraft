@@ -75,8 +75,10 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			adv.setFlipped(true);
 		}
-		if (adv.getType() == GearType.COIL && is.stackTagCompound != null) {
+		if (adv.getType().storesEnergy() && is.stackTagCompound != null) {
 			adv.setEnergyFromNBT(is.stackTagCompound);
+			adv.setBedrock(is.stackTagCompound.getBoolean("bedrock"));
+			adv.setCreative(is.stackTagCompound.getBoolean("creative"));
 		}
 		return true;
 	}
@@ -87,11 +89,17 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		for (int i = 0; i < TileEntityAdvancedGear.GearType.list.length; i++) {
 			ItemStack item = new ItemStack(id, 1, i);
 			list.add(item);
-			if (i == GearType.COIL.ordinal()) {
+			if (GearType.list[i].storesEnergy()) {
 				item = item.copy();
 				item.stackTagCompound = new NBTTagCompound();
-				item.stackTagCompound.setLong("energy", (long)Math.pow(10, 15)*20L);
+				item.stackTagCompound.setBoolean("bedrock", true);
+				list.add(item);
+
+				item = item.copy();
+				item.stackTagCompound = new NBTTagCompound();
+				item.stackTagCompound.setLong("energy", TileEntityAdvancedGear.getMaxStorageCapacity(true)*20);
 				item.stackTagCompound.setBoolean("creative", true);
+				item.stackTagCompound.setBoolean("bedrock", true);
 				list.add(item);
 			}
 		}
@@ -99,14 +107,21 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
-		if (is.getItemDamage() == GearType.COIL.ordinal()) {
-			if (is.stackTagCompound == null)
-				par3List.add("Stored Energy: 0J");
+		boolean bedrock = is.stackTagCompound != null && is.stackTagCompound.getBoolean("bedrock");
+		long max = TileEntityAdvancedGear.getMaxStorageCapacity(bedrock);
+		par3List.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
+		if (GearType.list[is.getItemDamage()].storesEnergy()) {
+			if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
+				par3List.add("Stored Energy: 0 J");
 			else {
-				long e = is.stackTagCompound.getLong("energy")/20;
-				par3List.add("Stored Energy: "+String.format("%.3f", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
-				if (is.stackTagCompound.getBoolean("creative"))
-					par3List.add("Basically infinite power for creative mode.");
+				if (is.stackTagCompound.getBoolean("creative")) {
+					par3List.add("Infinite power for creative mode:");
+					par3List.add("This coil does not deplete.");
+				}
+				else {
+					long e = is.stackTagCompound.getLong("energy")/20;
+					par3List.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+				}
 			}
 		}
 	}

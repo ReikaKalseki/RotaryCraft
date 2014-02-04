@@ -265,22 +265,21 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			torquein = 0;
 			omegain = 0;
 		}
-		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
-		double h = 0.4;
+		double r=0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
+		double h=0.4;
 		double iner = (h*r*r*Math.PI)*this.getDensity()*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
-		updateticks = 0;
+		updateticks=0;
 		if (torquein > 0) {
-			oppTorque = TorqueUsage.getTorque(world, x, y, z); //gets the minimum torque requirement of all machines connected to the flywheel
-			if (oppTorque <= torquein) {
+			if (tickcount%20==0) oppTorque = TorqueUsage.getTorque(world,x,y,z); //gets the minimum torque requirement of all machines connected to the flywheel
+			if (oppTorque <= torquein){
 				if (omega <= omegain) {
-					if ((torquein-oppTorque)/iner < 1 && (torquein-oppTorque) > 0) { //making up for the fact that numbers are integers
-						int i = 1;
-						while ((((double)torquein-oppTorque)/iner*i) < 1) {
+					if ((torquein-oppTorque)/iner<1 && (torquein-oppTorque)>0){ //making up for the fact that numbers are integers
+						int i=1;
+						while ((((double)torquein-oppTorque)/iner*i)<1){
 							i++;
 						}
-						updateticks = i;
-						if (tickcount >= updateticks) {
-							tickcount=0;
+						updateticks=i;
+						if (tickcount%updateticks==0) {
 							omega++;
 						}
 					}
@@ -291,66 +290,54 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 						omega = omegain; //to prevent oscillations once reached the input value
 				}
 				else {
-					if ((torquein+oppTorque)/iner < 1) { //same as before, but to reduce omega if it's greater than the input omega
-						int i = 1;
-						while ((((double)torquein+oppTorque)/iner*i) < 1) {
+					if ((torquein+oppTorque)/iner<1){ //same as before, but to reduce omega if it's greater than the input omega
+						int i=1;
+						while ((((double)torquein+oppTorque)/iner*i)<1){
 							i++;
 						}
 						updateticks=i;
-						if (tickcount >= updateticks) {
-							tickcount = 0;
+						if (tickcount%updateticks==0) {
 							omega--;
 						}
 					}
-					else
-						omega -= (torquein+oppTorque)/iner;
+					else omega -= (torquein+oppTorque)/iner;
 				}
-				lasttorque = torquein;
-				lasttorque = Math.min(lasttorque, maxtorque);
-				torque = lasttorque;
+				torque = Math.min(torquein, maxtorque);
 			}
 			else {
-				if ((oppTorque-torquein)/iner < 1) { //this applies the same formula to reduce omega in the case the input is smaller than the required output
-					int i = 1;
-					while (((oppTorque-torquein)/iner*i) < 1) {
+				if ((oppTorque-torquein)/iner<1){ //this applies the same formula to reduce omega in the case the input is smaller than the required output
+					int i=1;
+					while (((oppTorque-torquein)/iner*i)<1){
 						i++;
 					}
-					updateticks = i;
-					if (tickcount >= updateticks) {
-						tickcount = 0;
+					updateticks=i;
+					if (tickcount%updateticks==0) {
 						omega--;
 					}
 				}
-				else
-					omega -= (oppTorque-torquein)/iner;
-				if (omega < 0)
-					omega = 0;
+				else omega -= (oppTorque-torquein)/iner;
+				if (omega<0) omega=0;
 			}
 		}
 		else {
 			if (omega == 0) {
-				lasttorque = 0;
 				torque = 0;
-				tickcount = 0;
+				tickcount=0;
 			}
 			else { //same as before, but without input
-				oppTorque = TorqueUsage.getTorque(world, x, y, z);
-				if (oppTorque/iner < 1 && oppTorque > 0) {
-					int i = 1;
-					while ((oppTorque/iner*i) < 1) {
+				oppTorque = TorqueUsage.getTorque(world,x,y,z);
+				if (oppTorque/iner<1 && oppTorque>0){
+					int i=1;
+					while ((oppTorque/iner*i)<1){
 						i++;
 					}
-					updateticks = i;
-					if (tickcount>=updateticks) {
-						tickcount = 0;
+					updateticks=i;
+					if (tickcount%updateticks==0) {
 						omega--;
 					}
 				}
-				else
-					omega -= oppTorque/iner;
-				torque = lasttorque;
-				if (omega < 0)
-					omega = 0;
+				else omega -= oppTorque/iner;
+				if (omega<0) omega=0;
 			}
 		}
 	}

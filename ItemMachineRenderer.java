@@ -111,6 +111,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
+			if (item.stackTagCompound != null && item.stackTagCompound.getBoolean("bedrock"))
+				adv.setBedrock(true);
+			else
+				adv.setBedrock(false);
 			TileEntityRenderer.instance.renderTileEntityAt(adv, a, -0.1D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.flywheelitems.itemID) {

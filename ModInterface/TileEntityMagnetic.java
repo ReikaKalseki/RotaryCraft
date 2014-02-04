@@ -22,6 +22,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
+
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
@@ -32,7 +33,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 
-		if (world.getWorldTime()%20 == 0)
+		if ((world.getWorldTime()&32) != 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (!this.hasEnoughEnergy()) {

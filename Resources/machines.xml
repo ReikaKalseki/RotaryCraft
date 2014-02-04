@@ -947,4 +947,11 @@
 			Required Speed: %d rad/s
 		</note>
 	</crystallizer>
+		<particle>
+		<desc>
+			The particle display can emit a stream of any particle type you choose from its GUI. It requires a charged windspring to function.
+		</desc>
+		<note>
+		</note>
+	</particle>
 </machines>
