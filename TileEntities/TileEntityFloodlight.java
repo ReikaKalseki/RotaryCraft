@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
@@ -142,10 +143,18 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			return 0;
 		int ir = this.getMaxRange();
 		for (int i = 1; i < ir; i++) {
-			int id = worldObj.getBlockId(xCoord+i*xstep, yCoord+i*ystep, zCoord+i*zstep);
+			int dx = xCoord+i*xstep;
+			int dy = yCoord+i*ystep;
+			int dz = zCoord+i*zstep;
+			int id = worldObj.getBlockId(dx, dy, dz);
 			if (id != 0) {
 				Block b = Block.blocksList[id];
-				if (b.isOpaqueCube())
+				if (b instanceof SemiTransparent) {
+					SemiTransparent sm = (SemiTransparent)b;
+					if (sm.isOpaque(worldObj.getBlockMetadata(dx, dy, dz)))
+						return i;
+				}
+				else if (b.isOpaqueCube())
 					return i;
 			}
 		}

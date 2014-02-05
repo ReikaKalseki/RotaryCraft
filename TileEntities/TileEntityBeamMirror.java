@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -164,10 +165,17 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		if (ir > this.getMaxRange())
 			ir = this.getMaxRange();
 		for (int i = 1; i < ir; i++) {
-			int id = worldObj.getBlockId(xCoord+i*facingDir.offsetX, yCoord+i*facingDir.offsetY, zCoord+i*facingDir.offsetZ);
+			int dx = xCoord+i*facingDir.offsetX;
+			int dy = yCoord+i*facingDir.offsetY;
+			int dz = zCoord+i*facingDir.offsetZ;
+			int id = worldObj.getBlockId(dx, dy, dz);
 			if (id != 0) {
 				Block b = Block.blocksList[id];
-				if (b.isOpaqueCube())
+				if (b instanceof SemiTransparent) {
+					if (((SemiTransparent)b).isOpaque(worldObj.getBlockMetadata(dx, dy, dz)))
+						return i;
+				}
+				else if (b.isOpaqueCube())
 					return i;
 			}
 		}

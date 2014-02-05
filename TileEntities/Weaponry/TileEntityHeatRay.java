@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -45,22 +46,29 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	public void scorch(World world, int x, int y, int z, int metadata) {
 		boolean blocked = false;
 		int step;
-		if (power > MINPOWER) { //524+ kW (real military laser)
+		if (power >= MINPOWER) { //2MW+ (real military laser)
 			int maxdist = this.getRange();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
-				int id = world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep);
-				if (id != 0 && Block.blocksList[id].isFlammable(world, x+step*xstep, y+step*ystep, z+step*zstep, world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), ForgeDirection.UP))
-					this.ignite(world, x+step*xstep, y+step*ystep, z+step*zstep, metadata, step);
-				if (this.makeBeam(world, x, y, z, step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep), world.getBlockMetadata(x+step*xstep, y+step*ystep, z+step*zstep), maxdist)) {
+				int dx = x+step*xstep;
+				int dy = y+step*ystep;
+				int dz = z+step*zstep;
+				int id = world.getBlockId(dx, dy, dz);
+				int meta2 = world.getBlockMetadata(dx, dy, dz);
+				if (id != 0 && Block.blocksList[id].isFlammable(world, dx, dy, dz, meta2, ForgeDirection.UP))
+					this.ignite(world, dx, dy, dz, metadata, step);
+				//ReikaJavaLibrary.pConsole(Block.blocksList[id]);
+				if (this.makeBeam(world, x, y, z, step, id, meta2, maxdist)) {
 					blocked = true;
 					tickcount = 0;
 				}
-				if (Block.opaqueCubeLookup[world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep)])
+				if (Block.blocksList[id] instanceof SemiTransparent) {
+					SemiTransparent st = (SemiTransparent)Block.blocksList[id];
+					if (st.isOpaque(meta2))
+						blocked = true;
+				}
+				else if (Block.opaqueCubeLookup[id])
 					blocked = true; //break loop
-				/*if (world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep) == 0)
-	    			world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, 4);*/
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d ", step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep))+String.valueOf(blocked));
-				world.markBlockForUpdate(x+xstep*step, y+ystep*step, z+zstep*step);
+				world.markBlockForUpdate(dx, dy, dz);
 			}
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d ", step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep))+String.valueOf(blocked));
 			AxisAlignedBB zone = this.getBurnZone(metadata, step);
