@@ -273,7 +273,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public double getDamageMultiplier() {
-		return 1;
+		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? 0.35 : 1;
 	}
 
 	@Override
