@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
@@ -29,7 +30,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements DiscreteFunction {
+public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements DiscreteFunction, ConditionalOperation {
 
 	public int mixTime;
 	public int storeTime;
@@ -294,5 +295,15 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.FRACTIONATOR.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return ReikaInventoryHelper.countEmptySlots(inv) == 0;
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "Missing Ingredients";
 	}
 }

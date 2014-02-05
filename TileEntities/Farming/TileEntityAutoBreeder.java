@@ -24,12 +24,13 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements RangedEffect {
+public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
 	public ItemStack[] inventory = new ItemStack[18];
 
@@ -284,6 +285,16 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		if (idle)
 			return 15;
 		return 0;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Items";
 	}
 
 }

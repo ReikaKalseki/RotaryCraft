@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -60,6 +61,8 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.API.Event.JetEngineEnterFailureEvent;
+import Reika.RotaryCraft.API.Event.JetEngineExplosionEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -882,6 +885,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
 			isJetFailing = true;
 			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
+			MinecraftForge.EVENT_BUS.post(new JetEngineEnterFailureEvent(this));
 		}
 	}
 
@@ -1539,6 +1543,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 
 		if (temperature > 1000) {
+			MinecraftForge.EVENT_BUS.post(new JetEngineExplosionEvent(this));
 			int r = 6;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {

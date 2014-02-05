@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -31,7 +32,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
+public class TileEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
 	private ItemStack[] inv = new ItemStack[18];
 	public boolean filling = true;
@@ -258,5 +259,15 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.BUCKETFILLER.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inv);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Buckets";
 	}
 }

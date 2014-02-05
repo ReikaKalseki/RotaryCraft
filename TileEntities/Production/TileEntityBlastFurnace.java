@@ -24,14 +24,16 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction {
+public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction, ConditionalOperation {
 
 	private int temperature;
 	public ItemStack[] inv = new ItemStack[14];
@@ -59,12 +61,16 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		boolean steel = false;
 		boolean bedrock = false;
+		boolean scrap = false;
 
 		if (this.canMakeSteel()) {
 			steel = true;
 		}
 		else if (this.canMakeBedrock()) {
 			bedrock = true;
+		}
+		else if (this.canMeltScrap()) {
+			scrap = true;
 		}
 		else {
 			smeltTime = 0;
@@ -77,7 +83,34 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				this.makeSteel();
 			else if (bedrock)
 				this.makeBedrock();
+			else if (scrap)
+				this.meltScrap();
 		}
+	}
+
+	private void meltScrap() {
+		int num = 1;
+		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 10))
+			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 12))
+				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 13))
+					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
+						return;
+
+		for (int i = 1; i < inv.length-1; i++) {
+			ReikaInventoryHelper.decrStack(i, inv);
+		}
+		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
+	}
+
+	private boolean canMeltScrap() {
+		if (temperature < SMELTTEMP)
+			return false;
+		for (int i = 1; i < inv.length-1; i++) {
+			ItemStack is = inv[i];
+			if (!ReikaItemHelper.matchStacks(is, ItemStacks.scrap))
+				return false;
+		}
+		return true;
 	}
 
 	private void makeBedrock() {
@@ -456,5 +489,15 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	@Override
 	public int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.canMakeBedrock() || this.canMakeSteel() || this.canMeltScrap();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
 }

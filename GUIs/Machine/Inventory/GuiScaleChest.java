@@ -88,7 +88,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		if (page == oldpage)
 			return;
 		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CHEST.getMinValue(), scale, ep, page);
-		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CHESTRELOAD.getMinValue(), scale);
 		//ep.closeScreen();
 		//this.refresh();
 		//this.setValues();

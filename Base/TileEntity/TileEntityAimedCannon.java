@@ -26,13 +26,14 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect, DiscreteFunction {
+public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver implements RangedEffect, DiscreteFunction, ConditionalOperation {
 
 	private List<String> safePlayers = new ArrayList<String>();
 
@@ -260,6 +261,16 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	public int getOperationTime() {
 		return 20;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.hasAmmo();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Ammunition";
 	}
 
 }

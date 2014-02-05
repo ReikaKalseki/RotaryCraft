@@ -18,11 +18,12 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction {
+public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
 
 	private ItemStack[] inv = new ItemStack[9];
 	public int[] target = new int[3];
@@ -193,5 +194,15 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	@Override
 	public int getOperationTime() {
 		return 8;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inv);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Items";
 	}
 }

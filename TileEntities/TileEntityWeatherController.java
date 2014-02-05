@@ -19,20 +19,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Event.WeatherControlEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWeatherController extends InventoriedPowerReceiver {
+public class TileEntityWeatherController extends InventoriedPowerReceiver implements ConditionalOperation {
 
 	/** 0 = no control; 1 = set sun; 2 = set rain; 3 = set thunder, 4 = superstorm */
-	public int rainmode = 0;
+	private int rainmode = 0;
 
-	public int cooldown = 0;
+	private int cooldown = 0;
 
 	public ItemStack[] inventory = new ItemStack[18];
 
@@ -70,6 +73,9 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver {
 					return;
 			}
 		}
+		boolean rain = false;
+		boolean thunder = false;
+		boolean storm = false;
 		switch(rainmode) {
 		case 1:
 			wi.setRaining(false);
@@ -78,16 +84,23 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver {
 		case 2:
 			wi.setRaining(true);
 			wi.setThundering(false);
+			rain = true;
 			break;
 		case 3:
 			wi.setRaining(true);
 			wi.setThundering(true);
+			rain = true;
+			thunder = true;
 			break;
 		case 4:
 			wi.setRaining(true);
 			wi.setThundering(true);
+			rain = true;
+			thunder = true;
+			storm = true;
 			break;
 		}
+		MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
 	}
 
 	@Override
@@ -294,5 +307,15 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return rainmode != 0;
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "Empty Inventory";
 	}
 }

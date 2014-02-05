@@ -13,11 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 
-public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver implements DiscreteFunction {
+public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
 
-	protected ItemStack[] inventory = new ItemStack[9];
+	protected ItemStack[] inventory = new ItemStack[this.getSizeInventory()];
 
 	public int velocity;
 	public int phi;
@@ -29,7 +31,7 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 
 	@Override
 	public final int getSizeInventory() {
-		return inventory.length;
+		return 11;
 	}
 
 	@Override
@@ -108,7 +110,17 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 	}
 
 	public int getOperationTime() {
-		return 15;
+		return 10;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Ammunition";
 	}
 
 }

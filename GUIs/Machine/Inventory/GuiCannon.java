@@ -12,26 +12,23 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Auxiliary.PacketTypes;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
-import cpw.mods.fml.common.FMLCommonHandler;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
 
 public class GuiCannon extends GuiPowerOnlyMachine
 {
@@ -39,6 +36,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	private GuiTextField input;
 	private GuiTextField input2;
 	private GuiTextField input3;
+	private GuiTextField input4;
 
 	private double phi;
 	private double theta;
@@ -46,6 +44,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	private double thetad;
 	private int velocity;
 	private int[] target = new int[3];
+	private int fuse;
 
 	int x;
 	int y;
@@ -58,7 +57,6 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	{
 		super(new ContainerCannon(p5ep, Cannon), Cannon);
 		tnt = Cannon;
-		ySize = 236;
 		phi = tnt.phi;
 		theta = tnt.theta;
 		velocity = tnt.velocity;
@@ -67,11 +65,16 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			ySize = 170;
 			target = tnt.target;
 		}
+		else {
+			xSize = 212;
+			ySize = 236;
+		}
 		thetad = theta;
 		phid = phi;
 		theta = ReikaPhysicsHelper.degToRad(theta);
 		phi = ReikaPhysicsHelper.degToRad(phi);
 		ep = p5ep;
+		fuse = tnt instanceof TileEntityTNTCannon ? ((TileEntityTNTCannon)tnt).selectedFuse : 0;
 	}
 
 	@Override
@@ -92,15 +95,20 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			input3.setMaxStringLength(6);
 		}
 		else {
-			input = new GuiTextField(fontRenderer, j+xSize/2+22, k+104, 26, 16);
+			input = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+104, 26, 16);
 			input.setFocused(false);
 			input.setMaxStringLength(3);
-			input2 = new GuiTextField(fontRenderer, j+xSize/2-65, k+104, 26, 16);
+			input2 = new GuiTextField(fontRenderer, j+xSize/2-65-18, k+104, 26, 16);
 			input2.setFocused(false);
 			input2.setMaxStringLength(3);
-			input3 = new GuiTextField(fontRenderer, j+xSize/2+22, k+124, 26, 16);
+			input3 = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+124, 26, 16);
 			input3.setFocused(false);
 			input3.setMaxStringLength(3);
+		}
+		if (tnt instanceof TileEntityTNTCannon) {
+			input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
+			input4.setFocused(false);
+			input4.setMaxStringLength(3);
 		}
 	}
 
@@ -110,6 +118,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		input.textboxKeyTyped(c, i);
 		input2.textboxKeyTyped(c, i);
 		input3.textboxKeyTyped(c, i);
+		input4.textboxKeyTyped(c, i);
 	}
 
 	@Override
@@ -118,10 +127,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		input.mouseClicked(i, j, k);
 		input2.mouseClicked(i, j, k);
 		input3.mouseClicked(i, j, k);
+		input4.mouseClicked(i, j, k);
 	}
 
 	public void sendPacket(int a) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(28); // 7 ints
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32); // 8 ints
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
@@ -141,6 +151,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					outputStream.writeInt(target[1]);
 				if (a == 2)
 					outputStream.writeInt(target[2]);
+				if (a == 3)
+					outputStream.writeInt(fuse);
 			}
 			else {
 				outputStream.writeInt(0);
@@ -150,6 +162,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					outputStream.writeInt((int)thetad);
 				if (a == 2)
 					outputStream.writeInt(velocity);
+				if (a == 3)
+					outputStream.writeInt(fuse);
 			}
 			outputStream.writeInt(tile.xCoord);
 			outputStream.writeInt(tile.yCoord);
@@ -161,21 +175,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 
 		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "RotaryCraftData";
+		packet.channel = RotaryCraft.packetChannel;
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
 
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		if (side == Side.SERVER) {
-			// We are on the server side.
-			EntityPlayerMP player2 = (EntityPlayerMP) player;
-		} else if (side == Side.CLIENT) {
-			// We are on the client side.
-			EntityClientPlayerMP player2 = (EntityClientPlayerMP) player;
-			PacketDispatcher.sendPacketToServer(packet);
-		} else {
-			// We are on the Bukkit server.
-		}
+		PacketDispatcher.sendPacketToServer(packet);
 	}
 
 	@Override
@@ -184,9 +188,10 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		boolean valid1 = true;
 		boolean valid2 = true;
 		boolean valid3 = true;
+		boolean valid4 = true;
 		x = Mouse.getX();
 		y = Mouse.getY();
-		if (input.getText().isEmpty() && input2.getText().isEmpty() && input3.getText().isEmpty()) {
+		if (input.getText().isEmpty() && input2.getText().isEmpty() && input3.getText().isEmpty() && input4.getText().isEmpty()) {
 			return;
 		}
 		if (input.getText().isEmpty())
@@ -195,6 +200,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			valid2 = false;
 		if (input3.getText().isEmpty())
 			valid3 = false;
+		if (input4.getText().isEmpty())
+			valid4 = false;
 		if (!input.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input.getText())) {
 			if (targetMode)
 				target[0] = 0;
@@ -220,9 +227,15 @@ public class GuiCannon extends GuiPowerOnlyMachine
 				velocity = 0;
 			input3.deleteFromCursor(-1);
 			this.sendPacket(2);
-			valid2 = false;
+			valid3 = false;
 		}
-		if (!valid1 && !valid2 && !valid3)
+		if (!input4.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input4.getText())) {
+			fuse = 0;
+			input4.deleteFromCursor(-1);
+			this.sendPacket(3);
+			valid4 = false;
+		}
+		if (!valid1 && !valid2 && !valid3 && !valid4)
 			return;
 		if (input.getText().contentEquals("-"))
 			valid1 = false;
@@ -230,6 +243,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			valid2 = false;
 		if (input3.getText().contentEquals("-"))
 			valid3 = false;
+		if (input4.getText().contentEquals("-"))
+			valid4 = false;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
 		//System.out.println(input.getText());
 		if (valid1) {
@@ -274,6 +289,10 @@ public class GuiCannon extends GuiPowerOnlyMachine
 					this.sendPacket(2);
 			}
 		}
+		if (valid4) {
+			fuse = ReikaJavaLibrary.safeIntParse(input4.getText());
+			this.sendPacket(3);
+		}
 		if (targetMode)
 			return;
 		theta = ReikaPhysicsHelper.degToRad(thetad);
@@ -297,10 +316,12 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			fontRenderer.drawString("Target Z", xSize/3-20, 51, 4210752);
 		}
 		else {
-			fontRenderer.drawString("Launch Angle", xSize/3-46, 80, 4210752);
-			fontRenderer.drawString("Compass Angle", xSize/3+36, 80, 4210752);
-			fontRenderer.drawString("Launch Velocity", xSize/3-26, 116, 4210752);
+			fontRenderer.drawString("Launch Angle", xSize/3-46-12, 80, 4210752);
+			fontRenderer.drawString("Compass Angle", xSize/3+36+24, 80, 4210752);
+			fontRenderer.drawString("Velocity", xSize/3-26+24+44, 116, 4210752);
 		}
+		if (tnt instanceof TileEntityTNTCannon)
+			fontRenderer.drawString("Fuse Time", xSize/3-26-32, 116, 4210752);
 
 		if (targetMode) {
 			if (!input.isFocused())
@@ -312,12 +333,15 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 		else {
 			if (!input.isFocused())
-				fontRenderer.drawString(String.format("%d", tnt.phi), 122, 96, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", tnt.phi), 122+36, 96, 0xffffffff);
 			if (!input2.isFocused())
 				fontRenderer.drawString(String.format("%d", tnt.theta), 35, 96, 0xffffffff);
 			if (!input3.isFocused())
-				fontRenderer.drawString(String.format("%d", tnt.velocity), 122, 116, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", tnt.velocity), 122+36, 116, 0xffffffff);
 		}
+		if (tnt instanceof TileEntityTNTCannon)
+			if (!input4.isFocused())
+				fontRenderer.drawString(String.format("%d", fuse), 122-54, 116, 0xffffffff);
 	}
 
 	/**
@@ -334,6 +358,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		input.drawTextBox();
 		input2.drawTextBox();
 		input3.drawTextBox();
+		input4.drawTextBox();
 
 		if (!targetMode) {
 			this.drawGrid(j, k);
@@ -346,7 +371,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		int basey1 = 73+k;
 		int x2 = basex1+(int)(57*Math.cos(theta));
 		int y2 = basey1-(int)(57*Math.sin(theta));
-		int basex3 = 131+j;
+		int basex3 = 131+j+36;
 		int basey3 = 45+k;/*
     	if (phid >= 90 && phid <= 270) {
     		basey3--;
@@ -365,7 +390,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		int color = 0x008800;
 		int basex1 = 16+j;
 		int basey1 = 73+k;
-		int basex3 = 131+j;
+		int basex3 = 131+j+36;
 		int basey3 = 45+k;
 		for (int i = 0; i < 7; i++) {
 			int size = 57;
@@ -381,7 +406,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 		for (int i = 0; i < 8; i++) {
 			int size = 30;
-			int x4 = basex3-88+xSize/2+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*45)));
+			int x4 = basex3-18-88+xSize/2+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*45)));
 			int y4 = basey3-118+ySize/2-(int)(size*Math.sin(ReikaPhysicsHelper.degToRad(i*45)));
 			api.drawLine(basex3, basey3, x4, y4, color);
 		}

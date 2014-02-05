@@ -852,6 +852,9 @@ public class RotaryRecipes {
 		FurnaceRecipes.smelting().addSmelting(RotaryCraft.extracts.itemID, 32, new ItemStack(ItemStacks.silveringot.itemID, 1, ItemStacks.silveringot.getItemDamage()), 1F);
 
 		ExtractorModOres.addSmelting();
+
+		//ReikaRecipeHelper.addSmelting(ItemStacks.scrap, ItemStacks.steelingot, 0.4F);
+		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Item.ingotIron), 0.4F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

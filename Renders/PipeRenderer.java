@@ -25,7 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.RotaryCraft.ClientProxy;
-import Reika.RotaryCraft.RenderableDuct;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 
 public class PipeRenderer extends RotaryTERenderer {

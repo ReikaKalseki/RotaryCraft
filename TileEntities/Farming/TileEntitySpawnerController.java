@@ -18,15 +18,18 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Event.SpawnerControllerSpawnEvent;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction {
+public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction, ConditionalOperation {
 	public static final int BASEDELAY = 800; //40s default max spawner delay
 
 	public boolean disable;
@@ -207,8 +210,10 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 						lgc.func_98265_a(toSpawn);
 						world.playAuxSFX(2004, x, y, z, 0);
 
-						if (livingSpawn != null)
+						if (livingSpawn != null) {
 							livingSpawn.spawnExplosionParticle();
+							MinecraftForge.EVENT_BUS.post(new SpawnerControllerSpawnEvent(this, livingSpawn.getClass()));
+						}
 					}
 				}
 			}
@@ -257,5 +262,15 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.isValidLocation(worldObj, xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Spawner";
 	}
 }

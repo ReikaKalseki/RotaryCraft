@@ -11,6 +11,7 @@ package Reika.RotaryCraft;
 
 import java.util.HashMap;
 
+import net.minecraft.client.renderer.entity.RenderTNTPrimed;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +23,7 @@ import Reika.DragonAPI.Instantiable.Rendering.MultiSheetItemRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.SpawnerRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
@@ -114,6 +116,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntitySonicShot.class, new RenderSonicShot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLiquidBlock.class, new RenderLiquidBlock());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDischarge.class, new RenderDischarge());
+		RenderingRegistry.registerEntityRenderingHandler(EntityCustomTNT.class, new RenderTNTPrimed());
 
 		this.registerSpriteSheets();
 		this.registerBlockSheets();

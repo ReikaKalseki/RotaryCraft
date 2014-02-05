@@ -21,8 +21,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.RenderableDuct;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct {
@@ -366,6 +366,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public boolean needsToCauseBlockUpdates() {
 		return true;
+	}
+
+	@Override
+	public Icon getGlassIcon() {
+		return Block.glass.getIcon(0, 0);
 	}
 
 	public static enum TransferAmount {

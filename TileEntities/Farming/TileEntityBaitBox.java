@@ -37,13 +37,14 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
-public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect {
+public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
 	public ItemStack[] inventory = new ItemStack[27]; //ReikaMathLibrary.extrema(ReikaMathLibrary.nextMultiple(9, ReikaEntityHelper.getNumberMobsInMC(this.worldObj)), 54, "absmin")
 	public boolean[] attractive = new boolean[inventory.length];
@@ -373,5 +374,15 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 				return 0;
 		}
 		return 15;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Items";
 	}
 }

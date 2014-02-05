@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -35,7 +36,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction {
+public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
 	public int mixTime;
 
@@ -379,5 +380,15 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.OBSIDIAN.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !lava.isEmpty() && !water.isEmpty();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return lava.isEmpty() ? "No Lava" : water.isEmpty() ? "No Water" : "Operational";
 	}
 }

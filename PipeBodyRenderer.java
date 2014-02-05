@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
@@ -46,9 +46,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		GL11.glScaled(s, s, s);
 		v5.startDrawingQuads();
 
-		Icon ico = BlockRegistry.PIPING.getBlockVariable().getIcon(0, metadata);
-		if (metadata == 1)
-			ico = RotaryCraft.decoblock.getIcon(0, 0);
+		Icon ico = block.getIcon(0, metadata);
+		Icon gico = block.getIcon(1, metadata);
 		ReikaTextureHelper.bindTerrainTexture();
 
 		float dx = -0.5F;
@@ -59,7 +58,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			this.renderInventoryFace(ico, dir);
+			this.renderInventoryFace(ico, gico, dir);
 		}
 
 		v5.addTranslation(-dx, -dy, -dz);
@@ -438,7 +437,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float mx = 1-dd-dl;
 		float my = 1-dd-dl;
 
-		Icon gico = Block.glass.getIcon(0, 0);
+		Icon gico = tile.getGlassIcon();
 		float gu = gico.getMinU();
 		float gv = gico.getMinV();
 		float gu2 = gico.getMaxU();
@@ -1107,7 +1106,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		v5.setColorOpaque_F(f, f, f);
 	}
 
-	private void renderInventoryFace(Icon ico, ForgeDirection dir) {
+	private void renderInventoryFace(Icon ico, Icon gico, ForgeDirection dir) {
 		Tessellator v5 = Tessellator.instance;
 
 		float size = 0.75F/2F;
@@ -1140,7 +1139,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float mx = 1-dd-dl;
 		float my = 1-dd-dl;
 
-		Icon gico = Block.glass.getIcon(0, 0);
 		float gu = gico.getMinU();
 		float gv = gico.getMinV();
 		float gu2 = gico.getMaxU();

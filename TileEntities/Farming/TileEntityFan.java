@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -25,6 +26,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -265,6 +267,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			metato = crop.harvestedMeta;
 			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
 		}
+		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}
 
 	public void dropBlocks(World world, int x, int y, int z, int id, int meta) {

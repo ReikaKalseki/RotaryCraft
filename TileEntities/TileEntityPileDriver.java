@@ -31,12 +31,14 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -92,8 +94,9 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			return;
 		climbing = true;
 		tickcount = 0;
-		if (this.smash(world, x, y-step-1, z))
+		if (this.smash(world, x, y-step-1, z)) {
 			step += 1;
+		}
 		//if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		this.bounce(world, x, y-step-1, z);
 		this.dealDamage(world, x, y-step-1, z);
@@ -393,6 +396,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	}
 
 	public boolean smash(World world, int x, int y, int z) {
+		MinecraftForge.EVENT_BUS.post(new PileDriverImpactEvent(this, x, y, z));
 		boolean cleared = true;
 		smashed = true;
 		for (int i = -2; i < 3; i++) {

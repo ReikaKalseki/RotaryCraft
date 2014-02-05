@@ -20,16 +20,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Event.FireworkLaunchEvent;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine, DiscreteFunction {
+public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine, DiscreteFunction, ConditionalOperation {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
@@ -94,6 +97,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			return;
 		EntityFireworkRocket firework = new EntityFireworkRocket(world, x+0.5, y+1.25, z+0.5, rocket);
 		world.spawnEntityInWorld(firework);
+		MinecraftForge.EVENT_BUS.post(new FireworkLaunchEvent(this, firework));
 		//-------TEST CODE----------
 		//EntityItem ent = new EntityItem(world, x, y+1, z, star);
 		//world.spawnEntityInWorld(ent);
@@ -714,5 +718,15 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.FIREWORK.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !ReikaInventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Items";
 	}
 }

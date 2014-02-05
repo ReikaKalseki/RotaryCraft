@@ -29,16 +29,17 @@ public class ContainerCannon extends CoreContainer
 		if (cannon.targetMode)
 			dy = 48;
 		int i = 0;
+		int dx = 0;
 		//for (int i = 0; i < 2; i++)
-		for (int j = 0; j < 9; j++)
-			for (int k = 0; k < 1; k++)
-				this.addSlotToContainer(new Slot(par2TileEntityCannon, j+9*k, 8+j*18, dy+18+k*18));
+		for (int j = 0; j < cannon.getSizeInventory(); j++)
+			this.addSlotToContainer(new Slot(par2TileEntityCannon, j, dx+8+j*18, dy+18));
 		dy += 40;
+		dx = 18;
 		for (i = 0; i < 3; i++)
 			for (int k = 0; k < 9; k++)
-				this.addSlotToContainer(new Slot(player.inventory, k + i * 9 + 9, 8 + k * 18, dy + i * 18));
+				this.addSlotToContainer(new Slot(player.inventory, k + i * 9 + 9, dx+8 + k * 18, dy + i * 18));
 		dy += 58;
 		for (int j = 0; j < 9; j++)
-			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, dy));
+			this.addSlotToContainer(new Slot(player.inventory, j, dx+8 + j * 18, dy));
 	}
 }

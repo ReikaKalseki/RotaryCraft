@@ -22,11 +22,12 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Fillable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
+public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
 
 	private ItemStack[] inv = new ItemStack[2];
 
@@ -251,6 +252,16 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver {
 
 	public ItemStack getItemForRender() {
 		return inv[0] != null ? inv[0].copy() : null;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !tank.isEmpty() && inv[0] != null && inv[0].getItem() instanceof Fillable;
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return tank.isEmpty() ? "No Liquid" : this.areConditionsMet() ? "Operational" : "No Fillable Items";
 	}
 
 }

@@ -23,12 +23,13 @@ import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction {
+public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction, ConditionalOperation {
 
 	public static final int HEIGHT = 2;
 	public static final int WIDTH = 9;
@@ -288,6 +289,18 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public int getOperationTime() {
 		return temperature >= 600 ? 150 : 200;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.canSmelt();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		if (temperature < SMELT_TEMP)
+			return "Insufficient Temperature";
+		return this.areConditionsMet() ? "Operational" : "No Smeltable Items";
 	}
 
 }

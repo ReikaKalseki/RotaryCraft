@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -34,7 +35,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect {
+public class TileEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
 	public static final int MAXRANGE = Math.max(64, ConfigRegistry.AERORANGE.getValue());
 	public static final int CAPACITY = 64;
@@ -388,5 +389,19 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	@Override
 	public int getRedstoneOverride() {
 		return ((int)((ReikaArrayHelper.sumArray(potionLevel)/576D)*15));
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		for (int i = 0; i < potionLevel.length; i++) {
+			if (potionLevel[i] > 0)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Potions";
 	}
 }

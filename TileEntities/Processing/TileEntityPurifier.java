@@ -23,13 +23,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
+public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation {
 
 	private ItemStack[] inv = new ItemStack[7];
 
@@ -279,6 +280,16 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.PURIFIER.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.canSmelt();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
 
 }

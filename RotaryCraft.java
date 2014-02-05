@@ -139,6 +139,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
+	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
 
 	static final Random rand = new Random();
 
@@ -274,8 +275,6 @@ public class RotaryCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.sandStone);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockNetherQuartz);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.cloth);
-		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.bedrock);
-		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.hardenedClay);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.glass);
 
 		if (ConfigRegistry.HANDBOOK.getState())

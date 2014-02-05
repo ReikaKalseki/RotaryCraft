@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -26,7 +27,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE {
+public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE, ConditionalOperation {
 	//give ability to heat blast furnace
 	private int temperature;
 	public int fx;
@@ -108,11 +109,11 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			tickcount = 0;
 			this.updateTemperature(world, x, y, z, meta);
 		}
+		this.getFurnaceCoordinates(world, x, y, z, meta);
 		if (power < MINPOWER)
 			return;
 		if (torque < MINTORQUE)
 			return;
-		this.getFurnaceCoordinates(world, x, y, z, meta);
 
 		if (!this.hasFurnace(world)) {
 			if (this.hasHeatable(world)) {
@@ -266,6 +267,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("temp", temperature);
+
+		NBT.setInteger("furnx", fx);
+		NBT.setInteger("furny", fy);
+		NBT.setInteger("furnz", fz);
 	}
 
 	/**
@@ -276,6 +281,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	{
 		super.readFromNBT(NBT);
 		temperature = NBT.getInteger("temp");
+
+		fx = NBT.getInteger("furnx");
+		fy = NBT.getInteger("furny");
+		fz = NBT.getInteger("furnz");
 	}
 
 	@Override
@@ -295,5 +304,15 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.hasHeatableMachine(worldObj);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Heatable Machine";
+	}
 
 }

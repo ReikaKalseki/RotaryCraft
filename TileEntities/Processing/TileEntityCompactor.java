@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -34,7 +35,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, DiscreteFunction
+public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, DiscreteFunction, ConditionalOperation
 {
 	private ItemStack inv[];
 
@@ -568,5 +569,19 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.COMPACTOR.getOperationTime(omega, this.getStage()-1);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.canSmelt();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		if (temperature < RecipesCompactor.getRecipes().getReqTemperature(inv[0]))
+			return "Insufficient Temperature";
+		if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]))
+			return "Insufficient Pressure";
+		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
 }

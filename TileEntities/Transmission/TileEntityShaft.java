@@ -16,10 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.Event.ShaftFailureEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -41,6 +43,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public boolean failed = false;
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
+		MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, type));
 		failed = true;
 		if (speed) {
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 1F, true);

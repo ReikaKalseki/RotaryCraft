@@ -71,7 +71,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
+import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
@@ -192,7 +192,7 @@ public enum MachineRegistry {
 	HEATRAY(			"machine.heatray", 			BlockDMMachine.class,		TileEntityHeatRay.class,			2,	"RenderHRay"),
 	HOSE(				"machine.hose", 			BlockPiping.class,			TileEntityHose.class,				0,	"PipeRenderer"),
 	BORER(				"machine.borer", 			BlockDMachine.class,		TileEntityBorer.class,				0),
-	LIGHTBRIDGE(		"machine.lightbridge", 		BlockDMMachine.class,		TileEntityBridgeEmitter.class,		3,	"RenderBridge"),
+	LIGHTBRIDGE(		"machine.lightbridge", 		BlockDMMachine.class,		TileEntityLightBridge.class,		3,	"RenderBridge"),
 	PUMP(				"machine.pump", 			BlockDMMachine.class,		TileEntityPump.class,				4,	"RenderPump"),
 	PIPE(				"machine.pipe", 			BlockPiping.class,			TileEntityPipe.class,				1,	"PipeRenderer"),
 	RESERVOIR(			"machine.reservoir", 		BlockMMachine.class,		TileEntityReservoir.class,			0,	"RenderReservoir"),

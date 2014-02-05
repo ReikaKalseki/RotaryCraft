@@ -59,7 +59,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.bedingot, 1), 143, 24);
+			return new PositionedStack(ItemStacks.bedingot, 143, 24);
 		}
 
 		@Override
@@ -71,6 +71,29 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			stacks.add(new PositionedStack(ItemStacks.steelingot, dx, dy));
 
 			stacks.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), 21, 24));
+
+			return stacks;
+		}
+	}
+
+	public class ScrapRecipe extends CachedRecipe {
+
+		@Override
+		public PositionedStack getResult() {
+			return new PositionedStack(ItemStacks.steelingot, 143, 24);
+		}
+
+		@Override
+		public ArrayList<PositionedStack> getIngredients()
+		{
+			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+			int dx = 57;
+			int dy = 6;
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					stacks.add(new PositionedStack(ItemStacks.scrap, dx+18*j, dy+18*i));
+				}
+			}
 
 			return stacks;
 		}
@@ -107,6 +130,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(ItemStack result) {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.steelingot)) {
 			arecipes.add(new SteelRecipe());
+			arecipes.add(new ScrapRecipe());
 		}
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.bedingot)) {
 			arecipes.add(new BedrockRecipe());
@@ -120,6 +144,9 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		}
 		if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, ingredient) || ReikaItemHelper.matchStacks(ItemStacks.bedrockdust, ingredient)) {
 			arecipes.add(new BedrockRecipe());
+		}
+		if (ReikaItemHelper.matchStacks(ItemStacks.scrap, ingredient)) {
+			arecipes.add(new ScrapRecipe());
 		}
 	}
 

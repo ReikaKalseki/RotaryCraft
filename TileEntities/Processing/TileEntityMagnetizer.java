@@ -17,12 +17,13 @@ import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction {
+public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation {
 
 	public ItemStack[] inv = new ItemStack[1];
 	private boolean[] lastPower = new boolean[3];
@@ -179,6 +180,16 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.MAGNETIZER.getOperationTime(omega);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.hasCore();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Shaft Core";
 	}
 
 }

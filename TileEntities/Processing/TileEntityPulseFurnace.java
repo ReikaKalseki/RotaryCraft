@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -37,10 +38,9 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction {
+public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
 	private ItemStack inv[] = new ItemStack[3];
 
@@ -370,11 +370,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	/** Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack */
 	public void smeltItem() {
 		if (!this.canSmelt())
-			return;
+			return;/*
 		if (this.hasScrap()) {
 			this.smeltScrap();
 			return;
-		}
+		}*/
 		flag2 = false;
 		this.smeltHeat();
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
@@ -388,7 +388,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		inv[0].stackSize--;
 		if (inv[0].stackSize <= 0)
 			inv[0] = null;
-	}
+	}/*
 
 	private void smeltScrap() {
 		int size = 1;
@@ -400,7 +400,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (inv[0].stackSize <= 0)
 			inv[0] = null;
 		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
-	}
+	}*/
 
 	private ItemStack getCraftedScrapIngot() {
 		if (inv[0].itemID == ItemStacks.scrap.itemID && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage())
@@ -547,5 +547,15 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	@Override
 	public int getOperationTime() {
 		return 20;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.canSmelt() && !fuel.isEmpty();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return fuel.isEmpty() ? "No Fuel" : this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
 }

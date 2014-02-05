@@ -22,11 +22,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Shockable;
+import Reika.RotaryCraft.API.Event.VDGAttackEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntityDischarge;
@@ -139,7 +142,8 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		if (insul)
 			dmg /= 2;
 
-		e.attackEntityFrom(DamageSource.magic, dmg);
+		e.attackEntityFrom(RotaryCraft.shock, dmg);
+		MinecraftForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));
 		//ReikaJavaLibrary.pConsole(charge+":"+this.getAttackDamage());
 		if (e instanceof EntityCreeper) {
 			worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 3F, true);

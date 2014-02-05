@@ -61,6 +61,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -316,6 +317,9 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 						cannon.target[2] = cannon.zCoord;
 					}
 				}
+				if (control == PacketRegistry.CANNON.getMinValue()+3 && cannon instanceof TileEntityTNTCannon) {
+					((TileEntityTNTCannon) cannon).selectedFuse = data[1];
+				}
 			}
 			break;
 			case SONIC: {
@@ -430,20 +434,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				Random rand = new Random();
 				music = (TileEntityMusicBox)te;
 				world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
-				break;
-			case DISPLAY:
-				display = (TileEntityDisplay)te;/*
-			if (control == 40)
-				display.setFullMessage(stringdata);
-			if (control == 41)
-				display.saveToFile();
-			if (control == 42)
-				display.readFromFile();*/
-				break;
-			case CHESTRELOAD:
-				//ep.closeScreen();
-				//ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
-				//ReikaJavaLibrary.pConsole("Opening gui for "+ep+" on "+FMLCommonHandler.instance().getEffectiveSide());
 				break;
 			case REDGEAR:
 				redgear = (TileEntityMultiClutch)te;

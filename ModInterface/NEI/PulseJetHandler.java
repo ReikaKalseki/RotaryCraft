@@ -14,16 +14,13 @@ import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 import codechicken.nei.PositionedStack;
@@ -105,13 +102,13 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesPulseFurnace.smelting().isSmeltable(ingredient)) {
 			arecipes.add(new PulseJetRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
-		}
+		}/*
 		else if (ReikaItemHelper.matchStacks(ItemStacks.scrap, ingredient)) {
 			arecipes.add(new PulseJetRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.steelingot));
 		}
 		else if (ReikaItemHelper.matchStacks(ItemStacks.ironscrap, ingredient)) {
 			arecipes.add(new PulseJetRecipe(ItemStacks.ironscrap, new ItemStack(Item.ingotIron)));
-		}
+		}*/
 	}
 
 	@Override

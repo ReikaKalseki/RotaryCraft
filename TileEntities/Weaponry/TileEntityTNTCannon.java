@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTNTCannon extends TileEntityLaunchCannon {
@@ -30,6 +31,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	public static final double torquecap = 32768D;
 
 	public boolean isCreative = false;
+
+	public int selectedFuse;
 
 	//private final ArrayList<EntityTNTPrimed> fired = new ArrayList();
 
@@ -120,7 +123,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}*/
 
 	private int getMinFuse() {
-		return 10;
+		return 5;
 	}
 
 	private void calcTarget(World world, int x, int y, int z) {
@@ -153,12 +156,11 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
 			world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
-			EntityTNTPrimed tnt = new EntityTNTPrimed(world, x+0.5, y+1.5-0.0625, z+0.5, null);
+			EntityCustomTNT tnt = new EntityCustomTNT(world, x+0.5, y+1.5-0.0625, z+0.5, null, this.getFuseTime());
 			double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
 			tnt.motionX = xyz[0];
 			tnt.motionY = xyz[1];
 			tnt.motionZ = xyz[2];
-			tnt.fuse = this.getFuseTime();
 			if (!world.isRemote) {
 				tnt.velocityChanged = true;
 				world.spawnEntityInWorld(tnt);
@@ -169,7 +171,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	private int getFuseTime() {
-		return Math.max(this.getMinFuse(), 80);
+		return Math.max(this.getMinFuse(), selectedFuse);
 	}
 
 	/**
@@ -180,6 +182,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	{
 		super.readFromNBT(NBT);
 		isCreative = NBT.getBoolean("creative");
+
+		selectedFuse = NBT.getInteger("selfuse");
 	}
 
 	/**
@@ -190,6 +194,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	{
 		super.writeToNBT(NBT);
 		NBT.setBoolean("creative", isCreative);
+
+		NBT.setInteger("selfuse", selectedFuse);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -32,7 +33,7 @@ import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
+public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
 
 	private ItemStack inv[] = new ItemStack[9];
 
@@ -471,5 +472,15 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver {
 
 	public int getOperationTime(int stage) {
 		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage-1);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !tank.isEmpty() && !ReikaInventoryHelper.isEmpty(inv);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return tank.isEmpty() ? "No Water" : this.areConditionsMet() ? "Operational" : "No Items";
 	}
 }

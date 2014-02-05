@@ -62,6 +62,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
@@ -82,7 +83,7 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
+import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
@@ -569,8 +570,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (te instanceof TileEntityVacuum) {
 			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).experience);
 		}
-		if (te instanceof TileEntityBridgeEmitter) {
-			((TileEntityBridgeEmitter)te).lightsOut(world, x, y, z);
+		if (te instanceof TileEntityLightBridge) {
+			((TileEntityLightBridge)te).lightsOut(world, x, y, z);
 		}
 		if (te instanceof TileEntityFloodlight) {
 			((TileEntityFloodlight)te).lightsOut(world, x, y, z);
@@ -866,6 +867,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						currenttip.add("  "+EnumChatFormatting.LIGHT_PURPLE.toString()+e.getTranslatedName(level));
 				}
 			}
+		}
+		if (te instanceof ConditionalOperation) {
+			currenttip.add(((ConditionalOperation) te).getOperationalStatus());
 		}
 		return currenttip;
 	}

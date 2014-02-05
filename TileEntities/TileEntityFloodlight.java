@@ -38,11 +38,9 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		power = omega*torque;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower();
-		//if (par5Random.nextInt(20) == 0)
-		//this.lightsOut(world, x, y, z);
+		power = (long)omega*(long)torque;
 		this.makeBeam(world, x, y, z, meta);
 	}
 

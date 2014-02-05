@@ -49,28 +49,34 @@ public class PowerSourceList {
 
 	public static PowerSourceList getAllFrom(World world, int x, int y, int z, TileEntityIOMachine io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (tile instanceof TileEntityIOMachine) {
-			TileEntityIOMachine te = (TileEntityIOMachine)tile;
-			if (te.readx == io.xCoord && te.ready == io.yCoord && te.readz == io.zCoord)
+		try {
+			TileEntity tile = world.getBlockTileEntity(x, y, z);
+			if (tile instanceof TileEntityIOMachine) {
+				TileEntityIOMachine te = (TileEntityIOMachine)tile;
+				if (te.readx == io.xCoord && te.ready == io.yCoord && te.readz == io.zCoord)
+					return pwr;
+				if (te.readx2 == io.xCoord && te.ready2 == io.yCoord && te.readz2 == io.zCoord)
+					return pwr;
+				if (te.readx3 == io.xCoord && te.ready3 == io.yCoord && te.readz3 == io.zCoord)
+					return pwr;
+				if (te.readx4 == io.xCoord && te.ready4 == io.yCoord && te.readz4 == io.zCoord)
+					return pwr;
+				pwr.addAll(te.getPowerSources(io, caller));
 				return pwr;
-			if (te.readx2 == io.xCoord && te.ready2 == io.yCoord && te.readz2 == io.zCoord)
+			}
+			else if (tile instanceof PowerGenerator) {
+				return pwr.addSource((PowerGenerator)tile);
+			}
+			else if (tile instanceof ShaftPowerEmitter) {
+				return pwr; //for now
+			}
+			else
 				return pwr;
-			if (te.readx3 == io.xCoord && te.ready3 == io.yCoord && te.readz3 == io.zCoord)
-				return pwr;
-			if (te.readx4 == io.xCoord && te.ready4 == io.yCoord && te.readz4 == io.zCoord)
-				return pwr;
-			pwr.addAll(te.getPowerSources(io, caller));
+		}
+		catch (StackOverflowError e) {
+			e.printStackTrace();
 			return pwr;
 		}
-		else if (tile instanceof PowerGenerator) {
-			return pwr.addSource((PowerGenerator)tile);
-		}
-		else if (tile instanceof ShaftPowerEmitter) {
-			return pwr; //for now
-		}
-		else
-			return pwr;
 	}
 
 	public void addAll(PowerSourceList pwr) {

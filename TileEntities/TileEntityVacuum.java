@@ -24,10 +24,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Event.VacuumItemAbsorbEvent;
+import Reika.RotaryCraft.API.Event.VacuumXPAbsorbEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -176,15 +179,17 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				}
 				ent.setDead();
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.pop", 0.1F+0.5F*rand.nextFloat(), rand.nextFloat());
-
+				MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy(): null));
 			}
 		}
 		List closeorbs = world.getEntitiesWithinAABB(EntityXPOrb.class, close);
 		for (int i = 0; i < closeorbs.size(); i++) {
 			EntityXPOrb xp = (EntityXPOrb)closeorbs.get(i);
-			experience += xp.getXpValue();
+			int val = xp.getXpValue();
+			experience += val;
 			xp.setDead();
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.orb", 0.1F, 0.5F * ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.8F));
+			MinecraftForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
 		}
 	}
 

@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import Reika.RotaryCraft.API.TensionStorage;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 
-public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
+public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity implements ConditionalOperation {
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
@@ -130,5 +131,15 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity {
 		NBT.setTag("Items", nbttaglist);
 
 		NBT.setBoolean("creative", isCreativeMode);
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return this.hasCoil();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Coil";
 	}
 }

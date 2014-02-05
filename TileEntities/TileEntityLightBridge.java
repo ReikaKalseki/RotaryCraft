@@ -11,15 +11,17 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Event.LightBridgePowerLossEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 
-public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements RangedEffect {
+public class TileEntityLightBridge extends TileEntityBeamMachine implements RangedEffect {
 
 	private int animtick = 0;
 
@@ -61,7 +63,7 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID)
 		//	blocked = true;
 		int range = this.getRange();
-		if (world.getBlockLightValue(x, y+1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
+		if (range > 0 && world.getBlockLightValue(x, y+1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
 			if (!world.isRemote) {
 				//if (!Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)]) {
 				for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
@@ -83,8 +85,10 @@ public class TileEntityBridgeEmitter extends TileEntityBeamMachine implements Ra
 			}
 		}
 		//}
-		else
+		else {
+			MinecraftForge.EVENT_BUS.post(new LightBridgePowerLossEvent(this));
 			this.lightsOut(world, x, y, z);
+		}
 	}
 
 	public void lightsOut(World world, int x, int y, int z) {

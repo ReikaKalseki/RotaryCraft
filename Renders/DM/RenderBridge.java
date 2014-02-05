@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelBridge;
-import Reika.RotaryCraft.TileEntities.TileEntityBridgeEmitter;
+import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 
 public class RenderBridge extends RotaryTERenderer
 {
@@ -30,7 +30,7 @@ public class RenderBridge extends RotaryTERenderer
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityBridgeAt(TileEntityBridgeEmitter tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityBridgeAt(TileEntityLightBridge tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -86,7 +86,7 @@ public class RenderBridge extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityBridgeAt((TileEntityBridgeEmitter)tile, par2, par4, par6, par8);
+			this.renderTileEntityBridgeAt((TileEntityLightBridge)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}

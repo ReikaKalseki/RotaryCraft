@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.Icon;
@@ -31,5 +31,7 @@ public interface RenderableDuct {
 
 	/** The contained liquid type. Null if empty. */
 	public Fluid getLiquidType();
+
+	public Icon getGlassIcon();
 
 }

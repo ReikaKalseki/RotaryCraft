@@ -31,12 +31,13 @@ import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
-public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect {
+public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect, ConditionalOperation {
 
 	private ItemStack[] inv = new ItemStack[18];
 
@@ -277,5 +278,15 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public int getCapacity() {
 		return 6000;
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return !tank.isEmpty() && this.hasFertilizer();
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return tank.isEmpty() ? "No Water" : this.areConditionsMet() ? "Operational" : "No Fertilizer Items";
 	}
 }

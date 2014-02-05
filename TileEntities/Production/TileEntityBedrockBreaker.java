@@ -15,12 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Event.BedrockDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
@@ -232,6 +234,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 					else
 						ReikaInventoryHelper.addOrSetStack(this.getDrops(), inv, 0);
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
+					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, harvestx, harvesty, harvestz));
 				}
 			}
 		}

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -19,6 +20,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.Event.FlywheelFailureEvent;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.TorqueUsage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -92,8 +94,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	private void fail(World world, int x, int y, int z, double e) {
 		failed = true;
+		float f = ReikaPhysicsHelper.getExplosionFromEnergy(e);
 		if (!world.isRemote)
-			world.createExplosion(null, x+0.5, y+0.5, z+0.5, ReikaPhysicsHelper.getExplosionFromEnergy(e), ConfigRegistry.BLOCKDAMAGE.getState());
+			world.createExplosion(null, x+0.5, y+0.5, z+0.5, f, ConfigRegistry.BLOCKDAMAGE.getState());
+		MinecraftForge.EVENT_BUS.post(new FlywheelFailureEvent(this, f));
 	}
 
 	private double getDensity() {

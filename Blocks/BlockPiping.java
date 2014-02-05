@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 
 public class BlockPiping extends BlockBasicMultiTE {
 
-	private Icon[] iconBlocks = new Icon[16];
+	private Icon[][] iconBlocks = new Icon[16][2];
 
 	public BlockPiping(int par1, Material par3Material) {
 		super(par1, par3Material);
@@ -86,20 +86,23 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
-		for (int i = 0; i < 6; i++) {
-			iconBlocks[0] = Block.planks.getIcon(0, 0);
-			iconBlocks[1] = RotaryCraft.decoblock.getIcon(0, 0);
-			iconBlocks[2] = Block.obsidian.getIcon(0, 0);
-			iconBlocks[4] = Block.blockRedstone.getIcon(0, 0);
-			iconBlocks[5] = Block.netherBrick.getIcon(0, 0);
-			iconBlocks[6] = Block.blockLapis.getIcon(0, 0);
-			iconBlocks[7] = Block.sandStone.getIcon(0, 0);
+		iconBlocks[0][0] = Block.planks.getIcon(0, 0);
+		iconBlocks[1][0] = RotaryCraft.decoblock.getIcon(0, 0);
+		iconBlocks[2][0] = Block.obsidian.getIcon(0, 0);
+		iconBlocks[4][0] = Block.blockRedstone.getIcon(0, 0);
+		iconBlocks[5][0] = Block.netherBrick.getIcon(0, 0);
+		iconBlocks[6][0] = Block.blockLapis.getIcon(0, 0);
+		iconBlocks[7][0] = Block.sandStone.getIcon(0, 0);
+
+		for (int i = 0; i < 8; i++) {
+			iconBlocks[i][1] = Block.glass.getIcon(0, 0);
 		}
 	}
 
 	@Override
 	public Icon getIcon(int s, int meta) {
-		return iconBlocks[meta];
+		s = Math.min(s, 1);
+		return iconBlocks[meta][s];
 	}
 
 	@Override
