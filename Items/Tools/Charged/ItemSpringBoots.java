@@ -50,7 +50,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 
 	@Override
 	public double getDamageMultiplier() {
-		return 1;
+		return itemID == ItemRegistry.BEDJUMP.getShiftedID() ? 0.35 : 1;
 	}
 
 	@Override
