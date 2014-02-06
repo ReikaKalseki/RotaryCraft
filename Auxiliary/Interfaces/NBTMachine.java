@@ -25,5 +25,5 @@ public interface NBTMachine {
 	public ArrayList<NBTTagCompound> getCreativeModeVariants();
 
 	/** Will never supply null. */
-	public String getDisplayTag(NBTTagCompound NBT);
+	public ArrayList<String> getDisplayTags(NBTTagCompound NBT);
 }

@@ -243,7 +243,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				else if (FluidContainerRegistry.isFilledContainer(is)) {
 					boolean bucket = FluidContainerRegistry.isBucket(is);
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
-					f.amount *= 48;
 					if (f != null) {
 						Fluid fluid = f.getFluid();
 						int size = is.stackSize;

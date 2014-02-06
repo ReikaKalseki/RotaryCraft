@@ -35,6 +35,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
 
+	public boolean isCreative;
+
 	public static final int CAPACITY = 64000;
 
 	public boolean isCovered = false;
@@ -66,6 +68,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		if (tank.getActualFluid() == null || this.getLevel() <= 0)
 			tank.empty();
+		else if (isCreative)
+			tank.addLiquid(CAPACITY, tank.getActualFluid());
 
 		if (!world.isRemote && !this.isEmpty() && rand.nextInt(this.getThermalTickChance()) == 0) {
 			int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
@@ -140,6 +144,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		tank.writeToNBT(NBT);
 
 		NBT.setBoolean("cover", isCovered);
+		NBT.setBoolean("creative", isCreative);
 	}
 
 	@Override
@@ -150,6 +155,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		tank.readFromNBT(NBT);
 
 		isCovered = NBT.getBoolean("cover");
+		isCreative = NBT.getBoolean("creative");
 	}
 
 	@Override
@@ -313,14 +319,24 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);
 		int level = NBT.getInteger("lvl");
 		tank.setContents(level, f);
+
+		if (NBT.getBoolean("creative"))
+			isCreative = true;
 	}
 
-	public String getDisplayTag(NBTTagCompound nbt) {
+	public ArrayList<String> getDisplayTags(NBTTagCompound nbt) {
+		ArrayList li = new ArrayList();
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(nbt);
-		String fluid = f.getLocalizedName();
-		int amt = nbt.getInteger("lvl");
-		String amount = String.format("%d", amt);
-		return "Contents: "+amount+" mB of "+fluid;
+		if (f != null) {
+			String fluid = f.getLocalizedName();
+			int amt = nbt.getInteger("lvl");
+			if (amt > 0) {
+				String amount = String.format("%d", amt);
+				String contents = "Contents: "+amount+" mB of "+fluid;
+				li.add(contents);
+			}
+		}
+		return li;
 	}
 
 	public ArrayList<NBTTagCompound> getCreativeModeVariants() {

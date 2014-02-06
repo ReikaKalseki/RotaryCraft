@@ -258,7 +258,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (m.hasNBTVariants() && is.stackTagCompound != null) {
 			ItemMachineRenderer ir = ClientProxy.machineItems;
 			TileEntity te = ir.getRenderingInstance(m);
-			li.add(((NBTMachine)te).getDisplayTag(is.stackTagCompound));
+			li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();

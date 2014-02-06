@@ -9,11 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import ic2.api.item.IElectricItem;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.machinemuse.api.electricity.MuseElectricItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -33,6 +36,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import cofh.api.energy.IEnergyContainerItem;
 
 import com.google.common.collect.Multimap;
 
@@ -99,12 +103,26 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getCurrentItemOrArmor(i);
 			if (arm != null) {
-				arm.damageItem(100, target);
-				if (arm.getItemDamage() > arm.getMaxDamage() || arm.stackSize <= 0) {
-					arm = null;
-					target.setCurrentItemOrArmor(i, null);
+				if (arm.getItem() instanceof MuseElectricItem) {
+					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
+					ms.extractEnergy(arm, 5000, false);
 				}
-				target.playSound("random.break", 0.1F, 0.8F);
+				else if (arm.getItem() instanceof IEnergyContainerItem) {
+					IEnergyContainerItem ie = (IEnergyContainerItem)arm.getItem();
+					ie.extractEnergy(arm, 5000, false);
+				}
+				else if (arm.getItem() instanceof IElectricItem) {
+					IElectricItem ie = (IElectricItem)arm.getItem();
+					///???
+				}
+				else {
+					arm.damageItem(100, target);
+					if (arm.getItemDamage() > arm.getMaxDamage() || arm.stackSize <= 0) {
+						arm = null;
+						target.setCurrentItemOrArmor(i, null);
+					}
+					target.playSound("random.break", 0.1F, 0.8F);
+				}
 			}
 		}
 		if (target.isDead || target.getHealth() <= 0) {

@@ -113,6 +113,8 @@ public class ItemDebug extends ItemRotaryTool {
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%s  %d", tile.getFluid().getLocalizedName(), tile.getLevel()));
 			}
+			if (player.isSneaking())
+				tile.isCreative = !tile.isCreative;
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor tile = (TileEntityExtractor)te;
