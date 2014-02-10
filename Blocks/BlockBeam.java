@@ -19,7 +19,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
@@ -130,7 +129,7 @@ public class BlockBeam extends BlockBasic {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5) {
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		world.setBlock(x, y, z, 0);
 	}
 
 	/**

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import net.minecraft.world.World;
 
+/** Make your block or TileEntity implements this to have custom Angular Transducer display. */
 public interface Transducerable {
 
 	public ArrayList<String> getMessages(World world, int x, int y, int z, int side);

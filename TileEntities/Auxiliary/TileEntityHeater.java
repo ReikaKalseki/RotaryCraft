@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ThermalMachine;
@@ -55,7 +56,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public boolean idle = false;
 
 	public void testIdle() {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(worldObj, xCoord, zCoord);
 		if (setTemperature <= Tamb) {
 			idle = true;
 			return;
@@ -110,7 +111,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		if (temperature > Tamb)
 			temperature -= ReikaMathLibrary.extrema((temperature-Tamb)/200, 1, "max");
 		if (temperature < Tamb)

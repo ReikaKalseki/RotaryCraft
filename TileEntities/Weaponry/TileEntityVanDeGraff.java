@@ -115,7 +115,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		}
 	}
 
-	private void dischargeToBlock(int x, int y, int z, Shockable s) {
+	public void dischargeToBlock(int x, int y, int z, Shockable s) {
 		float dx = 0.5F;
 		float dy = 0.5F;
 		float dz = 0.5F;

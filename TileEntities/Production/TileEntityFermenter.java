@@ -27,7 +27,9 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -132,6 +134,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (TreeGetter.isDyeLeaf(is))
 				return PlantMaterials.LEAVES.getPlantValue();
 		}
+		if (ModList.FORESTRY.isLoaded() && is.itemID == ForestryHandler.getInstance().saplingID)
+			return 2;
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
 			return PlantMaterials.SAPLING.getPlantValue()*getModWoodValue(sap);
@@ -297,7 +301,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		ForgeDirection waterside = ReikaWorldHelper.checkForAdjSourceBlock(world, x, y, z, Material.water);
 		if (waterside != null) {
 			Tamb -= 5;

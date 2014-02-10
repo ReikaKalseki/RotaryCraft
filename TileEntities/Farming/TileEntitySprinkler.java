@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -133,10 +132,10 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 							ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
 							ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
 							if (crop != null && !crop.isRipe(meta2)) {
-								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
+								world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
 							}
 							if (modcrop != null && !modcrop.isRipe(world, x+i, k, z+j)) {
-								ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, k, z+j, meta2+1);
+								world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
 							}
 						}
 						if (foundid == Block.tilledField.blockID) {
@@ -157,7 +156,7 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", x+i, ytop, z+j));
 					int metaf = world.getBlockMetadata(x+i, ytop, z+j);
 					if (metaf < 8 && world.getBlockId(x+i, ytop, z+j) == Block.tilledField.blockID) //Wetness maxes at 8
-						ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x+i, ytop, z+j, metaf+1);
+						world.setBlockMetadataWithNotify(x+i, ytop, z+j, metaf+1, 3);
 				}
 				if (world.getBlockId(x+i, ytop-2, z+j) == Block.tilledField.blockID)
 					world.spawnParticle("splash", x+i+0.5, ytop-0.875, z+j+0.5, 0, 0, 0);

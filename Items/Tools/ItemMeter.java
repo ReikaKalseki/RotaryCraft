@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -84,6 +85,7 @@ public class ItemMeter extends ItemRotaryTool
 		int damage = -1;
 		int lube = -453;
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		Block b = Block.blocksList[world.getBlockId(x, y, z)];
 		String name;
 		if (tile instanceof RotaryCraftTileEntity)
 			name = ((RotaryCraftTileEntity)tile).getMultiValuedName();
@@ -99,8 +101,17 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (tile instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)tile).getMessages(world, x, y, z, s);
-			for (int i = 0; i < li.size(); i++)
-				ReikaChatHelper.writeString(li.get(i));
+			if (li != null) {
+				for (int i = 0; i < li.size(); i++)
+					ReikaChatHelper.writeString(li.get(i));
+			}
+		}
+		else if (b instanceof Transducerable) {
+			ArrayList<String> li = ((Transducerable)b).getMessages(world, x, y, z, s);
+			if (li != null) {
+				for (int i = 0; i < li.size(); i++)
+					ReikaChatHelper.writeString(li.get(i));
+			}
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.BLASTFURNACE) {
@@ -157,13 +168,17 @@ public class ItemMeter extends ItemRotaryTool
 		}*/
 		if (tile instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
-			ReikaChatHelper.writeString(String.format("%s producing %.3f kW @ %d rad/s.", sp.getName(), sp.getPower()/1000D, sp.getOmega()));
+			power = sp.getPower();
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			ReikaChatHelper.writeString(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			return true;
 		}
 		if (tile instanceof ShaftPowerReceiver) {
 			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
-			String pre = ReikaEngLibrary.getSIPrefix(sp.getPower());
-			double base = ReikaMathLibrary.getThousandBase(sp.getPower());
+			power = sp.getPower();
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
 			ReikaChatHelper.writeString(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			return true;
 		}
@@ -371,7 +386,7 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				if (clicked.getType().storesEnergy()) {
+				if (clicked.getGearType().storesEnergy()) {
 					long energy = clicked.getEnergy();
 					if (energy/20D >= 1000000000000L)
 						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f TJ.", energy/20D/1000000000000.0D, omega));
@@ -404,7 +419,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 				}
 
-				if (clicked.getType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
+				if (clicked.getGearType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
 					double loss = 0;
 					TileEntity read = world.getBlockTileEntity(clicked.readx, clicked.ready, clicked.readz);
 					if (read instanceof TileEntityIOMachine) {

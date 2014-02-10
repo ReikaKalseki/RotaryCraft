@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,14 +25,17 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
@@ -56,9 +60,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		power = omega*torque;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false, true);
+		power = (long)omega*(long)torque;
 		this.makeBeam(world, x, y, z, meta);
 		sound.update();
 		if (omega > 0) {
@@ -79,33 +83,33 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			for (int i = 1; i <= range; i++) {
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 
 				editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 
 				editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Block.fire.blockID);
 			}
 		}
 	}
@@ -199,6 +203,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		for (int i = 1; i <= range; i++) {
 			editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
 			this.rip2(world, editx, edity, editz);
+			this.enhanceFinPower(world, editx, edity, editz);
 			editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
 			this.rip2(world, editx, edity, editz);
 			editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
@@ -217,6 +222,20 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			this.rip2(world, editx, edity, editz);
 			editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
 			this.rip2(world, editx, edity, editz);
+		}
+	}
+
+	private void enhanceFinPower(World world, int x, int y, int z) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.COOLINGFIN) {
+			TileEntityCoolingFin te = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
+			int[] tg = te.getTarget();
+			TileEntity te2 = world.getBlockTileEntity(tg[0], tg[1], tg[2]);
+			if (te2 instanceof TemperatureTE && world.getTotalWorldTime()%20 == 0) {
+				int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+				if (((TemperatureTE) te2).getTemperature() > Tamb)
+					((TemperatureTE) te2).addTemperature(-1);
+			}
 		}
 	}
 
@@ -260,12 +279,12 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			if (mod.isTileEntity())
 				mod.runTEHarvestCode(world, x, y, z);
 			else
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
+				world.setBlockMetadataWithNotify(x, y, z, metato, 3);
 		}
 		if (crop != null && crop.isRipe(world.getBlockMetadata(x, y, z))) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
 			metato = crop.harvestedMeta;
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, metato);
+			world.setBlockMetadataWithNotify(x, y, z, metato, 3);
 		}
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}

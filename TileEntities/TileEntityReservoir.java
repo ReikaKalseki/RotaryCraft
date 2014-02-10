@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -72,7 +73,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			tank.addLiquid(CAPACITY, tank.getActualFluid());
 
 		if (!world.isRemote && !this.isEmpty() && rand.nextInt(this.getThermalTickChance()) == 0) {
-			int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+			int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 			int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
 			int dT = temp-Tamb;
 			int r = 2;

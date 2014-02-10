@@ -22,6 +22,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -140,7 +141,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 
 		if (!tank.isEmpty() && tank.getActualFluid().equals(FluidRegistry.LAVA)) {
 			tank.removeLiquid(15);

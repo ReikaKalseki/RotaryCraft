@@ -24,7 +24,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -148,16 +147,16 @@ public class BlockGearbox extends BlockModelledMachine {
 
 		switch (i) {
 		case 0:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+2);
+			world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
 			break;
 		case 1:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+1);
+			world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
 			break;
 		case 2:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+3);
+			world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
 			break;
 		case 3:
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, prevmeta+0);
+			world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
 			break;
 		}
 	}

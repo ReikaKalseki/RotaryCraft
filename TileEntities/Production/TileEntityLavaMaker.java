@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -222,7 +223,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
 		if (fireside != null) {
 			Tamb += 200;

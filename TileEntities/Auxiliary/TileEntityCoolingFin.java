@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -30,7 +31,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != null)
 			Tamb -= 5;
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null)

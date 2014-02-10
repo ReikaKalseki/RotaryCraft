@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaRailCraftHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -100,7 +101,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	}
 
 	private int getWaterTemp() {
-		return ReikaWorldHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+		return ReikaBiomeHelper.getBiomeTemp(worldObj, xCoord, zCoord);
 	}
 
 	public int getSteam() {
@@ -113,7 +114,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		if (power > 0) {
 			temperature += 0.3125*ReikaMathLibrary.logbase(power, 2);
 		}

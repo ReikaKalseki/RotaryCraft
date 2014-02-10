@@ -34,7 +34,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -259,9 +258,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					if (id == Block.sand.blockID || id == Block.gravel.blockID)
 						if (this.checkTop(i, j)) {
 							if (id == Block.sand.blockID)
-								ReikaWorldHelper.legacySetBlockWithNotify(world, xread, yread+1, zread, Block.sandStone.blockID);
+								world.setBlock(xread, yread+1, zread, Block.sandStone.blockID);
 							else
-								ReikaWorldHelper.legacySetBlockWithNotify(world, xread, yread+1, zread, Block.stone.blockID);
+								world.setBlock(xread, yread+1, zread, Block.stone.blockID);
 						}
 				}
 			}

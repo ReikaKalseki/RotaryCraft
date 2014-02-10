@@ -19,7 +19,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -73,7 +72,7 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 	/** This block can only be destroyed by the wither explosions - this in effect makes it witherproof */
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex) {
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, blockID);
+		world.setBlock(x, y, z, blockID);
 	}
 
 	public String getTextureFile(){

@@ -75,7 +75,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.GEARBOX.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.GEARBOX.getBlockID());
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 			if (gbx != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);

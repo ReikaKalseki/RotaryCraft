@@ -26,6 +26,7 @@ import org.lwjgl.input.Keyboard;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
@@ -74,7 +75,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.ENGINE.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlockID());
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
@@ -183,86 +184,86 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		if (eng != null) {
 			if (eng.type == EngineType.HYDRO) {
 				int id = world.getBlockId(x, y+1, z);
-				if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+				if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y+1, z);
 					world.setBlock(x, y+1, z, 0);
 				}
 				id = world.getBlockId(x, y-1, z);
-				if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+				if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y-1, z);
 					world.setBlock(x, y-1, z, 0);
 				}
 
 				if (eng.getBlockMetadata() < 2) {
 					id = world.getBlockId(x, y, z+1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y, z+1);
 						world.setBlock(x, y, z+1, 0);
 					}
 
 					id = world.getBlockId(x, y, z-1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y, z-1);
 						world.setBlock(x, y, z-1, 0);
 					}
 
 					id = world.getBlockId(x, y-1, z+1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y-1, z+1);
 						world.setBlock(x, y-1, z+1, 0);
 					}
 
 					id = world.getBlockId(x, y-1, z-1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y-1, z-1);
 						world.setBlock(x, y-1, z-1, 0);
 					}
 
 					id = world.getBlockId(x, y+1, z+1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y+1, z+1);
 						world.setBlock(x, y+1, z+1, 0);
 					}
 
 					id = world.getBlockId(x, y+1, z-1);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y+1, z-1);
 						world.setBlock(x, y+1, z-1, 0);
 					}
 				}
 				else {
 					id = world.getBlockId(x-1, y, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y, z);
 						world.setBlock(x-1, y, z, 0);
 					}
 
 					id = world.getBlockId(x+1, y, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y, z);
 						world.setBlock(x+1, y, z, 0);
 					}
 
 					id = world.getBlockId(x-1, y-1, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y-1, z);
 						world.setBlock(x-1, y-1, z, 0);
 					}
 
 					id = world.getBlockId(x+1, y-1, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y-1, z);
 						world.setBlock(x+1, y-1, z, 0);
 					}
 
 					id = world.getBlockId(x-1, y+1, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y+1, z);
 						world.setBlock(x-1, y+1, z, 0);
 					}
 
 					id = world.getBlockId(x+1, y+1, z);
-					if (id != 0 && !ReikaWorldHelper.isLiquid(id)) {
+					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y+1, z);
 						world.setBlock(x+1, y+1, z, 0);
 					}

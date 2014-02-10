@@ -30,8 +30,11 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.ILuaContext;
+import dan200.computer.api.IPeripheral;
 
-public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher {
+public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, IPeripheral {
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
@@ -234,5 +237,35 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	public final int getPacketDelay() {
 		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
+	}
+
+	@Override
+	public String[] getMethodNames() {
+		return null;
+	}
+
+	@Override
+	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+		return null;
+	}
+
+	@Override
+	public boolean canAttachToSide(int side) {
+		return false;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer) {
+
+	}
+
+	@Override
+	public void detach(IComputerAccess computer) {
+
+	}
+
+	@Override
+	public String getType() {
+		return this.getMultiValuedName().replaceAll(" ", "");
 	}
 }

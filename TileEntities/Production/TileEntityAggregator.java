@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -37,14 +37,14 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		if (temperature < Tamb) {
 			if (power >= MINPOWER && omega >= MINSPEED) {
 				if (!tank.isFull()) {
 					BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 					float h = biome.rainfall; //Not used by any biome
 					double amt = 20+Math.sqrt(omega);
-					tank.addLiquid((int)(amt*ReikaWorldHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
+					tank.addLiquid((int)(amt*ReikaBiomeHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
 				}
 			}
 		}
@@ -95,7 +95,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 		int dT = Tamb-temperature;
 		temperature += dT/4;
 	}

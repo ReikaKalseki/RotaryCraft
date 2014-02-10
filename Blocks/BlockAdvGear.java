@@ -74,7 +74,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		if (te != null) {
 			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
-			if (te.getType().storesEnergy()) {
+			if (te.getGearType().storesEnergy()) {
 				long e = te.getEnergy();
 				if (is.stackTagCompound == null)
 					is.stackTagCompound = new NBTTagCompound();
@@ -98,7 +98,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 		ItemStack is = new ItemStack(RotaryCraft.advgearitems.itemID, 1, adv.getBlockMetadata()/4);
-		if (adv.getType().storesEnergy()) {
+		if (adv.getGearType().storesEnergy()) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setLong("energy", adv.getEnergy());

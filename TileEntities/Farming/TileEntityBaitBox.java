@@ -36,7 +36,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -98,7 +97,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			for (int j = y-5; j <= y+5; j++) {
 				for (int k = z-5; z <= z+5; k++) {
 					if (world.getBlockId(i, j, k) == Block.silverfish.blockID) {
-						ReikaWorldHelper.legacySetBlockWithNotify(world, i, j, k, 0);
+						world.setBlock(i, j, k, 0);
 						world.playSoundEffect(i+0.5, j+0.5, k+0.5, "step.stone", 0.5F+0.5F*rand.nextFloat(), 0.8F+0.2F*rand.nextFloat());
 					}
 				}

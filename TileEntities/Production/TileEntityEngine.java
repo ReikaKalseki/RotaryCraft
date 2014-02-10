@@ -55,6 +55,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -535,7 +536,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int Tamb = ReikaWorldHelper.getBiomeTemp(biome);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(biome);
 		//ReikaChatHelper.writeInt(temperature);
 		if (temperature > Tamb && omega == 0 && torque == 0 && type == EngineType.SPORT) { //If off and hot
 			if (temperature > Tamb+300)
@@ -725,7 +726,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return (float)frac;
 	}
 
-	private void getType() {
+	private void getEngineType() {
 		if (type == null) {
 			type = EngineType.DC;
 			omega = 0;
@@ -1193,7 +1194,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			power = 0;
 		}
 		else {
-			this.getType();
+			this.getEngineType();
 			power = torque*omega;
 		}
 
@@ -1703,7 +1704,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public void repairJet() {
 		FOD = 0;
 		isJetFailing = false;
-		temperature = ReikaWorldHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+		temperature = ReikaBiomeHelper.getBiomeTemp(worldObj, xCoord, zCoord);
 	}
 
 	public void repairJetPartial() {

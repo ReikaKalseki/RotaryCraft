@@ -69,7 +69,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
 			if (is.getItemDamage() == RotaryNames.getNumberShaftTypes()-1) {
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.SHAFT.getBlockID());
+				world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID());
 				TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 				if (sha != null) {
 					sha.type = MaterialRegistry.STEEL;
@@ -77,7 +77,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				}
 				return true;
 			}
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.SHAFT.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID());
 			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 			if (sha != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);

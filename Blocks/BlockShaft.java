@@ -25,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -105,7 +104,7 @@ public class BlockShaft extends BlockModelledMachine {
 	{
 		if (this.canHarvest(world, player, x, y, z))
 			this.harvestBlock(world, player, x, y, z, 0);
-		return ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		return world.setBlock(x, y, z, 0);
 	}
 
 	@Override
@@ -234,28 +233,28 @@ public class BlockShaft extends BlockModelledMachine {
 				i += 4;
 			switch (i) {
 			case 0:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+0);
+				world.setBlockMetadataWithNotify(x, y, z, base+0, 3);
 				break;
 			case 1:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+3);
+				world.setBlockMetadataWithNotify(x, y, z, base+3, 3);
 				break;
 			case 2:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+2);
+				world.setBlockMetadataWithNotify(x, y, z, base+2, 3);
 				break;
 			case 3:
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+1);
+				world.setBlockMetadataWithNotify(x, y, z, base+1, 3);
 				break;
 			}
 		}
 		else { //Looking up/down
-			if (base == 6) {
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, base+0);
+			if (base == 6) { //cross
+				world.setBlockMetadataWithNotify(x, y, z, base+0, 3);
 				return;
 			}
 			if (par5EntityLiving.rotationPitch > 0)
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 4); //set to up
+				world.setBlockMetadataWithNotify(x, y, z, 4, 3); //set to up
 			else
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 5); //set to down
+				world.setBlockMetadataWithNotify(x, y, z, 5, 3); //set to down
 		}
 	}
 

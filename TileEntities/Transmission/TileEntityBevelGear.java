@@ -16,7 +16,6 @@ import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -252,7 +251,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 		omegain = torquein = 0;
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {

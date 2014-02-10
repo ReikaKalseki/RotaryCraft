@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -95,7 +95,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		overgreen = 0;
 		overred = 0;
 
-		int Tamb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 
 		if (rand.nextInt(20) == 0) {
 			if (temperature > Tamb) {
@@ -124,7 +124,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	public void overheat(World world, int x, int y, int z) {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5,"random.fizz", 3F, 1F);
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, Block.lavaMoving.blockID);
+		world.setBlock(x, y, z, Block.lavaMoving.blockID);
 	}
 
 	public void mix() {

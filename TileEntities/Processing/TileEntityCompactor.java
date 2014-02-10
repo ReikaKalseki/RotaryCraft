@@ -22,6 +22,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -312,7 +313,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int Tamb = ReikaWorldHelper.getBiomeTemp(biome);
+		int Tamb = ReikaBiomeHelper.getBiomeTemp(biome);
 		Tamb = 25;
 		if (temperature > Tamb)
 			temperature -= ReikaMathLibrary.extrema((temperature-Tamb)/200, 1, "max");

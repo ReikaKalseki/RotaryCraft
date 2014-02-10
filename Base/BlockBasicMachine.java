@@ -152,7 +152,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
-			if (tile.getType().isLubricated() && !tile.hasLubricant()) {
+			if (tile.getGearType().isLubricated() && !tile.hasLubricant()) {
 				if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
 					tile.addLubricant();
 					if (!ep.capabilities.isCreativeMode)

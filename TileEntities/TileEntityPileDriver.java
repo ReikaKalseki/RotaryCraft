@@ -36,7 +36,6 @@ import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -186,26 +185,26 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		int dropmeta = world.getBlockMetadata(x, y, z);
 		if (id == Block.glass.blockID || id == Block.thinGlass.blockID || id == Block.glowStone.blockID) {
 			Block.blocksList[id].dropBlockAsItem(world, x, y, z, dropmeta, 0);
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+			world.setBlock(x, y, z, 0);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
 		}
 		if (id == Block.cactus.blockID || id == Block.reed.blockID || id == Block.vine.blockID ||
 				id == Block.waterlily.blockID || id == Block.tallGrass.blockID || id == Block.sapling.blockID ||
 				id == Block.flowerPot.blockID || id == Block.skull.blockID) {
 			Block.blocksList[id].dropBlockAsItem(world, x, y, z, dropmeta, 0);
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+			world.setBlock(x, y, z, 0);
 		}
 		if (id == Block.ice.blockID) {
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, Block.waterMoving.blockID);
+			world.setBlock(x, y, z, Block.waterMoving.blockID);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
 			dropid = Block.ice.blockID;
 		}
 		if (id == Block.web.blockID) {
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+			world.setBlock(x, y, z, 0);
 			dropid = Item.silk.itemID;
 		}/*
     	if (id == Block.tnt.blockID) {
-    		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+    		world.setBlock(x, y, z, 0);
             EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D);
             world.spawnEntityInWorld(var6);
             world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
@@ -213,7 +212,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		if (id == Block.sand.blockID || id == Block.gravel.blockID)
 			this.makeFall(world, x, y, z, id);
 		/*if (id == RotaryCraft.miningpipe.blockID && dropmeta != 4)
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);*/
+			world.setBlock(x, y, z, 0);*/
 		if (dropid == -1)
 			return;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
@@ -235,11 +234,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 				}
 			}
 			else {
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+				world.setBlock(x, y, z, 0);
 				while (tofall.canFallBelow(world, x, y-1, z) && y > 0)
 					--y;
 				if (y > 0)
-					ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, tofall.blockID);
+					world.setBlock(x, y, z, tofall.blockID);
 			}
 		}
 	}
@@ -291,7 +290,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public boolean drawPile3(World world, int x, int y, int z, int speed) {
 		if (climbing && tickcount > speed) {
 			if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-2, z, 0);
+				world.setBlock(x, y-step2-2, z, 0);
 			step2--;
 			if (world.getBlockId(x, y-step2, z) == this.getBlockType().blockID) {
 				climbing = false;
@@ -299,12 +298,12 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 				smashed = false;
 			}
 			else
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-1, z, 0);
+				world.setBlock(x, y-step2-1, z, 0);
 			tickcount = 0;
 		}
 		if (climbing && tickcount <= speed) {
 			//if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
-			//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-2, z, 0);
+			//world.setBlock(x, y-step2-2, z, 0);
 			if (step2 >= step)
 				step2--;
 			if (world.getBlockId(x, y-step2, z) == this.getBlockType().blockID) {
@@ -313,7 +312,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 				smashed = false;
 			}
 			else
-				ReikaWorldHelper.legacySetBlockWithNotify(world, x, y-step2-1, z, 0);
+				world.setBlock(x, y-step2-1, z, 0);
 			//this.tickcount = 0;
 		}
 		world.markBlockForUpdate(x, y-step2-1, z);
@@ -378,12 +377,12 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.fizz", 1F, 1F);
 			}
-			ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-1, z, RotaryCraft.miningpipe.blockID, BITMETA);
+			world.setBlock(x, y-step2-1, z, RotaryCraft.miningpipe.blockID, BITMETA, 3);
 			step2++;
 		}/*
 		if (step2 == step) {
 			if (world.getBlockId(x, y-step2-2, z) == 0)
-				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y-step2-2, z, RotaryCraft.miningpipe.blockID, BITMETA);
+				world.setBlock(x, y-step2-2, z, RotaryCraft.miningpipe.blockID, BITMETA);
 		}*/
 		if (world.getBlockId(x, y-step2-1, z) == 0) {
 			while(world.getBlockId(x, y-step2-2, z) == 0 && y-step2-2 > 0 && step == step2) {
@@ -411,19 +410,19 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 					}
 					if (world.getBlockId(x+i, y-1, z+j) == Block.netherrack.blockID) {
 						Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, y-1, z+j, 0);
+						world.setBlock(x+i, y-1, z+j, 0);
 						world.markBlockForUpdate(x+i, y-1, z+j);
 						//this.step++;
 					}
 					if (world.getBlockId(x+i, y-2, z+j) == Block.netherrack.blockID) {
 						Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
-						ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, y-2, z+j, 0);
+						world.setBlock(x+i, y-2, z+j, 0);
 						world.markBlockForUpdate(x+i, y-2, z+j);
 						//this.step++;
 					}
 					int meta = world.getBlockMetadata(x+i, y, z+j);
 					int[] blockTo = this.getBlockProduct(world, x, y, z, id, meta);
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x+i, y, z+j, blockTo[0], blockTo[1]);
+					world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
 					if (blockTo[0] == 0) {
 						//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
 						this.dropItems(world, x+i, y, z+j);
@@ -438,7 +437,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			for (int j = -2; j < 3; j++) {
 				if (i*j != 4 && i*j != -4 && world.getBlockId(x+i, y, z+j) != 0 && world.getBlockMaterial(x+i, y, z+j) != Material.water && world.getBlockMaterial(x+i, y, z+j) != Material.lava) {
 					cleared = false;
-					//ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, x, y, z, RotaryCraft.miningpipe.blockID, BITMETA);
+					//world.setBlock(x, y, z, RotaryCraft.miningpipe.blockID, BITMETA);
 				}
 			}
 		}

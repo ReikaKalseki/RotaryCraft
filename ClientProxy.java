@@ -85,7 +85,6 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerSounds() {
-		//RotarySounds.addSounds();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader(RotaryCraft.instance, SoundRegistry.soundList, SoundRegistry.SOUND_FOLDER));
 	}
 

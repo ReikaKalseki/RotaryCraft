@@ -19,7 +19,6 @@ import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.BedrockDigEvent;
@@ -126,7 +125,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			id = 0;
 			break;
 		}
-		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready+1, readz, 4);
+		//world.setBlock(readx, ready+1, readz, 4);
 		return true;
 	}
 
@@ -218,17 +217,17 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		if (!world.isRemote) {
 			if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-				ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0);
+				world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0, 3);
 			}
 			else {
 				int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
 				if (rockmetadata < 15) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					ReikaWorldHelper.legacySetBlockAndMetadataWithNotify(world, harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1);
+					world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
 				}
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					ReikaWorldHelper.legacySetBlockWithNotify(world, harvestx, harvesty, harvestz, 0);
+					world.setBlock(harvestx, harvesty, harvestz, 0);
 					if (this.isInventoryFull())
 						this.dropItem(world, x, y, z, meta, this.getDrops());
 					else

@@ -28,6 +28,7 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
@@ -90,7 +91,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		te.placer = ep.getEntityName();
 		if (te instanceof TemperatureTE) {
-			int Tb = ReikaWorldHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
 			((TemperatureTE)te).addTemperature(Tb);
 		}
 		if (te instanceof PressureTE) {
@@ -121,7 +122,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				tile.xdir = false;
 				break;
 			}
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, BlockGPR.getBiomeDesign(world, x, y, z));
+			world.setBlockMetadataWithNotify(x, y, z, BlockGPR.getBiomeDesign(world, x, y, z), 3);
 			return true;
 		}
 		if (m.isCannon())
@@ -190,7 +191,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
 		}
 		else {
-			ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, m.getMachineMetadata());
+			world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata(), 3);
 
 			if (m.is6Sided())
 				te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));

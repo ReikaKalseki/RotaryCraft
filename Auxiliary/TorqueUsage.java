@@ -104,7 +104,7 @@ public class TorqueUsage {
 				}
 			}
 			else if (tile instanceof TileEntityAdvancedGear) {
-				switch(((TileEntityAdvancedGear) tile).getType()) {
+				switch(((TileEntityAdvancedGear) tile).getGearType()) {
 				case WORM:
 					if (!TEList.contains(((TileEntityIOMachine) tile).getOutput()) && isPoweredFrom(world, ((TileEntityIOMachine) tile).getOutput())) {
 						addToList(((TileEntityIOMachine) tile).getOutput(), TERatio.get(TEList.indexOf(tile))/16);

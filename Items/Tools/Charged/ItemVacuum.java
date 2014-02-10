@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemVacuum extends ItemChargedTool {
@@ -95,7 +94,7 @@ public class ItemVacuum extends ItemChargedTool {
 		if (tile == null || !(tile instanceof IInventory))
 			return;
 		IInventory ii = (IInventory)tile;
-		ReikaWorldHelper.spillAndEmptyInventory(world, x, y, z, ii);
+		ReikaInventoryHelper.spillAndEmptyInventory(world, x, y, z, ii);
 	}
 
 }

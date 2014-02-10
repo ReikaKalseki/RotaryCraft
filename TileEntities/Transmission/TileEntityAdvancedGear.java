@@ -73,7 +73,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	public long getMaxStorageCapacity() {
-		return this.getType().storesEnergy() ? this.getMaxStorageCapacity(isBedrockCoil) : 0;
+		return this.getGearType().storesEnergy() ? this.getMaxStorageCapacity(isBedrockCoil) : 0;
 	}
 
 	public static long getMaxStorageCapacity(boolean bedrock) {
@@ -108,7 +108,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 	}
 
-	public GearType getType() {
+	public GearType getGearType() {
 		return GearType.list[this.getBlockMetadata()/4];
 	}
 
@@ -131,7 +131,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (this.getType() == GearType.WORM || this.getType() == GearType.CVT && this.getEffectiveRatio() < 0) {
+		if (this.getGearType() == GearType.WORM || this.getGearType() == GearType.CVT && this.getEffectiveRatio() < 0) {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 				omega = -(int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
@@ -202,7 +202,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	private double getEffectiveRatio() {
-		GearType type = this.getType();
+		GearType type = this.getGearType();
 		if (type == GearType.COIL)
 			return 1;
 		if (type == GearType.WORM)
@@ -221,14 +221,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	private double getPowerLossFraction(int speed) {
-		if (this.getType() == GearType.WORM)
+		if (this.getGearType() == GearType.WORM)
 			return (128-4*ReikaMathLibrary.logbase(speed, 2))/100;
 		return 1;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		if (this.getType() == GearType.WORM)
+		if (this.getGearType() == GearType.WORM)
 			return false;
 		return this.isPlayerAccessible(var1);
 	}
@@ -238,14 +238,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	{
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		if (this.getType() == GearType.CVT) {
+		if (this.getGearType() == GearType.CVT) {
 			if (controller != null && controller.isActive() && controller.getCVT().equals(this)) {
 				boolean torque = controller.isTorque();
 				int r = controller.getControlledRatio();
 				ratio = torque ? r : -r;
 			}
 		}
-		if (this.getType() != GearType.COIL)
+		if (this.getGearType() != GearType.COIL)
 			this.transferPower(world, x, y, z, meta);
 		else
 			this.store(world, x, y, z, meta);
@@ -255,7 +255,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		this.basicPowerReceiver();
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 
-		if (this.getType().storesEnergy()) {
+		if (this.getGearType().storesEnergy()) {
 			redstoneTimer.update();
 			if (redstoneTimer.checkCap())
 				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
@@ -384,18 +384,18 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public void readFromCross(TileEntityShaft cross) {
 		if (xCoord == cross.writex && zCoord == cross.writez) {
 			omega = cross.readomega[0];
-			if (this.getType() == GearType.WORM)
+			if (this.getGearType() == GearType.WORM)
 				omega = (int)((((omega / WORMRATIO)*(100-4*ReikaMathLibrary.logbase(omega, 2)+28)))/100);
 			torque = cross.readtorque[0];
-			if (this.getType() == GearType.WORM)
+			if (this.getGearType() == GearType.WORM)
 				torque = torque * WORMRATIO;
 		}
 		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
 			omega = cross.readomega[1];
-			if (this.getType() == GearType.WORM)
+			if (this.getGearType() == GearType.WORM)
 				omega = (int)((((omega / WORMRATIO)*(100-4*ReikaMathLibrary.logbase(omega, 2)+28)))/100);
 			torque = cross.readtorque[1];
-			if (this.getType() == GearType.WORM)
+			if (this.getGearType() == GearType.WORM)
 				torque = torque * WORMRATIO;
 		}
 		else
@@ -448,7 +448,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 		}
 
-		switch(this.getType()) {
+		switch(this.getGearType()) {
 		case WORM:
 			omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
 			if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
@@ -635,7 +635,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public int getRedstoneOverride() {
-		if (this.getType().storesEnergy()) {
+		if (this.getGearType().storesEnergy()) {
 			int level = (int)(15L*energy/20L/this.getMaxStorageCapacity());
 			return level;
 		}
@@ -683,7 +683,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public long getMaxPower() {
-		if (this.getType() != GearType.COIL)
+		if (this.getGearType() != GearType.COIL)
 			return 0;
 		return releaseOmega*releaseTorque;
 	}
@@ -695,7 +695,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		if (this.getType() == GearType.COIL)
+		if (this.getGearType() == GearType.COIL)
 			return new PowerSourceList().addSource(this);
 		else
 			return super.getPowerSources(io, caller);

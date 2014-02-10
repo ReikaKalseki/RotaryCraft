@@ -218,7 +218,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 										world.setBlock(x0+i, y0+j, z0+k, 0);
 									}
 									else
-										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+										world.setBlockMetadataWithNotify(x0+i, y0+j, z0+k, meta+1, 3);
 								}
 							}
 							if (power >= 5) {
@@ -234,7 +234,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 										}
 									}
 									else
-										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+										world.setBlockMetadataWithNotify(x0+i, y0+j, z0+k, meta+1, 3);
 								}
 								if (id == Block.cobblestone.blockID || id == Block.cobblestoneWall.blockID || id == Block.cobblestoneMossy.blockID) {
 									int meta = world.getBlockMetadata(x0+i, y0+j, z0+k);
@@ -243,7 +243,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 										world.setBlock(x0+i, y0+j, z0+k, 0);
 									}
 									else
-										ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x0+i, y0+j, z0+k, meta+1);
+										world.setBlockMetadataWithNotify(x0+i, y0+j, z0+k, meta+1, 3);
 								}
 							}
 							if (power == 14) {

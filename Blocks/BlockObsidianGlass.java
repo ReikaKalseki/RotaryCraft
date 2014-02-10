@@ -21,7 +21,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -87,7 +86,7 @@ public class BlockObsidianGlass extends BlockBasic {
 	/** This block can only be destroyed by the wither explosions - this in effect makes it witherproof */
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex) {
-		ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, blockID);
+		world.setBlock(x, y, z, blockID);
 	}
 
 	@Override

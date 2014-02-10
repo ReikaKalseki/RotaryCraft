@@ -120,7 +120,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 					return;
 				}
 				if (favorbent) {
-					torque = (int)(spl.torque*((sratio-1D)/(sratio)));
+					torque = (int)(spl.torque*((sratio-1D)/(sratio)))/ratio;
 				}
 				else {
 					torque = spl.torque/sratio/ratio;

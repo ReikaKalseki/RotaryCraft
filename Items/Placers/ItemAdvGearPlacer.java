@@ -66,7 +66,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.ADVANCEDGEARS.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.ADVANCEDGEARS.getBlockID());
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
@@ -75,7 +75,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			adv.setFlipped(true);
 		}
-		if (adv.getType().storesEnergy() && is.stackTagCompound != null) {
+		if (adv.getGearType().storesEnergy() && is.stackTagCompound != null) {
 			adv.setEnergyFromNBT(is.stackTagCompound);
 			adv.setBedrock(is.stackTagCompound.getBoolean("bedrock"));
 			adv.setCreative(is.stackTagCompound.getBoolean("creative"));

@@ -240,7 +240,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerObsidian(player, (TileEntityObsidianMaker) te);
 		}
 		if (te instanceof TileEntityAdvancedGear) {
-			switch (((TileEntityAdvancedGear) te).getType()) {
+			switch (((TileEntityAdvancedGear) te).getGearType()) {
 			case COIL:
 				return new CoreContainer(player, te);
 			case CVT:
@@ -414,7 +414,7 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiPlayerDetector(player, (TileEntityPlayerDetector) te);
 		}
 		if (te instanceof TileEntityAdvancedGear) {
-			switch (((TileEntityAdvancedGear) te).getType()) {
+			switch (((TileEntityAdvancedGear) te).getGearType()) {
 			case COIL:
 				return new GuiCoil(player, (TileEntityAdvancedGear) te);
 			case CVT:

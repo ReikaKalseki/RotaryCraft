@@ -321,9 +321,9 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			int id = world.getBlockId(x, y, z);
 			damage = world.getBlockMetadata(x, y, z);
 			if (damage < maxdamage[id] && maxdamage[id] != -1)
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, damage+1);
+				world.setBlockMetadataWithNotify(x, y, z, damage+1, 3);
 			else if (maxdamage[id] != -1)
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 0);
+				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
 		}
 		return true;
 	}

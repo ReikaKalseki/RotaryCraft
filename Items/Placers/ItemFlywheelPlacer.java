@@ -67,7 +67,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, MachineRegistry.FLYWHEEL.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.FLYWHEEL.getBlockID());
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);

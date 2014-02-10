@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -89,16 +88,16 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	}
 
 	@Override
-	public void updateTick(World par1World, int x, int y, int z, Random par5Random) {
-		if ((par1World.getBlockLightValue(x, y, z) < 9 && !par1World.canBlockSeeTheSky(x, y, z)) || par1World.getBlockId(x, y-1, z) != Block.tilledField.blockID) {
-			this.die(par1World, x, y, z);
+	public void updateTick(World world, int x, int y, int z, Random par5Random) {
+		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || world.getBlockId(x, y-1, z) != Block.tilledField.blockID) {
+			this.die(world, x, y, z);
 		}
-		else if (par1World.getBlockLightValue(x, y, z) >= 9)  {
-			int metadata = par1World.getBlockMetadata(x, y, z);
+		else if (world.getBlockLightValue(x, y, z) >= 9)  {
+			int metadata = world.getBlockMetadata(x, y, z);
 			if (metadata < 9) {
 				if (par5Random.nextInt(3) == 0) {
 					metadata++;
-					ReikaWorldHelper.legacySetBlockMetadataWithNotify(par1World, x, y, z, metadata);
+					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
 				}
 			}
 		}
@@ -121,7 +120,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par5, float f1, float f2, float f3) {
 		if (par5EntityPlayer.getCurrentEquippedItem() != null) {
 			if (par5EntityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDye && par5EntityPlayer.getCurrentEquippedItem().getItemDamage() == 15) {
-				ReikaWorldHelper.legacySetBlockMetadataWithNotify(world, x, y, z, 9);
+				world.setBlockMetadataWithNotify(x, y, z, 9, 3);
 				for (int i = 0; i < 16; i++)
 					world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
 				if (!par5EntityPlayer.capabilities.isCreativeMode)
