@@ -40,7 +40,6 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
-import Reika.RotaryCraft.Auxiliary.BedrockDisenchanterExploitPreventer;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -96,7 +95,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -239,9 +237,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		RotaryRecipes.addRecipes();
 		RotaryChests.addToChests();
-
-		if (ModList.MINEFACTORY.isLoaded())
-			TickRegistry.registerTickHandler(new BedrockDisenchanterExploitPreventer(), Side.SERVER);
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
