@@ -40,6 +40,7 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
+import Reika.RotaryCraft.Auxiliary.BedrockDisenchanterExploitPreventer;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -95,6 +96,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -238,6 +240,9 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryRecipes.addRecipes();
 		RotaryChests.addToChests();
 
+		if (ModList.MINEFACTORY.isLoaded())
+			TickRegistry.registerTickHandler(new BedrockDisenchanterExploitPreventer(), Side.SERVER);
+
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
@@ -259,6 +264,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Tyler Rudie", 10.00F);
 		DonatorController.instance.addDonation(instance, "Mortvana", 7.50F);
 		DonatorController.instance.addDonation(instance, "goreacraft", 10.00F);
+		DonatorController.instance.addDonation(instance, "Scooterdanny", 30.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");

@@ -22,15 +22,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 
-	/** unlimited channels, 7 voices, 48+ pitch states */
+	/** unlimited channels, 7 voices, 48+ pitch states */ //channels locked to one for now
 	public final ArrayList<Note> musicQueue = new ArrayList();
 
 	private boolean isOneTimePlaying = false;
@@ -40,6 +43,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private String musicFile;
 
 	public static final int LOOPPOWER = 1024;
+
+	private int playDelay = 0;
+	private int playIndex = 0;
 
 	public TileEntityMusicBox() {
 		super();
@@ -55,22 +61,91 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				this.read();
 		}
 
+		if (musicQueue.isEmpty()) {
+			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 30, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 30, Instrument.GUITAR));
+
+			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 20, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 20, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
+
+			this.addNote(0, new Note(NoteLength.EIGHTH, 15, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 27, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 15, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 27, Instrument.GUITAR));
+
+			this.addNote(0, new Note(NoteLength.EIGHTH, 10, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 10, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
+			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
+		}
+
 		if (power < LOOPPOWER) {
 			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				isOneTimePlaying = true;
+				playIndex = 0;
 				tickcount = 0;
+				playDelay = 0;
 			}
 			if (!ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower) && !isOneTimePlaying) {
 				lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 				tickcount = 0;
+				playIndex = 0;
+				playDelay = 0;
 				return;
 			}
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
+		else {
+			if (playIndex == musicQueue.size())
+				playIndex = 0;
+		}
+		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay, Side.SERVER);
+
+		if (playDelay > 0)
+			playDelay--;
+		if (playDelay == 0) {
+			if (!musicQueue.isEmpty()) {
+				if (playIndex < musicQueue.size()) {
+					Note n = musicQueue.get(playIndex);
+					if (n != null) {
+						if (!world.isRemote)
+							this.playNote(n);
+					}
+				}
+			}
+			else {
+				playIndex = 0;
+			}
+		}
+
+		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay+":"+musicQueue, Side.SERVER);
 	}
 
-	public void playSound() {
-
+	private void playNote(Note n) {
+		n.play(worldObj, xCoord, yCoord, zCoord);
+		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
+		playDelay = n.length.tickLength;
+		playIndex++;
 	}
 
 	@Override
@@ -83,34 +158,30 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	}
 
-	public void addNote(Note n) {
-		this.addNoteAtIndex(n, musicQueue.size());
+	public void addNote(int channel, Note n) {
+		this.addNoteAtIndex(channel, n, musicQueue.size());
 	}
 
-	public void addNoteAfter(Note n, Note ref) {
+	public void addNoteAfter(int channel, Note n, Note ref) {
 		int i = musicQueue.indexOf(ref);
 		if (i != -1) {
-			this.addNoteAtIndex(n, i+1);
+			this.addNoteAtIndex(channel, n, i+1);
 		}
 	}
 
-	public void addNoteBefore(Note n, Note ref) {
+	public void addNoteBefore(int channel, Note n, Note ref) {
 		int i = musicQueue.indexOf(ref);
 		if (i != -1) {
-			this.addNoteAtIndex(n, i);
+			this.addNoteAtIndex(channel, n, i);
 		}
 	}
 
-	private void addNoteAtIndex(Note n, int index) {
+	private void addNoteAtIndex(int channel, Note n, int index) {
 		if (index >= musicQueue.size()) {
-			NoteCompound nc = new NoteCompound();
-			nc.addNote(n);
-			musicQueue.add(nc);
+			musicQueue.add(n);
 		}
-		NoteCompound nc = musicQueue.get(index);
-		if (nc == null)
-			nc = new NoteCompound();
-		nc.addNote(n);
+		else
+			musicQueue.add(index, n);
 	}
 
 	public void backspace() {
@@ -162,7 +233,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			f.createNewFile();
 
 			for (int i = 0; i < musicQueue.size(); i++) {
-				NoteCompound n = musicQueue.get(i);
+				Note n = musicQueue.get(i);
 				String s = n.toSerialString();
 				p.append(s+"\n");
 			}
@@ -202,7 +273,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			BufferedReader p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
 			String line = p.readLine();
 			while (line != null) {
-				NoteCompound n = NoteCompound.getFromSerialString(line);
+				Note n = Note.getFromSerialString(line);
 				if (n != null) {
 					musicQueue.add(n);
 				}
@@ -246,60 +317,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			f.delete();
 	}
 
-	public static final class NoteCompound {
-
-		private final ArrayList<Note> notes = new ArrayList();
-
-		public NoteCompound() {
-
-		}
-
-		private NoteCompound(String s) {
-
-		}
-
-		public void addNote(Note note) {
-			if (!notes.contains(note))
-				notes.add(note);
-		}
-
-		public void removeNote(Note note) {
-			notes.remove(note);
-		}
-
-		public void clear() {
-			notes.clear();
-		}
-
-		public int getNumberNotes() {
-			return notes.size();
-		}
-
-		public void play(World world, double x, double y, double z) {
-			for (int i = 0; i < notes.size(); i++) {
-				notes.get(i).play(world, x, y, z);
-			}
-		}
-
-		@Override
-		public String toString() {
-			return notes.toString();
-		}
-
-		public String toSerialString() {
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < notes.size(); i++) {
-
-			}
-			return sb.toString();
-		}
-
-		protected static NoteCompound getFromSerialString(String s) {
-			return new NoteCompound(s);
-		}
-
-	}
-
 	public static final class Note {
 
 		public final NoteLength length;
@@ -308,14 +325,54 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		public final Instrument voice;
 
+		private static final String[] notes = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
+
 		public Note(NoteLength length, int pitch, Instrument voice) {
 			this.length = length;
 			this.pitch = pitch;
 			this.voice = voice;
 		}
 
-		public void play(World world, double x, double y, double z) {
+		public String getName() {
+			return notes[pitch%12];
+		}
 
+		public void play(World world, int x, int y, int z) {
+			String pit;
+			float pitch = (float)Math.pow(2.0D, (this.pitch-24)/12.0D);
+			float volume = 200/100F;
+			if (pitch < 0.5F) {
+				pitch *= 2F;
+				pit = "low";
+			}
+			else if (pitch > 2F) {
+				pitch *= 0.25F;
+				pit = "hi";
+			}
+			else
+				pit = "";
+			switch(voice) {
+			case GUITAR:
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+				break;
+			case BASS:
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+				break;
+			case PLING:
+				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+				break;
+			case BASSDRUM:
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.bd", volume, pitch);
+				break;
+			case SNARE:
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.snare", volume, pitch);
+				break;
+			case CLAVE:
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.hat", volume, pitch);
+				break;
+			default:
+				break;
+			}
 		}
 
 		@Override
@@ -336,6 +393,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			sb.append(" ");
 			sb.append(pitch);
 			return sb.toString();
+		}
+
+		public String toSerialString() {
+			StringBuilder sb = new StringBuilder();
+
+			return sb.toString();
+		}
+
+		protected static Note getFromSerialString(String s) {
+			return new Note(null, 0, null);
 		}
 
 	}

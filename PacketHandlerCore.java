@@ -353,33 +353,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				break;
 			case MUSIC:
 				music = (TileEntityMusicBox)te;
-				if (control == PacketRegistry.MUSIC.getMinValue()) {
-					music.chooseNoteType(data[0]);
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+1) {
-					music.setEntryData(data[0], data[1], data[2], data[3]);
-					music.addNote();
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+2) {
-					music.addNote();
-					music.backSpace();
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+3) {
-					music.clearMusic();
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+4) {
-					music.clearChannel(data[0]);
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+5) {
-					music.save();
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+6) {
-					music.read();
-				}
-				if (control == PacketRegistry.MUSIC.getMinValue()+7) {
-					music.loadDemo();
-					music.isOneTimePlaying = true;
-				}
+
 				break;
 			case VACUUM:
 				vac = (TileEntityVacuum)te;

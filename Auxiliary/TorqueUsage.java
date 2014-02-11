@@ -119,7 +119,10 @@ public class TorqueUsage {
 						}
 					}
 				case COIL:
-					torque += Math.sqrt(2*((TileEntityAdvancedGear)tile).getEnergy())/20;
+					double added = Math.sqrt(2*((TileEntityAdvancedGear)tile).getEnergy())/20;
+					if (((TileEntityAdvancedGear) tile).isBedrockCoil())
+						added *= 16;
+					torque += added;
 				}
 			}
 			else if (tile instanceof TileEntityShaft) {

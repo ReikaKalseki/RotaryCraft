@@ -119,6 +119,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getSpeed() {
+		if (baseomega > this.getMaxBase() || basetorque > this.getMaxBase())
+			baseomega = basetorque = -1;
 		if (!this.isEmitting())
 			return 0;
 		if (baseomega < 0 || basetorque < 0)
@@ -127,6 +129,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getTorque() {
+		if (baseomega > this.getMaxBase() || basetorque > this.getMaxBase())
+			baseomega = basetorque = -1;
 		if (!this.isEmitting())
 			return 0;
 		if (baseomega < 0 || basetorque < 0)
