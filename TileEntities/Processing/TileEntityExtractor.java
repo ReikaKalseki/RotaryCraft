@@ -48,6 +48,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	public boolean idle = false;
 
+	public boolean[] extractableSlots = new boolean[4];
+
 	public int getCookTime(int stage) {
 		return extractorCookTime[stage];
 	}
@@ -70,7 +72,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return i == 7 || i == 8;
+		return i == 7 || i == 8 || extractableSlots[i/2];
 	}
 
 	private int getSmeltNumber(ModOreList ore) {
@@ -162,6 +164,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 
 		extractorCookTime = NBT.getIntArray("CookTime");
+
+		for (int i = 0; i < 4; i++) {
+			extractableSlots[i] = NBT.getBoolean("extractable"+i);
+		}
 	}
 
 	/**
@@ -187,6 +193,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		for (int i = 0; i < 4; i++) {
+			NBT.setBoolean("extractable"+i, extractableSlots[i]);
+		}
 	}
 
 	/**

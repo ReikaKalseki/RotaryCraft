@@ -63,10 +63,11 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		//if (world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID)
 		//	blocked = true;
 		int range = this.getRange();
+		//ReikaJavaLibrary.pConsole(power+":"+distancelimit+":"+(PowerReceivers.LIGHTBRIDGE.getMinPower()/distancelimit)+":"+range, Side.SERVER);
 		if (range > 0 && world.getBlockLightValue(x, y+1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
 			if (!world.isRemote) {
 				//if (!Block.opaqueCubeLookup[world.getBlockId(x+xstep, y+ystep, z+zstep)]) {
-				for (int i = 1; (i < range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
+				for (int i = 1; (i <= range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlockId(x+xstep, y+ystep, z+zstep)) || world.getBlockId(x+xstep, y+ystep, z+zstep) == 0 || world.getBlockId(x+xstep, y+ystep, z+zstep) == RotaryCraft.lightbridge.blockID); i++) {//&& world.getBlockId(x+xstep, y+ystep, z+zstep) != RotaryCraft.lightbridge.blockID; i++) {
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
 					int idview = world.getBlockId(x+xstep*i, y+ystep*i, z+zstep*i);
 					int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
@@ -77,7 +78,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 						//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
 						//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
 					}
-					if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && (idview != RotaryCraft.lightbridge.blockID) || animtick > range) {
+					if (idview != 0 && !ReikaWorldHelper.softBlocks(idview) && idview != RotaryCraft.lightblock.blockID && idview != RotaryCraft.beamblock.blockID && (idview != RotaryCraft.lightbridge.blockID) || animtick > range+1) {
 						animtick--;
 						blocked = true;
 					}
@@ -150,7 +151,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 
 	@Override
 	public int getRange() {
-		return Math.min(distancelimit, PowerReceivers.LIGHTBRIDGE.getMinPower()/distancelimit);
+		return (int)Math.min(distancelimit, power*distancelimit/PowerReceivers.LIGHTBRIDGE.getMinPower());
 	}
 
 	@Override

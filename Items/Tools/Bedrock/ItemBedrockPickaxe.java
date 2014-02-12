@@ -10,16 +10,13 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
@@ -36,6 +33,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -85,18 +83,19 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	// To make un-unenchantable
 	@Override
-	public void onUpdate(ItemStack is, World world, Entity entity, int par4, boolean par5) {
-		this.forceSilkTouch(is);
+	public void onUpdate(ItemStack is, World world, Entity entity, int slot, boolean par5) {
+		this.forceSilkTouch(is, world, entity, slot);
 	}
 
-	private void forceSilkTouch(ItemStack is) {
-		if (ConfigRegistry.PREENCHANT.getState()) {
-			Map map = new HashMap();
-			map.put(Enchantment.silkTouch.effectId, 1);
-			EnchantmentHelper.setEnchantments(map, is);
-		}
-		else if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
-			is.addEnchantment(Enchantment.silkTouch, 1);
+	private void forceSilkTouch(ItemStack is, World world, Entity entity, int slot) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			entity.playSound("random.break", 1, 1);
+			if (entity instanceof EntityPlayer) {
+				EntityPlayer ep = (EntityPlayer)entity;
+				ep.inventory.setInventorySlotContents(slot, null);
+				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
+				is = null;
+			}
 		}
 	}
 
@@ -280,7 +279,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	@Override
 	public boolean onEntityItemUpdate(EntityItem ei) {
 		ItemStack is = ei.getEntityItem();
-		this.forceSilkTouch(is);
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			ei.playSound("random.break", 1, 1);
+			ei.setDead();
+		}
 		return false;
 	}
 

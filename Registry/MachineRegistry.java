@@ -71,7 +71,6 @@ import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
@@ -81,6 +80,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
+import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
 import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
@@ -109,6 +109,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityLawnSprinkler;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
@@ -290,7 +291,8 @@ public enum MachineRegistry {
 	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
 	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
 	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5),
-	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7);
+	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7),
+	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19);
 
 	private final String name;
 	private final Class te;

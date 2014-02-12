@@ -9,19 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -69,21 +68,28 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity entity, int par4, boolean par5) {
-		this.forceEnchantments(is);
+		this.forceEnchantments(is, world, entity, par4);
 	}
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem ei) {
 		ItemStack is = ei.getEntityItem();
-		this.forceEnchantments(is);
+		if (!ReikaEnchantmentHelper.hasEnchantment(this.getDefaultEnchantment(), is)) {
+			ei.playSound("random.break", 1, 1);
+			ei.setDead();
+		}
 		return false;
 	}
 
-	private void forceEnchantments(ItemStack is) {
-		if (ConfigRegistry.PREENCHANT.getState()) {
-			Map map = new HashMap();
-			map.put(this.getDefaultEnchantment().effectId, 4);
-			EnchantmentHelper.setEnchantments(map, is);
+	private void forceEnchantments(ItemStack is, World world, Entity entity, int slot) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(this.getDefaultEnchantment(), is)) {
+			entity.playSound("random.break", 1, 1);
+			if (entity instanceof EntityPlayer) {
+				EntityPlayer ep = (EntityPlayer)entity;
+				ep.inventory.setInventorySlotContents(slot, null);
+				ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
+				is = null;
+			}
 		}
 	}
 

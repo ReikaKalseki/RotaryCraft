@@ -110,8 +110,10 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 			ItemStack[] in = new ItemStack[9];
 			ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
 			for (int k = 0; k < 9; k++) {
-				if (ReikaItemHelper.matchStacks(ingredient, in[k]))
+				if (ReikaItemHelper.matchStacks(ingredient, in[k])) {
 					arecipes.add(new WorktableRecipe(ir));
+					k = 9;
+				}
 			}
 		}
 	}

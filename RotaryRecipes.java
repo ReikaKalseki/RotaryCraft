@@ -340,7 +340,9 @@ public class RotaryRecipes {
 
 		MachineRegistry.BUSCONTROLLER.addCrafting("SMS", "MCM", "SMS", 'S', ItemStacks.steelingot, 'M', ItemStacks.bearing, 'C', ItemStacks.pcb);
 
-		MachineRegistry.PARTICLE.addSizedCrafting(4, "SDS", "PCP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'D', Block.dispenser, 'P', ItemStacks.impeller);
+		MachineRegistry.PARTICLE.addSizedCrafting(4, "SDS", "PCP", "SIS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'D', Block.dispenser, 'I', ItemStacks.impeller);
+
+		MachineRegistry.LAWNSPRINKLER.addCrafting("PPP", "P", "BIB", 'I', ItemStacks.impeller, 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel);
 	}
 
 	private static void addCraftItems() {

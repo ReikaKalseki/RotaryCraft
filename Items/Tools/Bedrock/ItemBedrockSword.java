@@ -12,19 +12,17 @@ package Reika.RotaryCraft.Items.Tools.Bedrock;
 import ic2.api.item.IElectricItem;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.machinemuse.api.electricity.MuseElectricItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,7 +30,9 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -181,22 +181,28 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	// To make un-unenchantable
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity entity, int par4, boolean par5) {
-		this.forceEnchants(is);
+		this.forceEnchants(is, world, entity, par4);
 	}
 
-	private void forceEnchants(ItemStack is) {
-		if (ConfigRegistry.PREENCHANT.getState()) {
-			Map map = new HashMap();
-			map.put(Enchantment.looting.effectId, 5);
-			map.put(Enchantment.sharpness.effectId, 5);
-			EnchantmentHelper.setEnchantments(map, is);
+	private void forceEnchants(ItemStack is, World world, Entity entity, int slot) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.looting, is) || !ReikaEnchantmentHelper.hasEnchantment(Enchantment.sharpness, is)) {
+			entity.playSound("random.break", 1, 1);
+			if (entity instanceof EntityPlayer) {
+				EntityPlayer ep = (EntityPlayer)entity;
+				ep.inventory.setInventorySlotContents(slot, null);
+				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
+				is = null;
+			}
 		}
 	}
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem ei) {
 		ItemStack is = ei.getEntityItem();
-		this.forceEnchants(is);
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.looting, is) || !ReikaEnchantmentHelper.hasEnchantment(Enchantment.sharpness, is)) {
+			ei.playSound("random.break", 1, 1);
+			ei.setDead();
+		}
 		return false;
 	}
 

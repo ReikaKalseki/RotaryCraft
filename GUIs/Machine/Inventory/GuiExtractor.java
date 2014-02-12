@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
@@ -84,6 +83,20 @@ public class GuiExtractor extends GuiMachine
 		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+60, 0xff000000);
 		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+111, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", ext.power, ext.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+	}
+
+	@Override
+	public void mouseClicked(int x, int y, int button) {
+		super.mouseClicked(x, y, button);
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;/*
+		int slot = (x-inventorySlots.getSlot(0).xDisplayPosition-j)/36;
+		boolean isSlot = ((x-inventorySlots.getSlot(0).xDisplayPosition-j)/18)%2 == 0;
+		int dy = y-k;
+		//ReikaJavaLibrary.pConsole(x+":"+y+":"+slot+":"+isSlot+":"+dy);
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(2, 13, dy)) {
+			ext.extractableSlots[slot] = !ext.extractableSlots[slot];
+		}*/
 	}
 
 	@Override

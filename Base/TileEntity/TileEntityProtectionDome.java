@@ -32,9 +32,9 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 	public int setRange;
 
 	protected void setColor(int r, int g, int b) {
-		RGB[0] = r;
-		RGB[1] = g;
-		RGB[2] = b;
+		RGB[0] = Math.max(0, Math.min(255, r));
+		RGB[1] = Math.max(0, Math.min(255, g));
+		RGB[2] = Math.max(0, Math.min(255, b));
 	}
 
 	public final Color getDomeColor() {
