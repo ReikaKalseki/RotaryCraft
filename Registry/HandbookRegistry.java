@@ -129,6 +129,7 @@ public enum HandbookRegistry {
 	WOODCUTTER(MachineRegistry.WOODCUTTER),
 	HARVESTER(MachineRegistry.MOBHARVESTER),
 	FERTILIZER(MachineRegistry.FERTILIZER),
+	LAWNSPRINKLER(MachineRegistry.LAWNSPRINKLER),
 
 	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	HOSE(MachineRegistry.HOSE.getName(), MachineRegistry.HOSE),

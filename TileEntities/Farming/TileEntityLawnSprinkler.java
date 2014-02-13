@@ -38,15 +38,24 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements PipeConnector, RangedEffect {
 
-	public static final int CAPACITY = 6000;
+	public static final int CAPACITY = 5;
 
 	private int liquid;
 	private int pressure;
 	private StepTimer soundTimer = new StepTimer(40);
+	private int speed;
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (this.canCauseEffects()) {
+			if (speed < 24)
+				speed += 1;
+		}
+		else {
+			if (speed > 0)
+				speed--;
+		}
+		phi += speed;
 	}
 
 	@Override
@@ -66,20 +75,22 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
-				if (liquid < CAPACITY) {
-					int oldLevel = tile.getLiquidLevel();
-					int toremove = tile.getLiquidLevel()/4+1;
-					tile.removeLiquid(toremove);
-					liquid = ReikaMathLibrary.extrema(liquid+oldLevel/4+1, 0, "max");
+		if (!world.isRemote) {
+			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
+				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
+				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
+					if (liquid < CAPACITY) {
+						int oldLevel = tile.getLiquidLevel();
+						int toremove = tile.getLiquidLevel()/4+1;
+						tile.removeLiquid(toremove);
+						liquid = ReikaMathLibrary.extrema(liquid+oldLevel/4+1, 0, "max");
+					}
+					pressure = tile.getPressure();
 				}
-				pressure = tile.getPressure();
 			}
 		}
 
-		if (this.getRange() > 0 && liquid > 0) {
+		if (this.canCauseEffects()) {
 			if (!world.isRemote) {
 				for (int k = 0; k < 3; k++) {
 					this.accelerateGrowth(world, x, y, z);
@@ -93,7 +104,13 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 			if (soundTimer.checkCap()) {
 				SoundRegistry.SPRINKLER.playSoundAtBlock(world, x, y, z);
 			}
+			liquid--;
 		}
+		//ReikaJavaLibrary.pConsole(liquid+":"+this.getSide());
+	}
+
+	private boolean canCauseEffects() {
+		return this.getRange() > 0 && liquid > 0;
 	}
 
 	private void extinguishFire(World world, int x, int y, int z) {
@@ -161,7 +178,7 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 			double pz = z-1+2*rand.nextFloat();
 			world.spawnParticle("splash", px+0.5, py, pz+0.5, 0, 0, 0);
 		}
-
+		/*
 		for (vel = 0; vel < r; vel += 0.1) {
 			py = y-0.1875D+1.5;
 			for (int i = 0; i < rand.nextInt(5+d*4); i++) {
@@ -173,6 +190,19 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 				double pz = z-1+2*rand.nextFloat();
 				world.spawnParticle("splash", px+0.5, py, pz+0.5, vx, 0, vz);
 			}
+		}*/
+		for (int i = 0; i < 3; i++)
+			this.createWaterStream(world, x, y, z, i*120+60);
+	}
+
+	private void createWaterStream(World world, int x, int y, int z, float offset) {
+		int d = Math.max(0, ConfigRegistry.SPRINKLER.getValue());
+		int r = this.getRange();
+		double dx = 0.6*Math.sin(Math.toRadians(phi+offset));
+		double dz = 0.6*Math.cos(Math.toRadians(phi+offset));
+		for (int i = 0; i < 6*d; i++) {
+			double v = rand.nextInt((1+r)*10)/72D;
+			world.spawnParticle("splash", x+0.5+dx, y+0.75, z+0.5+dz, dx*v-0.025+0.05*rand.nextDouble(), 0, dz*v-0.025+0.05*rand.nextDouble());
 		}
 	}
 
@@ -212,6 +242,8 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 
 		NBT.setInteger("press", pressure);
 		NBT.setInteger("lvl", liquid);
+
+		NBT.setInteger("spd", speed);
 	}
 
 	/**
@@ -222,8 +254,10 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 	{
 		super.readFromNBT(NBT);
 
-		pressure = NBT.getInteger("pressure");
+		pressure = NBT.getInteger("press");
 		liquid = NBT.getInteger("lvl");
+
+		speed = NBT.getInteger("speed");
 	}
 
 	@Override

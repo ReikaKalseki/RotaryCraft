@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -68,15 +67,11 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		tickcount++;
 		soundtick++;
 		this.getLiq(world, x, y, z, meta);
 		if (waterLevel <= 0)
 			return;
-		if (tickcount > 300) {
-			waterLevel -= RotaryConfig.MILLIBUCKET;
-			tickcount = 0;
-		}
+		waterLevel -= 3;
 		this.hydrate(world, x, y, z, meta);
 		if (this.getRange() > 0 && waterLevel > 0 && soundtick >= 40) {
 			SoundRegistry.SPRINKLER.playSoundAtBlock(world, x, y, z, 1, 1);

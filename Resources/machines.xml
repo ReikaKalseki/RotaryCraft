@@ -947,11 +947,18 @@
 			Required Speed: %d rad/s
 		</note>
 	</crystallizer>
-		<particle>
+	<particle>
 		<desc>
 			The particle display can emit a stream of any particle type you choose from its GUI. It requires a charged windspring to function.
 		</desc>
 		<note>
 		</note>
 	</particle>
+	<lawnsprinkler>
+		<desc>
+			The ground sprinkler is a ground-mounted variety of the overheat sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety.
+		</desc>
+		<note>
+		</note>
+	</lawnsprinkler>
 </machines>
