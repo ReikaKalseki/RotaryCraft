@@ -109,6 +109,10 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (omega >= 0) {
 				if (omega > RotaryConfig.omegalimit)
 					omega = RotaryConfig.omegalimit;
+				if (omega > coil.getMaximumEmission()) {
+					omega = coil.getMaximumEmission();
+					input.setText(String.valueOf(coil.getMaximumEmission()));
+				}
 				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, ep, omega);
 			}
 		}
@@ -117,6 +121,10 @@ public class GuiCoil extends GuiNonPoweredMachine
 			if (torque >= 0) {
 				if (torque > RotaryConfig.torquelimit)
 					torque = RotaryConfig.torquelimit;
+				if (torque > coil.getMaximumEmission()) {
+					torque = coil.getMaximumEmission();
+					input2.setText(String.valueOf(coil.getMaximumEmission()));
+				}
 				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, ep, torque);
 			}
 		}
@@ -140,9 +148,9 @@ public class GuiCoil extends GuiNonPoweredMachine
 		fontRenderer.drawString("Nm", xSize/2+53, 52, 4210752);
 
 		if (!input.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.releaseOmega), xSize/2-3, 22, 0xffffffff);
+			fontRenderer.drawString(String.format("%d", coil.getReleaseOmega()), xSize/2-3, 22, 0xffffffff);
 		if (!input2.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.releaseTorque), xSize/2-3, 52, 0xffffffff);
+			fontRenderer.drawString(String.format("%d", coil.getReleaseTorque()), xSize/2-3, 52, 0xffffffff);
 
 		super.drawGuiContainerForegroundLayer(a, b);
 	}

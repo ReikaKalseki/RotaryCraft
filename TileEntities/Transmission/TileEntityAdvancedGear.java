@@ -43,8 +43,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator {
 
 	private boolean isReleasing = false;
-	public int releaseTorque = 0;
-	public int releaseOmega = 0;
+	private int releaseTorque = 0;
+	private int releaseOmega = 0;
 	/** Stored energy, in joules */
 	private long energy;
 
@@ -86,6 +86,26 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public void setCreative(boolean flag) {
 		isCreative = flag;
+	}
+
+	public int getMaximumEmission() {
+		return isCreative ? Integer.MAX_VALUE : this.isBedrockCoil() ? 4096 : 1024; //still the 16x increase in the coil item
+	}
+
+	public int getReleaseTorque() {
+		return releaseTorque;
+	}
+
+	public int getReleaseOmega() {
+		return releaseOmega;
+	}
+
+	public void setReleaseTorque(int torque) {
+		releaseTorque = Math.min(this.getMaximumEmission(), torque);
+	}
+
+	public void setReleaseOmega(int omega) {
+		releaseOmega = Math.min(this.getMaximumEmission(), omega);
 	}
 
 	public enum GearType {

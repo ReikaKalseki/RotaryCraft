@@ -345,10 +345,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case COIL:
 				adv = (TileEntityAdvancedGear)te;
 				if (control == PacketRegistry.COIL.getMinValue()) {
-					adv.releaseOmega = data[0];
+					adv.setReleaseOmega(data[0]);
 				}
 				if (control == PacketRegistry.COIL.getMinValue()+1) {
-					adv.releaseTorque = data[0];
+					adv.setReleaseTorque(data[0]);
 				}
 				break;
 			case MUSIC:
