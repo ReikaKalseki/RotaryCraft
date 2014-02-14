@@ -48,6 +48,9 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
@@ -353,7 +356,18 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				break;
 			case MUSIC:
 				music = (TileEntityMusicBox)te;
-
+				if (control == PacketRegistry.MUSIC.getMinValue()) {
+					Note n = new Note(NoteLength.EIGHTH, data[0], Instrument.GUITAR);
+					for (int i = 0; i < 3; i++)
+						n.play(world, x, y, z);
+					music.addNote(0, n);
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+1) {
+					music.save();
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+2) {
+					music.read();
+				}
 				break;
 			case VACUUM:
 				vac = (TileEntityVacuum)te;

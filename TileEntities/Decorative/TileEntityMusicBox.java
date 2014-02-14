@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 
 	/** 16 channels, 7 voices, 48+ pitch states */ //channels locked to one for now
-	public final ArrayList<Note>[] musicQueue = new ArrayList[16];
+	public final ArrayList<Note>[] musicQueue;
 
 	private boolean isOneTimePlaying = false;
 
@@ -49,6 +49,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public TileEntityMusicBox() {
 		super();
+
+		musicQueue = new ArrayList[16];
+		for (int i = 0; i < 16; i++) {
+			musicQueue[i] = new ArrayList();
+		}
 	}
 
 	public int getMusicLength() {
@@ -69,44 +74,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				this.read();
 		}
 
-		if (musicQueue[0].isEmpty()) {
-			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 30, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 30, Instrument.GUITAR));
-
-			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 20, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 20, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
-
-			this.addNote(0, new Note(NoteLength.EIGHTH, 15, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 27, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 15, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 27, Instrument.GUITAR));
-
-			this.addNote(0, new Note(NoteLength.EIGHTH, 10, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 10, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 13, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 17, Instrument.GUITAR));
-			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
-		}
-
 		if (power < LOOPPOWER) {
 			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				isOneTimePlaying = true;
@@ -120,36 +87,46 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
 		else {
-			if (this.isAtEnd())
-				this.resetPlayback();
+			isOneTimePlaying = false;
 		}
-		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay, Side.SERVER);
 
-		for (int i = 0; i < 16; i++) {
-			if (playDelay[i] > 0)
-				playDelay[i]--;
-			if (playDelay[i] == 0) {
-				if (!musicQueue[i].isEmpty()) {
-					if (playIndex[i] < musicQueue[i].size()) {
-						Note n = musicQueue[i].get(playIndex[i]);
-						if (n != null) {
-							if (!world.isRemote)
-								this.playNote(i, n);
+		if (isOneTimePlaying || power >= LOOPPOWER) {
+			for (int i = 0; i < 16; i++) {
+				if (playDelay[i] > 0)
+					playDelay[i]--;
+				if (playDelay[i] == 0) {
+					if (!musicQueue[i].isEmpty()) {
+						if (playIndex[i] < musicQueue[i].size()) {
+							Note n = musicQueue[i].get(playIndex[i]);
+							if (n != null) {
+								if (!world.isRemote)
+									this.playNote(i, n);
+							}
 						}
 					}
-				}
-				else {
-					this.resetPlayback();
+					else {
+						playIndex[i] = 0;
+					}
 				}
 			}
 		}
+		//ReikaJavaLibrary.pConsole(Arrays.toString(playDelay)+":"+Arrays.toString(playIndex), Side.SERVER);
+		if (this.isAtEnd() && this.hasNoDelays()) {
+			this.resetPlayback();
+		}
+	}
 
-		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay+":"+musicQueue, Side.SERVER);
+	private boolean hasNoDelays() {
+		for (int i = 0; i < 16; i++) {
+			if (playDelay[i] > 0)
+				return false;
+		}
+		return true;
 	}
 
 	private boolean isAtEnd() {
 		for (int i = 0; i < 16; i++) {
-			if (playIndex[i] >= this.getMusicLength())
+			if (playIndex[i] < musicQueue[i].size()-1)
 				return false;
 		}
 		return true;
@@ -159,6 +136,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		for (int i = 0; i < 16; i++) {
 			playIndex[i] = 0;
 		}
+		isOneTimePlaying = false;
 	}
 
 	private void startPlaying() {
@@ -261,10 +239,19 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			PrintWriter p = new PrintWriter(f);
 			f.createNewFile();
 
-			for (int i = 0; i < musicQueue.size(); i++) {
-				Note n = musicQueue.get(i);
-				String s = n.toSerialString();
-				p.append(s+"\n");
+			int length = this.getMusicLength();
+			for (int i = 0; i < length; i++) {
+				for (int k = 0; k < 16; k++) {
+					if (musicQueue[k].size() > i) {
+						Note n = musicQueue[k].get(i);
+						String s = n.toSerialString();
+						p.append(s+";");
+					}
+					else {
+						p.append("-;");
+					}
+				}
+				p.append("\n");
 			}
 
 			p.close();
@@ -277,9 +264,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public boolean hasSavedFile() {
 		File save = DimensionManager.getCurrentSaveRootDirectory();
+		String base = save.getPath().substring(2);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
 		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(save.getPath()+"/Music Box/"+name)));
+			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(base+"/RotaryCraft/"+name)));
 			p.close();
 			return true;
 		}
@@ -292,19 +280,23 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		String path = save.getPath()+"/Music Box/"+name;
+		String path = save.getPath().substring(2)+"/RotaryCraft/"+name;
 		this.readFile(path);
 	}
 
 	private void readFile(String path) {
-		musicQueue.clear();
+		this.clearMusic();
 		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
+			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
 			String line = p.readLine();
 			while (line != null) {
-				Note n = Note.getFromSerialString(line);
-				if (n != null) {
-					musicQueue.add(n);
+				String[] pieces = line.split(";");
+				for (int i = 0; i < 16; i++) {
+					Note n = Note.getFromSerialString(pieces[i]);
+					if (n != null) {
+						musicQueue[i].add(n);
+						//ReikaJavaLibrary.pConsole(n);
+					}
 				}
 				line = p.readLine();
 			}
@@ -341,7 +333,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		File f = new File(save.getPath()+"\\RotaryCraft\\"+name);
+		File f = new File(save.getPath().substring(2)+"/RotaryCraft/"+name);
 		if (f.exists())
 			f.delete();
 	}
@@ -426,12 +418,22 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		public String toSerialString() {
 			StringBuilder sb = new StringBuilder();
-
+			sb.append(length.ordinal());
+			sb.append(":");
+			sb.append(pitch);
+			sb.append(":");
+			sb.append(voice.ordinal());
 			return sb.toString();
 		}
 
 		protected static Note getFromSerialString(String s) {
-			return new Note(null, 0, null);
+			if (s.equals("-"))
+				return null;
+			String[] sgs = s.split(":");
+			int l1 = Integer.parseInt(sgs[0]);
+			int note = Integer.parseInt(sgs[1]);
+			int i1 = Integer.parseInt(sgs[2]);
+			return new Note(NoteLength.values()[l1], note, Instrument.values()[i1]);
 		}
 
 	}
