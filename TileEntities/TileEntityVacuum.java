@@ -50,12 +50,12 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			return;
-		power = torque*omega;
 		tickcount++;
 		if (power < MINPOWER)
 			return;
+		power = (long)torque*(long)omega;
 		if (tickcount < 2)
 			return;
 		tickcount = 0;
@@ -208,9 +208,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		}
 		for (int j = 0; j < inventory.length; j++) {
 			if (inventory[j] != null) {
-				if (inventory[j].itemID == id && inventory[j].getItemDamage() == meta) {
-					if (ItemStack.areItemStackTagsEqual(is, inventory[j])) {
-						if (inventory[j].stackSize+size <= is.getMaxStackSize()) {
+				if (ReikaItemHelper.matchStacks(is, inventory[j])) {
+					if (this.areNBTTagsCombineable(is, inventory[j])) {
+						if (inventory[j].stackSize+size <= this.getInventoryStackLimit()) {
 							target = j;
 							j = inventory.length;
 						}
@@ -227,6 +227,18 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		if (target == -1)
 			target = firstempty;
 		return target;
+	}
+
+	private boolean areNBTTagsCombineable(ItemStack is, ItemStack is2) {
+		if ((is.stackTagCompound == null && is2.stackTagCompound == null))
+			return true;
+		if ((is.stackTagCompound == null || is2.stackTagCompound == null))
+			return false;
+		if (is.stackTagCompound.getName() == null || is.stackTagCompound.getName().isEmpty())
+			is.stackTagCompound.setName("tag"); //is done by the TE's NBT functions anyways
+		if (ItemStack.areItemStackTagsEqual(is, is2))
+			return true;
+		return false;
 	}
 
 	public AxisAlignedBB getBox(World world, int x, int y, int z) {

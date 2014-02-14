@@ -33,8 +33,8 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 
-	/** unlimited channels, 7 voices, 48+ pitch states */ //channels locked to one for now
-	public final ArrayList<Note> musicQueue = new ArrayList();
+	/** 16 channels, 7 voices, 48+ pitch states */ //channels locked to one for now
+	public final ArrayList<Note>[] musicQueue = new ArrayList[16];
 
 	private boolean isOneTimePlaying = false;
 
@@ -44,11 +44,19 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public static final int LOOPPOWER = 1024;
 
-	private int playDelay = 0;
-	private int playIndex = 0;
+	private int[] playDelay = new int[16];
+	private int[] playIndex = new int[16];
 
 	public TileEntityMusicBox() {
 		super();
+	}
+
+	public int getMusicLength() {
+		int size = -1;
+		for (int i = 0; i < 16; i++) {
+			size = Math.max(size, musicQueue[i].size());
+		}
+		return size;
 	}
 
 	@Override
@@ -61,7 +69,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				this.read();
 		}
 
-		if (musicQueue.isEmpty()) {
+		if (musicQueue[0].isEmpty()) {
 			this.addNote(0, new Note(NoteLength.EIGHTH, 18, Instrument.GUITAR));
 			this.addNote(0, new Note(NoteLength.EIGHTH, 22, Instrument.GUITAR));
 			this.addNote(0, new Note(NoteLength.EIGHTH, 25, Instrument.GUITAR));
@@ -102,50 +110,70 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		if (power < LOOPPOWER) {
 			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				isOneTimePlaying = true;
-				playIndex = 0;
-				tickcount = 0;
-				playDelay = 0;
+				this.startPlaying();
 			}
 			if (!ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower) && !isOneTimePlaying) {
 				lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
-				tickcount = 0;
-				playIndex = 0;
-				playDelay = 0;
+				this.startPlaying();
 				return;
 			}
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
 		else {
-			if (playIndex == musicQueue.size())
-				playIndex = 0;
+			if (this.isAtEnd())
+				this.resetPlayback();
 		}
 		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay, Side.SERVER);
 
-		if (playDelay > 0)
-			playDelay--;
-		if (playDelay == 0) {
-			if (!musicQueue.isEmpty()) {
-				if (playIndex < musicQueue.size()) {
-					Note n = musicQueue.get(playIndex);
-					if (n != null) {
-						if (!world.isRemote)
-							this.playNote(n);
+		for (int i = 0; i < 16; i++) {
+			if (playDelay[i] > 0)
+				playDelay[i]--;
+			if (playDelay[i] == 0) {
+				if (!musicQueue[i].isEmpty()) {
+					if (playIndex[i] < musicQueue[i].size()) {
+						Note n = musicQueue[i].get(playIndex[i]);
+						if (n != null) {
+							if (!world.isRemote)
+								this.playNote(i, n);
+						}
 					}
 				}
-			}
-			else {
-				playIndex = 0;
+				else {
+					this.resetPlayback();
+				}
 			}
 		}
 
 		//ReikaJavaLibrary.pConsole(playIndex+":"+playDelay+":"+musicQueue, Side.SERVER);
 	}
 
-	private void playNote(Note n) {
-		n.play(worldObj, xCoord, yCoord, zCoord);
+	private boolean isAtEnd() {
+		for (int i = 0; i < 16; i++) {
+			if (playIndex[i] >= this.getMusicLength())
+				return false;
+		}
+		return true;
+	}
+
+	private void resetPlayback() {
+		for (int i = 0; i < 16; i++) {
+			playIndex[i] = 0;
+		}
+	}
+
+	private void startPlaying() {
+		for (int i = 0; i < 16; i++) {
+			playIndex[i] = 0;
+			playDelay[i] = 0;
+		}
+	}
+
+	private void playNote(int channel, Note n) {
+		for (int i = 0; i < 3; i++)
+			n.play(worldObj, xCoord, yCoord, zCoord);
 		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
-		playDelay = n.length.tickLength;
-		playIndex++;
+		playDelay[channel] = n.length.tickLength;
+		playIndex[channel]++;
 	}
 
 	@Override
@@ -159,37 +187,38 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void addNote(int channel, Note n) {
-		this.addNoteAtIndex(channel, n, musicQueue.size());
+		this.addNoteAtIndex(channel, n, musicQueue[channel].size());
 	}
 
 	public void addNoteAfter(int channel, Note n, Note ref) {
-		int i = musicQueue.indexOf(ref);
+		int i = musicQueue[channel].indexOf(ref);
 		if (i != -1) {
 			this.addNoteAtIndex(channel, n, i+1);
 		}
 	}
 
 	public void addNoteBefore(int channel, Note n, Note ref) {
-		int i = musicQueue.indexOf(ref);
+		int i = musicQueue[channel].indexOf(ref);
 		if (i != -1) {
 			this.addNoteAtIndex(channel, n, i);
 		}
 	}
 
 	private void addNoteAtIndex(int channel, Note n, int index) {
-		if (index >= musicQueue.size()) {
-			musicQueue.add(n);
+		if (index >= musicQueue[channel].size()) {
+			musicQueue[channel].add(n);
 		}
 		else
-			musicQueue.add(index, n);
+			musicQueue[channel].add(index, n);
 	}
 
-	public void backspace() {
-		musicQueue.remove(musicQueue.size()-1);
+	public void backspace(int channel) {
+		musicQueue[channel].remove(musicQueue[channel].size()-1);
 	}
 
 	public void clearMusic() {
-		musicQueue.clear();
+		for (int i = 0; i < 16; i++)
+			musicQueue[i].clear();
 	}
 
 	@Override

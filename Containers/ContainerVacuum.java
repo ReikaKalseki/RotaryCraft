@@ -12,10 +12,10 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
-import Reika.DragonAPI.Base.ContainerBasicStorage;
+import Reika.DragonAPI.Base.ContainerStackingStorage;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
-public class ContainerVacuum extends ContainerBasicStorage
+public class ContainerVacuum extends ContainerStackingStorage
 {
 	private IInventory lowerVacuumInventory;
 	private int numRows;
@@ -51,8 +51,8 @@ public class ContainerVacuum extends ContainerBasicStorage
 	/**
 	 * Return this vacuum container's lower vacuum inventory.
 	 */
-	 public IInventory getLowerVacuumInventory()
-	 {
-		 return lowerVacuumInventory;
-	 }
+	public IInventory getLowerVacuumInventory()
+	{
+		return lowerVacuumInventory;
+	}
 }
