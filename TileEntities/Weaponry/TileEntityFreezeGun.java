@@ -192,7 +192,7 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
 		int slot = ReikaInventoryHelper.locateInInventory(Item.snowball.itemID, -1, inv);
-		//ReikaInventoryHelper.decrStack(slot, inv);
+		ReikaInventoryHelper.decrStack(slot, inv);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
 		v[1] = xyz[1]-yCoord;

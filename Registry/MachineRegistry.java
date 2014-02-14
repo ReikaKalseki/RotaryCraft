@@ -76,6 +76,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.TileEntityGrindstone;
 import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
@@ -292,7 +293,8 @@ public enum MachineRegistry {
 	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
 	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5),
 	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7),
-	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler");
+	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
+	GRINDSTONE(			"machine.grindstone",		BlockDMMachine.class,		TileEntityGrindstone.class,			15);
 
 	private final String name;
 	private final Class te;
@@ -826,6 +828,7 @@ public enum MachineRegistry {
 		case PILEDRIVER:
 		case GPR:
 		case PUMP:
+		case GRINDSTONE:
 			return true;
 		default:
 			return false;

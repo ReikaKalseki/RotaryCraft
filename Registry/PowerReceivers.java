@@ -90,7 +90,8 @@ public enum PowerReceivers {
 	HYDRAULIC(),
 	DYNAMO(),
 	CRYSTALLIZER(1, 1024, 2048),
-	BUSCONTROLLER();
+	BUSCONTROLLER(),
+	GRINDSTONE(256, 1, 16384);
 
 	private final int minT;
 	private final int minS;
