@@ -20,7 +20,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Base.OneSlotMachine;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -48,8 +47,17 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		if (world.isRemote)
 			return;
 
-		if (this.hasValidItem())
+		if (this.hasValidItem()) {
+			this.createUsesTag();
 			this.repair();
+		}
+	}
+
+	private void createUsesTag() {
+		if (inv[0].stackTagCompound == null)
+			inv[0].stackTagCompound = new NBTTagCompound();
+		if (!inv[0].stackTagCompound.hasKey(NBT_TAG))
+			inv[0].stackTagCompound.setInteger(NBT_TAG, inv[0].getMaxDamage()*2);
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -75,19 +83,13 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		int dmg = inv[0].getItemDamage();
 		int newdmg = dmg-1;
 		inv[0].setItemDamage(newdmg);
-		int repair = this.getRepairCount(inv[0])+1;
-		if (inv[0].stackTagCompound == null)
-			inv[0].stackTagCompound = new NBTTagCompound();
-		inv[0].stackTagCompound.setInteger(NBT_TAG, repair);
-		ReikaJavaLibrary.pConsole(this.getRepairCount(inv[0])+":"+this.getMinimumDamageForItem(inv[0]));
-	}
-
-	public int getRepairCount(ItemStack is) {
-		return is.stackTagCompound != null ? is.stackTagCompound.getInteger(NBT_TAG) : 0;
+		int repair = inv[0].stackTagCompound.getInteger(NBT_TAG);
+		inv[0].stackTagCompound.setInteger(NBT_TAG, repair-1);
+		//ReikaJavaLibrary.pConsole(inv[0].stackTagCompound);
 	}
 
 	public int getMinimumDamageForItem(ItemStack is) {
-		return is.stackTagCompound != null ? MathHelper.ceiling_float_int(is.stackTagCompound.getInteger(NBT_TAG)/(float)is.getMaxDamage()) : 0;
+		return is.stackTagCompound != null && is.stackTagCompound.hasKey(NBT_TAG) ? is.getMaxDamage()-MathHelper.ceiling_float_int(is.stackTagCompound.getInteger(NBT_TAG)/2F) : 0;
 	}
 
 	public boolean hasValidItem() {
