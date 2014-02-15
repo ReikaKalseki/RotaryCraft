@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.item.ItemShears;
@@ -5,17 +14,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver implements DiscreteFunction, ConditionalOperation {
+public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver implements DiscreteFunction, ConditionalOperation, OneSlotMachine {
 
 	ItemStack[] inv = new ItemStack[1];
 
@@ -61,11 +73,13 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 
 	private void repair() {
 		int dmg = inv[0].getItemDamage();
-		inv[0].setItemDamage(dmg-1);
+		int newdmg = dmg-1;
+		inv[0].setItemDamage(newdmg);
 		int repair = this.getRepairCount(inv[0])+1;
 		if (inv[0].stackTagCompound == null)
 			inv[0].stackTagCompound = new NBTTagCompound();
 		inv[0].stackTagCompound.setInteger(NBT_TAG, repair);
+		ReikaJavaLibrary.pConsole(this.getRepairCount(inv[0])+":"+this.getMinimumDamageForItem(inv[0]));
 	}
 
 	public int getRepairCount(ItemStack is) {
@@ -73,7 +87,7 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	public int getMinimumDamageForItem(ItemStack is) {
-		return is.stackTagCompound != null ? is.stackTagCompound.getInteger(NBT_TAG) : 0;
+		return is.stackTagCompound != null ? MathHelper.ceiling_float_int(is.stackTagCompound.getInteger(NBT_TAG)/(float)is.getMaxDamage()) : 0;
 	}
 
 	public boolean hasValidItem() {

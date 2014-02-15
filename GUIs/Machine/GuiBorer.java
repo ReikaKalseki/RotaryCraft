@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Instantiable.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;

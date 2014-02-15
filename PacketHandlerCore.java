@@ -357,16 +357,32 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case MUSIC:
 				music = (TileEntityMusicBox)te;
 				if (control == PacketRegistry.MUSIC.getMinValue()) {
-					Note n = new Note(NoteLength.EIGHTH, data[0], Instrument.GUITAR);
+					Note n = new Note(NoteLength.values()[data[2]], data[0], Instrument.values()[data[3]]);
 					for (int i = 0; i < 3; i++)
 						n.play(world, x, y, z);
-					music.addNote(0, n);
+					music.addNote(data[1], n);
 				}
 				if (control == PacketRegistry.MUSIC.getMinValue()+1) {
 					music.save();
 				}
 				if (control == PacketRegistry.MUSIC.getMinValue()+2) {
 					music.read();
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+3) {
+					music.loadDemo();
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+4) {
+					Note n = new Note(NoteLength.values()[data[1]], 0, Instrument.GUITAR);
+					music.addRest(data[0], n);
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+5) {
+					music.backspace(data[0]);
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+6) {
+					music.clearChannel(data[0]);
+				}
+				if (control == PacketRegistry.MUSIC.getMinValue()+7) {
+					music.clearMusic();
 				}
 				break;
 			case VACUUM:
@@ -501,6 +517,9 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		catch (NullPointerException e) {
 			ReikaJavaLibrary.pConsole("Machine/item was deleted before its packet could be received!");
 			ReikaChatHelper.writeString("Machine/item was deleted before its packet could be received!");
+			e.printStackTrace();
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

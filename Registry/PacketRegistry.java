@@ -76,6 +76,8 @@ public enum PacketRegistry {
 	}
 
 	public int getNumberDataInts() {
+		if (this == MUSIC)
+			return 4;
 		if (this == CANNON)
 			return 2;
 		if (this == REDGEAR)

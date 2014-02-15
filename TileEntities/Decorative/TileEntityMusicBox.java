@@ -9,12 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -33,8 +36,8 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 
-	/** 16 channels, 7 voices, 48+ pitch states */ //channels locked to one for now
-	public final ArrayList<Note>[] musicQueue;
+	/** 16 channels, 7 voices, 64 pitch states */
+	private final ArrayList<Note>[] musicQueue;
 
 	private boolean isOneTimePlaying = false;
 
@@ -47,6 +50,12 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private int[] playDelay = new int[16];
 	private int[] playIndex = new int[16];
 
+	private static final Color[] channelColors = {
+		new Color(0x3636FF), new Color(0xD336FF), new Color(0xFFACAC), new Color(0xFF3636), new Color(0xFFAC36), new Color(0xD3D336),
+		new Color(0x65BC8F), new Color(0x36D336), new Color(0x36FFFF), new Color(0x58ABF9), new Color(0x8484FF), new Color(0xFF36FF),
+		new Color(0x8436FF), new Color(0xB49C8A), new Color(0x8FA9B5), new Color(0x94B581)
+	};
+
 	public TileEntityMusicBox() {
 		super();
 
@@ -54,6 +63,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		for (int i = 0; i < 16; i++) {
 			musicQueue[i] = new ArrayList();
 		}
+	}
+
+	public static Color getColorForChannel(int channel) {
+		return channelColors[channel];
 	}
 
 	public int getMusicLength() {
@@ -64,10 +77,28 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		return size;
 	}
 
+	public int getChannelLength(int channel) {
+		return musicQueue[channel].size();
+	}
+
+	public ArrayList<Note> getNotesAtIndex(int index) {
+		ArrayList<Note> li = new ArrayList();
+		for (int i = 0; i < 16; i++) {
+			if (musicQueue[i].size() > index)
+				li.add(musicQueue[i].get(index));
+		}
+		return li;
+	}
+
+	public List<Note> getNotesInChannel(int channel) {
+		return ReikaJavaLibrary.copyList(musicQueue[channel]);
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
+		//ReikaJavaLibrary.pConsole(Arrays.toString(musicQueue), Side.SERVER);
 
 		if (this.getTicksExisted() == 0) {
 			if (this.hasSavedFile())
@@ -147,9 +178,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	private void playNote(int channel, Note n) {
-		for (int i = 0; i < 3; i++)
-			n.play(worldObj, xCoord, yCoord, zCoord);
-		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
+		if (!n.isRest()) {
+			for (int i = 0; i < 3; i++)
+				n.play(worldObj, xCoord, yCoord, zCoord);
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
+		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;
 	}
@@ -165,38 +198,25 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void addNote(int channel, Note n) {
-		this.addNoteAtIndex(channel, n, musicQueue[channel].size());
+		musicQueue[channel].add(n);
 	}
 
-	public void addNoteAfter(int channel, Note n, Note ref) {
-		int i = musicQueue[channel].indexOf(ref);
-		if (i != -1) {
-			this.addNoteAtIndex(channel, n, i+1);
-		}
-	}
-
-	public void addNoteBefore(int channel, Note n, Note ref) {
-		int i = musicQueue[channel].indexOf(ref);
-		if (i != -1) {
-			this.addNoteAtIndex(channel, n, i);
-		}
-	}
-
-	private void addNoteAtIndex(int channel, Note n, int index) {
-		if (index >= musicQueue[channel].size()) {
-			musicQueue[channel].add(n);
-		}
-		else
-			musicQueue[channel].add(index, n);
+	public void addRest(int channel, Note n) {
+		n = n.getRest();
+		musicQueue[channel].add(n);
 	}
 
 	public void backspace(int channel) {
 		musicQueue[channel].remove(musicQueue[channel].size()-1);
 	}
 
+	public void clearChannel(int channel) {
+		musicQueue[channel].clear();
+	}
+
 	public void clearMusic() {
 		for (int i = 0; i < 16; i++)
-			musicQueue[i].clear();
+			this.clearChannel(i);
 	}
 
 	@Override
@@ -281,15 +301,21 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
 		String path = save.getPath().substring(2)+"/RotaryCraft/"+name;
-		this.readFile(path);
+		this.readFile(path, false);
 	}
 
-	private void readFile(String path) {
+	private void readFile(String path, boolean internal) {
 		this.clearMusic();
+		int linecount = -1;
 		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
+			BufferedReader p;
+			if (internal)
+				p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
+			else
+				p = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
 			String line = p.readLine();
 			while (line != null) {
+				linecount++;
 				String[] pieces = line.split(";");
 				for (int i = 0; i < 16; i++) {
 					Note n = Note.getFromSerialString(pieces[i]);
@@ -303,14 +329,17 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			p.close();
 		}
 		catch (Exception e) {
+			if (linecount >= 0)
+				ReikaJavaLibrary.pConsole("LINE "+linecount+":\n");
 			e.printStackTrace();
 			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
 		}
 	}
 
 	public void loadDemo() {
-		String path = "Resources/demomusic.txt";
-		this.readFile(path);
+		String path = "Resources/demomusic.rcmusic";
+		this.readFile(path, true);
+		isOneTimePlaying = true;
 	}
 
 	@Override
@@ -358,7 +387,18 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return notes[pitch%12];
 		}
 
+		public boolean isRest() {
+			return pitch < 0;
+		}
+
+		public Note getRest() {
+			return new Note(length, -1, voice);
+		}
+
 		public void play(World world, int x, int y, int z) {
+			if (this.isRest())
+				return;
+
 			String pit;
 			float pitch = (float)Math.pow(2.0D, (this.pitch-24)/12.0D);
 			float volume = 200/100F;
@@ -407,6 +447,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		@Override
 		public String toString() {
+			if (this.isRest()) {
+				return ReikaStringParser.capFirstChar(length.name())+" Rest";
+			}
 			StringBuilder sb = new StringBuilder();
 			sb.append(voice);
 			sb.append(" plays ");

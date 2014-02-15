@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.OneSlotContainer;
-import Reika.DragonAPI.Instantiable.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;

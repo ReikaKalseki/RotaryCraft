@@ -120,7 +120,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
-		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt()*RotaryConfig.MILLIBUCKET, FluidRegistry.getFluid("jet fuel"));
+		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt(), FluidRegistry.getFluid("jet fuel"));
 	}
 
 	public boolean process() {

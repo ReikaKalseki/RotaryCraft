@@ -25,7 +25,7 @@ public enum DifficultyEffects {
 	BONUSSTEEL(2D, 1D, 0.5D),
 	JETFAILURE(4500, 1800, 900),
 	CONSUMEFRAC(0.03125F, 0.25F, 0.75F),
-	PRODUCEFRAC(new int[]{8,16}, new int[]{5,11}, new int[]{2,4}),
+	PRODUCEFRAC(new int[]{1600,3200}, new int[]{1000,2200}, new int[]{400,800}),
 	BREAKCOIL(16, 4, 1),
 	FURNACEMELT(1800, 600, 150),
 	CANOLA(new int[]{128,280}, new int[]{64,160}, new int[]{8,64});
