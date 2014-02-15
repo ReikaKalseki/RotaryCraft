@@ -173,27 +173,29 @@ public class BlockShaft extends BlockModelledMachine {
 		if (sha != null) {
 			if (sha.failed) {
 				ItemStack todrop = null;
-				switch(sha.type) {
-				case WOOD:
-					todrop = new ItemStack(Block.planks.blockID, 5, 0);
-					break;
-				case STONE:
-					todrop = new ItemStack(ReikaItemHelper.cobbleSlab.itemID, 5, ReikaItemHelper.cobbleSlab.getItemDamage());
-					break;
-				case STEEL:
-					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-					break;
-				case DIAMOND:
-					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-					break;
-				case BEDROCK:
-					todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
-					break;
+				if (par5Random.nextInt(8) == 0) {
+					switch(sha.type) {
+					case WOOD:
+						todrop = new ItemStack(Block.planks.blockID, 5, 0);
+						break;
+					case STONE:
+						todrop = new ItemStack(ReikaItemHelper.cobbleSlab.itemID, 5, ReikaItemHelper.cobbleSlab.getItemDamage());
+						break;
+					case STEEL:
+						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+						break;
+					case DIAMOND:
+						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+						break;
+					case BEDROCK:
+						todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+						break;
+					}
+					EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+					item.delayBeforeCanPickup = 10;
+					if (!world.isRemote && !ep.capabilities.isCreativeMode)
+						world.spawnEntityInWorld(item);
 				}
-				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-				item.delayBeforeCanPickup = 10;
-				if (!world.isRemote && !ep.capabilities.isCreativeMode)
-					world.spawnEntityInWorld(item);
 			}
 			else if (sha.getBlockMetadata() < 6) {
 				int metat = sha.type.ordinal();

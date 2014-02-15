@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import icbm.api.IMissile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -204,6 +206,12 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 				tickcount = 0;
 			}
 			if (ModExplosiveHandler.getInstance().isModExplosive(threat)) {
+				threat.setDead();
+				if (!world.isRemote)
+					world.createExplosion(null, x, y, z, 4F, true);
+				tickcount = 0;
+			}
+			if (threat instanceof IMissile) {
 				threat.setDead();
 				if (!world.isRemote)
 					world.createExplosion(null, x, y, z, 4F, true);

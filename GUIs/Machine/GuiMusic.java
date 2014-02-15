@@ -304,12 +304,16 @@ public class GuiMusic extends GuiNonPoweredMachine
 			ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/GUI/musicbuttons.png");
 			this.drawTexturedModalRect(guiX, guiY, 0, 64, 232, 37);
 
+			Minecraft mc = Minecraft.getMinecraft();
 			GL11.glEnable(GL11.GL_BLEND);
 			for (int i = 0; i < keyList.size(); i++) {
 				PianoKey key = keyList.get(i);
-				key.drawButton(Minecraft.getMinecraft(), 0, 0);
+				key.drawButton(mc, 0, 0);
 			}
 			GL11.glDisable(GL11.GL_BLEND);
+
+			mc.fontRenderer.drawString("F", guiX-6, guiY+28, 0);
+			mc.fontRenderer.drawString("F", guiX+233, guiY+28, 0);
 		}
 	}
 

@@ -90,7 +90,7 @@ public enum ItemRegistry implements RegistryEnum {
 	VACUUM(160, true, 			"item.vacuum", 				ItemVacuum.class),
 	STUNGUN(192, true, 			"item.stungun", 			ItemStunGun.class),
 	GRAVELGUN(176, true, 		"item.gravelgun", 			ItemGravelGun.class),
-	FIREBALL(224, 232, true, 	"item.fireball", 			ItemFireballLauncher.class),
+	FIREBALL(224, 232, true, 	"item.firelauncher",		ItemFireballLauncher.class),
 	BEDPICK(101, false, 		"item.bedpick", 			ItemBedrockPickaxe.class),
 	BEDAXE(100, false, 			"item.bedaxe", 				ItemBedrockAxe.class),
 	BEDSHOVEL(102, false, 		"item.bedshovel", 			ItemBedrockShovel.class),

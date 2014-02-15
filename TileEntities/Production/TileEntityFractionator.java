@@ -18,7 +18,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -90,7 +89,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
-		power = omega * torque;
+		power = (long)omega * (long)torque;
 		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE*1000) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket.copy();
@@ -125,7 +124,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	public boolean process() {
 		//ReikaJavaLibrary.pConsole(tank.getLevel()+":"+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*RotaryConfig.MILLIBUCKET)+":"+CAPACITY);
-		if (tank.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*RotaryConfig.MILLIBUCKET) >= CAPACITY)
+		if (tank.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()) >= CAPACITY)
 			return false;
 		boolean allitems = this.getAllIngredients();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));
