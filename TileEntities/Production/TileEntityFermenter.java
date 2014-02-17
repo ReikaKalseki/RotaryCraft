@@ -530,7 +530,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	@Override
 	public int getOperationTime() {
 		int base = DurationRegistry.FERMENTER.getOperationTime(omega);
-		return (int)(base/this.getFermentRate());
+		return Math.max(1, (int)(base/this.getFermentRate()));
 	}
 
 	@Override

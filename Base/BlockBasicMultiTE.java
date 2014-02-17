@@ -57,6 +57,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
+import Reika.JetPlane.Entity.EntityFighterJet;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -192,6 +193,11 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
+
+		EntityFighterJet ac = new EntityFighterJet(world);
+		ac.setPosition(x, y+2, z);
+		if (!world.isRemote)
+			world.spawnEntityInWorld(ac);
 
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);

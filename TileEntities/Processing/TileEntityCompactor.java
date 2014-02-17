@@ -579,6 +579,8 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 
 	@Override
 	public String getOperationalStatus() {
+		if (inv[0] == null)
+			return "Missing Items";
 		if (temperature < RecipesCompactor.getRecipes().getReqTemperature(inv[0]))
 			return "Insufficient Temperature";
 		if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]))

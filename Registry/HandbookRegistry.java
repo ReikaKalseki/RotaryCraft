@@ -24,17 +24,25 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
+import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
-public enum HandbookRegistry {
+public enum HandbookRegistry implements HandbookEntry {
 
 	//---------------------TOC--------------------//
 	TOC("Table of Contents", "TOC"),
 	MISC(),
 	ENGINES(),
 	TRANS(),
-	MACHINES(),
+	PRODMACHINES(),
+	PROCMACHINES(),
+	FARMMACHINES(),
+	ACCMACHINES(),
+	WEPMACHINES(),
+	SURVMACHINES(),
+	COSMACHINES(),
+	UTILMACHINES(),
 	TOOLS(),
 	RESOURCE(),
 	//---------------------INFO--------------------//
@@ -202,6 +210,7 @@ public enum HandbookRegistry {
 	BEAMMIRROR(MachineRegistry.BEAMMIRROR),
 	SONICBORER(MachineRegistry.SONICBORER),
 	DEFOLIATOR(MachineRegistry.DEFOLIATOR),
+	GRINDSTONE(MachineRegistry.GRINDSTONE),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
@@ -587,7 +596,7 @@ public enum HandbookRegistry {
 		int id = 0;
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen) {
-				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0*tabList[i].getTabColumn(), 0*tabList[i].getTabRow(), tabList[i].getTabImageFile(), RotaryCraft.class));
+				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0, 0, tabList[i].getTabImageFile(), RotaryCraft.class));
 				//ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
 				id++;
 			}
@@ -596,7 +605,8 @@ public enum HandbookRegistry {
 
 	public static HandbookRegistry getEntry(int screen, int page) {
 		//ReikaJavaLibrary.pConsole(screen+"   "+page);
-
+		if (screen < TERMS.getScreen())
+			return TOC;
 		HandbookRegistry h = HandbookAuxData.getMapping(screen, page);
 		return h != null ? h : TOC;
 		//throw new RuntimeException("Handbook screen "+screen+" and page "+page+" do not correspond to an entry!");
@@ -618,6 +628,8 @@ public enum HandbookRegistry {
 		if (this == TOC)
 			return true;
 		if (this == TIERS)
+			return false;
+		if (this == TIMING)
 			return false;
 		if (this.getParent() == TERMS)
 			return true;
@@ -931,8 +943,22 @@ public enum HandbookRegistry {
 			return ItemRegistry.SCREWDRIVER.getStackOf();
 		if (this == TRANS)
 			return MachineRegistry.GEARBOX.getCraftedMetadataProduct(RotaryNames.getNumberGearTypes()-3);
-		if (this == MACHINES)
+		if (this == PRODMACHINES)
+			return MachineRegistry.BEDROCKBREAKER.getCraftedProduct();
+		if (this == PROCMACHINES)
+			return MachineRegistry.EXTRACTOR.getCraftedProduct();
+		if (this == FARMMACHINES)
+			return MachineRegistry.FAN.getCraftedProduct();
+		if (this == ACCMACHINES)
+			return MachineRegistry.FRICTION.getCraftedProduct();
+		if (this == WEPMACHINES)
 			return MachineRegistry.RAILGUN.getCraftedProduct();
+		if (this == COSMACHINES)
+			return MachineRegistry.MUSICBOX.getCraftedProduct();
+		if (this == SURVMACHINES)
+			return MachineRegistry.GPR.getCraftedProduct();
+		if (this == UTILMACHINES)
+			return MachineRegistry.FLOODLIGHT.getCraftedProduct();
 		if (this == TOOLS)
 			return ItemRegistry.MOTION.getStackOf();
 		if (this == RESOURCE)
@@ -1012,6 +1038,11 @@ public enum HandbookRegistry {
 		if (this == TIERS)
 			return true;
 		return false;
+	}
+
+	@Override
+	public boolean hasMachineRender() {
+		return this.isEngine() || this.isTrans() || this.isMachine();
 	}
 
 }

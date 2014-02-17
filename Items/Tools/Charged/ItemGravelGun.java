@@ -61,36 +61,45 @@ public class ItemGravelGun extends ItemChargedTool {
 				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
 				if (!ep.equals(ent) && this.isEntityAttackable(ent) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
 					double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
-					ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);
-					EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, fl);
-					ei.delayBeforeCanPickup = 100;
-					ei.motionX = look.xCoord/look.lengthVector()*dist/5;
-					ei.motionY = look.yCoord/look.lengthVector()*dist/5;
-					ei.motionZ = look.zCoord/look.lengthVector()*dist/5;
-					//ReikaChatHelper.writeCoords(world, ei.posX, ei.posY, ei.posZ);
+					double x = ep.posX+look.xCoord;
+					double y = ep.posY+ep.getEyeHeight()+look.yCoord;
+					double z = ep.posZ+look.zCoord;
+					double dx = ent.posX-ep.posX;
+					double dy = ent.posY-ep.posY;
+					double dz = ent.posZ-ep.posZ;
 					if (!world.isRemote) {
+						ItemStack fl = new ItemStack(Item.flint);
+						EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, fl);
+						ei.delayBeforeCanPickup = 100;
+						ei.motionX = dx;
+						ei.motionY = dy+1;
+						ei.motionZ = dz;
+						//ReikaChatHelper.writeCoords(world, ei.posX, ei.posY, ei.posZ);
 						ei.velocityChanged = true;
 						world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
+						ei.lifespan = 5;
 						world.spawnEntityInWorld(ei);
+
+						if (is.getItemDamage() > 4096) { //approx the 1-hit kill of a 10-heart mob
+							//ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.GRAVELGUN.getMinValue(), world, (int)ent.posX, (int)ent.posY, (int)ent.posZ);
+							//world.playSoundAtEntity(ep, "random.explode", 0.25F, 1F);
+						}
+						if (ent instanceof EntityDragon) {
+							EntityDragon ed = (EntityDragon)ent;
+							ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
+						}
+						else {
+							int dmg = this.getAttackDamage(is);
+							ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), dmg);
+							if (dmg >= 500)
+								RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
+						}
+						if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 80)
+							RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 					}
-					if (is.getItemDamage() > 4096) { //approx the 1-hit kill of a 10-heart mob
-						//ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.GRAVELGUN.getMinValue(), world, (int)ent.posX, (int)ent.posY, (int)ent.posZ);
-						//world.playSoundAtEntity(ep, "random.explode", 0.25F, 1F);
-					}
-					if (ent instanceof EntityDragon) {
-						EntityDragon ed = (EntityDragon)ent;
-						ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
-					}
-					else {
-						int dmg = this.getAttackDamage(is);
-						ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), dmg);
-						if (dmg >= 500)
-							RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
-					}
-					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 80)
-						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
-					//ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
-					//ent.setRevengeTarget(ep);
+					//ReikaWorldHelper.spawnParticleLine(world, x, y, z, ent.posX, ent.posY+ent.height/2, ent.posZ, "crit", 0, 0, 0, 60);
+					for (float t = 0; t < 2; t += 0.05F)
+						world.spawnParticle("crit", x, y, z, dx/dist*t, dy/dist*t, dz/dist*t);
 				}
 			}
 			if (infov.size() > 0 && !(infov.size() == 1 && infov.get(0) instanceof EntityPlayer)) {

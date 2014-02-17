@@ -12,29 +12,11 @@ package Reika.RotaryCraft.GUIs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.Registry.HandbookRegistry;
 
 public class GuiHandbookPage extends GuiHandbook {
 
 	public GuiHandbookPage(EntityPlayer p5ep, World world, int sc, int pg) {
 		super(p5ep, world, sc, pg);
-	}
-
-	@Override
-	public void initGui() {
-		buttonList.clear();
-
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2 - 8;
-
-		buttonList.add(new GuiButton(12, j+xSize-27, k+6, 20, 20, "X"));	//Close gui button
-
-		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-
-		if (h.hasSubpages()) {
-			buttonList.add(new GuiButton(13, j+xSize-27, k+40, 20, 20, ">"));
-			buttonList.add(new GuiButton(14, j+xSize-27, k+60, 20, 20, "<"));
-		}
 	}
 
 	@Override
