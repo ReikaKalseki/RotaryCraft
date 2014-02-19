@@ -12,11 +12,13 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.util.ArrayList;
 
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+import codechicken.nei.recipe.DefaultOverlayHandler;
 
 public class NEI_RotaryConfig implements IConfigureNEI {
 
@@ -36,6 +38,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		RotaryCraft.logger.log("Loading NEI Compatibility!");
 		API.registerRecipeHandler(worktable);
 		API.registerUsageHandler(worktable);
+		API.registerGuiOverlayHandler(GuiWorktable.class, new DefaultOverlayHandler(), "crafting");
 
 		API.registerRecipeHandler(toolCharge);
 		API.registerUsageHandler(toolCharge);

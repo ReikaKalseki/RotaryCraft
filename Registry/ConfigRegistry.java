@@ -19,7 +19,7 @@ public enum ConfigRegistry implements ConfigList {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	GPRORES("GPR Renders Ores", true),
-	INSTACUT("Instant Woodcutter", true, true),
+	INSTACUT("Instant Woodcutter", true),
 	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
 	LOGLOADING("Console Loading Info", true),
@@ -42,7 +42,7 @@ public enum ConfigRegistry implements ConfigList {
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
-	ACHIEVEMENTS("Enable Achievements", true, true),
+	ACHIEVEMENTS("Enable Achievements", true),
 	MODORES("Force Inter-Mod Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),

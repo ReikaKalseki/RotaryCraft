@@ -77,7 +77,7 @@ public class GuiHandbook extends GuiScreen
 	private static int staticwidth;
 	private static int staticheight;
 
-	private float renderq = 22.5F;
+	protected float renderq = 22.5F;
 
 	protected static final RenderBlocks rb = new RenderBlocks();
 
@@ -456,7 +456,7 @@ public class GuiHandbook extends GuiScreen
 		return HandbookRegistry.getEntry(screen, page);
 	}
 
-	protected final void bindTexture() {
+	protected void bindTexture() {
 		String var4 = this.getBackgroundTexture();
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 	}

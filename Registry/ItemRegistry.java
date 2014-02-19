@@ -57,6 +57,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShovel;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSword;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemFireballLauncher;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemFlamethrower;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemGravelGun;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemNightVisionGoggles;
@@ -129,7 +130,8 @@ public enum ItemRegistry implements RegistryEnum {
 	BEDSWORD(23, false,			"item.bedrocksword",		ItemBedrockSword.class),
 	STEELSWORD(24, false,		"item.steelsword",			ItemSteelSword.class),
 	BEDSHEARS(25, false,		"item.bedrockshears",		ItemBedrockShears.class),
-	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class);
+	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class),
+	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -232,7 +234,7 @@ public enum ItemRegistry implements RegistryEnum {
 		return null;
 	}
 
-	private boolean isJetpack() {
+	public boolean isJetpack() {
 		if (this == JETPACK || this == BEDPACK)
 			return true;
 		return false;

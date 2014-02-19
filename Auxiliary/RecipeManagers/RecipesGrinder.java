@@ -96,6 +96,8 @@ public class RecipesGrinder {
 		this.addRecipe(Block.oreDiamond, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 29), 0F);
 		this.addRecipe(Block.oreEmerald, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 30), 0F);
 		this.addRecipe(Block.oreNetherQuartz, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 31), 0.7F);
+
+		this.addRecipe(Item.coal, new ItemStack(RotaryCraft.extracts.itemID, 1, 24), 0);
 	}
 
 	public boolean isGrindable(ItemStack item) {

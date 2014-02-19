@@ -961,4 +961,14 @@
 		<note>
 		</note>
 	</lawnsprinkler>
+	<grindstone>
+		<desc>
+			The grindstone is used to sharpen and repair tools without spending additional material. Because this reduces the amount of material in the tool, it cannot fully repair a tool, and the tool will gradually degrade until it is no longer able to be repaired.
+		</desc>
+		<note>
+			Power Input: Back
+			Required Power: %d
+			Required Torque: %d Nm
+		</note>
+	</grindstone>
 </machines>

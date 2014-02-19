@@ -41,6 +41,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
+import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -198,6 +199,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public void preload(FMLPreInitializationEvent evt) {
 
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
+		MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
 		MinecraftForge.EVENT_BUS.register(this);
 
 		config.loadSubfolderedConfigFile(evt);

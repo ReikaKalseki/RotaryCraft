@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.core.electricity.ElectricityPack;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -46,10 +45,6 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 			inputVoltage = voltage;
 			outputSpeed = speed;
 			outputTorque = torque;
-		}
-
-		public ElectricityPack getRequirements() {
-			return new ElectricityPack(inputCurrent, inputVoltage);
 		}
 
 		public double getPowerForDisplay() {

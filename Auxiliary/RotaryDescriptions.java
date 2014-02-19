@@ -431,5 +431,6 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
 		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque());
 		addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
+		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 	}
 }

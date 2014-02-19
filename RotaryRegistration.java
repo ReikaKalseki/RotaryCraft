@@ -119,6 +119,10 @@ public class RotaryRegistration {
 		id = EntityRegistry.findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityCustomTNT.class, "CustomTNT", id);
 		EntityRegistry.registerModEntity(EntityCustomTNT.class, "CustomTNT", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
+
+		//id = EntityRegistry.findGlobalUniqueEntityId();
+		//EntityRegistry.registerGlobalEntityID(EntityFlamethrowerFire.class, "CustomTNT", id);
+		//EntityRegistry.registerModEntity(EntityFlamethrower.class, "CustomTNT", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
 	}
 
 	public static void instantiateMachines() {
@@ -144,6 +148,8 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
+
+		OreDictionary.registerOre("dustCoal", new ItemStack(RotaryCraft.extracts.itemID, 1, 24));
 	}
 
 	public static void setupLiquids() {

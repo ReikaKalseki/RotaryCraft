@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemGravelGun extends ItemChargedTool {
@@ -90,6 +91,15 @@ public class ItemGravelGun extends ItemChargedTool {
 						}
 						else {
 							int dmg = this.getAttackDamage(is);
+							if (ent instanceof EntityPlayer) {
+								for (int n = 1; n < 5; n++) {
+									ItemRegistry ir = ItemRegistry.getEntry(ent.getCurrentItemOrArmor(n));
+									if (ir != null) {
+										if (ir.isBedrockArmor())
+											dmg *= 0.75;
+									}
+								}
+							}
 							ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), dmg);
 							if (dmg >= 500)
 								RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);

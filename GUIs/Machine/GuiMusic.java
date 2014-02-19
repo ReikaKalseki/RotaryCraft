@@ -191,6 +191,12 @@ public class GuiMusic extends GuiNonPoweredMachine
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Instrument", 200, 42, 0);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Channel Select", xSize/2, 85, 0);
 
+		int dx = (activeVoice.ordinal()-1)*16;
+		int color = TileEntityMusicBox.getColorForChannel(activeChannel).getRGB();
+		ReikaGuiAPI.instance.drawLine(152+dx, 53, 152+dx, 69, 0xff000000);
+		ReikaGuiAPI.instance.drawLine(152+dx, 53, 168+dx, 53, 0xff000000);
+		ReikaGuiAPI.instance.drawLine(168+dx, 53, 168+dx, 69, 0xff000000);
+		ReikaGuiAPI.instance.drawLine(152+dx, 69, 168+dx, 69, 0xff000000);
 
 	}
 

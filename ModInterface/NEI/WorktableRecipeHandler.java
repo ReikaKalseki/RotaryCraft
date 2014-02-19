@@ -27,6 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import codechicken.nei.PositionedStack;
+import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class WorktableRecipeHandler extends TemplateRecipeHandler {
@@ -73,6 +74,12 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 	@Override
 	public String getGuiTexture() {
 		return "/Reika/RotaryCraft/Textures/GUI/worktablegui.png";
+	}
+
+	@Override
+	public String getOverlayIdentifier()
+	{
+		return "crafting";
 	}
 
 	@Override
@@ -133,6 +140,13 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 		}
 		RecipeTransferRect rect = new RecipeTransferRect(new Rectangle(75, 24, 18, 18), "item", (Object[])new ItemStack[]{ItemStacks.salt, ItemStacks.aluminumingot});
 		transferRects.add(rect);*/
+	}
+
+	@Override
+	public IOverlayHandler getOverlayHandler(GuiContainer gui, int recipe)
+	{
+		IOverlayHandler ioh = super.getOverlayHandler(gui, recipe);
+		return ioh;
 	}
 
 }

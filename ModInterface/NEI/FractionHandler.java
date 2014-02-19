@@ -63,7 +63,7 @@ public class FractionHandler extends TemplateRecipeHandler {
 
 	@Override
 	public String getRecipeName() {
-		return "Fractionator";
+		return "Fractionation Unit";
 	}
 
 	@Override
