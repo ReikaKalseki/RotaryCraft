@@ -112,8 +112,8 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.ELECTRICMOTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ELECTRICMOTOR;
 	}
 
 	@Override

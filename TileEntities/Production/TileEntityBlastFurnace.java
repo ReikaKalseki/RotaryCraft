@@ -448,8 +448,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BLASTFURNACE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BLASTFURNACE;
 	}
 
 	@Override

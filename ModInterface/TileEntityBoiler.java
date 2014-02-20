@@ -47,8 +47,8 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BOILER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BOILER;
 	}
 
 	@Override

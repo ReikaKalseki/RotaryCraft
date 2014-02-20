@@ -228,8 +228,8 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LANDMINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LANDMINE;
 	}
 
 	@Override

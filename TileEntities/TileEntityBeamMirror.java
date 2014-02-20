@@ -44,8 +44,8 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BEAMMIRROR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BEAMMIRROR;
 	}
 
 	@Override

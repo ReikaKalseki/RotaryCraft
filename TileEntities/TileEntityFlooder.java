@@ -118,8 +118,8 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SPILLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SPILLER;
 	}
 
 	@Override

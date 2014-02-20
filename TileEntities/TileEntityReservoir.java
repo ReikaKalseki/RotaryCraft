@@ -170,8 +170,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.RESERVOIR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.RESERVOIR;
 	}
 
 	@Override

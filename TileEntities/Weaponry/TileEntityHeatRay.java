@@ -39,7 +39,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		tickcount++;
 		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		this.scorch(world, x, y, z, meta);
 	}
 
@@ -300,8 +300,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.HEATRAY.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.HEATRAY;
 	}
 
 	@Override

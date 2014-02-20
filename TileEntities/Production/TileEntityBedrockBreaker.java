@@ -70,7 +70,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public void readPower(boolean doublesided) {
 		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return;
-		super.getPower(doublesided, false);
+		super.getPower(doublesided);
 		power = (long)omega * (long)torque;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 		return;
@@ -281,8 +281,8 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BEDROCKBREAKER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BEDROCKBREAKER;
 	}
 
 	@Override

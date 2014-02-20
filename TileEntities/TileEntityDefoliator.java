@@ -86,8 +86,8 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.DEFOLIATOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.DEFOLIATOR;
 	}
 
 	@Override

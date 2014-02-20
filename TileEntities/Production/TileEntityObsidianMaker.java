@@ -272,8 +272,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.OBSIDIAN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.OBSIDIAN;
 	}
 
 	@Override

@@ -71,6 +71,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
@@ -294,7 +295,8 @@ public enum MachineRegistry {
 	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5),
 	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7),
 	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
-	GRINDSTONE(			"machine.grindstone",		BlockDMMachine.class,		TileEntityGrindstone.class,			15);
+	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
+	BLOWER(				"machine.blower",			BlockDMMachine.class,		TileEntityBlower.class,				15);
 
 	private final String name;
 	private final Class te;
@@ -813,8 +815,8 @@ public enum MachineRegistry {
 		case LINEBUILDER:
 		case SONICBORER:
 		case BELT:
-			//case HYDRAULIC:
 		case DYNAMO:
+		case BLOWER:
 			return true;
 		default:
 			return false;

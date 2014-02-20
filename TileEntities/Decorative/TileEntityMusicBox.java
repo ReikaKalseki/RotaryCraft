@@ -343,8 +343,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MUSICBOX.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MUSICBOX;
 	}
 
 	@Override
@@ -461,11 +461,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		public String toSerialString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append(length.ordinal());
+			sb.append(length);
 			sb.append(":");
 			sb.append(pitch);
 			sb.append(":");
-			sb.append(voice.ordinal());
+			sb.append(voice);
 			return sb.toString();
 		}
 

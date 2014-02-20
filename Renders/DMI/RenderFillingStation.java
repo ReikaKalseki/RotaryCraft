@@ -194,7 +194,7 @@ public class RenderFillingStation extends RotaryTERenderer
 
 		GL11.glTranslated(xoff, 0, zoff);
 
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		v5.startDrawingQuads();
 
 		Item item = is.getItem();

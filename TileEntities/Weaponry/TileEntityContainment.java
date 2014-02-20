@@ -30,8 +30,8 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 	public static final int FALLOFF = 8192;
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CONTAINMENT.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CONTAINMENT;
 	}
 
 	@Override

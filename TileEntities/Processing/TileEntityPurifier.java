@@ -143,8 +143,8 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PURIFIER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PURIFIER;
 	}
 
 	@Override

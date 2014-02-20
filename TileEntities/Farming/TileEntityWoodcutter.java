@@ -75,7 +75,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 		treeCopy.setWorld(world);
 
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		if (power < MINPOWER || torque < MINTORQUE) {
 			return;
@@ -413,8 +413,8 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.WOODCUTTER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.WOODCUTTER;
 	}
 
 	@Override

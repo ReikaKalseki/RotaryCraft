@@ -42,8 +42,8 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SCREEN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SCREEN;
 	}
 
 	@Override

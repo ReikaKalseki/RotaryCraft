@@ -39,7 +39,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, true);
+		this.getPower(false);
 		this.updatePressure(world, x, y, z, meta);
 		if (this.canFire(world, x, y, z, meta)) {
 			this.fire(world, x, y, z, meta);
@@ -203,8 +203,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SONICBORER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SONICBORER;
 	}
 
 	@Override

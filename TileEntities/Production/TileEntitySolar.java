@@ -62,8 +62,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SOLARTOWER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SOLARTOWER;
 	}
 
 	@Override

@@ -662,8 +662,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SPLITTER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SPLITTER;
 	}
 
 	@Override

@@ -160,8 +160,8 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PLAYERDETECTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PLAYERDETECTOR;
 	}
 
 	@Override

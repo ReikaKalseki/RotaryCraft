@@ -52,8 +52,8 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SEPARATION.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SEPARATION;
 	}
 
 	@Override

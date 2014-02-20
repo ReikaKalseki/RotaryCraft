@@ -38,7 +38,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSidesDefault(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		if (power < MINPOWER)
 			return;
 
@@ -164,8 +164,8 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FILLINGSTATION.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FILLINGSTATION;
 	}
 
 	@Override

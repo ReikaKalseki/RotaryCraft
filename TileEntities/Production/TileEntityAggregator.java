@@ -60,8 +60,8 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.AGGREGATOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.AGGREGATOR;
 	}
 
 	@Override

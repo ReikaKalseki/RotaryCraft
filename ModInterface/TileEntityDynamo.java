@@ -33,8 +33,8 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.DYNAMO.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.DYNAMO;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		if (power > 0) {
 			int id = world.getBlockId(writex, writey, writez);

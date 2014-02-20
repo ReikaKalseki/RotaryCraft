@@ -33,7 +33,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+			MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -98,8 +98,8 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MULTICLUTCH.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MULTICLUTCH;
 	}
 
 	@Override

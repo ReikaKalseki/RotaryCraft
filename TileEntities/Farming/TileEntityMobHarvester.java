@@ -170,8 +170,8 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MOBHARVESTER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MOBHARVESTER;
 	}
 
 	@Override

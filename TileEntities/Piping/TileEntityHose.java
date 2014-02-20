@@ -23,8 +23,8 @@ public class TileEntityHose extends TileEntityPiping {
 	private int lubricant = 0;
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.HOSE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.HOSE;
 	}
 
 	@Override

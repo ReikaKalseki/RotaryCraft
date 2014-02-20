@@ -292,8 +292,8 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.IGNITER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.IGNITER;
 	}
 
 	@Override

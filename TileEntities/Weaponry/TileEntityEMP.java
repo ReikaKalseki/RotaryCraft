@@ -154,8 +154,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.EMP.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.EMP;
 	}
 
 	@Override

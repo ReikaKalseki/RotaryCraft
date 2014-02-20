@@ -117,8 +117,8 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SMOKEDETECTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SMOKEDETECTOR;
 	}
 
 	@Override

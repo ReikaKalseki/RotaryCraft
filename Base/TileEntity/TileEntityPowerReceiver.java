@@ -185,10 +185,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 	}
 
-	public void getPower(boolean doublesided, boolean vertical) {
+	public void getPower(boolean doublesided) {
 		this.clear();
-		if (!vertical)
-			;//this.getIOSidesDefault(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
@@ -542,14 +540,14 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		readx = xCoord;
 		ready = yCoord-1;
 		readz = zCoord;
-		this.getPower(false, true);
+		this.getPower(false);
 	}
 
 	public void getPowerAbove() {
 		readx = xCoord;
 		ready = yCoord+1;
 		readz = zCoord;
-		this.getPower(false, true);
+		this.getPower(false);
 	}
 
 	public void getSummativeSidedPower() {
@@ -571,26 +569,26 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		readx = x+1;
 		readz = z;
 		if (this.getMachine().getMaxX(this) == 1) {
-			this.getPower(false, false);
+			this.getPower(false);
 			powers[0][2] = omega;
 			powers[1][2] = torque;
 		}
 		readx = x-1;
 		if (this.getMachine().getMinX(this) == 0) {
-			this.getPower(false, false);
+			this.getPower(false);
 			powers[0][3] = omega;
 			powers[1][3] = torque;
 		}
 		readx = x;
 		readz = z+1;
 		if (this.getMachine().getMaxZ(this) == 1) {
-			this.getPower(false, false);
+			this.getPower(false);
 			powers[0][4] = omega;
 			powers[1][4] = torque;
 		}
 		readz = z-1;
 		if (this.getMachine().getMinZ(this) == 0) {
-			this.getPower(false, false);
+			this.getPower(false);
 			powers[0][5] = omega;
 			powers[1][5] = torque;
 		}

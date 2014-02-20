@@ -21,26 +21,39 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver implements DiscreteFunction, ConditionalOperation, OneSlotMachine {
 
 	ItemStack[] inv = new ItemStack[1];
 
 	private static final String NBT_TAG = "repairs";
+	private int soundtick;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(true, false);
+		this.getPower(true);
 		tickcount++;
 		if (power < MINPOWER || torque < MINTORQUE) {
 			return;
 		}
+
+		if (inv[0] != null) {
+			soundtick++;
+			if (soundtick > 49) {
+				SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
+				soundtick = 0;
+			}
+		}
+
 		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
@@ -148,12 +161,18 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-
+		if (!this.isInWorld()) {
+			phi = 0;
+			return;
+		}
+		if (power < MINPOWER)
+			return;
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.GRINDSTONE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.GRINDSTONE;
 	}
 
 	@Override

@@ -50,8 +50,8 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FUELENHANCER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FUELENHANCER;
 	}
 
 	@Override

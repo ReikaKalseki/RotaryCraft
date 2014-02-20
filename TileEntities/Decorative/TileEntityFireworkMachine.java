@@ -654,8 +654,8 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FIREWORK.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FIREWORK;
 	}
 
 	@Override

@@ -53,8 +53,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FERTILIZER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FERTILIZER;
 	}
 
 	@Override

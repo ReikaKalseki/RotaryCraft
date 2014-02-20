@@ -229,8 +229,8 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SPRINKLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SPRINKLER;
 	}
 
 

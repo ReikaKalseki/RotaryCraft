@@ -42,8 +42,8 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LINEBUILDER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LINEBUILDER;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, true);
+		this.getPower(false);
 
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;

@@ -214,8 +214,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.TNTCANNON.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.TNTCANNON;
 	}
 
 	@Override

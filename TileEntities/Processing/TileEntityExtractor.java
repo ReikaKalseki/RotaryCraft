@@ -436,8 +436,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.EXTRACTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.EXTRACTOR;
 	}
 
 	@Override

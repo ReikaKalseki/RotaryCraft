@@ -461,8 +461,8 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.HEATER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.HEATER;
 	}
 
 	@Override

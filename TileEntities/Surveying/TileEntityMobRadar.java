@@ -117,8 +117,8 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MOBRADAR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MOBRADAR;
 	}
 
 	@Override

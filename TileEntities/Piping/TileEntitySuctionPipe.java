@@ -98,8 +98,8 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SUCTION.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SUCTION;
 	}
 
 }

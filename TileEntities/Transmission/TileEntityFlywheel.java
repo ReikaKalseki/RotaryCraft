@@ -447,8 +447,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FLYWHEEL.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FLYWHEEL;
 	}
 
 	@Override

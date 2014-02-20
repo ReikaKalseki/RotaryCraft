@@ -433,7 +433,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			power = 0;
 			return;
 		}
-		MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+		MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.getBlockMetadata() >= 6) {
@@ -644,8 +644,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.ADVANCEDGEARS.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ADVANCEDGEARS;
 	}
 
 	@Override

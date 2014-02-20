@@ -59,8 +59,8 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.ITEMCANNON.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ITEMCANNON;
 	}
 
 	@Override

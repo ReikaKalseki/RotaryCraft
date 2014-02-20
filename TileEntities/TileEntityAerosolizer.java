@@ -372,8 +372,8 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.AEROSOLIZER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.AEROSOLIZER;
 	}
 
 	@Override

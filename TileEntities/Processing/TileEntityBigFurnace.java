@@ -201,8 +201,8 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BIGFURNACE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BIGFURNACE;
 	}
 
 	@Override

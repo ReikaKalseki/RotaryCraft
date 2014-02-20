@@ -31,8 +31,8 @@ public class TileEntityBusController extends PoweredLiquidReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BUSCONTROLLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BUSCONTROLLER;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		timer.update();
 

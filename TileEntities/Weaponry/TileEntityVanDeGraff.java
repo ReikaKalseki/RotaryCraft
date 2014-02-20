@@ -166,8 +166,8 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.VANDEGRAFF.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.VANDEGRAFF;
 	}
 
 	@Override

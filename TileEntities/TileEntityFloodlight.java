@@ -46,7 +46,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	}
 
 	public void getPower() {
-		super.getPower(false, true);/*
+		super.getPower(false);/*
 		lightlevel = ReikaMathLibrary.extrema(-1+(int)power/FALLOFF, 0, "max");
 		lightlevel = ReikaMathLibrary.extrema(lightlevel, 15, "absmin");*/
 		if (power >= MINPOWER)
@@ -162,8 +162,8 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FLOODLIGHT.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FLOODLIGHT;
 	}
 
 	@Override

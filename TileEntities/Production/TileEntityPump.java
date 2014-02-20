@@ -70,7 +70,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		soundtick++;
 		tickcount++;
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
-		this.getPower(true, false);
+		this.getPower(true);
 		power = (long)omega*(long)torque;
 		int idbelow = world.getBlockId(x, y-1, z);
 		if (idbelow == 0)
@@ -236,8 +236,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PUMP.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PUMP;
 	}
 
 	@Override

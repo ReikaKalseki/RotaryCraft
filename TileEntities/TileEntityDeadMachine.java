@@ -19,6 +19,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityDeadMachine extends InventoriedRCTileEntity implements InertIInv {
 
@@ -73,8 +74,8 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return 0;//MachineRegistry.DEAD.ordinal();
+	public MachineRegistry getMachine() {
+		return null;//MachineRegistry.DEAD;
 	}
 
 	@Override

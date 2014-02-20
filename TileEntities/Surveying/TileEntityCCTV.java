@@ -165,8 +165,8 @@ public class TileEntityCCTV extends RemoteControlMachine {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CCTV.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CCTV;
 	}
 
 	@Override

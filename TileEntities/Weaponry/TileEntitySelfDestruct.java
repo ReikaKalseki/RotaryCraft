@@ -24,8 +24,8 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SELFDESTRUCT.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SELFDESTRUCT;
 	}
 
 	@Override

@@ -43,15 +43,15 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MAGNETIZER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MAGNETIZER;
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		if (power < MINPOWER) {
 			tickcount = 0;
 			return;

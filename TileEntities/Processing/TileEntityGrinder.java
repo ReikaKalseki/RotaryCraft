@@ -116,7 +116,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			return;
 		}
 		//ReikaJavaLibrary.pConsole(readx+", "+ready+", "+readz, power > 0);
-		this.getPower(false, false);
+		this.getPower(false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 	}
 
@@ -353,8 +353,8 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.GRINDER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.GRINDER;
 	}
 
 	@Override

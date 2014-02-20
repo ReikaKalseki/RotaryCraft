@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.List;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
@@ -302,7 +303,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	private boolean getRequirements(World world, int x, int y, int z) {
-		if (this.isDrowned(world, x, y, z))
+		if (type.isAirBreathing() && !this.hasAir(world, x, y, z))
 			return false;
 		switch (type) {
 		case DC:
@@ -325,6 +326,17 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			return this.jetCheck(world, x, y, z);
 		}
 		return false;
+	}
+
+	private boolean hasAir(World world, int x, int y, int z) {
+		if (this.isDrowned(world, x, y, z))
+			return false;
+		if (world.provider instanceof IGalacticraftWorldProvider) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			if (ig.getSoundVolReductionAmount() > 1)
+				return false;
+		}
+		return true;
 	}
 
 	private boolean hydroCheck(World world, int x, int y, int z, int meta) {
@@ -373,9 +385,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	private float getHydroFactor(World world, int x, int y, int z, boolean isTorque) {
+		double grav = ReikaPhysicsHelper.g;
+		if (world.provider instanceof IGalacticraftWorldProvider) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			grav += ig.getGravity()*10;
+		}
 		int[] pos = this.getWaterColumnPos();
 		double dy = (ReikaWorldHelper.findWaterSurface(world, pos[0], y, pos[1])-y)-0.5;
-		double v = Math.sqrt(2*ReikaPhysicsHelper.g*dy);
+		double v = Math.sqrt(2*grav*dy);
 		double mdot = ReikaEngLibrary.rhowater*v;
 		double P = 0.25*mdot*dy;
 		if (P >= type.getPower())
@@ -485,8 +502,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	public boolean isDrowned(World world, int x, int y, int z) {
-		if (!type.isAirBreathing())
-			return false;
 		boolean flag = false;
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
@@ -1475,8 +1490,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.ENGINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ENGINE;
 	}
 
 	@Override

@@ -43,8 +43,8 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BYPASS.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BYPASS;
 	}
 
 	@Override

@@ -340,8 +340,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.VACUUM.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.VACUUM;
 	}
 
 	@Override

@@ -78,8 +78,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.TERRAFORMER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.TERRAFORMER;
 	}
 
 	@Override

@@ -255,8 +255,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SPAWNERCONTROLLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SPAWNERCONTROLLER;
 	}
 
 	@Override

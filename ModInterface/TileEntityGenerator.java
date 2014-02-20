@@ -32,8 +32,8 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.GENERATOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.GENERATOR;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		//ReikaJavaLibrary.pConsole(this.getGenCurrent()+"A * "+OUTPUT_VOLTAGE+"V = "+this.getGenCurrent()*OUTPUT_VOLTAGE+"W");
 
 		if (power > 0) {

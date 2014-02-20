@@ -556,8 +556,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SHAFT.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SHAFT;
 	}
 
 	@Override

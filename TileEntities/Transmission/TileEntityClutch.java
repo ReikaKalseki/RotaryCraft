@@ -53,7 +53,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (world.isBlockIndirectlyGettingPowered(x, y, z) && this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
-			MachineRegistry m = MachineRegistry.machineList[((RotaryCraftTileEntity)(te)).getMachineIndex()];
+			MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -109,8 +109,8 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CLUTCH.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CLUTCH;
 	}
 
 	@Override

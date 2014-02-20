@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -46,6 +47,11 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
 			return false;
+		if (world.provider instanceof IGalacticraftWorldProvider) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			if (ig.getSoundVolReductionAmount() > 1)
+				return false;
+		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 		if (m == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
@@ -194,8 +200,8 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FUELENGINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FUELENGINE;
 	}
 
 	@Override

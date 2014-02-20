@@ -52,7 +52,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		//ReikaJavaLibrary.pConsole((omega-MINSPEED)+":"+dur);
 		timer.setCap(this.getOperationTime());
@@ -174,8 +174,8 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CRYSTALLIZER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CRYSTALLIZER;
 	}
 
 	@Override

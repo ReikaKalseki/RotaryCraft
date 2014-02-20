@@ -54,7 +54,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			writex = Integer.MIN_VALUE;
 			writey = Integer.MIN_VALUE;
 			writez = Integer.MIN_VALUE;
-			this.getPower(false, true);
+			this.getPower(false);
 		}
 
 		if (omega > 0)
@@ -310,8 +310,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BELT.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BELT;
 	}
 
 	@Override

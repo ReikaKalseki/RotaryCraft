@@ -62,7 +62,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	public abstract void animateWithTick(World world, int x, int y, int z);
 
-	public abstract int getMachineIndex();
+	public abstract MachineRegistry getMachine();
 
 	public final TextureFetcher getRenderer() {
 		if (this.getMachine().hasRender())
@@ -71,18 +71,18 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return null;
 	}
 
-	public final MachineRegistry getMachine() {
-		return MachineRegistry.machineList[this.getMachineIndex()];
+	public final int getMachineIndex() {
+		return this.getMachine().ordinal();
 	}
 
 	public final String getName() {
-		return MachineRegistry.machineList[this.getMachineIndex()].getName();
+		return this.getMachine().getName();
 	}
 
 	public final String getMultiValuedName() {
-		if (MachineRegistry.machineList[this.getMachineIndex()].isMultiNamed())
-			return MachineRegistry.machineList[this.getMachineIndex()].getMultiName(this);
-		return MachineRegistry.machineList[this.getMachineIndex()].getName();
+		if (this.getMachine().isMultiNamed())
+			return this.getMachine().getMultiName(this);
+		return this.getMachine().getName();
 	}
 
 	//public abstract int getMachineIndex();
@@ -241,22 +241,22 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public String[] getMethodNames() {
-		return null;
+		return new String[]{"getName"};
 	}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return null;
+		return new Object[]{this.getTEName()};
 	}
 
 	@Override
 	public boolean canAttachToSide(int side) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public void attach(IComputerAccess computer) {
-
+		ReikaJavaLibrary.pConsole(computer);
 	}
 
 	@Override

@@ -59,8 +59,8 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LAWNSPRINKLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LAWNSPRINKLER;
 	}
 
 	@Override

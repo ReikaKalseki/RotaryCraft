@@ -36,7 +36,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		animtick++;
 		power = omega*torque;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		this.makeBeam(world, x, y, z, meta);
 	}
 
@@ -155,8 +155,8 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LIGHTBRIDGE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LIGHTBRIDGE;
 	}
 
 	@Override

@@ -140,8 +140,8 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LAVAMAKER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LAVAMAKER;
 	}
 
 	@Override

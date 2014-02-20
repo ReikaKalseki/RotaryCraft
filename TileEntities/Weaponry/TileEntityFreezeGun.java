@@ -79,8 +79,8 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FREEZEGUN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FREEZEGUN;
 	}
 
 	@Override

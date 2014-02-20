@@ -135,7 +135,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	public void readPower() {
 		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return;
-		super.getPower(false, false);
+		super.getPower(false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 		return;
 	}
@@ -384,7 +384,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getPower(false, false);
+		this.getPower(false);
 		if (envirotick >= 20) {
 			this.updatePressure(world, x, y, z, meta);
 			this.updateTemperature(world, x, y, z, meta);
@@ -516,8 +516,8 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.COMPACTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.COMPACTOR;
 	}
 
 	@Override

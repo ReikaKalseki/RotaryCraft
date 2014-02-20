@@ -61,7 +61,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, true);
+		this.getPower(false);
 		power = (long)omega*(long)torque;
 		this.makeBeam(world, x, y, z, meta);
 		sound.update();
@@ -373,8 +373,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FAN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FAN;
 	}
 
 	@Override

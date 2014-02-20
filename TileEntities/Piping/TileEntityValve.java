@@ -43,8 +43,8 @@ public class TileEntityValve extends TileEntityPiping {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.VALVE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.VALVE;
 	}
 
 	@Override

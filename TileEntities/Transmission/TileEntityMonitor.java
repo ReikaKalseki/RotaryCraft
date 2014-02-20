@@ -110,8 +110,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.DYNAMOMETER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.DYNAMOMETER;
 	}
 
 	@Override

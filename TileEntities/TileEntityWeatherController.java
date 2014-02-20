@@ -295,8 +295,8 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.WEATHERCONTROLLER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.WEATHERCONTROLLER;
 	}
 
 	@Override

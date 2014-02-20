@@ -30,7 +30,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
@@ -151,8 +151,8 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.AIRGUN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.AIRGUN;
 	}
 
 	@Override

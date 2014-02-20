@@ -479,8 +479,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.GEARBOX.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.GEARBOX;
 	}
 
 	@Override

@@ -183,8 +183,8 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CAVESCANNER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CAVESCANNER;
 	}
 
 	@Override

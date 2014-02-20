@@ -35,7 +35,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		AxisAlignedBB box = this.getBox();
 		List<EntityItem> li = world.getEntitiesWithinAABB(EntityItem.class, box);
 		this.sortItems(world, x, y, z, li);
@@ -149,8 +149,8 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SORTING.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SORTING;
 	}
 
 	@Override

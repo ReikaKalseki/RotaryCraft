@@ -177,8 +177,8 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LASERGUN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LASERGUN;
 	}
 
 	@Override

@@ -66,8 +66,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PNEUENGINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PNEUENGINE;
 	}
 
 	@Override
@@ -94,8 +94,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 			storedEnergy = (int)pp.getEnergyStored();
 		if (storedEnergy < 0)
 			storedEnergy = (int)pp.getMaxEnergyStored();
-
-		//ReikaJavaLibrary.pConsoleSideOnly(this.getMJPerTick()+" && "+pp.getEnergyStored(), Side.SERVER);
 
 		if (!this.hasEnoughEnergy()) {
 			torque = 0;

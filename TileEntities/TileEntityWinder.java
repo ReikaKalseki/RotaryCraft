@@ -53,7 +53,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getPower(false, false);
+		this.getPower(false);
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
 		if (inslot[0] == null) {
@@ -234,8 +234,8 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.WINDER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.WINDER;
 	}
 
 	@Override

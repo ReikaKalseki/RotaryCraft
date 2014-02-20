@@ -157,7 +157,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		if (this.testInconsistentPower())
 			return;
 		if (power < MINPOWER) {
@@ -332,8 +332,8 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SCALECHEST.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SCALECHEST;
 	}
 
 	@Override

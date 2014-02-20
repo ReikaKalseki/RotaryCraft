@@ -43,8 +43,8 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.SPYCAM.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.SPYCAM;
 	}
 
 	@Override

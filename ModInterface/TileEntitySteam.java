@@ -57,8 +57,8 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.STEAMTURBINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.STEAMTURBINE;
 	}
 
 	@Override

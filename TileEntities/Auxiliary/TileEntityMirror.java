@@ -62,8 +62,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.MIRROR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.MIRROR;
 	}
 
 	@Override

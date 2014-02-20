@@ -34,8 +34,8 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.LAMP.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.LAMP;
 	}
 
 	@Override

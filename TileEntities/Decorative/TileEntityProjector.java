@@ -51,7 +51,7 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		if (power < MINPOWER) {
 			on = false;
 			return;
@@ -240,8 +240,8 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PROJECTOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PROJECTOR;
 	}
 
 	@Override

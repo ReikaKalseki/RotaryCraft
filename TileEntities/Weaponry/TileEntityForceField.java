@@ -304,8 +304,8 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FORCEFIELD.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FORCEFIELD;
 	}
 
 	@Override

@@ -286,8 +286,8 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.RAILGUN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.RAILGUN;
 	}
 
 	@Override

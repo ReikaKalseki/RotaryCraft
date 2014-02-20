@@ -76,7 +76,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(true, false);
+		this.getPower(true);
 		int speed = BASESPEED;
 		int minpower = BASEPOWER*(step+1);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", readx, ready, readz));
@@ -499,8 +499,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.PILEDRIVER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.PILEDRIVER;
 	}
 
 	@Override

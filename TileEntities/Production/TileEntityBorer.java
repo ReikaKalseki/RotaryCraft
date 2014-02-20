@@ -111,7 +111,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		power = (long)omega*(long)torque;
 		if (power == 0)
 			jammed = false;
@@ -537,8 +537,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.BORER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.BORER;
 	}
 
 	@Override

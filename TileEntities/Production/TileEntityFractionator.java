@@ -248,8 +248,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FRACTIONATOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FRACTIONATOR;
 	}
 
 	@Override

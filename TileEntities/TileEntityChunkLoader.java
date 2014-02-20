@@ -66,8 +66,8 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Lo
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.CHUNKLOADER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.CHUNKLOADER;
 	}
 
 	@Override

@@ -271,8 +271,8 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.AUTOBREEDER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.AUTOBREEDER;
 	}
 
 	@Override

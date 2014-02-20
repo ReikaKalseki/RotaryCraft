@@ -32,8 +32,8 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FUELLINE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FUELLINE;
 	}
 
 	@Override

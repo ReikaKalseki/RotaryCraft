@@ -102,8 +102,8 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.COMPRESSOR.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.COMPRESSOR;
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		if (power > 0) {
 			float fudge = 1F;

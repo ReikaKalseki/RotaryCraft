@@ -95,8 +95,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FRICTION.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FRICTION;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		if (tickcount >= 20) {
 			tickcount = 0;
 			this.updateTemperature(world, x, y, z, meta);

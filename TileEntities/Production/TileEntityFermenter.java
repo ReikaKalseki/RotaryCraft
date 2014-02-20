@@ -192,7 +192,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		temperaturetick++;
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 		ItemStack product = this.getRecipe();
 		if (temperaturetick >= 20) {
 			temperaturetick = 0;
@@ -448,8 +448,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.FERMENTER.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.FERMENTER;
 	}
 
 	@Override

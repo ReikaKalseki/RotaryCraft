@@ -43,7 +43,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false, false);
+		this.getPower(false);
 
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
@@ -176,8 +176,8 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.ARROWGUN.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ARROWGUN;
 	}
 
 	@Override

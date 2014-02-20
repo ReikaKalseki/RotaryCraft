@@ -115,8 +115,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	@Override
-	public int getMachineIndex() {
-		return MachineRegistry.WORKTABLE.ordinal();
+	public MachineRegistry getMachine() {
+		return MachineRegistry.WORKTABLE;
 	}
 
 	@Override
