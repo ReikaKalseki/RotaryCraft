@@ -21,11 +21,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
 
 	private boolean[] connections = new boolean[6];
 
@@ -264,7 +265,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
-			connections[i] = this.isConnected(dirs[i]);
+			connections[i] = this.shouldTryToConnect(dirs[i]);
 			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
 		world.markBlockForRenderUpdate(x, y, z);
@@ -300,7 +301,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		}
 	}
 
-	private boolean isConnected(ForgeDirection dir) {
+	public boolean shouldTryToConnect(ForgeDirection dir) {
 		int x = xCoord+dir.offsetX;
 		int y = yCoord+dir.offsetY;
 		int z = zCoord+dir.offsetZ;
@@ -371,6 +372,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public Icon getGlassIcon() {
 		return Block.glass.getIcon(0, 0);
+	}
+
+	@Override
+	public final boolean isFluidPipe() {
+		return true;
 	}
 
 	public static enum TransferAmount {

@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.inventory.Container;
@@ -68,37 +67,30 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	private void transfer(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
-			int meta = world.getBlockMetadata(dx, dy, dz);
-			if (id != 0 && Block.blocksList[id].hasTileEntity(meta) && !(id == MachineRegistry.VACUUM.getBlockID() && meta == MachineRegistry.VACUUM.getMachineMetadata())) {
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-				if (te instanceof IInventory) {
-					IInventory ii = ((IInventory)te);
-					int size = ii.getSizeInventory();
-					for (int k = 0; k < size; k++) {
-						ItemStack inslot = ii.getStackInSlot(k);
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof IInventory && !(te instanceof TileEntityVacuum)) {
+				IInventory ii = ((IInventory)te);
+				int size = ii.getSizeInventory();
+				for (int k = 0; k < size; k++) {
+					ItemStack inslot = ii.getStackInSlot(k);
+					if (inslot != null) {
+						boolean cansuck = true;
+						if (te instanceof ISidedInventory)
+							cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
 						if (inslot != null) {
-							boolean cansuck = true;
-							if (te instanceof ISidedInventory)
-								cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
-							if (inslot != null) {
-								if (this.canSuckStacks()) {
-									if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
-										ii.setInventorySlotContents(k, null);
-									}
+							if (this.canSuckStacks()) {
+								if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
+									ii.setInventorySlotContents(k, null);
 								}
-								else {
-									int newsize = inslot.stackSize-1;
-									ItemStack is2 = ReikaItemHelper.getSizedItemStack(inslot, 1);
-									ItemStack is3 = ReikaItemHelper.getSizedItemStack(inslot, newsize);
-									if (newsize <= 0)
-										is3 = null;
-									if (ReikaInventoryHelper.addToIInv(is2, this)) {
-										ii.setInventorySlotContents(k, is3);
-									}
+							}
+							else {
+								int newsize = inslot.stackSize-1;
+								ItemStack is2 = ReikaItemHelper.getSizedItemStack(inslot, 1);
+								ItemStack is3 = ReikaItemHelper.getSizedItemStack(inslot, newsize);
+								if (newsize <= 0)
+									is3 = null;
+								if (ReikaInventoryHelper.addToIInv(is2, this)) {
+									ii.setInventorySlotContents(k, is3);
 								}
 							}
 						}

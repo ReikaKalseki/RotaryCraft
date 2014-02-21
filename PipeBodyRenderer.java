@@ -52,6 +52,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		if (block.blockID == MachineRegistry.PIPE.getBlockID() && metadata == MachineRegistry.PIPE.getMachineMetadata())
 			ico = RotaryCraft.decoblock.getIcon(0, 0);
 		Icon gico = block.getIcon(1, metadata);
+		if (ico == null)
+			ico = RotaryCraft.lightblock.getIcon(0, 0);
+		if (gico == null)
+			gico = RotaryCraft.lightblock.getIcon(0, 0);
 
 		float dx = -0.5F;
 		float dy = -0.5F;
@@ -76,7 +80,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		for (int i = 0; i < 6; i++) {
 			if (renderPass == 0)
 				this.renderFace(tile, world, x, y, z, dirs[i]);
-			else
+			else if (tile.isFluidPipe())
 				this.renderLiquid(tile, x, y, z, dirs[i]);
 		}
 		return true;
@@ -415,6 +419,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float dd = 0.5F-size;
 
 		Icon ico = tile.getBlockIcon();
+		if (ico == null)
+			ico = RotaryCraft.lightblock.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
@@ -441,6 +447,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float my = 1-dd-dl;
 
 		Icon gico = tile.getGlassIcon();
+		if (gico == null)
+			gico = RotaryCraft.lightblock.getIcon(0, 0);
 		float gu = gico.getMinU();
 		float gv = gico.getMinV();
 		float gu2 = gico.getMaxU();

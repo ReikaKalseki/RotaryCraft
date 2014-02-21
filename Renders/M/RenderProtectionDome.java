@@ -87,14 +87,14 @@ public class RenderProtectionDome extends RotaryTERenderer
 		Color c = te.getDomeColor();
 		int[] color = new int[]{c.getRed(), c.getGreen(), c.getBlue()};
 		for (double k = -te.getRange(); k <= te.getRange(); k += 0.5*te.getRange()/8)
-			ReikaRenderHelper.renderCircle(Math.sqrt(te.getRange()*te.getRange()-k*k), x, y+k, z, color);
+			ReikaRenderHelper.renderCircle(Math.sqrt(te.getRange()*te.getRange()-k*k), x, y+k, z, color, 15);
 		for (int k = 0; k < 360; k += 15)
-			ReikaRenderHelper.renderVCircle(te.getRange(), x, y, z, color, ReikaPhysicsHelper.degToRad(k));
+			ReikaRenderHelper.renderVCircle(te.getRange(), x, y, z, color, ReikaPhysicsHelper.degToRad(k), 15);
 
 		double ang = 7;
 		ReikaRenderHelper.renderLine(x, y, z, x, y+te.getRange(), z, color);
 		for (int k = 0; k < 360; k += 15) {
-			ReikaRenderHelper.renderVCircle(0.125, x, y+0.5, z, color, Math.toRadians((System.nanoTime()/7500000)%360+k));
+			ReikaRenderHelper.renderVCircle(0.125, x, y+0.5, z, color, Math.toRadians((System.nanoTime()/7500000)%360+k), 15);
 			ReikaRenderHelper.renderLine(x, y, z, x+te.getRange()*Math.sin(Math.toRadians(ang)*Math.cos(Math.toRadians(k))), y+te.getRange()-Math.sin(Math.toRadians(ang)), z+te.getRange()*Math.sin(Math.toRadians(ang)*Math.sin(Math.toRadians(k))), color);
 		}
 	}

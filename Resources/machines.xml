@@ -971,4 +971,14 @@
 			Required Torque: %d Nm
 		</note>
 	</grindstone>
+	<blower>
+		<desc>
+			The pneumatic item pump is used to rapidly transfer items between inventories. If an item pump has an inventory behind it, it will check in front of it for a valid receiving inventory. If it finds another pump, it follows that pump's frontal direction and repeats the process. This system allows you to transport items across any distance nearly instantly. The pump can transfer one item per tick per kW of input power; therefore, to transfer entire stacks, supply 65kW of power. More power will transfer multiple stacks, as there is no upper limit on the transfer rate.
+		</desc>
+		<note>
+			Power Input: Any side
+			Required Power: %d
+			Required Speed: %d rad/s
+		</note>
+	</blower>
 </machines>

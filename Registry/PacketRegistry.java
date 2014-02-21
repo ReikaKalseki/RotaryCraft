@@ -44,7 +44,8 @@ public enum PacketRegistry {
 	GRAVELGUN(58),
 	SLIDE(59),
 	POWERBUS(60, 63),
-	PARTICLES(64);
+	PARTICLES(64),
+	BLOWER(65, 68);
 
 	private int min;
 	private int max;

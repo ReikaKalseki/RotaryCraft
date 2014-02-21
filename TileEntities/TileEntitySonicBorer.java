@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
@@ -176,11 +175,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	private int getPressureIncrement() {
-		//ReikaJavaLibrary.pConsole((int)ReikaMathLibrary.logbase(torque+1, 2)+":"+(int)ReikaMathLibrary.logbase(power+1, 2));
-		int amt = (int)ReikaMathLibrary.logbase(power+1, 2);
-		int amt2 = (int)Math.sqrt(power)/32;
-		int amt3 = (int)(power/32768);
-		//ReikaJavaLibrary.pConsole(amt3);
+		int amt3 = (int)(power/65536);
 		return amt3;
 	}
 

@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBigFurnace;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
+import Reika.RotaryCraft.Containers.ContainerBlower;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
@@ -70,6 +71,7 @@ import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiSlide;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
 import Reika.RotaryCraft.GUIs.Machine.GuiBevel;
+import Reika.RotaryCraft.GUIs.Machine.GuiBlower;
 import Reika.RotaryCraft.GUIs.Machine.GuiBorer;
 import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
 import Reika.RotaryCraft.GUIs.Machine.GuiGPR;
@@ -122,6 +124,7 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
+import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -302,6 +305,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityParticleEmitter) {
 			return new OneSlotContainer(player, te, 28);
+		}
+		if (te instanceof TileEntityBlower) {
+			return new ContainerBlower(player, (TileEntityBlower) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -500,6 +506,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityParticleEmitter) {
 			return new GuiParticle(player, (TileEntityParticleEmitter) te);
+		}
+		if (te instanceof TileEntityBlower) {
+			return new GuiBlower(player, (TileEntityBlower) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

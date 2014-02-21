@@ -16,11 +16,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Icon;
-import net.minecraft.world.World;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 
 public class BlockPiping extends BlockBasicMultiTE {
 
@@ -103,18 +101,5 @@ public class BlockPiping extends BlockBasicMultiTE {
 	public Icon getIcon(int s, int meta) {
 		s = Math.min(s, 1);
 		return iconBlocks[meta][s];
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int id) {
-		TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
-		te.recomputeConnections(world, x, y, z);
-	}
-
-	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(x, y, z);
-		te.addToAdjacentConnections(world, x, y, z);
-		te.recomputeConnections(world, x, y, z);
 	}
 }

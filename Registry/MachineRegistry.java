@@ -34,6 +34,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
@@ -296,7 +297,7 @@ public enum MachineRegistry {
 	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7),
 	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
-	BLOWER(				"machine.blower",			BlockDMMachine.class,		TileEntityBlower.class,				15);
+	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4);
 
 	private final String name;
 	private final Class te;
@@ -919,6 +920,10 @@ public enum MachineRegistry {
 
 	public boolean isEnchantable() {
 		return EnchantableMachine.class.isAssignableFrom(te);
+	}
+
+	public boolean cachesConnections() {
+		return CachedConnection.class.isAssignableFrom(te);
 	}
 
 	public boolean hasSubdivisions() {

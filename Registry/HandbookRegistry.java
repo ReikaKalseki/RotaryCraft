@@ -211,6 +211,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	SONICBORER(MachineRegistry.SONICBORER),
 	DEFOLIATOR(MachineRegistry.DEFOLIATOR),
 	GRINDSTONE(MachineRegistry.GRINDSTONE),
+	BLOWER(MachineRegistry.BLOWER),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

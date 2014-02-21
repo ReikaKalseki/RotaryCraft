@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -62,6 +63,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
+import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -744,6 +746,43 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		else {
 			return 0;
+		}
+	}
+
+	@Override
+	public final void onNeighborBlockChange(World world, int x, int y, int z, int id) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m != null) {
+			if (m.cachesConnections()) {
+				CachedConnection te = (CachedConnection)world.getBlockTileEntity(x, y, z);
+				te.recomputeConnections(world, x, y, z);
+			}
+
+			if (m == MachineRegistry.SMOKEDETECTOR) {
+				int upid = world.getBlockId(x, y+1, z);
+				if (upid == 0) {
+					world.setBlockToAir(x, y, z);
+					ItemStack is = MachineRegistry.SMOKEDETECTOR.getCraftedProduct();
+					if (!world.isRemote)
+						world.spawnEntityInWorld(new EntityItem(world, x, y, z, is));
+				}
+				else if (!Block.blocksList[upid].isOpaqueCube()) {
+					world.setBlockToAir(x, y, z);
+					ItemStack is = MachineRegistry.SMOKEDETECTOR.getCraftedProduct();
+					if (!world.isRemote)
+						world.spawnEntityInWorld(new EntityItem(world, x, y, z, is));
+				}
+			}
+		}
+	}
+
+	@Override
+	public final void onBlockAdded(World world, int x, int y, int z) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m.cachesConnections()) {
+			CachedConnection te = (CachedConnection)world.getBlockTileEntity(x, y, z);
+			te.addToAdjacentConnections(world, x, y, z);
+			te.recomputeConnections(world, x, y, z);
 		}
 	}
 

@@ -88,7 +88,7 @@ public class RenderSonicShot extends Render
 			GL11.glRotatef(-i, 1, 0, 0);
 		}
 		for (int i = 1; i < x.length; i++)
-			ReikaRenderHelper.renderVCircle(i, x[i], 0, 0, color, 0);
+			ReikaRenderHelper.renderVCircle(i, x[i], 0, 0, color, 0, 15);
 		//ReikaRenderHelper.exitGeoDraw();
 
 		GL11.glRotated(-rz, 0, 0, 1);

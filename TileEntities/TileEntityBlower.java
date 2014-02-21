@@ -1,23 +1,42 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2013
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityBlower extends TileEntityPowerReceiver {
+public class TileEntityBlower extends TileEntityPowerReceiver implements CachedConnection {
 
 	private ForgeDirection facing;
+	private boolean[] connections = new boolean[6];
 
-	private ItemStack toTransfer = null;
-	private int fromSlot = -1;
+	public ItemStack[] matchingItems = new ItemStack[18];
+	public boolean isWhitelist = false;
+	public boolean useOreDict = true;
+	public boolean checkMeta = false;
+	public boolean checkNBT = false;
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -42,122 +61,112 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower(false);
+		this.getSummativeSidedPower();
 
 		if (MINPOWER > power || MINSPEED > omega)
+			return;
+		if (world.isRemote)
 			return;
 
 		ForgeDirection dir = this.getFacingDir();
 		ForgeDirection from = dir.getOpposite();
 
 		TileEntity source = this.getAdjacentTileEntity(from);
-		TileEntity target = this.getAdjacentTileEntity(dir);
 
-		boolean hasSource = this.checkSource(from, source);
-		boolean hasTarget = this.checkTarget(dir, target);
+		if (source instanceof IInventory) {
+			TileEntity target = this.getAdjacentTileEntity(dir);
 
-		if (hasSource && hasTarget)
-			this.transferItem((IInventory)source, (IInventory)target);
+			while (target instanceof TileEntityBlower) {
+				TileEntityBlower te = (TileEntityBlower)target;
+				target = te.getAdjacentTileEntity(te.getFacingDir());
+				if (this.equals(target)) { //to prevent stackoverflow from loops, because some idiot is going to try
+					return;
+				}
+				if (source.equals(target)) { //to prevent dupe glitch, and because this would be stupid to do
+					return;
+				}
+			}
 
-	}
+			//this.printTEs(source, target);
 
-	private ArrayList<ItemStack> getAllTransferrables() {
-		return null;
-	}
-
-	private void transferItem(IInventory source, IInventory target) {
-		int added = ReikaInventoryHelper.addStackAndReturnCount(toTransfer, target);
-		if (added > 0) {
-			ReikaInventoryHelper.decrStack(fromSlot, source, added);
+			if (target instanceof IInventory) {
+				HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+				//ReikaJavaLibrary.pConsole(map, Side.SERVER);
+				if (map != null && !map.isEmpty())
+					this.transferItems(map, (IInventory)source, (IInventory)target, dir);
+			}
 		}
 	}
 
-	private boolean checkTarget(ForgeDirection dir, TileEntity target) {
-		if (target instanceof ISidedInventory) {
-			ISidedInventory ii = (ISidedInventory)target;
-			int slot = ReikaInventoryHelper.locateNonFullStackOf(toTransfer, target);
-			slot = ReikaInventoryHelper.getFirstEmptySlot(ii);
-			if (slot != -1) {
-				if (ii.canInsertItem(slot, toTransfer, dir.getOpposite().ordinal())) {
-					if (ii.isItemValidForSlot(slot, toTransfer))
-						return true;
+	private void printTEs(TileEntity source, TileEntity target) {
+		if (source == null && target == null)
+			ReikaJavaLibrary.pConsole("null >> null", Side.SERVER);
+		else if (source == null)
+			ReikaJavaLibrary.pConsole("null >> "+target.getClass().getSimpleName(), Side.SERVER);
+		else if (target == null)
+			ReikaJavaLibrary.pConsole(source.getClass().getSimpleName()+" >> null", Side.SERVER);
+		else
+			ReikaJavaLibrary.pConsole(source.getClass().getSimpleName()+" >> "+target.getClass().getSimpleName(), Side.SERVER);
+	}
+
+	private int getNumberTransferrableItems() {
+		return (int)(power/1024);
+	}
+
+	private void transferItems(HashMap<Integer, ItemStack> map, IInventory source, IInventory target, ForgeDirection dir) {
+		int items = 0;
+		int max = this.getNumberTransferrableItems();
+		if (max <= 0)
+			return;
+
+		for (int slot : map.keySet()) {
+			ItemStack is = map.get(slot);
+			if (this.isItemTransferrable(is)) {
+				int maxadd = Math.min(max-items, Math.min(is.getMaxStackSize(), target.getInventoryStackLimit()));
+				for (int i = 0; i < maxadd; i++) {
+					if (target instanceof ISidedInventory) {
+						if (((ISidedInventory) target).canInsertItem(slot, is, dir.getOpposite().ordinal())) {
+							if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
+								ReikaInventoryHelper.decrStack(slot, source, 1);
+								items += 1;
+							}
+						}
+					}
+					else {
+						if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
+							ReikaInventoryHelper.decrStack(slot, source, 1);
+							items += 1;
+						}
+					}
+					if (items >= max)
+						return;
 				}
 			}
 		}
-		else if (target instanceof IInventory) {
-			IInventory ii = (IInventory)target;
-			int slot = ReikaInventoryHelper.getFirstEmptySlot(ii);
-			slot = ReikaInventoryHelper.getFirstEmptySlot(ii);
-			if (slot != -1) {
-				if (ii.isItemValidForSlot(slot, toTransfer))
-					return true;
-			}
-		}
-		return false;
 	}
 
-	private boolean checkSource(ForgeDirection from, TileEntity source) {
-		if (source instanceof ISidedInventory) {
-			ISidedInventory ii = (ISidedInventory)source;
-			int slot = ReikaInventoryHelper.getFirstNonEmptySlot(ii);
-			if (slot != -1) {
-				ItemStack is = ii.getStackInSlot(slot);
-				if (ii.canExtractItem(slot, is, from.getOpposite().ordinal())) {
-					toTransfer = is.copy();
-					fromSlot = slot;
-					return true;
-				}
-			}
-		}
-		else if (source instanceof IInventory) {
-			IInventory ii = (IInventory)source;
-			int slot = ReikaInventoryHelper.getFirstNonEmptySlot(ii);
-			if (slot != -1) {
-				ItemStack is = ii.getStackInSlot(slot);
-				toTransfer = is.copy();
-				fromSlot = slot;
-				return true;
-			}
-		}
-		return false;
+	public boolean isIntake() {
+		return this.getAdjacentTileEntity(this.getFacingDir().getOpposite()) instanceof IInventory;
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
 		switch(meta) {
 		case 4:
-			ready = y-1;
-			writey = y+1;
 			facing = ForgeDirection.DOWN;
 			break;
 		case 5:
-			ready = y+1;
-			writey = y-1;
 			facing = ForgeDirection.UP;
 			break;
 		case 3:
-			readz = z-1;
-			writez = z+1;
 			facing = ForgeDirection.NORTH;
 			break;
 		case 1:
-			readx = x-1;
-			writex = x+1;
 			facing = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = z+1;
-			writez = z-1;
 			facing = ForgeDirection.SOUTH;
 			break;
 		case 0:
-			readx = x+1;
-			writex = x-1;
 			facing = ForgeDirection.EAST;
 			break;
 		}
@@ -166,6 +175,138 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 	/** The side we are emitting items to */
 	public ForgeDirection getFacingDir() {
 		return facing != null ? facing : ForgeDirection.UP;
+	}
+
+	public boolean isConnectionValidForSide(ForgeDirection dir) {
+		if (dir.offsetX == 0)
+			dir = dir.getOpposite();
+		return connections[dir.ordinal()];
+	}
+
+	public void recomputeConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			connections[i] = this.shouldTryToConnect(dirs[i]);
+			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
+		}
+		world.markBlockForRenderUpdate(x, y, z);
+	}
+
+	public boolean shouldTryToConnect(ForgeDirection dir) {
+		if (dir != this.getFacingDir() && dir != this.getFacingDir().getOpposite())
+			return false;
+		int x = xCoord+dir.offsetX;
+		int y = yCoord+dir.offsetY;
+		int z = zCoord+dir.offsetZ;
+		MachineRegistry m = this.getMachine();
+		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
+		if (m == m2)
+			return true;
+		TileEntity tile = this.getAdjacentTileEntity(dir);
+		return tile instanceof IInventory;
+	}
+
+	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = x+dir.offsetY;
+			int dz = x+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == this.getMachine()) {
+				TileEntityBlower te = (TileEntityBlower)world.getBlockTileEntity(dx, dy, dz);
+				te.connections[dir.getOpposite().ordinal()] = false;
+				world.markBlockForRenderUpdate(dx, dy, dz);
+			}
+		}
+	}
+
+	public void addToAdjacentConnections(World world, int x, int y, int z) {
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = x+dir.offsetY;
+			int dz = x+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+			if (m == this.getMachine()) {
+				TileEntityBlower te = (TileEntityBlower)world.getBlockTileEntity(dx, dy, dz);
+				te.connections[dir.getOpposite().ordinal()] = true;
+				world.markBlockForRenderUpdate(dx, dy, dz);
+			}
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < 6; i++) {
+			NBT.setBoolean("conn"+i, connections[i]);
+		}
+
+		NBT.setBoolean("ore", useOreDict);
+		NBT.setBoolean("metac", checkMeta);
+		NBT.setBoolean("cnbt", checkNBT);
+		NBT.setBoolean("white", isWhitelist);
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		for (int i = 0; i < 6; i++) {
+			connections[i] = NBT.getBoolean("conn"+i);
+		}
+
+		isWhitelist = NBT.getBoolean("white");
+		checkMeta = NBT.getBoolean("metac");
+		checkNBT = NBT.getBoolean("cnbt");
+		useOreDict = NBT.getBoolean("ore");
+	}
+
+	public boolean isItemTransferrable(ItemStack is) {
+		boolean match = this.isItemStackMatched(is);
+		return isWhitelist ? match : !match;
+	}
+
+	private boolean isItemStackMatched(ItemStack is) {
+		for (int i = 0; i < matchingItems.length; i++) {
+			ItemStack is1 = matchingItems[i];
+			if (is1 != null) {
+				if (this.doStacksMatch(is, is1))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean doStacksMatch(ItemStack is, ItemStack is1) {
+		if (checkMeta && is.getItemDamage() != is1.getItemDamage())
+			return false;
+		if (checkNBT && !ItemStack.areItemStackTagsEqual(is, is1))
+			return false;
+		if (ReikaItemHelper.matchStacks(is, is1))
+			return true;
+		if (useOreDict) {
+			int oreID = OreDictionary.getOreID(is);
+			if (oreID > -1 && oreID == OreDictionary.getOreID(is1))
+				return true;
+		}
+		return is.itemID == is1.itemID;
+	}
+
+	@Override
+	public int getTextureStateForSide(int s) {
+		TileEntity source = this.getAdjacentTileEntity(this.getFacingDir().getOpposite());
+		if (source instanceof TileEntityBlower) {
+			TileEntityBlower te = (TileEntityBlower)source;
+			return te.getFacingDir() != this.getFacingDir() ? 0 : 1;
+		}
+		return 0;
 	}
 
 }

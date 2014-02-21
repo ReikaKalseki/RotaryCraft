@@ -26,6 +26,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -48,7 +49,7 @@ public class ItemGravelGun extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (!ReikaInventoryHelper.playerHasOrIsCreative(ep, Block.gravel.blockID, -1)) {
+		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Block.gravel.blockID, -1)) {
 			if (!world.isRemote)
 				world.playAuxSFX(1001, (int)ep.posX, (int)ep.posY, (int)ep.posZ, 1);
 			return is;

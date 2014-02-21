@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -98,6 +99,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private EnergyToPowerBase eng;
 	private TileEntityPowerBus bus;
 	private TileEntityParticleEmitter emitter;
+	private TileEntityBlower blower;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -511,6 +513,21 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case PARTICLES:
 				emitter = (TileEntityParticleEmitter)te;
 				emitter.particleType = ReikaParticleHelper.values()[data[0]];
+				break;
+			case BLOWER:
+				blower = (TileEntityBlower)te;
+				if (control == PacketRegistry.BLOWER.getMinValue()) {
+					blower.isWhitelist = !blower.isWhitelist;
+				}
+				if (control == PacketRegistry.BLOWER.getMinValue()+1) {
+					blower.checkMeta = !blower.checkMeta;
+				}
+				if (control == PacketRegistry.BLOWER.getMinValue()+2) {
+					blower.checkNBT = !blower.checkNBT;
+				}
+				if (control == PacketRegistry.BLOWER.getMinValue()+3) {
+					blower.useOreDict = !blower.useOreDict;
+				}
 				break;
 			}
 		}

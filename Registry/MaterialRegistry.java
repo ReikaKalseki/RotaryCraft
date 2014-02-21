@@ -16,6 +16,7 @@ import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
+import Reika.DragonAPI.ModInteract.RedstoneArsenalHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 
 public enum MaterialRegistry {
@@ -128,6 +129,9 @@ public enum MaterialRegistry {
 			default:
 				return false;
 			}
+		}
+		if (tool.itemID == RedstoneArsenalHandler.getInstance().pickID) {
+			return RedstoneArsenalHandler.getInstance().pickLevel >= this.ordinal()-1;
 		}
 		return false;
 	}

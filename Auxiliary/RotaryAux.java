@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
+import Reika.DragonAPI.ModInteract.RedstoneArsenalHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -202,6 +203,9 @@ public class RotaryAux {
 			return true;
 		if (MekToolHandler.getInstance().isPickTypeTool(eitem) && !MekToolHandler.getInstance().isWood(eitem))
 			return true;
+		if (eitem.itemID == RedstoneArsenalHandler.getInstance().pickID) {
+			return RedstoneArsenalHandler.getInstance().pickLevel > 0;
+		}
 		if (!(eitem.getItem() instanceof ItemPickaxe))
 			return false;
 		if (eitem.getItem().canHarvestBlock(Block.oreIron, eitem))

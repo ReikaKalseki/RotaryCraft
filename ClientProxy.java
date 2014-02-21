@@ -66,7 +66,6 @@ public class ClientProxy extends CommonProxy
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();
 
 	public static PipeBodyRenderer pipe;
-	//public static HydraulicLineRenderer line;
 	public static CubicalMachineRenderer cube;
 	public static DecoTankRenderer tank;
 
@@ -101,10 +100,6 @@ public class ClientProxy extends CommonProxy
 		tankRender = RenderingRegistry.getNextAvailableRenderId();
 		tank = new DecoTankRenderer(tankRender);
 		RenderingRegistry.registerBlockHandler(tankRender, tank);
-
-		//lineRender = RenderingRegistry.getNextAvailableRenderId();
-		//line = new HydraulicLineRenderer(lineRender);
-		//RenderingRegistry.registerBlockHandler(lineRender, line);
 
 		this.loadModels();
 

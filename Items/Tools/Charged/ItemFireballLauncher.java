@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import cpw.mods.fml.relauncher.Side;
@@ -134,7 +135,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (!ReikaInventoryHelper.playerHasOrIsCreative(ep, Item.fireballCharge.itemID, -1))
+		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Item.fireballCharge.itemID, -1))
 			return is;
 		ep.setItemInUse(is, this.getMaxItemUseDuration(is));
 		return is;
