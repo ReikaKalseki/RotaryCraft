@@ -149,7 +149,7 @@ public class RotaryRegistration {
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
 
-		OreDictionary.registerOre("dustCoal", new ItemStack(RotaryCraft.extracts.itemID, 1, 24));
+		OreDictionary.registerOre("dustCoal", ItemStacks.coaldust);
 	}
 
 	public static void setupLiquids() {

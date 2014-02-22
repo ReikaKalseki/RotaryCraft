@@ -285,7 +285,7 @@ public enum MachineRegistry {
 	FILLINGSTATION(		"machine.fillingstation",	BlockDMIMachine.class,		TileEntityFillingStation.class,		8, "RenderFillingStation"),
 	BELT(				"machine.belt",				BlockDMMachine.class,		TileEntityBeltHub.class,			14, "RenderBelt"),
 	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17, "RenderVanDeGraff"),
-	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21),
+	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21, "RenderDefoliator"),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
@@ -459,6 +459,10 @@ public enum MachineRegistry {
 	}
 
 	public static MachineRegistry getMachineFromIDandMetadata(int id, int metad) {
+		BlockRegistry r = BlockRegistry.getMachineBlock(id);
+		if (r == null)
+			return null;
+		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
 		return getMachineMapping(id, metad);
 	}
 
@@ -586,8 +590,12 @@ public enum MachineRegistry {
 			return 0.5F;
 		if (this == FERTILIZER)
 			return 0.875F;
-		//if (this == HYDRAULIC)
-		//	return ((TileEntityHydraulicPump)tile).isTurbine() ? 1 : 0.75F;
+		if (this == DEFOLIATOR)
+			return 0.625F;
+		if (this == LAWNSPRINKLER)
+			return 0.75F;
+		if (this == GRINDSTONE)
+			return 0.9375F;
 		return 1;
 	}
 

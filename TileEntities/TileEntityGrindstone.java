@@ -219,9 +219,6 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{

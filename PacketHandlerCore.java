@@ -38,6 +38,7 @@ import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
+import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
@@ -100,6 +101,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityPowerBus bus;
 	private TileEntityParticleEmitter emitter;
 	private TileEntityBlower blower;
+	private TileEntityDefoliator defo;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -528,6 +530,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				if (control == PacketRegistry.BLOWER.getMinValue()+3) {
 					blower.useOreDict = !blower.useOreDict;
 				}
+				break;
+			case DEFOLIATOR:
+				defo = (TileEntityDefoliator)te;
+				defo.onBlockBreak(world, data[0], data[1], data[2]);
 				break;
 			}
 		}

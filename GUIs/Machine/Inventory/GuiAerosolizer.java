@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
@@ -25,21 +24,6 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
 		aero = Aerosolizer;
 		ep = p5ep;
 	}
-	/*
-    public void drawScreen(int m, int n, float f) {
-        int var5 = (this.width - this.xSize) / 2;
-        int var6 = (this.height - this.ySize) / 2;
-
-        this.drawGuiContainerBackgroundLayer(f, m, n);
-        this.drawGuiContainerForegroundLayer();
-
-        for (int i = 0; i < 3; i++) {
-        	for (int j = 0; j < 3; j++) {
-        		int color = 0xff00ff;
-        		this.drawRect(var5+32+16*j, var6+16+16*i, 16, 16, color);
-        	}
-        }
-    }*/
 
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)

@@ -45,7 +45,8 @@ public enum PacketRegistry {
 	SLIDE(59),
 	POWERBUS(60, 63),
 	PARTICLES(64),
-	BLOWER(65, 68);
+	BLOWER(65, 68),
+	DEFOLIATOR(69);
 
 	private int min;
 	private int max;
@@ -83,6 +84,8 @@ public enum PacketRegistry {
 			return 2;
 		if (this == REDGEAR)
 			return 2;
+		if (this == DEFOLIATOR)
+			return 3;
 		return 1;
 	}
 

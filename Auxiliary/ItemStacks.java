@@ -33,6 +33,7 @@ public final class ItemStacks {
 	public static final ItemStack silveriodide = new ItemStack(RotaryCraft.powders.itemID, 1, 7);
 	public static final ItemStack aluminumpowder = new ItemStack(RotaryCraft.powders.itemID, 1, 8);
 	public static final ItemStack flour = new ItemStack(RotaryCraft.powders.itemID, 1, 9);
+	public static final ItemStack coaldust = new ItemStack(RotaryCraft.powders.itemID, 1, 10);
 
 	public static final ItemStack lubebucket = ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket = ItemRegistry.BUCKET.getStackOfMetadata(1);

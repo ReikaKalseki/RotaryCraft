@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
+import Reika.RotaryCraft.Containers.ContainerDefoliator;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
@@ -94,6 +95,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCVT;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDefoliator;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiEthanol;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
@@ -125,6 +127,7 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
+import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
@@ -308,6 +311,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBlower) {
 			return new ContainerBlower(player, (TileEntityBlower) te);
+		}
+		if (te instanceof TileEntityDefoliator) {
+			return new ContainerDefoliator(player, (TileEntityDefoliator) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -509,6 +515,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBlower) {
 			return new GuiBlower(player, (TileEntityBlower) te);
+		}
+		if (te instanceof TileEntityDefoliator) {
+			return new GuiDefoliator(player, (TileEntityDefoliator) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

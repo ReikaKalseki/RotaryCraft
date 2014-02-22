@@ -30,12 +30,10 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		//this.getPower4Sided(0, 0, 0);
 		this.getSummativeSidedPower();
-		//ReikaJavaLibrary.pConsole(torque+" Nm at "+omega+" rad/s ("+power/1000D+"kW)");
 		if (power < MINPOWER)
 			return;
-		int range = 12;
+		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-range, y-range, z-range, x+1+range, y+1+range, z+1+range);
 		List items = world.getEntitiesWithinAABB(EntityItem.class, box);
 		for (int i = 0; i < items.size(); i++) {
@@ -55,7 +53,7 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 
 	@Override
 	public int getRange() {
-		return 4+(int)(power-MINPOWER)/FALLOFF;
+		return Math.min(this.getMaxRange(), 4+(int)(power-MINPOWER)/FALLOFF);
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 
 	@Override
 	public int getMaxRange() {
-		return this.getRange();
+		return 128;
 	}
 
 	@Override

@@ -291,29 +291,17 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		isReleasing = world.isBlockIndirectlyGettingPowered(x, y, z);
 		//ReikaJavaLibrary.pConsole(isCreative);
 		//ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Side.SERVER);
+		if (!isCreative && !world.isRemote && energy/20 >= this.getMaxStorageCapacity()) {
+			this.overChargeExplosion(world, x, y, z);
+		}
 		if (!isReleasing) {
 			torque = omega = 0;
 			power = 0;
 			if (energy + ((long)torquein*(long)omegain) < 0 || energy + ((long)torquein*(long)omegain) > Long.MAX_VALUE) {
 				this.destroy(world, x, y, z);
 			}
-			else if (energy/20 < this.getMaxStorageCapacity() && !isCreative) {
-				energy += ((long)torquein*(long)omegain);
-			}
 			else if (!isCreative) {
-				if (!world.isRemote) {
-					world.setBlock(x, y, z, 0);
-					int num = isBedrockCoil ? 24 : 3;
-					int pow = isBedrockCoil ? 20 : 8;
-					int r = isBedrockCoil ? 9 : 1;
-					for (int i = 0; i < num; i++) {
-						double rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
-						double ry = ReikaRandomHelper.getRandomPlusMinus(y, r);
-						double rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
-						world.createExplosion(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState());
-					}
-					world.createExplosion(null, x, y, z, 8, ConfigRegistry.BLOCKDAMAGE.getState());
-				}
+				energy += ((long)torquein*(long)omegain);
 			}
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {
@@ -329,6 +317,20 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				power = 0;
 			}
 		}
+	}
+
+	private void overChargeExplosion(World world, int x, int y, int z) {
+		world.setBlock(x, y, z, 0);
+		int num = isBedrockCoil ? 24 : 3;
+		int pow = isBedrockCoil ? 12 : 8;
+		int r = isBedrockCoil ? 9 : 1;
+		for (int i = 0; i < num; i++) {
+			double rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
+			double ry = ReikaRandomHelper.getRandomPlusMinus(y, r);
+			double rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
+			world.createExplosion(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState());
+		}
+		world.createExplosion(null, x, y, z, pow, ConfigRegistry.BLOCKDAMAGE.getState());
 	}
 
 	private void destroy(World world, int x, int y, int z) {

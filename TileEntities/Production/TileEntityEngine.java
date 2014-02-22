@@ -340,10 +340,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	private boolean hydroCheck(World world, int x, int y, int z, int meta) {
-		if (world.getBlockId(x, y+1, z) != 0)
+		if (this.doesBlockObstructBlades(world, x, y+1, z))
 			return false;
-
-		if (world.getBlockId(x, y-1, z) != 0)
+		if (this.doesBlockObstructBlades(world, x, y-1, z))
 			return false;
 
 		int[] pos = this.getWaterColumnPos();
@@ -359,10 +358,15 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
 			return false;
 
-		if (world.getBlockId(2*x-pos[0], y, 2*z-pos[1]) != 0)
-			return false;
+		for (int i = -1; i <= 1; i++)
+			if (this.doesBlockObstructBlades(world, 2*x-pos[0], y+i, 2*z-pos[1]))
+				return false;
 
 		return true;
+	}
+
+	private boolean doesBlockObstructBlades(World world, int x, int y, int z) {
+		return !ReikaWorldHelper.softBlocks(world, x, y, z);
 	}
 
 	private int[] getWaterColumnPos() {

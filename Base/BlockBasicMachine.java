@@ -410,6 +410,15 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			}
 			currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
 		}
+		if (te instanceof TileEntityEngine) {
+			TileEntityEngine eng = (TileEntityEngine)te;
+			if (eng.type.requiresLubricant()) {
+				currenttip.add(String.format("Lubricant: %d mB", eng.getLube()));
+			}
+			if (eng.type.burnsFuel()) {
+				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
+			}
+		}
 		return currenttip;
 	}
 

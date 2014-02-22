@@ -15,6 +15,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -248,6 +249,21 @@ public class TileEntityBlower extends TileEntityPowerReceiver implements CachedC
 		NBT.setBoolean("metac", checkMeta);
 		NBT.setBoolean("cnbt", checkNBT);
 		NBT.setBoolean("white", isWhitelist);
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < matchingItems.length; i++)
+		{
+			if (matchingItems[i] != null)
+			{
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setByte("Slot", (byte)i);
+				matchingItems[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+			}
+		}
+
+		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**
@@ -266,6 +282,20 @@ public class TileEntityBlower extends TileEntityPowerReceiver implements CachedC
 		checkMeta = NBT.getBoolean("metac");
 		checkNBT = NBT.getBoolean("cnbt");
 		useOreDict = NBT.getBoolean("ore");
+
+		NBTTagList nbttaglist = NBT.getTagList("Items");
+		matchingItems = new ItemStack[18];
+
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			byte byte0 = nbttagcompound.getByte("Slot");
+
+			if (byte0 >= 0 && byte0 < matchingItems.length)
+			{
+				matchingItems[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+		}
 	}
 
 	public boolean isItemTransferrable(ItemStack is) {

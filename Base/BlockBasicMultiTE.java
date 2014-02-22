@@ -495,9 +495,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		int id = this.idPicked(world, x, y, z);
+		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		if (id == 0)
 			return null;
-		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
 		if (m == null)
 			return null;
