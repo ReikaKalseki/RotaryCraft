@@ -168,16 +168,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return this.getName();
 	}
 
-	@Override
-	@Deprecated
-	public boolean isIDTEMatch(World world, int x, int y, int z) {
-		//TileEntity te = world.getBlockTileEntity(x, y, z);
-		//if (te instanceof ShaftPowerEmitter)
-		//	return world.getBlockId(x, y, z) == te.getBlockType().blockID;
-		//return super.isIDTEMatch(world, x, y, z);
-		return true;
-	}
-
 	public boolean isShutdown() {
 		return disabled;
 	}

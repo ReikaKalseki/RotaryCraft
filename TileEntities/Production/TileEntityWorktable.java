@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,19 +19,23 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.API.ChargeableTool;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	private ItemStack[] inventory = new ItemStack[18];
 	public boolean craftable = false;
 	private ItemStack toCraft;
+	private boolean lastPower;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -38,10 +44,41 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			this.makeJetplate();
 			this.makeBedjump();
 
-			if (world.isBlockIndirectlyGettingPowered(x, y, z))
-				if (this.canUncraft())
-					this.uncraft();
+			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
+				if (!this.craft()) {
+					if (this.canUncraft())
+						this.uncraft();
+				}
+			}
+			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
+	}
+
+	private boolean craft() {
+		EntityPlayer ep = !worldObj.playerEntities.isEmpty() ? (EntityPlayer)worldObj.playerEntities.get(0) : null;
+		if (ep == null)
+			return false;
+		ContainerWorktable cw = new ContainerWorktable(ep, this, worldObj);
+		InventoryCrafting cm = new InventoryCrafting(cw, 3, 3);
+		for (int i = 0; i < 9; i++)
+			cm.setInventorySlotContents(i, this.getStackInSlot(i));
+		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
+		if (is != null) {
+			for (int i = 0; i < 9; ++i) {
+				ItemStack item = this.getStackInSlot(i);
+				if (item != null) {
+					//noUpdate = true;
+					if (item.stackSize == 1)
+						this.setInventorySlotContents(i, null);
+					else
+						this.getStackInSlot(i).stackSize--;
+				}
+			}
+			ReikaInventoryHelper.addOrSetStack(is, inventory, 13);
+			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
+			return true;
+		}
+		return false;
 	}
 
 	private void makeBedjump() {
@@ -216,7 +253,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	public void setToCraft(ItemStack is) {
 		if (is != null)
 			toCraft = is.copy();
-		else toCraft = null;
+		else
+			toCraft = null;
 	}
 
 	@Override
@@ -238,6 +276,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		}
 
 		NBT.setTag("Items", nbttaglist);
+
+		NBT.setBoolean("lastpwr", lastPower);
 	}
 
 	/**
@@ -261,6 +301,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+
+		lastPower = NBT.getBoolean("lastpwr");
 	}
 
 	@Override

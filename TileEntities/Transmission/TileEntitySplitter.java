@@ -29,7 +29,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	private int torquein2;
 	private int omegain2;
-	private boolean split = false;
 	public int splitmode = 0;
 
 
@@ -105,30 +104,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		power = omega*torque;
 
 		this.getIOSides(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.splitmode));
 		this.transferPower(world, x, y, z, meta);
-		//if (!this.worldObj.isRemote)
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", torquein, torquein2, this.torque));
-		/*
-		if (this.testForLoopCheat()) {
-			cheatCount++;
-			if (cheatCount > 20) {
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", cheatCount));
-				torque = ReikaMathLibrary.extrema(torquein, torquein2, "absmin");
-				ReikaWorldHelper.legacySetBlockWithNotify(worldObj, x, y, z, 0); //cause loss of machine
-				worldObj.createExplosion(null, x, y, z, 2F+par5Random.nextFloat(), true);
-			}
-		}
-		else {
-			cheatTick++;
-		}
-		if (cheatTick > 20) {
-			cheatTick = 0;
-			cheatCount = 0;
-		}*/
+		power = (long)omega*(long)torque;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -336,15 +315,15 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		ready = y;
 		ready2 = y;
 		omegain = torquein = 0;
-		if (meta < 8) {
+		if (!this.isSplitting()) {
 			TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 			TileEntity te2 = world.getBlockTileEntity(readx2, ready2, readz2);
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
-			if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
+			if (this.isProvider(te)) {
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft devicein = (TileEntityShaft)te;
-					if (devicein.getBlockMetadata() >= 6) {
+					if (devicein.isCross()) {
 						this.mergeReadFromCross(devicein, 0);
 						//  return;
 					}
@@ -373,7 +352,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				}
 				if (m == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein = (TileEntitySplitter)te;
-					if (devicein.getBlockMetadata() >= 8) {
+					if (devicein.isSplitting()) {
 						this.readFromSplitter(devicein);
 					}
 					else if (devicein.writex == x && devicein.writez == z) {
@@ -385,10 +364,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			else {
 				torquein = omegain = 0;
 			}
-			if (this.isProvider(te2) && this.isIDTEMatch(world, readx2, ready2, readz2)) {
+			if (this.isProvider(te2)) {
 				if (m2 == MachineRegistry.SHAFT) {
 					TileEntityShaft devicein2 = (TileEntityShaft)te2;
-					if (devicein2.getBlockMetadata() >= 6) {
+					if (devicein2.isCross()) {
 						this.mergeReadFromCross(devicein2, 1);
 						// ReikaChatHelper.writeInt(this.omegain2);
 						// return;
@@ -418,7 +397,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				}
 				if (m2 == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
-					if (devicein2.getBlockMetadata() >= 8) {
+					if (devicein2.isSplitting()) {
 						this.readFromSplitter(devicein2);
 					}
 					else if (devicein2.writex == x && devicein2.writez == z) {
@@ -471,7 +450,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			}
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
-				if (devicein.getBlockMetadata() >= 6) {
+				if (devicein.isCross()) {
 					this.readFromCross(devicein);
 					//ReikaChatHelper.writeInt(this.torque);
 					return;
@@ -503,7 +482,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
-				if (devicein.getBlockMetadata() >= 8) {
+				if (devicein.isSplitting()) {
 					this.readFromSplitter(devicein);
 					torque = torquein;
 					omega = omegain;
@@ -519,6 +498,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			this.writeToReceiver();
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d * %d = %d", this.omega, this.torque, this.power));
 		}
+	}
+
+	public boolean isSplitting() {
+		return this.getBlockMetadata() >= 8;
 	}
 
 	private boolean isLoopingPower(PowerSourceList in1, PowerSourceList in2) {
@@ -628,7 +611,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("mode", splitmode);
-		NBT.setBoolean("split", split);
 	}
 
 	/**
@@ -639,7 +621,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	{
 		super.readFromNBT(NBT);
 		splitmode = NBT.getInteger("mode");
-		split = NBT.getBoolean("split");
 	}
 
 	@Override
@@ -679,7 +660,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 		if (caller == null)
 			caller = this;
-		if (this.getBlockMetadata() < 8) { //merge
+		if (!this.isSplitting()) { //merge
 			PowerSourceList in1 = pwr.getAllFrom(worldObj, readx, ready, readz, this, caller);
 			PowerSourceList in2 = pwr.getAllFrom(worldObj, readx2, ready2, readz2, this, caller);
 			pwr.addAll(in1);

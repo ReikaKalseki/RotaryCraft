@@ -141,7 +141,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		if (type == null)
 			type = MaterialRegistry.STEEL;
 		tickcount++;
-		this.getIOSides(world, x, y, z, this.getBlockMetadata());
+		this.getIOSides(world, x, y, z, meta);
 
 		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
 			ratio = -ratio;
@@ -149,7 +149,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
 		if (tickcount >= 20) { // Every 1s
-			this.getLube(world, x, y, z, this.getBlockMetadata());
+			this.getLube(world, x, y, z, meta);
 			tickcount = 0;
 		}
 		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= MAXLUBE) {
@@ -256,7 +256,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.getBlockMetadata() >= 6) {
+			if (devicein.isCross()) {
 				this.readFromCross(devicein);
 				return;
 			}
@@ -277,7 +277,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.getBlockMetadata() >= 8) {
+			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
 				return;
 			}

@@ -429,7 +429,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		this.getRatio();
 		omegain = torquein = 0;
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
-		if (!this.isProvider(te) || !this.isIDTEMatch(world, readx, ready, readz)) {
+		if (!this.isProvider(te)) {
 			omega = 0;
 			torque = 0;
 			power = 0;
@@ -438,7 +438,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.getBlockMetadata() >= 6) {
+			if (devicein.isCross()) {
 				this.readFromCross(devicein);
 				return;
 			}
@@ -459,7 +459,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.getBlockMetadata() >= 8) {
+			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
 				//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 				return;

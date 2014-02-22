@@ -376,11 +376,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		readtorque[1] = 0;
 		TileEntity te1 = worldObj.getBlockTileEntity(readx, ready, readz);
 		TileEntity te2 = worldObj.getBlockTileEntity(readx2, ready2, readz2);
-		if (this.isProvider(te1) && this.isIDTEMatch(world, readx, ready, readz)) {
+		if (this.isProvider(te1)) {
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te1;
-				if (devicein.getBlockMetadata() >= 6) {
+				if (devicein.isCross()) {
 					this.crossReadFromCross(devicein, 0);
 					return;
 				}
@@ -402,7 +402,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te1;
-				if (devicein.getBlockMetadata() >= 8) {
+				if (devicein.isSplitting()) {
 					this.crossReadFromSplitter(devicein, 0);
 					return;
 				}
@@ -412,11 +412,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 		}
-		if (this.isProvider(te2) && this.isIDTEMatch(world, readx2, ready2, readz2)) {
+		if (this.isProvider(te2)) {
 			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
 			if (m2 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein2 = (TileEntityShaft)te2;
-				if (devicein2.getBlockMetadata() >= 6) {
+				if (devicein2.isCross()) {
 					this.crossReadFromCross(devicein2, 1);
 					return;
 				}
@@ -438,7 +438,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			}
 			if (m2 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
-				if (devicein2.getBlockMetadata() >= 8) {
+				if (devicein2.isSplitting()) {
 					this.crossReadFromSplitter(devicein2, 1);
 					return;
 				}
@@ -461,7 +461,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 		omegain = torquein = 0;
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
-		if (!this.isProvider(te) || !this.isIDTEMatch(world, readx, ready, readz)) {
+		if (!this.isProvider(te)) {
 			omega = 0;
 			torque = 0;
 			power = 0;
@@ -470,7 +470,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (world.getBlockMetadata(readx, ready, readz) >= 6) {
+			if (devicein.isCross()) {
 				this.readFromCross(devicein);
 				return;
 			}
@@ -491,7 +491,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.getBlockMetadata() >= 8) {
+			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
 				return;
 			}

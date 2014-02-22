@@ -251,7 +251,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
-			if (devicein.getBlockMetadata() >= 6) {
+			if (devicein.isCross()) {
 				omegain = this.readFromCross(devicein, false);
 				torquein = this.readFromCross(devicein, true);
 			}
@@ -272,7 +272,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
-			if (devicein.getBlockMetadata() >= 8) {
+			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
 				return;
 			}

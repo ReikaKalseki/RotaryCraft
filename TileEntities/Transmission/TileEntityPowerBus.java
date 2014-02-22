@@ -89,7 +89,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		return hubX != Integer.MIN_VALUE && hubY != Integer.MIN_VALUE && hubZ != Integer.MIN_VALUE;
 	}
 
-	private int getAbsRatio(ForgeDirection dir) {
+	public int getAbsRatio(ForgeDirection dir) {
 		return this.getRatioFromItem(inv[dir.ordinal()-2]);
 	}
 

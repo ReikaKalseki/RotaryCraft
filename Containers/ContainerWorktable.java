@@ -100,7 +100,7 @@ public class ContainerWorktable extends CoreContainer {
 				if (item.stackSize == 1)
 					tile.setInventorySlotContents(i, null);
 				else
-					tile.setInventorySlotContents(i, new ItemStack(item.itemID, item.stackSize-1, item.getItemDamage()));
+					tile.getStackInSlot(i).stackSize--;
 			}
 		}
 		SoundRegistry.CRAFT.playSoundAtBlock(world, tile.xCoord, tile.yCoord, tile.zCoord, 0.3F, 1.5F);
@@ -135,8 +135,5 @@ public class ContainerWorktable extends CoreContainer {
 		}
 		tile.craftable = true;
 		tile.setToCraft(is);
-		if (!world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
-			return;
-		this.craft();
 	}
 }

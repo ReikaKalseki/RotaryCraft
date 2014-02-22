@@ -94,4 +94,8 @@ public class ShaftPowerBus {
 		blocks.clear();
 	}
 
+	public ArrayList<TileEntityPowerBus> getBlocks() {
+		return null;
+	}
+
 }

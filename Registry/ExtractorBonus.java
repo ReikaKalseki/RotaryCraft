@@ -43,7 +43,7 @@ public enum ExtractorBonus {
 	IRIDIUM(ExtractorModOres.getSolutionProduct(ModOreList.IRIDIUM), ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM), 0.5F),
 	TUNGSTEN(ExtractorModOres.getSolutionProduct(ModOreList.TUNGSTEN), ItemStacks.ironoreflakes, 0.75F);
 
-	private static final ExtractorBonus[] bonusList = ExtractorBonus.values();
+	private static final ExtractorBonus[] bonusList = values();
 
 	private ItemStack bonusItem;
 	private ItemStack sourceItem;

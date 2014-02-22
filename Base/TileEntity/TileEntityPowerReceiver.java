@@ -189,7 +189,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		this.clear();
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
-		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
+		if (this.isProvider(te)) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -254,7 +254,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", powerin[0][0], powerin[0][1], powerin[0][2]));
 
 		te = worldObj.getBlockTileEntity(readx2, ready2, readz2);
-		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx2, ready2, readz2)) {
+		if (this.isProvider(te)) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx2, ready2, readz2);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -331,7 +331,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		TileEntity te3 = worldObj.getBlockTileEntity(readx3, ready3, readz3);
 		TileEntity te4 = worldObj.getBlockTileEntity(readx4, ready4, readz4);
 
-		if (this.isProvider(te1) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
+		if (this.isProvider(te1)) {
 			if (id1 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te1;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -380,7 +380,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omegain = 0;
 
 
-		if (this.isProvider(te2) && this.isIDTEMatch(worldObj, readx2, ready2, readz2)) {
+		if (this.isProvider(te2)) {
 			if (id2 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te2;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -430,7 +430,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		torquein = 0;
 		omegain = 0;
 
-		if (this.isProvider(te3) && this.isIDTEMatch(worldObj, readx3, ready3, readz3)) {
+		if (this.isProvider(te3)) {
 			if (id3 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te3;
 				if (devicein.getBlockMetadata() >= 6) {
@@ -479,7 +479,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		torquein = 0;
 		omegain = 0;
 
-		if (this.isProvider(te4) && this.isIDTEMatch(worldObj, readx4, ready4, readz4)) {
+		if (this.isProvider(te4)) {
 			if (id4 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te4;
 				if (devicein.getBlockMetadata() >= 6) {

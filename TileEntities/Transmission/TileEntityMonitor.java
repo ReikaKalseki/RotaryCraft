@@ -48,10 +48,10 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 		omegain = torquein = 0;
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, y, readz);
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
-		if (this.isProvider(te) && this.isIDTEMatch(world, readx, ready, readz)) {
+		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
-				if (devicein.getBlockMetadata() >= 6) {
+				if (devicein.isCross()) {
 					this.readFromCross(devicein);
 					return;
 				}
@@ -78,7 +78,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
-				if (devicein.getBlockMetadata() >= 8) {
+				if (devicein.isSplitting()) {
 					this.readFromSplitter(devicein);
 					return;
 				}

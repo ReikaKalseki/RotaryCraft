@@ -250,11 +250,11 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
-		if (this.isProvider(te) && this.isIDTEMatch(worldObj, readx, ready, readz)) {
+		if (this.isProvider(te)) {
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
-				if (devicein.getBlockMetadata() >= 6) {
+				if (devicein.isCross()) {
 					this.readFromCross(devicein);
 					return;
 				}
@@ -275,7 +275,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
-				if (devicein.getBlockMetadata() >= 8) {
+				if (devicein.isSplitting()) {
 					this.readFromSplitter(devicein);
 					return;
 				}

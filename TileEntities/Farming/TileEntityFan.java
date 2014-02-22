@@ -115,7 +115,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	public int getRange() {
-		long power2 = ReikaMathLibrary.extrema((int)(power - MINPOWER), (int)MAXPOWER, "absmin");
+		if (power < MINPOWER)
+			return 0;
+		long power2 = Math.min(power - MINPOWER, MAXPOWER);
 		int range = 8+(int)(power2-MINPOWER)/FALLOFF;
 		if (range > this.getMaxRange())
 			range = this.getMaxRange();
