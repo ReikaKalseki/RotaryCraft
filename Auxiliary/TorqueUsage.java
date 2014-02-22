@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
@@ -205,7 +205,7 @@ public class TorqueUsage {
 
 	private static void manageBus(World world, TileEntityBusController tile) {
 		ShaftPowerBus bus = tile.getBus();
-		ArrayList<TileEntityPowerBus> blocks = bus.getBlocks();
+		List<TileEntityPowerBus> blocks = bus.getBlocks();
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntityPowerBus te = null;
 			if (blocks.get(i) instanceof TileEntityPowerBus) {
