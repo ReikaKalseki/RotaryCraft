@@ -127,7 +127,7 @@ public class RenderDisplay extends RotaryTERenderer {
 			return;
 		GL11.glTranslated(0, 0, 0.495);
 		ReikaRenderHelper.prepareGeoDraw(true);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		int r = tile.getRed();
 		int g = tile.getGreen();
 		int b = tile.getBlue();

@@ -107,8 +107,8 @@ public class GuiBevel extends GuiNonPoweredMachine
 			out = 3;
 			break;
 		case 5:
-			in = 4;
-			out = 2;
+			in = 2;
+			out = 4;
 			break;
 		case 6:
 			in = 5;
@@ -190,7 +190,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 	}
 
 	public void getDirectionFromIO() {
-		//System.out.print(bevel.colorNames[in]+" to "+bevel.colorNames[out]+" -> data: ");
+		//System.out.println(RotaryAux.sideColorNames[in]+" to "+RotaryAux.sideColorNames[out]+" -> data: ");
 		switch(in) {
 		case 0:
 			switch(out) {
@@ -289,6 +289,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 			}
 			break;
 		}
+		//System.out.println(posn);
 	}
 
 	private void setValidStates() {
@@ -308,7 +309,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 			in = button.id;
 			this.setValidStates();
 		}
-		else if (button.id < 24000 ){
+		else if (button.id < 24000) {
 			if (!isValid[button.id-6])
 				return;
 			out = button.id-6;

@@ -131,7 +131,7 @@ public class RenderProjector extends RotaryTERenderer {
 		if (!te.on)
 			return;
 		ReikaRenderHelper.prepareGeoDraw(false);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		double a = 0; double b = 0; double c = 0;
 		double d = -te.getRange()-0.001;
 		if (d > 11.999)
@@ -255,7 +255,7 @@ public class RenderProjector extends RotaryTERenderer {
 		int v = 0;
 		int du = 1;
 		int dv = 1;
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		if (te.getBlockMetadata()%2 == 0) {
 			GL11.glFrontFace(GL11.GL_CW);
 		}
@@ -556,7 +556,7 @@ public class RenderProjector extends RotaryTERenderer {
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(1, 1, 1);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		v5.setColorOpaque(255, 255, 255);
 		GL11.glTranslated(0, voffset, 0);
 		double w;

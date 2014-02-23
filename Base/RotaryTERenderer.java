@@ -61,7 +61,7 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		Color[] colors = RotaryAux.sideColors;
 		ReikaRenderHelper.prepareGeoDraw(true);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorRGBA(colors[0].getRed(), colors[0].getGreen(), colors[0].getBlue(), alpha);
 		v5.addVertex(p2-offset, p4-offset, p6-offset);

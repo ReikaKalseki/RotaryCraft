@@ -71,7 +71,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (broken)
 			return;
 		this.adjustAim(world, x, y, z, meta);
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+
+		if (!world.isRemote) {
 			AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
 			List in = world.getEntitiesWithinAABB(Entity.class, above);
 			for (int i = 0; i < in.size(); i++) {
@@ -99,6 +100,10 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 
 	public float getLightLevel() {
 		if (broken)
+			return 0;
+		if (worldObj.provider.dimensionId == -1 || worldObj.provider.dimensionId == 1)
+			return 0;
+		if (worldObj.provider.hasNoSky)
 			return 0;
 		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord) != null)
 			return 0;

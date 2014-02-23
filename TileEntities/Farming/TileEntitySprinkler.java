@@ -10,93 +10,26 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntitySprinkler extends RotaryCraftTileEntity implements RangedEffect, PipeConnector {
-
-	public static final int CAPACITY = 16000;
-
-	private int waterLevel = 0;
-	private int waterPressure = 0;
-
-	private int soundtick = 40;
-
-	public int getWater() {
-		return waterLevel;
-	}
-
-	public int getPressure() {
-		return waterPressure;
-	}
-
-	public void getLiq(World world, int x, int y, int z, int metadata) {
-		int oldLevel = 0;
-		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y+1, z);
-			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
-				if (waterLevel < CAPACITY) {
-					oldLevel = tile.getLiquidLevel();
-					int toremove = tile.getLiquidLevel()/4+1;
-					tile.removeLiquid(toremove);
-					waterLevel = ReikaMathLibrary.extrema(waterLevel+oldLevel/4+1, 0, "max");
-				}
-				waterPressure = tile.getPressure();
-			}
-		}
-		if (waterLevel > CAPACITY)
-			waterLevel = CAPACITY;
-	}
-
+public class TileEntitySprinkler extends SprinklerBlock {
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
-		soundtick++;
-		this.getLiq(world, x, y, z, meta);
-		if (waterLevel <= 0)
-			return;
-		waterLevel -= 3;
-		this.hydrate(world, x, y, z, meta);
-		if (this.getRange() > 0 && waterLevel > 0 && soundtick >= 40) {
-			SoundRegistry.SPRINKLER.playSoundAtBlock(world, x, y, z, 1, 1);
-			soundtick = 0;
-		}
-		else {
-
-		}
-	}
-
-	public int getRange() {
-		int val = 0;
-		if (waterPressure <= 0)
-			return 0;
-		val = waterPressure/80;
-		if (val > this.getMaxRange())
-			val = this.getMaxRange();
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", val));
-		return val;
-	}
-
-	public void hydrate(World world, int x, int y, int z, int meta) {
-		if (this.getRange() > 0)
-			RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
+	public void performEffects(World world, int x, int y, int z) {
+		RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
 		this.spawnParticles(world, x, y, z);
+		if (!world.isRemote)
+			this.hydrate(world, x, y, z);
+	}
+
+	public void hydrate(World world, int x, int y, int z) {
 		int ytop = y-1;
 		int range = this.getRange();
 		for (int i = -range; i <= range; i++) {
@@ -106,7 +39,6 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 					for (int k = y-1; k >= 0 && !top; k--) {
 						int foundid = world.getBlockId(x+i, k, z+j);
 						if (foundid == Block.fire.blockID) {
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", ytop));
 							world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*rand.nextFloat(), 0.5F+0.5F*rand.nextFloat());
 							world.setBlock(x+i, k, z+j, 0);
 						}
@@ -130,7 +62,10 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 								world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
 							}
 							if (modcrop != null && !modcrop.isRipe(world, x+i, k, z+j)) {
-								world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
+								//world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
+								Block b = Block.blocksList[foundid];
+								b.updateTick(world, x+i, k, z+j, rand);
+								world.markBlockForUpdate(x+i, k, z+j);
 							}
 						}
 						if (foundid == Block.tilledField.blockID) {
@@ -187,37 +122,6 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBT.setInteger("level", waterLevel);
-		NBT.setInteger("pressure", waterPressure);
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		waterLevel = NBT.getInteger("level");
-		waterPressure = NBT.getInteger("pressure");
-
-		if (waterLevel < 0)
-		{
-			waterLevel = 0;
-		}
-		if (waterPressure < 0)
-		{
-			waterPressure = 0;
-		}
-	}
-
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
@@ -233,50 +137,23 @@ public class TileEntitySprinkler extends RotaryCraftTileEntity implements Ranged
 		return MachineRegistry.SPRINKLER;
 	}
 
-
-	@Override
-	public int getMaxRange() {
-		return 8;
-	}
-
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+	public int getCapacity() {
+		return 180;
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side == ForgeDirection.UP;
-	}
-
-	public boolean canFill(ForgeDirection side, Fluid f) {
-		return f.equals(FluidRegistry.WATER) && side == ForgeDirection.UP;
+	public int getWaterConsumption() {
+		return 3;
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (this.canFill(from, resource.getFluid())) {
-			int space = CAPACITY-waterLevel;
-			int add = Math.min(space, resource.amount);
-			waterLevel += add;
-			return add;
-		}
-		return 0;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-
-	@Override
-	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
+	public ForgeDirection getPipeDirection() {
+		return ForgeDirection.UP;
 	}
 }

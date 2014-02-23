@@ -37,7 +37,7 @@ public class RenderFreezeGunShot extends Render
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Entity/freezegun.png");
-		Tessellator var11 = new Tessellator();
+		Tessellator var11 = Tessellator.instance;
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;

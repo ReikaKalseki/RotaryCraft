@@ -18,36 +18,23 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements PipeConnector, RangedEffect {
+public class TileEntityLawnSprinkler extends SprinklerBlock {
 
-	public static final int CAPACITY = 5;
-
-	private int liquid;
-	private int pressure;
-	private StepTimer soundTimer = new StepTimer(40);
 	private int speed;
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
-		if (this.canCauseEffects()) {
+		if (this.canPerformEffects()) {
 			if (speed < 24)
 				speed += 1;
 		}
@@ -74,43 +61,17 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public void performEffects(World world, int x, int y, int z) {
+		RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
 		if (!world.isRemote) {
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.PIPE) {
-				TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(x, y-1, z);
-				if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
-					if (liquid < CAPACITY) {
-						int oldLevel = tile.getLiquidLevel();
-						int toremove = tile.getLiquidLevel()/4+1;
-						tile.removeLiquid(toremove);
-						liquid = ReikaMathLibrary.extrema(liquid+oldLevel/4+1, 0, "max");
-					}
-					pressure = tile.getPressure();
-				}
+			for (int k = 0; k < 3; k++) {
+				this.accelerateGrowth(world, x, y, z);
+				this.extinguishFire(world, x, y, z);
 			}
+			if (this.getPressure() > 10000)
+				this.damageMobs(world, x, y, z);
 		}
-
-		if (this.canCauseEffects()) {
-			if (!world.isRemote) {
-				for (int k = 0; k < 3; k++) {
-					this.accelerateGrowth(world, x, y, z);
-					this.extinguishFire(world, x, y, z);
-				}
-				if (pressure > 10000)
-					this.damageMobs(world, x, y, z);
-			}
-			this.spreadWater(world, x, y, z);
-			soundTimer.update();
-			if (soundTimer.checkCap()) {
-				SoundRegistry.SPRINKLER.playSoundAtBlock(world, x, y, z);
-			}
-			liquid--;
-		}
-		//ReikaJavaLibrary.pConsole(liquid+":"+this.getSide());
-	}
-
-	private boolean canCauseEffects() {
-		return this.getRange() > 0 && liquid > 0;
+		this.spreadWater(world, x, y, z);
 	}
 
 	private void extinguishFire(World world, int x, int y, int z) {
@@ -149,7 +110,10 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				}
 				if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
-					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+					Block b = Block.blocksList[id];
+					b.updateTick(world, rx, i, rz, rand);
+					world.markBlockForUpdate(rx, i, rz);
 				}
 			}
 		}
@@ -178,19 +142,6 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 			double pz = z-1+2*rand.nextFloat();
 			world.spawnParticle("splash", px+0.5, py, pz+0.5, 0, 0, 0);
 		}
-		/*
-		for (vel = 0; vel < r; vel += 0.1) {
-			py = y-0.1875D+1.5;
-			for (int i = 0; i < rand.nextInt(5+d*4); i++) {
-				double vx = vel*(-1+rand.nextFloat()*2);
-				vx *= 0.5;
-				double vz = vel*(-1+rand.nextFloat()*2);
-				vz *= 0.5;
-				double px = x-1+2*rand.nextFloat();
-				double pz = z-1+2*rand.nextFloat();
-				world.spawnParticle("splash", px+0.5, py, pz+0.5, vx, 0, vz);
-			}
-		}*/
 		for (int i = 0; i < 3; i++)
 			this.createWaterStream(world, x, y, z, i*120+60);
 	}
@@ -207,74 +158,34 @@ public class TileEntityLawnSprinkler extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
-	}
-
-	@Override
-	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side == ForgeDirection.DOWN ? p == MachineRegistry.PIPE : false;
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (!resource.getFluid().equals(FluidRegistry.WATER))
-			return 0;
-		int toadd = Math.min(resource.amount, CAPACITY-liquid);
-		liquid += toadd;
-		return toadd;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 
-		NBT.setInteger("press", pressure);
-		NBT.setInteger("lvl", liquid);
-
 		NBT.setInteger("spd", speed);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 
-		pressure = NBT.getInteger("press");
-		liquid = NBT.getInteger("lvl");
-
 		speed = NBT.getInteger("speed");
 	}
 
 	@Override
-	public int getRange() {
-		int val = 0;
-		if (pressure <= 0)
-			return 0;
-		val = pressure/80;
-		if (val > this.getMaxRange())
-			val = this.getMaxRange();
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", val));
-		return val;
+	public int getCapacity() {
+		return 5;
 	}
 
 	@Override
-	public int getMaxRange() {
-		return 8;
+	public int getWaterConsumption() {
+		return 1;
+	}
+
+	@Override
+	public ForgeDirection getPipeDirection() {
+		return ForgeDirection.DOWN;
 	}
 
 }

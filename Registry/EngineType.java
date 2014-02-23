@@ -339,4 +339,8 @@ public enum EngineType {
 	public ItemStack getItem() {
 		return MachineRegistry.ENGINE.getCraftedMetadataProduct(this.ordinal());
 	}
+
+	public boolean usesAdditives() {
+		return this == SPORT;
+	}
 }

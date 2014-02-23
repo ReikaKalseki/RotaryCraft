@@ -256,8 +256,7 @@
 			The sprinkler will, when supplied with water, spray it out on the blocks below, watering crops and speeding up their growth, hydrating farmland, and extinguishing fires. Higher water pressures - created by larger power inputs to the pumps - result in increased range.
 		</desc>
 		<note>
-			Internal Capacity: %d m^3
-			Range: Water Pressure/400
+			Range: Water Pressure/80
 		</note>
 	</sprinkler>
 	<vacuum>

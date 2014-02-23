@@ -135,7 +135,7 @@ public abstract class EnchantmentRenderer {
 		if (color[3] > 255)
 			color[3] = 255;
 
-		Tessellator var5 = new Tessellator();
+		Tessellator var5 = Tessellator.instance;
 		var5.startDrawing(GL11.GL_QUADS);
 		//var5.setBrightness(255);
 

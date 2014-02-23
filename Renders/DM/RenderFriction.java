@@ -102,7 +102,7 @@ public class RenderFriction extends RotaryTERenderer
 	private void renderHotSide(TileEntityFurnaceHeater tile, double par2, double par4, double par6) {
 		if (!tile.hasFurnace(tile.worldObj))
 			return;
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		if (tile.getTemperature() > 1000)
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Misc/hotfurnace_2.png");
 		else if (tile.getTemperature() > 750)

@@ -236,7 +236,7 @@ public abstract class IORenderer {
 			color[3] = 255;
 		boolean filled = true;
 
-		Tessellator var5 = new Tessellator();
+		Tessellator var5 = Tessellator.instance;
 		var5.startDrawing(GL11.GL_LINE_LOOP);
 		var5.setColorRGBA(color[0], color[1], color[2], color[3]);
 		var5.addVertex(x+1+0.0625*expand, y+1+0.0625*expand, z-0.0625*expand);

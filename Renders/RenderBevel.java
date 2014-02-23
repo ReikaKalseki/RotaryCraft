@@ -276,7 +276,7 @@ public class RenderBevel extends RotaryTERenderer
 		int[] rgb = {255, 255, 0};
 		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		//GL11.glEnable(GL11.GL_BLEND);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorRGBA(rgb[0], rgb[1], rgb[2], io.iotick);
 		v5.addVertex(p2-0.5, p4+vo, p6+0.5);

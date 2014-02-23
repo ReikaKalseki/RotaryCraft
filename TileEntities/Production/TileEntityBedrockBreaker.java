@@ -41,14 +41,11 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	private double dropz;
 	private ItemStack[] inv = new ItemStack[1];
 
-
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
 		this.readPower(false);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d   %d", this.power, this.torque, this.omega));
 		if (tickcount >= this.getOperationTime()) {
 			this.process(world, x, y, z, meta);
 			tickcount = 0;
@@ -56,15 +53,19 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	public void process(World world, int x, int y, int z, int metadata) {
-		if (power >= MINPOWER && torque >= MINTORQUE) {
+		if (power >= MINPOWER && torque >= MINTORQUE && this.hasInventorySpace()) {
 			if (this.getBlockInFront(world, x, y, z, metadata)) {
-				//this.power -= CUTPOWER;
 				this.grind(world, harvestx, harvesty, harvestz, metadata);
 			}
-			//if (this.power < CUTPOWER)
-			//world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "mob.blaze.death", 0.5F, par5Random.nextFloat() * 0.4F + 0.8F);
 		}
+	}
 
+	private boolean hasInventorySpace() {
+		if (inv[0] == null)
+			return true;
+		if (!ReikaItemHelper.matchStacks(inv[0], ItemStacks.bedrockdust))
+			return false;
+		return inv[0].stackSize+DifficultyEffects.BEDROCKDUST.getInt() <= inv[0].getMaxStackSize();
 	}
 
 	public void readPower(boolean doublesided) {
@@ -72,8 +73,6 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			return;
 		super.getPower(doublesided);
 		power = (long)omega * (long)torque;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
-		return;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -125,7 +124,6 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			id = 0;
 			break;
 		}
-		//world.setBlock(readx, ready+1, readz, 4);
 		return true;
 	}
 

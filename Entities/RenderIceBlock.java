@@ -33,7 +33,7 @@ public class RenderIceBlock extends Render {
 		GL11.glPushMatrix();
 		GL11.glTranslated(par2, par4, par6);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Entity/ice.png");
-		Tessellator var11 = new Tessellator();
+		Tessellator var11 = Tessellator.instance;
 		int var19 = e.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
 		int var21 = var19 / 65536;

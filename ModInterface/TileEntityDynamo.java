@@ -101,13 +101,13 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 1:
-			ready = x+1;
-			writey = x-1;
+			ready = y+1;
+			writey = y-1;
 			facingDir = ForgeDirection.DOWN;
 			break;
 		case 0:
-			ready = x-1;
-			writey = x+1;
+			ready = y-1;
+			writey = y+1;
 			facingDir = ForgeDirection.UP;
 			break;
 		}

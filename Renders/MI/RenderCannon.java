@@ -83,7 +83,7 @@ public class RenderCannon extends RotaryTERenderer
 
 	private void renderMarker(TileEntityLaunchCannon tile, double par2, double par4, double par6) {
 		ReikaRenderHelper.prepareGeoDraw(true);
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		double dx = tile.target[0]-tile.xCoord;
 		double dy = tile.target[1]-tile.yCoord;
 		double dz = tile.target[2]-tile.zCoord;

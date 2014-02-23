@@ -47,6 +47,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction {
@@ -192,11 +193,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				reqpow = -1;
 
 			if (this.isLabyBedrock(world, xread, yread, zread)) {
-				mintorque = 8192;
-				reqpow += 262144;
+				mintorque = Math.max(mintorque, PowerReceivers.BEDROCKBREAKER.getMinTorque());
+				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
 			}
 			else if (this.isTwilightForestToughBlock(id)) {
-				mintorque = 2048;
+				mintorque = Math.max(mintorque, 2048);
 				reqpow += 65536;
 			}
 		}

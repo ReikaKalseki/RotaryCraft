@@ -294,7 +294,7 @@ public class RenderSEngine extends RotaryTERenderer
 	}
 
 	private void renderGlow(TileEntity tile, double par2, double par4, double par6) {
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		GL11.glTranslated(par2, par4, par6);
 		int meta = tile.getBlockMetadata();
 		double x = 0;

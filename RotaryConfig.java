@@ -39,6 +39,7 @@ public class RotaryConfig extends ControlledConfig {
 	public static final EnumDifficulty EASIEST = EnumDifficulty.EASY;
 	public static final EnumDifficulty HARDEST = EnumDifficulty.HARD;
 
+	@Deprecated
 	public static final int MILLIBUCKET = FluidContainerRegistry.BUCKET_VOLUME;
 
 	//Initialization of the config

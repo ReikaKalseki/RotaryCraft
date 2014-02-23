@@ -120,7 +120,7 @@ public class RenderPump extends RotaryTERenderer
 			du -= offset;
 			dv -= offset;
 			double h = 0.625;
-			Tessellator v5 = new Tessellator();
+			Tessellator v5 = Tessellator.instance;
 			if (f.getLuminosity() > 0)
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();

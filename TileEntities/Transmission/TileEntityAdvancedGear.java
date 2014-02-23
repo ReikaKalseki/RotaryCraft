@@ -34,7 +34,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -435,7 +434,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			power = 0;
 			return;
 		}
-		MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
+		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.isCross()) {

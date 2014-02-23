@@ -108,7 +108,7 @@ public class RenderLaserGun extends RotaryTERenderer {
 
 		ReikaRenderHelper.prepareGeoDraw(false);
 		int[] rgb = {255, 0, 0};
-		Tessellator v5 = new Tessellator();
+		Tessellator v5 = Tessellator.instance;
 		v5.startDrawingQuads();
 		v5.setColorOpaque(rgb[0], rgb[1], rgb[2]);
 		v5.addVertex(par2+0.5-dd0, par4+voff, par6+0.5-dd1);

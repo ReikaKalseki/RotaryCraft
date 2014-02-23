@@ -129,10 +129,6 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	private int dumpvx;
 	private int dumpvz;
 
-	/** Where power is "written" to (block coords) *//*
-	public int writex;
-	public int writez;*/
-
 	public int backx;
 	public int backz;
 
@@ -146,47 +142,20 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
-	/**
-	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-	 * this more of a set than a get?*
-	 */
-	public int getInventoryStackLimit()
-	{
+	public int getInventoryStackLimit() {
 		return type.allowInventoryStacking() ? 64 : 1;
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return fuelslot.length;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
+	public ItemStack getStackInSlot(int par1) {
 		return fuelslot[par1];
 	}
 
-	/**
-	 *
-	 */
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		fuelslot[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
+	public void setInventorySlotContents(int par1, ItemStack is) {
+		fuelslot[par1] = is;
 	}
 
 	@Override
@@ -196,33 +165,28 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return super.isUseableByPlayer(ep);
 	}
 
-	public int getLiquidScaled(int par1)
-	{
+	public int getLiquidScaled(int par1) {
 		return (water.getLevel()*par1)/CAPACITY;
 	}
 
-	public int getTempScaled(int par1)
-	{
+	public int getTempScaled(int par1) {
 		return (temperature*par1)/MAXTEMP;
 	}
 
-	public int getEthanolScaled(int par1)
-	{
+	public int getEthanolScaled(int par1) {
 		return (fuel.getLevel() * par1) / FUELCAP;
 	}
 
-	public int getAdditivesScaled(int par1)
-	{
+	public int getAdditivesScaled(int par1) {
 		return (additives * par1*1000) / FUELCAP;
 	}
 
-	public int getJetFuelScaled(int par1)
-	{
+	public int getJetFuelScaled(int par1) {
 		return (fuel.getLevel() * par1) / FUELCAP;
 	}
 
-	private void consumeFuel(World world, int x, int y, int z, int meta) {
-		this.internalizeFuel(world, x, y, z, meta);
+	private void consumeFuel() {
+		this.internalizeFuel();
 
 		if (timer.checkCap("fuel")) {
 			switch(type) {
@@ -256,7 +220,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 	}
 
-	private void internalizeFuel(World world, int x, int y, int z, int meta) {
+	private void internalizeFuel() {
 		switch(type) {
 		case STEAM:
 			if (fuelslot[0] != null) {
@@ -302,26 +266,25 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 	}
 
-	private boolean getRequirements(World world, int x, int y, int z) {
+	private boolean getRequirements(World world, int x, int y, int z, int meta) {
 		if (type.isAirBreathing() && !this.hasAir(world, x, y, z))
 			return false;
 		switch (type) {
 		case DC:
-			return (world.isBlockIndirectlyGettingPowered(x, y, z));
+			return world.isBlockIndirectlyGettingPowered(x, y, z);
 		case WIND:
-			return this.windCheck(world, x, y, z, this.getBlockMetadata());
+			return this.windCheck(world, x, y, z, meta);
 		case STEAM:
-			return this.steamCheck(world, x, y, z);
+			return this.steamCheck(world, x, y, z, meta);
 		case GAS:
-			return this.combustionCheck(world, x, y, z, false);
+			return this.combustionCheck(world, x, y, z, meta);
 		case AC:
 			return this.acPower(world, x, y, z);
 		case SPORT:
-			return this.combustionCheck(world, x, y, z, true);
+			return this.combustionCheck(world, x, y, z, meta);
 		case HYDRO:
-			return this.hydroCheck(world, x, y, z, this.getBlockMetadata());
+			return this.hydroCheck(world, x, y, z, meta);
 		case MICRO:
-			return this.jetCheck(world, x, y, z);
 		case JET:
 			return this.jetCheck(world, x, y, z);
 		}
@@ -404,22 +367,21 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return (float)(P/type.getPower());
 	}
 
-	private void dealPanelDamage() {
+	private void dealPanelDamage(World world, int x, int y, int z, int meta) {
 		int a = 0; int b = 0;
-		if (this.getBlockMetadata() < 2)
+		if (meta < 2)
 			b = 1;
 		else
 			a = 1;
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(a, 1, b);
-		List in = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(a, 1, b);
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase ent = (EntityLivingBase)in.get(i);
 			ent.attackEntityFrom(RotaryCraft.hydrokinetic, 1);
 		}
 	}
 
-	private void dealBladeDamage() {
-		int meta = this.getBlockMetadata();
+	private void dealBladeDamage(World world, int x, int y, int z, int meta) {
 		int c = 0; int d = 0;
 		int a = 0; int b = 0;
 		if (meta < 2)
@@ -440,8 +402,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			d = -1;
 			break;
 		}
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord+c, yCoord, zCoord+d, xCoord+1+c, yCoord+1, zCoord+1+d).expand(a, 1, b);
-		List in = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+c, y, z+d, x+1+c, y+1, z+1+d).expand(a, 1, b);
+		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase ent = (EntityLivingBase)in.get(i);
 			ent.attackEntityFrom(DamageSource.generic, 1);
@@ -524,13 +486,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return flag && true;
 	}
 
-	private boolean combustionCheck(World world, int x, int y, int z, boolean isPerf) {
+	private boolean combustionCheck(World world, int x, int y, int z, int meta) {
 		if (timer.checkCap("temperature")) {
-			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
+			this.updateTemperature(world, x, y, z, meta);
 		}
 		if (fuel.isEmpty())
 			return false;
-		if (isPerf) {
+		if (type.usesAdditives()) {
 			if (additives <= 0)
 				starvedengine = true;
 			else
@@ -539,9 +501,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return true;
 	}
 
-	private boolean steamCheck(World world, int x, int y, int z) {
+	private boolean steamCheck(World world, int x, int y, int z, int meta) {
 		if (timer.checkCap("temperature")) {
-			this.updateTemperature(world, x, y, z, this.getBlockMetadata());
+			this.updateTemperature(world, x, y, z, meta);
 		}
 
 		if (temperature < 100) //water boiling point
@@ -581,15 +543,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (world.getBlockMaterial(x, y-1, z) == Material.lava)
 				temperature += 2;
 			if (Tamb < 0 && world.getBlockId(x, y-1, z) == Block.fire.blockID)
-				Tamb += 30;/*
-	    	if (this.temperature > Tamb+80)
-	    		this.temperature -= (this.temperature-Tamb)/80;
-	    	else if (this.temperature > Tamb+30)
-	    		this.temperature -= (this.temperature-Tamb)/30;
-	    	else if (this.temperature > Tamb+5)
-	    		this.temperature -= (this.temperature-Tamb/5);
-	    	else if (this.temperature > Tamb)
-	    		this.temperature -= (this.temperature-Tamb);*/
+				Tamb += 30;
 			if (temperature < Tamb)
 				temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
 			if (world.getBlockId(x, y-1, z) != Block.fire.blockID && world.getBlockMaterial(x, y-1, z) != Material.lava && temperature > Tamb)
@@ -600,15 +554,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			if (temperature > MAXTEMP)
 				this.overheat(world, x, y, z);
 			break;
-		case SPORT:/*
-	    	if (this.temperature > Tamb+80)
-	    		this.temperature -= (this.temperature-Tamb)/160;
-	    	else if (this.temperature > Tamb+30)
-	    		this.temperature -= (this.temperature-Tamb)/60;
-	    	else if (this.temperature > Tamb+5)
-	    		this.temperature -= (this.temperature-Tamb)/10;
-	    	else if (this.temperature > Tamb)
-	    		this.temperature -= (this.temperature-Tamb)/2;*/
+		case SPORT:
 			if (temperature < Tamb)
 				temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
 			if (omega > 0 && torque > 0) { //If engine is on
@@ -619,21 +565,21 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				}
 				if (temperature > MAXTEMP/2) {
 					if (rand.nextInt(10) == 0) {
-						world.spawnParticle("smoke", xCoord+0.5, yCoord+0.5, zCoord+0.5, 0, 0, 0);
-						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
+						world.spawnParticle("smoke", x+0.5, y+0.5, z+0.5, 0, 0, 0);
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.fizz", 1F, 1F);
 					}
 				}
 				if (temperature > MAXTEMP/1.25) {
 					if (rand.nextInt(3) == 0) {
-						world.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 1F, 1F);
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.fizz", 1F, 1F);
 					}
-					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+0.5, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0.5, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+0, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+0.0, yCoord+1.0625, zCoord+1, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+0, 0, 0, 0);
-					world.spawnParticle("smoke", xCoord+1, yCoord+1.0625, zCoord+1, 0, 0, 0);
+					world.spawnParticle("smoke", x+0.0, y+1.0625, z+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", x+0.5, y+1.0625, z+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", x+1, y+1.0625, z+0.5, 0, 0, 0);
+					world.spawnParticle("smoke", x+0.0, y+1.0625, z+0, 0, 0, 0);
+					world.spawnParticle("smoke", x+0.0, y+1.0625, z+1, 0, 0, 0);
+					world.spawnParticle("smoke", x+1, y+1.0625, z+0, 0, 0, 0);
+					world.spawnParticle("smoke", x+1, y+1.0625, z+1, 0, 0, 0);
 				}
 			}
 			if (temperature > MAXTEMP) {
@@ -745,7 +691,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return (float)frac;
 	}
 
-	private void getEngineType() {
+	private void getEngineType(World world, int x, int y, int z, int meta) {
 		if (type == null) {
 			type = EngineType.DC;
 			omega = 0;
@@ -769,14 +715,14 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		boolean on = true;
 		if (type.isECUControllable()) {
-			MachineRegistry m = MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord);
+			MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 			if (m == MachineRegistry.ECU) {
-				TileEntityEngineController ecu = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+				TileEntityEngineController ecu = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 				on = ecu.canProducePower();
 			}
 		}
 
-		if (on && this.getRequirements(worldObj, xCoord, yCoord, zCoord)) {
+		if (on && this.getRequirements(world, x, y, z, meta)) {
 			isOn = true;
 			int speed;
 			switch (type) {
@@ -786,7 +732,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				torque = EngineType.DC.getTorque();
 				break;
 			case WIND:
-				speed = (int)(EngineType.WIND.getSpeed()*this.getWindFactor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				speed = (int)(EngineType.WIND.getSpeed()*this.getWindFactor(world, x, y, z, meta));
 				this.updateSpeed(speed, true);
 				torque = EngineType.WIND.getTorque();
 				if (omega == 0) {
@@ -794,7 +740,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					torque = 0;
 				}
 				if (omega > 0)
-					this.dealBladeDamage();
+					this.dealBladeDamage(world, x, y, z, meta);
 				break;
 			case STEAM:
 				this.updateSpeed(EngineType.STEAM.getSpeed(), true);
@@ -819,35 +765,35 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				}
 				break;
 			case HYDRO:
-				speed = (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, true));
+				speed = (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(world, x, y, z, true));
 				if (speed == 0)
 					speed = 1;
 				boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
 				//ReikaJavaLibrary.pConsole(lubricant, Side.SERVER);
 				this.updateSpeed(speed, hasLube);
-				torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(worldObj, xCoord, yCoord, zCoord, false)*this.getArrayTorqueMultiplier());
+				torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z, false)*this.getArrayTorqueMultiplier());
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
 				}
 				if (omega > 0)
-					this.dealPanelDamage();
+					this.dealPanelDamage(world, x, y, z, meta);
 				break;
 			case MICRO:
 				this.updateSpeed(EngineType.MICRO.getSpeed(), true);
 				torque = EngineType.MICRO.getTorque();
 				break;
 			case JET:
-				this.checkJetFailure();
-				speed = (int)(EngineType.JET.getSpeed()*this.getChokedFraction(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()));
+				this.checkJetFailure(world, x, y, z, meta);
+				speed = (int)(EngineType.JET.getSpeed()*this.getChokedFraction(world, x, y, z, meta));
 				this.updateSpeed(speed, true);
 				torque = EngineType.JET.getTorque()/(int)ReikaMathLibrary.intpow(2, FOD);
 				if (omega == 0) {
 					isOn = false;
 					torque = 0;
 				}
-				if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
-					TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+				if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
+					TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 					if (te != null) {
 						if (!te.canProducePower()) {
 							return;
@@ -855,7 +801,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 					}
 				}
 				if (omega > 0)
-					this.ingest();
+					this.ingest(world, x, y, z, meta);
 				break;
 			}
 		}
@@ -898,9 +844,9 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 	}
 
-	private void checkJetFailure() {
+	private void checkJetFailure(World world, int x, int y, int z, int meta) {
 		if (isJetFailing)
-			this.jetEngineDetonation(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
+			this.jetEngineDetonation(world, x, y, z, meta);
 		else if (FOD > 0 && rand.nextInt(DifficultyEffects.JETFAILURE.getInt()*(9-FOD)) == 0) {
 			RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
 			isJetFailing = true;
@@ -913,13 +859,12 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	 * Items (including players' inventories and mob drops) will be spat out the back.
 	 * Large mobs (Player, creeper, spider, ghast, etc) will cause foreign object damage, necessitating repair.
 	 */
-	private void ingest() {
+	private void ingest(World world, int x, int y, int z, int meta) {
 		if (FOD >= 8)
 			return;
 		for (int step = 0; step < 8; step++) {
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", step));
-			AxisAlignedBB zone = this.getSuctionZone(this.getBlockMetadata(), step);
-			List inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
+			AxisAlignedBB zone = this.getSuctionZone(world, x, y, z, meta, step);
+			List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 			for (int i = 0; i < inzone.size(); i++) {
 				boolean immune = false;
 				if (inzone.get(i) instanceof EntityPlayer) {
@@ -937,33 +882,20 @@ PipeConnector, PowerGenerator, IFluidHandler {
 				if (inzone.get(i) instanceof EntityTurretShot)
 					immune = true;
 				Entity caught = (Entity)inzone.get(i);
-				if (!immune){// && ReikaWorldHelper.canBlockSee(worldObj, xCoord, yCoord, zCoord, caught.posX, caught.posY, caught.posZ, 8)) {
-					caught.motionX += (xCoord+0.5D - caught.posX)/20;
-					caught.motionY += (yCoord+0.5D - caught.posY)/20;
-					caught.motionZ += (zCoord+0.5D - caught.posZ)/20;
-					if (!worldObj.isRemote)
-						caught.velocityChanged = true;/*
-	    				while (ReikaMathLibrary.py3d(caught.motionX, caught.motionY, caught.motionZ) > 2) {
-	    					caught.motionX *= 0.9;
-	    					caught.motionY *= 0.9;
-	    					caught.motionZ *= 0.9;
-	    				}*/
+				if (!immune) {
+					caught.motionX += (x+0.5D - caught.posX)/20;
+					caught.motionY += (y+0.5D - caught.posY)/20;
+					caught.motionZ += (z+0.5D - caught.posZ)/20;
+					if (!world.isRemote)
+						caught.velocityChanged = true;
 				}
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5))));
-				if (ReikaMathLibrary.py3d(caught.posX-(xCoord+0.5), caught.posY-(yCoord+0.5), caught.posZ-(zCoord+0.5)) < 1.2) { // Kill the adjacent entities, except items, which are teleported
-					if (caught instanceof EntityItem) {/*
-    						caught.posX = dumpx+0.5D;
-    						caught.posY = this.yCoord+0.375D;
-    						caught.posZ = dumpz+0.5D;*/
-						//caught.motionX = dumpvx*1D;
-						//caught.motionY = 0.1;
-						//caught.motionZ = dumpvz*1D;
+				if (ReikaMathLibrary.py3d(caught.posX-(x+0.5), caught.posY-(y+0.5), caught.posZ-(z+0.5)) < 1.2) { // Kill the adjacent entities, except items, which are teleported
+					if (caught instanceof EntityItem) {
 						if (!caught.isDead) {
 							ItemStack is = ((EntityItem) caught).getEntityItem();
 							caught.setDead();
-							//ReikaChatHelper.writeItemStack(this.worldObj, is);
 							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlockId(dumpx, y, dumpz))) {
 								if (dumpvx == 1)
 									dumpx++;
 								if (dumpvx == -1)
@@ -974,13 +906,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 									dumpz--;
 								trycount++;
 							}
-							EntityItem item = new EntityItem(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, is);
-							if (!worldObj.isRemote)
-								worldObj.spawnEntityInWorld(item);
+							EntityItem item = new EntityItem(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, is);
+							if (!world.isRemote)
+								world.spawnEntityInWorld(item);
 							item.motionX = dumpvx*1.5D;
 							item.motionY = 0.15;
 							item.motionZ = dumpvz*1.5D;
-							if (!worldObj.isRemote)
+							if (!world.isRemote)
 								caught.velocityChanged = true;
 							if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
 								caught.setDead();
@@ -988,22 +920,13 @@ PipeConnector, PowerGenerator, IFluidHandler {
 								isJetFailing = true;
 							}
 						}
-						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
-						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
 					}
-					else if (caught instanceof EntityXPOrb) {/*
-    						caught.posX = dumpx+0.5D;
-    						caught.posY = this.yCoord+0.375D;
-    						caught.posZ = dumpz+0.5D;*/
-						//caught.motionX = dumpvx*1D;
-						//caught.motionY = 0.1;
-						//caught.motionZ = dumpvz*1D;
+					else if (caught instanceof EntityXPOrb) {
 						if (!caught.isDead) {
 							int xp = ((EntityXPOrb)caught).getXpValue();
 							caught.setDead();
-							//ReikaChatHelper.writeItemStack(this.worldObj, is);
 							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(worldObj.getBlockId(dumpx, yCoord, dumpz))) {
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlockId(dumpx, y, dumpz))) {
 								if (dumpvx == 1)
 									dumpx++;
 								if (dumpvx == -1)
@@ -1014,23 +937,19 @@ PipeConnector, PowerGenerator, IFluidHandler {
 									dumpz--;
 								trycount++;
 							}
-							EntityXPOrb item = new EntityXPOrb(worldObj, dumpx+0.5D, yCoord+0.375D, dumpz+0.5D, xp);
-							if (!worldObj.isRemote)
-								worldObj.spawnEntityInWorld(item);
+							EntityXPOrb item = new EntityXPOrb(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, xp);
+							if (!world.isRemote)
+								world.spawnEntityInWorld(item);
 							item.motionX = dumpvx*1.5D;
 							item.motionY = 0.15;
 							item.motionZ = dumpvz*1.5D;
-							if (!worldObj.isRemote)
+							if (!world.isRemote)
 								caught.velocityChanged = true;
 						}
-						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
-						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught.motionX)+" "+String.valueOf(caught.motionY)+" "+String.valueOf(caught.motionZ));
 					}
 					else if (caught instanceof EntityLivingBase && !(caught instanceof EntityPlayer && immune)) {
 						caught.setFire(2);
-						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(caught));
-						//ReikaChatHelper.writeInt(FOD);
-						if (!worldObj.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
+						if (!world.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
 							this.damageEngine();
 						if (FOD > 8)
 							FOD = 8;
@@ -1041,13 +960,12 @@ PipeConnector, PowerGenerator, IFluidHandler {
 							}
 						}
 						if (!caught.isDead && !(caught instanceof EntityLivingBase && ((EntityLivingBase)caught).getHealth() < 0))
-							SoundRegistry.INGESTION.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1.4F);
+							SoundRegistry.INGESTION.playSoundAtBlock(world, x, y, z, 1, 1.4F);
 						caught.attackEntityFrom(RotaryCraft.jetingest, 10000);
 						if (caught instanceof EntityPlayer) {
 							RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
 						}
 					}
-					//ReikaChatHelper.writeInt(FOD);
 				}
 			}
 		}
@@ -1072,7 +990,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		return caught instanceof EntityLivingBase;
 	}
 
-	private AxisAlignedBB getSuctionZone(int meta, int step) {
+	private AxisAlignedBB getSuctionZone(World world, int x, int y, int z, int meta, int step) {
 		int minx = 0;
 		int miny = 0;
 		int minz = 0;
@@ -1082,59 +1000,55 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		switch (meta) {
 		case 0:
-			minx = xCoord+1+step;
-			maxx = xCoord+1+step+1;
-			miny = yCoord-step;
-			maxy = yCoord+step+1;
-			minz = zCoord-step;
-			maxz = zCoord+step+1;
-			dumpx = xCoord-1;
-			dumpz = zCoord;
+			minx = x+1+step;
+			maxx = x+1+step+1;
+			miny = y-step;
+			maxy = y+step+1;
+			minz = z-step;
+			maxz = z+step+1;
+			dumpx = x-1;
+			dumpz = z;
 			dumpvx = -1;
 			dumpvz = 0;
 			break;
 		case 1:
-			minx = xCoord-1-step;
-			maxx = xCoord-1-step+1;
-			miny = yCoord-step;
-			maxy = yCoord+step+1;
-			minz = zCoord-step;
-			maxz = zCoord+step+1;
-			dumpx = xCoord+1;
-			dumpz = zCoord;
+			minx = x-1-step;
+			maxx = x-1-step+1;
+			miny = y-step;
+			maxy = y+step+1;
+			minz = z-step;
+			maxz = z+step+1;
+			dumpx = x+1;
+			dumpz = z;
 			dumpvx = 1;
 			dumpvz = 0;
 			break;
 		case 2:
-			minz = zCoord+1+step;
-			maxz = zCoord+1+step+1;
-			miny = yCoord-step;
-			maxy = yCoord+step+1;
-			minx = xCoord-step;
-			maxx = xCoord+step+1;
-			dumpx = xCoord;
-			dumpz = zCoord-1;
+			minz = z+1+step;
+			maxz = z+1+step+1;
+			miny = y-step;
+			maxy = y+step+1;
+			minx = x-step;
+			maxx = x+step+1;
+			dumpx = x;
+			dumpz = z-1;
 			dumpvx = 0;
 			dumpvz = -1;
 			break;
 		case 3:
-			minz = zCoord-1-step;
-			maxz = zCoord-1-step+1;
-			miny = yCoord-step;
-			maxy = yCoord+step+1;
-			minx = xCoord-step;
-			maxx = xCoord+step+1;
-			dumpx = xCoord;
-			dumpz = zCoord+1;
+			minz = z-1-step;
+			maxz = z-1-step+1;
+			miny = y-step;
+			maxy = y+step+1;
+			minx = x-step;
+			maxx = x+step+1;
+			dumpx = x;
+			dumpz = z+1;
 			dumpvx = 0;
 			dumpvz = 1;
 			break;
 		}
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d \t %d \t %d \t %d \t %d \t %d", minx, miny, minz, maxx, maxy, maxz));
-		/*ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, miny, minz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, maxy, minz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, maxx, maxy, maxz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, maxx, miny, maxz, 20);*/
+
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
 	}
 
@@ -1150,13 +1064,11 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		if (this.isMuffled(world, x, y, z)) {
 			volume = 0.3125F;
 		}
-		//double speedFactor = Math.sqrt(omega/(float)type.getSpeed());
-		//ReikaJavaLibrary.pConsole(speedFactor, Side.SERVER);
-		//pitchMultiplier *= speedFactor;
+
 		if (soundtick < type.getSoundLength(FOD, 1F/pitchMultiplier) && soundtick < 2000)
 			return;
 		soundtick = 0;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %s", power, this.enginetype, soundtick, enginemat));
+
 		if (type.electricNoise())
 			SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.125F*volume, 1F*pitchMultiplier);
 		if (type.turbineNoise()) {
@@ -1213,8 +1125,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			power = 0;
 		}
 		else {
-			this.getEngineType();
-			power = torque*omega;
+			this.getEngineType(world, x, y, z, meta);
+			power = (long)torque*(long)omega;
 		}
 
 		float pitch = 1F;
@@ -1269,7 +1181,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 		timer.updateTicker("fuel");
 		if (type.burnsFuel())
-			this.consumeFuel(world, x, y, z, meta);
+			this.consumeFuel();
 
 		if (type.requiresLubricant())
 			this.distributeLubricant(world, x, y, z);
@@ -1315,7 +1227,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			}
 		}
 		if (!lubricant.isEmpty() && omega > 0) {
-			if (world.getWorldTime()%80 == 0)
+			if (world.getWorldTime()%40 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}
@@ -1323,31 +1235,31 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			writex = xCoord-1;
-			writez = zCoord;
-			backx = xCoord+1;
-			backz = zCoord;
+			writex = x-1;
+			writez = z;
+			backx = x+1;
+			backz = z;
 			break;
 		case 1:
-			writez = zCoord;
-			writex = xCoord+1;
-			backx = xCoord-1;
-			backz = zCoord;
+			writez = z;
+			writex = x+1;
+			backx = x-1;
+			backz = z;
 			break;
 		case 2:
-			writez = zCoord-1;
-			writex = xCoord;
-			backx = xCoord;
-			backz = zCoord+1;
+			writez = z-1;
+			writex = x;
+			backx = x;
+			backz = z+1;
 			break;
 		case 3:	//works
-			writez = zCoord+1;
-			writex = xCoord;
-			backx = xCoord;
-			backz = zCoord-1;
+			writez = z+1;
+			writex = x;
+			backx = x;
+			backz = z-1;
 			break;
 		}
-		writey = yCoord;
+		writey = y;
 	}
 
 	/**
@@ -1373,10 +1285,8 @@ PipeConnector, PowerGenerator, IFluidHandler {
 
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < fuelslot.length; i++)
-		{
-			if (fuelslot[i] != null)
-			{
+		for (int i = 0; i < fuelslot.length; i++) {
+			if (fuelslot[i] != null) {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
 				fuelslot[i].writeToNBT(nbttagcompound);
@@ -1421,8 +1331,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
-			if (byte0 >= 0 && byte0 < fuelslot.length)
-			{
+			if (byte0 >= 0 && byte0 < fuelslot.length) {
 				fuelslot[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
@@ -1519,7 +1428,7 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	}
 
 	public void jetEngineDetonation(World world, int x, int y, int z, int meta) {
-		AxisAlignedBB zone = this.getFlameZone();
+		AxisAlignedBB zone = this.getFlameZone(world, x, y, z, meta);
 		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)in.get(i);
@@ -1598,16 +1507,16 @@ PipeConnector, PowerGenerator, IFluidHandler {
 		}
 	}
 
-	private AxisAlignedBB getFlameZone() {
-		switch(this.getBlockMetadata()) {
+	private AxisAlignedBB getFlameZone(World world, int x, int y, int z, int meta) {
+		switch(meta) {
 		case 0: //-x
-			return AxisAlignedBB.getAABBPool().getAABB(xCoord-6, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
+			return AxisAlignedBB.getAABBPool().getAABB(x-6, y, z, x+1, y+1, z+1);
 		case 1: //+x
-			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+7, yCoord+1, zCoord+1);
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+7, y+1, z+1);
 		case 2: //-z
-			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord-6, xCoord+1, yCoord+1, zCoord+1);
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z-6, x+1, y+1, z+1);
 		case 3: //+z
-			return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+7);
+			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+7);
 		default:
 			return null;
 		}
