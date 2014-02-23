@@ -16,10 +16,11 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBusController extends PoweredLiquidReceiver {
+public class TileEntityBusController extends PoweredLiquidReceiver implements TransmissionReceiver {
 
 	private ShaftPowerBus bus = new ShaftPowerBus(this);
 

@@ -26,15 +26,8 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	public int distancelimit = Math.max(64, ConfigRegistry.FLOODLIGHTRANGE.getValue());
 	public boolean beammode = false;
 
-	/** Used to detect if floodlight just turned off */
-	private boolean wentdark = false;
-
 	private BlockArray beam = new BlockArray();
 	private int lastRange = 0;
-	private boolean markUpdate = true;
-
-	/** Rate of conversion - one power++ = 1/falloff ++ light levels */
-	public static final int FALLOFF = 1024; //1kW a light level right now
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -42,13 +35,12 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower();
 		power = (long)omega*(long)torque;
-		this.makeBeam(world, x, y, z, meta);
+		if ((world.getTotalWorldTime()&8) == 8) //almost unnoticeable light lag, but big FPS increase
+			this.makeBeam(world, x, y, z, meta);
 	}
 
 	public void getPower() {
-		super.getPower(false);/*
-		lightlevel = ReikaMathLibrary.extrema(-1+(int)power/FALLOFF, 0, "max");
-		lightlevel = ReikaMathLibrary.extrema(lightlevel, 15, "absmin");*/
+		super.getPower(false);
 		if (power >= MINPOWER)
 			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 	}
@@ -93,7 +85,6 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	public void lightsOut(World world, int x, int y, int z) {
 		world.markBlockForUpdate(x, y, z);
 		world.notifyBlocksOfNeighborChange(x, y, z, this.getTileEntityBlockID());
-		wentdark = true;
 		for (int i = 0; i < beam.getSize(); i++) {
 			int[] xyz = beam.getNthBlock(i);
 			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
@@ -142,7 +133,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		if (power < MINPOWER)
 			return 0;
 		int ir = this.getMaxRange();
-		for (int i = 1; i < ir; i++) {
+		for (int i = 1; i <= ir; i++) {
 			int dx = xCoord+i*xstep;
 			int dy = yCoord+i*ystep;
 			int dz = zCoord+i*zstep;

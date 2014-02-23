@@ -81,7 +81,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return from == ForgeDirection.DOWN;
+		return from != ForgeDirection.UP;
 	}
 
 	@Override

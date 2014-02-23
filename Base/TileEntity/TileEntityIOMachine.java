@@ -13,8 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
@@ -70,9 +68,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		superCalled = true;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
@@ -102,9 +97,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		NBT.setInteger("wz2", writez2);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
@@ -134,23 +126,9 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 		writez2 = NBT.getInteger("wz2");
 
 		if (torque < 0)
-		{
 			torque = 0;
-		}
 		if (omega < 0)
-		{
 			omega = 0;
-		}
-		/*
-
-		if (!superCalled && this.isInWorld()) {
-			superTick++;
-			EntityPlayer ep = worldObj.getClosestPlayer(xCoord, yCoord, zCoord, -1);
-			if (ep != null && this.isSelfBlock() && superTick > 40) {
-				ReikaJavaLibrary.pConsole("Super() not called for "+this.getName()+"! Contact Reika immediately!");
-				ReikaChatHelper.write("Super() not called for "+this.getName()+"! Contact Reika immediately!");
-			}
-		}*/
 	}
 
 	protected boolean isProvider(TileEntity te) {
@@ -164,7 +142,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	public abstract boolean canProvidePower();
 
 	protected void copyStandardPower(World world, int x, int y, int z) {
-		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
+		TileEntityIOMachine devicein = (TileEntityIOMachine)this.getTileEntity(x, y, z);
 		if (devicein instanceof TileEntityShaft)
 			return;
 		if (!this.isPointingAt(world, x, y, z)) {
@@ -178,11 +156,9 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 
 	private boolean isPointingAt(World world, int x, int y, int z) {
 		boolean cy = false;
-		TileEntityIOMachine devicein = (TileEntityIOMachine)worldObj.getBlockTileEntity(x, y, z);
+		TileEntityIOMachine devicein = (TileEntityIOMachine)this.getTileEntity(x, y, z);
 		if (devicein instanceof TileEntityBevelGear || devicein instanceof TileEntityMultiClutch || devicein instanceof TileEntityBeltHub)
 			cy = true;
-		//ReikaJavaLibrary.pConsole(devicein.writex+", "+devicein.writey+", "+devicein.writez, devicein instanceof TileEntityBevelGear && this instanceof TileEntitySpawnerController);
-		//ReikaJavaLibrary.pConsole(devicein.writez, devicein instanceof TileEntityBevelGear);
 		if (devicein.writex == xCoord+pointoffsetx && devicein.writez == zCoord+pointoffsetz) {
 			if (!cy || devicein.writey == yCoord+pointoffsety) {
 				return true;
@@ -200,7 +176,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	public TileEntityIOMachine getInput() {
 		if (ready == Integer.MIN_VALUE)
 			ready = yCoord;
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		if (te instanceof TileEntityIOMachine)
 			return (TileEntityIOMachine)te;
 		return null;
@@ -209,18 +185,10 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	public TileEntityIOMachine getOutput() {
 		if (writey == Integer.MIN_VALUE)
 			writey = yCoord;
-		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		TileEntity te = this.getTileEntity(writex, writey, writez);
 		if (te instanceof TileEntityIOMachine)
 			return (TileEntityIOMachine)te;
 		return null;
-	}
-
-	protected void writePowerToConsole() {
-		ReikaJavaLibrary.pConsole(String.format("Torque: %d Nm;   Omega: %d rad/s;   Power: %.3fkW", torque, omega, power/1000D));
-	}
-
-	protected void writePowerToChat() {
-		ReikaChatHelper.write(String.format("Torque: %d Nm;   Omega: %d rad/s;   Power: %.3fkW", torque, omega, power/1000D));
 	}
 
 	public boolean isOutputBlock(int x, int y, int z) {
@@ -245,7 +213,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	protected void basicPowerReceiver() {
-		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		TileEntity te = this.getTileEntity(writex, writey, writez);
 		if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
 				if (omega > 0 && torque > 0)
@@ -257,8 +225,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	private boolean isBlacklistedReceiver(TileEntity te) {
-		//int id = te.getBlockType().blockID;
-		//int meta = te.getBlockMetadata();
 		return RotaryAux.isBlacklistedIOMachine(te);
 	}
 

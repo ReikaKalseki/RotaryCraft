@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -54,7 +55,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.transferBetween(world, x, y, z);
 		if (!isCovered) {
-			if (world.isRaining() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
+			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+			if (world.isRaining() && !biome.getEnableSnow() && biome.canSpawnLightningBolt() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
 				if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
 					this.addLiquid(25, FluidRegistry.WATER);
 				}

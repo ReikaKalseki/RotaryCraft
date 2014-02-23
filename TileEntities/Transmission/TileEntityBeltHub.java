@@ -20,12 +20,13 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider {
+public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver {
 
 	private boolean isEmitting;
 

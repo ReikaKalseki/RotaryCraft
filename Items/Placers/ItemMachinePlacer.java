@@ -149,13 +149,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				break;
 			}
 			return true;
-		}/*
-		if (m == MachineRegistry.HYDRAULICLINE) {
-			TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
-			ForgeDirection dir = ForgeDirection.values()[side];
-			//th.setInput(dir.getOpposite());
-			//th.setOutput(dir);
-		}*/
+		}
 		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
 		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR || m == MachineRegistry.MAGNETIC) {
 			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
@@ -263,7 +257,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();
-			int pow = p.getMinPowerForDisplay();
+			long pow = p.getMinPowerForDisplay();
 			int trq = p.getMinTorqueForDisplay();
 			int spd = p.getMinSpeedForDisplay();
 			boolean minp = !p.hasNoDirectMinPower();

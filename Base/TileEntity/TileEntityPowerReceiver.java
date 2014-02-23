@@ -27,7 +27,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
-	public final int MINPOWER;
+	public final long MINPOWER;
 	public final int MINTORQUE;
 	public final int MINSPEED;
 

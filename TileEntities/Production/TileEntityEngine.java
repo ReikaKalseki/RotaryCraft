@@ -67,6 +67,7 @@ import Reika.RotaryCraft.API.Event.JetEngineEnterFailureEvent;
 import Reika.RotaryCraft.API.Event.JetEngineExplosionEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -88,7 +89,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
-PipeConnector, PowerGenerator, IFluidHandler {
+PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*RotaryConfig.MILLIBUCKET;
@@ -1838,5 +1839,10 @@ PipeConnector, PowerGenerator, IFluidHandler {
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return Flow.INPUT;
+	}
+
+	@Override
+	public boolean hasInventory() {
+		return type.hasInventory();
 	}
 }

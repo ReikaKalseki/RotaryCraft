@@ -343,4 +343,8 @@ public enum EngineType {
 	public boolean usesAdditives() {
 		return this == SPORT;
 	}
+
+	public boolean hasInventory() {
+		return this.getSizeInventory() > 0;
+	}
 }

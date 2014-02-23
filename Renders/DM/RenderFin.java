@@ -28,7 +28,6 @@ public class RenderFin extends RotaryTERenderer
 {
 
 	private ModelFin FinModel = new ModelFin();
-	//private ModelFinV FinModelV = new ModelFinV();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -44,8 +43,7 @@ public class RenderFin extends RotaryTERenderer
 
 		ModelFin var14;
 		var14 = FinModel;
-		//ModelFinV var15;
-		//var14 = this.FinModelV;
+
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fintex.png");
 
 		GL11.glPushMatrix();
@@ -90,17 +88,11 @@ public class RenderFin extends RotaryTERenderer
 				GL11.glTranslated(0, -1, -1);
 			}
 		}
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
-
+		float var13;
 
 		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isInWorld()), -tile.phi, 0);
-		// else
-		//var15.renderAll();
+
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

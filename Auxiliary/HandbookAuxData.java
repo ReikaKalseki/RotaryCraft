@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -74,7 +75,7 @@ public final class HandbookAuxData {
 
 	private static final ArrayMap<HandbookRegistry> tabMappings = new ArrayMap(2);
 
-	private static final TreeMultimap<Integer, MachineRegistry> powerData = TreeMultimap.create();
+	private static final TreeMultimap<Long, MachineRegistry> powerData = TreeMultimap.create();
 	private static final TreeMultimap<Integer, MachineRegistry> torqueData = TreeMultimap.create();
 	private static final TreeMultimap<Integer, MachineRegistry> speedData = TreeMultimap.create();
 
@@ -96,10 +97,10 @@ public final class HandbookAuxData {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (!m.isDummiedOut()) {
-				if (m.isPowerReceiver()) {
+				if (m.isPowerReceiver() && !m.isModConversionEngine() && !m.isPoweredTransmissionMachine()) {
 					PowerReceivers p = m.getPowerReceiverEntry();
 					if (p != null) {
-						int minp = p.getMinPowerForDisplay();
+						long minp = p.getMinPowerForDisplay();
 						int mint = p.getMinTorqueForDisplay();
 						int mins = p.getMinSpeedForDisplay();
 
@@ -108,7 +109,7 @@ public final class HandbookAuxData {
 						speedData.put(mins, m);
 					}
 					else
-						ReikaJavaLibrary.spamConsole(m);
+						throw new RegistrationException(RotaryCraft.instance, "Machine "+m+" is a power receiver but has no power Enum!");
 				}
 			}
 		}
@@ -555,9 +556,9 @@ public final class HandbookAuxData {
 			}
 			else if (h == HandbookRegistry.TIERS) {
 				int maxw = 11;
-				NavigableSet<Integer> s = powerData.keySet();
+				NavigableSet<Long> s = powerData.keySet();
 				int t = 0;
-				for (int key : s) {
+				for (long key : s) {
 					if (t == subpage) {
 						String sg = String.format("- %d W", key);
 						font.drawString(sg, posX+font.getStringWidth("Machine Tiers")+14, posY+6, 0);

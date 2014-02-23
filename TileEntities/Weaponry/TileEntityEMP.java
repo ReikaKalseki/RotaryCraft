@@ -50,8 +50,6 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private static List<Class<? extends TileEntity>> blacklist = new ArrayList<Class<? extends TileEntity>>();
 
-	public static final double BLAST_ENERGY = 4.814D*1000000000000D; //1 kiloton
-
 	private boolean loading = true;
 	private boolean canLoad = true;
 
@@ -204,7 +202,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		//power = (long)BLAST_ENERGY+800;
 
-		if (power >= BLAST_ENERGY && !loading && !world.isRemote)
+		if (power >= MINPOWER && !loading && !world.isRemote)
 			this.fire(world, x, y, z);
 	}
 

@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
@@ -41,6 +42,7 @@ import Reika.RotaryCraft.API.Event.BorerDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -66,9 +68,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	/** Power required to break a block, per 0.1F hardness */
 	public static final int DIGPOWER = 64;
 	public static final int OBSIDIANTORQUE = 512;
-
-	/** Rate of conversion - one power++ = 1/falloff ++ range - not used by this machine*/
-	public static final int FALLOFF = 1024; //1kW per meter right now
 
 	public int step = 1;
 
@@ -103,12 +102,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		//ReikaJavaLibrary.pConsole(this.hasEnchantments());
-
-		//enchantments.put(Enchantment.efficiency, 4);
-		//enchantments.put(Enchantment.silkTouch, 1);
-
-		//ReikaJavaLibrary.pConsole(this.getEnchantment(Enchantment.efficiency));
 
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
@@ -142,29 +135,24 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 		if (nodig)
 			return;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(cutShape[0][0]));
 		if (omega <= 0)
 			return;
+
 		if (tickcount >= this.getOperationTime()) {
 			this.calcReqPower(world, x, y, z, meta);
-
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.reqpow));
 			if (power > reqpow && reqpow != -1) {
-				this.calcReqPower(world, x, y, z, meta);
-
+				jammed = false;
 				if (!world.isRemote)
 					this.forceGenAndPopulate(world, x, y, z, meta);
 
 				this.dig(world, x, y, z, meta);
-				jammed = false;
 			}
 			else {
 				jammed = true;
 			}
 			tickcount = 0;
-			if (reqpow == -1) {
-				//step = ReikaMathLibrary.extrema(step-1, 1, "max");
-			}
+			mintorque = 0;
+			reqpow = 0;
 		}
 	}
 
@@ -185,23 +173,24 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
 		int id = world.getBlockId(xread, yread, zread);
-		if (id != 0 && !(world.getBlockMaterial(xread, yread, zread) == Material.water || world.getBlockMaterial(xread, yread, zread) == Material.lava)) {
-			reqpow += (int)(DIGPOWER*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread));
-			if (ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread))) > mintorque)
-				mintorque = ReikaMathLibrary.ceil2exp((int)(16*10*Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread)));
-			if (Block.blocksList[world.getBlockId(xread, yread, zread)].getBlockHardness(world, xread, yread, zread) < 0 && !this.isLabyBedrock(world, xread, yread, zread))
-				reqpow = -1;
+		Material mat = world.getBlockMaterial(xread, yread, zread);
+		if (id != 0 && !(mat == Material.water || mat == Material.lava)) {
+			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
+			reqpow += (int)(DIGPOWER*10*hard);
+			mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
 
 			if (this.isLabyBedrock(world, xread, yread, zread)) {
-				mintorque = Math.max(mintorque, PowerReceivers.BEDROCKBREAKER.getMinTorque());
+				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
 				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
 			}
 			else if (this.isTwilightForestToughBlock(id)) {
-				mintorque = Math.max(mintorque, 2048);
+				mintorque += 2048;
 				reqpow += 65536;
 			}
+			else if (hard < 0) {
+				reqpow = -1;
+			}
 		}
-		//ReikaJavaLibrary.pConsole(mintorque);
 	}
 
 	public static boolean isTwilightForestToughBlock(int id) {
@@ -227,16 +216,16 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (cutShape[i][j] || step == 1) {
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
 					this.reqPowAdd(world, xread, yread, zread, metadata);
-					//ReikaJavaLibrary.pConsole(reqpow+" for "+world.getBlockId(xread, yread, zread)+":"+world.getBlockMetadata(xread, yread, zread));
 				}
 			}
 		}
 
 		lowtorque = mintorque;
 
+		//ReikaJavaLibrary.pConsole(mintorque, Side.SERVER);
+
 		if (torque < lowtorque)
 			reqpow = -1;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", lowtorque));
 	}
 
 
@@ -280,7 +269,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
-		TileEntity tile = world.getBlockTileEntity(xread, yread, zread);
+		TileEntity tile = this.getTileEntity(xread, yread, zread);
 		if (tile instanceof RotaryCraftTileEntity)
 			return false;
 		if (drops && id != 0) {
@@ -305,28 +294,25 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				IInventory ii = (IInventory)tile;
 				List<ItemStack> contents = ReikaInventoryHelper.getWholeInventory(ii);
 				ReikaInventoryHelper.clearInventory(ii);
-				//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+contents);
 				for (int i = 0; i < contents.size(); i++) {
 					ItemStack is = contents.get(i);
 					boolean fits = this.chestCheck(world, x, y, z, is);
-					//ReikaJavaLibrary.pConsole(fits+" for "+is+" on "+FMLCommonHandler.instance().getEffectiveSide());
 					if (!fits) {
 						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 					}
 				}
 			}
-			int metaread = world.getBlockMetadata(xread, yread, zread);
-			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, metaread)) {
+			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, meta)) {
 				int ismeta = 0;
 				if (this.matchMeta(id))
-					ismeta = metaread;
+					ismeta = meta;
 				ItemStack is = new ItemStack(id, 1, ismeta);
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}
 				return true;
 			}
-			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, xread, yread, zread, metaread, this.getEnchantment(Enchantment.fortune));
+			ArrayList<ItemStack> items = Block.blocksList[id].getBlockDropped(world, xread, yread, zread, meta, this.getEnchantment(Enchantment.fortune));
 			for (int i = 0; i < items.size(); i++) {
 				ItemStack is = items.get(i);
 				if (!this.chestCheck(world, x, y, z, is)) {
@@ -371,42 +357,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (world.isRemote)
 			return false;
-		TileEntity te = world.getBlockTileEntity(x+1, y, z);
-		IInventory ii;
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
-		}
-		te = world.getBlockTileEntity(x-1, y, z);
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
-		}
-		te = world.getBlockTileEntity(x, y+1, z);
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
-		}
-		te = world.getBlockTileEntity(x, y-1, z);
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
-		}
-		te = world.getBlockTileEntity(x, y, z+1);
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
-		}
-		te = world.getBlockTileEntity(x, y, z-1);
-		if (te instanceof IInventory) {
-			ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof IInventory) {
+				boolean flag = true;
+				if (te instanceof PartialInventory) {
+					if (!((PartialInventory)te).hasInventory())
+						flag = false;
+				}
+				if (flag) {
+					if (ReikaInventoryHelper.addToIInv(is, (IInventory)te))
+						return true;
+				}
+			}
 		}
 		return false;
 	}

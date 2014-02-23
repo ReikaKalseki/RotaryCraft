@@ -33,7 +33,6 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
@@ -344,7 +343,6 @@ public final class RotaryDescriptions {
 		}
 		addData(HandbookRegistry.ENCHANTING, sb.toString());
 
-		addData(MachineRegistry.FLOODLIGHT, TileEntityFloodlight.FALLOFF);
 		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER, TileEntityBorer.OBSIDIANTORQUE);
 		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
 		addData(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2));

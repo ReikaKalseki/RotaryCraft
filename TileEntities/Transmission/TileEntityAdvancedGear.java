@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -33,13 +34,14 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator {
+public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory {
 
 	private boolean isReleasing = false;
 	private int releaseTorque = 0;
@@ -124,6 +126,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 		public boolean storesEnergy() {
 			return this == COIL;
+		}
+
+		public boolean hasInventory() {
+			return this == CVT;
 		}
 	}
 
@@ -614,7 +620,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack.itemID == ItemStacks.belt.itemID && itemstack.getItemDamage() == ItemStacks.belt.getItemDamage();
+		return this.getGearType() == GearType.CVT && ReikaItemHelper.matchStacks(itemstack, ItemStacks.belt);
 	}
 
 	@Override
@@ -778,5 +784,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		public String toString() {
 			return Math.abs(gearRatio)+"x "+(gearRatio > 0 ? "Speed" : "Torque");
 		}
+	}
+
+	@Override
+	public boolean hasInventory() {
+		return this.getGearType().hasInventory();
 	}
 }

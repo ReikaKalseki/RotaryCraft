@@ -38,6 +38,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
@@ -656,10 +657,6 @@ public enum MachineRegistry {
 		return BlockPiping.class.isAssignableFrom(blockClass);
 	}
 
-	public boolean isTrans() {
-		return (this == DYNAMOMETER || this == CLUTCH || this == BEVELGEARS || this == SPLITTER);
-	}
-
 	public boolean hasInv() {
 		if (BlockIMachine.class.isAssignableFrom(blockClass))
 			return true;
@@ -932,6 +929,22 @@ public enum MachineRegistry {
 
 	public boolean cachesConnections() {
 		return CachedConnection.class.isAssignableFrom(te);
+	}
+
+	public boolean isModConversionEngine() {
+		switch(this) {
+		case DYNAMO:
+		case COMPRESSOR:
+		case BOILER:
+		case GENERATOR:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isPoweredTransmissionMachine() {
+		return TransmissionReceiver.class.isAssignableFrom(te);
 	}
 
 	public boolean hasSubdivisions() {

@@ -145,15 +145,15 @@ public class TorqueUsage {
 					TileEntity di2 = world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2);
 					if (TEMap.containsKey(di1) && TEMap.get(di1) == true) {
 						if (!TEMap.containsKey(world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez))
-								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez))); {
-									addToList(world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez), tile);
-								}
+								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez))) {
+							addToList(world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez), tile);
+						}
 					}
 					else if (TEMap.containsKey(di2) && TEMap.get(di2) == true) {
 						if (!TEMap.containsKey(world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2))
-								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2))); {
-									addToList(world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2), tile);
-								}
+								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2))) {
+							addToList(world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2), tile);
+						}
 					}
 				}
 				else {
@@ -216,7 +216,7 @@ public class TorqueUsage {
 						TileEntity out = world.getBlockTileEntity(te.xCoord+dir.offsetX, te.yCoord+dir.offsetY, te.zCoord+dir.offsetZ);
 						if (out != null && out instanceof TileEntityIOMachine) {
 							TileEntityIOMachine io = (TileEntityIOMachine)out;
-							if ((io.getInput() == te || world.getBlockTileEntity(io.readx, out.yCoord, io.readz) == te || world.getBlockTileEntity(io.readx2, out.yCoord, io.readz2) == te)) {
+							if ((io.getInput() == te || world.getBlockTileEntity(io.readx, out.yCoord, io.readz) == te || world.getBlockTileEntity(io.readx2, out.yCoord, io.readz2) == te || world.getBlockTileEntity(io.readx3, out.yCoord, io.readz3) == te || world.getBlockTileEntity(io.readx4, out.yCoord, io.readz4) == te)) {
 								double ratio = te.getAbsRatio(dir);
 								if (!te.isSideSpeedMode(dir))
 									ratio = 1D/ratio;
@@ -249,7 +249,7 @@ public class TorqueUsage {
 		boolean isPoweredFrom = false;
 		if (tile instanceof TileEntityIOMachine) {
 			TileEntityIOMachine io = (TileEntityIOMachine)tile;
-			isPoweredFrom = (TEMap.containsKey(io.getInput()) || TEMap.containsKey(world.getBlockTileEntity(io.readx, tile.yCoord, io.readz)) || TEMap.containsKey(world.getBlockTileEntity(io.readx2, tile.yCoord, io.readz2)));
+			isPoweredFrom = (TEMap.containsKey(io.getInput()) || TEMap.containsKey(world.getBlockTileEntity(io.readx, tile.yCoord, io.readz)) || TEMap.containsKey(world.getBlockTileEntity(io.readx2, tile.yCoord, io.readz2)) || TEMap.containsKey(world.getBlockTileEntity(io.readx3, tile.yCoord, io.readz3)) || TEMap.containsKey(world.getBlockTileEntity(io.readx4, tile.yCoord, io.readz4)));
 		}
 		return isPoweredFrom;
 	}

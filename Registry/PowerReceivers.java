@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 
 
 public enum PowerReceivers {
@@ -25,7 +26,7 @@ public enum PowerReceivers {
 	CAVESCANNER(131072),
 	CHUNKLOADER(),
 	COMPACTOR(4096, 1, 262144),
-	EXTRACTOR(new int[]{512, 1, 1, 256}, new int[]{1, 2048, 8192, 1}, new int[]{65536, 16384, 32768, 65536}),
+	EXTRACTOR(new int[]{512, 1, 1, 256}, new int[]{1, 2048, 8192, 1}, new long[]{65536, 16384, 32768, 65536}),
 	FAN(1024),
 	FERMENTER(1, 32, 1024),
 	FIREWORK(1, 4096, 65536),
@@ -68,7 +69,7 @@ public enum PowerReceivers {
 	BUCKETFILLER(1, 512, 8192),
 	SELFDESTRUCT(),
 	COMPRESSOR(),
-	EMP((int)TileEntityEMP.BLAST_ENERGY),
+	EMP(4184000000L),
 	LINEBUILDER(1024, 1, 131072),
 	TERRAFORMER(1024),
 	FUELENHANCER(1, 1024, 1024),
@@ -96,8 +97,8 @@ public enum PowerReceivers {
 
 	private final int minT;
 	private final int minS;
-	private final int minP;
-	private final int[] powers;
+	private final long minP;
+	private final long[] powers;
 	private final int[] torques;
 	private final int[] speeds;
 
@@ -122,7 +123,7 @@ public enum PowerReceivers {
 		speeds = null;
 	}
 
-	private PowerReceivers(int P) {
+	private PowerReceivers(long P) {
 		minT = 1;
 		minS = 1;
 		minP = P;
@@ -131,10 +132,10 @@ public enum PowerReceivers {
 		speeds = null;
 	}
 
-	private PowerReceivers(int[] T, int[] S, int[] P) {
+	private PowerReceivers(int[] T, int[] S, long[] P) {
 		torques = new int[T.length];
 		speeds = new int[S.length];
-		powers = new int[P.length];
+		powers = new long[P.length];
 
 		for (int i = 0; i < T.length; i++) {
 			torques[i] = T[i];
@@ -174,7 +175,7 @@ public enum PowerReceivers {
 		return (minT == 1);
 	}
 
-	public int getMinPower(int i) {
+	public long getMinPower(int i) {
 		if (!this.hasMultiValuedPower())
 			throw new RuntimeException("Machine "+this.getName()+" cannot access mutlivalued power! Use direct power!");
 		return powers[i];
@@ -204,7 +205,7 @@ public enum PowerReceivers {
 		return minS;
 	}
 
-	public int getMinPower() {
+	public long getMinPower() {
 		if (this.hasMultiValuedPower())
 			throw new RuntimeException("Machine "+this.getName()+" cannot access Direct Power! Use multivalued power!");
 		return minP;
@@ -239,7 +240,7 @@ public enum PowerReceivers {
 			String name = m.getName();
 			String em = m.toString();
 			if (name == null)
-				throw new RuntimeException(m+" does not correspond to an existing machine Enum!");
+				throw new RegistrationException(RotaryCraft.instance, m+" does not correspond to an existing machine Enum!");
 			for (PowerReceivers e : PowerReceivers.list) {
 				String en = e.toString();
 				if (en.equals(em)) {
@@ -386,15 +387,15 @@ public enum PowerReceivers {
 		return false;
 	}
 
-	public int getMinPowerForDisplay() {
-		int min = -1;
+	public long getMinPowerForDisplay() {
+		long min = -1;
 		if (this.hasNoDirectMinPower()) {
 			min = 0;
 		}
 		else if (this.hasMultiValuedPower()) {
 			int n = this.getMultiValuedPowerTypes();
 			for (int k = 0; k < n; k++) {
-				int t = this.getMinPower(k);
+				long t = this.getMinPower(k);
 				if (t > min)
 					min = t;
 			}
