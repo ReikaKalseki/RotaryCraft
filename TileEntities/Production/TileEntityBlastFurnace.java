@@ -37,7 +37,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction, ConditionalOperation {
 
 	private int temperature;
-	public ItemStack[] inv = new ItemStack[14];
+	public ItemStack[] inv = new ItemStack[15];
 	public int smeltTime = 0;
 
 	public static final int SMELTTEMP = 600;
@@ -182,6 +182,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return false;
 		if (inv[11].itemID != Item.gunpowder.itemID)
 			return false;
+		if (inv[14] == null)
+			return false;
+		if (inv[14].itemID != Block.sand.blockID)
+			return false;
 
 
 		if (inv[10] != null) {
@@ -214,6 +218,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inv);
 		if ((int)Math.sqrt(num) >= 1 && rand.nextInt(3) == 0) {
 			ReikaInventoryHelper.decrStack(11, inv);
+		}
+		if ((int)Math.sqrt(num) >= 1 && rand.nextInt(3) == 0) {
+			ReikaInventoryHelper.decrStack(14, inv);
 		}
 		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1))) {
 			num *= 1+rand.nextFloat();

@@ -13,6 +13,7 @@ import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,6 +49,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 				}
 			}
 
+			stacks.add(new PositionedStack(new ItemStack(Block.sand), 21, 5));
 			stacks.add(new PositionedStack(new ItemStack(Item.coal), 21, 24));
 			stacks.add(new PositionedStack(new ItemStack(Item.gunpowder), 21, 43));
 

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Base.PlayerTracker;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -21,8 +22,12 @@ public class HandbookTracker extends PlayerTracker {
 
 	@Override
 	public void onNewPlayer(EntityPlayer ep) {
-		if (!ep.inventory.addItemStackToInventory(ItemRegistry.HANDBOOK.getStackOf()))
-			ep.dropPlayerItem(ItemRegistry.HANDBOOK.getStackOf());
+		if (!ep.inventory.addItemStackToInventory(this.getItem()))
+			ep.dropPlayerItem(this.getItem());
+	}
+
+	public ItemStack getItem() {
+		return ItemRegistry.HANDBOOK.getStackOf();
 	}
 
 }

@@ -44,6 +44,8 @@ public class ContainerBlastFurnace extends CoreContainer
 		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityBlastFurnace, 12, 148, 17));
 		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityBlastFurnace, 13, 148, 53));
 
+		this.addSlotToContainer(new Slot(par2TileEntityBlastFurnace, 14, 26, 16));
+
 		this.addPlayerInventory(player);
 	}
 
