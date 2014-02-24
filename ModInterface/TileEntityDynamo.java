@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -22,6 +23,15 @@ import cofh.api.energy.IEnergyHandler;
 public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler {
 
 	private ForgeDirection facingDir;
+
+	public static final int MAXTORQUE = 8192;
+	public static final int MAXOMEGA = 8192;
+
+	private static final boolean reika = DragonAPICore.isReikasComputer();
+
+	public final boolean isFlexibleMode() {
+		return reika;
+	}
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -63,13 +73,22 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 					if (tile instanceof IEnergyHandler) {
 						IEnergyHandler rc = (IEnergyHandler)tile;
 						if (rc.canInterface(facingDir.getOpposite())) {
-							int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+							int rf = this.getGenRF();
 							float used = rc.receiveEnergy(facingDir.getOpposite(), rf, false);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	public int getGenRF() {
+		int tq = Math.min(torque, MAXTORQUE);
+		int om = Math.min(omega, MAXOMEGA);
+		long pwr = (long)tq*(long)om;
+		if (this.isFlexibleMode())
+			pwr = power;
+		return (int)((float)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ()));
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

@@ -124,14 +124,13 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		this.getPower(false);
 
 		if (power > 0) {
-			float fudge = 1F;
 			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
 			if (tile instanceof IPowerReceptor) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
 				PowerReceiver pp = rc.getPowerReceiver(facingDir);
 				if (pp == null)
 					return;
-				float mj = (float)(power/ReikaBuildCraftHelper.getWattsPerMJ())/fudge;
+				float mj = (float)this.getGenMJ();
 				float used = pp.receiveEnergy(PowerHandler.Type.ENGINE, mj, facingDir);
 			}
 		}
@@ -256,6 +255,10 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	public boolean canEmitPowerFrom(ForgeDirection side) {
 		return this.isPipeConnected(side);
+	}
+
+	public double getGenMJ() {
+		return power/ReikaBuildCraftHelper.getWattsPerMJ();
 	}
 
 }

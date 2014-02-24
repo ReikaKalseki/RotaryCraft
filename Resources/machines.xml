@@ -921,7 +921,7 @@
 	</suction>
 	<dynamo>
 		<desc>
-			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Unlike the air compressor, it has no inherent power limits, and is therefore capable of producing tens of thousands of RF per tick with sufficient shaft power.
+			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
 		</desc>
 		<note>
 			Orientation and Output: Like ThermalExpansion Dynamos

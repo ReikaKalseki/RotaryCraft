@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -366,22 +365,7 @@ public class ItemMeter extends ItemRotaryTool
 					RotaryAux.writeMessage("minpower");
 				ReikaChatHelper.writeString(String.format("Liquid Pressure at %d kPa.", clicked.liquidPressure));
 				return true;
-			}/*
-			if (m == MachineRegistry.HYDRAULIC) {
-				TileEntityHydraulicPump clicked = (TileEntityHydraulicPump)world.getBlockTileEntity(x, y, z);
-				if (clicked.isTurbine()) {
-					power = clicked.power;
-					omega = clicked.omega;
-					name = clicked.getName();
-					if (power >= 1000000)
-						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f MW @ %d rad/s.", power/1000000.0D, omega));
-					if (power >= 1000 && power < 1000000)
-						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f kW @ %d rad/s.", power/1000.0D, omega));
-					if (power < 1000)
-						ReikaChatHelper.writeString(name+String.format(" Emitting %.3f W @ %d rad/s.", power, omega));
-					return true;
-				}
-			}*/
+			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
@@ -467,14 +451,16 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityAirCompressor clicked = (TileEntityAirCompressor)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				ReikaChatHelper.writeString(String.format("%s generating %.3f MJ/t.", clicked.getName(), clicked.power/ReikaBuildCraftHelper.getWattsPerMJ()));
+				ReikaChatHelper.writeString(String.format("%s generating %.3f MJ/t.", clicked.getName(), clicked.getGenMJ()));
 			}
 
 			if (m == MachineRegistry.DYNAMO) {
 				TileEntityDynamo clicked = (TileEntityDynamo)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)
 					return false;
-				ReikaChatHelper.writeString(String.format("%s generating %.3f RF/t.", clicked.getName(), clicked.power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+				ReikaChatHelper.writeString(String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
+				if ((clicked.torque > clicked.MAXTORQUE || clicked.omega > clicked.MAXOMEGA) && !clicked.isFlexibleMode())
+					ReikaChatHelper.writeString("Conversion limits exceeded; Power is being wasted.");
 			}
 			if (m == MachineRegistry.FLYWHEEL) {
 				ratioclicked = 16;

@@ -84,6 +84,7 @@ import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -199,7 +200,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public void preload(FMLPreInitializationEvent evt) {
 
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
-		MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
 		MinecraftForge.EVENT_BUS.register(this);
 
 		config.loadSubfolderedConfigFile(evt);
