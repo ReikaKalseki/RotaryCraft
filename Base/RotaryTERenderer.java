@@ -19,7 +19,6 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.RotaryCraft.GLListData;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -29,21 +28,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class RotaryTERenderer extends TileEntityRenderBase implements TextureFetcher {
-
-	//public abstract void createLists();
-
-	private void callList(RotaryCraftTileEntity te, int i) {
-		try {
-			int li = GLListData.getMachineRenderList(te.getMachine(), i);
-			GL11.glCallList(li);
-		}
-		catch (ClassCastException e) {
-
-		}
-		catch (NullPointerException e) {
-
-		}
-	}
 
 	@Override
 	public final String getTextureFolder() {

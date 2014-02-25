@@ -25,8 +25,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 	public void performEffects(World world, int x, int y, int z) {
 		RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
 		this.spawnParticles(world, x, y, z);
-		if (!world.isRemote)
-			this.hydrate(world, x, y, z);
+		this.hydrate(world, x, y, z);
 	}
 
 	public void hydrate(World world, int x, int y, int z) {
@@ -34,59 +33,61 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		int range = this.getRange();
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
-				if (rand.nextInt(20) == 0) {
-					boolean top = false;
-					for (int k = y-1; k >= 0 && !top; k--) {
-						int foundid = world.getBlockId(x+i, k, z+j);
-						if (foundid == Block.fire.blockID) {
-							world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*rand.nextFloat(), 0.5F+0.5F*rand.nextFloat());
-							world.setBlock(x+i, k, z+j, 0);
-						}
-						if (foundid != 0) {
-							if (Block.blocksList[foundid].isOpaqueCube()) {
-								top = true;
-								ytop = -1;
+				if (!world.isRemote) {
+					if (rand.nextInt(20) == 0) {
+						boolean top = false;
+						for (int k = y-1; k >= 0 && !top; k--) {
+							int foundid = world.getBlockId(x+i, k, z+j);
+							if (foundid == Block.fire.blockID) {
+								world.playSoundEffect(x+i+0.5, k+0.5, z+j+0.5, "random.fizz", 0.6F+0.4F*rand.nextFloat(), 0.5F+0.5F*rand.nextFloat());
+								world.setBlock(x+i, k, z+j, 0);
+							}
+							if (foundid != 0) {
+								if (Block.blocksList[foundid].isOpaqueCube()) {
+									top = true;
+									ytop = -1;
+								}
 							}
 						}
 					}
-				}
-				if (rand.nextInt(240) == 0) {
-					boolean top = false;
-					for (int k = y-1; k >= 0 && !top; k--) {
-						int foundid = world.getBlockId(x+i, k, z+j);
-						int meta2 = world.getBlockMetadata(x+i, k, z+j);
-						if (rand.nextInt(15) == 0) {
-							ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
-							ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
-							if (crop != null && !crop.isRipe(meta2)) {
-								world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
+					if (rand.nextInt(240) == 0) {
+						boolean top = false;
+						for (int k = y-1; k >= 0 && !top; k--) {
+							int foundid = world.getBlockId(x+i, k, z+j);
+							int meta2 = world.getBlockMetadata(x+i, k, z+j);
+							if (rand.nextInt(15) == 0) {
+								ReikaCropHelper crop = ReikaCropHelper.getCrop(foundid);
+								ModCropList modcrop = ModCropList.getModCrop(foundid, meta2);
+								if (crop != null && !crop.isRipe(meta2)) {
+									world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
+								}
+								if (modcrop != null && !modcrop.isRipe(world, x+i, k, z+j)) {
+									//world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
+									Block b = Block.blocksList[foundid];
+									b.updateTick(world, x+i, k, z+j, rand);
+									world.markBlockForUpdate(x+i, k, z+j);
+								}
 							}
-							if (modcrop != null && !modcrop.isRipe(world, x+i, k, z+j)) {
-								//world.setBlockMetadataWithNotify(x+i, k, z+j, meta2+1, 3);
-								Block b = Block.blocksList[foundid];
-								b.updateTick(world, x+i, k, z+j, rand);
-								world.markBlockForUpdate(x+i, k, z+j);
-							}
-						}
-						if (foundid == Block.tilledField.blockID) {
-							top = true;
-							ytop = k;
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ytop));
-						}
-						if (foundid != 0) {
-							if (Block.blocksList[foundid].isOpaqueCube()) {
+							if (foundid == Block.tilledField.blockID) {
 								top = true;
-								ytop = -1;
+								ytop = k;
+								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ytop));
+							}
+							if (foundid != 0) {
+								if (Block.blocksList[foundid].isOpaqueCube()) {
+									top = true;
+									ytop = -1;
+								}
 							}
 						}
+						if (ytop == -1)
+							return;
+						//ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, 75, z+j, 20);
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", x+i, ytop, z+j));
+						int metaf = world.getBlockMetadata(x+i, ytop, z+j);
+						if (metaf < 8 && world.getBlockId(x+i, ytop, z+j) == Block.tilledField.blockID) //Wetness maxes at 8
+							world.setBlockMetadataWithNotify(x+i, ytop, z+j, metaf+1, 3);
 					}
-					if (ytop == -1)
-						return;
-					//ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, 75, z+j, 20);
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", x+i, ytop, z+j));
-					int metaf = world.getBlockMetadata(x+i, ytop, z+j);
-					if (metaf < 8 && world.getBlockId(x+i, ytop, z+j) == Block.tilledField.blockID) //Wetness maxes at 8
-						world.setBlockMetadataWithNotify(x+i, ytop, z+j, metaf+1, 3);
 				}
 				if (world.getBlockId(x+i, ytop-2, z+j) == Block.tilledField.blockID)
 					world.spawnParticle("splash", x+i+0.5, ytop-0.875, z+j+0.5, 0, 0, 0);
@@ -96,7 +97,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 
 	public void spawnParticles(World world, int x, int y, int z) {
 
-		int d = Math.min(0, ConfigRegistry.SPRINKLER.getValue());
+		int d = Math.max(0, ConfigRegistry.SPRINKLER.getValue());
 		double ypos = y+0.125;
 		double vel;
 		double r = this.getRange()/10D;

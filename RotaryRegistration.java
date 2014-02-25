@@ -57,21 +57,9 @@ public class RotaryRegistration {
 		GameRegistry.registerBlock(RotaryCraft.lightbridge, "Bridge");
 
 		GameRegistry.registerBlock(RotaryCraft.miningpipe, "MiningPipe");
-		//GameRegistry.registerBlock(RotaryCraft.gravlog, ItemBlockGravLog.class, "GravLog");
-		//GameRegistry.registerBlock(RotaryCraft.gravleaves, ItemBlockGravLeaves.class, "GravLeaves");
 
 		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
 		GameRegistry.registerBlock(RotaryCraft.decoTank, ItemBlockDecoTank.class, "DecoTank");
-		/*
-		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
-			String regname = BlockRegistry.blockList[i].getName(0).toLowerCase().replaceAll("\\s","");
-			GameRegistry.registerBlock(BlockRegistry.blockList[i].getBlockVariable(), regname);
-		}*/
-		/*
-		GameRegistry.registerTileEntity(TileEntityAerosolizer.class, "RCaero");
-		GameRegistry.registerTileEntity(TileEntityAutoBreeder.class, "RCbreeder");
-		GameRegistry.registerTileEntity(TileEntityBaitBox.class, "RCbait");
-		GameRegistry.registerTileEntity(TileEntityCaveFinder.class, "RCcave");*/
 	}
 
 	public static void addTileEntities() {

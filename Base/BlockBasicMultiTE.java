@@ -279,7 +279,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					if (ret != null) {
 						int amt = FluidContainerRegistry.getFluidForFilledItem(ret).amount*size;
 						if (tr.getLevel() >= amt) {
-							tr.removeLiquid(amt*size);
+							tr.removeLiquid(amt);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(ret, size));
 							return true;
