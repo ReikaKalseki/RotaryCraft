@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelScreen;
-import Reika.RotaryCraft.TileEntities.TileEntityScreen;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 
 public class RenderCCTVScreen extends RotaryTERenderer
 {

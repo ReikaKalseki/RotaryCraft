@@ -34,8 +34,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine, DiscreteFunction {
 
-	private ItemStack[] inv = new ItemStack[27];
-
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
 
 	@Override
@@ -92,10 +90,6 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 
 	private int getArrowSlot() {
 		return ReikaInventoryHelper.locateIDInInventory(Item.arrow.itemID, this);
-	}
-
-	public ItemStack getStackInSlot(int sl) {
-		return inv[sl];
 	}
 
 	@Override
@@ -198,11 +192,6 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	@Override
 	public int getRedstoneOverride() {
 		return Container.calcRedstoneFromInventory(this);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
 	}
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {

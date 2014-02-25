@@ -52,7 +52,7 @@ public class RenderBreeder extends RotaryTERenderer
 		//ModelAutoBreederV var15;
 		//var14 = this.AutoBreederModelV;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/emptybreedertex.png");
-		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, te.inventory))
+		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, te))
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/breedertex.png");
 		GL11.glPushMatrix();
 
@@ -89,17 +89,17 @@ public class RenderBreeder extends RotaryTERenderer
 	private Object[] getConditions(TileEntityAutoBreeder te) {
 		Object[] vals = new Object[5];
 		vals[0] = true;
-		vals[1] = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, te.inventory);
-		vals[2] = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, te.inventory);
-		vals[3] = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, te.inventory);
-		vals[4] = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, te.inventory);
+		vals[1] = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, te);
+		vals[2] = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, te);
+		vals[3] = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, te);
+		vals[4] = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, te);
 		return vals;
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityAutoBreeder tb = (TileEntityAutoBreeder)te;
-		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, tb.inventory))
+		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, tb))
 			return "breedertex.png";
 		return "emptybreedertex.png";
 	}

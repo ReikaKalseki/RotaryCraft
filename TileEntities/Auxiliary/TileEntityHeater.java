@@ -16,7 +16,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
@@ -44,7 +43,6 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 
 public class TileEntityHeater extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
 
-	public ItemStack[] inventory = new ItemStack[18];
 	public int temperature;
 	public int setTemperature;
 
@@ -70,7 +68,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return 18;
 	}
 
 	@Override
@@ -146,22 +144,22 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 		ItemStack item = null;
 		int itemheat = -1;
 		int slot = -1;
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				//ReikaChatHelper.writeInt(TileEntityFurnace.getItemBurnTime(inventory[i]));
-				int heat = (TileEntityFurnace.getItemBurnTime(inventory[i])/25);
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				//ReikaChatHelper.writeInt(TileEntityFurnace.getItemBurnTime(inv[i]));
+				int heat = (TileEntityFurnace.getItemBurnTime(inv[i])/25);
 				if (heat <= maxT && heat > itemheat) {
 					itemheat = heat;
-					item = inventory[i];
+					item = inv[i];
 					slot = i;
 				}
 			}
 		}
 		if (slot != -1 && consume) {
-			int id = inventory[slot].itemID;
-			ReikaInventoryHelper.decrStack(slot, inventory);
+			int id = inv[slot].itemID;
+			ReikaInventoryHelper.decrStack(slot, inv);
 			if (id == Item.bucketLava.itemID) {
-				int leftover = ReikaInventoryHelper.addToInventoryWithLeftover(Item.bucketEmpty.itemID, -1, 1, inventory);
+				int leftover = ReikaInventoryHelper.addToInventoryWithLeftover(Item.bucketEmpty.itemID, -1, 1, inv);
 				if (leftover > 0) {
 					EntityItem ei = new EntityItem(worldObj, xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), new ItemStack(Item.bucketLava.itemID, leftover, 0));
 					ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
@@ -387,21 +385,6 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return inventory[var1];
-	}
-
 	/**
 	 * Reads a tile entity from NBT.
 	 */
@@ -409,45 +392,14 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 		temperature = NBT.getInteger("temperature");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.  Maybe was not saving inventory since seems to be acting like
-	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("temperature", temperature);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

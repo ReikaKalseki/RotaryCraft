@@ -28,8 +28,6 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -45,8 +43,7 @@ import Reika.RotaryCraft.Registry.MobBait;
 
 public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
-	public ItemStack[] inventory = new ItemStack[27]; //ReikaMathLibrary.extrema(ReikaMathLibrary.nextMultiple(9, ReikaEntityHelper.getNumberMobsInMC(this.worldObj)), 54, "absmin")
-	public boolean[] attractive = new boolean[inventory.length];
+	public boolean[] attractive = new boolean[inv.length];
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
@@ -119,11 +116,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	private boolean canRepel(EntityLivingBase ent) {
-		return MobBait.hasRepelItem(ent, inventory);
+		return MobBait.hasRepelItem(ent, inv);
 	}
 
 	private boolean canAttract(EntityLivingBase ent) {
-		return MobBait.hasAttractItem(ent, inventory);
+		return MobBait.hasAttractItem(ent, inv);
 	}
 
 	private int[] getRepelTo(World world, int x, int y, int z, EntityLivingBase ent) {
@@ -274,74 +271,14 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return 27;
 	}
 
 	public int getLeftoverSlots() {
-		int slots = inventory.length;
+		int slots = inv.length;
 		while (slots >= 9)
 			slots -= 9;
 		return slots;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return inventory[var1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
@@ -366,10 +303,10 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 
 	@Override
 	public int getRedstoneOverride() {
-		if (ReikaInventoryHelper.isEmpty(inventory))
+		if (ReikaInventoryHelper.isEmpty(inv))
 			return 15;
-		for (int i = 0; i < inventory.length; i++) {
-			if (MobBait.isValidItem(inventory[i]))
+		for (int i = 0; i < inv.length; i++) {
+			if (MobBait.isValidItem(inv[i]))
 				return 0;
 		}
 		return 15;
@@ -377,7 +314,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 
 	@Override
 	public boolean areConditionsMet() {
-		return !ReikaInventoryHelper.isEmpty(inventory);
+		return !ReikaInventoryHelper.isEmpty(inv);
 	}
 
 	@Override

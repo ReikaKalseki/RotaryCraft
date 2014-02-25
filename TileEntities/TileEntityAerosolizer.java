@@ -18,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
@@ -52,8 +51,6 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 
 	public boolean idle = false;
 
-	private ItemStack[] contents = new ItemStack[9];
-
 	public void testIdle() {
 		boolean empty = true;
 		for (int i = 0; i < 9; i++) {
@@ -72,7 +69,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
 		super.updateTileEntity();
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		//this.getIOSides(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		this.getSummativeSidedPower();
 		tickcount++;
@@ -274,52 +271,19 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 		return occurrence; //return the counts
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList var2 = NBT.getTagList("Items");
-		contents = new ItemStack[potionDamage.length];
-
-		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
-		{
-			NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-			int var5 = var4.getByte("Slot") & 255;
-
-			if (var5 >= 0 && var5 < contents.length)
-			{
-				contents[var5] = ItemStack.loadItemStackFromNBT(var4);
-			}
-		}
 		potionDamage = NBT.getIntArray("damages");
 		potionLevel = NBT.getIntArray("levels");
 		potionIDs = NBT.getIntArray("IDs");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBTTagList var2 = new NBTTagList();
-
-		for (int var3 = 0; var3 < contents.length; ++var3)
-		{
-			if (contents[var3] != null)
-			{
-				NBTTagCompound var4 = new NBTTagCompound();
-				var4.setByte("Slot", (byte)var3);
-				contents[var3].writeToNBT(var4);
-				var2.appendTag(var4);
-			}
-		}
-
-		NBT.setTag("Items", var2);
 		NBT.setIntArray("damages", potionDamage);
 		NBT.setIntArray("levels", potionLevel);
 		NBT.setIntArray("IDs", potionIDs);
@@ -330,30 +294,12 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	 */
 	public int getSizeInventory()
 	{
-		return contents.length;
+		return 9;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
 	{
 		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return contents[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		contents[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	@Override

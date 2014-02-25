@@ -14,7 +14,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -32,7 +31,6 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityWorktable extends InventoriedRCTileEntity {
 
-	private ItemStack[] inventory = new ItemStack[18];
 	public boolean craftable = false;
 	private ItemStack toCraft;
 	private boolean lastPower;
@@ -74,7 +72,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 						this.getStackInSlot(i).stackSize--;
 				}
 			}
-			ReikaInventoryHelper.addOrSetStack(is, inventory, 13);
+			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
 			return true;
 		}
@@ -82,20 +80,20 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	private void makeBedjump() {
-		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getShiftedID(), inventory);
-		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getShiftedID(), inventory);
-		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
-			inventory[jumpslot] = null;
-			inventory[armorslot] = null;
+		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getShiftedID(), inv);
+		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getShiftedID(), inv);
+		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+			inv[jumpslot] = null;
+			inv[armorslot] = null;
 			ItemStack is = ItemRegistry.BEDJUMP.getEnchantedStack();
-			inventory[9] = is;
+			inv[9] = is;
 		}
 	}
 
 	public boolean canUncraft() {
 		boolean can = false;
 		for (int i = 0; i < 9; i++) {
-			ItemStack is = inventory[i];
+			ItemStack is = inv[i];
 			if (i == 4) {
 				if (is == null)
 					return false;
@@ -108,10 +106,10 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 						ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
 						boolean flag = true;
 						for (int k = 0; k < 9; k++) {
-							if (inventory[k+9] != null) {
-								if (!ReikaItemHelper.matchStacks(inventory[k+9], in[k]))
+							if (inv[k+9] != null) {
+								if (!ReikaItemHelper.matchStacks(inv[k+9], in[k]))
 									flag = false;
-								if (inventory[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inventory[k+9].getMaxStackSize()))
+								if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
 									flag = false;
 							}
 						}
@@ -128,20 +126,20 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	private void uncraft() {
-		ItemStack is = inventory[4];
+		ItemStack is = inv[4];
 		IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
 		ItemStack[] in = new ItemStack[9];
 		ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
 
 		for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
-			ReikaInventoryHelper.decrStack(4, inventory);
+			ReikaInventoryHelper.decrStack(4, inv);
 
 		for (int i = 0; i < 9; i++) {
-			if (inventory[i+9] == null) {
-				inventory[i+9] = in[i];
+			if (inv[i+9] == null) {
+				inv[i+9] = in[i];
 			}
 			else {
-				inventory[i+9] = ReikaItemHelper.getSizedItemStack(inventory[i+9], inventory[i+9].stackSize+1);
+				inv[i+9] = ReikaItemHelper.getSizedItemStack(inv[i+9], inv[i+9].stackSize+1);
 			}
 		}
 	}
@@ -167,64 +165,54 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	private void chargeTools() {
-		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getShiftedID(), inventory);
+		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getShiftedID(), inv);
 		if (coilslot == -1)
-			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getShiftedID(), inventory);
+			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getShiftedID(), inv);
 		int toolid = this.getTool();
-		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inventory);
-		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
-			int coilid = inventory[coilslot].itemID;
-			int toolmeta = inventory[toolslot].getItemDamage();
-			int coilmeta = inventory[coilslot].getItemDamage();
+		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
+		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+			int coilid = inv[coilslot].itemID;
+			int toolmeta = inv[toolslot].getItemDamage();
+			int coilmeta = inv[coilslot].getItemDamage();
 			ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
 			ItemStack newcoil = new ItemStack(coilid, 1, toolmeta);
-			inventory[toolslot] = null;
-			inventory[coilslot] = null;
-			inventory[9] = newtool;
-			inventory[10] = newcoil;
+			inv[toolslot] = null;
+			inv[coilslot] = null;
+			inv[9] = newtool;
+			inv[10] = newcoil;
 		}
 	}
 
 	private int getTool() {
 		for (int i = 0; i < 9; i++) {
-			ItemStack is = inventory[i];
+			ItemStack is = inv[i];
 			if (is != null) {
 				if (is.getItem() instanceof ItemChargedTool || is.getItem() instanceof ItemChargedArmor || is.getItem() instanceof ChargeableTool)
-					return inventory[i].itemID;
+					return inv[i].itemID;
 			}
 		}
 		return -1;
 	}
 
 	private void makeJetplate() {
-		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inventory);
-		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getShiftedID(), inventory);
-		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inventory, 16)) {
-			ItemStack jet = inventory[jetslot];
+		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inv);
+		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getShiftedID(), inv);
+		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+			ItemStack jet = inv[jetslot];
 			int original = jet.stackTagCompound != null ? jet.stackTagCompound.getInteger("fuel") : 0;
-			inventory[jetslot] = null;
-			inventory[plateslot] = null;
+			inv[jetslot] = null;
+			inv[plateslot] = null;
 			ItemStack is = ItemRegistry.BEDPACK.getEnchantedStack();
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setInteger("charge", original);
-			inventory[9] = is;
+			inv[9] = is;
 		}
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory[i] = itemstack;
+		return 18;
 	}
 
 	@Override
@@ -262,45 +250,13 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	{
 		super.writeToNBT(NBT);
 
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
-
 		NBT.setBoolean("lastpwr", lastPower);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		lastPower = NBT.getBoolean("lastpwr");
 	}

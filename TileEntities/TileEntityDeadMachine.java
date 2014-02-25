@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
@@ -31,10 +30,8 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 
 	private Block parentBlock;
 
-	private ItemStack[] parentInv;
-
 	public void setInvSize(int size) {
-		parentInv = new ItemStack[size];
+		inv = new ItemStack[size];
 	}
 
 	public void setBlock(Block b, int id, int meta) {
@@ -90,19 +87,7 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 
 	@Override
 	public int getSizeInventory() {
-		if (parentInv == null)
-			return 0;
-		return parentInv.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return parentInv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		parentInv[i] = itemstack;
+		return 1;
 	}
 
 	@Override
@@ -126,18 +111,6 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 		super.writeToNBT(NBT);
 		NBT.setInteger("id", tileID);
 		NBT.setInteger("meta", tileMeta);
-
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < parentInv.length; i++)
-		{
-			if (parentInv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				parentInv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
 	}
 
 	/**
@@ -150,20 +123,6 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 
 		tileID = NBT.getInteger("id");
 		tileMeta = NBT.getInteger("meta");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		parentInv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < parentInv.length)
-			{
-				parentInv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 }

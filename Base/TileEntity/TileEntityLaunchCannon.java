@@ -9,17 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 
 public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
-
-	protected ItemStack[] inventory = new ItemStack[this.getSizeInventory()];
 
 	public int velocity;
 	public int phi;
@@ -32,16 +28,6 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 	@Override
 	public final int getSizeInventory() {
 		return 11;
-	}
-
-	@Override
-	public final ItemStack getStackInSlot(int i) {
-		return inventory[i];
-	}
-
-	@Override
-	public final void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory[i] = itemstack;
 	}
 
 	@Override
@@ -66,24 +52,8 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 		theta = NBT.getInteger("stheta");
 		targetMode = NBT.getBoolean("istarget");
 		target = NBT.getIntArray("targetxyz");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
@@ -93,20 +63,6 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 		NBT.setInteger("stheta", theta);
 		NBT.setBoolean("istarget", targetMode);
 		NBT.setIntArray("targetxyz", target);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	public int getOperationTime() {
@@ -115,7 +71,7 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 
 	@Override
 	public boolean areConditionsMet() {
-		return !ReikaInventoryHelper.isEmpty(inventory);
+		return !ReikaInventoryHelper.isEmpty(inv);
 	}
 
 	@Override

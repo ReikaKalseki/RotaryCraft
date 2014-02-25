@@ -14,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.XPProducer;
@@ -37,7 +36,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction, ConditionalOperation {
 
 	private int temperature;
-	public ItemStack[] inv = new ItemStack[15];
 	public int smeltTime = 0;
 
 	public static final int SMELTTEMP = 600;
@@ -348,28 +346,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	 */
 	public int getSizeInventory()
 	{
-		return inv.length;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inv[par1];
-	}
-
-	/**
-	 *
-	 */
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inv[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
+		return 15;
 	}
 
 	@Override
@@ -387,26 +364,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		NBT.setInteger("melt", smeltTime);
 		NBT.setInteger("temp", temperature);
 		NBT.setFloat("exp", xp);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
@@ -414,20 +373,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		smeltTime = NBT.getInteger("melt");
 		temperature = NBT.getInteger("temp");
 		xp = NBT.getFloat("exp");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	@Override
@@ -438,6 +383,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return is.itemID == Item.coal.itemID;
 		else if (i == 11)
 			return is.itemID == Item.gunpowder.itemID;
+		else if (i == 14)
+			return is.itemID == Block.sand.blockID;
 		else if (i <= 9)
 			return is.itemID == Item.ingotIron.itemID;
 		else

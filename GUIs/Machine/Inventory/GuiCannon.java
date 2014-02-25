@@ -105,11 +105,9 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			input3.setFocused(false);
 			input3.setMaxStringLength(3);
 		}
-		if (tnt instanceof TileEntityTNTCannon) {
-			input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
-			input4.setFocused(false);
-			input4.setMaxStringLength(3);
-		}
+		input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
+		input4.setFocused(false);
+		input4.setMaxStringLength(3);
 	}
 
 	@Override
@@ -358,7 +356,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		input.drawTextBox();
 		input2.drawTextBox();
 		input3.drawTextBox();
-		input4.drawTextBox();
+		if (tnt instanceof TileEntityTNTCannon)
+			input4.drawTextBox();
 
 		if (!targetMode) {
 			this.drawGrid(j, k);

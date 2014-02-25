@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -52,8 +51,6 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	public static final int CAPACITY = 320*RotaryConfig.MILLIBUCKET;
 	public static final int MAXTEMP = 1000;
-
-	public ItemStack[] inventory = new ItemStack[9];
 
 	private HybridTank lava = new HybridTank("lavamix", CAPACITY);
 	private HybridTank water = new HybridTank("watermix", CAPACITY);
@@ -133,7 +130,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 			return;
 		lava.removeLiquid(RotaryConfig.MILLIBUCKET);
 		water.removeLiquid(RotaryConfig.MILLIBUCKET);
-		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inventory, slot);
+		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inv, slot);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*rand.nextFloat(), 0.7F+0.3F*rand.nextFloat());
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.5, 0, 0, 0);
@@ -148,10 +145,10 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	public int getNonFullStack() {
 		int slot = -1;
-		for (int k = 0; k < inventory.length && slot == -1; k++) {
-			if (inventory[k] == null)
+		for (int k = 0; k < inv.length && slot == -1; k++) {
+			if (inv[k] == null)
 				slot = k;
-			else if (inventory[k].itemID == Block.obsidian.blockID && inventory[k].stackSize < this.getInventoryStackLimit())
+			else if (inv[k].itemID == Block.obsidian.blockID && inv[k].stackSize < this.getInventoryStackLimit())
 				slot = k;
 		}
 		return slot;
@@ -168,34 +165,16 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	}
 
 	/**
-	 * Returns the number of slots in the inventory.
+	 * Returns the number of slots in the inv.
 	 */
 	public int getSizeInventory()
 	{
-		return inventory.length;
+		return 9;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
 	{
 		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inventory[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	/**
@@ -216,21 +195,6 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		water.writeToNBT(NBT);
 
 		NBT.setInteger("mix", mixTime);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**
@@ -245,20 +209,6 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		lava.readFromNBT(NBT);
 
 		mixTime = NBT.getInteger("mix");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	@Override

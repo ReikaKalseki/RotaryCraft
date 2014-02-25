@@ -27,7 +27,7 @@ public class ContainerScaleChest extends CoreContainer
 		super(player, te);
 		lowerScaleChestInventory = te;
 		chest = te;
-		size = te.getSizeInventory();
+		size = te.getNumberSlots();
 		te.openChest();
 		this.page = page;
 		this.setSlots(player, te, page);

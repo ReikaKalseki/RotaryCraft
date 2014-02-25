@@ -13,8 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -76,28 +74,28 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	}
 
 	private ItemStack getNextToFire() {
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				if (ReikaItemHelper.isBlock(inventory[i])) {
-					ItemStack is = inventory[i].copy();
-					ReikaInventoryHelper.decrStack(i, inventory);
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				if (ReikaItemHelper.isBlock(inv[i])) {
+					ItemStack is = inv[i].copy();
+					ReikaInventoryHelper.decrStack(i, inv);
 					return ReikaItemHelper.getSizedItemStack(is, 1);
 				}
-				else if (inventory[i].itemID == Item.bucketWater.itemID) {
-					ReikaInventoryHelper.decrStack(i, inventory);
+				else if (inv[i].itemID == Item.bucketWater.itemID) {
+					ReikaInventoryHelper.decrStack(i, inv);
 					return new ItemStack(Block.waterMoving);
 				}
-				else if (inventory[i].itemID == Item.bucketLava.itemID) {
-					ReikaInventoryHelper.decrStack(i, inventory);
+				else if (inv[i].itemID == Item.bucketLava.itemID) {
+					ReikaInventoryHelper.decrStack(i, inv);
 					return new ItemStack(Block.lavaMoving);
 				}
 				else {
-					ItemStack is = inventory[i];
+					ItemStack is = inv[i];
 					FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
 					if (fs != null) {
 						Fluid f = fs.getFluid();
 						if (f.canBePlacedInWorld()) {
-							ReikaInventoryHelper.decrStack(i, inventory);
+							ReikaInventoryHelper.decrStack(i, inv);
 							return new ItemStack(f.getBlockID(), 1, 0);
 						}
 					}
@@ -127,34 +125,6 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-			if (byte0 >= 0 && byte0 < inventory.length)
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

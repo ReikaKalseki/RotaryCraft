@@ -18,7 +18,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -37,7 +36,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect {
 
-	public ItemStack[] inventory = new ItemStack[54];
 	public int experience = 0;
 
 	@Override
@@ -161,10 +159,10 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				ItemStack is = ent.getEntityItem();
 				int targetslot = this.checkForStack(is);
 				if (targetslot != -1) {
-					if (inventory[targetslot] == null)
-						inventory[targetslot] = is.copy();
+					if (inv[targetslot] == null)
+						inv[targetslot] = is.copy();
 					else
-						inventory[targetslot].stackSize += is.stackSize;
+						inv[targetslot].stackSize += is.stackSize;
 				}
 				else {
 					return;
@@ -192,23 +190,23 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		int size = is.stackSize;
 		int firstempty = -1;
 
-		for (int k = 0; k < inventory.length; k++) { //Find first empty slot
-			if (inventory[k] == null) {
+		for (int k = 0; k < inv.length; k++) { //Find first empty slot
+			if (inv[k] == null) {
 				firstempty = k;
-				k = inventory.length;
+				k = inv.length;
 			}
 		}
-		for (int j = 0; j < inventory.length; j++) {
-			if (inventory[j] != null) {
-				if (ReikaItemHelper.matchStacks(is, inventory[j])) {
-					if (this.areNBTTagsCombineable(is, inventory[j])) {
-						if (inventory[j].stackSize+size <= this.getInventoryStackLimit()) {
+		for (int j = 0; j < inv.length; j++) {
+			if (inv[j] != null) {
+				if (ReikaItemHelper.matchStacks(is, inv[j])) {
+					if (this.areNBTTagsCombineable(is, inv[j])) {
+						if (inv[j].stackSize+size <= this.getInventoryStackLimit()) {
 							target = j;
-							j = inventory.length;
+							j = inv.length;
 						}
 						else {
-							int diff = is.getMaxStackSize() - inventory[j].stackSize;
-							inventory[j].stackSize += diff;
+							int diff = is.getMaxStackSize() - inv[j].stackSize;
+							inv[j].stackSize += diff;
 							is.stackSize -= diff;
 						}
 					}
@@ -243,12 +241,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		return ReikaMathLibrary.extrema(8+(int)(power*4/MINPOWER), this.getMaxRange(), "min");
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
 	public int getSizeInventory()
 	{
-		return inventory.length;
+		return 54;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
@@ -256,69 +251,18 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		return true;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
 		experience = NBT.getInteger("xp");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 		NBT.setInteger("xp", experience);
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inventory[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	@Override

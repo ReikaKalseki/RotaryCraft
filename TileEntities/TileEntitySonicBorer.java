@@ -169,6 +169,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	private boolean canFire(World world, int x, int y, int z, int meta) {
 		if (pressure < FIRE_PRESSURE)
 			return false;
+		if (power < MINPOWER || torque < MINTORQUE)
+			return false;
 		if (y-this.getDistanceToSurface(world, x, y, z) <= 0 && ystep == -1)
 			return false;
 		return true;

@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
@@ -33,8 +32,6 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	public boolean emptySlide = true;
 
 	private boolean lastPower = false;
-
-	private ItemStack[] slides = new ItemStack[MAXCHANNELS];
 
 	public boolean canProject(int x2, int y2, int z2) {
 
@@ -68,44 +65,44 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	}
 
 	private void getChannelFromActiveSlide() {
-		if (slides[0] == null) {
+		if (inv[0] == null) {
 			emptySlide = true;
 			channel = 0;
 			return;
 		}
-		if (slides[0].itemID == Item.eyeOfEnder.itemID) {
+		if (inv[0].itemID == Item.eyeOfEnder.itemID) {
 			emptySlide = false;
 			channel = -1;
 		}
-		if (slides[0].itemID == Item.pocketSundial.itemID) {
+		if (inv[0].itemID == Item.pocketSundial.itemID) {
 			emptySlide = false;
 			channel = -3;
 		}
-		if (slides[0].itemID != ItemRegistry.SLIDE.getShiftedID()) {
+		if (inv[0].itemID != ItemRegistry.SLIDE.getShiftedID()) {
 			emptySlide = true;
 			return;
 		}
 		emptySlide = false;
-		if (slides[0].getItemDamage() == 24) {
+		if (inv[0].getItemDamage() == 24) {
 			channel = -2;
 		}
 		else
-			channel = slides[0].getItemDamage();
+			channel = inv[0].getItemDamage();
 	}
 
 	public String getCustomImagePath() {
-		if (slides[0] == null || slides[0].stackTagCompound == null)
+		if (inv[0] == null || inv[0].stackTagCompound == null)
 			return "";
-		NBTTagCompound nbt = slides[0].stackTagCompound;
+		NBTTagCompound nbt = inv[0].stackTagCompound;
 		return nbt.getString("file");
 	}
 
 	public void cycleInv() {
-		ItemStack active = slides[0];
-		for (int i = 0; i < slides.length-1; i++) {
-			slides[i] = slides[i+1];
+		ItemStack active = inv[0];
+		for (int i = 0; i < inv.length-1; i++) {
+			inv[i] = inv[i+1];
 		}
-		slides[slides.length-1] = active;
+		inv[inv.length-1] = active;
 		SoundRegistry.PROJECTOR.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, 1);
 	}
 
@@ -250,16 +247,6 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return slides[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack is) {
-		slides[i] = is;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == ItemRegistry.SLIDE.getShiftedID();
 	}
@@ -270,45 +257,14 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		super.readFromNBT(NBT);
 		channel = NBT.getInteger("ch");
 		emptySlide = NBT.getBoolean("empty");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		slides = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < slides.length)
-			{
-				slides[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.  Maybe was not saving slides since seems to be acting like
-	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("ch", channel);
 		NBT.setBoolean("empty", emptySlide);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < slides.length; i++)
-		{
-			if (slides[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				slides[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

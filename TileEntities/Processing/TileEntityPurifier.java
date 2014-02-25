@@ -16,7 +16,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -33,8 +32,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPurifier extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation {
 
-	private ItemStack[] inv = new ItemStack[7];
-
 	public int cookTime = 0;
 
 	public int temperature;
@@ -49,12 +46,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 
 	@Override
 	public int getSizeInventory() {
-		return inv.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
+		return 7;
 	}
 
 	@Override
@@ -111,11 +103,6 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		return false;
 	}
 
-	@Override
-	public void setInventorySlotContents(int i, ItemStack is) {
-		inv[i] = is;
-	}
-
 	private boolean isModSteel(ItemStack is) {
 		if (is == null)
 			return false;
@@ -158,19 +145,6 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		super.readFromNBT(NBT);
 		temperature = NBT.getInteger("temperature");
 		cookTime = NBT.getInteger("time");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	/**
@@ -182,20 +156,6 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		super.writeToNBT(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBT.setInteger("time", cookTime);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {

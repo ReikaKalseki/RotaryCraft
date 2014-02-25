@@ -28,7 +28,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -139,8 +138,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	private boolean isOn;
 
-	public ItemStack[] fuelslot = new ItemStack[2];
-
 	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
 	public int getInventoryStackLimit() {
@@ -148,15 +145,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	public int getSizeInventory() {
-		return fuelslot.length;
-	}
-
-	public ItemStack getStackInSlot(int par1) {
-		return fuelslot[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack is) {
-		fuelslot[par1] = is;
+		return 2;
 	}
 
 	@Override
@@ -224,32 +213,32 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	private void internalizeFuel() {
 		switch(type) {
 		case STEAM:
-			if (fuelslot[0] != null) {
-				if (fuelslot[0].itemID == Item.bucketWater.itemID && water.getLevel() <= CAPACITY) {
-					water.addLiquid(FluidContainerRegistry.BUCKET_VOLUME*fuelslot[0].stackSize, FluidRegistry.WATER);
-					fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, fuelslot[0].stackSize, 0);
+			if (inv[0] != null) {
+				if (inv[0].itemID == Item.bucketWater.itemID && water.getLevel() <= CAPACITY) {
+					water.addLiquid(FluidContainerRegistry.BUCKET_VOLUME*inv[0].stackSize, FluidRegistry.WATER);
+					inv[0] = new ItemStack(Item.bucketEmpty.itemID, inv[0].stackSize, 0);
 				}
 			}
 			break;
 		case GAS:
-			if (fuelslot[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= FUELCAP) {
-				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
-					ReikaInventoryHelper.decrStack(0, fuelslot);
+			if (inv[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME <= FUELCAP) {
+				if (inv[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
+					ReikaInventoryHelper.decrStack(0, inv);
 					fuel.addLiquid(1000, RotaryCraft.ethanolFluid);
 				}
 			}
 			break;
 		case SPORT:
-			if (fuelslot[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME < FUELCAP) {
-				if (fuelslot[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
-					ReikaInventoryHelper.decrStack(0, fuelslot);
+			if (inv[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME < FUELCAP) {
+				if (inv[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
+					ReikaInventoryHelper.decrStack(0, inv);
 					fuel.addLiquid(1000, RotaryCraft.ethanolFluid);
 				}
 			}
-			if (fuelslot [1] != null && additives < FUELCAP/FluidContainerRegistry.BUCKET_VOLUME) { //additives
-				int id = fuelslot[1].itemID;
+			if (inv [1] != null && additives < FUELCAP/FluidContainerRegistry.BUCKET_VOLUME) { //additives
+				int id = inv[1].itemID;
 				if (id == Item.blazePowder.itemID || id == Item.redstone.itemID || id == Item.gunpowder.itemID) {
-					ReikaInventoryHelper.decrStack(1, fuelslot);
+					ReikaInventoryHelper.decrStack(1, inv);
 					if (id == Item.redstone.itemID)
 						additives += 1;
 					if (id == Item.gunpowder.itemID)
@@ -605,7 +594,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	private boolean acPower (World world, int x, int y, int z) {
-		ItemStack is = fuelslot[0];
+		ItemStack is = inv[0];
 		if (is == null)
 			return false;
 		if (is.itemID != ItemStacks.shaftcore.itemID || is.getItemDamage() != ItemStacks.shaftcore.getItemDamage())
@@ -1174,9 +1163,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		this.basicPowerReceiver();
 
-		if (type.isJetFueled() && fuelslot[0] != null && fuel.getLevel()+ItemFuelLubeBucket.JET_VALUE <= FUELCAP) {
-			if (fuelslot[0].itemID == ItemStacks.fuelbucket.itemID && fuelslot[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
-				fuelslot[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
+		if (type.isJetFueled() && inv[0] != null && fuel.getLevel()+ItemFuelLubeBucket.JET_VALUE <= FUELCAP) {
+			if (inv[0].itemID == ItemStacks.fuelbucket.itemID && inv[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
+				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
 				fuel.addLiquid(ItemFuelLubeBucket.JET_VALUE, RotaryCraft.jetFuelFluid);
 			}
 		}
@@ -1263,9 +1252,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		writey = y;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
@@ -1284,25 +1270,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		NBT.setBoolean("jetfail", isJetFailing);
 		NBT.setInteger("chickens", chickenCount);
 
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < fuelslot.length; i++) {
-			if (fuelslot[i] != null) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				fuelslot[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
-
 		lubricant.writeToNBT(NBT);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
@@ -1323,19 +1293,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		type = EngineType.setType(NBT.getInteger("type"));
 		FOD = NBT.getInteger("FOD");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		fuelslot = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < fuelslot.length) {
-				fuelslot[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		if (omega > type.getSpeed())
 			omega = type.getSpeed();

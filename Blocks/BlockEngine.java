@@ -155,9 +155,9 @@ public class BlockEngine extends BlockModelledMachine {
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);
-				for (int i = 0; i < eng.fuelslot.length; i++) {
-					if (eng.fuelslot[i] != null) {
-						todrop = eng.fuelslot[i];
+				for (int i = 0; i < eng.getSizeInventory(); i++) {
+					if (eng.getStackInSlot(i) != null) {
+						todrop = eng.getStackInSlot(i);
 						item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 						item.delayBeforeCanPickup = 10;
 						if (!world.isRemote && !ep.capabilities.isCreativeMode)

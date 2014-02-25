@@ -15,7 +15,6 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -41,8 +40,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
-	private ItemStack inventory[];
-
 	/** The number of ticks that the current item has been cooking for */
 	public int grinderCookTime;
 
@@ -51,12 +48,6 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	public static final int MAXLUBE = 4000;
 
 	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
-
-	public TileEntityGrinder()
-	{
-		inventory = new ItemStack[3];
-		grinderCookTime = 0;
-	}
 
 	private static final List<ItemStack> grindableSeeds = new ArrayList();
 
@@ -121,31 +112,16 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	}
 
 	/**
-	 * Returns the number of slots in the inventory.
+	 * Returns the number of slots in the inv.
 	 */
 	public int getSizeInventory()
 	{
-		return inventory.length;
+		return 3;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
 	{
 		return true;
-	}
-
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inventory[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	/**
@@ -155,19 +131,6 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		grinderCookTime = NBT.getShort("CookTime");
 
@@ -184,21 +147,6 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 		NBT.setShort("CookTime", (short)grinderCookTime);
 
 		tank.writeToNBT(NBT);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**
@@ -225,10 +173,10 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 
 		if (this.canSmelt()) {
 			flag1 = true;/*
-				if (inventory[1] != null) {
-					inventory[1].stackSize--;
-					if (inventory[1].stackSize <= 0)
-						inventory[1] = null;
+				if (inv[1] != null) {
+					inv[1].stackSize--;
+					if (inv[1].stackSize <= 0)
+						inv[1] = null;
 				}*/
 		}
 		if (this.canSmelt()) {
@@ -245,9 +193,9 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inventory[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000 && !world.isRemote) {
-			if (inventory[2].itemID == Item.bucketEmpty.itemID && inventory[2].stackSize == 1) {
-				inventory[2] = ItemStacks.lubebucket.copy();
+		if (inv[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000 && !world.isRemote) {
+			if (inv[2].itemID == Item.bucketEmpty.itemID && inv[2].stackSize == 1) {
+				inv[2] = ItemStacks.lubebucket.copy();
 				tank.removeLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000);
 			}
 		}
@@ -261,38 +209,38 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 		this.readPower();
 		if (!(power >= MINPOWER && torque >= MINTORQUE))
 			return false;
-		if (inventory[0] == null)
+		if (inv[0] == null)
 		{
 			return false;
 		}
 
-		if (ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
+		if (ReikaItemHelper.listContainsItemStack(grindableSeeds, inv[0])) {
 			return (!tank.isFull());
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0]);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inv[0]);
 
 		if (itemstack == null)
 		{
 			return false;
 		}
 
-		if (inventory[1] == null)
+		if (inv[1] == null)
 		{
 			return true;
 		}
 
-		if (!inventory[1].isItemEqual(itemstack))
+		if (!inv[1].isItemEqual(itemstack))
 		{
 			return false;
 		}
 
-		if (inventory[1].stackSize < this.getInventoryStackLimit() && inventory[1].stackSize < inventory[1].getMaxStackSize())
+		if (inv[1].stackSize < this.getInventoryStackLimit() && inv[1].stackSize < inv[1].getMaxStackSize())
 		{
 			return true;
 		}
 
-		return inventory[1].stackSize < itemstack.getMaxStackSize();
+		return inv[1].stackSize < itemstack.getMaxStackSize();
 	}
 
 	public int getLubricantScaled(int par1)
@@ -309,30 +257,30 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 		{
 			return;
 		}
-		if (inventory[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inventory[0])) {
+		if (inv[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inv[0])) {
 			int num = 1;
-			inventory[0].stackSize -= num;
+			inv[0].stackSize -= num;
 			tank.addLiquid(DifficultyEffects.CANOLA.getInt()*num, FluidRegistry.getFluid("lubricant"));
-			if (inventory[0].stackSize <= 0)
-				inventory[0] = null;
+			if (inv[0].stackSize <= 0)
+				inv[0] = null;
 			return;
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inventory[0]);
-		if (inventory[1] == null)
+		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inv[0]);
+		if (inv[1] == null)
 		{
-			inventory[1] = itemstack.copy();
+			inv[1] = itemstack.copy();
 		}
-		else if (inventory[1].itemID == itemstack.itemID)
+		else if (inv[1].itemID == itemstack.itemID)
 		{
-			inventory[1].stackSize += itemstack.stackSize;
+			inv[1].stackSize += itemstack.stackSize;
 		}
 
-		inventory[0].stackSize--;
+		inv[0].stackSize--;
 
-		if (inventory[0].stackSize <= 0)
+		if (inv[0].stackSize <= 0)
 		{
-			inventory[0] = null;
+			inv[0] = null;
 		}
 	}
 

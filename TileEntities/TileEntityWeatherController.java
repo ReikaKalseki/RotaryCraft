@@ -15,8 +15,6 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,8 +34,6 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	private int rainmode = 0;
 
 	private int cooldown = 0;
-
-	public ItemStack[] inventory = new ItemStack[18];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -131,12 +127,12 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	}
 
 	private boolean hasSawdust() {
-		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
+		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inv);
 		if (sawdust)
 			return true;
 		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
-		for (int i = 0; i < inventory.length; i++) {
-			ItemStack is = inventory[i];
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack is = inv[i];
 			if (is != null) {
 				if (ReikaItemHelper.listContainsItemStack(li, is))
 					return true;
@@ -152,9 +148,9 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		ItemStack is = null;
 		ItemStack is2 = null;
 		boolean sawdust = this.hasSawdust();
-		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inventory);
-		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inventory);
+		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inv);
+		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inv);
 		if (sawdust && (isRain || isThunder)) {
 			rainmode = 1;
 			is = ItemStacks.sawdust;
@@ -182,24 +178,24 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		case 0:
 			return;
 		case 1:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
 			return;
 		case 2:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
 			return;
 		case 3:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
+			slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
 			return;
 		case 4:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
-			slot = ReikaInventoryHelper.locateInInventory(Item.glowstone.itemID, inventory);
-			ReikaInventoryHelper.decrStack(slot, inventory);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
+			slot = ReikaInventoryHelper.locateInInventory(Item.glowstone.itemID, inv);
+			ReikaInventoryHelper.decrStack(slot, inv);
 			return;
 		}
 	}
@@ -218,70 +214,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory[i];
-	}
-
-	/**
-	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-	 */
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inventory.length)
-			{
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
+		return 18;
 	}
 
 	@Override

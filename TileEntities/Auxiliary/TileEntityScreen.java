@@ -7,15 +7,13 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -28,8 +26,6 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 
 	/** Stores things as key-value as colors[]-xyz[] */
 	private HashMap<int[], int[]> cameras = new HashMap<int[], int[]>();
-
-	private ItemStack[] inv = new ItemStack[3];
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -125,61 +121,8 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return is.itemID == Item.dyePowder.itemID;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

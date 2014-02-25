@@ -146,14 +146,14 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	private boolean canFire() {
-		boolean hasTNT = ReikaInventoryHelper.checkForItem(Block.tnt.blockID, inventory);
+		boolean hasTNT = ReikaInventoryHelper.checkForItem(Block.tnt.blockID, inv);
 		return (hasTNT || isCreative);
 	}
 
 	@Override
 	protected boolean fire(World world, int x, int y, int z) {
 		for (int i = 0; i < 1; i++) {
-			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inventory);
+			ReikaInventoryHelper.findAndDecrStack(Block.tnt.blockID, -1, inv);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
 			world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
 			EntityCustomTNT tnt = new EntityCustomTNT(world, x+0.5, y+1.5-0.0625, z+0.5, null, this.getFuseTime());

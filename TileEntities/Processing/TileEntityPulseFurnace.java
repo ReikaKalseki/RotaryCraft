@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Processing;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -42,8 +41,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
-
-	private ItemStack inv[] = new ItemStack[3];
 
 	/** The number of ticks that the current item has been cooking for */
 	public int pulseFurnaceCookTime;
@@ -97,30 +94,12 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	 */
 	public int getSizeInventory()
 	{
-		return inv.length;
+		return 3;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
 	{
 		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inv[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inv[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	/**
@@ -130,19 +109,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		pulseFurnaceCookTime = NBT.getShort("CookTime");
 
@@ -165,20 +131,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		fuel.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**

@@ -21,7 +21,6 @@ import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
@@ -48,8 +47,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction, ConditionalOperation {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
-
-	private ItemStack[] inv = new ItemStack[1];
 
 	public int editx;
 	public int edity;
@@ -501,16 +498,6 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		return false;
 	}
@@ -525,21 +512,6 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
 			}
 		}
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
@@ -551,20 +523,6 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
 				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
 	}

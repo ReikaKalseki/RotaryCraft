@@ -16,8 +16,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -32,15 +30,13 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
-	public ItemStack[] inventory = new ItemStack[18];
-
 	public static final int FALLOFF = 2048; //2kW per extra meter
 
 	public boolean idle = false;
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return 18;
 	}
 
 	@Override
@@ -65,11 +61,11 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		boolean meat = false;
 		boolean fish = false;
 		boolean seed = false;
-		wheat = ReikaInventoryHelper.checkForItem(Item.wheat.itemID, inventory);
-		carrot = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, inventory);
-		meat = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, inventory);
-		fish = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, inventory);
-		seed = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, inventory);
+		wheat = ReikaInventoryHelper.checkForItem(Item.wheat.itemID, inv);
+		carrot = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, inv);
+		meat = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, inv);
+		fish = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, inv);
+		seed = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, inv);
 		idle = (!wheat && !carrot && !meat && !fish && !seed);
 	}
 
@@ -88,9 +84,9 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 	private boolean canBreed(EntityAnimal ent) {
 		ItemStack item = null;
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				item = new ItemStack(inventory[i].itemID, 1, inventory[i].getItemDamage());
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				item = new ItemStack(inv[i].itemID, 1, inv[i].getItemDamage());
 				if (ent.isBreedingItem(item)) {
 					return true;
 				}
@@ -101,7 +97,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 	private int getFeedItem(EntityAnimal ent) {
 		ItemStack item = ReikaEntityHelper.getBreedItem(ent);
-		int slot = ReikaInventoryHelper.locateInInventory(item, inventory, false);
+		int slot = ReikaInventoryHelper.locateInInventory(item, inv, false);
 		return slot;
 	}
 
@@ -109,9 +105,9 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		int slot = this.getFeedItem(ent);
 		if (slot == -1)
 			return;
-		if (inventory[slot] == null)
+		if (inv[slot] == null)
 			return;
-		ReikaInventoryHelper.decrStack(slot, inventory);
+		ReikaInventoryHelper.decrStack(slot, inv);
 	}
 
 	private void breed(World world, int x, int y, int z, List inroom) {
@@ -218,49 +214,6 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return inventory[var1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-			if (byte0 >= 0 && byte0 < inventory.length)
-				inventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-		NBT.setTag("Items", nbttaglist);
-	}
-
-	@Override
 	public boolean hasModelTransparency() {
 		return false;
 	}
@@ -289,7 +242,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 	@Override
 	public boolean areConditionsMet() {
-		return !ReikaInventoryHelper.isEmpty(inventory);
+		return !ReikaInventoryHelper.isEmpty(inv);
 	}
 
 	@Override

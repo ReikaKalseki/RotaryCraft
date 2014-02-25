@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -28,7 +27,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv {
 
-	private ItemStack[] inv = new ItemStack[4];
 	private HashMap<ForgeDirection, Boolean> modes = new HashMap();
 
 	private ForgeDirection inputSide;
@@ -180,16 +178,6 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 1;
 	}
@@ -213,20 +201,6 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 			modes.put(dirs[i], NBT.getBoolean("spd"+i));
 		}
 
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
-
 		hubX = NBT.getInteger("hx");
 		hubY = NBT.getInteger("hy");
 		hubZ = NBT.getInteger("hz");
@@ -241,21 +215,6 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		for (int i = 2; i < 6; i++) {
 			NBT.setBoolean("spd"+i, modes.get(dirs[i]));
 		}
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 
 		NBT.setInteger("hx", hubX);
 		NBT.setInteger("hy", hubY);

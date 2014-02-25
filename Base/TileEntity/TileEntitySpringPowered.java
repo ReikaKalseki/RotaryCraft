@@ -12,13 +12,10 @@ package Reika.RotaryCraft.Base.TileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 
 public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity implements ConditionalOperation {
-
-	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
 	public boolean isCreativeMode;
 
@@ -69,66 +66,22 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity im
 	}
 
 	@Override
-	public final ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public final void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
-	}
-
-	@Override
 	public final int getInventoryStackLimit() {
 		return 1;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		isCreativeMode = NBT.getBoolean("creative");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 
 		NBT.setBoolean("creative", isCreativeMode);
 	}

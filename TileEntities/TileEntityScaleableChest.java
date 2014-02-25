@@ -18,10 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -48,8 +46,6 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	public int numUsingPlayers;
 
-	private ItemStack[] inventory = new ItemStack[MAXSIZE];
-
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;
@@ -57,13 +53,17 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	@Override
 	public int getSizeInventory() {
+		return MAXSIZE;
+	}
+
+	public int getNumberSlots() {
 		int size;
 		if (power < MINPOWER)
 			size = 9;
 		else
 			size = 9+(int)(power-MINPOWER)/FALLOFF;
-		if (size >= inventory.length)
-			size = inventory.length;
+		if (size >= inv.length)
+			size = inv.length;
 		return size;
 	}
 
@@ -126,26 +126,12 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		if (i >= inventory.length) {
-			ReikaJavaLibrary.pConsole("Minecraft tried to access nonexistent stack "+(i+1)+"/"+MAXSIZE+"!");
-			return null;
-		}
-		return inventory[i];
-	}
-
-	@Override
 	public boolean isUseableByPlayer(EntityPlayer ep) {
 		if (numchanges > 0)
 			return false;
 		if (power < MINPOWER)
 			return false;
 		return super.isPlayerAccessible(ep);
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inventory[par1] = par2ItemStack;
 	}
 
 	@Override
@@ -280,55 +266,18 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
-		//for (int i = 0; i < powerchanges.size(); i++)
-		//	NBT.setInteger("pwr"+String.valueOf(i), powerchanges.get(i));
 
 		NBT.setInteger("chng", numchanges);
 		NBT.setInteger("player", numUsingPlayers);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inventory.length; i++)
-		{
-			if (inventory[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setShort("Slot", (short)i);
-				inventory[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 
-		//ArrayList<Integer> pwr = new ArrayList<Integer>();
-
 		numchanges = NBT.getInteger("chng");
 		numUsingPlayers = NBT.getInteger("player");
-
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inventory = new ItemStack[MAXSIZE];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			short short0 = nbttagcompound.getShort("Slot");
-
-			if (short0 >= 0 && short0 < inventory.length)
-			{
-				inventory[short0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	@Override
@@ -345,5 +294,4 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public int getRedstoneOverride() {
 		return 15*this.getSizeInventory()/MAXSIZE;
 	}
-
 }

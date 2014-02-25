@@ -246,31 +246,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					clicked.phi += 5;
 				}
 				return true;
-			}/*
-			if (m == MachineRegistry.HYDRAULICLINE) {
-				TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
-				ForgeDirection dir = ForgeDirection.values()[s];
-				int dx = x+dir.offsetX;
-				int dy = y+dir.offsetY;
-				int dz = z+dir.offsetZ;
-				MachineRegistry m2 = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (ep.isSneaking()) {
-					th.setInput(dir);
-				}
-				else {
-					th.setOutput(dir);
-				}
-				if (m2 == MachineRegistry.HYDRAULICLINE) {
-					TileEntityHydraulicLine th2 = (TileEntityHydraulicLine)world.getBlockTileEntity(dx, dy, dz);
-					if (ep.isSneaking()) {
-						th2.setOutput(dir.getOpposite());
-					}
-					else {
-						th2.setInput(dir.getOpposite());
-					}
-				}
-				return true;
-			}*/
+			}
 			if (m == MachineRegistry.GEARBOX) {
 				if (ep.isSneaking()) {
 					TileEntityGearbox clicked = (TileEntityGearbox)te;
@@ -318,12 +294,18 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
 		else {
-			int id = world.getBlockId(x, y, z);
-			damage = world.getBlockMetadata(x, y, z);
-			if (damage < maxdamage[id] && maxdamage[id] != -1)
-				world.setBlockMetadataWithNotify(x, y, z, damage+1, 3);
-			else if (maxdamage[id] != -1)
-				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+			if (!world.isRemote) {
+				int id = world.getBlockId(x, y, z);
+				damage = world.getBlockMetadata(x, y, z);
+				if ((id == Block.pistonStickyBase.blockID || id == Block.pistonBase.blockID) && world.isBlockIndirectlyGettingPowered(x, y, z))
+					return false;
+				if (damage < maxdamage[id] && maxdamage[id] != -1) {
+					world.setBlockMetadataWithNotify(x, y, z, damage+1, 3);
+				}
+				else if (maxdamage[id] != -1) {
+					world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+				}
+			}
 		}
 		return true;
 	}
