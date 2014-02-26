@@ -194,7 +194,7 @@ public class BlockGearbox extends BlockModelledMachine {
 				break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
-				tile.damage -= 1 + 20 * tile.getRandom().nextInt(18 - tile.ratio);
+				tile.damage -= 1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio());
 				if (tile.damage < 0)
 					tile.damage = 0;
 				if (!ep.capabilities.isCreativeMode) {

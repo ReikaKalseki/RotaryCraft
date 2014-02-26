@@ -494,7 +494,7 @@ public class ItemMeter extends ItemRotaryTool
 					return false;
 				torque = clicked.torque;
 				omega = clicked.omega;
-				ratioclicked = clicked.ratio;
+				ratioclicked = clicked.getRatio();
 				damage = clicked.damage;
 				lube = clicked.getLubricant();
 				reductionclicked = clicked.reduction;

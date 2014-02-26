@@ -34,13 +34,4 @@ public interface ShaftMachine {
 	 * This one is called by tools. */
 	public void setIORenderAlpha(int io);
 
-	/** Usually returns this.xCoord */
-	public int getMachineX();
-
-	/** Usually returns this.yCoord */
-	public int getMachineY();
-
-	/** Usually returns this.zCoord */
-	public int getMachineZ();
-
 }

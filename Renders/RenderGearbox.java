@@ -183,7 +183,7 @@ public class RenderGearbox extends RotaryTERenderer
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-		switch(tile.ratio) {
+		switch(tile.getRatio()) {
 		case 2:
 			var14.renderAll(null, -tile.phi, 0);
 			break;

@@ -366,7 +366,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		super.getIOSides(world, x, y, z, metadata, false);
 	}
 
-	public void getRatio() {
+	private void calculateRatio() {
 		int sign = 1;
 		if (ratio < 0)
 			sign = -1;
@@ -374,6 +374,17 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			ratio = this.getMaxRatio()*sign;
 		if (ratio == 0)
 			ratio = 1;
+	}
+
+	public void setRatio(int ratio) {
+		if (ratio == 0) {
+			this.ratio = 1;
+		}
+		else {
+			int sign = ratio < 0 ? -1 : 1;
+			int maxrat = Math.min(Math.abs(ratio), this.getMaxRatio());
+			this.ratio = maxrat*sign;
+		}
 	}
 
 	public int getMaxRatio() {
@@ -431,7 +442,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
-		this.getRatio();
+		this.calculateRatio();
 		omegain = torquein = 0;
 		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
 		if (!this.isProvider(te)) {

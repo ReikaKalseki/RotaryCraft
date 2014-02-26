@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
@@ -18,12 +17,12 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class GuiGearbox extends GuiNonPoweredMachine
 {
-	private TileEntityGearbox gearboxInventory;
+	private TileEntityGearbox gbx;
 
 	public GuiGearbox(EntityPlayer p5ep, TileEntityGearbox Gearbox)
 	{
 		super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
-		gearboxInventory = Gearbox;
+		gbx = Gearbox;
 		ep = p5ep;
 	}
 
@@ -41,7 +40,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		fontRenderer.drawString("Lubricant", 5, 12, 4210752);
 
 		fontRenderer.drawString("Damage:", 68, 60, 0x000000);
-		int damage = (int)(100*(1-ReikaMathLibrary.doubpow(0.99, gearboxInventory.damage)));
+		int damage = (int)(100*(1-ReikaMathLibrary.doubpow(0.99, gbx.damage)));
 		if (damage < 10)
 			fontRenderer.drawString(String.format("%5d%s", damage, "%"), 122, 60, 0x00ff00);
 		if (damage < 25 && damage >= 10)
@@ -57,23 +56,23 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		fontRenderer.drawString("Mode:", 80, 36, 0x000000);
 		fontRenderer.drawString("Power:", 74, 48, 0x000000);
 
-		fontRenderer.drawString(String.format("%5d ", gearboxInventory.ratio), 127, 24, 0x000000);
-		if (gearboxInventory.reduction)
+		fontRenderer.drawString(String.format("%5d ", gbx.getRatio()), 127, 24, 0x000000);
+		if (gbx.reduction)
 			fontRenderer.drawString("Torque", 115, 36, 0x000000);
 		else
 			fontRenderer.drawString(" Speed", 115, 36, 0x000000);
 
-		if (gearboxInventory.power < 1000)
-			fontRenderer.drawString(String.format("%3d  W", gearboxInventory.power), 122, 48, 0x000000);
-		if (gearboxInventory.power < 1000000 && gearboxInventory.power >= 1000)
-			fontRenderer.drawString(String.format("%.1f kW", gearboxInventory.power/1000D), 112, 48, 0x000000);
-		if (gearboxInventory.power >= 1000000)
-			fontRenderer.drawString(String.format("%.1f MW", gearboxInventory.power/1000000D), 112, 48, 0x000000);
+		if (gbx.power < 1000)
+			fontRenderer.drawString(String.format("%3d  W", gbx.power), 122, 48, 0x000000);
+		if (gbx.power < 1000000 && gbx.power >= 1000)
+			fontRenderer.drawString(String.format("%.1f kW", gbx.power/1000D), 112, 48, 0x000000);
+		if (gbx.power >= 1000000)
+			fontRenderer.drawString(String.format("%.1f MW", gbx.power/1000000D), 112, 48, 0x000000);
 
 		if (api.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("%d/%d", gearboxInventory.getLubricant(), gearboxInventory.MAXLUBE), mx-j, my-k);
+			api.drawTooltipAt(fontRenderer, String.format("%d/%d", gbx.getLubricant(), gbx.MAXLUBE), mx-j, my-k);
 		}
 	}
 
@@ -88,7 +87,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = gearboxInventory.getLubricantScaled(55);
+		int i2 = gbx.getLubricantScaled(55);
 		int i3 = 0;
 		if (i2 != 0)
 			i3 = 1;

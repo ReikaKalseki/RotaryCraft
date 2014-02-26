@@ -217,7 +217,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		super.getIOSides(world, x, y, z, metadata, false);
 	}
 
-	public void getRatio() {
+	private void calculateRatio() {
 		int tratio = 1+this.getBlockMetadata()/4;
 		ratio = (int)ReikaMathLibrary.intpow(2, tratio);
 	}
@@ -249,7 +249,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
-		this.getRatio();
+		this.calculateRatio();
 		omegain = torquein = 0;
 		ready = y;
 		TileEntity te = world.getBlockTileEntity(readx, ready, readz);

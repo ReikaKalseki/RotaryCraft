@@ -119,7 +119,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (o >= l)
 			o = 0;
 		setting = EngineSettings.list[o];
+	}
 
+	public void setSetting(int ordinal) {
+		int o = Math.max(0, Math.min(ordinal, EngineSettings.list.length-1));
+		setting = EngineSettings.list[o];
 	}
 
 	public int getSettingNumber() {

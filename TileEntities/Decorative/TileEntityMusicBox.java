@@ -395,6 +395,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return new Note(length, -1, voice);
 		}
 
+		public void play(TileEntityMusicBox te) {
+			this.play(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+		}
+
 		public void play(World world, int x, int y, int z) {
 			if (this.isRest())
 				return;

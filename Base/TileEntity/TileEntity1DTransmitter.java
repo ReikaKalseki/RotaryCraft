@@ -16,7 +16,11 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 
 public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMachine implements SimpleProvider {
 
-	public int ratio;
+	protected int ratio;
+
+	public final int getRatio() {
+		return ratio;
+	}
 
 	public static final int SHEARSTRENGTH = -1;
 	public static final int TENSILESTRENGTH = -1;

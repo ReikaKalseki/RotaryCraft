@@ -108,10 +108,10 @@ public class TorqueUsage {
 				TileEntityGearbox gbx = (TileEntityGearbox)tile;
 				if (!TEMap.containsKey(gbx.getOutput()) && isPoweredFrom(world, gbx.getOutput())) {
 					if (((TileEntityGearbox) tile).reduction) {
-						addToList(gbx.getOutput(), tile, TEMapR.get(tile)/((TileEntityGearbox) tile).ratio);
+						addToList(gbx.getOutput(), tile, TEMapR.get(tile)/((TileEntityGearbox) tile).getRatio());
 					}
 					else {
-						addToList(gbx.getOutput(), tile, TEMapR.get(tile)*((TileEntityGearbox) tile).ratio);
+						addToList(gbx.getOutput(), tile, TEMapR.get(tile)*((TileEntityGearbox) tile).getRatio());
 					}
 				}
 			}
@@ -124,11 +124,11 @@ public class TorqueUsage {
 					}
 				case CVT:
 					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
-						if (adv.ratio > 0) {
-							addToList(adv.getOutput(), tile, TEMapR.get(tile)*adv.ratio);
+						if (adv.getRatio() > 0) {
+							addToList(adv.getOutput(), tile, TEMapR.get(tile)*adv.getRatio());
 						}
 						else {
-							addToList(adv.getOutput(), tile, TEMapR.get(tile)/-adv.ratio);
+							addToList(adv.getOutput(), tile, TEMapR.get(tile)/-adv.getRatio());
 						}
 					}
 				case COIL:

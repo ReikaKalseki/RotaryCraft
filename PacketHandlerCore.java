@@ -278,7 +278,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					if (adv.isRedstoneControlled)
 						adv.incrementCVTState(true);
 					else
-						adv.ratio = data[0];
+						adv.setRatio(data[0]);
 				}
 				else if (control == PacketRegistry.CVT.getMinValue()+2) {
 					adv.incrementCVTState(false);

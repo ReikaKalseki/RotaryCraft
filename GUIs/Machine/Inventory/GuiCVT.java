@@ -54,7 +54,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		ySize = 237;
 		xSize = 240;
 		ep = p5ep;
-		ratio = cvt.ratio;
+		ratio = cvt.getRatio();
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		reduction = ratio < 0;
@@ -207,7 +207,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 		else {
 			if (!input.isFocused()) {
-				fontRenderer.drawString(String.format("%d", Math.abs(cvt.ratio)), xSize/2+36, 31, 0xffffffff);
+				fontRenderer.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
 			}
 		}
 	}
@@ -233,7 +233,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 			else if (ratio == 0)
 				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, "(1)", j+xSize/2+88, k+31, 0xff0000);
 			else
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", Math.abs(cvt.ratio)), j+xSize/2+88, k+31, 4210752);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
 		}
 	}
 

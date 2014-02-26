@@ -192,9 +192,9 @@ public abstract class IORenderer {
 					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
-					int dx = dir.offsetX+sr.getMachineX();
-					int dy = dir.offsetY+sr.getMachineY();
-					int dz = dir.offsetZ+sr.getMachineZ();
+					int dx = dir.offsetX+teb.xCoord;
+					int dy = dir.offsetY+teb.yCoord;
+					int dz = dir.offsetZ+teb.zCoord;
 					if (sr.canReadFromBlock(dx, dy, dz)) {
 						renderIn(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
 					}
@@ -209,9 +209,9 @@ public abstract class IORenderer {
 					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
-					int dx = dir.offsetX+se.getMachineX();
-					int dy = dir.offsetY+se.getMachineY();
-					int dz = dir.offsetZ+se.getMachineZ();
+					int dx = dir.offsetX+teb.xCoord;
+					int dy = dir.offsetY+teb.yCoord;
+					int dz = dir.offsetZ+teb.zCoord;
 					if (se.canWriteToBlock(dx, dy, dz)) {
 						renderOut(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
 					}

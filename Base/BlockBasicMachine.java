@@ -278,7 +278,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			if (gbx.type == null)
 				return null;
 			int dmg = gbx.type.ordinal();
-			switch(gbx.ratio) {
+			switch(gbx.getRatio()) {
 			case 4:
 				dmg += 5;
 				break;
