@@ -341,11 +341,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return 15;
 	}
 
@@ -354,9 +350,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		return 64;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
@@ -380,7 +373,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (is == null)
 			return false;
 		if (i == 0)
-			return is.itemID == Item.coal.itemID;
+			return is.itemID == Item.coal.itemID || ReikaItemHelper.matchStacks(is, ItemStacks.bedrockdust);
+		else if (i == 1)
+			return is.itemID == Item.ingotIron.itemID || ReikaItemHelper.matchStacks(is, ItemStacks.scrap) || ReikaItemHelper.matchStacks(is, ItemStacks.steelingot);
 		else if (i == 11)
 			return is.itemID == Item.gunpowder.itemID;
 		else if (i == 14)

@@ -231,6 +231,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public String[] getMethodNames() {
+		Thread.dumpStack();
 		return new String[]{"getName"};
 	}
 

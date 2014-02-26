@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -127,16 +126,6 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public int getSizeInventory() {
 		return WIDTH * HEIGHT * 2;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
 	}
 
 	@Override
@@ -258,15 +247,6 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		super.readFromNBT(NBT);
 
 		temperature = NBT.getInteger("temp");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-			if (byte0 >= 0 && byte0 < inv.length)
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-		}
 	}
 
 	@Override
@@ -274,17 +254,6 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
-
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inv.length; i++) {
-			if (inv[i] != null) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override

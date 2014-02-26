@@ -17,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
@@ -46,8 +45,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	private static final HashMap<List<BiomeGenBase>, Integer> powerReqs = new HashMap<List<BiomeGenBase>, Integer>();
 	private static final HashMap<List<BiomeGenBase>, FluidStack> liquidReqs = new HashMap<List<BiomeGenBase>, FluidStack>();
 
-	private ItemStack[] inv = new ItemStack[54];
-
 	private ColumnArray coords = new ColumnArray();
 
 	private BiomeGenBase target;
@@ -55,16 +52,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	@Override
 	public int getSizeInventory() {
 		return 54;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inv[i] = itemstack;
 	}
 
 	@Override
@@ -289,28 +276,12 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		int tg = NBT.getInteger("tg");
 		if (tg != -1)
 			target = BiomeGenBase.biomeList[tg];
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
@@ -320,22 +291,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			NBT.setInteger("tg", target.biomeID);
 		else
 			NBT.setInteger("tg", -1);
-
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/** Returns the valid transformations registered to the terraformer.

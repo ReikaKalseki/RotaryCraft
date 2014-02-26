@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -57,8 +56,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		System.arraycopy(ingredients, 0, is, 0, is.length);
 		return is;
 	}
-
-	public ItemStack[] inv = new ItemStack[ingredients.length+1+1];
 
 	public void testIdle() {
 		idle = !this.getAllIngredients();
@@ -155,61 +152,16 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
-		return inv.length;
+	public int getSizeInventory() {
+		return ingredients.length+1+1;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inv[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inv[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 
 		NBT.setInteger("mix", mixTime);
-
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	/**
@@ -221,20 +173,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		super.readFromNBT(NBT);
 
 		mixTime = NBT.getInteger("mix");
-
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	@Override

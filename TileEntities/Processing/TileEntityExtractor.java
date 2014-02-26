@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -34,8 +33,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
-
-	private ItemStack inv[] = new ItemStack[9];
 
 	public static final int oreCopy = 50; //50% chance of doubling -> 1.5^4 = 5.1
 	public static final int oreCopyNether = 75; //75% chance of doubling -> 1.75^4 = 9.3
@@ -116,52 +113,13 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	 */
 	public int getSizeInventory()
 	{
-		return inv.length;
+		return 9;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return inv[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inv[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		extractorCookTime = NBT.getIntArray("CookTime");
 
@@ -170,39 +128,17 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setIntArray("CookTime", extractorCookTime);
 
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
-
 		for (int i = 0; i < 4; i++) {
 			NBT.setBoolean("extractable"+i, extractableSlots[i]);
 		}
 	}
 
-	/**
-	 * Returns an integer between 0 and the passed value representing how close the current item is to being completely
-	 * cooked
-	 */
 	public int getCookProgressScaled(int par1, int i)
 	{
 		int j = i+1;

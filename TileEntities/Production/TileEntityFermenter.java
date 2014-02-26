@@ -17,7 +17,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -47,8 +46,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	/** The number of ticks that the current item has been cooking for */
 	public int fermenterCookTime = 0;
-
-	public ItemStack[] slots = new ItemStack[3];
 
 	public static final int MINUSEFULTEMP = 20;
 	public static final int OPTMULTIPLYTEMP = 25;
@@ -106,15 +103,15 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	// Return the itemstack product from the input items.
 	private ItemStack getRecipe() {
 		for (int i = 0; i < 2; i++)
-			if (slots[i] == null)
+			if (inv[i] == null)
 				return null;
-		if (slots[0].itemID == Item.sugar.itemID) {
+		if (inv[0].itemID == Item.sugar.itemID) {
 			if (this.hasWater())
-				if(slots[1].itemID == Block.dirt.blockID)
+				if(inv[1].itemID == Block.dirt.blockID)
 					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
 		}
-		if (slots[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
-			if (this.getPlantValue(slots[1]) > 0)
+		if (inv[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
+			if (this.getPlantValue(inv[1]) > 0)
 				if (this.hasWater())
 					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
 		}
@@ -216,8 +213,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				//return;
 			}
 		}
-		if (slots[2] != null) {
-			if (product.itemID != slots[2].itemID) {
+		if (inv[2] != null) {
+			if (product.itemID != inv[2].itemID) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -229,8 +226,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			this.testYeastKill();
 			tickcount = 0;
 		}
-		if (slots[2] != null) {
-			if (slots[2].stackSize >= slots[2].getMaxStackSize()) {
+		if (inv[2] != null) {
+			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -250,11 +247,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		}
 		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
 			return false;
-		if (slots[2] != null) {
-			if (slots[2].stackSize >= slots[2].getMaxStackSize()) {
+		if (inv[2] != null) {
+			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
 				return false;
 			}
-			if (product.itemID != slots[2].itemID) {
+			if (product.itemID != inv[2].itemID) {
 				return false;
 			}
 		}
@@ -263,11 +260,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	private void make(ItemStack product) {
 		if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
-			if (slots[2] == null)
-				slots[2] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
-			else if (slots[2].itemID == ItemRegistry.YEAST.getShiftedID()) {
-				if (slots[2].stackSize < slots[2].getMaxStackSize())
-					slots[2].stackSize++;
+			if (inv[2] == null)
+				inv[2] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
+			else if (inv[2].itemID == ItemRegistry.YEAST.getShiftedID()) {
+				if (inv[2].stackSize < inv[2].getMaxStackSize())
+					inv[2].stackSize++;
 				else
 					return;
 			}
@@ -275,16 +272,16 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				fermenterCookTime = 0;
 				return;
 			}
-			ReikaInventoryHelper.decrStack(0, slots);
+			ReikaInventoryHelper.decrStack(0, inv);
 			if (rand.nextInt(4) == 0)
-				ReikaInventoryHelper.decrStack(1, slots);
+				ReikaInventoryHelper.decrStack(1, inv);
 		}
 		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
-			if (slots[2] == null)
-				slots[2] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(slots[1]), ItemStacks.sludge.getItemDamage());
-			else if (slots[2].itemID == ItemStacks.sludge.itemID && slots[2].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
-				if (slots[2].stackSize < slots[2].getMaxStackSize())
-					slots[2].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(slots[1]), slots[2].getMaxStackSize()-slots[2].stackSize, "min");
+			if (inv[2] == null)
+				inv[2] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(inv[1]), ItemStacks.sludge.getItemDamage());
+			else if (inv[2].itemID == ItemStacks.sludge.itemID && inv[2].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
+				if (inv[2].stackSize < inv[2].getMaxStackSize())
+					inv[2].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(inv[1]), inv[2].getMaxStackSize()-inv[2].stackSize, "min");
 				else
 					return;
 			}
@@ -292,9 +289,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				fermenterCookTime = 0;
 				return;
 			}
-			ReikaInventoryHelper.decrStack(1, slots);
+			ReikaInventoryHelper.decrStack(1, inv);
 			if (rand.nextInt(2) == 0)
-				ReikaInventoryHelper.decrStack(0, slots);
+				ReikaInventoryHelper.decrStack(0, inv);
 		}
 		this.onInventoryChanged();
 		tank.removeLiquid(CONSUME_WATER);
@@ -333,98 +330,34 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public void testYeastKill() {
 		if (temperature < MAXTEMP)
 			return;
-		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getShiftedID(), slots);
+		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getShiftedID(), inv);
 		if (slot != -1) {
-			ReikaInventoryHelper.decrStack(slot, slots);
+			ReikaInventoryHelper.decrStack(slot, inv);
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "random.fizz", 0.8F, 0.8F);
 		}
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
-		return slots.length;
+	public int getSizeInventory() {
+		return 3;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
-	}
-
-	/**
-	 * Returns the stack in slot i
-	 */
-	public ItemStack getStackInSlot(int par1)
-	{
-		return slots[par1];
-	}
-
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		slots[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 		temperature = NBT.getInteger("temperature");
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		slots = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < slots.length)
-			{
-				slots[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 
 		fermenterCookTime = NBT.getShort("CookTime");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBT.setShort("CookTime", (short)fermenterCookTime);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < slots.length; i++)
-		{
-			if (slots[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				slots[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Returns an integer between 0 and the passed value representing how close the current item is to being completely
-	 * cooked
-	 */
 	public int getCookProgressScaled(int par1)
 	{
 		//ReikaChatHelper.writeInt(this.operationTime(0));
