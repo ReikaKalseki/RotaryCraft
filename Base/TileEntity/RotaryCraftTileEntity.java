@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
@@ -23,6 +27,7 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -49,6 +54,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	protected StepTimer second = new StepTimer(20);
 
 	protected boolean isFlipped = false;
+
+	private final HashMap<Integer, LuaMethod> luaMethods = new HashMap();
 
 	@Override
 	public final boolean canUpdate() {
@@ -231,13 +238,25 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public String[] getMethodNames() {
-		Thread.dumpStack();
-		return new String[]{"getName"};
+		ArrayList<LuaMethod> li = new ArrayList();
+		List<LuaMethod> all = LuaMethod.getMethods();
+		for (int i = 0; i < all.size(); i++) {
+			LuaMethod l = all.get(i);
+			if (l.isValidFor(this))
+				li.add(l);
+		}
+		String[] s = new String[li.size()];
+		for (int i = 0; i < s.length; i++) {
+			LuaMethod l = li.get(i);
+			s[i] = l.displayName;
+			luaMethods.put(i, l);
+		}
+		return s;
 	}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return new Object[]{this.getTEName()};
+		return luaMethods.containsKey(method) ? luaMethods.get(method).invoke(this, arguments) : null;
 	}
 
 	@Override
@@ -247,7 +266,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public void attach(IComputerAccess computer) {
-		ReikaJavaLibrary.pConsole(computer);
+
 	}
 
 	@Override
@@ -257,6 +276,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public String getType() {
-		return this.getMultiValuedName().replaceAll(" ", "");
+		return this.getName().replaceAll(" ", "");
 	}
 }

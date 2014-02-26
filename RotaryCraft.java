@@ -69,6 +69,7 @@ import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.ModInterface.OreForcer;
+import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -305,6 +306,7 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaJavaLibrary.initClass(SoundRegistry.class);
 		ReikaJavaLibrary.initClass(PacketRegistry.class);
 		ReikaJavaLibrary.initClass(PowerReceivers.class);
+		ReikaJavaLibrary.initClass(LuaMethods.class);
 
 		TileEntityReservoir.initCreativeFluids();
 		ItemFuelTank.initCreativeFluids();

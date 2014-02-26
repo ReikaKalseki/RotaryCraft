@@ -196,6 +196,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			this.updateTemperature(world, x, y, z, meta);
 		}
 
+		if (tickcount >= 2+rand.nextInt(18)) {
+			this.testYeastKill();
+			tickcount = 0;
+		}
+
 		if (product == null) {
 			idle = true;
 			return;
@@ -222,10 +227,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		idle = false;
 		if (power < MINPOWER || omega < MINSPEED)
 			return;
-		if (tickcount >= 2+rand.nextInt(18)) {
-			this.testYeastKill();
-			tickcount = 0;
-		}
 		if (inv[2] != null) {
 			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
 				fermenterCookTime = 0;

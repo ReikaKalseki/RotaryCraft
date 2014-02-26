@@ -117,7 +117,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 		if (!this.hasFurnace(world)) {
 			if (this.hasHeatable(world)) {
-				this.heatMachine(world);
+				this.heatMachine(world, x, y, z);
 			}
 			else {
 				TileEntity te = world.getBlockTileEntity(fx, fy, fz);
@@ -138,10 +138,16 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		this.hijackFurnace(world, x, y, z, meta);
 	}
 
-	private void heatMachine(World world) {
+	private void heatMachine(World world, int x, int y, int z) {
 		FrictionHeatable te = (FrictionHeatable)world.getBlockTileEntity(fx, fy, fz);
 		int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
 		te.addTemperature(tdiff);
+
+		soundtick++;
+		if (soundtick > 49) {
+			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
+			soundtick = 0;
+		}
 	}
 
 	private boolean hasHeatable(World world) {
