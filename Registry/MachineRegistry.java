@@ -159,6 +159,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -298,7 +299,8 @@ public enum MachineRegistry {
 	PARTICLE(			"machine.particle",			BlockMachine.class,			TileEntityParticleEmitter.class,	7),
 	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
-	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4);
+	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
+	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15);
 
 	private final String name;
 	private final Class te;

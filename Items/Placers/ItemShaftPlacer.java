@@ -24,12 +24,14 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -55,6 +57,27 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				--x;
 			if (side == 5)
 				++x;
+			int id = world.getBlockId(x, y, z);
+			if (ReikaBlockHelper.isPortalBlock(world, x, y, z)) {
+				TileEntityShaft sha = new TileEntityShaft();
+				sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				sha.getIOSides(world, x, y, z, sha.getBlockMetadata());
+				sha.xCoord = x;
+				sha.yCoord = y;
+				sha.zCoord = z;
+				int dx = sha.readx;
+				int dy = sha.ready;
+				int dz = sha.readz;
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.SHAFT) {
+					TileEntityShaft te = (TileEntityShaft)world.getBlockTileEntity(dx, dy, dz);
+					if (te.writex == x && te.writey == y && te.writez == z) {
+						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
+						TileEntityPortalShaft ps = (TileEntityPortalShaft)world.getBlockTileEntity(dx, dy, dz);
+						ps.setPortalType(world, x, y, z);
+					}
+				}
+			}
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
 				return false;
 		}
