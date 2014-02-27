@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2013
+ * Copyright 2014
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -43,7 +43,7 @@ public class RenderSplitter extends RotaryTERenderer
 		ModelSplitter var14 = SplitterModel;
 		ModelSplitter2 var15 = SplitterModel2;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/splittertex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -112,12 +112,9 @@ public class RenderSplitter extends RotaryTERenderer
 			meta = 0;
 			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
 		}
-		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
+		float var13;
+
 		if (meta < 4 || (meta >= 8 && meta < 12))
 			var14.renderAll(null, -tile.phi*dir, 0);
 		else
@@ -137,6 +134,6 @@ public class RenderSplitter extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "beveltex.png";
+		return "splittertex.png";
 	}
 }

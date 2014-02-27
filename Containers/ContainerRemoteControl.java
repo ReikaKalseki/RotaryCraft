@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2013
+ * Copyright 2014
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with

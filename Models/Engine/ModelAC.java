@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2013
+ * Copyright 2014
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -86,8 +86,8 @@ public class ModelAC extends RotaryModelBase
 		Shape16.mirror = true;
 		this.setRotation(Shape16, 0F, 0F, 0F);
 		Shape17 = new ModelRenderer(this, 78, 37);
-		Shape17.addBox(0F, 0F, 0F, 11, 2, 13);
-		Shape17.setRotationPoint(-5.5F, 18.7F, -4.2F);
+		Shape17.addBox(0F, 0F, 0F, 10, 2, 13);
+		Shape17.setRotationPoint(-4.5F, 18.7F, -4.2F);
 		Shape17.setTextureSize(128, 128);
 		Shape17.mirror = true;
 		this.setRotation(Shape17, 0.7853982F, 0F, 0F);
