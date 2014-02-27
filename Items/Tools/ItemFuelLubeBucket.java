@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items.Tools;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -27,6 +28,7 @@ public class ItemFuelLubeBucket extends ItemRotaryTool {
 	public ItemFuelLubeBucket(int ID, int tex) {
 		super(ID, tex);
 		hasSubtypes = true;
+		this.setContainerItem(Item.bucketEmpty);
 	}
 
 	@Override

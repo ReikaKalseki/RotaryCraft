@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -97,6 +98,20 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				world.setBlock(x, y, z+1, Block.lavaMoving.blockID);
 				world.setBlock(x, y, z-1, Block.lavaMoving.blockID);
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
+			}
+
+			boolean hot = Tamb >= 300;
+			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null;
+			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
+			if (hot) {
+				Fluid f = tank.getActualFluid();
+				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("jet fuel"));
+				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
+				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
+				if (flammable) {
+					world.setBlock(x, y, z, 0);
+					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
+				}
 			}
 		}
 	}
