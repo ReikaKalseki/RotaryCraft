@@ -237,7 +237,8 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryRegistration.addTileEntities();
 		RotaryRegistration.addEntities();
 
-		RotaryDescriptions.loadData();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
 		RotaryRecipes.addRecipes();
