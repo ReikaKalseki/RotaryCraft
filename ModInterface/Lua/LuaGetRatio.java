@@ -26,4 +26,9 @@ public class LuaGetRatio extends LuaMethod {
 		return adv.getGearType() == GearType.CVT ? new Object[]{adv.getRatio()} : null;
 	}
 
+	@Override
+	public String getDocumentation() {
+		return "Returns the CVT ratio.\nArgs: None\nReturns: Ratio";
+	}
+
 }

@@ -24,4 +24,9 @@ public class LuaGetTemperature extends LuaMethod {
 		return new Object[]{((TemperatureTE)te).getTemperature()};
 	}
 
+	@Override
+	public String getDocumentation() {
+		return "Returns the machine temperature.\nArgs: None\nReturns: Temperature";
+	}
+
 }

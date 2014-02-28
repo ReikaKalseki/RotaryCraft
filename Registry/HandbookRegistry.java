@@ -62,6 +62,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	SCREW("Screwdriver", ItemRegistry.SCREWDRIVER),
 	ENCHANTING("Enchanting Machines"),
 	MODINTERFACE("Inter-Mod Interactions"),
+	COMPUTERCRAFT("ComputerCraft"),
 	//---------------------ENGINES--------------------//
 	ENGINEDESC("Power Supply", "Engines"),
 	DCENGINE(MachineRegistry.ENGINE, EngineType.DC.ordinal()),

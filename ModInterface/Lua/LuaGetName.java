@@ -24,4 +24,9 @@ public class LuaGetName extends LuaMethod {
 		return new Object[]{((RotaryCraftTileEntity)te).getMultiValuedName()};
 	}
 
+	@Override
+	public String getDocumentation() {
+		return "Returns the machine name.\nArgs: None\nReturns: Display name";
+	}
+
 }

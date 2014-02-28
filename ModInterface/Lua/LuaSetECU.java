@@ -27,4 +27,9 @@ public class LuaSetECU extends LuaMethod {
 		return null;
 	}
 
+	@Override
+	public String getDocumentation() {
+		return "Sets the ECU setting.\nArgs: Setting Ordinal\nReturns: Nothing";
+	}
+
 }

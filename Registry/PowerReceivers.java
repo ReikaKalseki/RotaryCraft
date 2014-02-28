@@ -93,7 +93,8 @@ public enum PowerReceivers {
 	CRYSTALLIZER(1, 1024, 2048),
 	BUSCONTROLLER(),
 	GRINDSTONE(256, 1, 16384),
-	BLOWER(1, 256, 1024);
+	BLOWER(1, 256, 1024),
+	PORTALSHAFT();
 
 	private final int minT;
 	private final int minS;

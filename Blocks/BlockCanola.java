@@ -120,12 +120,14 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par5, float f1, float f2, float f3) {
 		if (par5EntityPlayer.getCurrentEquippedItem() != null) {
 			if (par5EntityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDye && par5EntityPlayer.getCurrentEquippedItem().getItemDamage() == 15) {
-				world.setBlockMetadataWithNotify(x, y, z, 9, 3);
-				for (int i = 0; i < 16; i++)
-					world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
-				if (!par5EntityPlayer.capabilities.isCreativeMode)
-					par5EntityPlayer.getCurrentEquippedItem().stackSize--;
-				return true;
+				if (world.getBlockMetadata(x, y, z) < 9) {
+					world.setBlockMetadataWithNotify(x, y, z, 9, 3);
+					for (int i = 0; i < 16; i++)
+						world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
+					if (!par5EntityPlayer.capabilities.isCreativeMode)
+						par5EntityPlayer.getCurrentEquippedItem().stackSize--;
+					return true;
+				}
 			}
 		}
 		return false;

@@ -77,6 +77,7 @@ public class ContainerWorktable extends CoreContainer {
 			if (drop != null && (!ReikaItemHelper.matchStacks(drop, craft) || drop.stackSize+craft.stackSize > drop.getMaxStackSize()))
 				return is;
 			this.craft();
+			craft.onCrafting(world, ep, craft.stackSize);
 			if (drop == null)
 				ip.setItemStack(tile.getStackInSlot(13));
 			else

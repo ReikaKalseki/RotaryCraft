@@ -53,7 +53,12 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	private boolean craft() {
-		EntityPlayer ep = !worldObj.playerEntities.isEmpty() ? (EntityPlayer)worldObj.playerEntities.get(0) : null;
+		EntityPlayer ep = this.getPlacer();
+		boolean isPlacer = true;
+		if (ep == null && !worldObj.playerEntities.isEmpty()) {
+			ep = (EntityPlayer)worldObj.playerEntities.get(0);
+			isPlacer = false;
+		}
 		if (ep == null)
 			return false;
 		ContainerWorktable cw = new ContainerWorktable(ep, this, worldObj);
@@ -72,6 +77,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 						this.getStackInSlot(i).stackSize--;
 				}
 			}
+			if (isPlacer)
+				is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
 			return true;

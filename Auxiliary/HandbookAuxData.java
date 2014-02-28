@@ -610,6 +610,9 @@ public final class HandbookAuxData {
 					k++;
 				}
 			}
+			else if (h == HandbookRegistry.TIMING) {
+
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();

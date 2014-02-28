@@ -21,7 +21,12 @@ public class LuaGetRange extends LuaMethod {
 
 	@Override
 	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
-		return new Object[]{((RangedEffect)te).getRange()};
+		return new Object[]{((RangedEffect)te).getRange(), ((RangedEffect)te).getMaxRange()};
+	}
+
+	@Override
+	public String getDocumentation() {
+		return "Returns the effect range.\nArgs: None\nReturns: [Range, Max Range]";
 	}
 
 }

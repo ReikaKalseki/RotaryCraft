@@ -25,4 +25,9 @@ public class LuaGetPipe extends LuaMethod {
 		return new Object[]{p.getLiquidType().getLocalizedName(), p.getLiquidLevel()};
 	}
 
+	@Override
+	public String getDocumentation() {
+		return "Returns the pipe contents.\nArgs: None\nReturns: [Fluid name, amount]";
+	}
+
 }

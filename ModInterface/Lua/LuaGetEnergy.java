@@ -22,7 +22,12 @@ public class LuaGetEnergy extends LuaMethod {
 	@Override
 	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
-		return adv.getGearType().storesEnergy() ? new Object[]{adv.getEnergy(), adv.getMaxStorageCapacity()} : null;
+		return adv.getGearType().storesEnergy() ? new Object[]{adv.getEnergy()/20, adv.getMaxStorageCapacity()} : null;
+	}
+
+	@Override
+	public String getDocumentation() {
+		return "Returns the stored energy.\nArgs: None\nReturns: [Energy,Capacity]";
 	}
 
 }
