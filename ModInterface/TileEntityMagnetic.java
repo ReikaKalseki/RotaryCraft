@@ -11,6 +11,7 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.awt.Color;
 
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -155,7 +156,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public int getConsumedUnitsPerTick() {
-		return (int)this.getRFPerTick();
+		return MathHelper.ceiling_float_int(this.getRFPerTick());
 	}
 
 	public float getRFPerTick() {
