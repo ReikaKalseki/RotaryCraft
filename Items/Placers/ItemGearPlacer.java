@@ -88,7 +88,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		if (tile instanceof TileEntityGearbox) {
 			if (is.stackTagCompound == null)
 				is.setTagCompound(new NBTTagCompound());
-			((TileEntityGearbox)tile).damage = is.stackTagCompound.getInteger("damage");
+			((TileEntityGearbox)tile).setDamage(is.stackTagCompound.getInteger("damage"));
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 				((TileEntityGearbox)tile).setFlipped(true);
 			}

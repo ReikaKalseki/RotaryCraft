@@ -200,7 +200,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox tile = (TileEntityGearbox)te;
 			if (player.isSneaking()) {
-				tile.damage = 0;
+				tile.repair(Integer.MAX_VALUE);
 				tile.setLubricant(tile.MAXLUBE);
 				ReikaChatHelper.write("Filled to capacity.");
 			}

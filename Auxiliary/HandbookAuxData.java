@@ -45,6 +45,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -450,6 +451,20 @@ public final class HandbookAuxData {
 			}
 			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 		}
+		else if (h == HandbookRegistry.STEELINGOT) {
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.steelingot, dx+185, dy+10);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 64), dx+185, dy+28);
+
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.sand), dx+63, dy+9);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.coal), dx+63, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.gunpowder), dx+63, dy+47);
+
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.ingotIron), dx+99+i*18, dy+10+j*18);
+				}
+			}
+		}
 	}
 
 	public static void drawGraphics(HandbookRegistry h, int posX, int posY, int xSize, int ySize, FontRenderer font, RenderItem item, int subpage) {
@@ -610,8 +625,32 @@ public final class HandbookAuxData {
 					k++;
 				}
 			}
-			else if (h == HandbookRegistry.TIMING) {
-
+			else if (h == HandbookRegistry.COMPUTERCRAFT) {
+				if (subpage > 0) {
+					List<LuaMethod> li = LuaMethod.getMethods();
+					LuaMethod current = li.get(subpage-1);
+					String name = current.displayName;
+					String desc = current.getDocumentation();
+					font.drawString("- "+name+"()", posX+font.getStringWidth("ComputerCraft")+14, posY+6, 0);
+					font.drawSplitString(desc, posX+11, posY+88, 242, 0xffffff);
+					/*
+					int r = 0;
+					int c = 0;
+					for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+						MachineRegistry m = MachineRegistry.machineList[i];
+						if (current.isClassInstanceOf(m.getTEClass())) {
+							ItemStack is = m.getCraftedProduct();
+							int x = posX+c*18+10;
+							int y = posY+r*18+20;
+							ReikaGuiAPI.instance.drawItemStackWithTooltip(item, font, is, x, y);
+							c++;
+							if (c >= 12) {
+								c = 0;
+								r++;
+							}
+						}
+					}*/
+				}
 			}
 		}
 		catch (Exception e) {

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -26,8 +27,11 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -45,15 +49,28 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
-	public int damage = 0;
+	private int damage = 0;
 	public static final int MAXLUBE = 24000;
-	public ItemStack[] inv = new ItemStack[1];
+	private ItemStack[] inv = new ItemStack[1];
 
 	private HybridTank tank = new HybridTank("gear", MAXLUBE);
 
 	public MaterialRegistry type;
+	private boolean failed;
 
 	private boolean lastPower;
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public double getDamagedPowerFactor() {
+		return Math.pow(0.99, damage);
+	}
+
+	public int getDamagePercent() {
+		return (int)(100*(1-Math.pow(0.99, damage)));
+	}
 
 	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
@@ -148,10 +165,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
-		if (tickcount >= 20) { // Every 1s
-			this.getLube(world, x, y, z, meta);
-			tickcount = 0;
-		}
+		this.getLube(world, x, y, z, meta);
 		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= MAXLUBE) {
 			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
 				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
@@ -165,47 +179,25 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public void getLube(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
-
-		if (rand.nextInt(3) == 0) {
-			if (tank.isEmpty() && omega > 0 && rand.nextInt(16*omega/ratio+1) != 0) {
-				switch(type) {
-				case WOOD:
-					damage += 6;	//2x original steel
+		if (type.isDamageableGear() && omegain > 0) {
+			if (tank.isEmpty()) {
+				if (!world.isRemote && rand.nextInt(40) == 0) {
+					damage++;
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
-					break;
-				case STONE:
-					damage += 3;	//== original steel
-					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
-					break;
-				case STEEL:
-					damage++;		//1/3 original steel
-					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
-					break;
-				case DIAMOND:
-					if (rand.nextInt(3) == 0) {
-						damage++;
-						RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
-					}
-					break;
-				case BEDROCK:
-					break;
-				default:
-					break;
-				}//other types do not get damaged
-				if (type.isDamageableGear()) {
-					world.spawnParticle("crit", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					if (rand.nextInt(1+damage/3) > 0)
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
-				else {
-					damage = 0;
+				if (rand.nextDouble()*rand.nextDouble() > this.getDamagedPowerFactor()) {
+					if (type.isFlammable())
+						ReikaWorldHelper.ignite(world, x, y, z);
+					world.spawnParticle("crit", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					if (rand.nextInt(5) == 0) {
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1F, 1F);
+					}
 				}
 			}
-			else if (type.consumesLubricant()) {
-				if (!tank.isEmpty() && omega > 0) {
-					int chance = (type.ordinal()+1);
-					if (rand.nextInt(chance*4) == 0)
-						tank.removeLiquid(Math.max(1, (int)ReikaMathLibrary.logbase(omega, 2)/4));
+			else if (!world.isRemote && type.consumesLubricant()) {
+				if (tickcount >= 80) {
+					tank.removeLiquid(Math.max(1, (int)ReikaMathLibrary.logbase(omegain, 2)/4));
+					tickcount = 0;
 				}
 			}
 		}
@@ -294,7 +286,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			else {
 				torque = RotaryConfig.torquelimit;
 				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
 			}
 		}
 		else {
@@ -303,11 +295,63 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			else {
 				omega = RotaryConfig.omegalimit;
 				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
 			}
 			torque = torquein / ratio;
 		}
-		torque *= ReikaMathLibrary.doubpow(0.99, damage);
+		torque *= this.getDamagedPowerFactor();
+		if (torque <= 0)
+			omega = 0;
+
+		if (!type.isInfiniteStrength())
+			this.testFailure();
+	}
+
+	public void fail(World world, int x, int y, int z) {
+		failed = true;
+		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 1F, true);
+		ItemStack item = null;
+		switch(type) {
+		case WOOD:
+			item = new ItemStack(ItemStacks.sawdust.itemID, 1, ItemStacks.sawdust.getItemDamage());
+			break;
+		case STONE:
+			item = new ItemStack(Block.gravel, 1, 0);
+			break;
+		case STEEL:
+			item = new ItemStack(ItemStacks.scrap.itemID, 1, ItemStacks.scrap.getItemDamage());
+			break;
+		case DIAMOND:
+			item = new ItemStack(Item.diamond, 1, 0);
+			break;
+		case BEDROCK:
+			item = new ItemStack(ItemStacks.bedrockdust.itemID, 1, ItemStacks.bedrockdust.getItemDamage());
+			break;
+		}
+		for (int i = 0; i < this.getRatio(); i++) {
+			ReikaItemHelper.dropItem(world, x+0.5, y+1.25, z+0.5, item);
+		}
+		world.setBlock(x, y, z, 0);
+	}
+
+	public void repair(int dmg) {
+		damage -= dmg;
+		if (damage < 0)
+			damage = 0;
+		failed = false;
+	}
+
+	public void setDamage(int dmg) {
+		damage = dmg;
+	}
+
+	public void testFailure() {
+		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(Math.max(omega, omegain), 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
+			this.fail(worldObj, xCoord, yCoord, zCoord);
+		}
+		else if (ReikaEngLibrary.mat_twistfailure(Math.max(torque, torquein), 0.0625, type.getShearStrength()/16D)) {
+			this.fail(worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 
 	public int getLubricantScaled(int par1)
@@ -315,15 +359,13 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		return (tank.getLevel()*par1)/MAXLUBE;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound NBT)
 	{
 		super.writeToNBT(NBT);
 		NBT.setBoolean("reduction", reduction);
 		NBT.setInteger("damage", damage);
+		NBT.setBoolean("fail", failed);
 
 		tank.writeToNBT(NBT);
 
@@ -344,15 +386,13 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound NBT)
 	{
 		super.readFromNBT(NBT);
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
+		failed = NBT.getBoolean("fail");
 
 		tank.readFromNBT(NBT);
 

@@ -128,7 +128,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			ItemStack todrop = new ItemStack(RotaryCraft.gbxitems.itemID, 1, type+5*ratio); //drop gearbox item
 			if (todrop.stackTagCompound == null)
 				todrop.setTagCompound(new NBTTagCompound());
-			todrop.stackTagCompound.setInteger("damage", gbx.damage);
+			todrop.stackTagCompound.setInteger("damage", gbx.getDamage());
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 	}
@@ -194,9 +194,7 @@ public class BlockGearbox extends BlockModelledMachine {
 				break;
 			}
 			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
-				tile.damage -= 1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio());
-				if (tile.damage < 0)
-					tile.damage = 0;
+				tile.repair(1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio()));
 				if (!ep.capabilities.isCreativeMode) {
 					int num = ep.getCurrentEquippedItem().stackSize;
 					if (num > 1)
@@ -230,7 +228,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		ItemStack is = new ItemStack(RotaryCraft.gbxitems.itemID, 1, (gbx.getBlockMetadata()/4)*5+gbx.type.ordinal());
 		is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("damage", gbx.damage);
+		is.stackTagCompound.setInteger("damage", gbx.getDamage());
 		ret.add(is);
 		return ret;
 	}

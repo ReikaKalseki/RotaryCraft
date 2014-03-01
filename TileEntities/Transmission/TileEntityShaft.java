@@ -40,7 +40,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public float crossphi2 = 0;
 
 	public MaterialRegistry type;
-	public boolean failed = false;
+	private boolean failed = false;
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
 		MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, type));
@@ -111,10 +111,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		failed = false;
 	}
 
+	public boolean failed() {
+		return failed;
+	}
+
 	public void testFailure() {
-		if (type.isInfiniteStrength())
-			return;
-		//ReikaChatHelper.write(this.getStrength(false));
 		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
 			this.fail(worldObj, xCoord, yCoord, zCoord, true);
 		}
@@ -128,25 +129,13 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public void crossReadFromCross(TileEntityShaft cross, int dir) {
 		reading2Dir = true;
-		if (xCoord == cross.writex && zCoord == cross.writez) {/*
-    		if (cross.reading2Dir && false) {
-
-    		}
-    		else {*/
+		if (xCoord == cross.writex && zCoord == cross.writez) {
 			readomega[dir] = cross.readomega[0];
 			readtorque[dir] = cross.readtorque[0];
-			//ReikaChatHelper.writeInt(cross.readomega[0]);
-			//}
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {/*
-    		if (cross.reading2Dir && false) {
-
-    		}
-    		else {*/
+		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
 			readomega[dir] = cross.readomega[1];
 			readtorque[dir] = cross.readtorque[1];
-			//ReikaChatHelper.writeInt(cross.readomega[1]);
-			//}
 		}
 		else
 			return; //not its output
@@ -507,7 +496,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 		this.basicPowerReceiver();
 
-		this.testFailure();
+		if (!type.isInfiniteStrength())
+			this.testFailure();
+
 		if (omega >= 32000000 && !failed) {
 			RotaryAchievements.MRADS32.triggerAchievement(this.getPlacer());
 		}

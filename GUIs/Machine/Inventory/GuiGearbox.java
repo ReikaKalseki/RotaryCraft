@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -40,7 +39,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		fontRenderer.drawString("Lubricant", 5, 12, 4210752);
 
 		fontRenderer.drawString("Damage:", 68, 60, 0x000000);
-		int damage = (int)(100*(1-ReikaMathLibrary.doubpow(0.99, gbx.damage)));
+		int damage = gbx.getDamagePercent();
 		if (damage < 10)
 			fontRenderer.drawString(String.format("%5d%s", damage, "%"), 122, 60, 0x00ff00);
 		if (damage < 25 && damage >= 10)

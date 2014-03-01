@@ -27,7 +27,7 @@ public class LuaGetAPIPower extends LuaMethod {
 
 	@Override
 	public String getDocumentation() {
-		return "Returns the power data.\nArgs: None\nReturns: [Power,Torque,Speed]";
+		return "Returns the power data.\nArgs: None\nReturns: [Power, Torque, Speed]";
 	}
 
 }

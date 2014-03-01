@@ -28,4 +28,7 @@
 
 		The following machines can be enchanted: %s
 	</enchanting>
+	<computercraft>
+		If you have ComputerCraft or OpenComputers installed, you can use them to read and sometimes control various machines. Simply use the machine as you would any other peripheral, and call one of the listed methods. Note that not all machines have access to all methods; for example, the Reservoir has no inventory, power, or range methods, as they would be meaningless.
+	</computercraft>
 </misc>

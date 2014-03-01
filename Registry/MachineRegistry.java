@@ -979,7 +979,7 @@ public enum MachineRegistry {
 		if (!this.canBeBroken())
 			return false;
 		if (this == SHAFT)
-			return ((TileEntityShaft)tile).failed;
+			return ((TileEntityShaft)tile).failed();
 		if (this == FLYWHEEL)
 			return ((TileEntityFlywheel)tile).failed;
 		if (this == ENGINE)

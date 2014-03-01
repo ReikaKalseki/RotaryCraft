@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import li.cil.oc.api.network.Arguments;
+import li.cil.oc.api.network.Context;
+import li.cil.oc.api.network.ManagedPeripheral;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
@@ -39,7 +43,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, IPeripheral {
+public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, IPeripheral, SimpleComponent, ManagedPeripheral {
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
@@ -56,6 +60,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	protected boolean isFlipped = false;
 
 	private final HashMap<Integer, LuaMethod> luaMethods = new HashMap();
+	private final HashMap<String, LuaMethod> methodNames = new HashMap();
 
 	@Override
 	public final boolean canUpdate() {
@@ -236,8 +241,10 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 
+
+	/** ComputerCraft */
 	@Override
-	public String[] getMethodNames() {
+	public final String[] getMethodNames() {
 		ArrayList<LuaMethod> li = new ArrayList();
 		List<LuaMethod> all = LuaMethod.getMethods();
 		for (int i = 0; i < all.size(); i++) {
@@ -250,32 +257,53 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			LuaMethod l = li.get(i);
 			s[i] = l.displayName;
 			luaMethods.put(i, l);
+			methodNames.put(l.displayName, l);
 		}
 		return s;
 	}
 
 	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+	public final Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
 		return luaMethods.containsKey(method) ? luaMethods.get(method).invoke(this, arguments) : null;
 	}
 
 	@Override
-	public boolean canAttachToSide(int side) {
+	public final boolean canAttachToSide(int side) {
 		return true;
 	}
 
 	@Override
-	public void attach(IComputerAccess computer) {
+	public final void attach(IComputerAccess computer) {
 
 	}
 
 	@Override
-	public void detach(IComputerAccess computer) {
+	public final void detach(IComputerAccess computer) {
 
 	}
 
 	@Override
-	public String getType() {
+	public final String getType() {
 		return this.getName().replaceAll(" ", "");
+	}
+
+	/** OpenComputers */
+	@Override
+	public final String getComponentName() {
+		return this.getName().replaceAll(" ", "");
+	}
+
+	@Override
+	public final String[] methods() {
+		return this.getMethodNames();
+	}
+
+	@Override
+	public final Object[] invoke(String method, Context context, Arguments args) throws Exception {
+		Object[] objs = new Object[args.count()];
+		for (int i = 0; i < objs.length; i++) {
+			objs[i] = args.checkAny(i);
+		}
+		return methodNames.containsKey(method) ? methodNames.get(method).invoke(this, objs) : null;
 	}
 }

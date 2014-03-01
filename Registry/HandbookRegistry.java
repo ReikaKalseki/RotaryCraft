@@ -243,8 +243,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
 	OTHERSHAFT("Alternative Shafts"),
-	OTHERGEARUNIT("Alternative Gear Units"),
 	OTHERGEAR("Alternative Gearboxes"),
+	OTHERGEARUNIT("Alternative Gear Units"),
 	NETHERDUST("Netherrack Dust and Tar"),
 	SAWDUST("Sawdust"),
 	BEDDUST("Bedrock Dust"),
@@ -651,6 +651,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return true;
 		if (this == ALUMINUM)
 			return true;
+		if (this == COMPUTERCRAFT)
+			return true;
 		return false;
 	}
 
@@ -682,6 +684,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this.getParent() == TOC || this.getParent() == TERMS)
 			return false;
 		if (this == MODINTERFACE)
+			return false;
+		if (this == COMPUTERCRAFT)
 			return false;
 		if (this == ENCHANTING)
 			return false;
@@ -937,6 +941,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return new ItemStack(Item.enchantedBook);
 		if (this == TIMING)
 			return new ItemStack(Item.pocketSundial);
+		if (this == COMPUTERCRAFT)
+			return ItemStacks.pcb;
 		if (this == TRANSFER)
 			return ItemStacks.gearunit;
 		if (this == ENGINES)
@@ -1032,6 +1038,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this.isMachine())
 			return true;
 		if (this == TIERS)
+			return true;
+		if (this == COMPUTERCRAFT)
 			return true;
 		return false;
 	}

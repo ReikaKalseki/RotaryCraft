@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -150,6 +151,8 @@ public class GuiHandbook extends GuiScreen
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
 		if (h == HandbookRegistry.TIERS)
 			return HandbookAuxData.getPowerDataSize()-1;
+		if (h == HandbookRegistry.COMPUTERCRAFT)
+			return LuaMethod.getNumberMethods();
 		return 1;
 	}
 

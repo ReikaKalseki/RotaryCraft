@@ -171,7 +171,7 @@ public class BlockShaft extends BlockModelledMachine {
 			return;
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (sha != null) {
-			if (sha.failed) {
+			if (sha.failed()) {
 				ItemStack todrop = null;
 				if (par5Random.nextInt(8) == 0) {
 					switch(sha.type) {

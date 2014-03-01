@@ -100,7 +100,7 @@ public class RenderShaft extends RotaryTERenderer
 		int meta;
 		boolean failed = false;
 		if (tile.isInWorld()) {
-			failed = tile.failed;
+			failed = tile.failed();
 			meta = tile.getBlockMetadata();
 
 			switch(meta) {

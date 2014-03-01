@@ -79,6 +79,18 @@ public enum MaterialRegistry {
 		return this == WOOD || this == STONE || this == STEEL;
 	}
 
+	public boolean isFlammable() {
+		return this == WOOD;
+	}
+
+	public String getDamageNoise() {
+		if (this == WOOD)
+			return "dig.wood";
+		if (this == STONE)
+			return "dig.stone";
+		return "mob.blaze.hit";
+	}
+
 	public boolean isHarvestablePickaxe(ItemStack tool) {
 		if (this == WOOD)
 			return true;
