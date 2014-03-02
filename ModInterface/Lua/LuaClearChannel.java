@@ -32,4 +32,9 @@ public class LuaClearChannel extends LuaMethod {
 		return "Clears the music box channel.\nArgs: Channel (0-15)\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int channel";
+	}
+
 }

@@ -29,4 +29,9 @@ public class LuaGetPressure extends LuaMethod {
 		return "Returns the internal pressure of the machine.\nArgs: None\nReturns: Pressure";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

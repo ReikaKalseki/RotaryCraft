@@ -29,4 +29,9 @@ public class LuaGetTemperature extends LuaMethod {
 		return "Returns the machine temperature.\nArgs: None\nReturns: Temperature";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

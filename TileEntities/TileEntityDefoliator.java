@@ -142,7 +142,8 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 					e.attackEntityFrom(DamageSource.generic, 0.5F);
 				}
 
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, this.getPlacer(), x, y, z);
+				if (world.checkChunksExist(x, y, z, x, y, z))
+					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, this.getPlacer(), x, y, z);
 				potionLevel--;
 			}
 		}

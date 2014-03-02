@@ -28,11 +28,7 @@ public class RenderFan extends RotaryTERenderer
 {
 
 	private ModelFan FanModel = new ModelFan();
-	//private ModelFanV FanModelV = new ModelFanV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityFanAt(TileEntityFan tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -44,8 +40,7 @@ public class RenderFan extends RotaryTERenderer
 
 		ModelFan var14;
 		var14 = FanModel;
-		//ModelFanV var15;
-		//var14 = this.FanModelV;
+
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fantex.png");
 
 		GL11.glPushMatrix();
@@ -87,17 +82,12 @@ public class RenderFan extends RotaryTERenderer
 					GL11.glTranslatef(0F, 0F, -2F);
 			}
 		}
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
+		float var13;
 
 
 		var14.renderAll(null, -tile.phi, 0);
-		// else
-		//var15.renderAll();
+
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

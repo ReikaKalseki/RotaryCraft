@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelCompactor;
@@ -26,11 +25,7 @@ public class RenderCompactor extends RotaryTERenderer
 {
 
 	private ModelCompactor CompactorModel = new ModelCompactor();
-	//private ModelCompactorV CompactorModelV = new ModelCompactorV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityCompactorAt(TileEntityCompactor tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -42,16 +37,13 @@ public class RenderCompactor extends RotaryTERenderer
 
 		ModelCompactor var14;
 		var14 = CompactorModel;
-		//ModelCompactorV var15;
-		//var14 = this.CompactorModelV;
+
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/compactortex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
-		int var11 = 0;	 //used to rotate the model about metadata
-
+		int var11 = 0;
 		if (tile.isInWorld()) {
-
 			switch(tile.getBlockMetadata()) {
 			case 0:
 				var11 = 180;
@@ -76,19 +68,13 @@ public class RenderCompactor extends RotaryTERenderer
 					GL11.glTranslatef(0F, 0F, -2F);
 			}
 		}
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		// if (tile.getBlockMetadata() < 4)
+		float var13;
 
 		float p = tile.phi;
 		if (!tile.isInWorld())
 			p = 1;
 		var14.renderAll(null, p, 0);
-		// else
-		//var15.renderAll();
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -102,7 +88,7 @@ public class RenderCompactor extends RotaryTERenderer
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityCompactorAt((TileEntityCompactor)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			IORenderer.renderIO(tile, par2, par4, par6);
+			//IORenderer.renderIO(tile, par2, par4, par6);
 		}
 	}
 

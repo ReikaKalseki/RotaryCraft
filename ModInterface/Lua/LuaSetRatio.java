@@ -35,4 +35,9 @@ public class LuaSetRatio extends LuaMethod {
 		return "Sets the CVT ratio.\nArgs: Ratio\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int ratio";
+	}
+
 }

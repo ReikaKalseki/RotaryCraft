@@ -35,4 +35,9 @@ public class LuaSetTorque extends LuaMethod {
 		return "Sets the coil torque.\nArgs: Desired Torque\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int torque";
+	}
+
 }

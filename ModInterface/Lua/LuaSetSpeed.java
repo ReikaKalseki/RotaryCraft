@@ -35,4 +35,9 @@ public class LuaSetSpeed extends LuaMethod {
 		return "Sets the coil speed.\nArgs: Desired Speed\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int speed";
+	}
+
 }

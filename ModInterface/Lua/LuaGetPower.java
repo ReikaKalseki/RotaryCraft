@@ -39,4 +39,9 @@ public class LuaGetPower extends LuaMethod {
 		return "Returns the power data.\nArgs: None\nReturns: [Power, Torque, Speed]";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

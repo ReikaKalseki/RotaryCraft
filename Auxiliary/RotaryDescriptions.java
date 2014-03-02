@@ -382,7 +382,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.PULSEJET, PowerReceivers.PULSEJET.getMinSpeed(), TileEntityPulseFurnace.MAXTEMP);
 		addNotes(MachineRegistry.PUMP, PowerReceivers.PUMP.getMinPower(), PowerReceivers.PUMP.getMinTorque());
 		addNotes(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY/RotaryConfig.MILLIBUCKET);
-		addNotes(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF, TileEntityFan.HARVESTSPEED, TileEntityFan.FIRESPEED);
+		addNotes(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), TileEntityFan.FALLOFF, TileEntityFan.HARVESTSPEED, TileEntityFan.FIRESPEED);
 		addNotes(MachineRegistry.COMPACTOR, PowerReceivers.COMPACTOR.getMinPower(), PowerReceivers.COMPACTOR.getMinTorque(), TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP, TileEntityCompactor.MAXPRESSURE, TileEntityCompactor.MAXTEMP);
 		addNotes(MachineRegistry.AUTOBREEDER, PowerReceivers.AUTOBREEDER.getMinPower(), PowerReceivers.AUTOBREEDER.getMinPower(), TileEntityAutoBreeder.FALLOFF);
 		addNotes(MachineRegistry.BAITBOX, PowerReceivers.BAITBOX.getMinPower(), PowerReceivers.BAITBOX.getMinPower(), TileEntityBaitBox.FALLOFF);

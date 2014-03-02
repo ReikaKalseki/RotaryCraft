@@ -32,4 +32,9 @@ public class LuaSetECU extends LuaMethod {
 		return "Sets the ECU setting.\nArgs: Setting Ordinal\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int settingOrdinal";
+	}
+
 }

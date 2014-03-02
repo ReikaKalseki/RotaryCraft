@@ -30,4 +30,9 @@ public class LuaGetEnergy extends LuaMethod {
 		return "Returns the stored energy.\nArgs: None\nReturns: [Energy,Capacity]";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

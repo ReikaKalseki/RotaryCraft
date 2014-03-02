@@ -20,6 +20,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -58,9 +59,15 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		if (world.isRemote)
 			return;
 
+		ReikaJavaLibrary.pConsole(tank);
+
+		if (tank.isEmpty())
+			return;
+
 		if (this.hasValidItem()) {
 			this.createUsesTag();
 			this.repair();
+			tank.removeLiquid(100);
 		}
 	}
 

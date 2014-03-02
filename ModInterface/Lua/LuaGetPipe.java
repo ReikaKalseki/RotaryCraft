@@ -30,4 +30,9 @@ public class LuaGetPipe extends LuaMethod {
 		return "Returns the pipe contents.\nArgs: None\nReturns: [Fluid name, amount]";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

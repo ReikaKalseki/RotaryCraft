@@ -29,4 +29,9 @@ public class LuaGetRange extends LuaMethod {
 		return "Returns the effect range.\nArgs: None\nReturns: [Range, Max Range]";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

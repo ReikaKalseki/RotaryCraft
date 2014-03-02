@@ -29,4 +29,9 @@ public class LuaGetName extends LuaMethod {
 		return "Returns the machine name.\nArgs: None\nReturns: Display name";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "";
+	}
+
 }

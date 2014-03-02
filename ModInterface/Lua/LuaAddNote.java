@@ -41,4 +41,9 @@ public class LuaAddNote extends LuaMethod {
 		return "Adds a note to the music box.\nArgs: Pitch (0-63), Channel (0-15), Length (0-4), Instrument (0-5)\nReturns: Nothing";
 	}
 
+	@Override
+	public String getArgsAsString() {
+		return "int pitch, int channel, int length, int voice";
+	}
+
 }

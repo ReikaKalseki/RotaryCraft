@@ -614,7 +614,7 @@ public final class HandbookAuxData {
 					ReikaGuiAPI.instance.drawItemStack(item, font, is, x, y);
 
 					GL11.glColor4f(1, 1, 1, 1);
-					if (ReikaGuiAPI.instance.isMouseInBox(x, x+18, y, y+18)) {
+					if (ReikaGuiAPI.instance.isMouseInBox(x, x+17, y, y+17)) {
 						for (int j = 0; j < d.getNumberStages(); j++) {
 							//ReikaGuiAPI.instance.drawTooltipAt(font, d.getDisplayTime(j), mx, my);
 							ReikaRenderHelper.disableLighting();
@@ -628,28 +628,33 @@ public final class HandbookAuxData {
 			else if (h == HandbookRegistry.COMPUTERCRAFT) {
 				if (subpage > 0) {
 					List<LuaMethod> li = LuaMethod.getMethods();
-					LuaMethod current = li.get(subpage-1);
-					String name = current.displayName;
-					String desc = current.getDocumentation();
-					font.drawString("- "+name+"()", posX+font.getStringWidth("ComputerCraft")+14, posY+6, 0);
-					font.drawSplitString(desc, posX+11, posY+88, 242, 0xffffff);
-					/*
-					int r = 0;
-					int c = 0;
-					for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+					int di = (subpage-1)*36;
+					int max = Math.min(di+36, MachineRegistry.machineList.length);
+					for (int i = di; i < max; i++) {
 						MachineRegistry m = MachineRegistry.machineList[i];
-						if (current.isClassInstanceOf(m.getTEClass())) {
-							ItemStack is = m.getCraftedProduct();
-							int x = posX+c*18+10;
-							int y = posY+r*18+20;
-							ReikaGuiAPI.instance.drawItemStackWithTooltip(item, font, is, x, y);
-							c++;
-							if (c >= 12) {
-								c = 0;
-								r++;
+						ItemStack is = m.getCraftedProduct();
+						if (m.hasSubdivisions()) {
+							int meta = m.getNumberSubtypes();
+							int time = (int)(System.currentTimeMillis()/1600)%meta;
+							is = m.getCraftedMetadataProduct(time);
+						}
+						int r = (i-di)/12;
+						int c = i%12;
+						int x = posX+c*18+10;
+						int y = posY+r*18+20;
+						ReikaGuiAPI.instance.drawItemStackWithTooltip(item, font, is, x, y);
+						if (ReikaGuiAPI.instance.isMouseInBox(x, x+17, y, y+17)) {
+							int k = 0;
+							for (int j = 0; j < li.size(); j++) {
+								LuaMethod cur = li.get(j);
+								if (cur.isClassInstanceOf(m.getTEClass())) {
+									ReikaRenderHelper.disableLighting();
+									font.drawString(cur.displayName+"("+cur.getArgsAsString()+")", posX+11, posY+88+k*10, 0xffffff);
+									k++;
+								}
 							}
 						}
-					}*/
+					}
 				}
 			}
 		}

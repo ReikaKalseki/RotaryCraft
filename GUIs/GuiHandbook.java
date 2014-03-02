@@ -33,7 +33,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
-import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -152,7 +151,7 @@ public class GuiHandbook extends GuiScreen
 		if (h == HandbookRegistry.TIERS)
 			return HandbookAuxData.getPowerDataSize()-1;
 		if (h == HandbookRegistry.COMPUTERCRAFT)
-			return LuaMethod.getNumberMethods();
+			return MachineRegistry.machineList.length/36+1;
 		return 1;
 	}
 
@@ -506,10 +505,10 @@ public class GuiHandbook extends GuiScreen
 		}
 		double sc = 48;
 		if (m.hasModel() && !m.isPipe()) {
-			double dx = -x;
-			double dy = -y-21;
+			double dx = x;
+			double dy = y+21;
 			double dz = 0;
-			GL11.glTranslated(-dx, -dy, -dz);
+			GL11.glTranslated(dx, dy, dz);
 			GL11.glScaled(sc, -sc, sc);
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);

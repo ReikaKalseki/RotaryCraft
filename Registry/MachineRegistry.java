@@ -312,6 +312,7 @@ public enum MachineRegistry {
 	private ModList requirement;
 	private static final HashMap<List<Integer>, MachineRegistry> machineMappings = new HashMap();
 	private PowerReceivers receiver;
+	private TileEntity renderInstance;
 
 	public static final MachineRegistry[] machineList = MachineRegistry.values();
 
@@ -963,6 +964,22 @@ public enum MachineRegistry {
 		}
 	}
 
+	public int getNumberSubtypes() {
+		switch(this) {
+		case ENGINE:
+			return EngineType.engineList.length;
+		case GEARBOX:
+		case SHAFT:
+			return MaterialRegistry.matList.length+1;
+		case ADVANCEDGEARS:
+			return TileEntityAdvancedGear.GearType.list.length;
+		case FLYWHEEL:
+			return 4;
+		default:
+			return 1;
+		}
+	}
+
 	public boolean canBeBroken() {
 		switch(this) {
 		case MIRROR:
@@ -1174,8 +1191,11 @@ public enum MachineRegistry {
 	}
 
 	public TileEntity createTEInstanceForRender() {
+		if (renderInstance != null)
+			return renderInstance;
 		try {
-			return (TileEntity)te.newInstance();
+			renderInstance = (TileEntity)te.newInstance();
+			return renderInstance;
 		}
 		catch (InstantiationException e) {
 			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
