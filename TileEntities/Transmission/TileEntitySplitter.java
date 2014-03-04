@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -341,6 +342,12 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					else
 						torquein = omegain = 0;
 				}
+				if (m == MachineRegistry.POWERBUS) {
+					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+					omegain = pwr.getSpeedToSide(dir);
+					torquein = pwr.getTorqueToSide(dir);
+				}
 				if (te instanceof ShaftPowerEmitter) {
 					ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
 					if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
@@ -385,6 +392,12 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					}
 					else
 						torquein2 = omegain2 = 0;
+				}
+				if (m2 == MachineRegistry.POWERBUS) {
+					TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
+					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+					omegain2 = pwr.getSpeedToSide(dir);
+					torquein2 = pwr.getTorqueToSide(dir);
 				}
 				if (te2 instanceof ShaftPowerEmitter) {
 					ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
@@ -479,6 +492,13 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				}
 				else
 					torque = omega = 0;
+			}
+
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
@@ -607,9 +627,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("mode", splitmode);
 	}
 
@@ -617,9 +637,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		splitmode = NBT.getInteger("mode");
 	}
 

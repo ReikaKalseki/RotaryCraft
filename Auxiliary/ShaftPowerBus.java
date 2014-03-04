@@ -10,10 +10,13 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 
@@ -39,7 +42,35 @@ public class ShaftPowerBus {
 
 	public void removeBlock(TileEntityPowerBus bus) {
 		blocks.remove(bus);
-		this.update();
+		this.rebuild();
+	}
+
+	private void rebuild() {
+		BlockArray b = new BlockArray();
+		int x = hub.xCoord;
+		int y = hub.yCoord;
+		int z = hub.zCoord;
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(hub.worldObj, dx, dy, dz);
+			if (m == MachineRegistry.POWERBUS) {
+				b.recursiveAddWithMetadata(hub.worldObj, dx, dy, dz, m.getBlockID(), m.getMachineMetadata());
+			}
+		}
+		Iterator<TileEntityPowerBus> it = blocks.iterator();
+		while (it.hasNext()) {
+			TileEntityPowerBus te = it.next();
+			if (b.hasBlock(te.xCoord, te.yCoord, te.zCoord)) {
+
+			}
+			else {
+				te.clearBus();
+				it.remove();
+			}
+		}
 	}
 
 	public boolean addBlock(TileEntityPowerBus bus) {

@@ -300,7 +300,7 @@ public enum MachineRegistry {
 	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
-	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15);
+	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft");
 
 	private final String name;
 	private final Class te;
@@ -679,15 +679,15 @@ public enum MachineRegistry {
 			throw new RuntimeException("Machine "+this.getName()+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)tile;
-			return RotaryNames.getGearboxName(gbx.getBlockMetadata()/4*5+gbx.type.ordinal());
+			return RotaryNames.getGearboxName(gbx.getBlockMetadata()/4*5+gbx.getGearboxType().ordinal());
 		}
 		if (this == ENGINE) {
 			TileEntityEngine eng = (TileEntityEngine)tile;
-			return RotaryNames.getEngineName(eng.type.ordinal());
+			return RotaryNames.getEngineName(eng.getEngineType().ordinal());
 		}
 		if (this == SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)tile;
-			return RotaryNames.getShaftName(sha.type.ordinal());
+			return RotaryNames.getShaftName(sha.getShaftType().ordinal());
 		}
 		if (this == FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)tile;
@@ -1234,6 +1234,12 @@ public enum MachineRegistry {
 	public static MachineRegistry getMachineMapping(int id, int meta) {
 		if (id == BlockRegistry.GPR.getBlockID())
 			return GPR;
+		if (id == BlockRegistry.SHAFT.getBlockID())
+			return SHAFT;
+		if (id == BlockRegistry.ENGINE.getBlockID())
+			return ENGINE;
+		if (id == BlockRegistry.GEARBOX.getBlockID())
+			return GEARBOX;
 		List li = Arrays.asList(id, meta);
 		return machineMappings.get(li);
 	}

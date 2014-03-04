@@ -343,18 +343,18 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temperature");
 
 		fermenterCookTime = NBT.getShort("CookTime");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBT.setShort("CookTime", (short)fermenterCookTime);
 	}

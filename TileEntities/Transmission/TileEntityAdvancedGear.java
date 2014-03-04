@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -473,6 +474,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				omegain = sp.getOmega();
 			}
 		}
+
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
+		}
 		if (m == MachineRegistry.SPLITTER) {
 			TileEntitySplitter devicein = (TileEntitySplitter)te;
 			if (devicein.isSplitting()) {
@@ -532,13 +540,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("ratio", ratio);
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
@@ -549,7 +554,27 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 		NBT.setBoolean("bedrock", isBedrockCoil);
 		NBT.setBoolean("creative", isCreative);
+	}
 
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+		ratio = NBT.getInteger("ratio");
+		energy = NBT.getLong("e");
+		releaseOmega = NBT.getInteger("relo");
+		releaseTorque = NBT.getInteger("relt");
+		hasLubricant = NBT.getBoolean("lube");
+		isRedstoneControlled = NBT.getBoolean("redstone");
+		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
+		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
+		isBedrockCoil = NBT.getBoolean("bedrock");
+		isCreative = NBT.getBoolean("creative");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < belts.length; i++)
@@ -566,24 +591,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-		ratio = NBT.getInteger("ratio");
-		energy = NBT.getLong("e");
-		releaseOmega = NBT.getInteger("relo");
-		releaseTorque = NBT.getInteger("relt");
-		hasLubricant = NBT.getBoolean("lube");
-		isRedstoneControlled = NBT.getBoolean("redstone");
-		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
-		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
-		isBedrockCoil = NBT.getBoolean("bedrock");
-		isCreative = NBT.getBoolean("creative");
-
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		belts = new ItemStack[this.getSizeInventory()];
 

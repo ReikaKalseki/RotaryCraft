@@ -91,7 +91,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			dat = -1;
 		else
 			dat = timer;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 					dat = -1;
 				else
 					dat = timer;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
 				return;
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
@@ -123,7 +123,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			else
 				dat = timer;
 			if (timer >= 0)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, ep, dat);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
 		}
 	}
 

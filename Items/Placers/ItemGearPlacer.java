@@ -75,11 +75,11 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, MachineRegistry.GEARBOX.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.GEARBOX.getBlockID(), is.getItemDamage()%5, 3);
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 			if (gbx != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				gbx.type = MaterialRegistry.setType(is.getItemDamage()%5);
+				//gbx.type = MaterialRegistry.setType(is.getItemDamage()%5);
 				gbx.setBlockMetadata(is.getItemDamage()/5*4+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				gbx.placer = ep.getEntityName();
 			}

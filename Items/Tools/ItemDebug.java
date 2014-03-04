@@ -188,7 +188,7 @@ public class ItemDebug extends ItemRotaryTool {
 				tile.additives = tile.FUELCAP/1000;
 				tile.addWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
-				tile.omega = tile.type.getSpeed();
+				tile.omega = tile.getEngineType().getSpeed();
 			}
 		}
 		if (m == MachineRegistry.SHAFT) {
@@ -201,7 +201,7 @@ public class ItemDebug extends ItemRotaryTool {
 			TileEntityGearbox tile = (TileEntityGearbox)te;
 			if (player.isSneaking()) {
 				tile.repair(Integer.MAX_VALUE);
-				tile.setLubricant(tile.MAXLUBE);
+				tile.fillWithLubricant();
 				ReikaChatHelper.write("Filled to capacity.");
 			}
 		}

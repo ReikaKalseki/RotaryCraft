@@ -147,7 +147,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	private void transferToEngine(TileEntityEngine te) {
 		FluidStack liq = tank.getFluid();
-		Fluid f = te.type.getFuelType();
+		Fluid f = te.getEngineType().getFuelType();
 		if (f == null || liq == null || !f.equals(liq.getFluid()))
 			return;
 		if (te.getFuelLevel()+liq.amount > te.FUELCAP)
@@ -174,9 +174,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
 
@@ -189,9 +189,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 

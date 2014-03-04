@@ -137,25 +137,25 @@ public class GuiMusic extends GuiNonPoweredMachine
 		boolean flag = true;
 		if (button.id < 24000) {
 			if (button.id == 100) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+1, music, ep, 0, 0, 0, 0); //data not used
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+1, music, 0, 0, 0, 0); //data not used
 			}
 			else if (button.id == 101) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+2, music, ep, 0, 0, 0, 0);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+2, music, 0, 0, 0, 0);
 			}
 			else if (button.id == 102) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+3, music, ep, 0, 0, 0, 0); //demo
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+3, music, 0, 0, 0, 0); //demo
 			}
 			else if (button.id == 103) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+4, music, ep, activeChannel, activeType.ordinal(), 0, 0); //rest
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+4, music, activeChannel, activeType.ordinal(), 0, 0); //rest
 			}
 			else if (button.id == 104) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+5, music, ep, activeChannel, 0, 0, 0); //bksp
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+5, music, activeChannel, 0, 0, 0); //bksp
 			}
 			else if (button.id == 105) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+6, music, ep, activeChannel, 0, 0, 0); //ch clr
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+6, music, activeChannel, 0, 0, 0); //ch clr
 			}
 			else if (button.id == 106) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, music, ep, 0, 0, 0, 0); //clrall
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, music, 0, 0, 0, 0); //clrall
 			}
 			else if (button.id >= 400) {
 				int i = button.id-400+1;
@@ -171,7 +171,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 			else {
 				//ReikaJavaLibrary.pConsole(button.id);
 				flag = false;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), music, ep, button.id, activeChannel, activeType.ordinal(), activeVoice.ordinal());
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), music, button.id, activeChannel, activeType.ordinal(), activeVoice.ordinal());
 			}
 		}
 		if (flag) {

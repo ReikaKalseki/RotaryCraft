@@ -28,5 +28,6 @@ public class LuaMethods {
 	private static final LuaMethod setECU = new LuaSetECU();
 	private static final LuaMethod addNote = new LuaAddNote();
 	private static final LuaMethod clearChannel = new LuaClearChannel();
+	private static final LuaMethod getFuelTime = new LuaGetFuelTime();
 
 }

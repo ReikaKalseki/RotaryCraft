@@ -109,6 +109,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
@@ -512,6 +513,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			NBTTagCompound nbt = nb.getTagsToWriteToStack();
 			//core.stackTagCompound = nbt;
 		}
+		if (m == MachineRegistry.PORTALSHAFT) {
+			return MachineRegistry.SHAFT.getCraftedMetadataProduct(((TileEntityPortalShaft)tile).material.ordinal());
+		}
 		return core;
 	}
 
@@ -546,6 +550,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
 			ItemStack is = m.getCraftedProduct();
+			if (m == MachineRegistry.PORTALSHAFT)
+				is = MachineRegistry.SHAFT.getCraftedMetadataProduct(((TileEntityPortalShaft)te).material.ordinal());
 			List li;
 			if (m.isEnchantable()) {
 				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();

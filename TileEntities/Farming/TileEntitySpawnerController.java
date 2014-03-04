@@ -224,9 +224,9 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("hjdelay", hijackdelay);
 		NBT.setInteger("setdelay", setDelay);
 		NBT.setBoolean("disable", disable);
@@ -236,9 +236,9 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		hijackdelay = NBT.getInteger("hjdelay");
 		setDelay = NBT.getInteger("setdelay");
 		disable = NBT.getBoolean("disable");

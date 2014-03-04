@@ -272,18 +272,18 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		potionDamage = NBT.getIntArray("damages");
 		potionLevel = NBT.getIntArray("levels");
 		potionIDs = NBT.getIntArray("IDs");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setIntArray("damages", potionDamage);
 		NBT.setIntArray("levels", potionLevel);
 		NBT.setIntArray("IDs", potionIDs);

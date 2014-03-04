@@ -43,13 +43,10 @@ public class BlockGearbox extends BlockModelledMachine {
 		//this.blockHardness = 0.5F;
 	}
 
-	/**
-	 * Returns the TileEntity used by this block.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createTileEntity(World world, int meta)
 	{
-		return new TileEntityGearbox();
+		return new TileEntityGearbox(MaterialRegistry.setType(meta));
 	}
 
 	@Override
@@ -57,9 +54,9 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox tg = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (tg == null)
 			return 0;
-		if (tg.type != MaterialRegistry.WOOD)
-			return 0;
-		return 60;
+		if (tg.getGearboxType().isFlammable())
+			return 60;
+		return 0;
 	}
 
 	@Override
@@ -68,7 +65,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx == null)
 			return 0;
-		MaterialRegistry type = gbx.type;
+		MaterialRegistry type = gbx.getGearboxType();
 		switch(type) {
 		case WOOD:
 			return 5F;
@@ -94,8 +91,8 @@ public class BlockGearbox extends BlockModelledMachine {
 				mult = 2;
 		}
 		if (this.canHarvest(world, ep, x, y, z))
-			return mult*0.2F/(gbx.type.ordinal()+1);
-		return 0.01F/(gbx.type.ordinal()+1);
+			return mult*0.2F/(gbx.getGearboxType().ordinal()+1);
+		return 0.01F/(gbx.getGearboxType().ordinal()+1);
 	}
 
 	@Override
@@ -113,7 +110,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx == null)
 			return false;
-		MaterialRegistry type = gbx.type;
+		MaterialRegistry type = gbx.getGearboxType();
 		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
 	}
 
@@ -123,7 +120,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return;
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (gbx != null) {
-			int type = gbx.type.ordinal();
+			int type = gbx.getGearboxType().ordinal();
 			int ratio = gbx.getBlockMetadata()/4;
 			ItemStack todrop = new ItemStack(RotaryCraft.gbxitems.itemID, 1, type+5*ratio); //drop gearbox item
 			if (todrop.stackTagCompound == null)
@@ -173,7 +170,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox tile = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 		if (tile != null) {
 			ItemStack fix;
-			switch(tile.type) {
+			switch(tile.getGearboxType()) {
 			case WOOD:
 				fix = ItemStacks.woodgear;
 				break;
@@ -226,7 +223,7 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
-		ItemStack is = new ItemStack(RotaryCraft.gbxitems.itemID, 1, (gbx.getBlockMetadata()/4)*5+gbx.type.ordinal());
+		ItemStack is = new ItemStack(RotaryCraft.gbxitems.itemID, 1, (gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("damage", gbx.getDamage());
 		ret.add(is);

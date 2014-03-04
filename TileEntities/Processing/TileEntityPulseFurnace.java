@@ -106,9 +106,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		pulseFurnaceCookTime = NBT.getShort("CookTime");
 
@@ -122,9 +122,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setShort("CookTime", (short)pulseFurnaceCookTime);
 
 		water.writeToNBT(NBT);

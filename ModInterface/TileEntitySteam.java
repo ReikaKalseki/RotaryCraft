@@ -148,9 +148,9 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("storage", steamLevel);
 	}
 
@@ -158,9 +158,9 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		steamLevel = NBT.getInteger("storage");
 	}
 

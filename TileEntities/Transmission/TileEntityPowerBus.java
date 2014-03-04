@@ -192,8 +192,8 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		inputSide = dirs[NBT.getInteger("in")];
 
@@ -207,8 +207,8 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("in", this.getInputSide().ordinal());
 
@@ -269,6 +269,9 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 
 	public void clearBus() {
 		bus = null;
+		hubX = Integer.MIN_VALUE;
+		hubY = Integer.MIN_VALUE;
+		hubZ = Integer.MIN_VALUE;
 	}
 
 	@Override

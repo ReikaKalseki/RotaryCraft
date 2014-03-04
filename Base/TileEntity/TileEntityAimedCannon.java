@@ -173,9 +173,9 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	protected abstract double randomOffset();
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setFloat("theta", theta);
 		NBT.setInteger("direction", dir);
 		NBT.setInteger("numsafe", numSafePlayers);
@@ -191,9 +191,9 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		theta = NBT.getFloat("theta");
 		dir = NBT.getInteger("direction");
 

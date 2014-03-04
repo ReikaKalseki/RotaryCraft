@@ -370,9 +370,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("load", loading);
 		NBT.setBoolean("cload", canLoad);
 		NBT.setBoolean("fire", fired);
@@ -382,9 +382,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		loading = NBT.getBoolean("load");
 		canLoad = NBT.getBoolean("cload");
 		fired = NBT.getBoolean("fire");

@@ -76,12 +76,12 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
 			return;
 		}
 		range = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (range >= 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, ep, range);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
 	}
 
 	/**

@@ -263,18 +263,18 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("chng", numchanges);
 		NBT.setInteger("player", numUsingPlayers);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		numchanges = NBT.getInteger("chng");
 		numUsingPlayers = NBT.getInteger("player");

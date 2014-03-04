@@ -300,7 +300,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		ReikaJavaLibrary.initClass(DifficultyEffects.class);
 		ReikaJavaLibrary.initClass(ExtractorBonus.class);
-		ReikaJavaLibrary.initClass(HandbookRegistry.class);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			ReikaJavaLibrary.initClass(HandbookRegistry.class);
 		ReikaJavaLibrary.initClass(MobBait.class);
 		ReikaJavaLibrary.initClass(PlantMaterials.class);
 		ReikaJavaLibrary.initClass(EngineType.class);

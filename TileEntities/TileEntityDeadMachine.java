@@ -106,9 +106,9 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("id", tileID);
 		NBT.setInteger("meta", tileMeta);
 	}
@@ -117,9 +117,9 @@ public class TileEntityDeadMachine extends InventoriedRCTileEntity implements In
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		tileID = NBT.getInteger("id");
 		tileMeta = NBT.getInteger("meta");

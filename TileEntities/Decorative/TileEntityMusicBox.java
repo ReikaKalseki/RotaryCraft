@@ -220,9 +220,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
 		NBT.setBoolean("lastpwr", lastPower);
@@ -235,9 +235,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
@@ -284,7 +284,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	public boolean hasSavedFile() {
 		File save = DimensionManager.getCurrentSaveRootDirectory();
-		String base = save.getPath().substring(2);
+		String base = save.getPath();
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
 		try {
 			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(base+"/RotaryCraft/"+name)));
@@ -300,7 +300,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		String path = save.getPath().substring(2)+"/RotaryCraft/"+name;
+		String path = save.getPath()+"/RotaryCraft/"+name;
 		this.readFile(path, false);
 	}
 
@@ -362,7 +362,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		File f = new File(save.getPath().substring(2)+"/RotaryCraft/"+name);
+		File f = new File(save.getPath()+"/RotaryCraft/"+name);
 		if (f.exists())
 			f.delete();
 	}

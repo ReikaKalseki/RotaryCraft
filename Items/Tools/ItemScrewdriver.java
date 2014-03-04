@@ -153,7 +153,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}*/
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft ts = (TileEntityShaft)te;
-				MaterialRegistry type = ts.type;
+				MaterialRegistry type = ts.getShaftType();
 				if (damage < 5)
 					ts.setBlockMetadata(damage+1);
 				if (damage == 5)
@@ -163,7 +163,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 				if (damage == 9)
 					ts.setBlockMetadata(6);
 				TileEntityShaft ts1 = (TileEntityShaft)te;
-				ts1.type = type;
+				//ts1.type = type;
 				return true;
 			}
 			if (m == MachineRegistry.FLOODLIGHT) {

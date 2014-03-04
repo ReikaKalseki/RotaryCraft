@@ -38,12 +38,12 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 		public GrinderRecipe(List<ItemStack> in) {
 			input = in;
-			output = RecipesGrinder.getRecipes().getSmeltingResult(in.get(0));
+			output = RecipesGrinder.getRecipes().getGrindingResult(in.get(0));
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack result = RecipesGrinder.getRecipes().getSmeltingResult(this.getEntry());
+			ItemStack result = RecipesGrinder.getRecipes().getGrindingResult(this.getEntry());
 			ItemStack is = result != null ? ReikaItemHelper.getSizedItemStack(result, 1) : null;
 			return is != null ? new PositionedStack(is, 131, 24) : null;
 		}

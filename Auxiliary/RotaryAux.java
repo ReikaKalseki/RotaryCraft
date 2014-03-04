@@ -72,9 +72,9 @@ public class RotaryAux {
 			TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (te == null)
 				return false;
-			if (te.type == null)
+			if (te.getEngineType() == null)
 				return false;
-			if (!te.type.hasGui())
+			if (!te.getEngineType().hasGui())
 				return false;
 			return true;
 		}

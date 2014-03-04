@@ -75,11 +75,11 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlockID());
+			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlockID(), is.getItemDamage(), 3);
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				eng.type = EngineType.setType(is.getItemDamage());
+				//eng.type = EngineType.setType(is.getItemDamage());
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				eng.placer = ep.getEntityName();
 				if (is.stackTagCompound != null)
@@ -87,6 +87,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 					eng.setFlipped(true);
 				}
+				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 			}
 		}
 		return true;
@@ -117,32 +118,32 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		if (is.getItemDamage() == EngineType.WIND.ordinal()) {
 			if (world.getBlockId(x, y+1, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y+1, z);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y-1, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y-1, z);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x+1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x+1, y, z);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x-1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x-1, y, z);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y, z+1) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z+1);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 			if (world.getBlockId(x, y, z-1) == MachineRegistry.ENGINE.getBlockID()) {
 				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z-1);
-				if (te.type == EngineType.WIND)
+				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
 
@@ -182,7 +183,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	protected void checkAndBreakAdjacent(World world, int x, int y, int z) {
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
-			if (eng.type == EngineType.HYDRO) {
+			if (eng.getEngineType() == EngineType.HYDRO) {
 				int id = world.getBlockId(x, y+1, z);
 				if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y+1, z);

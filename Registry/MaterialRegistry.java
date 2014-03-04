@@ -44,7 +44,7 @@ public enum MaterialRegistry {
 	}
 
 	public static MaterialRegistry setType(int type) {
-		return values()[type];
+		return matList[type];
 	}
 
 	public double getElasticModulus() {

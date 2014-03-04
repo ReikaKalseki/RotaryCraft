@@ -335,7 +335,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (tile == null)
 				return;
-			if (!tile.type.isCooled())
+			if (!tile.getEngineType().isCooled())
 				return;
 			int tempdiff = temperature-tile.temperature;
 			if (tempdiff <= 0)
@@ -389,16 +389,16 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temperature");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("temperature", temperature);
 	}
 

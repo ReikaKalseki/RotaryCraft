@@ -142,14 +142,14 @@ public class ItemMulti extends ItemBasic {
 							for (int k = -6; k <= 6; k++) {
 								if (world.getBlockTileEntity(x+i, y+j, z+k) instanceof TileEntityEngine) {
 									TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x+i, y+j, z+k);
-									if (te.type == EngineType.AC) {
+									if (te.getEngineType() == EngineType.AC) {
 										double dx = x-te.xCoord-0.5;
 										double dy = y-te.yCoord-0.5;
 										double dz = z-te.zCoord-0.5;
 										double dd = ReikaMathLibrary.py3d(dx, dy, dz);
 										double v = ReikaMathLibrary.py3d(e.motionX, e.motionY, e.motionZ);
-										te.torque = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.type.getTorque()/dd);
-										te.omega = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.type.getSpeed()/dd/4D);
+										te.torque = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.getEngineType().getTorque()/dd);
+										te.omega = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.getEngineType().getSpeed()/dd/4D);
 										te.power = te.omega*te.torque;
 										te.soundtick = 1;
 									}

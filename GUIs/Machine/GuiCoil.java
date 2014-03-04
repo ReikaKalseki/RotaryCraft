@@ -91,13 +91,13 @@ public class GuiCoil extends GuiNonPoweredMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			omega = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, ep, omega);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, omega);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			torque = 0;
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, ep, torque);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, torque);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -113,7 +113,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 					omega = coil.getMaximumEmission();
 					input.setText(String.valueOf(coil.getMaximumEmission()));
 				}
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, ep, omega);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, omega);
 			}
 		}
 		if (valid2) {
@@ -125,7 +125,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 					torque = coil.getMaximumEmission();
 					input2.setText(String.valueOf(coil.getMaximumEmission()));
 				}
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, ep, torque);
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, torque);
 			}
 		}
 	}

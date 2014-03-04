@@ -322,9 +322,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		for (int i = 0; i < 6; i++) {
 			NBT.setBoolean("conn"+i, connections[i]);
@@ -334,13 +334,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		NBT.setInteger("level", this.getLiquidLevel());
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		for (int i = 0; i < 6; i++) {
 			connections[i] = NBT.getBoolean("conn"+i);

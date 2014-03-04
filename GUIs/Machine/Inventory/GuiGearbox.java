@@ -71,7 +71,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		if (api.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("%d/%d", gbx.getLubricant(), gbx.MAXLUBE), mx-j, my-k);
+			api.drawTooltipAt(fontRenderer, String.format("%.1f/%d", gbx.getLubricant()/1000F, gbx.getMaxLubricant()/1000), mx-j, my-k);
 		}
 	}
 

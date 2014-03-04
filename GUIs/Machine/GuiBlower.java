@@ -60,7 +60,7 @@ public class GuiBlower extends GuiPowerOnlyMachine {
 		super.actionPerformed(b);
 
 		if (b.id < 24000) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BLOWER.getMinValue()+b.id, tile, ep, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BLOWER.getMinValue()+b.id, tile, 0);
 			controls[b.id] = !controls[b.id];
 		}
 

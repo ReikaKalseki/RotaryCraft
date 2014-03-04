@@ -132,25 +132,28 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public abstract boolean hasModelTransparency();
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 		NBT.setFloat("phi", phi);
-		NBT.setInteger("tick", tickcount);
+	}
 
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+		phi = NBT.getFloat("phi");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+		NBT.setInteger("tick", tickcount);
 		NBT.setBoolean("emp", disabled);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-		phi = NBT.getFloat("phi");
 		tickcount = NBT.getInteger("tick");
-
 		disabled = NBT.getBoolean("emp");
 	}
 

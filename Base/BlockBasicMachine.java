@@ -14,7 +14,7 @@ import java.util.Random;
 import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -64,7 +64,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
-public abstract class BlockBasicMachine extends BlockContainer implements SidedTextureIndex, IWailaBlock {
+public abstract class BlockBasicMachine extends Block implements SidedTextureIndex, IWailaBlock {
 
 	protected Random par5Random = new Random();
 
@@ -80,6 +80,11 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			this.setStepSound(soundMetalFootstep);
 	}
 
+	@Override
+	public final boolean hasTileEntity(int meta) {
+		return true;
+	}
+
 	public final AxisAlignedBB getBlockAABB(int x, int y, int z) {
 		return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 	}
@@ -93,8 +98,6 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 	/** Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
 	@Override
 	public abstract void registerIcons(IconRegister par1IconRegister);
-
-	public abstract TileEntity createNewTileEntity(World var1);
 
 	@Override
 	public int getRenderType() {
@@ -164,7 +167,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		else if (te instanceof TileEntityEngine) {
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
-				if (tile.type == EngineType.JET && tile.FOD > 0) {
+				if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
 					tile.repairJet();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;
@@ -172,7 +175,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 				}
 			}
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
-				if (tile.type == EngineType.JET && tile.FOD > 0) {
+				if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
 					tile.repairJetPartial();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;
@@ -181,7 +184,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			}
 			if (is != null && is.stackSize == 1) {
 				if (is.itemID == Item.bucketEmpty.itemID) {
-					if (tile.type.isEthanolFueled()) {
+					if (tile.getEngineType().isEthanolFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
 							tile.subtractFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
@@ -192,7 +195,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						}
 						return true;
 					}
-					if (tile.type.isJetFueled()) {
+					if (tile.getEngineType().isJetFueled()) {
 						if (tile.getFuelLevel() >= ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
 							tile.subtractFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
@@ -204,7 +207,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						return true;
 					}
 				}
-				if (tile.type.isJetFueled()) {
+				if (tile.getEngineType().isJetFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.JET_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
@@ -218,7 +221,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						return true;
 					}
 				}
-				if (tile.type.isEthanolFueled()) {
+				if (tile.getEngineType().isEthanolFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
 						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.ETHANOL_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
@@ -232,7 +235,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 						return true;
 					}
 				}
-				if (tile.type.requiresLubricant()) {
+				if (tile.getEngineType().requiresLubricant()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
 						if (tile.getLube() <= tile.LUBECAP-ItemFuelLubeBucket.LUBE_VALUE) {
 							if (!ep.capabilities.isCreativeMode)
@@ -268,16 +271,16 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 			if (eng == null)
 				return null;
-			if (eng.type == null)
+			if (eng.getEngineType() == null)
 				return null;
-			return new ItemStack(RotaryCraft.engineitems.itemID, 1, eng.type.ordinal());
+			return new ItemStack(RotaryCraft.engineitems.itemID, 1, eng.getEngineType().ordinal());
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
 			meta = gbx.getBlockMetadata();
-			if (gbx.type == null)
+			if (gbx.getGearboxType() == null)
 				return null;
-			int dmg = gbx.type.ordinal();
+			int dmg = gbx.getGearboxType().ordinal();
 			switch(gbx.getRatio()) {
 			case 4:
 				dmg += 5;
@@ -296,9 +299,9 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 			meta = sha.getBlockMetadata();
 			if (meta >= 6)
 				return new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.getNumberShaftTypes()-1);
-			if (sha.type == null)
+			if (sha.getShaftType() == null)
 				return null;
-			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, sha.type.ordinal());
+			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, sha.getShaftType().ordinal());
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
@@ -374,7 +377,7 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
-		if (te instanceof TemperatureTE)
+		if (te instanceof TemperatureTE && !(te instanceof TileEntityEngine))
 			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
 			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
@@ -405,18 +408,21 @@ public abstract class BlockBasicMachine extends BlockContainer implements SidedT
 		}
 		if (te instanceof TileEntityGearbox) {
 			TileEntityGearbox gbx = (TileEntityGearbox)te;
-			if (gbx.type.isDamageableGear()) {
+			if (gbx.getGearboxType().isDamageableGear()) {
 				currenttip.add(String.format("Damage: %d%s", gbx.getDamagePercent(), "%"));
 			}
 			currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
 		}
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine eng = (TileEntityEngine)te;
-			if (eng.type.requiresLubricant()) {
+			if (eng.getEngineType().requiresLubricant()) {
 				currenttip.add(String.format("Lubricant: %d mB", eng.getLube()));
 			}
-			if (eng.type.burnsFuel()) {
+			if (eng.getEngineType().burnsFuel()) {
 				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
+			}
+			if (eng.getEngineType().hasTemperature()) {
+				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));
 			}
 		}
 		return currenttip;

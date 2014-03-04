@@ -133,9 +133,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("range", selectedrange);
 	}
 
@@ -143,9 +143,9 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		selectedrange = NBT.getInteger("range");
 	}
 

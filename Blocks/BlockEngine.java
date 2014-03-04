@@ -49,9 +49,7 @@ public class BlockEngine extends BlockModelledMachine {
 		if (tile == null)
 			return;
 
-		if (tile.type == null)
-			tile.type = EngineType.DC;
-		switch(tile.type) {
+		switch(tile.getEngineType()) {
 		case DC:
 			maxy -= 0.1875F;
 			break;/*
@@ -130,9 +128,7 @@ public class BlockEngine extends BlockModelledMachine {
 			return;
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
-			if (eng.type == null)
-				eng.type = EngineType.DC;
-			if (eng.FOD >= 8 && eng.type == EngineType.JET) {
+			if (eng.FOD >= 8 && eng.getEngineType() == EngineType.JET) {
 				ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
@@ -145,9 +141,9 @@ public class BlockEngine extends BlockModelledMachine {
 					world.spawnEntityInWorld(item);
 			}
 			else {
-				int metat = eng.type.ordinal();
+				int metat = eng.getEngineType().ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
-				if (eng.type == EngineType.JET && eng.FOD > 0) {
+				if (eng.getEngineType() == EngineType.JET && eng.FOD > 0) {
 					todrop.stackTagCompound = new NBTTagCompound();
 					todrop.stackTagCompound.setInteger("damage", eng.FOD);
 				}
@@ -168,13 +164,10 @@ public class BlockEngine extends BlockModelledMachine {
 		}
 	}
 
-	/**
-	 * Returns the TileEntity used by this block.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createTileEntity(World world, int meta)
 	{
-		return new TileEntityEngine();
+		return new TileEntityEngine(EngineType.engineList[meta]);
 	}
 
 	@Override
@@ -192,9 +185,9 @@ public class BlockEngine extends BlockModelledMachine {
 		TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (tile == null)
 			return ret;
-		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.type.ordinal());
+		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.getEngineType().ordinal());
 		ret.add(is);
-		if (tile.type == EngineType.JET && tile.FOD > 0) {
+		if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
 			is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setInteger("damage", tile.FOD);
 		}

@@ -82,15 +82,15 @@ public class TileEntityParticleEmitter extends TileEntitySpringPowered implement
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("type", particleType.ordinal());
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		particleType = ReikaParticleHelper.values()[NBT.getInteger("type")];
 	}

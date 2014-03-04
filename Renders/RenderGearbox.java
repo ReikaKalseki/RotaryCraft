@@ -61,11 +61,8 @@ public class RenderGearbox extends RotaryTERenderer
 		this.setupGL(tile, par2, par4, par6);
 
 		int var11 = 0;	 //used to rotate the model about metadata
-
 		if (tile.isInWorld()) {
-			if (tile.type == null)
-				return;
-			switch(tile.type) {
+			switch(tile.getGearboxType()) {
 			case WOOD:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw.png");
 				break;
@@ -177,12 +174,6 @@ public class RenderGearbox extends RotaryTERenderer
 			return;
 		}
 
-		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
 		switch(tile.getRatio()) {
 		case 2:
 			var14.renderAll(null, -tile.phi, 0);
@@ -229,7 +220,7 @@ public class RenderGearbox extends RotaryTERenderer
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
-			double h = 0.0625+(4D/16D*tr.getLubricant()/tr.MAXLUBE)*0.9;
+			double h = 0.0625+(4D/16D*tr.getLubricant()/tr.getMaxLubricant())*0.9;
 			Tessellator v5 = Tessellator.instance;
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
@@ -250,7 +241,7 @@ public class RenderGearbox extends RotaryTERenderer
 		String name;
 		TileEntityGearbox tile = (TileEntityGearbox)te;
 		if (tile.isInWorld()) {
-			switch(tile.type) {
+			switch(tile.getGearboxType()) {
 			case WOOD:
 				name = "geartexw.png";
 				break;

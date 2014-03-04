@@ -347,4 +347,8 @@ public enum EngineType {
 	public boolean hasInventory() {
 		return this.getSizeInventory() > 0;
 	}
+
+	public boolean needsWater() {
+		return this == STEAM || this == SPORT;
+	}
 }

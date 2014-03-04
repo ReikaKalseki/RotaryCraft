@@ -50,15 +50,46 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
 	private int damage = 0;
-	public static final int MAXLUBE = 24000;
 	private ItemStack[] inv = new ItemStack[1];
 
-	private HybridTank tank = new HybridTank("gear", MAXLUBE);
+	private MaterialRegistry type;
 
-	public MaterialRegistry type;
+	private final HybridTank tank;
 	private boolean failed;
 
 	private boolean lastPower;
+
+	public TileEntityGearbox(MaterialRegistry type) {
+		if (type == null)
+			type = MaterialRegistry.WOOD;
+		this.type = type;
+		tank = new HybridTank("gear", this.getMaxLubricant());
+	}
+
+	public TileEntityGearbox() {
+		this(MaterialRegistry.WOOD);
+	}
+
+	public MaterialRegistry getGearboxType() {
+		return type;
+	}
+
+	public int getMaxLubricant() {
+		switch(type) {
+		case BEDROCK:
+			return 0;
+		case DIAMOND:
+			return 1000;
+		case STEEL:
+			return 24000;
+		case STONE:
+			return 8000;
+		case WOOD:
+			return 3000;
+		default:
+			return 0;
+		}
+	}
 
 	public int getDamage() {
 		return damage;
@@ -155,8 +186,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		if (type == null)
-			type = MaterialRegistry.STEEL;
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 
@@ -166,7 +195,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
 		this.getLube(world, x, y, z, meta);
-		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= MAXLUBE) {
+		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= this.getMaxLubricant()) {
 			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
 				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
 				tank.addLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000, FluidRegistry.getFluid("lubricant"));
@@ -259,6 +288,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		}
 		if (te instanceof SimpleProvider) {
 			this.copyStandardPower(worldObj, readx, ready, readz);
+		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
 		}
 		if (te instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
@@ -356,20 +391,26 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	public int getLubricantScaled(int par1)
 	{
-		return (tank.getLevel()*par1)/MAXLUBE;
+		if (this.getMaxLubricant() == 0)
+			return 0;
+		return tank.getLevel()*par1/this.getMaxLubricant();
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("reduction", reduction);
 		NBT.setInteger("damage", damage);
 		NBT.setBoolean("fail", failed);
 
 		tank.writeToNBT(NBT);
+	}
 
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
 		NBT.setInteger("type", type.ordinal());
+		super.writeToNBT(NBT);
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inv.length; i++)
@@ -387,16 +428,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
-		super.readFromNBT(NBT);
-		reduction = NBT.getBoolean("reduction");
-		damage = NBT.getInteger("damage");
-		failed = NBT.getBoolean("fail");
-
-		tank.readFromNBT(NBT);
-
+	public void readFromNBT(NBTTagCompound NBT) {
 		type = MaterialRegistry.setType(NBT.getInteger("type"));
+		super.readFromNBT(NBT);
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		inv = new ItemStack[this.getSizeInventory()];
 
@@ -410,6 +444,17 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+		reduction = NBT.getBoolean("reduction");
+		damage = NBT.getInteger("damage");
+		failed = NBT.getBoolean("fail");
+
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -530,7 +575,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*tank.getLevel()/MAXLUBE;
+		return 15*tank.getLevel()/this.getMaxLubricant();
 	}
 
 	@Override
@@ -583,8 +628,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		return tank.getLevel();
 	}
 
-	public void setLubricant(int amt) {
-		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
+	public void fillWithLubricant() {
+		tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("lubricant"));
 	}
 
 	@Override

@@ -298,9 +298,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setLong("setfrequency", setpitch);
 		NBT.setLong("setvolume", setvolume);
 	}
@@ -309,9 +309,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		setpitch = NBT.getLong("setfrequency");
 		setvolume = NBT.getLong("setvolume");
 	}

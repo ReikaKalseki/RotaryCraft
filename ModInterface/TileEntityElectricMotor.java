@@ -187,9 +187,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		numberCoils = NBT.getInteger("coils");
 
@@ -201,9 +201,9 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("coils", numberCoils);
 

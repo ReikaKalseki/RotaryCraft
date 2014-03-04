@@ -118,9 +118,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public boolean isJetFailing = false;
 
-	/** Used by turbine engines */
-
-	public EngineType type;
+	private EngineType type;
 
 	/** Used in jet engines */
 	public int FOD = 0;
@@ -139,6 +137,18 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	private boolean isOn;
 
 	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
+
+	public TileEntityEngine(EngineType eng) {
+		type = eng;
+	}
+
+	public TileEntityEngine() {
+		this(EngineType.DC);
+	}
+
+	public EngineType getEngineType() {
+		return type;
+	}
 
 	public int getInventoryStackLimit() {
 		return type.allowInventoryStacking() ? 64 : 1;
@@ -682,13 +692,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	private void getEngineType(World world, int x, int y, int z, int meta) {
-		if (type == null) {
-			type = EngineType.DC;
-			omega = 0;
-			torque = 0;
-			return;
-		}
-
 		switch (type) {
 		case STEAM:
 			MAXTEMP = 150;
@@ -711,7 +714,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				on = ecu.canProducePower();
 			}
 		}
-
 		if (on && this.getRequirements(world, x, y, z, meta)) {
 			isOn = true;
 			int speed;
@@ -857,6 +859,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 			for (int i = 0; i < inzone.size(); i++) {
 				boolean immune = false;
+				float mult = 1;
 				if (inzone.get(i) instanceof EntityPlayer) {
 					EntityPlayer caughtpl = (EntityPlayer)inzone.get(i);
 					if (caughtpl.capabilities.isCreativeMode)
@@ -864,18 +867,18 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 					ItemStack is = caughtpl.getCurrentArmor(0);
 					if (is != null) {
 						if (is.itemID == ItemRegistry.BEDBOOTS.getShiftedID())
-							immune = true;
+							mult = 0.1F;
 						if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
-							immune = true;
+							mult = 0.1F;
 					}
 				}
 				if (inzone.get(i) instanceof EntityTurretShot)
 					immune = true;
 				Entity caught = (Entity)inzone.get(i);
 				if (!immune) {
-					caught.motionX += (x+0.5D - caught.posX)/20;
-					caught.motionY += (y+0.5D - caught.posY)/20;
-					caught.motionZ += (z+0.5D - caught.posZ)/20;
+					caught.motionX += (x+0.5D - caught.posX)/20*mult;
+					caught.motionY += (y+0.5D - caught.posY)/20*mult;
+					caught.motionZ += (z+0.5D - caught.posZ)/20*mult;
 					if (!world.isRemote)
 						caught.velocityChanged = true;
 				}
@@ -1253,46 +1256,69 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
-		NBT.setInteger("FOD", FOD);
-		NBT.setInteger("type", type.ordinal());
-		NBT.setInteger("temperature", temperature);
+		super.writeSyncTag(NBT);
 
-		water.writeToNBT(NBT);
-		fuel.writeToNBT(NBT);
+		if (type.hasTemperature())
+			NBT.setInteger("temperature", temperature);
 
-		timer.writeToNBT(NBT, "engine");
+		if (type.needsWater())
+			water.writeToNBT(NBT);
+		if (type.isEthanolFueled() || type.isJetFueled())
+			fuel.writeToNBT(NBT);
 
-		NBT.setInteger("additive", additives);
-		NBT.setBoolean("choke", isChoking);
-		NBT.setBoolean("jetfail", isJetFailing);
-		NBT.setInteger("chickens", chickenCount);
+		if (type.usesAdditives())
+			NBT.setInteger("additive", additives);
+		if (type == EngineType.JET) {
+			NBT.setBoolean("choke", isChoking);
+			NBT.setBoolean("jetfail", isJetFailing);
+		}
 
-		lubricant.writeToNBT(NBT);
+		if (type.requiresLubricant())
+			lubricant.writeToNBT(NBT);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
-		temperature = NBT.getInteger("temperature");
+		super.readSyncTag(NBT);
 
-		water.readFromNBT(NBT);
-		fuel.readFromNBT(NBT);
+		if (type.hasTemperature())
+			temperature = NBT.getInteger("temperature");
 
-		lubricant.readFromNBT(NBT);
+		if (type.requiresLubricant())
+			lubricant.readFromNBT(NBT);
 
-		timer.readFromNBT(NBT, "engine");
+		if (type.needsWater())
+			water.readFromNBT(NBT);
+		if (type.isEthanolFueled() || type.isJetFueled())
+			fuel.readFromNBT(NBT);
 
-		additives = NBT.getInteger("additive");
-		isChoking = NBT.getBoolean("choke");
-		isJetFailing = NBT.getBoolean("jetfail");
-		chickenCount = NBT.getInteger("chickens");
+		if (type.usesAdditives())
+			additives = NBT.getInteger("additive");
+		if (type == EngineType.JET) {
+			isChoking = NBT.getBoolean("choke");
+			isJetFailing = NBT.getBoolean("jetfail");
+		}
+	}
 
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		NBT.setInteger("type", type.ordinal());
+		super.writeToNBT(NBT);
+		NBT.setInteger("FOD", FOD);
+		NBT.setInteger("chickens", chickenCount);
+		timer.writeToNBT(NBT, "engine");
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
 		type = EngineType.setType(NBT.getInteger("type"));
+		super.readFromNBT(NBT);
 		FOD = NBT.getInteger("FOD");
+		chickenCount = NBT.getInteger("chickens");
+		timer.readFromNBT(NBT, "engine");
 
 		if (omega > type.getSpeed())
 			omega = type.getSpeed();

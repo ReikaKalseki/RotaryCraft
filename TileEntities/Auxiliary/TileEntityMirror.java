@@ -234,9 +234,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("broke", broken);
 		NBT.setIntArray("target", targetloc);
 	}
@@ -245,9 +245,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		broken = NBT.getBoolean("broke");
 		targetloc = NBT.getIntArray("target");
 	}

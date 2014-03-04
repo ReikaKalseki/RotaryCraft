@@ -143,7 +143,7 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 				}
 
 				if (world.checkChunksExist(x, y, z, x, y, z))
-					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, this.getPlacer(), x, y, z);
+					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, x, y, z);
 				potionLevel--;
 			}
 		}
@@ -199,17 +199,17 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		potionLevel = NBT.getInteger("level");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("level", potionLevel);
 	}

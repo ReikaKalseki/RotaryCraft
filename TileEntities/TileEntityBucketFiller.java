@@ -135,15 +135,15 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
 	}

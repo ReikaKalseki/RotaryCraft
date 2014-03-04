@@ -184,7 +184,7 @@ public enum ItemRegistry implements RegistryEnum {
 		itemClass = iCl;
 	}
 
-	public static final ItemRegistry[] itemList = ItemRegistry.values();
+	public static final ItemRegistry[] itemList = values();
 
 
 	public Class[] getConstructorParamTypes() {

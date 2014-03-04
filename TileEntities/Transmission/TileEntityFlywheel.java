@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -263,6 +264,12 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		if (te instanceof SimpleProvider) {
 			this.copyStandardPower(worldObj, readx, ready, readz);
 		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
+		}
 		if (te instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
 			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
@@ -416,9 +423,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("failed", failed);
 	}
 
@@ -426,9 +433,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		failed = NBT.getBoolean("failed");
 	}
 

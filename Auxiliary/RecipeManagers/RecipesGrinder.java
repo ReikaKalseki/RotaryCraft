@@ -101,7 +101,7 @@ public class RecipesGrinder {
 	}
 
 	public boolean isGrindable(ItemStack item) {
-		return this.getSmeltingResult(item) != null;
+		return this.getGrindingResult(item) != null;
 	}
 
 	public boolean isProduct(ItemStack item) {
@@ -114,7 +114,7 @@ public class RecipesGrinder {
 		arr.add(out.getItemDamage());
 		List<ItemStack> in = new ArrayList();
 		for (int i = 0; i < ingredients.size(); i++) {
-			ItemStack is = this.getSmeltingResult(ingredients.get(i));
+			ItemStack is = this.getGrindingResult(ingredients.get(i));
 			if (is != null) {
 				if (ReikaItemHelper.matchStacks(is, out))
 					in.add(ingredients.get(i));
@@ -148,7 +148,7 @@ public class RecipesGrinder {
 	 * @param item The Source ItemStack
 	 * @return The result ItemStack
 	 */
-	public ItemStack getSmeltingResult(ItemStack item)
+	public ItemStack getGrindingResult(ItemStack item)
 	{
 		if (item == null)
 			return null;

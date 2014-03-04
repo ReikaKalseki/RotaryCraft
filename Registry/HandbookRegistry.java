@@ -542,12 +542,12 @@ public enum HandbookRegistry implements HandbookEntry {
 	}
 
 	private static int getEnginePage(TileEntity te) {
-		EngineType e = ((TileEntityEngine)te).type;
+		EngineType e = ((TileEntityEngine)te).getEngineType();
 		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.getBaseScreen())*8;
 	}
 
 	private static int getEngineScreen(TileEntity te) {
-		EngineType e = ((TileEntityEngine)te).type;
+		EngineType e = ((TileEntityEngine)te).getEngineType();
 		int ei = (1+e.ordinal())/8;
 		ReikaJavaLibrary.pConsole(ENGINEDESC.getBaseScreen()+ei);
 		return ENGINEDESC.getBaseScreen()+ei;

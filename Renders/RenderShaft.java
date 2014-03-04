@@ -27,17 +27,12 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class RenderShaft extends RotaryTERenderer
 {
-
-	private ModelShaft ShaftModel = new ModelShaft();
-	private ModelShaftV VShaftModel = new ModelShaftV();
+	protected ModelShaft ShaftModel = new ModelShaft();
+	protected ModelShaftV VShaftModel = new ModelShaftV();
 	private ModelCross crossModel = new ModelCross();
-
 
 	private int itemMetadata;
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityShaftAt(TileEntityShaft tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -72,9 +67,9 @@ public class RenderShaft extends RotaryTERenderer
 			}
 		}
 		else {
-			if (tile.type == null)
+			if (tile.getShaftType() == null)
 				return;
-			switch(tile.type) {
+			switch(tile.getShaftType()) {
 			case WOOD:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
 				break;
@@ -95,7 +90,7 @@ public class RenderShaft extends RotaryTERenderer
 
 		this.setupGL(tile, par2, par4, par6);
 
-		int var11 = 0;	 //used to rotate the model about metadata
+		int var11 = 0;
 
 		int meta;
 		boolean failed = false;
@@ -126,10 +121,8 @@ public class RenderShaft extends RotaryTERenderer
 				meta = 6;
 			}
 		}
-		float var13;/*
+		float var13;
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
 		int dir = 1;
 		if (meta == 5)
 			dir = -1;
@@ -186,7 +179,6 @@ public class RenderShaft extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		//ReikaJavaLibrary.pConsole(te);
 		if (te == null)
 			return null;
 		String name;
@@ -220,8 +212,7 @@ public class RenderShaft extends RotaryTERenderer
 				p = "v";
 			else
 				p = "";
-			//ReikaJavaLibrary.pConsole(tile.type);
-			switch(tile.type) {
+			switch(tile.getShaftType()) {
 			case WOOD:
 				name = p+"shafttexw.png";
 				break;

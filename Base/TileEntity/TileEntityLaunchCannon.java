@@ -44,9 +44,9 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 	public abstract double getMaxLaunchDistance();
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		velocity = NBT.getInteger("svelocity");
 		phi = NBT.getInteger("sphi");
 		theta = NBT.getInteger("stheta");
@@ -55,9 +55,9 @@ public abstract class TileEntityLaunchCannon extends InventoriedPowerReceiver im
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("svelocity", velocity);
 		NBT.setInteger("sphi", phi);
 		NBT.setInteger("stheta", theta);

@@ -243,15 +243,15 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		temperature = NBT.getInteger("temp");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("temp", temperature);
 	}

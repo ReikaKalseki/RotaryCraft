@@ -45,11 +45,8 @@ public class BlockAdvGear extends BlockModelledMachine {
 				yList.add(new ItemStack(par1, 1, var4));
 	}
 
-	/**
-	 * Returns the TileEntity used by this block.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createTileEntity(World world, int meta)
 	{
 		return new TileEntityAdvancedGear();
 	}

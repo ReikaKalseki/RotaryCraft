@@ -142,6 +142,23 @@ public class ModelShaft extends RotaryModelBase
 	public void renderAll(ArrayList li, float phi, float theta)
 	{
 		boolean fail = (Boolean)li.get(0);
+		this.renderMount();
+		if (!fail)
+			this.renderShaft(phi);
+	}
+
+	public void renderShaft(float phi) {
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+		Shape12.render(f5);
+		Shape13.render(f5);
+		GL11.glTranslated(0, 1, 0);
+		GL11.glRotatef(-phi, 1, 0, 0);
+		GL11.glTranslated(0, -1, 0);
+	}
+
+	public void renderMount() {
 		Shape1.render(f5);
 		Shape2.render(f5);
 		Shape3.render(f5);
@@ -153,16 +170,6 @@ public class ModelShaft extends RotaryModelBase
 		Shape9.render(f5);
 		Shape10.render(f5);
 		Shape11.render(f5);
-		if (fail)
-			return;
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
-		Shape12.render(f5);
-		Shape13.render(f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
 	}
 
 }

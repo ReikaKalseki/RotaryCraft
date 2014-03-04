@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
@@ -161,6 +162,10 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				if (mat == Material.leaves)
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
+				else
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
 				if (xyz[1] == edity) {
 					int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
@@ -200,6 +205,7 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 					this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
 					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					ReikaSoundHelper.playBreakSound(world, xyz[0], xyz[1], xyz[2], Block.wood);
 
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
@@ -503,8 +509,8 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
@@ -515,8 +521,8 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {

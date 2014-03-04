@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,10 +98,16 @@ public final class RotaryDescriptions {
 		Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
 		String lang = language.getLanguageCode();
 		String sg = lang.toUpperCase().substring(0, 2);
-		File f = new File("Reika/RotaryCraft/Resources/"+sg);
-		if (f.exists() && f.isDirectory() && !sg.equals("EN"))
+		if (hasLocalizedFor(language) && !"EN".equals(sg))
 			return "Resources/"+sg;
 		return "Resources/";
+	}
+
+	private static boolean hasLocalizedFor(Language language) {
+		String lang = language.getLanguageCode();
+		String sg = lang.toUpperCase().substring(0, 2);
+		Object o = RotaryCraft.class.getResourceAsStream("Resources/categories.xml");
+		return o != null;
 	}
 
 	public static int getCategoryCount() {

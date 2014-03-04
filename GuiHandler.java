@@ -205,7 +205,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerCompactor(player, (TileEntityCompactor) te);
 		}
 		if (te instanceof TileEntityEngine) {
-			switch(((TileEntityEngine) te).type) {
+			switch(((TileEntityEngine) te).getEngineType()) {
 			case STEAM:
 				return new ContainerSteam(player, (TileEntityEngine) te);
 			case GAS:
@@ -370,7 +370,7 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiCompactor(player, (TileEntityCompactor) te);
 		}
 		if (te instanceof TileEntityEngine) {
-			switch(((TileEntityEngine) te).type) {
+			switch(((TileEntityEngine) te).getEngineType()) {
 			case STEAM:
 				return new GuiSteam(player, (TileEntityEngine) te);
 			case GAS:

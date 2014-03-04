@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -88,7 +87,6 @@ public class ItemMachineRenderer implements IItemRenderer {
 		if (item.itemID == RotaryCraft.engineitems.itemID) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.ENGINE);
 			TileEntityEngine eng = (TileEntityEngine)te;
-			eng.type = EngineType.DC;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);

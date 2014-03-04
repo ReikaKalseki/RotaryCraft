@@ -252,17 +252,17 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		channel = NBT.getInteger("ch");
 		emptySlide = NBT.getBoolean("empty");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("ch", channel);
 		NBT.setBoolean("empty", emptySlide);
 	}

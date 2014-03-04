@@ -187,9 +187,9 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		lava.writeToNBT(NBT);
 		water.writeToNBT(NBT);
@@ -201,9 +201,9 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		water.readFromNBT(NBT);
 		lava.readFromNBT(NBT);

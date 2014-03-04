@@ -178,9 +178,9 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		isCreative = NBT.getBoolean("creative");
 
 		selectedFuse = NBT.getInteger("selfuse");
@@ -190,9 +190,9 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("creative", isCreative);
 
 		NBT.setInteger("selfuse", selectedFuse);

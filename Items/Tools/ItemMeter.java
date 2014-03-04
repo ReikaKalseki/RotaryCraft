@@ -201,26 +201,26 @@ public class ItemMeter extends ItemRotaryTool
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
 				torque = omega = 0;
-				if (clicked.type.isAirBreathing() && clicked.isDrowned(world, x, y, z))
+				if (clicked.getEngineType().isAirBreathing() && clicked.isDrowned(world, x, y, z))
 					RotaryAux.writeMessage("drowning");
-				if (clicked.type == EngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
+				if (clicked.getEngineType() == EngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
 					RotaryAux.writeMessage("choke");
 				if (clicked.FOD >= 8)
 					RotaryAux.writeMessage("fod");
-				if (clicked.type.isCooled() || clicked.isJetFailing) {
+				if (clicked.getEngineType().isCooled() || clicked.isJetFailing) {
 					ReikaChatHelper.writeString(String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
 				}
-				if (clicked.type.burnsFuel()) {
+				if (clicked.getEngineType().burnsFuel()) {
 					int time = clicked.getFuelDuration();
 					String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
 					ReikaChatHelper.writeString(sg);
 				}
-				if (clicked.type.requiresLubricant()) {
+				if (clicked.getEngineType().requiresLubricant()) {
 					int amt = clicked.getLube();
 					String sg = String.format("Lubricant: %d mB", amt);
 					ReikaChatHelper.writeString(sg);
 				}
-				if (clicked.type.isWaterPiped()) {
+				if (clicked.getEngineType().isWaterPiped()) {
 					int amt = clicked.getWater();
 					String sg = String.format("Water: %d mB", amt);
 					ReikaChatHelper.writeString(sg);

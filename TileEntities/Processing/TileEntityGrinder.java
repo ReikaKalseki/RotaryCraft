@@ -128,9 +128,9 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		grinderCookTime = NBT.getShort("CookTime");
 
@@ -141,9 +141,9 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setShort("CookTime", (short)grinderCookTime);
 
 		tank.writeToNBT(NBT);
@@ -218,7 +218,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			return (!tank.isFull());
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inv[0]);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
 
 		if (itemstack == null)
 		{
@@ -266,7 +266,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			return;
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getSmeltingResult(inv[0]);
+		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
 		if (inv[1] == null)
 		{
 			inv[1] = itemstack.copy();
@@ -311,7 +311,7 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 			return false;
 		if (slot == 2)
 			return is.itemID == Item.bucketEmpty.itemID;
-		return is.itemID == ItemRegistry.CANOLA.getShiftedID() || RecipesGrinder.getRecipes().getSmeltingResult(is) != null;
+		return is.itemID == ItemRegistry.CANOLA.getShiftedID() || RecipesGrinder.getRecipes().isGrindable(is);
 	}
 
 	@Override

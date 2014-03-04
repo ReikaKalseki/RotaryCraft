@@ -181,9 +181,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("storage", storedEnergy);
 
 		if (!this.isFlexibleMode())
@@ -198,9 +198,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		storedEnergy = NBT.getInteger("storage");
 		basetorque = NBT.getInteger("tier");
 		if (!this.isFlexibleMode())

@@ -38,9 +38,9 @@ public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		colors = NBT.getIntArray("color");
 	}
 
@@ -49,9 +49,9 @@ public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setIntArray("color", colors);
 	}
 

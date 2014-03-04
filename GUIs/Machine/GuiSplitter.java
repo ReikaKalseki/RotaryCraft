@@ -67,10 +67,10 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id <= 8) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMinValue(), splitter, ep, mode);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMinValue(), splitter, mode);
 		}
 		if (button.id == 9)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMaxValue(), splitter, ep, 0);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMaxValue(), splitter, 0);
 		this.updateScreen();
 		this.updateMode(mode);
 

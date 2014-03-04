@@ -269,9 +269,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("temp", temperature);
 
 		NBT.setInteger("furnx", fx);
@@ -283,9 +283,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temp");
 
 		fx = NBT.getInteger("furnx");

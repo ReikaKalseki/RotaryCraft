@@ -170,9 +170,9 @@ public class TileEntityCCTV extends RemoteControlMachine {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		theta = NBT.getFloat("thetad");
 		owner = NBT.getString("sowner");
 		cameraIsMoved = NBT.getBoolean("moved");
@@ -183,9 +183,9 @@ public class TileEntityCCTV extends RemoteControlMachine {
 	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		if (owner != null && !owner.isEmpty())
 			NBT.setString("sowner", owner);
 		NBT.setFloat("thetad", theta);

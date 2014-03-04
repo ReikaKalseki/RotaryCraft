@@ -23,15 +23,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityBlower extends TileEntityPowerReceiver implements CachedConnection {
+public class TileEntityBlower extends TileEntityPowerReceiver {
 
 	private ForgeDirection facing;
-	private boolean[] connections = new boolean[6];
 
 	public ItemStack[] matchingItems = new ItemStack[18];
 	public boolean isWhitelist = false;
@@ -178,72 +176,10 @@ public class TileEntityBlower extends TileEntityPowerReceiver implements CachedC
 		return facing != null ? facing : ForgeDirection.UP;
 	}
 
-	public boolean isConnectionValidForSide(ForgeDirection dir) {
-		if (dir.offsetX == 0)
-			dir = dir.getOpposite();
-		return connections[dir.ordinal()];
-	}
-
-	public void recomputeConnections(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			connections[i] = this.shouldTryToConnect(dirs[i]);
-			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
-		}
-		world.markBlockForRenderUpdate(x, y, z);
-	}
-
-	public boolean shouldTryToConnect(ForgeDirection dir) {
-		if (dir != this.getFacingDir() && dir != this.getFacingDir().getOpposite())
-			return false;
-		int x = xCoord+dir.offsetX;
-		int y = yCoord+dir.offsetY;
-		int z = zCoord+dir.offsetZ;
-		MachineRegistry m = this.getMachine();
-		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
-		if (m == m2)
-			return true;
-		TileEntity tile = this.getAdjacentTileEntity(dir);
-		return tile instanceof IInventory;
-	}
-
-	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = x+dir.offsetY;
-			int dz = x+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == this.getMachine()) {
-				TileEntityBlower te = (TileEntityBlower)world.getBlockTileEntity(dx, dy, dz);
-				te.connections[dir.getOpposite().ordinal()] = false;
-				world.markBlockForRenderUpdate(dx, dy, dz);
-			}
-		}
-	}
-
-	public void addToAdjacentConnections(World world, int x, int y, int z) {
-		for (int i = 0; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = x+dir.offsetY;
-			int dz = x+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == this.getMachine()) {
-				TileEntityBlower te = (TileEntityBlower)world.getBlockTileEntity(dx, dy, dz);
-				te.connections[dir.getOpposite().ordinal()] = true;
-				world.markBlockForRenderUpdate(dx, dy, dz);
-			}
-		}
-	}
-
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
-
-		for (int i = 0; i < 6; i++) {
-			NBT.setBoolean("conn"+i, connections[i]);
-		}
+		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("ore", useOreDict);
 		NBT.setBoolean("metac", checkMeta);
@@ -266,17 +202,10 @@ public class TileEntityBlower extends TileEntityPowerReceiver implements CachedC
 		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
-
-		for (int i = 0; i < 6; i++) {
-			connections[i] = NBT.getBoolean("conn"+i);
-		}
+		super.readSyncTag(NBT);
 
 		isWhitelist = NBT.getBoolean("white");
 		checkMeta = NBT.getBoolean("metac");

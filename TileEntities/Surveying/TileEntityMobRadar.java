@@ -102,17 +102,17 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		if (owner != null && !owner.isEmpty())
 			NBT.setString("own", owner);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		owner = NBT.getString("own");
 	}
 

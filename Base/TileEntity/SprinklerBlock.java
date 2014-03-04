@@ -87,18 +87,18 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBT.setInteger("press", pressure);
 		NBT.setInteger("lvl", liquid);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		pressure = NBT.getInteger("press");
 		liquid = NBT.getInteger("lvl");

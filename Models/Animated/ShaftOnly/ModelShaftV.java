@@ -121,6 +121,13 @@ public class ModelShaftV extends RotaryModelBase
 	@Override
 	public void renderAll(ArrayList li, float phi, float theta)
 	{
+		boolean fail = (Boolean)li.get(0);
+		this.renderMount();
+		if (!fail)
+			this.renderShaft(phi);
+	}
+
+	public void renderMount() {
 		Shape15b.render(f5);
 		Shape1.render(f5);
 		Shape1a.render(f5);
@@ -131,7 +138,9 @@ public class ModelShaftV extends RotaryModelBase
 		Shape1f.render(f5);
 		Shape1e.render(f5);
 		Shape15ba.render(f5);
+	}
 
+	public void renderShaft(float phi) {
 		GL11.glRotatef(phi, 0, 1, 0);
 		Shape2.render(f5);
 		Shape2b.render(f5);

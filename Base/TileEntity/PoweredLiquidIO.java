@@ -122,16 +122,16 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
 
 		input.readFromNBT(NBT);
 		output.readFromNBT(NBT);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
 
 		input.writeToNBT(NBT);
 		output.writeToNBT(NBT);

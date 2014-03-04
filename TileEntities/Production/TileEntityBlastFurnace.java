@@ -88,6 +88,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	private void meltScrap() {
+		smeltTime = 0;
+		if (worldObj.isRemote)
+			return;
 		int num = 1;
 		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 10))
 			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 12))
@@ -95,7 +98,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
 						return;
 
-		for (int i = 1; i < inv.length-1; i++) {
+		for (int i = 1; i < 10; i++) {
 			ReikaInventoryHelper.decrStack(i, inv);
 		}
 		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
@@ -104,7 +107,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private boolean canMeltScrap() {
 		if (temperature < SMELTTEMP)
 			return false;
-		for (int i = 1; i < inv.length-1; i++) {
+		for (int i = 1; i < 10; i++) {
 			ItemStack is = inv[i];
 			if (!ReikaItemHelper.matchStacks(is, ItemStacks.scrap))
 				return false;
@@ -229,7 +232,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 13))
 					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
 						return;
-		for (int i = 1; i < inv.length-1; i++) {
+		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null) {
 				if (inv[i].itemID == Item.ingotIron.itemID) {
 					ReikaInventoryHelper.decrStack(i, inv);
@@ -351,18 +354,18 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("melt", smeltTime);
 		NBT.setInteger("temp", temperature);
 		NBT.setFloat("exp", xp);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		smeltTime = NBT.getInteger("melt");
 		temperature = NBT.getInteger("temp");
 		xp = NBT.getFloat("exp");

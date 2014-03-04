@@ -458,9 +458,9 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("step", step);
 		NBT.setInteger("step2", step2);
 		NBT.setBoolean("active", active);
@@ -472,9 +472,9 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		step = NBT.getInteger("step");
 		step2 = NBT.getInteger("step2");
 		climbing = NBT.getBoolean("climbing");

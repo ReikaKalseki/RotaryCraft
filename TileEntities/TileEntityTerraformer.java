@@ -88,6 +88,14 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		//ReikaJavaLibrary.pConsoleSideOnly(String.format("Tick %2d: ", tickcount)+coords, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(this.getValidTargetBiomes(this.getCentralBiome()));
 		//ReikaJavaLibrary.pConsole(coords.getSize(), Side.SERVER);
+		/*
+		if (coords.isEmpty()) {
+			for (int i = -16; i <= 16; i++) {
+				for (int j = -16; j <= 16; j++) {
+					coords.add(x+i, z+j);
+				}
+			}
+			}*/
 
 		if (coords.isEmpty()) {
 			return;
@@ -121,14 +129,14 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		if (!this.isValidTarget(from))
 			return false;
 		if (!this.getReqsForTransform(from, target))
-			return false;
+			;//return false;
 		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		if (this.modifyBlocks())
 			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);
 		else
 			ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
-		ReikaWorldHelper.causeAdjacentUpdates(world, x, yCoord, z);
-		world.markBlockRangeForRenderUpdate(x, 0, z, x, world.provider.getHeight(), z);
+		//ReikaWorldHelper.causeAdjacentUpdates(world, x, yCoord, z);
+		//world.markBlockRangeForRenderUpdate(x, 0, z, x, world.provider.getHeight(), z);
 		return true;
 	}
 
@@ -273,9 +281,9 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		int tg = NBT.getInteger("tg");
 		if (tg != -1)
@@ -283,9 +291,9 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		if (target != null)
 			NBT.setInteger("tg", target.biomeID);

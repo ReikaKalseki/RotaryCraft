@@ -44,13 +44,10 @@ public class BlockShaft extends BlockModelledMachine {
 		super(ID, mat);
 	}
 
-	/**
-	 * Returns the TileEntity used by this block.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createTileEntity(World world, int meta)
 	{
-		return new TileEntityShaft();
+		return new TileEntityShaft(meta < 5 ? MaterialRegistry.setType(meta) : MaterialRegistry.STEEL);
 	}
 
 	@Override
@@ -58,9 +55,9 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (ts == null)
 			return 0;
-		if (ts.type != MaterialRegistry.WOOD)
-			return 0;
-		return 60;
+		if (ts.getShaftType().isFlammable())
+			return 60;
+		return 0;
 	}
 
 	@Override
@@ -69,7 +66,7 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (sha == null)
 			return 0;
-		MaterialRegistry type = sha.type;
+		MaterialRegistry type = sha.getShaftType();
 		switch(type) {
 		case WOOD:
 			return 3F;
@@ -95,8 +92,8 @@ public class BlockShaft extends BlockModelledMachine {
 				mult = 4;
 		}
 		if (this.canHarvest(world, ep, x, y, z))
-			return mult*0.2F/(sha.type.ordinal()+1);
-		return 0.01F/(sha.type.ordinal()+1);
+			return mult*0.2F/(sha.getShaftType().ordinal()+1);
+		return 0.01F/(sha.getShaftType().ordinal()+1);
 	}
 
 	@Override
@@ -118,9 +115,9 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft tile = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (tile != null) {
 			ItemStack fix;
-			if (tile.type == null)
+			if (tile.getShaftType() == null)
 				return false;
-			switch(tile.type) {
+			switch(tile.getShaftType()) {
 			case WOOD:
 				fix = new ItemStack(Item.stick);
 				break;
@@ -156,16 +153,6 @@ public class BlockShaft extends BlockModelledMachine {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		if (world.getBlockMetadata(x, y, z) < 6)
-			return;
-		TileEntityShaft t = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
-		if (t != null) {
-			t.type = MaterialRegistry.STEEL;
-		}
-	}
-
-	@Override
 	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
@@ -174,7 +161,7 @@ public class BlockShaft extends BlockModelledMachine {
 			if (sha.failed()) {
 				ItemStack todrop = null;
 				if (par5Random.nextInt(8) == 0) {
-					switch(sha.type) {
+					switch(sha.getShaftType()) {
 					case WOOD:
 						todrop = new ItemStack(Block.planks.blockID, 5, 0);
 						break;
@@ -198,7 +185,7 @@ public class BlockShaft extends BlockModelledMachine {
 				}
 			}
 			else if (sha.getBlockMetadata() < 6) {
-				int metat = sha.type.ordinal();
+				int metat = sha.getShaftType().ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.shaftitems.itemID, 1, metat); //drop shaft item
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
@@ -267,7 +254,7 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft ts = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (ts == null)
 			return false;
-		MaterialRegistry type = ts.type;
+		MaterialRegistry type = ts.getShaftType();
 		return type != null ? type.isHarvestablePickaxe(player.inventory.getCurrentItem()) : false;
 	}
 
@@ -297,7 +284,7 @@ public class BlockShaft extends BlockModelledMachine {
 		TileEntityShaft tile = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 		if (tile == null)
 			return ret;
-		ret.add(new ItemStack(RotaryCraft.shaftitems.itemID, 1, tile.type.ordinal()));
+		ret.add(new ItemStack(RotaryCraft.shaftitems.itemID, 1, tile.getShaftType().ordinal()));
 		return ret;
 	}
 }

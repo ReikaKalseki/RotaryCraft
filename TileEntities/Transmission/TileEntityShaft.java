@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -39,8 +40,22 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public float crossphi1 = 0;
 	public float crossphi2 = 0;
 
-	public MaterialRegistry type;
+	private MaterialRegistry type;
 	private boolean failed = false;
+
+	public TileEntityShaft(MaterialRegistry type) {
+		if (type == null)
+			type = MaterialRegistry.WOOD;
+		this.type = type;
+	}
+
+	public TileEntityShaft() {
+		this(MaterialRegistry.WOOD);
+	}
+
+	public MaterialRegistry getShaftType() {
+		return type;
+	}
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
 		MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, type));
@@ -253,8 +268,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		if (type == null)
-			type = MaterialRegistry.STEEL;
 		ratio = 1;
 		if (failed) {
 			torque = 0;
@@ -265,7 +278,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		//this.testFailure();
 		this.getIOSides(world, x, y, z, meta);
 		this.transferPower(world, x, y, z, meta);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
 	}
 
 	public boolean isCross() {
@@ -471,6 +483,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		if (te instanceof SimpleProvider) {
 			this.copyStandardPower(worldObj, readx, ready, readz);
 		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
+		}
 		if (te instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
 			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
@@ -506,27 +524,30 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			RotaryAchievements.GIGAWATT.triggerAchievement(this.getPlacer());
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setBoolean("failed", failed);
-		if (type != null)
-			NBT.setInteger("type", type.ordinal());
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		failed = NBT.getBoolean("failed");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		NBT.setInteger("type", type.ordinal());
+		super.writeToNBT(NBT);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
 		type = MaterialRegistry.setType(NBT.getInteger("type"));
+		super.readFromNBT(NBT);
 	}
 
 	@Override

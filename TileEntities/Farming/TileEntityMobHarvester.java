@@ -130,9 +130,9 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		if (owner != null && !owner.isEmpty())
 			NBT.setString("sowner", owner);
 
@@ -145,9 +145,9 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		owner = NBT.getString("sowner");
 
 		enchantments = new HashMap<Enchantment,Integer>();

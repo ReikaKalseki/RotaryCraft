@@ -75,9 +75,7 @@ public class RenderSEngine extends RotaryTERenderer
 		ModelWind var22 = WindModel;
 
 		if (tile.isInWorld()) {
-			if (tile.type == null)
-				tile.type = EngineType.DC;
-			switch(tile.type) {
+			switch(tile.getEngineType()) {
 			case DC:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
 				break;
@@ -160,7 +158,7 @@ public class RenderSEngine extends RotaryTERenderer
 				break;
 			}
 
-			if (tile.type.isJetFueled())
+			if (tile.getEngineType().isJetFueled())
 				var11 += 90;
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
@@ -232,9 +230,7 @@ public class RenderSEngine extends RotaryTERenderer
 			return;
 		}
 
-		if (tile.type == null)
-			tile.type = EngineType.DC;
-		switch (tile.type) {
+		switch (tile.getEngineType()) {
 		case DC:
 			var14.renderAll(null, -tile.phi, 0);
 			break;
@@ -286,7 +282,7 @@ public class RenderSEngine extends RotaryTERenderer
 			 */
 			TileEntityEngine eng = (TileEntityEngine)tile;
 			eng.power = 1;
-			if (eng.type == EngineType.JET && eng.power > 0) {
+			if (eng.getEngineType() == EngineType.JET && eng.power > 0) {
 				jetGlow.setPosition(tile.xCoord+0.5, tile.yCoord+0.5, tile.zCoord+0.5);
 				jetGlow.render();
 			}
@@ -350,9 +346,7 @@ public class RenderSEngine extends RotaryTERenderer
 			return null;
 		TileEntityEngine tile = (TileEntityEngine)te;
 		if (tile.isInWorld()) {
-			if (tile.type == null)
-				tile.type = EngineType.DC;
-			switch(tile.type) {
+			switch(tile.getEngineType()) {
 			case DC:
 				return "dc.png";
 			case WIND:

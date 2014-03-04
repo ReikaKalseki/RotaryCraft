@@ -60,7 +60,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			int id = world.getBlockId(x, y, z);
 			if (ReikaBlockHelper.isPortalBlock(world, x, y, z)) {
 				TileEntityShaft sha = new TileEntityShaft();
-				sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
 				sha.getIOSides(world, x, y, z, sha.getBlockMetadata());
 				sha.xCoord = x;
 				sha.yCoord = y;
@@ -74,7 +74,9 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 					if (te.writex == x && te.writey == y && te.writez == z) {
 						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
 						TileEntityPortalShaft ps = (TileEntityPortalShaft)world.getBlockTileEntity(dx, dy, dz);
+						ps.setBlockMetadata(te.getBlockMetadata());
 						ps.setPortalType(world, x, y, z);
+						ps.material = te.getShaftType();
 					}
 				}
 			}
@@ -91,20 +93,19 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
+			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID(), is.getItemDamage(), 3);
 			if (is.getItemDamage() == RotaryNames.getNumberShaftTypes()-1) {
-				world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID());
 				TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 				if (sha != null) {
-					sha.type = MaterialRegistry.STEEL;
+					//sha.type = MaterialRegistry.STEEL;
 					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				}
 				return true;
 			}
-			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID());
 			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
 			if (sha != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				sha.type = MaterialRegistry.setType(is.getItemDamage());
+				//sha.type = MaterialRegistry.setType(is.getItemDamage());
 			}
 		}
 		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);

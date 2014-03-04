@@ -110,7 +110,7 @@ public class GuiParticle extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ReikaParticleHelper p = particles.get(button.id);
 			int particle = p.ordinal();
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.getMinValue(), tile, ep, particle);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.getMinValue(), tile, particle);
 		}
 	}
 

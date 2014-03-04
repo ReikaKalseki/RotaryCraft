@@ -21,6 +21,7 @@ import Reika.DragonAPI.Exception.ModReflectionException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
@@ -122,6 +123,9 @@ public final class OreForcer {
 		case MIMICRY:
 			intercraftMimichite();
 			break;
+		case FACTORIZATION:
+			intercraftDarkIron();
+			break;
 		case QCRAFT:
 			if (ConfigRegistry.MODORES.getState())
 				registerQuantum();
@@ -135,10 +139,16 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft quantum dust can now be crafted into QCraft quantum dust!");
 	}
 
+	private static void intercraftDarkIron() {
+		ItemStack ingot = new ItemStack(FactorizationHandler.getInstance().ingotID, 1, 0);
+		GameRegistry.addShapelessRecipe(ingot, ItemStacks.getModOreIngot(ModOreList.DARKIRON));
+		RotaryCraft.logger.log("RotaryCraft dark iron ingots can now be crafted into Factorization equivalents!");
+	}
+
 	private static void intercraftMimichite() {
 		ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
-		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Mimicry mimichite!");
+		RotaryCraft.logger.log("RotaryCraft mimichite items can now be crafted into Mimicry mimichite!");
 	}
 
 	private static void registerEssence() {

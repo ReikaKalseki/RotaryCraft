@@ -46,7 +46,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 
 	@Override
 	public int getSizeInventory() {
-		return 7;
+		return 8;
 	}
 
 	@Override
@@ -81,8 +81,10 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		if (count <= 0)
 			return;
 		ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, count, ItemStacks.steelingot.getItemDamage(), inv, 6);
-		if (rand.nextInt(5) == 0)
+		if (rand.nextInt(25) == 0)
 			ReikaInventoryHelper.decrStack(0, inv);
+		if (rand.nextInt(5) == 0)
+			ReikaInventoryHelper.decrStack(7, inv);
 	}
 
 	public int getCookScaled(int par1) {
@@ -95,6 +97,10 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		if (inv[0] == null)
 			return false;
 		if (inv[0].itemID != Item.gunpowder.itemID)
+			return false;
+		if (inv[7] == null)
+			return false;
+		if (inv[7].itemID != Block.sand.blockID)
 			return false;
 		for (int i = 1; i < 6; i++) {
 			if (this.isModSteel(inv[i]))
@@ -119,6 +125,8 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 0)
 			return is.itemID == Item.gunpowder.itemID;
+		if (slot == 7)
+			return is.itemID == Block.sand.blockID;
 		if (slot == 6)
 			return false;
 		return this.isModSteel(is);
@@ -140,9 +148,9 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temperature");
 		cookTime = NBT.getInteger("time");
 	}
@@ -151,9 +159,9 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		NBT.setInteger("temperature", temperature);
 		NBT.setInteger("time", cookTime);
 	}

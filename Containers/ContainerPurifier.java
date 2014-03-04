@@ -30,7 +30,8 @@ public class ContainerPurifier extends CoreContainer
 		lastPurifierBurnTime = 0;
 		lastPurifierItemBurnTime = 0;
 		purifier = par2TileEntityPurifier;
-		this.addSlotToContainer(new Slot(par2TileEntityPurifier, 0, 44, 16));
+		this.addSlotToContainer(new Slot(par2TileEntityPurifier, 0, 35, 16));
+		this.addSlotToContainer(new Slot(par2TileEntityPurifier, 7, 53, 16));
 
 		for (int i = 0; i < 5; i++)
 			this.addSlotToContainer(new Slot(par2TileEntityPurifier, i+1, 8+i*18, 52));

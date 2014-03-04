@@ -199,9 +199,9 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		mappings = new ItemStack[LENGTH*3];
@@ -219,9 +219,9 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
 

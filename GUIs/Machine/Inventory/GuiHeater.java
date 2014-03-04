@@ -17,7 +17,6 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -90,12 +89,12 @@ public class GuiHeater extends GuiMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			temperature = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, ep, temperature);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
 			return;
 		}
 		temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (temperature >= 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, ep, temperature);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
 	}
 
 	/**

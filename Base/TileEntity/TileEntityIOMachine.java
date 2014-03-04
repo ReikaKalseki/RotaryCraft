@@ -69,13 +69,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
+	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
-		NBT.setInteger("torque", torque);
-		NBT.setInteger("omega", omega);
-		NBT.setLong("pwr", power);
-		NBT.setInteger("io", iotick);
 		NBT.setInteger("rx", readx);
 		NBT.setInteger("ry", ready);
 		NBT.setInteger("rz", readz);
@@ -98,13 +93,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-		torque = NBT.getInteger("torque");
-		omega = NBT.getInteger("omega");
-		power = NBT.getLong("pwr");
-		iotick = NBT.getInteger("io");
 		readx = NBT.getInteger("rx");
 		ready = NBT.getInteger("ry");
 		readz = NBT.getInteger("rz");
@@ -129,6 +119,26 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			torque = 0;
 		if (omega < 0)
 			omega = 0;
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+		NBT.setInteger("torque", torque);
+		NBT.setInteger("omega", omega);
+		NBT.setLong("pwr", power);
+		NBT.setInteger("io", iotick);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+		torque = NBT.getInteger("torque");
+		omega = NBT.getInteger("omega");
+		power = NBT.getLong("pwr");
+		iotick = NBT.getInteger("io");
 	}
 
 	protected boolean isProvider(TileEntity te) {

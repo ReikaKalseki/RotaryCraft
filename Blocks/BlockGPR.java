@@ -41,11 +41,8 @@ public class BlockGPR extends BlockBasicMachine {
 		return 81;
 	}
 
-	/**
-	 * Returns the TileEntity used by this block.
-	 */
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createTileEntity(World world, int meta)
 	{
 		return new TileEntityGPR();
 	}

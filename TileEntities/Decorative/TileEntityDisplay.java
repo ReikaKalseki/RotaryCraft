@@ -229,9 +229,9 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
+	protected void writeSyncTag(NBTTagCompound NBT)
 	{
-		super.writeToNBT(NBT);
+		super.writeSyncTag(NBT);
 		//NBT.setIntArray("color", rgb);
 		//NBT.setIntArray("Bcolor", Brgb);
 		NBT.setInteger("dye", this.getDyeColor().ordinal());
@@ -245,9 +245,9 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	 * Reads a tile entity from NBT.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
+	protected void readSyncTag(NBTTagCompound NBT)
 	{
-		super.readFromNBT(NBT);
+		super.readSyncTag(NBT);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(NBT.getIntArray("Bcolor")));
 		//rgb = NBT.getIntArray("color");
 		//Brgb = NBT.getIntArray("Bcolor");
