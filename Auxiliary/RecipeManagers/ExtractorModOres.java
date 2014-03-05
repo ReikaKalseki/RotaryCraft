@@ -130,7 +130,7 @@ public class ExtractorModOres {
 		case NETHERLEAD:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.LEAD.ordinal());
 		case NETHERNICKEL:
-			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.FERROUS.ordinal());
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.NICKEL.ordinal());
 		case NETHERNIKOLITE:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.NIKOLITE.ordinal());
 		case NETHERREDSTONE:
