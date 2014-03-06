@@ -88,6 +88,8 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	public int getAbsRatio(ForgeDirection dir) {
+		if (dir.offsetY != 0)
+			return 0;
 		return this.getRatioFromItem(inv[dir.ordinal()-2]);
 	}
 

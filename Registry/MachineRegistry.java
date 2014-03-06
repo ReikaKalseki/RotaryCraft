@@ -1023,6 +1023,8 @@ public enum MachineRegistry {
 			return false;
 		if (this.isIncomplete() && !(DragonAPICore.isReikasComputer() || ConfigRegistry.DEBUGMODE.getState()))
 			return false;
+		if (this == PORTALSHAFT)
+			return false;
 		return true;
 	}
 

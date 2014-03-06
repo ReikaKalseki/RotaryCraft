@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.inventory.IInventory;
@@ -75,9 +76,16 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 		if (source instanceof IInventory) {
 			TileEntity target = this.getAdjacentTileEntity(dir);
 
+			ArrayList<TileEntity> li = new ArrayList();
 			while (target instanceof TileEntityBlower) {
 				TileEntityBlower te = (TileEntityBlower)target;
 				target = te.getAdjacentTileEntity(te.getFacingDir());
+
+				if (li.contains(target))
+					return;
+				else
+					li.add(target);
+
 				if (this.equals(target)) { //to prevent stackoverflow from loops, because some idiot is going to try
 					return;
 				}
