@@ -161,6 +161,8 @@ public class RenderGrindstone extends RotaryTERenderer
 			else
 				ReikaTextureHelper.bindItemTexture();
 			Icon ico = item.getIcon(is, MinecraftForgeClient.getRenderPass());
+			if (ico == null)
+				return;
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
