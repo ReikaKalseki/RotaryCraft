@@ -139,20 +139,28 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
 			world.setBlock(loc[0], loc[1], loc[2], 0);
 		int mult = 1;
-		if (power/MINPOWER >= 16)
-			mult++;
-		if (power/MINPOWER >= 64)
-			mult++;
-		if (power/MINPOWER >= 256)
-			mult++;
-		if (power/MINPOWER >= 1024)
-			mult++;
-		if (power/MINPOWER >= 4096)
-			mult++;
+		if (this.canMultiply(fluid)) {
+			if (power/MINPOWER >= 16)
+				mult++;
+			if (power/MINPOWER >= 64)
+				mult++;
+			if (power/MINPOWER >= 256)
+				mult++;
+			if (power/MINPOWER >= 1024)
+				mult++;
+			if (power/MINPOWER >= 4096)
+				mult++;
+		}
 		if (fluid.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
 		tank.addLiquid(RotaryConfig.MILLIBUCKET*mult, fluid);
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
+	}
+
+	private boolean canMultiply(Fluid fluid) {
+		if (fluid.equals(FluidRegistry.WATER))
+			return true;
+		return false;
 	}
 
 	public boolean isSource(World world, int x, int y, int z) {
