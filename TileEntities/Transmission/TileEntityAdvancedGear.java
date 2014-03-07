@@ -445,7 +445,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		this.calculateRatio();
 		omegain = torquein = 0;
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		if (!this.isProvider(te)) {
 			omega = 0;
 			torque = 0;

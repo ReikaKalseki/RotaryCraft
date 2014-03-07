@@ -317,8 +317,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		ready2 = y;
 		omegain = torquein = 0;
 		if (!this.isSplitting()) {
-			TileEntity te = world.getBlockTileEntity(readx, ready, readz);
-			TileEntity te2 = world.getBlockTileEntity(readx2, ready2, readz2);
+			TileEntity te = this.getTileEntity(readx, ready, readz);
+			TileEntity te2 = this.getTileEntity(readx2, ready2, readz2);
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
 			if (this.isProvider(te)) {
@@ -456,7 +456,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			ready = y;
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			//ReikaJavaLibrary.pConsole(readx+"  "+readz+"  "+m);
-			TileEntity te = world.getBlockTileEntity(readx, ready, readz);
+			TileEntity te = this.getTileEntity(readx, ready, readz);
 			if (te == null || !(te instanceof TileEntityIOMachine)) {
 				torque = omega = 0;
 				return;
@@ -623,9 +623,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -633,9 +630,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		NBT.setInteger("mode", splitmode);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

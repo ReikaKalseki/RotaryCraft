@@ -51,7 +51,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (world.isBlockIndirectlyGettingPowered(x, y, z) && this.isProvider(te)) {
 			MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();

@@ -18,7 +18,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -31,10 +30,10 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (this.isProvider(te)) {
-			MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
+			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {

@@ -375,8 +375,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		readomega[1] = 0;
 		readtorque[0] = 0;
 		readtorque[1] = 0;
-		TileEntity te1 = worldObj.getBlockTileEntity(readx, ready, readz);
-		TileEntity te2 = worldObj.getBlockTileEntity(readx2, ready2, readz2);
+		TileEntity te1 = this.getTileEntity(readx, ready, readz);
+		TileEntity te2 = this.getTileEntity(readx2, ready2, readz2);
 		if (this.isProvider(te1)) {
 			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
@@ -461,7 +461,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return;
 		}
 		omegain = torquein = 0;
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		if (!this.isProvider(te)) {
 			omega = 0;
 			torque = 0;

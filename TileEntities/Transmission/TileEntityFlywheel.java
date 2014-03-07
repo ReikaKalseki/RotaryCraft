@@ -249,9 +249,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		omegain=0;
 		tickcount++;
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
-		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)world.getBlockTileEntity(readx, ready, readz);
+			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.isCross()) {
 				omegain = this.readFromCross(devicein, false);
 				torquein = this.readFromCross(devicein, true);
@@ -278,7 +278,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)world.getBlockTileEntity(readx, ready, readz);
+			TileEntitySplitter devicein = (TileEntitySplitter)te;
 			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
 				return;
@@ -315,7 +315,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 							i++;
 						}
 						updateticks = i;
-						if (tickcount%updateticks == 0) {
+						if (tickcount % updateticks == 0) {
 							omega++;
 							tickcount = 0;
 						}
@@ -333,7 +333,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 							i++;
 						}
 						updateticks = i;
-						if (tickcount%updateticks == 0) {
+						if (tickcount % updateticks == 0) {
 							omega--;
 							tickcount = 0;
 						}
@@ -350,7 +350,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 						i++;
 					}
 					updateticks = i;
-					if (tickcount%updateticks == 0) {
+					if (tickcount % updateticks == 0) {
 						omega--;
 						tickcount = 0;
 					}

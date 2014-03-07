@@ -273,7 +273,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		this.calculateRatio();
 		omegain = torquein = 0;
 		ready = y;
-		TileEntity te = world.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;

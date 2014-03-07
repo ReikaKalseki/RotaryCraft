@@ -188,7 +188,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public void getPower(boolean doublesided) {
 		this.clear();
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
-		TileEntity te = worldObj.getBlockTileEntity(readx, ready, readz);
+		TileEntity te = this.getTileEntity(readx, ready, readz);
 		if (this.isProvider(te)) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx, ready, readz);
 			if (m == MachineRegistry.SHAFT) {
@@ -253,7 +253,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omegain = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", powerin[0][0], powerin[0][1], powerin[0][2]));
 
-		te = worldObj.getBlockTileEntity(readx2, ready2, readz2);
+		te = this.getTileEntity(readx2, ready2, readz2);
 		if (this.isProvider(te)) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, readx2, ready2, readz2);
 			if (m == MachineRegistry.SHAFT) {
@@ -326,10 +326,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		MachineRegistry id2 = MachineRegistry.getMachine(worldObj, readx2, ready2, readz2);
 		MachineRegistry id3 = MachineRegistry.getMachine(worldObj, readx3, ready3, readz3);
 		MachineRegistry id4 = MachineRegistry.getMachine(worldObj, readx4, ready4, readz4);
-		TileEntity te1 = worldObj.getBlockTileEntity(readx, ready, readz);
-		TileEntity te2 = worldObj.getBlockTileEntity(readx2, ready2, readz2);
-		TileEntity te3 = worldObj.getBlockTileEntity(readx3, ready3, readz3);
-		TileEntity te4 = worldObj.getBlockTileEntity(readx4, ready4, readz4);
+		TileEntity te1 = this.getTileEntity(readx, ready, readz);
+		TileEntity te2 = this.getTileEntity(readx2, ready2, readz2);
+		TileEntity te3 = this.getTileEntity(readx3, ready3, readz3);
+		TileEntity te4 = this.getTileEntity(readx4, ready4, readz4);
 
 		if (this.isProvider(te1)) {
 			if (id1 == MachineRegistry.SHAFT) {

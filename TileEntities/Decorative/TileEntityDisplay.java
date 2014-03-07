@@ -23,8 +23,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Renders.M.RenderDisplay;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityDisplay extends TileEntitySpringPowered implements InertIInv, GuiController, OneSlotMachine {
 
@@ -192,14 +190,10 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	}
 
 	public void setMessage(String str) {
-		if (this.getSide() == Side.CLIENT)
-			((RenderDisplay)this.getRenderer()).resetCache();
 		message = str;
 	}
 
 	public void clearMessage() {
-		if (this.getSide() == Side.CLIENT)
-			((RenderDisplay)this.getRenderer()).resetCache();
 		message = "";
 	}
 
@@ -241,9 +235,6 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 		NBT.setString("msg", message);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
