@@ -38,8 +38,6 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	public static final int SMELT_TEMP = 400;
 
-	private ItemStack[] inv = new ItemStack[this.getSizeInventory()];
-
 	private float xp;
 
 	private int temperature;

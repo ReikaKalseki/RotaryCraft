@@ -356,6 +356,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 					NBTTagList li = is.stackTagCompound.getTagList("ch"+i);
 					for (int k = 0; k < li.tagCount(); k++) {
 						NBTTagCompound nbt = (NBTTagCompound)li.tagAt(k);
+						//ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Side.SERVER);
 						Note n = Note.readFromNBT(nbt);
 						this.addNote(i, n);
 					}
@@ -373,13 +374,14 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		is.stackTagCompound = new NBTTagCompound();
 		for (int i = 0; i < 16; i++) {
 			NBTTagList li = new NBTTagList();
-			is.stackTagCompound.setTag("ch"+i, li);
 			ArrayList<Note> channel = musicQueue[i];
 			for (int k = 0; k < channel.size(); k++) {
-				Note n = channel.get(i);
+				Note n = channel.get(k);
 				NBTTagCompound nbt = n.writeToNBT();
+				//ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Side.SERVER);
 				li.appendTag(nbt);
 			}
+			is.stackTagCompound.setTag("ch"+i, li);
 		}
 	}
 
@@ -520,6 +522,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			NBT.setInteger("len", length.ordinal());
 			NBT.setInteger("pch", pitch);
 			NBT.setInteger("vc", voice.ordinal());
+			//ReikaJavaLibrary.pConsole(this+":"+NBT, Side.SERVER);
 			return NBT;
 		}
 

@@ -217,12 +217,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			return false;
 		}
 		if (m == MachineRegistry.MUSICBOX) {
-			TileEntityMusicBox tile = (TileEntityMusicBox)te;
-			if (ep.isSneaking()) {
-				tile.setMusicFromDisc(is);
-			}
-			else {
-				tile.saveMusicToDisk(is);
+			if (is != null && is.itemID == ItemRegistry.DISK.getShiftedID()) {
+				TileEntityMusicBox tile = (TileEntityMusicBox)te;
+				if (is.stackTagCompound != null) {
+					tile.setMusicFromDisc(is);
+				}
+				else {
+					tile.saveMusicToDisk(is);
+				}
+				return true;
 			}
 		}
 		if (m == MachineRegistry.FUELENGINE) {

@@ -494,7 +494,6 @@ public enum ItemRegistry implements RegistryEnum {
 		case SCREWDRIVER:
 		case KEY:
 		case TILESELECTOR:
-		case DISK:
 			return true;
 		case PUMP:
 			return is.stackTagCompound != null;

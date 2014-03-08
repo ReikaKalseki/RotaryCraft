@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
@@ -28,6 +29,13 @@ public class ItemDisk extends ItemRotaryTool {
 		if (is.stackTagCompound == null)
 			return;
 		li.add("Contains stored music:");
+		for (int i = 0; i < 16; i++) {
+			if (is.stackTagCompound.hasKey("ch"+i)) {
+				NBTTagList track = is.stackTagCompound.getTagList("ch"+i);
+				if (track.tagCount() > 0)
+					li.add("Track "+i+": "+track.tagCount()+" entries");
+			}
+		}
 	}
 
 }
