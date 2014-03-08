@@ -64,7 +64,7 @@ public class RecipesCrystallizer
 	 * @param item The Source ItemStack
 	 * @return The result ItemStack
 	 */
-	public ItemStack getSmeltingResult(FluidStack liquid)
+	public ItemStack getFreezingResult(FluidStack liquid)
 	{
 		Fluid f = liquid.getFluid();
 		if (amounts.containsKey(f)) {

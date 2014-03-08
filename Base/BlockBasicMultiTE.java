@@ -203,7 +203,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			ReikaChatHelper.write("Your tool has shattered into a dozen pieces.");
 			return true;
 		}
-		if (ep.isSneaking() && !((RotaryCraftTileEntity)te).getMachine().hasSneakActions())
+		if (ep.isSneaking() && !m.hasSneakActions())
 			return false;
 		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick(is)) {
 			return false;
@@ -215,6 +215,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				return true;
 			}
 			return false;
+		}
+		if (m == MachineRegistry.MUSICBOX) {
+			TileEntityMusicBox tile = (TileEntityMusicBox)te;
+			if (ep.isSneaking()) {
+				tile.setMusicFromDisc(is);
+			}
+			else {
+				tile.saveMusicToDisk(is);
+			}
 		}
 		if (m == MachineRegistry.FUELENGINE) {
 			if (is != null) {

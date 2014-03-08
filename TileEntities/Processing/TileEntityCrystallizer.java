@@ -61,7 +61,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 		if (!worldObj.isRemote) {
 			if (!tank.isEmpty()) {
-				ItemStack toMake = RecipesCrystallizer.getRecipes().getSmeltingResult(tank.getFluid());
+				ItemStack toMake = RecipesCrystallizer.getRecipes().getFreezingResult(tank.getFluid());
 				//ReikaJavaLibrary.pConsole(timer.getTick()+"/"+timer.getCap()+":"+toMake);
 				if (this.canOperate(toMake)) {
 					timer.update();

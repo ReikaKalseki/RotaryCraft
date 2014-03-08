@@ -47,6 +47,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			this.process(world, x, y, z, meta);
 			tickcount = 0;
 		}
+		//ReikaJavaLibrary.pConsole(Arrays.toString(inv), Side.SERVER);
 	}
 
 	public void process(World world, int x, int y, int z, int metadata) {

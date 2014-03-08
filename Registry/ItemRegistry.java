@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
+import Reika.RotaryCraft.Items.ItemDisk;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
@@ -131,7 +132,8 @@ public enum ItemRegistry implements RegistryEnum {
 	STEELSWORD(24, false,		"item.steelsword",			ItemSteelSword.class),
 	BEDSHEARS(25, false,		"item.bedrockshears",		ItemBedrockShears.class),
 	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class),
-	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class);
+	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class),
+	DISK(3, false,				"item.musicboxdisc",		ItemDisk.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -492,6 +494,7 @@ public enum ItemRegistry implements RegistryEnum {
 		case SCREWDRIVER:
 		case KEY:
 		case TILESELECTOR:
+		case DISK:
 			return true;
 		case PUMP:
 			return is.stackTagCompound != null;

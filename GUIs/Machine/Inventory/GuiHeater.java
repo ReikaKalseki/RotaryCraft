@@ -36,9 +36,6 @@ public class GuiHeater extends GuiMachine
 	int x;
 	int y;
 
-	/**
-	 * window height is calculated with this values, the more rows, the heigher
-	 */
 	private int inventoryRows = 0;
 
 	public GuiHeater(EntityPlayer p5ep, IInventory par2IInventory, TileEntityHeater te)
@@ -95,11 +92,10 @@ public class GuiHeater extends GuiMachine
 		temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (temperature >= 0)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
+		heater.setTemperature = temperature;
+
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -115,9 +111,6 @@ public class GuiHeater extends GuiMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

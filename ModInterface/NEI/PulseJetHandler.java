@@ -102,13 +102,7 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesPulseFurnace.smelting().isSmeltable(ingredient)) {
 			arecipes.add(new PulseJetRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
-		}/*
-		else if (ReikaItemHelper.matchStacks(ItemStacks.scrap, ingredient)) {
-			arecipes.add(new PulseJetRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.steelingot));
 		}
-		else if (ReikaItemHelper.matchStacks(ItemStacks.ironscrap, ingredient)) {
-			arecipes.add(new PulseJetRecipe(ItemStacks.ironscrap, new ItemStack(Item.ingotIron)));
-		}*/
 	}
 
 	@Override

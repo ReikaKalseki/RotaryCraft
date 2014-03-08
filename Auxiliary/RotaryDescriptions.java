@@ -97,7 +97,7 @@ public final class RotaryDescriptions {
 	private static String getParent() {
 		Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
 		String lang = language.getLanguageCode();
-		String sg = lang.toUpperCase().substring(0, 2);
+		String sg = lang.toUpperCase().substring(0, 2)+"/";
 		if (hasLocalizedFor(language) && !"EN".equals(sg))
 			return "Resources/"+sg;
 		return "Resources/";
@@ -105,8 +105,8 @@ public final class RotaryDescriptions {
 
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
-		String sg = lang.toUpperCase().substring(0, 2);
-		Object o = RotaryCraft.class.getResourceAsStream("Resources/categories.xml");
+		String sg = lang.toUpperCase().substring(0, 2)+"/";
+		Object o = RotaryCraft.class.getResourceAsStream("Resources/"+sg+"categories.xml");
 		return o != null;
 	}
 
@@ -373,7 +373,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
 		addData(MachineRegistry.GENERATOR, TileEntityGenerator.OUTPUT_VOLTAGE);
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
-		addNotes(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
+		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

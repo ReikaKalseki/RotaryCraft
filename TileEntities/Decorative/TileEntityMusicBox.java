@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import Reika.DragonAPI.Interfaces.GuiController;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -42,8 +44,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private boolean isOneTimePlaying = false;
 
 	private boolean lastPower = false;
-
-	private String musicFile;
 
 	public static final int LOOPPOWER = 1024;
 
@@ -226,14 +226,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
 		NBT.setBoolean("lastpwr", lastPower);
-
-		if (musicFile != null && !musicFile.isEmpty())
-			NBT.setString("music", musicFile);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -241,8 +235,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
 		lastPower = NBT.getBoolean("lastpwr");
-
-		musicFile = NBT.getString("music");
 	}
 
 	public void save() {
@@ -352,10 +344,43 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		return 0;
 	}
 
-	public void setMusicFile(ItemStack is) {
-		if (!is.stackTagCompound.hasKey("music"))
+	public void setMusicFromDisc(ItemStack is) {
+		if (is.itemID != ItemRegistry.DISK.getShiftedID())
 			return;
-		musicFile = is.stackTagCompound.getString("music");
+		if (is.stackTagCompound == null)
+			return;
+		this.clearMusic();
+		try {
+			for (int i = 0; i < 16; i++) {
+				if (is.stackTagCompound.hasKey("ch"+i)) {
+					NBTTagList li = is.stackTagCompound.getTagList("ch"+i);
+					for (int k = 0; k < li.tagCount(); k++) {
+						NBTTagCompound nbt = (NBTTagCompound)li.tagAt(k);
+						Note n = Note.readFromNBT(nbt);
+						this.addNote(i, n);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveMusicToDisk(ItemStack is) {
+		if (is.itemID != ItemRegistry.DISK.getShiftedID())
+			return;
+		is.stackTagCompound = new NBTTagCompound();
+		for (int i = 0; i < 16; i++) {
+			NBTTagList li = new NBTTagList();
+			is.stackTagCompound.setTag("ch"+i, li);
+			ArrayList<Note> channel = musicQueue[i];
+			for (int k = 0; k < channel.size(); k++) {
+				Note n = channel.get(i);
+				NBTTagCompound nbt = n.writeToNBT();
+				li.appendTag(nbt);
+			}
+		}
 	}
 
 	public void deleteFiles(int x, int y, int z) {
@@ -481,6 +506,21 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			int note = Integer.parseInt(sgs[1]);
 			int i1 = Integer.parseInt(sgs[2]);
 			return new Note(NoteLength.values()[l1], note, Instrument.values()[i1]);
+		}
+
+		protected static Note readFromNBT(NBTTagCompound NBT) {
+			int length = NBT.getInteger("len");
+			int pitch = NBT.getInteger("pch");
+			int voice = NBT.getInteger("vc");
+			return new Note(NoteLength.values()[length], pitch, Instrument.values()[voice]);
+		}
+
+		public NBTTagCompound writeToNBT() {
+			NBTTagCompound NBT = new NBTTagCompound();
+			NBT.setInteger("len", length.ordinal());
+			NBT.setInteger("pch", pitch);
+			NBT.setInteger("vc", voice.ordinal());
+			return NBT;
 		}
 
 	}

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -128,14 +129,15 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 			RotaryCraft.logger.warn("WARNING: "+this+" is reaching a very high temperature!");
 		}
 
-		if (temperature > MAXTEMP)
-			//this.overheat(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+		if (temperature > MAXTEMP) {
+			this.overheat(worldObj, xCoord, yCoord, zCoord);
 			temperature = MAXTEMP;
+		}
 	}
 
 	public void overheat(World world, int x, int y, int z) {
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.2F, true, true, 1F);
-		//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 0);
+		world.setBlock(x, y, z, Block.lavaMoving.blockID);
 		temperature = 0;
 		setTemperature = 0;
 	}
