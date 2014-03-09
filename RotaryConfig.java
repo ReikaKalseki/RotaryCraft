@@ -50,4 +50,9 @@ public class RotaryConfig extends ControlledConfig {
 			achievementIDs[i] = config.get("Achievement IDs", name, 24000+i).getInt();
 		}
 	}
+
+	@Override
+	protected void onInit() {
+
+	}
 }

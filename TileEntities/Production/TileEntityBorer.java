@@ -171,7 +171,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		}
 	}
 
-	public void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
+	private void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
 		int id = world.getBlockId(xread, yread, zread);
 		Material mat = world.getBlockMaterial(xread, yread, zread);
 		if (id != 0 && !(mat == Material.water || mat == Material.lava)) {
@@ -201,7 +201,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return y > 4 && y < 40 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID();
 	}
 
-	public void calcReqPower(World world, int x, int y, int z, int metadata) {
+	private void calcReqPower(World world, int x, int y, int z, int metadata) {
 		reqpow = 0;
 		int lowtorque = -1;
 		int a = 0;
@@ -266,7 +266,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return true;
 	}
 
-	public boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
+	private boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		TileEntity tile = this.getTileEntity(xread, yread, zread);
@@ -375,7 +375,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return false;
 	}
 
-	public void dig(World world, int x, int y, int z, int metadata) {
+	private void dig(World world, int x, int y, int z, int metadata) {
 		if (step == 1)
 			RotaryAchievements.BORER.triggerAchievement(this.getPlacer());
 		this.support(world, x, y, z, metadata);

@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.SpecialConfigLoader;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -1083,7 +1084,7 @@ public enum MachineRegistry {
 	}
 
 	public void addRecipe(IRecipe ir) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
@@ -1092,7 +1093,7 @@ public enum MachineRegistry {
 	}
 
 	public void addOreRecipe(Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1102,7 +1103,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedOreRecipe(int size, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1112,7 +1113,7 @@ public enum MachineRegistry {
 	}
 
 	public void addMetaOreRecipe(int meta, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1122,7 +1123,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1132,7 +1133,7 @@ public enum MachineRegistry {
 	}
 
 	public void addRecipe(ItemStack is, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
@@ -1141,7 +1142,7 @@ public enum MachineRegistry {
 	}
 
 	public void addCrafting(Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
@@ -1151,7 +1152,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedCrafting(int num, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
@@ -1161,7 +1162,7 @@ public enum MachineRegistry {
 	}
 
 	public void addMetaCrafting(int metadata, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
@@ -1173,7 +1174,7 @@ public enum MachineRegistry {
 	public void addNBTMetaCrafting(NBTTagCompound NBT, int metadata, Object... obj) {
 		ItemStack is = this.getCraftedMetadataProduct(metadata);
 		is.stackTagCompound = (NBTTagCompound)NBT.copy();
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
@@ -1183,13 +1184,21 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
-		if (!this.isDummiedOut()) {
+		if (!this.isDummiedOut() && this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 			}
 		}
 		//this.addSizedMetaOreRecipe(num, metadata, obj);
+	}
+
+	private boolean isCraftable() {
+		if (!SpecialConfigLoader.exists())
+			return true;
+		if (this.isCritical())
+			return true;
+		return SpecialConfigLoader.getMachine(this);
 	}
 
 	public TileEntity createTEInstanceForRender() {
@@ -1307,6 +1316,47 @@ public enum MachineRegistry {
 		case BUSCONTROLLER:
 		case POWERBUS:
 		case BIGFURNACE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isCritical() {
+		if (this.isPipe())
+			return true;
+		switch(this) {
+		case BEDROCKBREAKER:
+		case ENGINE:
+		case SHAFT:
+		case BEVELGEARS:
+		case SPLITTER:
+		case GEARBOX:
+		case FERMENTER:
+		case GRINDER:
+		case COMPACTOR:
+		case PUMP:
+		case EXTRACTOR:
+		case FAN:
+		case FRACTIONATOR:
+		case HEATER:
+		case HEATRAY:
+		case WINDER:
+		case ADVANCEDGEARS:
+		case BLASTFURNACE:
+		case MAGNETIZER:
+		case FRICTION:
+		case COOLINGFIN:
+		case WORKTABLE:
+		case MULTICLUTCH:
+		case SORTING:
+		case FERTILIZER:
+		case AGGREGATOR:
+		case FILLINGSTATION:
+		case BELT:
+		case VANDEGRAFF:
+		case BUSCONTROLLER:
+		case POWERBUS:
 			return true;
 		default:
 			return false;

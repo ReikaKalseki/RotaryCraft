@@ -42,6 +42,7 @@ public enum ConfigRegistry implements ConfigList {
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),
 	DEBUGMODE("Debug Mode", false),
+	BANRAIN("Disable Silver Iodide Cannon Rain", false),
 	ACHIEVEMENTS("Enable Achievements", true),
 	MODORES("Force Inter-Mod Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
@@ -87,9 +88,7 @@ public enum ConfigRegistry implements ConfigList {
 	}
 
 	private ConfigRegistry(String l, boolean d, boolean tag) {
-		label = l;
-		defaultState = d;
-		type = boolean.class;
+		this(l, d);
 		enforcing = true;
 	}
 
@@ -162,6 +161,11 @@ public enum ConfigRegistry implements ConfigList {
 	@Override
 	public boolean isEnforcingDefaults() {
 		return enforcing;
+	}
+
+	@Override
+	public boolean shouldLoad() {
+		return true;
 	}
 
 }

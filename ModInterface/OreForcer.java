@@ -91,6 +91,7 @@ public final class OreForcer {
 			addThaumAspects();
 			if (ConfigRegistry.MODORES.getState())
 				registerThaumcraft();
+			intercraftThaumcraft();
 			break;
 		case MFFS:
 			intercraftForcicium();
@@ -101,11 +102,13 @@ public final class OreForcer {
 		case DARTCRAFT:
 			if (ConfigRegistry.MODORES.getState())
 				registerDart();
+			intercraftDart();
 			breakForceWrench();
 			break;
 		case ARSMAGICA:
 			if (ConfigRegistry.MODORES.getState())
 				registerMagica();
+			intercraftMagica();
 			break;
 		case TRANSITIONAL:
 			intercraftMagmanite();
@@ -206,8 +209,7 @@ public final class OreForcer {
 		}
 	}
 
-	private static void registerMagica() {
-		MagicaOreHandler.getInstance().forceOreRegistration();
+	private static void intercraftMagica() {
 		RotaryCraft.logger.log("Adding ore item conversion recipes!");
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
@@ -219,6 +221,10 @@ public final class OreForcer {
 				RotaryCraft.logger.log(o.displayName+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
+	}
+
+	private static void registerMagica() {
+		MagicaOreHandler.getInstance().forceOreRegistration();
 	}
 
 	private static void registerOsmium() {
@@ -289,9 +295,12 @@ public final class OreForcer {
 		}
 	}
 
-	private static void registerDart() {
+	private static void intercraftDart() {
 		GameRegistry.addShapelessRecipe(DartOreHandler.getInstance().getForceGem(), ItemStacks.getModOreIngot(ModOreList.FORCE));
 		RotaryCraft.logger.log("RotaryCraft force gems can now be crafted into DartCraft force gems!");
+	}
+
+	private static void registerDart() {
 		DartOreHandler.getInstance().forceOreRegistration();
 	}
 
@@ -337,8 +346,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
 	}
 
-	private static void registerThaumcraft() {
-		ThaumOreHandler.getInstance().forceOreRegistration();
+	private static void intercraftThaumcraft() {
 		RotaryCraft.logger.log("Adding ore item conversion recipes!");
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
@@ -350,6 +358,10 @@ public final class OreForcer {
 				RotaryCraft.logger.log(o.displayName+" can now be crafted with RotaryCraft equivalents!");
 			}
 		}
+	}
+
+	private static void registerThaumcraft() {
+		ThaumOreHandler.getInstance().forceOreRegistration();
 	}
 
 }

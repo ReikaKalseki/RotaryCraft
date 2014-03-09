@@ -26,77 +26,80 @@ import Reika.RotaryCraft.API.Event.WeatherControlEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWeatherController extends InventoriedPowerReceiver implements ConditionalOperation {
 
-	/** 0 = no control; 1 = set sun; 2 = set rain; 3 = set thunder, 4 = superstorm */
-	private int rainmode = 0;
-
 	private int cooldown = 0;
+
+	private RainMode rainmode;
+
+	private static enum RainMode {
+		NONE(),
+		SUN(),
+		RAIN(),
+		THUNDER(),
+		SUPERSTORM();
+
+		public boolean isRain() {
+			return this.ordinal() > SUN.ordinal();
+		}
+
+		public boolean isThunder() {
+			return this.ordinal() > RAIN.ordinal();
+		}
+
+		public boolean hasAction() {
+			return this != NONE;
+		}
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
-		cooldown--;
+		if (cooldown > 0)
+			cooldown--;
 		if (power < MINPOWER)
 			return;
 		if (!world.canBlockSeeTheSky(x, y+1, z))
 			return;
-		if (cooldown > 0)
-			return;
-		this.getRainMode();
-		//ReikaJavaLibrary.pConsole(this.rainmode);
-		if (rainmode == 0)
-			return;
-		boolean isRain = world.isRaining();
-		boolean isThunder = world.isThundering();
+
 		WorldInfo wi = world.getWorldInfo();
-		if (rainmode == 1 && !isRain && !isThunder)
-			return;
-		if (rainmode == 2 && isRain && !isThunder)
-			return;
-		if (rainmode == 3 && isThunder)
-			return;
-		if (rainmode == 4) {
-			if (rand.nextInt(30) == 0) {
+		//ReikaJavaLibrary.pConsole(rainmode, Side.SERVER);
+		if (rainmode == RainMode.SUPERSTORM) {
+			wi.setRaining(true);
+			wi.setThundering(true);
+			if (rand.nextInt(20) == 0) {
 				int xl = x-64+rand.nextInt(129);
 				int zl = z-64+rand.nextInt(129);
 				int yl = world.getTopSolidOrLiquidBlock(xl, zl);
 				world.addWeatherEffect(new EntityLightningBolt(world, xl, yl, zl));
-				if (isThunder)
-					return;
 			}
 		}
-		boolean rain = false;
-		boolean thunder = false;
-		boolean storm = false;
-		switch(rainmode) {
-		case 1:
-			wi.setRaining(false);
-			wi.setThundering(false);
-			break;
-		case 2:
-			wi.setRaining(true);
-			wi.setThundering(false);
-			rain = true;
-			break;
-		case 3:
-			wi.setRaining(true);
-			wi.setThundering(true);
-			rain = true;
-			thunder = true;
-			break;
-		case 4:
-			wi.setRaining(true);
-			wi.setThundering(true);
-			rain = true;
-			thunder = true;
-			storm = true;
-			break;
-		}
+
+		if (cooldown > 0)
+			return;
+		rainmode = this.getRainMode();
+		//ReikaJavaLibrary.pConsole(this.rainmode);
+		if (rainmode.isRain() && ConfigRegistry.BANRAIN.getState())
+			rainmode = RainMode.NONE;
+		if (!rainmode.hasAction())
+			return;
+		boolean isThunder = world.isThundering();
+		if (this.isAlready(world, rainmode))
+			return;
+		boolean rain = rainmode.isRain();
+		boolean thunder = rainmode.isThunder();
+		boolean storm = rainmode == RainMode.SUPERSTORM;
+		wi.setRaining(rain);
+		wi.setThundering(thunder);
 		MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
+	}
+
+	private boolean isAlready(World world, RainMode rainmode) {
+		return rainmode == this.rainmode;
 	}
 
 	@Override
@@ -141,63 +144,64 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		return false;
 	}
 
-	public void getRainMode() {
-		boolean isRain = worldObj.isRaining();
-		boolean isThunder = worldObj.isThundering();
-		int oldrain = rainmode;
+	public RainMode getRainMode() {
+		RainMode rainmode;
 		ItemStack is = null;
 		ItemStack is2 = null;
 		boolean sawdust = this.hasSawdust();
 		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
 		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inv);
 		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inv);
-		if (sawdust && (isRain || isThunder)) {
-			rainmode = 1;
+		if (sawdust) {
+			rainmode = RainMode.SUN;
 			is = ItemStacks.sawdust;
 		}
-		else if (silverio && !isRain) {
-			rainmode = 2;
+		else if (silverio) {
+			rainmode = RainMode.RAIN;
 			is = ItemStacks.silveriodide;
-			if (redstone && !isThunder) {
-				rainmode = 3;
+			if (redstone) {
+				rainmode = RainMode.THUNDER;
 				is2 = new ItemStack(Item.redstone.itemID, 1, 0);
 			}
 			else if (glowdust) {
-				rainmode = 4;
+				rainmode = RainMode.SUPERSTORM;
 				is2 = new ItemStack(Item.glowstone.itemID, 1, 0);
 			}
 		}
 		else
-			return;
-		if (oldrain == rainmode)
-			return;
+			rainmode = RainMode.NONE;
+		//ReikaJavaLibrary.pConsole(rainmode, Side.SERVER);
+		if (this.isAlready(worldObj, rainmode))
+			return this.rainmode;
 		cooldown = 200+rand.nextInt(400);
-		this.fire(is, is2);
+		if (rainmode.hasAction())
+			this.fire(is, is2);
 		int slot = -1;
 		switch(rainmode) {
-		case 0:
-			return;
-		case 1:
+		case NONE:
+			break;
+		case SUN:
 			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			return;
-		case 2:
+			break;
+		case RAIN:
 			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			return;
-		case 3:
+			break;
+		case THUNDER:
 			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			return;
-		case 4:
+			break;
+		case SUPERSTORM:
 			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			slot = ReikaInventoryHelper.locateInInventory(Item.glowstone.itemID, inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			return;
+			break;
 		}
+		return rainmode;
 	}
 
 	private boolean isValidWeatherItem(ItemStack is) {
@@ -244,11 +248,11 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 
 	@Override
 	public boolean areConditionsMet() {
-		return rainmode != 0;
+		return this.getRainMode().hasAction();
 	}
 
 	@Override
 	public String getOperationalStatus() {
-		return this.areConditionsMet() ? "Operational" : "Empty Inventory";
+		return cooldown <= 0 ? this.areConditionsMet() ? "Operational" : "Empty Inventory" : "Idle";
 	}
 }
