@@ -21,15 +21,15 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.Animated.ModelMagnetizer;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
+import Reika.RotaryCraft.Models.ModelFridge;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 
-public class RenderMagnetizer extends RotaryTERenderer
+public class RenderFridge extends RotaryTERenderer
 {
 
-	private ModelMagnetizer MagnetizerModel = new ModelMagnetizer();
+	private ModelFridge FridgeModel = new ModelFridge();
 
-	public void renderTileEntityMagnetizerAt(TileEntityMagnetizer tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityRefrigeratorAt(TileEntityRefrigerator tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -38,10 +38,10 @@ public class RenderMagnetizer extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelMagnetizer var14;
-		var14 = MagnetizerModel;
+		ModelFridge var14;
+		var14 = FridgeModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/magnettex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fridgetex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -51,19 +51,18 @@ public class RenderMagnetizer extends RotaryTERenderer
 
 			switch(tile.getBlockMetadata()) {
 			case 0:
-				var11 = 180;
-				break;
-			case 1:
 				var11 = 0;
 				break;
-			case 2:
-				var11 = 270;
+			case 1:
+				var11 = 180;
 				break;
-			case 3:
+			case 2:
 				var11 = 90;
 				break;
+			case 3:
+				var11 = 270;
+				break;
 			}
-
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
 
 		}
@@ -79,13 +78,13 @@ public class RenderMagnetizer extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityMagnetizerAt((TileEntityMagnetizer)tile, par2, par4, par6, par8);
+			this.renderTileEntityRefrigeratorAt((TileEntityRefrigerator)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "magnettex.png";
+		return "fridgetex.png";
 	}
 }

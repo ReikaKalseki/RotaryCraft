@@ -15,8 +15,8 @@ import net.minecraftforge.fluids.Fluid;
 /** For items that use fuel and can be filled in the filling station. */
 public interface Fillable {
 
-	/** The current fluid type. */
-	public Fluid getFluidType(ItemStack is);
+	/** Return true if the item can currently accept this fluid. */
+	public boolean isValidFluid(Fluid f, ItemStack is);
 
 	/** The max amount of fluid (in millibuckets) the item can take. */
 	public int getCapacity(ItemStack is);

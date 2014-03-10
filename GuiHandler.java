@@ -42,6 +42,7 @@ import Reika.RotaryCraft.Containers.ContainerExtractor;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
 import Reika.RotaryCraft.Containers.ContainerFillingStation;
 import Reika.RotaryCraft.Containers.ContainerFractionator;
+import Reika.RotaryCraft.Containers.ContainerFridge;
 import Reika.RotaryCraft.Containers.ContainerGearbox;
 import Reika.RotaryCraft.Containers.ContainerGrinder;
 import Reika.RotaryCraft.Containers.ContainerHandCraft;
@@ -101,6 +102,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFillingStation;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFractionator;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFridge;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGearbox;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
@@ -156,6 +158,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
@@ -314,6 +317,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDefoliator) {
 			return new ContainerDefoliator(player, (TileEntityDefoliator) te);
+		}
+		if (te instanceof TileEntityRefrigerator) {
+			return new ContainerFridge(player, (TileEntityRefrigerator)te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -518,6 +524,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDefoliator) {
 			return new GuiDefoliator(player, (TileEntityDefoliator) te);
+		}
+		if (te instanceof TileEntityRefrigerator) {
+			return new GuiFridge(player, (TileEntityRefrigerator)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

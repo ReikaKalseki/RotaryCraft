@@ -440,7 +440,7 @@ public enum ItemRegistry implements RegistryEnum {
 		case RAILGUN:
 			return 16;
 		case BUCKET:
-			return 3;
+			return 4;
 		default:
 			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
 		}

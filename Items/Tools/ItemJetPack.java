@@ -216,8 +216,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}*/
 
 	@Override
-	public Fluid getFluidType(ItemStack is) {
-		return FluidRegistry.getFluid("rc ethanol");
+	public boolean isValidFluid(Fluid f, ItemStack is) {
+		return f.equals(FluidRegistry.getFluid("rc ethanol"));
 	}
 
 	@Override

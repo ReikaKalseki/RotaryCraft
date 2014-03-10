@@ -128,7 +128,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			omega = 0;
 			torque = 0;
 		}
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		if (rand.nextInt(20) == 0)
 			if (tank.getLevel() > 0)
 				tank.removeLiquid(RotaryConfig.MILLIBUCKET);

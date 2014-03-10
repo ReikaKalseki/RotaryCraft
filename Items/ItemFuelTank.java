@@ -37,8 +37,8 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 	}
 
 	@Override
-	public Fluid getFluidType(ItemStack is) {
-		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+	public boolean isValidFluid(Fluid f, ItemStack is) {
+		return is.stackTagCompound != null ? f.equals(ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound)) : true;
 	}
 
 	@Override

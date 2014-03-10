@@ -303,7 +303,7 @@ public enum MachineRegistry {
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
 	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft"),
-	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11);
+	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge");
 
 	private final String name;
 	private final Class te;

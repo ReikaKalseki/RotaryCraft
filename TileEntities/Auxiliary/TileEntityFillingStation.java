@@ -100,8 +100,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 		Fillable i = (Fillable)is.getItem();
 		int current = i.getCurrentFillLevel(is);
 		int max = i.getCapacity(is);
-		Fluid f = i.getFluidType(is);
-		return (f == null || tank.getActualFluid().equals(f)) && max > current;
+		return i.isValidFluid(tank.getActualFluid(), is) && max > current;
 	}
 
 	private boolean canIntakeFluid(Fluid f) {

@@ -40,7 +40,7 @@ public class RotaryNames {
 	};
 
 	private static final String[] liquidNames = {
-		"fluid.lubricant", "fluid.jet fuel", "fluid.rc ethanol"
+		"fluid.lubricant", "fluid.jet fuel", "fluid.rc ethanol", "fluid.liquid nitrogen"
 	};
 
 	//Never presented directly, not in .lang
@@ -98,7 +98,7 @@ public class RotaryNames {
 
 	public static final String[] powderNames = {
 		"misc.netherdust", "misc.tar", "misc.sludge", "misc.sawdust", "misc.beddust", "misc.salt", "misc.nh4" , "misc.agi",
-		"misc.alum", "misc.flour", "misc.coaldust"
+		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice"
 	};
 
 	public static final String[] extractNames = {

@@ -980,4 +980,14 @@
 			Required Speed: %d rad/s
 		</note>
 	</blower>
+	<refrigerator>
+		<desc>
+			The refrigeration unit is used to dramatically cool air to the point that some components freeze or condense out of it. This is how liquid nitrogen and dry ice are produced.
+		</desc>
+		<note>
+			Power Input: Back
+			Required Power: %d
+			Required Torque: %d Nm
+		</note>
+	</refrigerator>
 </machines>

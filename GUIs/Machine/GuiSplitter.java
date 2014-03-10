@@ -23,7 +23,6 @@ public class GuiSplitter extends GuiNonPoweredMachine
 	public int mode;
 
 	private TileEntitySplitter splitter;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
 	int y;
@@ -53,8 +52,6 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		buttonList.add(new GuiButton(5, j+96, -1+k+52, 72, 20, "1:15 Bend"));
 		buttonList.add(new GuiButton(6, j+96, -1+k+72, 72, 20, "1:7 Bend"));
 		buttonList.add(new GuiButton(7, j+96, -1+k+92, 72, 20, "1:3 Bend"));
-
-		//this.buttonList.add(new GuiButton(9, j+52, -1+k+140, 72, 20, "Merge"));
 	}
 
 	public void updateMode(int md) {

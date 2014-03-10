@@ -1,33 +1,112 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2014
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements TemperatureTE, PressureTE, DiscreteFunction {
+public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements DiscreteFunction {
 
-	private int pressure;
-	private int temperature;
+	public int time;
+	private StepTimer timer = new StepTimer(20);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
+		this.getIOSides(world, x, y, z, meta);
+		this.getPower(false);
+		timer.setCap(this.getOperationTime());
+		if (this.canProgress()) {
+			timer.update();
+			if (timer.checkCap()) {
+				if (!world.isRemote)
+					this.cycle();
+			}
+		}
+		else {
+			timer.reset();
+		}
+		if (!world.isRemote)
+			time = timer.getTick();
+	}
 
+	public void getIOSides(World world, int x, int y, int z, int metadata) {
+		switch(metadata) {
+		case 0:
+			readx = xCoord+1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 1:
+			readx = xCoord-1;
+			readz = zCoord;
+			ready = yCoord;
+			break;
+		case 2:
+			readz = zCoord+1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		case 3:
+			readz = zCoord-1;
+			readx = xCoord;
+			ready = yCoord;
+			break;
+		}
+	}
+
+	private boolean canProgress() {
+		if (power < MINPOWER || torque < MINTORQUE)
+			return false;
+		if (inv[0] == null)
+			return false;
+		if (tank.isFull())
+			return false;
+		return inv[0].itemID == Block.ice.blockID && (inv[1] == null || inv[1].stackSize < inv[1].getMaxStackSize());
+	}
+
+	private void cycle() {
+		ReikaInventoryHelper.decrStack(0, inv);
+		tank.addLiquid(100, FluidRegistry.getFluid("liquid nitrogen"));
+		if (rand.nextInt(5) == 0)
+			ReikaInventoryHelper.addOrSetStack(ItemStacks.dryice, inv, 1);
+	}
+
+	public void setLevel(int lvl) {
+		if (!tank.isEmpty())
+			tank.setContents(lvl, tank.getActualFluid());
+	}
+
+	public int getProgressScaled(int a) {
+		return time * a / this.getOperationTime();
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
+		return i == 1;
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -37,7 +116,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return false;
+		return slot == 0 && is.itemID == Block.ice.blockID;
 	}
 
 	@Override
@@ -71,53 +150,26 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	}
 
 	@Override
-	public void updatePressure(World world, int x, int y, int z, int meta) {
-
-	}
-
-	@Override
-	public void addPressure(int press) {
-		pressure += pressure;
-	}
-
-	@Override
-	public int getPressure() {
-		return pressure;
-	}
-
-	@Override
-	public void overpressure(World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public void updateTemperature(World world, int x, int y, int z, int meta) {
-
-	}
-
-	@Override
-	public void addTemperature(int temp) {
-		temperature += temp;
-	}
-
-	@Override
-	public int getTemperature() {
-		return temperature;
-	}
-
-	@Override
-	public int getThermalDamage() {
-		return 0;
-	}
-
-	@Override
-	public void overheat(World world, int x, int y, int z) {
-
-	}
-
-	@Override
 	public int getOperationTime() {
 		return DurationRegistry.REFRIGERATOR.getOperationTime(omega);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		time = NBT.getInteger("timer");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("timer", time);
+	}
+
+	public int getLiquidScaled(int i) {
+		return tank.getLevel() * i / tank.getCapacity();
 	}
 
 }

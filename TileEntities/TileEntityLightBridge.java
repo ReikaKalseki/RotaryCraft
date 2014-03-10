@@ -34,7 +34,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		animtick++;
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		this.makeBeam(world, x, y, z, meta);

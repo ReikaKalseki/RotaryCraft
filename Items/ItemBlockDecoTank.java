@@ -49,8 +49,7 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 
 	@Override
 	public int addFluid(ItemStack is, Fluid f, int amt) {
-		Fluid cur = this.getFluidType(is);
-		if ((cur == null || f.equals(cur)) && !this.isFull(is)) {
+		if (this.isValidFluid(f, is) && !this.isFull(is)) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			int currentlevel = is.stackTagCompound.getInteger("level");
@@ -74,8 +73,8 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	}
 
 	@Override
-	public Fluid getFluidType(ItemStack is) {
-		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+	public boolean isValidFluid(Fluid f, ItemStack is) {
+		return is.stackTagCompound != null ? f.equals(ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound)) : true;
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
 		if (is.stackTagCompound != null) {
-			Fluid f = this.getFluidType(is);
+			Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
 			if (f != null && this.getCurrentFillLevel(is) >= FILL) {
 				li.add("Full of "+f.getLocalizedName());
 			}

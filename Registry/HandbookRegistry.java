@@ -113,6 +113,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	AGGREGATOR(MachineRegistry.AGGREGATOR),
 	FUELENGINE(MachineRegistry.FUELENGINE),
 	DYNAMO(MachineRegistry.MAGNETIC),
+	FRIDGE(MachineRegistry.REFRIGERATOR),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
 	GRINDER(MachineRegistry.GRINDER),
