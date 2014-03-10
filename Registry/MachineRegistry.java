@@ -144,6 +144,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
@@ -301,7 +302,8 @@ public enum MachineRegistry {
 	LAWNSPRINKLER(		"machine.lawnsprinkler",	BlockMMachine.class, 		TileEntityLawnSprinkler.class,		19, "RenderLawnSprinkler"),
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
-	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft");
+	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft"),
+	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11);
 
 	private final String name;
 	private final Class te;
@@ -808,6 +810,7 @@ public enum MachineRegistry {
 		case MAGNETIC:
 		case CRYSTALLIZER:
 		case BUSCONTROLLER:
+		case REFRIGERATOR:
 			return true;
 		default:
 			return false;

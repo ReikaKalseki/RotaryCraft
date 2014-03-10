@@ -229,7 +229,7 @@ public enum EngineType {
 		case SPORT:
 			return 600;
 		case MICRO:
-			return 450;
+			return 2400;
 		case JET:
 			return 225;
 		default:

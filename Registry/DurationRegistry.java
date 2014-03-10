@@ -31,7 +31,8 @@ public enum DurationRegistry {
 	PURIFIER(MachineRegistry.PURIFIER, 			800, 40),
 	TERRAFORMER(MachineRegistry.TERRAFORMER, 	800, 40),
 	WOODCUTTER(MachineRegistry.WOODCUTTER, 		40, 4),
-	GRINDSTONE(MachineRegistry.GRINDSTONE,		80, 6);
+	GRINDSTONE(MachineRegistry.GRINDSTONE,		80, 6),
+	REFRIGERATOR(MachineRegistry.REFRIGERATOR,	1000, 80);
 
 	private final MathExpression formula;
 	private final boolean hasMultiple;

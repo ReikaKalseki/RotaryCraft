@@ -94,7 +94,8 @@ public enum PowerReceivers {
 	BUSCONTROLLER(),
 	GRINDSTONE(256, 1, 16384),
 	BLOWER(1, 256, 1024),
-	PORTALSHAFT();
+	PORTALSHAFT(),
+	REFRIGERATOR(2048, 1, 32768);
 
 	private final int minT;
 	private final int minS;
