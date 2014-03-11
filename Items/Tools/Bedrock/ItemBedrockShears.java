@@ -89,8 +89,6 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		else {
 			int id = player.worldObj.getBlockId(x, y, z);
 			int meta = player.worldObj.getBlockMetadata(x, y, z);
-			if (id == Block.leaves.blockID)
-				meta = meta&3;
 			boolean drop = false;
 			boolean flag = false;
 			Block b = Block.blocksList[id];
@@ -107,12 +105,22 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 					flag = super.onBlockStartBreak(is, x, y, z, player);
 			}
 			if (drop) {
-				ItemStack block = new ItemStack(id, 1, meta);
+				ItemStack block = new ItemStack(id, 1, this.getDroppedMeta(id, meta));
 				ReikaItemHelper.dropItem(player.worldObj, x+0.5, y+0.5, z+0.5, block);
 				player.worldObj.setBlock(x, y, z, 0);
 			}
 			return flag;
 		}
+	}
+
+	private int getDroppedMeta(int id, int meta) {
+		if (id == Block.leaves.blockID)
+			return meta&3;
+		if (id == Block.vine.blockID)
+			return 0;
+		if (id == Block.waterlily.blockID)
+			return 0;
+		return meta;
 	}
 
 	@Override
