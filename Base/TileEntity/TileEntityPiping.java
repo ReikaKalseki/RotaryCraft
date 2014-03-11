@@ -20,10 +20,13 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
@@ -58,11 +61,24 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public abstract boolean isValidFluid(Fluid f);
 
+	private StepTimer flowTimer = new StepTimer(this.getTickDelay());
+
+	public static int getTickDelay() {
+		int cfg = Math.max(ConfigRegistry.FLOWSPEED.getValue(), 1);
+		if (cfg > 5)
+			cfg = 5;
+		return 6-cfg;
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
-			this.intakeFluid(world, x, y, z);
-			this.dumpContents(world, x, y, z);
+			flowTimer.update();
+			if (flowTimer.checkCap()) {
+				ReikaJavaLibrary.pConsole("hi");
+				this.intakeFluid(world, x, y, z);
+				this.dumpContents(world, x, y, z);
+			}
 		}
 		if (this.getLiquidLevel() <= 0) {
 			this.setLevel(0);

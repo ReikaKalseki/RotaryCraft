@@ -111,6 +111,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
@@ -857,6 +858,16 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
 			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+		if (te instanceof TileEntitySplitter) {
+			TileEntitySplitter spl = (TileEntitySplitter)te;
+			if (spl.isSplitting()) {
+				currenttip.add("Splitting Power");
+				currenttip.add(spl.getRatioForDisplay());
+			}
+			else {
+				currenttip.add("Merging Power");
+			}
+		}
 		if (te instanceof PoweredLiquidIO) {
 			PoweredLiquidIO liq = (PoweredLiquidIO)te;
 			Fluid in = liq.getFluidInInput();

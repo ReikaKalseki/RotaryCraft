@@ -24,7 +24,6 @@ public class RenderElecMotor extends RotaryTERenderer
 {
 
 	private ModelElecMotor ElecMotorModel = new ModelElecMotor();
-	//private ModelElecMotorV ElecMotorModelV = new ModelElecMotorV();
 
 	/**
 	 * Renders the TileEntity for the position.

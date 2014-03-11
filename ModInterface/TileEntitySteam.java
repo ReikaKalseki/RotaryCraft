@@ -102,7 +102,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	private void genPower() {
 		omega = this.getGenOmega();
 		torque = Math.min(this.getGenTorque(), MAX_TORQUE);
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		steamLevel -= steamLevel/200+1;
 	}
 
@@ -124,7 +124,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 			if (te instanceof IFluidHandler) {
 				IFluidHandler ic = (IFluidHandler)te;
 				FluidStack liq = ic.drain(facingDir.getOpposite(), FluidContainerRegistry.BUCKET_VOLUME, true);
-				if (liq != null && liq.amount > 0 && liq.getFluid().equals(FluidRegistry.getFluid("steam")))
+				if (liq != null && liq.amount > 0 && liq.getFluid().equals(FluidRegistry.getFluid("water")))
 					steamLevel += liq.amount;
 			}
 		}
@@ -144,9 +144,6 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 		return power;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -154,9 +151,6 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 		NBT.setInteger("storage", steamLevel);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

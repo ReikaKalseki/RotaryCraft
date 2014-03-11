@@ -22,11 +22,13 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements DiscreteFunction {
 
 	public int time;
 	private StepTimer timer = new StepTimer(20);
+	private StepTimer soundTimer = new StepTimer(20);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -36,13 +38,18 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 		timer.setCap(this.getOperationTime());
 		if (this.canProgress()) {
 			timer.update();
+			soundTimer.update();
 			if (timer.checkCap()) {
 				if (!world.isRemote)
 					this.cycle();
 			}
+			if (soundTimer.checkCap()) {
+				SoundRegistry.FRIDGE.playSoundAtBlock(world, x, y, z, 1, 0.88F);
+			}
 		}
 		else {
 			timer.reset();
+			soundTimer.reset();
 		}
 		if (!world.isRemote)
 			time = timer.getTick();

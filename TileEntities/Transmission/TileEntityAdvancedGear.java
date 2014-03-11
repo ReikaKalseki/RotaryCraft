@@ -811,4 +811,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public boolean hasInventory() {
 		return this.getGearType().hasInventory();
 	}
+
+	public boolean isCreative() {
+		return isCreative;
+	}
 }

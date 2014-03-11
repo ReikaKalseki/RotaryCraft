@@ -142,6 +142,8 @@ public class GuiCoil extends GuiNonPoweredMachine
 		ReikaTextureHelper.bindFontTexture();
 
 		fontRenderer.drawString("Output Speed", xSize/2-82, 22, 4210752);
+		if (!coil.isCreative())
+			fontRenderer.drawString(String.format("(Max %d)", coil.getMaximumEmission()), xSize/2-82, 37, 4210752);
 		fontRenderer.drawString("Output Torque", xSize/2-82, 52, 4210752);
 
 		fontRenderer.drawString("rad/s", xSize/2+53, 22, 4210752);

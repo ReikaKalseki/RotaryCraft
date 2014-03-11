@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -153,11 +152,7 @@ public class RenderShaft extends RotaryTERenderer
 			}
 		}
 
-		GL11.glEnable(GL11.GL_LIGHTING);
-		if (tile.isInWorld())
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.closeGL(tile);
 	}
 
 	@Override

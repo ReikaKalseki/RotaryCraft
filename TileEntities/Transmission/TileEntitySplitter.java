@@ -695,4 +695,31 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public void setFlipped(boolean set) {
 		isFlipped = set;
 	}
+
+	public String getRatioForDisplay() {
+		switch(splitmode) {
+		case -1:
+			return "";
+		case 0:
+			return "31:1 Inline";
+		case 4:
+			return "1:31 Bend";
+		case 1:
+			return "15:1 Inline";
+		case 5:
+			return "1:15 Bend";
+		case 2:
+			return "7:1 Inline";
+		case 6:
+			return "1:7 Bend";
+		case 3:
+			return "3:1 Inline";
+		case 7:
+			return "1:3 Bend";
+		case 8:
+			return "1:1 Even";
+		default:
+			return "ERROR";
+		}
+	}
 }

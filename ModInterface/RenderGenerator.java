@@ -23,7 +23,6 @@ public class RenderGenerator extends RotaryTERenderer
 {
 
 	private ModelGenerator GeneratorModel = new ModelGenerator();
-	//private ModelGeneratorV GeneratorModelV = new ModelGeneratorV();
 
 	/**
 	 * Renders the TileEntity for the position.

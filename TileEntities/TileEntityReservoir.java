@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -33,6 +34,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -48,13 +50,17 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
+	private StepTimer flowTimer = new StepTimer(TileEntityPiping.getTickDelay());
+
 	public int getLiquidScaled(int par1) {
 		return (tank.getLevel()*par1)/CAPACITY;
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.transferBetween(world, x, y, z);
+		flowTimer.update();
+		if (flowTimer.checkCap())
+			this.transferBetween(world, x, y, z);
 		if (!isCovered) {
 			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 			if (world.isRaining() && !biome.getEnableSnow() && biome.canSpawnLightningBolt() && worldObj.canBlockSeeTheSky(x, y+1, z)) {

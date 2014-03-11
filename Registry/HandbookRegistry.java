@@ -90,9 +90,6 @@ public enum HandbookRegistry implements HandbookEntry {
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
 	MULTI(MachineRegistry.MULTICLUTCH),
 	BELT(MachineRegistry.BELT),
-	//HYDRAULIC(MachineRegistry.HYDRAULIC),
-	//HYLINE(MachineRegistry.HYDRAULICLINE),
-	//ROUTER(MachineRegistry.ROUTER),
 	BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
 	BUS(MachineRegistry.POWERBUS),
 
@@ -126,6 +123,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
 	BOILER(MachineRegistry.BOILER),
 	GENERATOR(MachineRegistry.GENERATOR),
+	DISTILER(MachineRegistry.DISTILLER),
 	FURNACE(MachineRegistry.BIGFURNACE),
 	STATIC(MachineRegistry.DYNAMO),
 	CRYSTAL(MachineRegistry.CRYSTALLIZER),
@@ -240,6 +238,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	STEELARMOR("Steel Armor"),
 	ITEMPUMP(ItemRegistry.PUMP),
 	JUMPBOOTS("Spring Boots"),
+	TANKS(ItemRegistry.FUEL),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),

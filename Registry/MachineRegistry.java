@@ -595,6 +595,8 @@ public enum MachineRegistry {
 			return 0.9375F;
 		if (this == EMP)
 			return 0.5F;
+		if (this == PNEUENGINE)
+			return 0.8125F;
 		if (this == FERTILIZER)
 			return 0.875F;
 		if (this == DEFOLIATOR)

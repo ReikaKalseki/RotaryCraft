@@ -152,7 +152,7 @@ public class ModelGenerator extends RotaryModelBase
 		this.setRotation(Shape4a, 0F, 0F, 0F);
 		Shape5a = new ModelRenderer(this, 0, 58);
 		Shape5a.addBox(-5F, 0F, 0F, 10, 4, 7);
-		Shape5a.setRotationPoint(0F, 8.5F, 1F);
+		Shape5a.setRotationPoint(0F, 8.5F, 0.9F);
 		Shape5a.setTextureSize(128, 128);
 		Shape5a.mirror = true;
 		this.setRotation(Shape5a, 0F, 0F, 0F);

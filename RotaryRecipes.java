@@ -29,6 +29,7 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ThermalRecipeHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -39,7 +40,6 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
@@ -92,24 +92,10 @@ public class RotaryRecipes {
 		if (ModList.THERMALEXPANSION.isLoaded()) {
 			FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
 			int energy = 750;
-			NBTTagCompound toSend = new NBTTagCompound();
-			toSend.setInteger("energy", energy);
-			toSend.setCompoundTag("input", new NBTTagCompound());
-			toSend.setCompoundTag("output", new NBTTagCompound());
-			ItemRegistry.ETHANOL.getStackOf().writeToNBT(toSend.getCompoundTag("input"));
-			ethanol.writeToNBT(toSend.getCompoundTag("output"));
-			FMLInterModComms.sendMessage(ModList.THERMALEXPANSION.modLabel, "CrucibleRecipe", toSend);
+			ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
 
-			toSend = new NBTTagCompound();
-			toSend.setInteger("energy", 48000);
-			toSend.setCompoundTag("primaryInput", new NBTTagCompound());
-			toSend.setCompoundTag("secondaryInput", new NBTTagCompound());
-			toSend.setCompoundTag("primaryOutput", new NBTTagCompound());
-
-			ItemStacks.steelingot.copy().writeToNBT(toSend.getCompoundTag("primaryInput"));
-			ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy().writeToNBT(toSend.getCompoundTag("secondaryInput"));
-			ItemStacks.bedingot.copy().writeToNBT(toSend.getCompoundTag("primaryOutput"));
-			FMLInterModComms.sendMessage("ThermalExpansion", "SmelterRecipe", toSend);
+			ItemStack bedrock = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy();
+			ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);;
 
 			ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
 			ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);

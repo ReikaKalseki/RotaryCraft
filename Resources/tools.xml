@@ -71,4 +71,7 @@
 	<jumpboots>
 		Spring Boots give the wearer greater agility and mobility by increasing their effective jump height and sprinting speed. They also double as shock absorbers, dampening fall damage.
 	</jumpboots>
+	<tanks>
+		Backup fuel tanks allow you to carry some extra fuel for things like jetpacks in case of emergency. They can be filled in the filling station. Right-click to empty them into their target item.
+	</tanks>
 </tools>

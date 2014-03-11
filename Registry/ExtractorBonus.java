@@ -28,7 +28,7 @@ public enum ExtractorBonus {
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
 	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ModList.REACTORCRAFT, ExtractorModOres.getFlakeProduct(ModOreList.PITCHBLENDE), ModList.IC2, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM)), //Nod to gregtech
-	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.ironoreflakes, 0.125F),
+	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.goldoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.25F),
 	NETHERGOLD(ExtractorModOres.getSolutionProduct(ModOreList.NETHERGOLD), ItemStacks.silverflakes, 0.125F),
 	NETHERIRON(ExtractorModOres.getSolutionProduct(ModOreList.NETHERIRON), ItemStacks.aluminumpowder, 0.125F),
@@ -41,7 +41,14 @@ public enum ExtractorBonus {
 	PYRITE(ExtractorModOres.getSolutionProduct(ModOreList.PYRITE), ExtractorModOres.getFlakeProduct(ModOreList.SULFUR), 0.4F),
 	BAUXITE(ExtractorModOres.getSolutionProduct(ModOreList.BAUXITE), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.25F),
 	IRIDIUM(ExtractorModOres.getSolutionProduct(ModOreList.IRIDIUM), ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM), 0.5F),
-	TUNGSTEN(ExtractorModOres.getSolutionProduct(ModOreList.TUNGSTEN), ItemStacks.ironoreflakes, 0.75F);
+	TUNGSTEN(ExtractorModOres.getSolutionProduct(ModOreList.TUNGSTEN), ItemStacks.ironoreflakes, 0.75F),
+	OSMIUM(ExtractorModOres.getSolutionProduct(ModOreList.OSMIUM), ItemStacks.ironoreflakes, 0.125F),
+	LAPIS(ItemStacks.lapisoresolution, ItemStacks.aluminumpowder, 0.125F),
+	RUBY(ExtractorModOres.getSolutionProduct(ModOreList.RUBY), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.0625F),
+	SAPPHIRE(ExtractorModOres.getSolutionProduct(ModOreList.SAPPHIRE), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.0625F),
+	QUARTZ(ItemStacks.netherquartzsolution, ExtractorModOres.getFlakeProduct(ModOreList.CERTUSQUARTZ), 0.0625F),
+	CERTUS(ExtractorModOres.getSolutionProduct(ModOreList.CERTUSQUARTZ), ItemStacks.netherquartzflakes, 0.5F),
+	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F);
 
 	private static final ExtractorBonus[] bonusList = values();
 

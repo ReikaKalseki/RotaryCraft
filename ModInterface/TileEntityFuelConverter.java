@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -32,9 +32,9 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
 
-	private static final ItemStack[] ingredients =
-		{new ItemStack(Item.blazePowder.itemID, 1, 0), new ItemStack(RotaryCraft.powders.itemID, 1, 0),
-		new ItemStack(RotaryCraft.powders.itemID, 1, 1), new ItemStack(Item.magmaCream.itemID, 1, 0)};
+	private static final ItemStack[] ingredients = {
+		new ItemStack(Item.blazePowder), ItemStacks.netherrackdust, ItemStacks.tar, new ItemStack(Item.magmaCream)
+	};
 
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
@@ -93,8 +93,9 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	private boolean hasItems() {
 		for (int i = 0; i < ingredients.length; i++) {
-			if (!ReikaInventoryHelper.checkForItemStack(ingredients[i], inv, false))
+			if (!ReikaInventoryHelper.checkForItemStack(ingredients[i], inv, false)) {
 				return false;
+			}
 		}
 		return true;
 	}

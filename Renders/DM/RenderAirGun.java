@@ -25,7 +25,6 @@ public class RenderAirGun extends RotaryTERenderer
 {
 
 	private ModelAirGun AirGunModel = new ModelAirGun();
-	//private ModelAirGunV AirGunModelV = new ModelAirGunV();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -41,8 +40,6 @@ public class RenderAirGun extends RotaryTERenderer
 
 		ModelAirGun var14;
 		var14 = AirGunModel;
-		//ModelAirGunV var15;
-		//var14 = this.AirGunModelV;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/airguntex.png");
 
 		this.setupGL(tile, par2, par4, par6);

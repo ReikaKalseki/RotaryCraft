@@ -187,7 +187,7 @@ public class RenderProjector extends RotaryTERenderer {
 		ReikaRenderHelper.exitGeoDraw();
 		ReikaRenderHelper.disableLighting();
 		if (te.channel == -2)
-			ReikaTextureHelper.bindRawTexture(te.getCustomImagePath());
+			ReikaTextureHelper.bindRawTexture(RotaryCraft.class, te.getCustomImagePath());
 		else
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(te.channel)+".png");
 		GL11.glTranslated(0, voffset, 0);

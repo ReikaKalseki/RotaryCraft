@@ -146,33 +146,21 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
 			writex = x-1;
 			writey = y;
 			writez = z;
 			break;
 		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
 			writex = x+1;
 			writey = y;
 			writez = z;
 			break;
 		case 2:
-			readz = z+1;
-			readx = x;
-			ready = y;
 			writex = x;
 			writey = y;
 			writez = z-1;
 			break;
 		case 3:
-			readz = z-1;
-			readx = x;
-			ready = y;
 			writex = x;
 			writey = y;
 			writez = z+1;
@@ -275,6 +263,18 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
 		return type == PipeType.FLUID && with == ForgeDirection.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+	}
+
+	public int getFuelLevel() {
+		return tank.getLevel();
+	}
+
+	public int getMaxFuel() {
+		return tank.getCapacity();
+	}
+
+	public void addFuel(int amt) {
+		tank.addLiquid(amt, FluidRegistry.getFluid("fuel"));
 	}
 
 }

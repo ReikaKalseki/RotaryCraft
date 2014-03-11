@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
@@ -143,6 +144,17 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			tank.setFluidType(FluidRegistry.getFluid("rc ethanol"));
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
 			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
+		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FUELENGINE)
+			this.transferToFuelEngine((TileEntityFuelEngine)world.getBlockTileEntity(x, y+1, z));
+	}
+
+	private void transferToFuelEngine(TileEntityFuelEngine te) {
+		FluidStack liq = tank.getFluid();
+		int toadd = Math.min(liq.amount/4+1, te.getMaxFuel()-te.getFuelLevel());
+		if (toadd > 0) {
+			te.addFuel(toadd);
+			tank.removeLiquid(toadd);
+		}
 	}
 
 	private void transferToEngine(TileEntityEngine te) {
@@ -170,9 +182,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -185,9 +194,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		NBT.setBoolean("redstone", redstoneMode);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -263,6 +269,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("bioethanol")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("fuel")))
 			return true;
 		return false;
 	}
