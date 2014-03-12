@@ -258,7 +258,7 @@ public class RotaryCraft extends DragonAPIMod {
 		MinecraftForge.setToolClass(ItemRegistry.STEELPICK.getItemInstance(), "pickaxe", 2);
 		MinecraftForge.setToolClass(ItemRegistry.STEELSHOVEL.getItemInstance(), "shovel", 2);
 
-		FMLInterModComms.sendMessage("Thaumcraft", "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
+		FMLInterModComms.sendMessage(ModList.THAUMCRAFT.modLabel, "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
 
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
 		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);

@@ -44,6 +44,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -135,6 +136,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	private boolean isChoking = false;
 
 	private boolean isOn;
+
+	private StepTimer jetstarttimer = new StepTimer(479);
+	private long lastpower = 0;
 
 	private ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
@@ -630,13 +634,20 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	private boolean jetCheck(World world, int x, int y, int z) {
 		if (type == EngineType.JET) {
-			if (FOD >= 8)
+			if (FOD >= 8) {
+				jetstarttimer.reset();
 				return false;
+			}
 		}
-		if (fuel.getLevel() <= 0)
+		if (fuel.getLevel() <= 0) {
+			jetstarttimer.reset();
 			return false;
+		}
 		if (type == EngineType.JET)
 			RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
+		if (lastpower == 0) {
+			SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
+		}
 		return true;
 	}
 
@@ -797,7 +808,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				break;
 			}
 		}
-		else {
+		else if (this.canBeShutDown()) {
 			isOn = false;
 			this.updateSpeed(0, false);
 			//omega = 0;
@@ -807,16 +818,20 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				soundtick = 2000;
 			//timer.resetTicker("fuel");
 		}
+		else
+			this.updateSpeed(type.getSpeed(), true);
 	}
 
 	private void updateSpeed(int maxspeed, boolean revup) {
-		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
-			if (te != null) {
-				maxspeed *= te.getSpeedMultiplier();
+		if (this.canBeShutDown()) {
+			if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
+				TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+				if (te != null) {
+					maxspeed *= te.getSpeedMultiplier();
+				}
+				if (omega > maxspeed)
+					revup = false;
 			}
-			if (omega > maxspeed)
-				revup = false;
 		}
 		if (revup) {
 			if (omega < maxspeed) {
@@ -1072,8 +1087,12 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			else {
 				volume *= 0.125F;
 			}
-			if (type.jetNoise())
-				SoundRegistry.JET.playSoundAtBlock(world, x, y, z, volume, pitch*pitchMultiplier);
+			if (type.jetNoise()) {
+				if (jetstarttimer.getTick() >= jetstarttimer.getCap())
+					SoundRegistry.JET.playSoundAtBlock(world, x, y, z, volume, pitch*pitchMultiplier);
+				else
+					soundtick = 2000;
+			}
 			else
 				SoundRegistry.MICRO.playSoundAtBlock(world, x, y, z, volume, pitch*pitchMultiplier);
 		}
@@ -1122,13 +1141,16 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			power = (long)torque*(long)omega;
 		}
 
+		if (type == EngineType.JET && power > 0)
+			jetstarttimer.update();
+
 		float pitch = 1F;
 		float soundfactor = 1F;
 		if (type.isECUControllable()) {
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 				if (te != null) {
-					if (te.canProducePower()) {
+					if (te.canProducePower() || this.canBeShutDown()) {
 						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
 							//omega = (int)(omega*te.getSpeedMultiplier());
 							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
@@ -1146,7 +1168,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 						tempcap *= soundfactor;
 						timer.setCap("temperature", tempcap);
 					}
-					else {
+					else if (this.canBeShutDown()) {
 						//this.updateSpeed(0, false);
 						if (omega == 0)
 							torque = 0;
@@ -1157,9 +1179,11 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 							}
 						}
 						soundtick = 2000;
-
+						jetstarttimer.reset();
 						return;
 					}
+					else
+						this.updateSpeed(type.getSpeed(), true);
 				}
 			}
 		}
@@ -1198,6 +1222,16 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		}
 		else if (soundtick < type.getSoundLength(FOD, soundfactor))
 			soundtick = 2000;
+
+		lastpower = power;
+	}
+
+	private boolean canBeShutDown() {
+		if (type == EngineType.JET) {
+			//ReikaJavaLibrary.pConsole(jetstarttimer, Side.SERVER);
+			return jetstarttimer.getTick() >= jetstarttimer.getCap() || jetstarttimer.getTick() == 0 || fuel.isEmpty();
+		}
+		return true;
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z) {

@@ -317,7 +317,7 @@ public enum MachineRegistry {
 	private PowerReceivers receiver;
 	private TileEntity renderInstance;
 
-	public static final MachineRegistry[] machineList = MachineRegistry.values();
+	public static final MachineRegistry[] machineList = values();
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m) {
 		name = n;

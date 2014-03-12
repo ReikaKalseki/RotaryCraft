@@ -25,7 +25,8 @@
 		Diamond: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
-		These are the load limits for the shafts. Exceeding these will result in breakage.
+		These are the load limits for the shafts and gearboxes. Exceeding these will result in breakage. For a gearbox, both the input and output speeds and torques must be considered.
+		
 		Wood: %dNm at %d rad/s
 		Stone: %dNm at %d rad/s
 		Steel: %dNm at %d rad/s

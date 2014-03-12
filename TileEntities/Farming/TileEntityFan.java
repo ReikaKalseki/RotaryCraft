@@ -274,14 +274,22 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
 		if (mod != null && mod.isRipe(world, x, y, z)) {
-			ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
-			mod.removeOneSeed(li);
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-			metato = mod.harvestedMeta;
-			if (mod.isTileEntity())
-				mod.runTEHarvestCode(world, x, y, z);
-			else
-				world.setBlockMetadataWithNotify(x, y, z, metato, 3);
+			if (mod.destroyOnHarvest()) {
+				Block b = Block.blocksList[id];
+				ArrayList<ItemStack> li = b.getBlockDropped(world, x, y, z, meta, 0);
+				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
+				world.setBlock(x, y, z, 0);
+			}
+			else {
+				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
+				mod.removeOneSeed(li);
+				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
+				metato = mod.harvestedMeta;
+				if (mod.isTileEntity())
+					mod.runTEHarvestCode(world, x, y, z);
+				else
+					world.setBlockMetadataWithNotify(x, y, z, metato, 3);
+			}
 		}
 		if (crop != null && crop.isRipe(world.getBlockMetadata(x, y, z))) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
