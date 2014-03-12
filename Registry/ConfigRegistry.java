@@ -72,7 +72,7 @@ public enum ConfigRegistry implements ConfigList {
 	LOGBLOCKS("Log Block Placement and Removal", false),
 	PACKETDELAY("Sync Packet Interval in Ticks", 1),
 	FLOWSPEED("Fluid Flow Speed", 5),
-	CONVLOSS("Power Conversion Efficiency", 0.85F);
+	CONVLOSS("Power Conversion Efficiency", 1F);
 
 	private String label;
 	private boolean defaultState;
