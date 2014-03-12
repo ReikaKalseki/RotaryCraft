@@ -120,6 +120,8 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			return 0;
 		if (id == Block.waterlily.blockID)
 			return 0;
+		if (id == Block.sapling.blockID)
+			return meta&3;
 		return meta;
 	}
 

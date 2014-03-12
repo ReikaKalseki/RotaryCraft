@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -258,7 +259,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	public double getGenMJ() {
-		return power/ReikaBuildCraftHelper.getWattsPerMJ();
+		return power/ReikaBuildCraftHelper.getWattsPerMJ()*RotaryCraft.config.getConversionEngineEfficiency();
 	}
 
 }

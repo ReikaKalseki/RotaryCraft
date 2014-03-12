@@ -71,7 +71,8 @@ public enum ConfigRegistry implements ConfigList {
 	ALLOWBAN("Allow Build Blocking of Some Machines", false),
 	LOGBLOCKS("Log Block Placement and Removal", false),
 	PACKETDELAY("Sync Packet Interval in Ticks", 1),
-	FLOWSPEED("Fluid Flow Speed", 5);
+	FLOWSPEED("Fluid Flow Speed", 5),
+	CONVLOSS("Power Conversion Efficiency", 0.85F);
 
 	private String label;
 	private boolean defaultState;

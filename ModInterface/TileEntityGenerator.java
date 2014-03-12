@@ -16,6 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IEnergyInterface;
 import universalelectricity.core.electricity.ElectricityPack;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -112,7 +113,8 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 	}
 
 	public ElectricityPack getProduction() {
-		ElectricityPack e = new ElectricityPack(this.getGenCurrent(), OUTPUT_VOLTAGE);
+		float i = this.getGenCurrent()*RotaryCraft.config.getConversionEngineEfficiency();
+		ElectricityPack e = new ElectricityPack(i, OUTPUT_VOLTAGE);
 		return e;
 	}
 

@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -48,7 +49,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	public float getMJPerTick() {
-		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
+		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ())*RotaryCraft.config.getConversionEngineEfficiency();
 	}
 
 	@Override
@@ -177,9 +178,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored());
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -187,9 +185,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		pp.writeToNBT(NBT);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

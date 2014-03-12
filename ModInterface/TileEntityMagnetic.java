@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -160,7 +161,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	}
 
 	public float getRFPerTick() {
-		return (float)(this.getPowerLevel()*10/ReikaBuildCraftHelper.getWattsPerMJ());
+		return (float)(this.getPowerLevel()*10/ReikaBuildCraftHelper.getWattsPerMJ())*RotaryCraft.config.getConversionEngineEfficiency();
 	}
 
 	@Override
