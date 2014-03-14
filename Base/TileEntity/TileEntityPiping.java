@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
@@ -75,7 +74,6 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		if (!world.isRemote) {
 			flowTimer.update();
 			if (flowTimer.checkCap()) {
-				ReikaJavaLibrary.pConsole("hi");
 				this.intakeFluid(world, x, y, z);
 				this.dumpContents(world, x, y, z);
 			}

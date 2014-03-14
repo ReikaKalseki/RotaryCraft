@@ -193,9 +193,6 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		control[state] = side;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -204,9 +201,6 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		NBT.setIntArray("set", control);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
