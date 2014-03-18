@@ -29,5 +29,8 @@ public class LuaMethods {
 	private static final LuaMethod addNote = new LuaAddNote();
 	private static final LuaMethod clearChannel = new LuaClearChannel();
 	private static final LuaMethod getFuelTime = new LuaGetFuelTime();
+	private static final LuaMethod setJunction = new LuaSetJunction();
+	private static final LuaMethod setParticle = new LuaSetParticle();
+	private static final LuaMethod setCannon = new LuaSetCannon();
 
 }

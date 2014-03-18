@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Screwdriverable;
@@ -93,9 +94,9 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			Screwdriverable sc = (Screwdriverable)te;
 			boolean flag = false;
 			if (ep.isSneaking())
-				flag = sc.onShiftRightClick(world, x, y, z);
+				flag = sc.onShiftRightClick(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s]);
 			else
-				flag = sc.onRightClick(world, x, y, z);
+				flag = sc.onRightClick(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s]);
 			if (flag)
 				return true;
 		}

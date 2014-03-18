@@ -64,6 +64,12 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			if (pot == null || pot.getAmplifier() < SPEED_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, SPEED_LEVEL));
 			}
+			if (itemRand.nextInt(160) == 0) {
+				if (is.itemID != ItemRegistry.BEDJUMP.getShiftedID()) {
+					ep.setCurrentItemOrArmor(1, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+					this.warnCharge(is);
+				}
+			}
 		}
 	}
 

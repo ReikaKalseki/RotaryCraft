@@ -237,6 +237,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("Adding ThaumCraft aspects.");
 		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
 		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
+		ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
 
 		ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
 		ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);

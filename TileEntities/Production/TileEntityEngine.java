@@ -196,26 +196,26 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			switch(type) {
 			case STEAM:
 				if (water.getLevel() > 0 && temperature >= 100)
-					water.removeLiquid(RotaryConfig.MILLIBUCKET);
+					water.removeLiquid(10);
 				break;
 			case GAS:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
+					fuel.removeLiquid(10);
 				break;
 			case SPORT:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
+					fuel.removeLiquid(10);
 				if (rand.nextInt(6) == 0)
 					if (additives > 0)
 						additives--;
 				break;
 			case MICRO:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
+					fuel.removeLiquid(10);
 				break;
 			case JET:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
+					fuel.removeLiquid(10);
 				break;
 			default:
 				break;
@@ -837,7 +837,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			if (omega < maxspeed) {
 				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
 				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed+1, 2);
-				timer.setCap("fuel", type.getFuelUnitDuration()/4); //4x fuel burn while spinning up
+				timer.setCap("fuel", Math.max(type.getFuelUnitDuration()/4, 1)); //4x fuel burn while spinning up
 				if (omega > maxspeed)
 					omega = maxspeed;
 			}
@@ -1503,9 +1503,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				}
 			}
 			if (!world.isRemote) {
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, ConfigRegistry.BLOCKDAMAGE.getState());
+				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
 				for (int m = 0; m < 6; m++)
-					world.newExplosion(null, x-4+rand.nextInt(11), y-4+rand.nextInt(11), z-4+rand.nextInt(11), 4F+rand.nextFloat()*2, true, ConfigRegistry.BLOCKDAMAGE.getState());
+					world.newExplosion(null, x-4+rand.nextInt(11), y-4+rand.nextInt(11), z-4+rand.nextInt(11), 4F+rand.nextFloat()*2, true, true);
 			}
 		}
 	}
@@ -1583,21 +1583,21 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	public int getFuelDuration() {
 		if (!type.burnsFuel())
 			return -1;
-		int fuel = this.getFuelLevel()/RotaryConfig.MILLIBUCKET;
+		int fuel = this.getFuelLevel();
 		float burnprogress = 0;
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
-		int factor = type.getFuelUnitDuration()/timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
+		float factor = type.getFuelUnitDuration()/timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
 		if (factor <= 0)
 			return 0;
-		return (int)(fuel*type.getFuelUnitDuration()*(burnprogress))/20/factor;
+		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/RotaryConfig.MILLIBUCKET);
 	}
 
 	/** In seconds */
 	public int getFullTankDuration() {
 		if (!type.burnsFuel())
 			return -1;
-		return this.getFuelCapacity()*type.getFuelUnitDuration()/20;
+		return this.getFuelCapacity()*type.getFuelUnitDuration()*5;
 	}
 
 	@Override

@@ -18,7 +18,9 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -96,6 +98,12 @@ public class RecipesGrinder {
 		this.addRecipe(Block.oreDiamond, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 29), 0F);
 		this.addRecipe(Block.oreEmerald, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 30), 0F);
 		this.addRecipe(Block.oreNetherQuartz, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 31), 0.7F);
+
+		if (ModList.APPENG.isLoaded()) {
+			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
+			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
+			this.addRecipe(cry, dust, 0);
+		}
 
 		this.addRecipe(Item.coal, ItemStacks.coaldust, 0);
 	}

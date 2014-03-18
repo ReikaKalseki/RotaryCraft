@@ -108,7 +108,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@SuppressWarnings("unused")
-	public void suck(World world, int x, int y, int z) {
+	private void suck(World world, int x, int y, int z) {
 		AxisAlignedBB box = this.getBox(world, x, y, z);
 		List inbox = world.getEntitiesWithinAABB(EntityItem.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
@@ -120,11 +120,11 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				double dy = (y+0.5 - ent.posY);
 				double dz = (z+0.5 - ent.posZ);
 				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
-				ent.motionX += dx/ddt/ddt/2;
+				ent.motionX += dx/ddt/ddt/1;
 				ent.motionY += dy/ddt/ddt/2;
-				ent.motionZ += dz/ddt/ddt/2;
+				ent.motionZ += dz/ddt/ddt/1;
 				if (ent.posY < y)
-					ent.motionY += 0.1;
+					ent.motionY += 0.125;
 				if (!world.isRemote)
 					ent.velocityChanged = true;
 			}
@@ -148,7 +148,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		}
 	}
 
-	public void absorb(World world, int x, int y, int z) {
+	private void absorb(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
 		AxisAlignedBB close = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(0.25D, 0.25D, 0.25D);
@@ -183,7 +183,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		}
 	}
 
-	public int checkForStack(ItemStack is) {
+	private int checkForStack(ItemStack is) {
 		int target = -1;
 		int id = is.itemID;
 		int meta = is.getItemDamage();
@@ -231,7 +231,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		return false;
 	}
 
-	public AxisAlignedBB getBox(World world, int x, int y, int z) {
+	private AxisAlignedBB getBox(World world, int x, int y, int z) {
 		int expand = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(expand, expand, expand);
 		return box;

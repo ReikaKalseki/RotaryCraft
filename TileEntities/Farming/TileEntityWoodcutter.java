@@ -94,6 +94,15 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 						tree.clear();
 				}
 			}
+			if (tree.isEmpty()) {
+				for (int i = -1; i <= 1; i++) {
+					for (int j = -1; j <= 1; j++) {
+						tree.checkAndAddRainbowTree(world, editx+i, edity, editz+j);
+						if (tree.isEmpty() || !tree.isValidTree())
+							tree.clear();
+					}
+				}
+			}
 
 			if (tree.isEmpty()) {
 

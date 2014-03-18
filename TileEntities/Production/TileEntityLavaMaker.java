@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -22,19 +21,15 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, TemperatureTE, ConditionalOperation {
+public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, ConditionalOperation {
 
 	public static final int CAPACITY = 64000;
 
@@ -43,10 +38,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	public static final int MAXTEMP = 1500;
 
 	private long energy;
-
-	private int temperature;
-
-	private StepTimer timer = new StepTimer(20);
 
 	private static final HashMap<Integer, FluidStack> recipes = new HashMap();
 	private static final List<Integer> fuels = new ArrayList();
@@ -65,10 +56,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 			}
 			world.spawnParticle("crit", x+rand.nextDouble(), y, z+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 		}
-
-		timer.update();
-		if (timer.checkCap())
-			this.updateTemperature(world, x, y, z, meta);
 
 		if (energy/20 >= MELT_ENERGY) {
 			for (int i = 0; i < fuels.size(); i++) {
@@ -175,7 +162,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		tank.readFromNBT(NBT);
 
 		energy = NBT.getLong("e");
-		temperature = NBT.getInteger("temp");
 	}
 
 	@Override
@@ -185,67 +171,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		tank.writeToNBT(NBT);
 
 		NBT.setLong("e", energy);
-		NBT.setInteger("temp", temperature);
-	}
-
-	@Override
-	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
-		if (fireside != null) {
-			Tamb += 200;
-		}
-		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-		if (lavaside != null) {
-			Tamb += 600;
-		}
-		if (power > 0) {
-			temperature += 2.5*ReikaMathLibrary.logbase(power, 2);
-		}
-		if (temperature > Tamb) {
-			temperature -= (temperature-Tamb)/12;
-		}
-		else {
-			temperature += (Tamb-temperature)/12;
-		}
-		if (temperature - Tamb <= 4 && temperature > Tamb)
-			temperature--;
-		if (temperature > MAXTEMP) {
-			temperature = MAXTEMP;
-			this.overheat(world, x, y, z);
-		}
-		if (temperature > 50) {
-			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
-			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
-			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
-			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
-		}
-	}
-
-	@Override
-	public void addTemperature(int temp) {
-		temperature += temp;
-	}
-
-	@Override
-	public int getTemperature() {
-		return temperature;
-	}
-
-	@Override
-	public int getThermalDamage() {
-		return 0;
-	}
-
-	@Override
-	public void overheat(World world, int x, int y, int z) {
-		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, false);
-		if (tank.isEmpty())
-			world.setBlock(x, y, z, 0);
-		else
-			world.setBlock(x, y, z, Block.lavaMoving.blockID);
 	}
 
 	public boolean isEmpty() {

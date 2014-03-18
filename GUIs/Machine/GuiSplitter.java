@@ -33,7 +33,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		splitter = Splitter;
 		ySize = 140;
 		ep = p5ep;
-		mode = splitter.splitmode;
+		mode = splitter.getRatioFromMode();
 	}
 
 	@Override
@@ -41,21 +41,21 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		super.initGui();
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		buttonList.add(new GuiButton(0, j+8, -1+k+32, 72, 20, "31:1 Inline"));
-		buttonList.add(new GuiButton(1, j+8, -1+k+52, 72, 20, "15:1 Inline"));
-		buttonList.add(new GuiButton(2, j+8, -1+k+72, 72, 20, "7:1 Inline"));
-		buttonList.add(new GuiButton(3, j+8, -1+k+92, 72, 20, "3:1 Inline"));
+		buttonList.add(new GuiButton(32, j+8, -1+k+32, 72, 20, "31:1 Inline"));
+		buttonList.add(new GuiButton(16, j+8, -1+k+52, 72, 20, "15:1 Inline"));
+		buttonList.add(new GuiButton(8, j+8, -1+k+72, 72, 20, "7:1 Inline"));
+		buttonList.add(new GuiButton(4, j+8, -1+k+92, 72, 20, "3:1 Inline"));
 
-		buttonList.add(new GuiButton(8, j+52, -1+k+114, 72, 20, "1:1 Even"));
+		buttonList.add(new GuiButton(1, j+52, -1+k+114, 72, 20, "1:1 Even"));
 
-		buttonList.add(new GuiButton(4, j+96, -1+k+32, 72, 20, "1:31 Bend"));
-		buttonList.add(new GuiButton(5, j+96, -1+k+52, 72, 20, "1:15 Bend"));
-		buttonList.add(new GuiButton(6, j+96, -1+k+72, 72, 20, "1:7 Bend"));
-		buttonList.add(new GuiButton(7, j+96, -1+k+92, 72, 20, "1:3 Bend"));
+		buttonList.add(new GuiButton(-32, j+96, -1+k+32, 72, 20, "1:31 Bend"));
+		buttonList.add(new GuiButton(-16, j+96, -1+k+52, 72, 20, "1:15 Bend"));
+		buttonList.add(new GuiButton(-8, j+96, -1+k+72, 72, 20, "1:7 Bend"));
+		buttonList.add(new GuiButton(-4, j+96, -1+k+92, 72, 20, "1:3 Bend"));
 	}
 
 	public void updateMode(int md) {
-		splitter.splitmode = md;
+		splitter.setMode(md);
 	}
 
 	@Override

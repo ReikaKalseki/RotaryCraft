@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import cpw.mods.fml.relauncher.Side;
@@ -36,22 +35,7 @@ public class ItemNightVisionGoggles extends ItemChargedArmor {
 			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
 			if (itemRand.nextInt(160) == 0) {
 				ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
-				if (is.getItemDamage() == 2) {
-					ReikaChatHelper.clearChat();
-					ReikaChatHelper.write("Night-Vision Goggles charge is very low (2 kJ)!");
-				}
-				if (is.getItemDamage() == 4) {
-					ReikaChatHelper.clearChat();
-					ReikaChatHelper.write("Night-Vision Goggles charge is low (4 kJ)!");
-				}
-				if (is.getItemDamage() == 16) {
-					ReikaChatHelper.clearChat();
-					ReikaChatHelper.write("Night-Vision Goggles charge is low (16 kJ)!");
-				}
-				if (is.getItemDamage() == 32) {
-					ReikaChatHelper.clearChat();
-					ReikaChatHelper.write("Night-Vision Goggles charge is low (32 kJ)!");
-				}
+				this.warnCharge(is);
 			}
 		}
 	}

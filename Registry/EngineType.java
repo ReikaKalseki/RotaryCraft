@@ -221,17 +221,17 @@ public enum EngineType {
 	public int getFuelUnitDuration() {
 		switch(this) {
 		case STEAM:
-			return 1800;
+			return 18;
 		case GAS:
-			return 1200;
+			return 12;
 		case AC:
-			return 1200;
+			return 12;
 		case SPORT:
-			return 600;
+			return 6;
 		case MICRO:
-			return 2400;
+			return 24;
 		case JET:
-			return 225;
+			return 2;
 		default:
 			return 0;
 		}

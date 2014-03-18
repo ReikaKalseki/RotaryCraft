@@ -54,7 +54,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 
 	private MaterialRegistry type;
 
-	private final HybridTank tank;
+	private HybridTank tank = new HybridTank("gear", 24000);
 	private boolean failed;
 
 	private boolean lastPower;
@@ -63,7 +63,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		if (type == null)
 			type = MaterialRegistry.WOOD;
 		this.type = type;
-		tank = new HybridTank("gear", this.getMaxLubricant());
 	}
 
 	public TileEntityGearbox() {
@@ -188,6 +187,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
+
+		if ((world.getWorldTime()&31) == 0)
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
 			ratio = -ratio;
@@ -594,7 +596,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		if (this.canFill(from, resource.getFluid())) {
-			return tank.fill(resource, doFill);
+			int space = this.getMaxLubricant()-this.getLubricant();
+			if (space > 0) {
+				if (resource.amount > space)
+					resource = new FluidStack(resource.getFluid(), space);
+				return tank.fill(resource, doFill);
+			}
 		}
 		return 0;
 	}
@@ -629,7 +636,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	public void fillWithLubricant() {
-		tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("lubricant"));
+		tank.setContents(this.getMaxLubricant(), FluidRegistry.getFluid("lubricant"));
 	}
 
 	@Override

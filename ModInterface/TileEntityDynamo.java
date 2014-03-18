@@ -16,7 +16,6 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;
@@ -89,7 +88,6 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		long pwr = (long)tq*(long)om;
 		if (this.isFlexibleMode())
 			pwr = power;
-		pwr *= RotaryCraft.config.getConversionEngineEfficiency();
 		return (int)((float)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ()));
 	}
 

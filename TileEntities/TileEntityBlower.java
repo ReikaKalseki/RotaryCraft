@@ -131,22 +131,24 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 			if (this.isItemTransferrable(is)) {
 				int maxadd = Math.min(max-items, Math.min(is.getMaxStackSize(), target.getInventoryStackLimit()));
 				for (int i = 0; i < maxadd; i++) {
-					if (target instanceof ISidedInventory) {
-						if (((ISidedInventory) target).canInsertItem(slot, is, dir.getOpposite().ordinal())) {
+					if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
+						if (target instanceof ISidedInventory) {
+							if (((ISidedInventory) target).canInsertItem(slot, is, dir.getOpposite().ordinal())) {
+								if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
+									ReikaInventoryHelper.decrStack(slot, source, 1);
+									items += 1;
+								}
+							}
+						}
+						else {
 							if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
 								ReikaInventoryHelper.decrStack(slot, source, 1);
 								items += 1;
 							}
 						}
+						if (items >= max)
+							return;
 					}
-					else {
-						if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
-							ReikaInventoryHelper.decrStack(slot, source, 1);
-							items += 1;
-						}
-					}
-					if (items >= max)
-						return;
 				}
 			}
 		}

@@ -66,7 +66,7 @@ public class EntityGasMinecart extends EntityMinecart {
 
 		fueltick++;
 
-		if (fueltick >= EngineType.GAS.getFuelUnitDuration()) {
+		if (fueltick >= EngineType.GAS.getFuelUnitDuration()*25) {
 			fueltick = 0;
 			if (fuel > 0)
 				--fuel;

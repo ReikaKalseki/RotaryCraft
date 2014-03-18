@@ -17,7 +17,6 @@ import universalelectricity.api.energy.IEnergyInterface;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -142,7 +141,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 			type = Tier.LOW;
 		if (this.isGettingSufficientPower()) {
 			omega = type.outputSpeed;
-			torque = (int)(type.outputTorque*RotaryCraft.config.getConversionEngineEfficiency());
+			torque = type.outputTorque;
 			float pit = 1+((type.ordinal()-1)/3F);
 			float m = 1.025F;
 			if (type == Tier.LOW)

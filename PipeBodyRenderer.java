@@ -378,10 +378,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			}
 		}
 		v5.addTranslation(-x, -y, -z);
-		//GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 
-		//GL11.glTranslated(-x, -y, -z);
-		//GL11.glDisable(GL11.GL_BLEND);
+		//GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 
 	public void renderBlockInInventory(RenderableDuct tile, double par2, double par4, double par6) {

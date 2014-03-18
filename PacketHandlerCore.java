@@ -240,7 +240,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 				splitter = (TileEntitySplitter)te;
 				if (control == PacketRegistry.SPLITTER.getMinValue()) {
-					splitter.splitmode = data[0];
+					splitter.setMode(data[0]);
 				}
 			}
 			break;
@@ -514,7 +514,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				break;
 			case PARTICLES:
 				emitter = (TileEntityParticleEmitter)te;
-				emitter.particleType = ReikaParticleHelper.values()[data[0]];
+				emitter.particleType = ReikaParticleHelper.particleList[data[0]];
 				break;
 			case BLOWER:
 				blower = (TileEntityBlower)te;

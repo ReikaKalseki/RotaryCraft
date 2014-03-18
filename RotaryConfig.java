@@ -18,7 +18,6 @@ import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class RotaryConfig extends ControlledConfig {
@@ -55,14 +54,5 @@ public class RotaryConfig extends ControlledConfig {
 	@Override
 	protected void onInit() {
 
-	}
-
-	public float getConversionEngineEfficiency() {
-		float f = ConfigRegistry.CONVLOSS.getFloat();
-		if (f < 0.5F)
-			f = 0.5F;
-		if (f > 1F)
-			f = 1F;
-		return f;
 	}
 }

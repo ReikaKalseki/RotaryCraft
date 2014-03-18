@@ -30,7 +30,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	private int torquein2;
 	private int omegain2;
-	public int splitmode = 0;
+	private int splitmode = 0;
 
 
 	private int cheatCount = 0;
@@ -40,30 +40,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	private int pow2;
 
 	public int getRatioFromMode() {
-		switch(splitmode) {
-		case -1:
-			return 0; //if merge, return 0
-		case 0:
-			return 32; //31:1
-		case 4:
-			return -32; //31:1, favor bent
-		case 1:
-			return 16; //15:1
-		case 5:
-			return -16; //15:1, favor bent
-		case 2:
-			return 8; //7:1
-		case 6:
-			return -8; //7:1, favor bent
-		case 3:
-			return 4; //3:1
-		case 7:
-			return -4; //3:1, favor bent
-		case 8:
-			return 1; //1:1
-		default:
-			return 9999999; //will know something is wrong
-		}
+		return splitmode;
+	}
+
+	public void setMode(int mode) {
+		splitmode = mode;
 	}
 
 	/**
@@ -698,25 +679,23 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public String getRatioForDisplay() {
 		switch(splitmode) {
-		case -1:
-			return "";
-		case 0:
+		case 32:
 			return "31:1 Inline";
-		case 4:
+		case -32:
 			return "1:31 Bend";
-		case 1:
+		case 16:
 			return "15:1 Inline";
-		case 5:
+		case -16:
 			return "1:15 Bend";
-		case 2:
-			return "7:1 Inline";
-		case 6:
-			return "1:7 Bend";
-		case 3:
-			return "3:1 Inline";
-		case 7:
-			return "1:3 Bend";
 		case 8:
+			return "7:1 Inline";
+		case -8:
+			return "1:7 Bend";
+		case 4:
+			return "3:1 Inline";
+		case -4:
+			return "1:3 Bend";
+		case 1:
 			return "1:1 Even";
 		default:
 			return "ERROR";

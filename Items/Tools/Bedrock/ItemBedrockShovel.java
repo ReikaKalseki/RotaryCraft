@@ -51,6 +51,12 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	@Override
+	public int getItemEnchantability()
+	{
+		return Item.shovelIron.getItemEnchantability();
+	}
+
+	@Override
 	public float getStrVsBlock(ItemStack is, Block b) {
 		if (b == null)
 			return 0;
