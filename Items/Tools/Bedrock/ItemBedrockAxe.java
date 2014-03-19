@@ -85,6 +85,23 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		tree.setWorld(world);
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		if (id == TwilightForestHandler.getInstance().rootID) {
+			Block b = Block.blocksList[id];
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			for (int i = -2; i <= 2; i++) {
+				for (int j = -2; j <= 2; j++) {
+					for (int k = -2; k <= 2; k++) {
+						int id2 = world.getBlockId(x+i, y+j, z+k);
+						if (id2 == id) {
+							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
+							world.setBlock(x+i, y+j, z+k, 0);
+						}
+					}
+				}
+			}
+			return true;
+		}
 		ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(id, meta);
 		ModWoodList wood = ModWoodList.getModWood(id, meta);
 		tree.checkAndAddRainbowTree(world, x, y, z);
