@@ -277,4 +277,19 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 		tank.addLiquid(amt, FluidRegistry.getFluid("fuel"));
 	}
 
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
+
 }

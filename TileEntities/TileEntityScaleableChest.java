@@ -72,7 +72,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	}
 
 	public int getMaxPage() {
-		int size = this.getSizeInventory();
+		int size = this.getNumberSlots();
 		size /= 9D;
 		size /= MAXROWS;
 		return Math.min(this.getMaxPages(), (int)Math.ceil(size));

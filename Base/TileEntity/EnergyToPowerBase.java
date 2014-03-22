@@ -241,4 +241,19 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		return te;
 	}
 
+	@Override
+	public final int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public final int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public final int getEmittingZ() {
+		return writez;
+	}
+
 }

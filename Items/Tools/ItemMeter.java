@@ -24,7 +24,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftMachine;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
@@ -141,21 +140,21 @@ public class ItemMeter extends ItemRotaryTool
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.getLiquidLevel()/(double)RotaryConfig.MILLIBUCKET, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.getLiquidLevel()/1000D, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine clicked = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f L of fuel.", m.getName(), clicked.getLiquidLevel()/(double)RotaryConfig.MILLIBUCKET));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getLiquidLevel()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose clicked = (TileEntityHose)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f L of lubricant.", m.getName(), clicked.getLiquidLevel()/(double)RotaryConfig.MILLIBUCKET));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getLiquidLevel()/1000D));
 			return true;
 		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {

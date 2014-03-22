@@ -165,4 +165,19 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 		return dir == facingDir.getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
+
 }

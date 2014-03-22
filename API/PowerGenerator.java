@@ -19,4 +19,8 @@ public interface PowerGenerator {
 	/** The current power your machine is producing, in watts. */
 	public long getCurrentPower();
 
+	public int getEmittingX();
+	public int getEmittingY();
+	public int getEmittingZ();
+
 }

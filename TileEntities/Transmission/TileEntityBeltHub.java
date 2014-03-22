@@ -386,4 +386,19 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return target[2];
 	}
 
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
+
 }

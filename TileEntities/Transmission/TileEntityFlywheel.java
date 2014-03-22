@@ -495,4 +495,19 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public boolean canProvidePower() {
 		return true;
 	}
+
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
 }

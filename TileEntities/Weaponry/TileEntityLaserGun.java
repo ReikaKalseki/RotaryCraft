@@ -101,7 +101,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			int meta2 = this.getAffectedMetadata(id2, meta);
 			//ReikaJavaLibrary.pConsole(id+"  to  "+id2+"  @  "+x+", "+y+", "+z);
 			//ReikaJavaLibrary.pConsole(theta);
-			if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+			if (ConfigRegistry.ATTACKBLOCKS.getState()) {
 				if (id2 != id || meta2 != meta) {
 					world.setBlock(x, y, z, id2, meta2, 3);
 					world.markBlockForUpdate(x, y, z);

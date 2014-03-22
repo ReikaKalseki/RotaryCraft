@@ -70,7 +70,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
 		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ))));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
-		if (ReikaWorldHelper.softBlocks(id) && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, id) && ConfigRegistry.BLOCKDAMAGE.getState())
+		if (ReikaWorldHelper.softBlocks(id) && !ReikaMathLibrary.isValueInsideBoundsIncl(8, 11, id) && ConfigRegistry.ATTACKBLOCKS.getState())
 			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), id, -1, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), 4);
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
@@ -156,7 +156,7 @@ public class EntityRailGunShot extends EntityTurretShot {
 				for (int k = -3; k <= 3; k++) {
 					if (i*j*k < 9 && i*j*k > -9) {
 						//ReikaJavaLibrary.pConsole(ConfigRegistry.BLOCKDAMAGE.getState()+" with "+power+" on "+FMLCommonHandler.instance().getEffectiveSide());
-						if (ConfigRegistry.BLOCKDAMAGE.getState() && ConfigRegistry.RAILGUNDAMAGE.getState()) {
+						if (ConfigRegistry.ATTACKBLOCKS.getState() && ConfigRegistry.RAILGUNDAMAGE.getState()) {
 							int id = world.getBlockId(x0+i, y0+j, z0+k);
 							if (ReikaWorldHelper.softBlocks(world, x0+i, y0+j, z0+k) && !ReikaWorldHelper.isLiquidSourceBlock(worldObj, x0+i, y0+j, z0+k))
 								ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 5);

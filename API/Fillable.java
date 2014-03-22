@@ -29,4 +29,6 @@ public interface Fillable {
 
 	public boolean isFull(ItemStack is);
 
+	public Fluid getCurrentFluid(ItemStack is);
+
 }

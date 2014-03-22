@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -78,7 +79,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
-		if (y == 0)
+		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
 		int id = 0;
 		switch (metadata) {

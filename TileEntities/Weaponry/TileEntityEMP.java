@@ -294,7 +294,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			if (!rc.isShutdown())
 				rc.onEMP();
 		}
-		else if (ConfigRegistry.BLOCKDAMAGE.getState())
+		else if (ConfigRegistry.ATTACKBLOCKS.getState())
 			this.shutdownFallback(te);
 	}
 

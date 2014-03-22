@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import java.util.List;
 
+import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,6 +111,10 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
 		float sun = ReikaWorldHelper.getSunIntensity(worldObj);
+		if (worldObj.provider instanceof ISolarLevel) {
+			ISolarLevel isl = (ISolarLevel)worldObj.provider;
+			sun *= isl.getSolarEnergyMultiplier();
+		}
 		if (sun > 0.21) {
 			return (int)(15*sun);
 		}

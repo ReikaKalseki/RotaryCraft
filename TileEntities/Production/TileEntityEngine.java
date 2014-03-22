@@ -191,37 +191,40 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	private void consumeFuel() {
 		this.internalizeFuel();
-
 		if (timer.checkCap("fuel")) {
 			switch(type) {
 			case STEAM:
 				if (water.getLevel() > 0 && temperature >= 100)
-					water.removeLiquid(10);
+					water.removeLiquid(this.getConsumedFuel());
 				break;
 			case GAS:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(10);
+					fuel.removeLiquid(this.getConsumedFuel());
 				break;
 			case SPORT:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(10);
-				if (rand.nextInt(6) == 0)
+					fuel.removeLiquid(this.getConsumedFuel());
+				if (rand.nextInt(30) == 0)
 					if (additives > 0)
 						additives--;
 				break;
 			case MICRO:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(10);
+					fuel.removeLiquid(this.getConsumedFuel());
 				break;
 			case JET:
 				if (fuel.getLevel() > 0)
-					fuel.removeLiquid(10);
+					fuel.removeLiquid(this.getConsumedFuel());
 				break;
 			default:
 				break;
 			}
 
 		}
+	}
+
+	private int getConsumedFuel() {
+		return type == EngineType.JET ? 20 : 10;
 	}
 
 	private void internalizeFuel() {
@@ -645,7 +648,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		}
 		if (type == EngineType.JET)
 			RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
-		if (lastpower == 0) {
+		if (type == EngineType.JET && lastpower == 0) {
 			SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
 		}
 		return true;
@@ -1150,7 +1153,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 				if (te != null) {
-					if (te.canProducePower() || this.canBeShutDown()) {
+					if (te.canProducePower() && this.canBeShutDown()) {
 						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
 							//omega = (int)(omega*te.getSpeedMultiplier());
 							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
@@ -1172,7 +1175,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 						//this.updateSpeed(0, false);
 						if (omega == 0)
 							torque = 0;
-						power = omega*torque;
+						power = (long)omega*(long)torque;
 						if (type.hasTemperature()) {
 							if (timer.checkCap("temperature")) {
 								this.updateTemperature(world, x, y, z, meta);
@@ -1861,5 +1864,20 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	@Override
 	public boolean hasInventory() {
 		return type.hasInventory();
+	}
+
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
 	}
 }

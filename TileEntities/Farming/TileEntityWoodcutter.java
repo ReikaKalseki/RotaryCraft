@@ -113,6 +113,10 @@ public class TileEntityWoodcutter extends InventoriedPowerReceiver implements En
 				else if (wood == ModWoodList.DARKWOOD) {
 					tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
 				}
+				else if (wood == ModWoodList.IRONWOOD) {
+					for (int i = -2; i < 128; i += 16)
+						tree.addIronwood(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
+				}
 				else if (wood != null) {
 					for (int i = -1; i <= 1; i++) {
 						for (int j = -1; j <= 1; j++) {

@@ -290,4 +290,19 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return Flow.INPUT;
 	}
 
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
+
 }

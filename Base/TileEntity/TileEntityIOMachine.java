@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
@@ -23,7 +24,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
-public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
+public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implements IOMachine {
 
 	public int iotick = 512;
 
@@ -288,5 +289,35 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity {
 			return ForgeDirection.DOWN;
 
 		return ForgeDirection.UNKNOWN;
+	}
+
+	@Override
+	public int getWriteX() {
+		return writex;
+	}
+
+	@Override
+	public int getWriteY() {
+		return writey;
+	}
+
+	@Override
+	public int getWriteZ() {
+		return writez;
+	}
+
+	@Override
+	public int getWriteX2() {
+		return writex2;
+	}
+
+	@Override
+	public int getWriteY2() {
+		return writey2;
+	}
+
+	@Override
+	public int getWriteZ2() {
+		return writez2;
 	}
 }

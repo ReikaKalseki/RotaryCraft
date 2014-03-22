@@ -109,4 +109,9 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 		}
 	}
 
+	@Override
+	public Fluid getCurrentFluid(ItemStack is) {
+		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+	}
+
 }

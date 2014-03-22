@@ -66,9 +66,9 @@ public class SpecialConfigLoader {
 			p.close();
 		}
 		catch (Exception e) {
-			if (linecount >= 0)
-				ReikaJavaLibrary.pConsole("LINE "+linecount+":\n");
-			e.printStackTrace();
+			//if (linecount >= 0)
+			//ReikaJavaLibrary.pConsole("LINE "+linecount+":\n");
+			//e.printStackTrace();
 		}
 	}
 

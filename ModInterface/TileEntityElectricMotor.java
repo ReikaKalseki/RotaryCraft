@@ -265,4 +265,19 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	public long onExtractEnergy(ForgeDirection from, long extract, boolean doExtract) {
 		return 0;
 	}
+
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
 }

@@ -280,4 +280,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	public boolean isFull(ItemStack is) {
 		return this.getCurrentFillLevel(is) >= this.getCapacity(is);
 	}
+
+	@Override
+	public Fluid getCurrentFluid(ItemStack is) {
+		return this.getCurrentFillLevel(is) > 0 ? FluidRegistry.getFluid("rc ethanol") : null;
+	}
 }

@@ -155,4 +155,9 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 		return this.getCurrentFillLevel(is) >= this.getCapacity(is);
 	}
 
+	@Override
+	public Fluid getCurrentFluid(ItemStack is) {
+		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+	}
+
 }

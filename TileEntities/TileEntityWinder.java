@@ -120,9 +120,10 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	}
 
 	public int getOperationTime() {
+		if (inv[0] == null)
+			return 1;
 		int base = (int)ReikaMathLibrary.logbase(inv[0].getItemDamage(), 2);
 		double factor = 1D/(int)(ReikaMathLibrary.logbase(omega, 2));
-		//ReikaJavaLibrary.pConsole(factor);
 		return (int)(base*factor);
 	}
 

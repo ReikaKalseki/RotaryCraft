@@ -815,4 +815,19 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public boolean isCreative() {
 		return isCreative;
 	}
+
+	@Override
+	public int getEmittingX() {
+		return writex;
+	}
+
+	@Override
+	public int getEmittingY() {
+		return writey;
+	}
+
+	@Override
+	public int getEmittingZ() {
+		return writez;
+	}
 }

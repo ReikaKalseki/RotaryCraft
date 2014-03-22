@@ -99,13 +99,13 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d  %d", tile.getLiquidType(), tile.getLiquidLevel(), tile.getPressure()));
+				ReikaChatHelper.write(String.format("%s  %d  %d", tile.getLiquidType().getLocalizedName(), tile.getLiquidLevel(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.PUMP) {
 			TileEntityPump tile = (TileEntityPump)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d  %d", tile.getLevel() <= 0 ? 0 : tile.getLiquid().getID(), tile.getLevel()));
+				ReikaChatHelper.write(String.format("%s  %d", tile.getLevel() <= 0 ? 0 : tile.getLiquid().getLocalizedName(), tile.getLevel()));
 			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {

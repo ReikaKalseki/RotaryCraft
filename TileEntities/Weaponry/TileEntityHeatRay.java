@@ -191,7 +191,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				((Laserable)te).whenInBeam(power, step);
 			}
 		}
-		if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
 			if (id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");

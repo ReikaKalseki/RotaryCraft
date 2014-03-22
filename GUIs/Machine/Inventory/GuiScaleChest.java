@@ -46,7 +46,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		allowUserInput = false;
 		short var3 = 222;
 		int var4 = var3 - 108;
-		invsize = te.getSizeInventory();
+		invsize = te.getNumberSlots();
 		scale = te;
 		ySize = var4 + 18*scale.MAXROWS;//ReikaMathLibrary.extrema(numrows, scale.MAXROWS, "min")*18;
 		ep = p5ep;

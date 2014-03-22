@@ -101,7 +101,7 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	}
 
 	private int getAffectiveTemperature() {
-		return ConfigRegistry.BLOCKDAMAGE.getState() ? temperature : Math.min(700, temperature);
+		return ConfigRegistry.ATTACKBLOCKS.getState() ? temperature : Math.min(400, temperature);
 	}
 
 	@Override

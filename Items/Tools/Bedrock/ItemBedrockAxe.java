@@ -118,6 +118,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			else if (wood == ModWoodList.DARKWOOD) {
 				tree.addDarkForest(world, x, y, z, x-8, x+8, z-8, z+8, RotaryCraft.logger.shouldDebug());
 			}
+			else if (wood == ModWoodList.IRONWOOD) {
+				for (int i = -2; i < 128; i += 16)
+					tree.addIronwood(world, x, y+i, z, RotaryCraft.logger.shouldDebug());
+			}
 			else if (wood != null) {
 				tree.setModTree(wood);
 				tree.addModTree(world, x, y, z);

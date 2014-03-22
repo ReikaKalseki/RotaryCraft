@@ -47,7 +47,7 @@ public enum ConfigRegistry implements ConfigList {
 	MODORES("Force Inter-Mod Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
-	BLOCKDAMAGE("Direct Block Damage from Machines and Failures", true),
+	BLOCKDAMAGE("Direct Block Damage from Machine Failures", true),
 	DIFFICULTY("Difficulty Control", 2),
 	ALARM("Machine Warning Alarms", false),
 	BIOMEBLOCKS("Terraformer Block Editing", true),
@@ -71,7 +71,9 @@ public enum ConfigRegistry implements ConfigList {
 	ALLOWBAN("Allow Build Blocking of Some Machines", false),
 	LOGBLOCKS("Log Block Placement and Removal", false),
 	PACKETDELAY("Sync Packet Interval in Ticks", 1),
-	FLOWSPEED("Fluid Flow Speed", 5);
+	FLOWSPEED("Fluid Flow Speed", 5),
+	ATTACKBLOCKS("Block Damage from Destructive Machines", true),
+	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false);
 
 	private String label;
 	private boolean defaultState;
