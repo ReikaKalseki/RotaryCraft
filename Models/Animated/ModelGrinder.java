@@ -468,7 +468,7 @@ public class ModelGrinder extends RotaryModelBase
 		Shape23.setTextureSize(64, 32);
 		Shape23.mirror = true;
 		this.setRotation(Shape23, 0F, 0F, 0.7853982F);
-		Shape6 = new ModelRenderer(this, 98, 0);
+		Shape6 = new ModelRenderer(this, 98, 37);
 		Shape6.addBox(0F, 0F, 0F, 14, 12, 1);
 		Shape6.setRotationPoint(-7F, 11F, 7F);
 		Shape6.setTextureSize(64, 32);

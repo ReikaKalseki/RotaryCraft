@@ -378,9 +378,11 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			}
 		}
 		v5.addTranslation(-x, -y, -z);
+		v5.draw();
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		v5.startDrawingQuads();
 
 		//GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_CULL_FACE);
 		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 

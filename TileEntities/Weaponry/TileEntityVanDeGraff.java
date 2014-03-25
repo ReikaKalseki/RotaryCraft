@@ -61,29 +61,32 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 				if (id != 0) {
 					Block b = Block.blocksList[id];
 					Material mat = b.blockMaterial;
-					boolean flag = false;
-					if (b.hasTileEntity(metadata)) {
-						TileEntity te = world.getBlockTileEntity(dx, dy, dz);
-						if (te instanceof Shockable) {
-							flag = true;
-							this.dischargeToBlock(dx, dy, dz, (Shockable)te);
+					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+					if (m != MachineRegistry.VANDEGRAFF) {
+						boolean flag = false;
+						if (b.hasTileEntity(metadata)) {
+							TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+							if (te instanceof Shockable) {
+								flag = true;
+								this.dischargeToBlock(dx, dy, dz, (Shockable)te);
+							}
 						}
-					}
-					if (!flag) {
-						if (mat == Material.iron || mat == Material.anvil) {
-							this.dischargeToBlock(dx, dy, dz, null);
-						}
-						else if (mat == Material.water) {
-							this.dischargeToBlock(dx, dy, dz, null);
-						}
-						else if (id == Block.tnt.blockID) {
-							this.dischargeToBlock(dx, dy, dz, null);
-							world.setBlock(dx, dy, dz, 0);
-							EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
-							if (!world.isRemote)
-								world.spawnEntityInWorld(var6);
-							world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-							world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
+						if (!flag) {
+							if (mat == Material.iron || mat == Material.anvil) {
+								this.dischargeToBlock(dx, dy, dz, null);
+							}
+							else if (mat == Material.water) {
+								this.dischargeToBlock(dx, dy, dz, null);
+							}
+							else if (id == Block.tnt.blockID) {
+								this.dischargeToBlock(dx, dy, dz, null);
+								world.setBlock(dx, dy, dz, 0);
+								EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
+								if (!world.isRemote)
+									world.spawnEntityInWorld(var6);
+								world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
+								world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
+							}
 						}
 					}
 				}
@@ -128,7 +131,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			dy = s.getAimY();
 			dz = s.getAimZ();
 		}
-		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.35F, 1F);
+		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.25F, 1F);
 		EntityDischarge d = new EntityDischarge(worldObj, xCoord+0.5, yCoord+0.75, zCoord+0.5, charge, x+dx, y+dy, z+dz);
 		if (!worldObj.isRemote)
 			worldObj.spawnEntityInWorld(d);
@@ -149,7 +152,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 3F, true);
 			e.attackEntityFrom(DamageSource.magic, Integer.MAX_VALUE);
 		}
-		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1.5F, 1F);
+		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1.25F, 1F);
 	}
 
 	private int getAttackDamage() {

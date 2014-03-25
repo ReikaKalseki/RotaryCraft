@@ -141,15 +141,15 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		int mult = 1;
 		if (this.canMultiply(fluid)) {
 			if (power/MINPOWER >= 16)
-				mult++;
+				mult *= 2;
 			if (power/MINPOWER >= 64)
-				mult++;
+				mult *= 2;
 			if (power/MINPOWER >= 256)
-				mult++;
+				mult *= 2;
 			if (power/MINPOWER >= 1024)
-				mult++;
+				mult *= 2;
 			if (power/MINPOWER >= 4096)
-				mult++;
+				mult *= 2;
 		}
 		if (fluid.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());

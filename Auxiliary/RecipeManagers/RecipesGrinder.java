@@ -99,13 +99,15 @@ public class RecipesGrinder {
 		this.addRecipe(Block.oreEmerald, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 30), 0F);
 		this.addRecipe(Block.oreNetherQuartz, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 31), 0.7F);
 
+		this.addRecipe(Item.coal, ItemStacks.coaldust, 0);
+	}
+
+	public void addModRecipes() {
 		if (ModList.APPENG.isLoaded()) {
 			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
 			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
 			this.addRecipe(cry, dust, 0);
 		}
-
-		this.addRecipe(Item.coal, ItemStacks.coaldust, 0);
 	}
 
 	public boolean isGrindable(ItemStack item) {

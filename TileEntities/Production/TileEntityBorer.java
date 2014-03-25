@@ -142,10 +142,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			this.calcReqPower(world, x, y, z, meta);
 			if (power > reqpow && reqpow != -1) {
 				jammed = false;
-				if (!world.isRemote)
+				if (!world.isRemote) {
 					this.forceGenAndPopulate(world, x, y, z, meta);
 
-				this.dig(world, x, y, z, meta);
+					this.dig(world, x, y, z, meta);
+				}
 			}
 			else {
 				jammed = true;
@@ -167,6 +168,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			catch (ConcurrentModificationException e) {
 				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population due to a ConcurrentModificationException! Contact Reika with information on any mods that might be multithreading worldgen!");
+			}
+			catch (RuntimeException e) {
+				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population!");
+				e.printStackTrace();
 			}
 		}
 	}

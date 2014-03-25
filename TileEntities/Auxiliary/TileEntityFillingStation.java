@@ -47,8 +47,28 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 				this.fill();
 			}
 		}
+		//else if (this.hasContainer()) {
+		//	this.fillContainer();
+		//}
 
 		//ReikaJavaLibrary.pConsole(this.getSide()+":"+tank);
+	}
+
+	private boolean hasContainer() {
+		return inv[0] != null && FluidContainerRegistry.isContainer(inv[0]);
+	}
+
+	private void fillContainer() {
+		int maxadd = this.getFluidToAdd()*128;
+		ItemStack filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(tank.getActualFluid(), maxadd), inv[0]);
+		if (filled != null) {
+			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(filled);
+			if (fs != null && fs.amount > 0) {
+				int added = fs.amount;
+				tank.removeLiquid(added);
+				inv[0] = filled;
+			}
+		}
 	}
 
 	public boolean canMakeFuel() {
@@ -82,11 +102,13 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 		ItemStack is = inv[0];
 		Fillable i = (Fillable)is.getItem();
 		int added = i.addFluid(is, tank.getActualFluid(), this.getFluidToAdd());
-		tank.removeLiquid(added);
+		if (added > 0)
+			tank.removeLiquid(added);
 	}
 
 	private int getFluidToAdd() {
-		return (int)ReikaMathLibrary.logbase(omega, 2);
+		int toadd = (int)ReikaMathLibrary.logbase(omega, 2);
+		return Math.min(toadd, tank.getLevel());
 	}
 
 	private boolean hasFillable() {

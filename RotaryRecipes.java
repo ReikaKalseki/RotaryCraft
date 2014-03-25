@@ -35,6 +35,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -110,7 +111,7 @@ public class RotaryRecipes {
 	public static void addPostLoadRecipes() {
 
 		addProps();
-		//addCompat();
+		RecipesGrinder.getRecipes().addModRecipes();
 
 		if (ModList.TINKERER.isLoaded())
 			GameRegistry.addRecipe(new ItemStack(RotaryCraft.decoTank.blockID, 4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
