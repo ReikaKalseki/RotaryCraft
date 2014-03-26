@@ -24,7 +24,7 @@ public class RotaryNames {
 	};
 
 	private static final String[] advGearItemNames = {
-		"advgear.worm", "advgear.cvt", "advgear.coil"
+		"advgear.worm", "advgear.cvt", "advgear.coil", "advgear.hi"
 	};
 
 	private static final String[] hydraulicItemNames = {

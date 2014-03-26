@@ -122,6 +122,7 @@ public class TorqueUsage {
 					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
 						addToList(adv.getOutput(), tile, TEMapR.get(tile)/16);
 					}
+					break;
 				case CVT:
 					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
 						if (adv.getRatio() > 0) {
@@ -131,11 +132,18 @@ public class TorqueUsage {
 							addToList(adv.getOutput(), tile, TEMapR.get(tile)/-adv.getRatio());
 						}
 					}
+					break;
 				case COIL:
 					double amt = Math.sqrt(2*adv.getEnergy());
 					if (adv.isBedrockCoil())
 						amt *= 16;
 					torque += amt;
+					break;
+				case HIGH:
+					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
+						double D = adv.torquemode ? 256D : 1/256D;
+						addToList(adv.getOutput(), tile, TEMapR.get(tile)/D);
+					}
 				}
 			}
 			else if (tile instanceof TileEntityShaft) {

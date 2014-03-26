@@ -155,9 +155,9 @@ public abstract class BlockBasicMachine extends Block implements SidedTextureInd
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
-			if (tile.getGearType().isLubricated() && !tile.hasLubricant()) {
+			if (tile.getGearType().isLubricated()) {
 				if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-					tile.addLubricant();
+					tile.addLubricant(1000);
 					if (!ep.capabilities.isCreativeMode)
 						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 					return true;

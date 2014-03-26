@@ -107,20 +107,22 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
-		boolean bedrock = is.stackTagCompound != null && is.stackTagCompound.getBoolean("bedrock");
-		long max = TileEntityAdvancedGear.getMaxStorageCapacity(bedrock);
-		par3List.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
-		if (GearType.list[is.getItemDamage()].storesEnergy()) {
-			if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
-				par3List.add("Stored Energy: 0 J");
-			else {
-				if (is.stackTagCompound.getBoolean("creative")) {
-					par3List.add("Infinite power for creative mode:");
-					par3List.add("This coil does not deplete.");
-				}
+		if (TileEntityAdvancedGear.GearType.list[is.getItemDamage()].storesEnergy()) {
+			boolean bedrock = is.stackTagCompound != null && is.stackTagCompound.getBoolean("bedrock");
+			long max = TileEntityAdvancedGear.getMaxStorageCapacity(bedrock);
+			par3List.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
+			if (GearType.list[is.getItemDamage()].storesEnergy()) {
+				if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
+					par3List.add("Stored Energy: 0 J");
 				else {
-					long e = is.stackTagCompound.getLong("energy")/20;
-					par3List.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+					if (is.stackTagCompound.getBoolean("creative")) {
+						par3List.add("Infinite power for creative mode:");
+						par3List.add("This coil does not deplete.");
+					}
+					else {
+						long e = is.stackTagCompound.getLong("energy")/20;
+						par3List.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+					}
 				}
 			}
 		}

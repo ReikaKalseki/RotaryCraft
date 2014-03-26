@@ -19,6 +19,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -36,13 +42,15 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory {
+public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PipeConnector, IFluidHandler {
 
 	private boolean isReleasing = false;
 	private int releaseTorque = 0;
@@ -58,7 +66,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	private ItemStack[] belts = new ItemStack[31];
 
-	private boolean hasLubricant = false;
+	private final HybridTank lubricant = new HybridTank("advgear", 20000);
 
 	private CVTState[] cvtState = new CVTState[2];
 
@@ -69,6 +77,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	private boolean isCreative;
 
 	private StepTimer redstoneTimer = new StepTimer(20);
+
+	public boolean torquemode = true;
 
 	public void setController(CVTController c) {
 		controller = c;
@@ -113,12 +123,17 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public enum GearType {
 		WORM(),
 		CVT(),
-		COIL();
+		COIL(),
+		HIGH();
 
 		public static final GearType[] list = values();
 
 		public boolean isLubricated() {
-			return this == CVT;
+			return this == CVT || this == HIGH;
+		}
+
+		public boolean consumesLubricant() {
+			return this == HIGH;
 		}
 
 		public boolean hasLosses() {
@@ -138,12 +153,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return GearType.list[this.getBlockMetadata()/4];
 	}
 
-	public void addLubricant() {
-		hasLubricant = true;
+	public void addLubricant(int amt) {
+		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
 	public boolean hasLubricant() {
-		return hasLubricant;
+		return !lubricant.isEmpty();
 	}
 
 	//-ve ratio is torque mode for cvt
@@ -271,10 +286,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				ratio = torque ? r : -r;
 			}
 		}
-		if (this.getGearType() != GearType.COIL)
-			this.transferPower(world, x, y, z, meta);
-		else
+		if (this.getGearType().storesEnergy())
 			this.store(world, x, y, z, meta);
+		else
+			this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
 		//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 
@@ -507,7 +522,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			break;
 		case CVT:
 			int ratio = this.getCVTRatio();
-			if (hasLubricant) {
+			if (this.hasLubricant()) {
 				boolean speed = true;
 				if (ratio > 0) {
 					if (omegain <= RotaryConfig.omegalimit/ratio)
@@ -537,6 +552,35 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		case COIL:
 
 			break;
+		case HIGH:
+			if (this.hasLubricant()) {
+				if (torquemode) {
+					if (torquein <= RotaryConfig.torquelimit/256)
+						torque = torquein*256;
+					else {
+						torque = RotaryConfig.torquelimit;
+						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					}
+					omega = omegain/256;
+				}
+				else {
+					torque = torquein/256;
+					if (omegain <= RotaryConfig.omegalimit/256)
+						omega = omegain*256;
+					else {
+						omega = RotaryConfig.omegalimit;
+						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					}
+				}
+				if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
+					lubricant.removeLiquid((int)ReikaMathLibrary.logbase(Math.max(omega, torque), 2));
+			}
+			else {
+				omega = torque = 0;
+			}
+			break;
 		}
 	}
 
@@ -548,12 +592,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
-		NBT.setBoolean("lube", hasLubricant);
 		NBT.setBoolean("redstone", isRedstoneControlled);
 		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 		NBT.setBoolean("bedrock", isBedrockCoil);
 		NBT.setBoolean("creative", isCreative);
+		NBT.setBoolean("trq", torquemode);
+
+		lubricant.writeToNBT(NBT);
 	}
 
 	@Override
@@ -564,12 +610,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		energy = NBT.getLong("e");
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
-		hasLubricant = NBT.getBoolean("lube");
 		isRedstoneControlled = NBT.getBoolean("redstone");
 		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
 		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
 		isBedrockCoil = NBT.getBoolean("bedrock");
 		isCreative = NBT.getBoolean("creative");
+		torquemode = NBT.getBoolean("trq");
+
+		lubricant.readFromNBT(NBT);
 	}
 
 	@Override
@@ -829,5 +877,50 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public int getEmittingZ() {
 		return writez;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return this.getGearType().isLubricated() ? FluidRegistry.getFluid("lubricant").equals(fluid) : false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return this.getGearType().isLubricated() ? new FluidTankInfo[]{lubricant.getInfo()} : null;
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return this.getGearType().isLubricated() ? m == MachineRegistry.HOSE : false;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.getGearType().isLubricated() ? p == MachineRegistry.HOSE : false;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return this.canFill(from, resource.getFluid()) ? lubricant.fill(resource, doFill) : 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return this.getGearType().isLubricated() ? Flow.INPUT : Flow.NONE;
 	}
 }

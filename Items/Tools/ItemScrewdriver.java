@@ -138,10 +138,15 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {
 				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)te;
-				if (damage != 3 && damage != 7 && damage != 11)
-					clicked.setBlockMetadata(damage+1);
-				else
-					clicked.setBlockMetadata(damage-3);
+				if (ep.isSneaking()) {
+					clicked.torquemode = !clicked.torquemode;
+				}
+				else {
+					if (damage != 3 && damage != 7 && damage != 11)
+						clicked.setBlockMetadata(damage+1);
+					else
+						clicked.setBlockMetadata(damage-3);
+				}
 				return true;
 			}/*
 			if (m == MachineRegistry.HYDRAULIC) {
