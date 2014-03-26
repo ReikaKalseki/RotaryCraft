@@ -202,11 +202,12 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 					fuel.removeLiquid(this.getConsumedFuel());
 				break;
 			case SPORT:
-				if (fuel.getLevel() > 0)
+				if (fuel.getLevel() > 0) {
 					fuel.removeLiquid(this.getConsumedFuel());
-				if (rand.nextInt(30) == 0)
-					if (additives > 0)
-						additives--;
+					if (rand.nextInt(30) == 0)
+						if (additives > 0)
+							additives--;
+				}
 				break;
 			case MICRO:
 				if (fuel.getLevel() > 0)
