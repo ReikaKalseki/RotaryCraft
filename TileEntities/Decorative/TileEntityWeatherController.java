@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Decorative;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 
 	private int cooldown = 0;
 
-	private RainMode rainmode;
+	private RainMode rainmode = RainMode.NONE;
 
 	private static enum RainMode {
 		NONE(),
@@ -78,7 +78,6 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 				world.addWeatherEffect(new EntityLightningBolt(world, xl, yl, zl));
 			}
 		}
-
 		if (cooldown > 0)
 			return;
 		rainmode = this.getRainMode();
@@ -88,7 +87,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		if (!rainmode.hasAction())
 			return;
 		boolean isThunder = world.isThundering();
-		if (this.isAlready(world, rainmode))
+		if (this.isAlready(world))
 			return;
 		boolean rain = rainmode.isRain();
 		boolean thunder = rainmode.isThunder();
@@ -98,8 +97,12 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
 	}
 
-	private boolean isAlready(World world, RainMode rainmode) {
-		return rainmode == this.rainmode;
+	private boolean isAlready(World world) {
+		boolean rain = rainmode.isRain();
+		boolean thunder = rainmode.isThunder();
+		boolean rain2 = world.isRaining();
+		boolean thunder2 = world.isThundering();
+		return rain == rain2 && thunder == thunder2;
 	}
 
 	@Override
@@ -171,7 +174,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		else
 			rainmode = RainMode.NONE;
 		//ReikaJavaLibrary.pConsole(rainmode, Side.SERVER);
-		if (this.isAlready(worldObj, rainmode))
+		if (this.isAlready(worldObj))
 			return this.rainmode;
 		cooldown = 200+rand.nextInt(400);
 		if (rainmode.hasAction())
@@ -212,6 +215,9 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		if (is.itemID == Item.redstone.itemID)
 			return true;
 		if (is.itemID == Item.glowstone.itemID)
+			return true;
+		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
+		if (ReikaItemHelper.listContainsItemStack(li, is))
 			return true;
 		return false;
 	}

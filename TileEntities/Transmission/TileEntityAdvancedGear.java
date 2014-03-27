@@ -161,6 +161,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return !lubricant.isEmpty();
 	}
 
+	public boolean canAcceptAnotherLubricantBucket() {
+		return lubricant.getLevel()+1000 <= lubricant.getCapacity();
+	}
+
 	//-ve ratio is torque mode for cvt
 	@Override
 	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function

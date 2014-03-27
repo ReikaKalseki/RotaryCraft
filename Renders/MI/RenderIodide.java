@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelIodide;
-import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
 
 public class RenderIodide extends RotaryTERenderer
 {

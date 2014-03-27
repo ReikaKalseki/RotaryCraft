@@ -85,7 +85,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 	@Override
 	public void registerIcons(IconRegister ico) {
 		iconBlocks[0][0] = Block.planks.getIcon(0, 0);
-		iconBlocks[1][0] = RotaryCraft.decoblock.getIcon(0, 0);
+		iconBlocks[1][0] = ico.registerIcon("rotarycraft:steel");
 		iconBlocks[2][0] = Block.obsidian.getIcon(0, 0);
 		iconBlocks[4][0] = Block.blockRedstone.getIcon(0, 0);
 		iconBlocks[5][0] = Block.netherBrick.getIcon(0, 0);

@@ -30,6 +30,9 @@
 	<coil>
 		The industrial coil stores energy in a large spring that can be unwound on command with redstone. Due to the fact that its output torque and speed can be chosen at will within prescribed limits, it can be used to store energy for later or as a sort of capacitor, to store low-power energy accumulated over a long time and then release it in one powerful burst. Note that each coil type has a maximum storage capacity, and that exceeding that will result in an extremely violent release of all stored energy. This machine cannot simultaneously charge and release power; any power input while discharging is wasted.
 	</coil>
+	<higear>
+		The high-ratio gear allows you to create the effect of multiple chained gearboxes in a more compact space. Creating an enormous ratio of 256:1, it requires a large amount of lubricant to be able to turn, and must be made of bedrock to withstand the high stresses. Like a normal gearbox, it can be flipped between torque and speed by shift-right-clicking with the screwdriver.
+	</higear>
 	<multi>
 		The multi-clutch allows you to redirect power according to a redstone signal. Simply choose an output side for each signal strength from 0 to 15.
 	</multi>

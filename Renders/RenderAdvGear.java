@@ -92,6 +92,10 @@ public class RenderAdvGear extends RotaryTERenderer
 					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
 				var16.renderAll(null, 0, 0);
 				break;
+			case 4:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/highgeartex.png");
+				var17.renderAll(null, 0, 0);
+				break;
 			}
 			if (tile.isInWorld())
 				GL11.glDisable(GL12.GL_RESCALE_NORMAL);

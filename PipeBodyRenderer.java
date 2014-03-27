@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
@@ -49,8 +48,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		v5.startDrawingQuads();
 
 		Icon ico = block.getIcon(0, metadata);
-		if (block.blockID == MachineRegistry.PIPE.getBlockID() && metadata == MachineRegistry.PIPE.getMachineMetadata())
-			ico = RotaryCraft.decoblock.getIcon(0, 0);
 		Icon gico = block.getIcon(1, metadata);
 		if (ico == null)
 			ico = RotaryCraft.lightblock.getIcon(0, 0);

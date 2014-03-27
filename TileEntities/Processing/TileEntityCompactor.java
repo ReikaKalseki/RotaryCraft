@@ -171,10 +171,8 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	 */
 	public int getCookProgressScaled(int par1)
 	{
-		if (this.compressTime() != -1)
-			return (compactorCookTime * par1) / this.getOperationTime();
-		else
-			return 0;
+		int time = this.getOperationTime();
+		return time > 0 ? (compactorCookTime * par1) / time : 0;
 	}
 
 	public int getPressureScaled(int par1)

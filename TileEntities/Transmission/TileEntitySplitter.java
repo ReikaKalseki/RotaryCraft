@@ -30,7 +30,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	private int torquein2;
 	private int omegain2;
-	private int splitmode = 0;
+	private int splitmode = 1;
 
 
 	private int cheatCount = 0;
@@ -46,19 +46,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public void setMode(int mode) {
 		splitmode = mode;
 	}
-
-	/**
-	 * Returns block data at the location of this entity (client-only). Call parent one.
-	 *//*
-    public int getBlockMetadata()
-    {
-        if (this.blockMetadata == -1)
-        {
-            this.blockMetadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        }
-
-        return this.blockMetadata;
-    }*/
 
 	public boolean testForLoopCheat() { //logic: if for last 5 cycles lasttorque+torque2 = this.torque(now)
 		boolean allstep = true;

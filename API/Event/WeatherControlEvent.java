@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.API.Event;
 
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.TileEntityWeatherController;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
 
 public class WeatherControlEvent extends TileEntityEvent {
 

@@ -88,6 +88,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	WORM(MachineRegistry.ADVANCEDGEARS, 0),
 	CVT(MachineRegistry.ADVANCEDGEARS, 1),
 	COIL(MachineRegistry.ADVANCEDGEARS, 2),
+	HIGEAR(MachineRegistry.ADVANCEDGEARS, 3),
 	MULTI(MachineRegistry.MULTICLUTCH),
 	BELT(MachineRegistry.BELT),
 	BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
