@@ -158,6 +158,8 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 			tickcount = 2000;
 		}
 		power = (long)omega*(long)torque;
+
+		this.basicPowerReceiver();
 	}
 
 	public boolean addCoil() {

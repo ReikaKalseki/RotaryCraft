@@ -482,7 +482,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				else
 					torque = omega = 0;
 			}
-			power = torque*omega;
+			power = (long)torque*(long)omega;
 			this.writeToReceiver();
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d * %d = %d", this.omega, this.torque, this.power));
 		}
@@ -687,5 +687,35 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		default:
 			return "ERROR";
 		}
+	}
+
+	@Override
+	public int getWriteX() {
+		return this.isSplitting() ? writeinline[0] : writex;
+	}
+
+	@Override
+	public int getWriteY() {
+		return yCoord;
+	}
+
+	@Override
+	public int getWriteZ() {
+		return this.isSplitting() ? writeinline[1] : writez;
+	}
+
+	@Override
+	public int getWriteX2() {
+		return this.isSplitting() ? writebend[0] : writex2;
+	}
+
+	@Override
+	public int getWriteY2() {
+		return yCoord;
+	}
+
+	@Override
+	public int getWriteZ2() {
+		return this.isSplitting() ? writebend[1] : writez2;
 	}
 }

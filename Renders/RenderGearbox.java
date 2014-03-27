@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -20,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -27,6 +30,7 @@ import Reika.RotaryCraft.Models.Animated.ModelGearbox;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox16;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox4;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox8;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class RenderGearbox extends RotaryTERenderer
@@ -80,7 +84,7 @@ public class RenderGearbox extends RotaryTERenderer
 				break;
 			}
 
-			switch(tile.getBlockMetadata()%4) {
+			switch(tile.getBlockMetadata()&3) {
 			case 0:
 				var11 = 0;
 				break;
@@ -94,7 +98,6 @@ public class RenderGearbox extends RotaryTERenderer
 				var11 = 270;
 				break;
 			}
-
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 
 		}
@@ -205,6 +208,37 @@ public class RenderGearbox extends RotaryTERenderer
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 			this.renderLiquid(tile, par2, par4, par6);
+			//this.renderMode((TileEntityGearbox)tile, par2, par4, par6);
+		}
+	}
+
+	private void renderMode(TileEntityGearbox tile, double par2, double par4, double par6) {
+		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
+		boolean flag = ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf());
+		if (flag) {
+			int var11 = 0;
+			switch(tile.getBlockMetadata()&3) {
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
+			}
+			GL11.glTranslated(par2, par4, par6);
+			double sc = 0.1;
+			GL11.glScaled(sc, sc, sc);
+			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+			String s = tile.reduction ? "Torque" : "Speed";
+			Minecraft.getMinecraft().fontRenderer.drawString(s, 0, 0, 0xffffff);
+			GL11.glScaled(1/sc, 1/sc, 1/sc);
+			GL11.glTranslated(-par2, -par4, -par6);
 		}
 	}
 

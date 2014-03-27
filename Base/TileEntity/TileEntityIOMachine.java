@@ -245,7 +245,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	}
 
 	protected void writeToPowerReceiverAt(World world, int x, int y, int z, int om, int tq) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = this.getTileEntity(x, y, z);
 		if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
 				if (om > 0 && tq > 0)

@@ -47,7 +47,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	@Override
 	public boolean canHarvestBlock(Block b) {
-		return true;
+		return b.blockMaterial != Material.rock && b.blockMaterial != Material.iron;
 	}
 
 	@Override
