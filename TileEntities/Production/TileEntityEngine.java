@@ -49,6 +49,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -649,9 +650,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		}
 		if (type == EngineType.JET)
 			RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
-		if (type == EngineType.JET && lastpower == 0) {
-			SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
-		}
 		return true;
 	}
 
@@ -807,12 +805,17 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 						}
 					}
 				}
-				if (omega > 0)
+				if (omega > 0) {
 					this.ingest(world, x, y, z, meta);
+					ReikaJavaLibrary.pConsole(lastpower+":"+power, Side.SERVER);
+					if (lastpower == 0) {
+						SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
+					}
+				}
 				break;
 			}
 		}
-		else if (this.canBeShutDown()) {
+		else {
 			isOn = false;
 			this.updateSpeed(0, false);
 			//omega = 0;
@@ -822,20 +825,16 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				soundtick = 2000;
 			//timer.resetTicker("fuel");
 		}
-		else
-			this.updateSpeed(type.getSpeed(), true);
 	}
 
 	private void updateSpeed(int maxspeed, boolean revup) {
-		if (this.canBeShutDown()) {
-			if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
-				TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
-				if (te != null) {
-					maxspeed *= te.getSpeedMultiplier();
-				}
-				if (omega > maxspeed)
-					revup = false;
+		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
+			TileEntityEngineController te = (TileEntityEngineController)worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+			if (te != null) {
+				maxspeed *= te.getSpeedMultiplier();
 			}
+			if (omega > maxspeed)
+				revup = false;
 		}
 		if (revup) {
 			if (omega < maxspeed) {
@@ -1154,7 +1153,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
 				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
 				if (te != null) {
-					if (te.canProducePower() && this.canBeShutDown()) {
+					if (te.canProducePower()) {
 						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
 							//omega = (int)(omega*te.getSpeedMultiplier());
 							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
@@ -1172,7 +1171,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 						tempcap *= soundfactor;
 						timer.setCap("temperature", tempcap);
 					}
-					else if (this.canBeShutDown()) {
+					else {
 						//this.updateSpeed(0, false);
 						if (omega == 0)
 							torque = 0;
@@ -1184,10 +1183,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 						}
 						soundtick = 2000;
 						jetstarttimer.reset();
+						lastpower = power;
 						return;
 					}
-					else
-						this.updateSpeed(type.getSpeed(), true);
 				}
 			}
 		}
@@ -1228,14 +1226,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			soundtick = 2000;
 
 		lastpower = power;
-	}
-
-	private boolean canBeShutDown() {
-		if (type == EngineType.JET) {
-			//ReikaJavaLibrary.pConsole(jetstarttimer, Side.SERVER);
-			return jetstarttimer.getTick() >= jetstarttimer.getCap() || jetstarttimer.getTick() == 0 || fuel.isEmpty();
-		}
-		return true;
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z) {
