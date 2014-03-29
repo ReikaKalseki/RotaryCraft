@@ -47,7 +47,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
-	/** Rotational speed in radians per render tick. */
+	/** Rotational position. */
 	public float phi = 0;
 
 	/** For emp */

@@ -45,7 +45,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
 		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
@@ -85,7 +85,8 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			double dx = i*Math.cos(Math.toRadians(theta))*Math.cos(Math.toRadians(-phi+90));
 			double dy = i*Math.sin(Math.toRadians(theta));
 			double dz = i*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-phi+90));
-			AxisAlignedBB light = AxisAlignedBB.getAABBPool().getAABB(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(1, 1, 1);
+			int r = 1;
+			AxisAlignedBB light = AxisAlignedBB.getAABBPool().getAABB(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(r, r, r);
 			List in = world.getEntitiesWithinAABB(EntityLivingBase.class, light);
 			for (int k = 0; k < in.size(); k++) {
 				EntityLivingBase e = (EntityLivingBase)in.get(k);

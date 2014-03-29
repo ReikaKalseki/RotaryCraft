@@ -73,7 +73,7 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
-		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
+		AxisAlignedBB range = AxisAlignedBB.getAABBPool().getAABB(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
 		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, range);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
@@ -237,9 +237,9 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
+	public void writeToNBT(NBTTagCompound NBT)
 	{
-		super.writeSyncTag(NBT);
+		super.writeToNBT(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -257,13 +257,10 @@ public class TileEntityRailGun extends TileEntityAimedCannon implements ISidedIn
 		NBT.setTag("Items", nbttaglist);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
+	public void readFromNBT(NBTTagCompound NBT)
 	{
-		super.readSyncTag(NBT);
+		super.readFromNBT(NBT);
 
 		NBTTagList nbttaglist = NBT.getTagList("Items");
 		ammo = new ItemStack[this.getSizeInventory()];

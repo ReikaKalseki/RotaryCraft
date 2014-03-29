@@ -72,6 +72,8 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		//this.printSafeList();
 		super.updateTileEntity();
 		tickcount++;
+		if (worldObj.isRemote)
+			return;
 		switch(this.getBlockMetadata()) {
 		case 0:
 			this.getPowerBelow();
@@ -178,6 +180,13 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		super.writeSyncTag(NBT);
 		NBT.setFloat("theta", theta);
 		NBT.setInteger("direction", dir);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
 		NBT.setInteger("numsafe", numSafePlayers);
 
 		NBT.setBoolean("aim", isCustomAim);
@@ -187,15 +196,10 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		}
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
+	public void readFromNBT(NBTTagCompound NBT)
 	{
-		super.readSyncTag(NBT);
-		theta = NBT.getFloat("theta");
-		dir = NBT.getInteger("direction");
+		super.readFromNBT(NBT);
 
 		isCustomAim = NBT.getBoolean("aim");
 
@@ -204,6 +208,19 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		for (int i = 0; i < numSafePlayers; i++) {
 			safePlayers.add(NBT.getString("Safe_Player_"+String.valueOf(i)));
 		}
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+		theta = NBT.getFloat("theta");
+		dir = NBT.getInteger("direction");
+	}
+
+	@Override
+	public int getUpdatePacketRadius() {
+		return 128;
 	}
 
 	@Override

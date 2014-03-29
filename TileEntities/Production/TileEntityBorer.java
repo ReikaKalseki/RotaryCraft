@@ -28,6 +28,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -35,9 +36,11 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.IgnoredByBorer;
 import Reika.RotaryCraft.API.Event.BorerDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -55,8 +58,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction {
 
 	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
-
-	private static List<Integer> silkTouchBlacklist = new ArrayList<Integer>();
 
 	private int pipemeta2 = 0;
 
@@ -120,7 +121,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		}
 
 		if (jammed && tickcount%5 == 0) {
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.75F, 1F);
 			for (int i = 0; i < 6; i++) {
 				world.spawnParticle("smoke", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
 				world.spawnParticle("crit", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
@@ -128,7 +129,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		}
 
 		if (this.hasEnchantments()) {
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 6; i++) {
 				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
 			}
 		}
@@ -144,7 +145,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				jammed = false;
 				if (!world.isRemote) {
 					this.forceGenAndPopulate(world, x, y, z, meta);
-
 					this.dig(world, x, y, z, meta);
 				}
 			}
@@ -178,8 +178,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	private void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
 		int id = world.getBlockId(xread, yread, zread);
-		Material mat = world.getBlockMaterial(xread, yread, zread);
-		if (id != 0 && !(mat == Material.water || mat == Material.lava)) {
+		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
 			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
 			reqpow += (int)(DIGPOWER*10*hard);
 			mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
@@ -196,6 +195,21 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				reqpow = -1;
 			}
 		}
+	}
+
+	private boolean ignoreBlockExistence(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (id == 0)
+			return true;
+		Material mat = world.getBlockMaterial(x, y, z);
+		if (mat == Material.water || mat == Material.lava)
+			return true;
+		Block b = Block.blocksList[id];
+		if (b instanceof BlockFluid || b instanceof BlockFluidBase)
+			return true;
+		if (b instanceof IgnoredByBorer)
+			return ((IgnoredByBorer)b).ignoreHardness(world, world.provider.dimensionId, x, y, z, world.getBlockMetadata(x, y, z));
+		return false;
 	}
 
 	public static boolean isTwilightForestToughBlock(int id) {
@@ -235,7 +249,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 
 
-	public void support(World world, int x, int y, int z, int metadata) {
+	private void support(World world, int x, int y, int z, int metadata) {
 		int a = 0;
 		if (metadata > 1)
 			a = 1;
@@ -308,10 +322,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, meta)) {
-				int ismeta = 0;
-				if (this.matchMeta(id))
-					ismeta = meta;
-				ItemStack is = new ItemStack(id, 1, ismeta);
+				ItemStack is = new ItemStack(id, 1, this.getSilkTouchMetaDropped(id, meta));
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
 				}
@@ -328,10 +339,24 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return true;
 	}
 
-	private boolean matchMeta(int id) {
+	private int getSilkTouchMetaDropped(int id, int meta) {
 		if (id == Block.torchWood.blockID)
-			return false;
-		return true;
+			return 0;
+		if (id == Block.torchRedstoneActive.blockID || id == Block.torchRedstoneIdle.blockID)
+			return 0;
+		if (id == Block.leaves.blockID || id == Block.wood.blockID)
+			return meta&3;
+		if (id == Block.sapling.blockID)
+			return meta&3;
+		if (id == Block.vine.blockID)
+			return 0;
+		if (id == Block.waterlily.blockID)
+			return 0;
+		if (id == Block.pistonStickyBase.blockID || id == Block.pistonStickyBase.blockID)
+			return 0;
+		if (ReikaBlockHelper.isStairBlock(id))
+			return 0;
+		return meta;
 	}
 
 	private boolean canSilk(int id, int meta) {
@@ -339,20 +364,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (id == Block.fire.blockID)
 			return false;
-		Block b = Block.blocksList[id];
-		if (b.blockMaterial == Material.water)
+		if (id == Block.redstoneComparatorActive.blockID || id == Block.redstoneComparatorIdle.blockID)
 			return false;
-		if (b.blockMaterial == Material.lava)
+		if (id == Block.redstoneRepeaterActive.blockID || id == Block.redstoneRepeaterIdle.blockID)
+			return false;
+		if (id == Block.pistonExtension.blockID || id == Block.pistonMoving.blockID)
 			return false;
 		if (id == RotaryCraft.miningpipe.blockID)
 			return false;
 		if (BlockRegistry.isMachineBlock(id))
 			return false;
-		if (b instanceof BlockFluid)
+		Block b = Block.blocksList[id];
+		if (b instanceof BlockFluid || b instanceof BlockFluidBase)
 			return false;
 		if (b.hasTileEntity(meta))
-			return false;
-		if (silkTouchBlacklist.contains(id))
 			return false;
 		return true;
 	}
@@ -446,9 +471,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return enchantments;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -457,21 +479,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		NBT.setBoolean("drops", drops);
 		NBT.setInteger("step", step);
 		NBT.setBoolean("jam", jammed);
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 5; j++)
-				NBT.setBoolean("cut"+String.valueOf(i*7+j), cutShape[i][j]);
-		}
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -480,16 +489,40 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		drops = NBT.getBoolean("drops");
 		step = NBT.getInteger("step");
 		jammed = NBT.getBoolean("jam");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
+
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++)
-				cutShape[i][j] = NBT.getBoolean("cut"+String.valueOf(i*7+j));
+				NBT.setBoolean("cut"+String.valueOf(i*7+j), cutShape[i][j]);
 		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
 				enchantments.put(Enchantment.enchantmentsList[i], lvl);
 			}
+		}
+
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 5; j++)
+				cutShape[i][j] = NBT.getBoolean("cut"+String.valueOf(i*7+j));
 		}
 	}
 

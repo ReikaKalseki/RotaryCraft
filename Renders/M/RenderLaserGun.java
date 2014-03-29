@@ -61,7 +61,8 @@ public class RenderLaserGun extends RotaryTERenderer {
 		}
 		GL11.glTranslated(0, var12, 0);
 		GL11.glScaled(1, var11, 1);
-		var14.renderAll(null, -tile.phi, tile.theta);
+		int a = tile.getBlockMetadata() == 0 ? -1 : 1;
+		var14.renderAll(null, -tile.phi, a*tile.theta);
 		GL11.glScaled(1, var11, 1);
 		GL11.glTranslated(0, -var12, 0);
 		GL11.glFrontFace(GL11.GL_CCW);
