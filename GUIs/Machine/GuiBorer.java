@@ -37,29 +37,26 @@ public class GuiBorer extends GuiMachine
 {
 	public String dropstatus;
 	public boolean drops;
-	public int mode;
 
 	private TileEntityBorer borer;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
 	int y;
 	private boolean[][] dig = new boolean[7][5];
 	private int packetID;
 
-	public GuiBorer(EntityPlayer p5ep, TileEntityBorer Borer)
+	public GuiBorer(EntityPlayer p5ep, TileEntityBorer borer)
 	{
-		super(new CoreContainer(p5ep, Borer), Borer);
-		borer = Borer;
-		ySize = 148;
+		super(new CoreContainer(p5ep, borer), borer);
+		this.borer = borer;
+		ySize = 169;
 		xSize = 176;
 		dropstatus = "Drops On";
 		ep = p5ep;
 		drops = borer.drops;
-		mode = borer.mode;
 		for (int i = 0; i < 7; i++)
 			for (int l = 0; l < 5; l++)
-				dig[i][l] = Borer.cutShape[i][l];
+				dig[i][l] = borer.cutShape[i][l];
 	}
 
 	@Override
@@ -81,6 +78,7 @@ public class GuiBorer extends GuiMachine
 			}
 
 		buttonList.add(new GuiButton(8, j+14, -1+k+116, 72, 20, "Reset Pos'n"));
+		buttonList.add(new GuiButton(6, j+14, k+140, 148, 20, "Toggle All"));
 
 		if (drops)
 			buttonList.add(new GuiButton(7, j+90, -1+k+116, 72, 20, "Drops On"));
@@ -101,10 +99,6 @@ public class GuiBorer extends GuiMachine
 		this.sendPacket(PacketRegistry.BORER.getMinValue()+1);
 	}
 
-	public void updateMode(int md) {
-		borer.mode = (byte)md;
-	}
-
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
@@ -114,8 +108,6 @@ public class GuiBorer extends GuiMachine
 		if (button.id == 8)
 			this.sendPacket(PacketRegistry.BORER.getMinValue()+3);
 		if (button.id < 7) {
-			//this.updateMode(button.id);
-			mode = button.id;
 			this.sendPacket(PacketRegistry.BORER.getMinValue()+2);
 		}
 		if (button.id >= 10 && button.id < 50) {
@@ -157,7 +149,7 @@ public class GuiBorer extends GuiMachine
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			}
 			if (a == PacketRegistry.BORER.getMinValue()+2)
-				outputStream.writeInt(mode);
+				outputStream.writeInt(-1);
 			if (a > PacketRegistry.BORER.getMinValue()+2)
 				outputStream.writeInt(-1);
 			if (a == PacketRegistry.BORER.getMinValue()) {
@@ -214,26 +206,26 @@ public class GuiBorer extends GuiMachine
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
-		this.drawTexturedModalRect(xSize+var5-13, var6, 127, 4, 42, ySize);
+		this.drawTexturedModalRect(xSize+var5, var6+5, 0, 4, 42, 159);
 
 		long frac = ((borer.power*29L)/borer.MINPOWER);
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5-13, ySize+var6-132, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-132, 0, 0, (int)frac, 4);
 
 		frac = borer.omega*29L/borer.MINSPEED;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5-13, ySize+var6-73, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-73, 0, 0, (int)frac, 4);
 
 		frac = borer.torque*29L/borer.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5-13, ySize+var6-14, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-14, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20-13, var6+4, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20-13, var6+63, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20-13, var6+122, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+12, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+71, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+130, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", borer.power, borer.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

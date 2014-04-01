@@ -40,6 +40,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
+		//if ((world.getTotalWorldTime()&2) == 2) //halves load
 		this.scorch(world, x, y, z, meta);
 	}
 

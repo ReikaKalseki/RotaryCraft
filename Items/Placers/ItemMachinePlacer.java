@@ -28,7 +28,6 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
@@ -91,7 +90,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		te.placer = ep.getEntityName();
 		if (te instanceof TemperatureTE) {
-			int Tb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((TemperatureTE)te).addTemperature(Tb);
 		}
 		if (te instanceof PressureTE) {
@@ -150,7 +149,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
-		te.setFlipped(RotaryAux.shouldSetFlipped(world, x, y, z));
+		te.isFlipped = RotaryAux.shouldSetFlipped(world, x, y, z);
 		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR || m == MachineRegistry.MAGNETIC) {
 			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;

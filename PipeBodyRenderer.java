@@ -77,8 +77,13 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		for (int i = 0; i < 6; i++) {
 			if (renderPass == 0)
 				this.renderFace(tile, world, x, y, z, dirs[i]);
-			else if (tile.isFluidPipe())
-				this.renderLiquid(tile, x, y, z, dirs[i]);
+			else {
+				//Icon ico = tile.getOverlayIcon();
+				//if (ico != null)
+				//this.renderOverlay(tile, world, x, y, z, dirs[i], ico);
+				if (tile.isFluidPipe())
+					this.renderLiquid(tile, x, y, z, dirs[i]);
+			}
 		}
 		return true;
 	}
@@ -91,6 +96,60 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public int getRenderId() {
 		return renderID;
+	}
+
+	private void renderOverlay(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir, Icon ico) {
+		if (tile.isConnectionValidForSide(dir))
+			return;
+		Tessellator v5 = Tessellator.instance;
+		v5.draw();
+		ReikaTextureHelper.bindTerrainTexture();
+		float size = 0.75F/2F;
+
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float du = ico.getMaxU();
+		float dv = ico.getMaxV();
+
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		v5.startDrawingQuads();
+		v5.setColorOpaque(255, 255, 255);
+		v5.setBrightness(240);
+		v5.addTranslation(x, y, z);
+		v5.setNormal(dir.offsetX, dir.offsetY, dir.offsetZ);
+		switch(dir) {
+		case DOWN:
+			v5.addVertexWithUV(0.5+size, 0.5-size-0.001, 0.5+size, u, v);
+			v5.addVertexWithUV(0.5-size, 0.5-size-0.001, 0.5+size, du, v);
+			v5.addVertexWithUV(0.5-size, 0.5-size-0.001, 0.5-size, du, dv);
+			v5.addVertexWithUV(0.5+size, 0.5-size-0.001, 0.5-size, u, dv);
+			break;
+		case EAST:
+			break;
+		case NORTH:
+			break;
+		case SOUTH:
+			break;
+		case UP:
+			v5.addVertexWithUV(0.5+size, 0.5+size+0.001, 0.5-size, u, dv);
+			v5.addVertexWithUV(0.5-size, 0.5+size+0.001, 0.5-size, du, dv);
+			v5.addVertexWithUV(0.5-size, 0.5+size+0.001, 0.5+size, du, v);
+			v5.addVertexWithUV(0.5+size, 0.5+size+0.001, 0.5+size, u, v);
+			break;
+		case WEST:
+			break;
+		default:
+			break;
+		}
+		v5.addTranslation(-x, -y, -z);
+		v5.draw();
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		v5.startDrawingQuads();
 	}
 
 	private void renderLiquid(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
@@ -454,9 +513,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float gv2 = gico.getMaxV();
 		float dgu = gu2-gu;
 		float dgv = gv2-gv;
-
-		float guu = gu+dgu*dl;
-		float gvv = gv+dgv*dl;
+		float guu = gu+dgu/2;
+		float gvv = gv+dgv/2;
 
 		gu += dgu/8;
 		gv += dgv/8;
@@ -780,6 +838,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(lx, 1-dd, ly, gu, gv);
 				v5.addVertexWithUV(lx, 1-dd, my, gu, gv2);
 				v5.addVertexWithUV(mx, 1-dd, my, gu2, gv2);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(mx+0.5, 1-dd, ly, gu2, gv);
+					v5.addVertexWithUV(lx+0.5, 1-dd, ly, gu, gv);
+					v5.addVertexWithUV(lx+0.5, 1-dd, my, gu, gv2);
+					v5.addVertexWithUV(mx+0.5, 1-dd, my, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(mx-0.5, 1-dd, ly, gu2, gv);
+					v5.addVertexWithUV(lx-0.5, 1-dd, ly, gu, gv);
+					v5.addVertexWithUV(lx-0.5, 1-dd, my, gu, gv2);
+					v5.addVertexWithUV(mx-0.5, 1-dd, my, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(mx, 1-dd, ly+0.5, gu2, gv);
+					v5.addVertexWithUV(lx, 1-dd, ly+0.5, gu, gv);
+					v5.addVertexWithUV(lx, 1-dd, my+0.5, gu, gv2);
+					v5.addVertexWithUV(mx, 1-dd, my+0.5, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(mx, 1-dd, ly-0.5, gu2, gv);
+					v5.addVertexWithUV(lx, 1-dd, ly-0.5, gu, gv);
+					v5.addVertexWithUV(lx, 1-dd, my-0.5, gu, gv2);
+					v5.addVertexWithUV(mx, 1-dd, my-0.5, gu2, gv2);
+				}
 				break;
 			case NORTH:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
@@ -814,6 +897,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(lx, my, 1-dd, gu, gv2);
 				v5.addVertexWithUV(lx, ly, 1-dd, gu, gv);
 				v5.addVertexWithUV(mx, ly, 1-dd, gu2, gv);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(mx+0.5, my, 1-dd, gu2, gv2);
+					v5.addVertexWithUV(lx+0.5, my, 1-dd, gu, gv2);
+					v5.addVertexWithUV(lx+0.5, ly, 1-dd, gu, gv);
+					v5.addVertexWithUV(mx+0.5, ly, 1-dd, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(mx-0.5, my, 1-dd, gu2, gv2);
+					v5.addVertexWithUV(lx-0.5, my, 1-dd, gu, gv2);
+					v5.addVertexWithUV(lx-0.5, ly, 1-dd, gu, gv);
+					v5.addVertexWithUV(mx-0.5, ly, 1-dd, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(mx, my+0.5, 1-dd, gu2, gv2);
+					v5.addVertexWithUV(lx, my+0.5, 1-dd, gu, gv2);
+					v5.addVertexWithUV(lx, ly+0.5, 1-dd, gu, gv);
+					v5.addVertexWithUV(mx, ly+0.5, 1-dd, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(mx, my-0.5, 1-dd, gu2, gv2);
+					v5.addVertexWithUV(lx, my-0.5, 1-dd, gu, gv2);
+					v5.addVertexWithUV(lx, ly-0.5, 1-dd, gu, gv);
+					v5.addVertexWithUV(mx, ly-0.5, 1-dd, gu2, gv);
+				}
 				break;
 			case EAST:
 				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
@@ -848,6 +956,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(1-dd, ly, lx, gu, gv);
 				v5.addVertexWithUV(1-dd, my, lx, gu, gv2);
 				v5.addVertexWithUV(1-dd, my, mx, gu2, gv2);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(1-dd, ly, mx+0.5, gu2, gv);
+					v5.addVertexWithUV(1-dd, ly, lx+0.5, gu, gv);
+					v5.addVertexWithUV(1-dd, my, lx+0.5, gu, gv2);
+					v5.addVertexWithUV(1-dd, my, mx+0.5, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(1-dd, ly, mx-0.5, gu2, gv);
+					v5.addVertexWithUV(1-dd, ly, lx-0.5, gu, gv);
+					v5.addVertexWithUV(1-dd, my, lx-0.5, gu, gv2);
+					v5.addVertexWithUV(1-dd, my, mx-0.5, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(1-dd, ly-0.5, mx, gu2, gv);
+					v5.addVertexWithUV(1-dd, ly-0.5, lx, gu, gv);
+					v5.addVertexWithUV(1-dd, my-0.5, lx, gu, gv2);
+					v5.addVertexWithUV(1-dd, my-0.5, mx, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(1-dd, ly+0.5, mx, gu2, gv);
+					v5.addVertexWithUV(1-dd, ly+0.5, lx, gu, gv);
+					v5.addVertexWithUV(1-dd, my+0.5, lx, gu, gv2);
+					v5.addVertexWithUV(1-dd, my+0.5, mx, gu2, gv2);
+				}
 				break;
 			case WEST:
 				if (!tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
@@ -882,6 +1015,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(dd, my, lx, gu, gv2);
 				v5.addVertexWithUV(dd, ly, lx, gu, gv);
 				v5.addVertexWithUV(dd, ly, mx, gu2, gv);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(dd, my, mx+0.5, gu2, gv2);
+					v5.addVertexWithUV(dd, my, lx+0.5, gu, gv2);
+					v5.addVertexWithUV(dd, ly, lx+0.5, gu, gv);
+					v5.addVertexWithUV(dd, ly, mx+0.5, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(dd, my, mx-0.5, gu2, gv2);
+					v5.addVertexWithUV(dd, my, lx-0.5, gu, gv2);
+					v5.addVertexWithUV(dd, ly, lx-0.5, gu, gv);
+					v5.addVertexWithUV(dd, ly, mx-0.5, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(dd, my-0.5, mx, gu2, gv2);
+					v5.addVertexWithUV(dd, my-0.5, lx, gu, gv2);
+					v5.addVertexWithUV(dd, ly-0.5, lx, gu, gv);
+					v5.addVertexWithUV(dd, ly-0.5, mx, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(dd, my+0.5, mx, gu2, gv2);
+					v5.addVertexWithUV(dd, my+0.5, lx, gu, gv2);
+					v5.addVertexWithUV(dd, ly+0.5, lx, gu, gv);
+					v5.addVertexWithUV(dd, ly+0.5, mx, gu2, gv);
+				}
 				break;
 			case UP:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
@@ -916,6 +1074,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(lx, dd, my, gu, gv2);
 				v5.addVertexWithUV(lx, dd, ly, gu, gv);
 				v5.addVertexWithUV(mx, dd, ly, gu2, gv);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(mx+0.5, dd, my, gu2, gv2);
+					v5.addVertexWithUV(lx+0.5, dd, my, gu, gv2);
+					v5.addVertexWithUV(lx+0.5, dd, ly, gu, gv);
+					v5.addVertexWithUV(mx+0.5, dd, ly, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(mx-0.5, dd, my, gu2, gv2);
+					v5.addVertexWithUV(lx-0.5, dd, my, gu, gv2);
+					v5.addVertexWithUV(lx-0.5, dd, ly, gu, gv);
+					v5.addVertexWithUV(mx-0.5, dd, ly, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.NORTH)) {
+					v5.addVertexWithUV(mx, dd, my+0.5, gu2, gv2);
+					v5.addVertexWithUV(lx, dd, my+0.5, gu, gv2);
+					v5.addVertexWithUV(lx, dd, ly+0.5, gu, gv);
+					v5.addVertexWithUV(mx, dd, ly+0.5, gu2, gv);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.SOUTH)) {
+					v5.addVertexWithUV(mx, dd, my-0.5, gu2, gv2);
+					v5.addVertexWithUV(lx, dd, my-0.5, gu, gv2);
+					v5.addVertexWithUV(lx, dd, ly-0.5, gu, gv);
+					v5.addVertexWithUV(mx, dd, ly-0.5, gu2, gv);
+				}
 				break;
 			case SOUTH:
 				if (!tile.isConnectionValidForSide(ForgeDirection.WEST)) {
@@ -950,6 +1133,31 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 				v5.addVertexWithUV(lx, ly, dd, gu, gv);
 				v5.addVertexWithUV(lx, my, dd, gu, gv2);
 				v5.addVertexWithUV(mx, my, dd, gu2, gv2);
+
+				if (tile.isConnectionValidForSide(ForgeDirection.EAST)) {
+					v5.addVertexWithUV(mx+0.5, ly, dd, gu2, gv);
+					v5.addVertexWithUV(lx+0.5, ly, dd, gu, gv);
+					v5.addVertexWithUV(lx+0.5, my, dd, gu, gv2);
+					v5.addVertexWithUV(mx+0.5, my, dd, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.WEST)) {
+					v5.addVertexWithUV(mx-0.5, ly, dd, gu2, gv);
+					v5.addVertexWithUV(lx-0.5, ly, dd, gu, gv);
+					v5.addVertexWithUV(lx-0.5, my, dd, gu, gv2);
+					v5.addVertexWithUV(mx-0.5, my, dd, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.DOWN)) {
+					v5.addVertexWithUV(mx, ly+0.5, dd, gu2, gv);
+					v5.addVertexWithUV(lx, ly+0.5, dd, gu, gv);
+					v5.addVertexWithUV(lx, my+0.5, dd, gu, gv2);
+					v5.addVertexWithUV(mx, my+0.5, dd, gu2, gv2);
+				}
+				if (tile.isConnectionValidForSide(ForgeDirection.UP)) {
+					v5.addVertexWithUV(mx, ly-0.5, dd, gu2, gv);
+					v5.addVertexWithUV(lx, ly-0.5, dd, gu, gv);
+					v5.addVertexWithUV(lx, my-0.5, dd, gu, gv2);
+					v5.addVertexWithUV(mx, my-0.5, dd, gu2, gv2);
+				}
 				break;
 			default:
 				break;

@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -20,19 +19,15 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public class TileEntityPipe extends TileEntityPiping {
 
 	private Fluid liquid;
 	private int liquidLevel = 0;
-	private int fluidPressure = 0;
-	public int fluidrho;
 
 	public static final int HORIZLOSS = 1*0;	// all are 1(friction)+g (10m) * delta h (0 or 1m)
 	public static final int UPLOSS = 1*0;
@@ -43,19 +38,12 @@ public class TileEntityPipe extends TileEntityPiping {
 	public static final int DOWNPRESSURE = 0;
 
 	public int getPressure() {
-		return fluidPressure;
+		return 101300+(liquidLevel*24);
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
-		fluidrho = this.getDensity();
-		if (fluidPressure > 0 && tickcount > 40) {
-			fluidPressure--;
-			tickcount = 0;
-		}
-		if (fluidPressure < 0)
-			fluidPressure = 0;
 
 		if (ModList.BCFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
 			if (this.contains(FluidRegistry.getFluid("uranium hexafluoride")) || this.contains(FluidRegistry.getFluid("hydrofluoric acid"))) {
@@ -79,28 +67,8 @@ public class TileEntityPipe extends TileEntityPiping {
 		}
 	}
 
-	public int getDensity() {
-		if (FluidRegistry.LAVA.equals(liquid))
-			return (int)ReikaEngLibrary.rholava/100;
-		if (FluidRegistry.WATER.equals(liquid))
-			return (int)ReikaEngLibrary.rhowater/100;
-		return liquid != null ? liquid.getDensity() : 0;
-	}
-
 	@Override
 	protected void onIntake(TileEntity te) {
-		if (te instanceof TileEntityPump) {
-			TileEntityPump tile = (TileEntityPump)te;
-			fluidPressure = tile.liquidPressure;
-		}
-		else if (te instanceof TileEntityPipe) {
-			TileEntityPipe tile = (TileEntityPipe)te;
-			int dp = tile.fluidPressure-fluidPressure;
-			if (dp > 0) {
-				fluidPressure += dp/4;
-			}
-		}
-
 		if (liquid != null) {
 			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
 
@@ -116,20 +84,6 @@ public class TileEntityPipe extends TileEntityPiping {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
-		NBT.setInteger("pressure", fluidPressure);
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
-		super.readSyncTag(NBT);
-		fluidPressure = NBT.getInteger("pressure");
 	}
 
 	@Override

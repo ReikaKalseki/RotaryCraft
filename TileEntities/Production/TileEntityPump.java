@@ -50,19 +50,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	private HybridTank tank = new HybridTank("pump", CAPACITY);
 
-	public int liquidPressure = 0;
-
 	/** Rate of conversion - one power++ = one tick-- per operation */
 	public static final int FALLOFF = 256; //256W per 1 kPa
-
-	public void getPressure() {
-		int overPower = (int)(power-MINPOWER);
-		if (overPower <= 0) {
-			liquidPressure = 0;
-			return;
-		}
-		liquidPressure = 101+overPower/FALLOFF;
-	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -86,7 +75,6 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (damage > 400)
 			power = 0;
-		this.getPressure();
 		//ReikaJavaLibrary.pConsole(FMLCommonHandler.instance().getEffectiveSide()+" for "+blocks.getSize());
 		if (blocks.isEmpty())
 			return;
@@ -209,7 +197,6 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 		tank.writeToNBT(NBT);
 
-		NBT.setInteger("pressure", liquidPressure);
 		NBT.setInteger("dmg", damage);
 	}
 
@@ -223,7 +210,6 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 		tank.readFromNBT(NBT);
 
-		liquidPressure = NBT.getInteger("pressure");
 		damage = NBT.getInteger("dmg");
 	}
 
@@ -250,7 +236,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*liquidPressure/1000;
+		return 0;
 	}
 
 	@Override

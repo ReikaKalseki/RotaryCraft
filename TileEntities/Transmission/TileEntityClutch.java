@@ -124,14 +124,4 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	public int getRedstoneOverride() {
 		return 0;
 	}
-
-	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
-	}
 }

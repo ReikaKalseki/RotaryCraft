@@ -178,7 +178,7 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		GL11.glTranslated(0, -2, -1);
 
-		if (tile.isInWorld() && tile.isFlipped() && MinecraftForgeClient.getRenderPass() == 0) {
+		if (tile.isInWorld() && tile.isFlipped && MinecraftForgeClient.getRenderPass() == 0) {
 			GL11.glRotated(180, 1, 0, 0);
 			GL11.glTranslated(0, -2, 0);
 		}

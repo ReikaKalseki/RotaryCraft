@@ -51,7 +51,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		int r = this.getRange();
 
 		if (r > 0) {
-			for (int i = 2; i < 6; i++) {
+			for (int i = 1; i < 6; i++) {
 				ForgeDirection dir = dirs[i];
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
@@ -63,30 +63,30 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 					Material mat = b.blockMaterial;
 					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 					if (m != MachineRegistry.VANDEGRAFF) {
-						boolean flag = false;
 						if (b.hasTileEntity(metadata)) {
 							TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 							if (te instanceof Shockable) {
-								flag = true;
 								this.dischargeToBlock(dx, dy, dz, (Shockable)te);
+								return;
 							}
 						}
-						if (!flag) {
-							if (mat == Material.iron || mat == Material.anvil) {
-								this.dischargeToBlock(dx, dy, dz, null);
-							}
-							else if (mat == Material.water) {
-								this.dischargeToBlock(dx, dy, dz, null);
-							}
-							else if (id == Block.tnt.blockID) {
-								this.dischargeToBlock(dx, dy, dz, null);
-								world.setBlock(dx, dy, dz, 0);
-								EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
-								if (!world.isRemote)
-									world.spawnEntityInWorld(var6);
-								world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-								world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
-							}
+						if (mat == Material.iron || mat == Material.anvil) {
+							this.dischargeToBlock(dx, dy, dz, null);
+							return;
+						}
+						else if (mat == Material.water) {
+							this.dischargeToBlock(dx, dy, dz, null);
+							return;
+						}
+						else if (id == Block.tnt.blockID) {
+							this.dischargeToBlock(dx, dy, dz, null);
+							world.setBlock(dx, dy, dz, 0);
+							EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
+							if (!world.isRemote)
+								world.spawnEntityInWorld(var6);
+							world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
+							world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
+							return;
 						}
 					}
 				}

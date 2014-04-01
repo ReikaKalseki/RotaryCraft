@@ -25,7 +25,6 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -184,7 +183,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (temperature < 0)
 			temperature = 0;
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(biome);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.frozenRiver ||
 				biome == BiomeGenBase.iceMountains || biome == BiomeGenBase.icePlains ||
 				biome == BiomeGenBase.taiga || biome == BiomeGenBase.taigaHills)

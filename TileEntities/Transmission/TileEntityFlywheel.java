@@ -472,16 +472,6 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
-	}
-
-	@Override
 	public long getMaxPower() {
 		return maxtorque*omega;
 	}

@@ -79,7 +79,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 			fly.setBlockMetadata(meta-1);
 		fly.placer = ep.getEntityName();
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-			fly.setFlipped(true);
+			fly.isFlipped = true;
 		}
 		return true;
 	}

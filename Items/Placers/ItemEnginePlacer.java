@@ -85,7 +85,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				if (is.stackTagCompound != null)
 					eng.FOD = is.stackTagCompound.getInteger("damage");
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-					eng.setFlipped(true);
+					eng.isFlipped = true;
 				}
 				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 			}

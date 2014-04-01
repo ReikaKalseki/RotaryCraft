@@ -362,7 +362,6 @@ public class ItemMeter extends ItemRotaryTool
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
-				ReikaChatHelper.writeString(String.format("Liquid Pressure at %d kPa.", clicked.liquidPressure));
 				return true;
 			}
 			if (m == MachineRegistry.ADVANCEDGEARS) {

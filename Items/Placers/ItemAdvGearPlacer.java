@@ -73,7 +73,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		adv.setBlockMetadata(4*is.getItemDamage()+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		adv.placer = ep.getEntityName();
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-			adv.setFlipped(true);
+			adv.isFlipped = true;
 		}
 		if (adv.getGearType().storesEnergy() && is.stackTagCompound != null) {
 			adv.setEnergyFromNBT(is.stackTagCompound);

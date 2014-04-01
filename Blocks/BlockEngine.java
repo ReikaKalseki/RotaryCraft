@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -174,7 +174,7 @@ public class BlockEngine extends BlockModelledMachine {
 	public void onBlockAdded(World world, int x, int y, int z) {
 		TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (te != null) {
-			te.temperature = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+			te.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		}
 	}
 

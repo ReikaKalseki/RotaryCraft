@@ -70,7 +70,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 			return ((TileEntityReservoir)te).getHitbox();
 		}
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x+m.getMinX(te), y+m.getMinY(te), z+m.getMinZ(te), x+m.getMaxX(te), y+m.getMaxY(te), z+m.getMaxZ(te));
-		if (te.isFlipped()) {
+		if (te.isFlipped) {
 			box = AxisAlignedBB.getAABBPool().getAABB(x+m.getMinX(te), y+(1-m.getMaxY(te)), z+m.getMinZ(te), x+m.getMaxX(te), y+(1-m.getMinY(te)), z+m.getMaxZ(te));
 		}
 		return box;

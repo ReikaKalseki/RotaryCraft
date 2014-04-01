@@ -639,16 +639,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		tank.setContents(this.getMaxLubricant(), FluidRegistry.getFluid("lubricant"));
 	}
 
-	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
-	}
-
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		if (this instanceof InertIInv)
 			return new int[0];

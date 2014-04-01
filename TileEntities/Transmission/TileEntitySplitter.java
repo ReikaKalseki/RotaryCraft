@@ -654,16 +654,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 	}
 
-	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
-	}
-
 	public String getRatioForDisplay() {
 		switch(splitmode) {
 		case 32:

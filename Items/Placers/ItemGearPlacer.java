@@ -90,7 +90,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 				is.setTagCompound(new NBTTagCompound());
 			((TileEntityGearbox)tile).setDamage(is.stackTagCompound.getInteger("damage"));
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-				((TileEntityGearbox)tile).setFlipped(true);
+				((TileEntityGearbox)tile).isFlipped = true;
 			}
 		}
 		return true;

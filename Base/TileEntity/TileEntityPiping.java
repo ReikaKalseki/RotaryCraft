@@ -102,7 +102,17 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
 			return this.canConnectToPipe(m);
-		return this.interactsWithMachines() && Block.blocksList[id].hasTileEntity(meta);
+		return this.interactsWithMachines() && this.isInteractableTile(this.getTileEntity(dx, dy, dz));
+	}
+
+	private boolean isInteractableTile(TileEntity te) {
+		if (te == null)
+			return false;
+		if (te instanceof IFluidHandler) {
+			String name = te.getClass().getSimpleName().toLowerCase();
+			return !name.contains("conduit") && !name.contains("pipe");
+		}
+		return false;
 	}
 
 	public final int getPipeIntake(int otherlevel) {
@@ -388,6 +398,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public final boolean isFluidPipe() {
 		return true;
+	}
+
+	@Override
+	public Icon getOverlayIcon() {
+		return null;
 	}
 
 	public static enum TransferAmount {

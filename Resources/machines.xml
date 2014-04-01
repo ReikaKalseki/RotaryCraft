@@ -117,7 +117,7 @@
 	</pulsejet>
 	<pump>
 		<desc>
-			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access. Excess power to the pump generates pressure, which is essential for the operation of sprinklers.
+			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access.
 		</desc>
 		<note>
 			Required Power: %d W

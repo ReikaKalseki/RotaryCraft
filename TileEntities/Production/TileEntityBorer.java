@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -72,10 +73,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public int step = 1;
 
-
-	/** Digging Profile */
-	public int mode;
-
 	public boolean[][] cutShape = new boolean[7][5]; // 7 cols, 5 rows
 
 	private boolean jammed = false;
@@ -100,6 +97,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return power > 0 && power >= reqpow && torque >= mintorque ? 1 : 0;
 	}
 
+	private void setJammed(boolean jam) {
+		jammed = jam;
+		ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -109,7 +111,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		this.getPower(false);
 		power = (long)omega*(long)torque;
 		if (power == 0)
-			jammed = false;
+			this.setJammed(false);
 		boolean nodig = true;
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -142,14 +144,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (tickcount >= this.getOperationTime()) {
 			this.calcReqPower(world, x, y, z, meta);
 			if (power > reqpow && reqpow != -1) {
-				jammed = false;
+				this.setJammed(false);
 				if (!world.isRemote) {
 					this.forceGenAndPopulate(world, x, y, z, meta);
 					this.dig(world, x, y, z, meta);
 				}
 			}
 			else {
-				jammed = true;
+				this.setJammed(true);
 			}
 			tickcount = 0;
 			mintorque = 0;
@@ -205,6 +207,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (mat == Material.water || mat == Material.lava)
 			return true;
 		Block b = Block.blocksList[id];
+		if (b.isAirBlock(world, x, y, z))
+			return true;
 		if (b instanceof BlockFluid || b instanceof BlockFluidBase)
 			return true;
 		if (b instanceof IgnoredByBorer)
@@ -321,7 +325,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					}
 				}
 			}
-			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(id, meta)) {
+			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(world, xread, yread, zread)) {
 				ItemStack is = new ItemStack(id, 1, this.getSilkTouchMetaDropped(id, meta));
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
@@ -359,7 +363,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return meta;
 	}
 
-	private boolean canSilk(int id, int meta) {
+	private boolean canSilk(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
 		if (id == 0)
 			return false;
 		if (id == Block.fire.blockID)
@@ -375,9 +380,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (BlockRegistry.isMachineBlock(id))
 			return false;
 		Block b = Block.blocksList[id];
+		if (b.isAirBlock(world, x, y, z))
+			return false;
 		if (b instanceof BlockFluid || b instanceof BlockFluidBase)
 			return false;
-		if (b.hasTileEntity(meta))
+		if (b.hasTileEntity(world.getBlockMetadata(x, y, z)))
 			return false;
 		return true;
 	}
@@ -475,8 +482,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-		NBT.setInteger("mode", mode);
-		NBT.setBoolean("drops", drops);
 		NBT.setInteger("step", step);
 		NBT.setBoolean("jam", jammed);
 	}
@@ -485,8 +490,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-		mode = NBT.getInteger("mode");
-		drops = NBT.getBoolean("drops");
 		step = NBT.getInteger("step");
 		jammed = NBT.getBoolean("jam");
 	}
@@ -494,6 +497,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
+		NBT.setBoolean("drops", drops);
 
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
@@ -511,6 +515,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
+		drops = NBT.getBoolean("drops");
 
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {

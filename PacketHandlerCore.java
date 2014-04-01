@@ -191,7 +191,11 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				borer = (TileEntityBorer)te;
 				if (borer != null) {
 					if (control == PacketRegistry.BORER.getMinValue()+2) {
-						borer.mode = data[0];
+						for (int i = 0; i < 5; i++) {
+							for (int j = 0; j < 7; j++) {
+								borer.cutShape[j][i] = !borer.cutShape[j][i];
+							}
+						}
 					}
 					if (control == PacketRegistry.BORER.getMinValue()+3) {
 						borer.step = 1;

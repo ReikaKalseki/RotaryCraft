@@ -34,6 +34,8 @@ public interface RenderableDuct {
 
 	public Icon getGlassIcon();
 
+	public Icon getOverlayIcon();
+
 	public boolean isFluidPipe();
 
 }

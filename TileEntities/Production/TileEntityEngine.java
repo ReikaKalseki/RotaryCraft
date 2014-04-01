@@ -57,7 +57,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
@@ -526,7 +525,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int Tamb = ReikaBiomeHelper.getBiomeTemp(biome);
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		//ReikaChatHelper.writeInt(temperature);
 		if (temperature > Tamb && omega == 0 && torque == 0 && type == EngineType.SPORT) { //If off and hot
 			if (temperature > Tamb+300)
@@ -1644,7 +1643,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	public void repairJet() {
 		FOD = 0;
 		isJetFailing = false;
-		temperature = ReikaBiomeHelper.getBiomeTemp(worldObj, xCoord, zCoord);
+		temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public void repairJetPartial() {
@@ -1835,16 +1834,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public int getLube() {
 		return lubricant.getLevel();
-	}
-
-	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
 	}
 
 	@Override

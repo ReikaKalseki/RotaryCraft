@@ -49,11 +49,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -196,6 +199,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
+
+		if (te instanceof TileEntityBase)
+			((TileEntityBase)te).syncAllData();
 
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
@@ -912,8 +918,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (te instanceof TileEntityPiping) {
 			TileEntityPiping tp = (TileEntityPiping)te;
 			Fluid f = tp.getLiquidType();
-			if (f != null)
+			if (f != null) {
 				currenttip.add(String.format("%s", f.getLocalizedName()));
+				if (tp instanceof TileEntityPipe) {
+					int p = ((TileEntityPipe)tp).getPressure();
+					double val = ReikaMathLibrary.getThousandBase(p);
+					String sg = ReikaEngLibrary.getSIPrefix(p);
+					currenttip.add(String.format("Pressure: %.3f%sPa", val, sg));
+				}
+			}
 		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();

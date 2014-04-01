@@ -25,7 +25,6 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
@@ -234,7 +233,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			int[] tg = te.getTarget();
 			TileEntity te2 = world.getBlockTileEntity(tg[0], tg[1], tg[2]);
 			if (te2 instanceof TemperatureTE && world.getTotalWorldTime()%20 == 0) {
-				int Tamb = ReikaBiomeHelper.getBiomeTemp(world, x, z);
+				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 				if (((TemperatureTE) te2).getTemperature() > Tamb)
 					((TemperatureTE) te2).addTemperature(-1);
 			}

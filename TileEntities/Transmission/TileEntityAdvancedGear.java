@@ -747,16 +747,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		//super.onEMP();
 	}
 
-	@Override
-	public boolean isFlipped() {
-		return isFlipped;
-	}
-
-	@Override
-	public void setFlipped(boolean set) {
-		isFlipped = set;
-	}
-
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		if (this instanceof InertIInv)
 			return new int[0];

@@ -35,6 +35,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -139,7 +140,11 @@ public abstract class BlockBasicMachine extends Block implements SidedTextureInd
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+
+		if (te instanceof TileEntityBase)
+			((TileEntityBase)te).syncAllData();
 		ItemStack is = ep.getCurrentEquippedItem();
+
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
