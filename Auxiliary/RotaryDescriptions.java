@@ -18,7 +18,6 @@ import net.minecraft.client.resources.Language;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -222,8 +221,6 @@ public final class RotaryDescriptions {
 					ItemStack item = te.getUpgradeItemFromTier(k);
 					if (item != null)
 						aux += String.format("\nTier %d Upgrade: %s", k+1, item.getDisplayName());
-					else
-						ReikaJavaLibrary.pConsole(m+":"+k);
 				}
 			}
 

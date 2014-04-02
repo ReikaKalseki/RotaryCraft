@@ -23,7 +23,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -73,26 +72,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		idle = (!this.canSmelt() && omega > MINSPEED);
 	}
 
-	public int getSmeltNumber(ItemStack is) {
-		int num = is.stackSize;
-		if (is.itemID != RotaryCraft.shaftcraft.itemID || is.getItemDamage() != 1) //if not making steel
-			return 1;/*
-	    	int a = par5Random.nextInt(2);
-	    	int b = par5Random.nextInt(2);
-	    	if (a == 0 && b == 0)
-	    		return 1;
-	    	if (num > 62)
-	    		return 1;
-	    	else
-	    		return 2;*/
-		return ReikaInventoryHelper.addUpToStack(is, 1, 5);
-	}
-
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return 3;
 	}
 
@@ -101,9 +81,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return true;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -117,9 +94,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		temperature = NBT.getInteger("temp");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -250,8 +224,16 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 		tickcount++;
 		tickcount2++;
-		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt())
+
+		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt()) {
 			smelttick++;
+			if (temperature >= 900) //2x speed if running uncooled
+				smelttick++;
+			if (temperature >= 950) //4x speed if running uncooled and very hot
+				smelttick += 2;
+			if (temperature >= 980) //8x speed if about to fail
+				smelttick += 4;
+		}
 		else
 			smelttick = 0;
 		if (smelttick < SMELTTICKS && !flag2)
@@ -333,10 +315,8 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (inv[2] == null)
 			inv[2] = itemstack.copy();
 		else if (inv[2].itemID == itemstack.itemID)
-			inv[2].stackSize += this.getSmeltNumber(inv[2]);
-		//  if (inv[0].getItem().func_46056_k())
-		//   inv[0] = new ItemStack(inv[0].getItem().setFull3D());
-		//  else
+			inv[2].stackSize += itemstack.stackSize;
+
 		inv[0].stackSize--;
 		if (inv[0].stackSize <= 0)
 			inv[0] = null;
