@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -39,6 +40,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	private RedstoneState rsState;
 
+	private static final boolean reika = DragonAPICore.isReikasComputer();
+
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
 	}
@@ -49,6 +52,19 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final void upgrade() {
 		tier++;
+	}
+
+	public final int getTierFromPowerOutput(long power) {
+		for (int i = 0; i < this.tierCount(); i++) {
+			long tier = this.getTierPower(i);
+			if (tier >= power)
+				return i;
+		}
+		return 0;
+	}
+
+	public final long getTierPower(int tier) {
+		return this.getTierTorque(tier)*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
 	}
 
 	public abstract int tierCount();
@@ -217,6 +233,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 		NBT.setInteger("rs", this.getRedstoneState().ordinal());
 
+		if (reika && power > 0) {
+			tier = Math.max(tier, this.getTierFromPowerOutput(power));
+		}
 		NBT.setInteger("level", tier);
 	}
 
@@ -224,12 +243,17 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
+
 		storedEnergy = NBT.getInteger("storage");
 		baseomega = NBT.getInteger("tiero");
 
 		rsState = RedstoneState.list[NBT.getInteger("rs")];
 
 		tier = NBT.getInteger("level");
+
+		if (reika && power > 0) {
+			tier =  Math.max(tier, this.getTierFromPowerOutput(power));
+		}
 	}
 
 	@Override
