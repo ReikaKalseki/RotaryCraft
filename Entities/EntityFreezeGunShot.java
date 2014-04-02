@@ -13,10 +13,6 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -24,6 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 
 public class EntityFreezeGunShot extends EntityTurretShot {
 
@@ -83,7 +80,7 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
+	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {/*
 		if (el instanceof EntityDragon) {
 			el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 27));
 			el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -29));
@@ -95,7 +92,8 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 		else {
 			el.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 60000, 7));
 			el.addPotionEffect(new PotionEffect(Potion.jump.id, 60000, -9));
-		}
+		}*/
+		el.addPotionEffect(TileEntityFreezeGun.getFreezeEffect(60000));
 	}
 
 	@Override

@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
@@ -99,6 +100,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (te instanceof EnchantableMachine) {
 			EnchantableMachine e = (EnchantableMachine)te;
 			e.applyEnchants(is);
+		}
+		if (te instanceof EnergyToPowerBase) {
+			((EnergyToPowerBase)te).setTierFromItemTag(is.stackTagCompound);
 		}
 		if (te instanceof NBTMachine) {
 			((NBTMachine)te).setDataFromItemStackTag(is.stackTagCompound);
@@ -209,11 +213,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (!m.hasCustomPlacerItem() && m.isAvailableInCreativeInventory()) {
+				ItemMachineRenderer ir = ClientProxy.machineItems;
+				TileEntity te = ir.getRenderingInstance(m);
 				ItemStack item = m.getCraftedProduct();
 				par3List.add(item);
+				if (m.isEnergyToPower()) {
+					ItemStack item2 = item.copy();
+					if (item2.stackTagCompound == null)
+						item2.stackTagCompound = new NBTTagCompound();
+					item2.stackTagCompound.setInteger("tier", ((EnergyToPowerBase)te).tierCount()-1);
+					par3List.add(item2);
+				}
 				if (m.hasNBTVariants()) {
-					ItemMachineRenderer ir = ClientProxy.machineItems;
-					TileEntity te = ir.getRenderingInstance(m);
 					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
 					for (int k = 0; k < li.size(); k++) {
 						NBTTagCompound NBT = li.get(k);
@@ -246,13 +257,29 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
 		MachineRegistry m = MachineRegistry.machineList[i];
+		ItemMachineRenderer ir = ClientProxy.machineItems;
+		TileEntity te = ir.getRenderingInstance(m);
 		if (m.isIncomplete()) {
 			li.add("This machine is in development. Use at your own risk.");
 		}
 		if (m.hasNBTVariants() && is.stackTagCompound != null) {
-			ItemMachineRenderer ir = ClientProxy.machineItems;
-			TileEntity te = ir.getRenderingInstance(m);
 			li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
+		}
+		if (m.isEnergyToPower()) {
+			int tier = 0;
+			if (is.stackTagCompound != null) {
+				tier = is.stackTagCompound.getInteger("tier");
+			}
+			li.add(String.format("Tier %d", tier));
+			EnergyToPowerBase e = (EnergyToPowerBase)te;
+			int torque = e.getTierTorque(tier);
+			int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
+			long power = (long)torque*(long)speed;
+			double val = ReikaMathLibrary.getThousandBase(power);
+			String exp = ReikaEngLibrary.getSIPrefix(power);
+			li.add(String.format("Torque: %d Nm", torque));
+			li.add(String.format("Max Speed: %d rad/s", speed));
+			li.add(String.format("Max Power: %.3f%sW", val, exp));
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();

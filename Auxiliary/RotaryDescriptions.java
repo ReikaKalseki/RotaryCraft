@@ -15,8 +15,10 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -24,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
@@ -211,6 +214,17 @@ public final class RotaryDescriptions {
 			}
 			if (m.isIncomplete()) {
 				desc += "\nThis machine is incomplete. Use at your own risk.";
+			}
+
+			if (m.isEnergyToPower()) {
+				EnergyToPowerBase te = (EnergyToPowerBase)m.createTEInstanceForRender();
+				for (int k = 0; k < te.tierCount(); k++) {
+					ItemStack item = te.getUpgradeItemFromTier(k);
+					if (item != null)
+						aux += String.format("\nTier %d Upgrade: %s", k+1, item.getDisplayName());
+					else
+						ReikaJavaLibrary.pConsole(m+":"+k);
+				}
 			}
 
 			addEntry(h, desc);

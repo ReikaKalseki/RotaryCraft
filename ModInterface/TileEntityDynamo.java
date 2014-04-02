@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -62,6 +63,9 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
+
+		if ((world.getWorldTime()&31) == 0)
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (power > 0) {
 			int id = world.getBlockId(writex, writey, writez);

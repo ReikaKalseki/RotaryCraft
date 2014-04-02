@@ -73,7 +73,8 @@ public enum ConfigRegistry implements ConfigList {
 	PACKETDELAY("Sync Packet Interval in Ticks", 1),
 	FLOWSPEED("Fluid Flow Speed", 5),
 	ATTACKBLOCKS("Block Damage from Destructive Machines", true),
-	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false);
+	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false),
+	JETFUELPACK("Jetpack Uses Jet Fuel", false);
 
 	private String label;
 	private boolean defaultState;

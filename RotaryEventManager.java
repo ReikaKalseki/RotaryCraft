@@ -16,7 +16,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.event.Event;
@@ -106,11 +105,10 @@ public class RotaryEventManager {
 	@ForgeSubscribe
 	public void disallowDespawn(AllowDespawn ad) {
 		EntityLivingBase e = ad.entityLiving;
-		PotionEffect pe = e.getActivePotionEffect(Potion.jump);
+		PotionEffect pe = e.getActivePotionEffect(RotaryCraft.freeze);
 		if (pe == null)
 			return;
-		if (pe.getAmplifier() == -9 || pe.getAmplifier() == -29) //the two freeze gun call values
-			ad.setResult(Result.DENY);
+		ad.setResult(Result.DENY);
 	}
 
 	@ForgeSubscribe(priority = EventPriority.LOWEST, receiveCanceled = true)

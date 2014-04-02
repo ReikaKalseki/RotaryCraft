@@ -16,8 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -31,26 +31,35 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	protected int storedEnergy;
 
-	protected int basetorque = -1;
 	protected int baseomega = -1;
 
-	protected ForgeDirection facingDir;
+	private ForgeDirection facingDir;
+
+	private int tier;
 
 	private RedstoneState rsState;
-
-	private static final boolean reika = DragonAPICore.isReikasComputer();
 
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
 	}
 
-	private int getMaxBase() {
-		return this.isFlexibleMode() ? 15 : 11;
+	public final int getTier() {
+		return tier;
 	}
 
-	public final boolean isFlexibleMode() {
-		return reika;
+	public final void upgrade() {
+		tier++;
 	}
+
+	public abstract int tierCount();
+
+	public abstract int getTierTorque(int tier);
+
+	public abstract int getMaxSpeedBase(int tier);
+
+	public abstract ItemStack getUpgradeItemFromTier(int tier);
+
+	public abstract boolean isValidSupplier(TileEntity te);
 
 	private static enum RedstoneState {
 		IGNORE(Item.gunpowder),
@@ -119,23 +128,15 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getSpeed() {
-		if (baseomega > this.getMaxBase() || basetorque > this.getMaxBase())
-			baseomega = basetorque = -1;
 		if (!this.isEmitting())
 			return 0;
-		if (baseomega < 0 || basetorque < 0)
+		if (baseomega < 0)
 			return 0;
 		return ReikaMathLibrary.intpow2(2, baseomega);
 	}
 
 	public final int getTorque() {
-		if (baseomega > this.getMaxBase() || basetorque > this.getMaxBase())
-			baseomega = basetorque = -1;
-		if (!this.isEmitting())
-			return 0;
-		if (baseomega < 0 || basetorque < 0)
-			return 0;
-		return this.isFlexibleMode() ? ReikaMathLibrary.intpow2(2, basetorque) : 2048;
+		return baseomega >= 0 ? this.getTierTorque(this.getTier()) : 0;
 	}
 
 	public final boolean hasEnoughEnergy() {
@@ -145,22 +146,20 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public abstract int getConsumedUnitsPerTick();
 
-	public final int getTier() {
-		return basetorque;
+	public final void setTierFromItemTag(NBTTagCompound nbt) {
+		if (nbt != null) {
+			tier = nbt.getInteger("tier");
+		}
 	}
 
-	public final void incrementTorque() {
-		if (basetorque < this.getMaxBase() && baseomega+basetorque < this.getMaxBase()*2-3)
-			basetorque++;
-	}
-
-	public final void decrementTorque() {
-		if (basetorque > MINBASE)
-			basetorque--;
+	public final void setItemTagFromTier(ItemStack is) {
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("tier", tier);
 	}
 
 	public final void incrementOmega() {
-		if (baseomega < this.getMaxBase() && baseomega+basetorque < this.getMaxBase()*2-3)
+		if (baseomega < this.getMaxSpeedBase(this.getTier()))
 			baseomega++;
 	}
 
@@ -177,37 +176,60 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		return this.getStoredPower()/(float)this.getMaxStorage();
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
+	protected final void getIOSides(World world, int x, int y, int z, int meta) {
+		readx = x;
+		ready = y;
+		readz = z;
+		writex = x;
+		writey = y;
+		writez = z;
+		switch(meta) {
+		case 0:
+			readz = z-1;
+			writez = z+1;
+			facingDir = ForgeDirection.NORTH;
+			break;
+		case 1:
+			readx = x-1;
+			writex = x+1;
+			facingDir = ForgeDirection.WEST;
+			break;
+		case 2:
+			readz = z+1;
+			writez = z-1;
+			facingDir = ForgeDirection.SOUTH;
+			break;
+		case 3:
+			readx = x+1;
+			writex = x-1;
+			facingDir = ForgeDirection.EAST;
+			break;
+		}
+	}
+
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("storage", storedEnergy);
 
-		if (!this.isFlexibleMode())
-			basetorque = 0;
-		NBT.setInteger("tier", basetorque);
 		NBT.setInteger("tiero", baseomega);
 
 		NBT.setInteger("rs", this.getRedstoneState().ordinal());
+
+		NBT.setInteger("level", tier);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
 		storedEnergy = NBT.getInteger("storage");
-		basetorque = NBT.getInteger("tier");
-		if (!this.isFlexibleMode())
-			basetorque = 0;
 		baseomega = NBT.getInteger("tiero");
 
 		rsState = RedstoneState.list[NBT.getInteger("rs")];
+
+		tier = NBT.getInteger("level");
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		super.updateTileEntity();
 		this.getPowerBelow();
 
-		charge += Math.sqrt(power)*4;
+		charge += 4*Math.sqrt(power);
 
 		int r = this.getRange();
 
@@ -193,9 +193,6 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		return 16;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -203,9 +200,6 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		NBT.setInteger("c", charge);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

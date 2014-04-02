@@ -458,14 +458,10 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case PNEUMATIC:
 				eng = (EnergyToPowerBase)te;
 				if (control == PacketRegistry.PNEUMATIC.getMinValue())
-					eng.decrementTorque();
-				if (control == PacketRegistry.PNEUMATIC.getMinValue()+1)
-					eng.incrementTorque();
-				if (control == PacketRegistry.PNEUMATIC.getMinValue()+2)
 					eng.decrementOmega();
-				if (control == PacketRegistry.PNEUMATIC.getMinValue()+3)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+1)
 					eng.incrementOmega();
-				if (control == PacketRegistry.PNEUMATIC.getMinValue()+4)
+				if (control == PacketRegistry.PNEUMATIC.getMinValue()+2)
 					eng.incrementRedstoneState();
 				break;
 			case JETPACK:

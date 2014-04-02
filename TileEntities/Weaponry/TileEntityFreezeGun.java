@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -21,11 +23,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
@@ -38,6 +42,13 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		for (int i = 0; i < world.loadedEntityList.size(); i++) {
+			Entity e = (Entity) world.loadedEntityList.get(i);
+			if (e instanceof EntityLivingBase) {
+				EntityLivingBase el = (EntityLivingBase) e;
+				el.addPotionEffect(this.getFreezeEffect(6000));
+			}
+		}
 		super.updateTileEntity();
 		if (!this.isAimingAtTarget(world, x, y, z, target))
 			return;
@@ -58,6 +69,12 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 		//	/**Used to reset mob age and prevent despawning (since entityAge is private); still does not prevent far-from despawn */
 		//	ent.attackEntityFrom(DamageSource.generic, 0);
 		//}
+	}
+
+	public static PotionEffect getFreezeEffect(int duration) {
+		PotionEffect pot = new PotionEffect(RotaryCraft.freeze.id, duration, 0);
+		pot.setCurativeItems(new ArrayList());
+		return pot;
 	}
 
 	private void convertSnow() {

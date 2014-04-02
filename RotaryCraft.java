@@ -30,6 +30,7 @@ import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.DonatorController;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
+import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
@@ -41,6 +42,7 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
+import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
@@ -184,6 +186,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Achievement[] achievements;
 	public static Entity fallblock;
 
+	public static FreezePotion freeze;
+
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
 
@@ -223,6 +227,10 @@ public class RotaryCraft extends DragonAPIMod {
 			achievements = new Achievement[RotaryAchievements.list.length];
 			RotaryAchievements.registerAchievements();
 		}
+
+		int id = ExtraConfigIDs.FREEZEID.getValue();
+		PotionCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
+		freeze = (FreezePotion)new FreezePotion(id, true).setPotionName("Frozen Solid");
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);

@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
@@ -38,7 +39,8 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
+public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction,
+ConditionalOperation, DamagingContact {
 
 	/** The number of ticks that the current item has been cooking for */
 	public int grinderCookTime;
@@ -398,5 +400,14 @@ public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeC
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
+	}
+
+	@Override
+	public int getContactDamage() {
+		return 3;
+	}
+
+	public boolean canDealDamage() {
+		return power >= MINPOWER && torque >= MINTORQUE;
 	}
 }

@@ -36,11 +36,13 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.SpecialConfigLoader;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -724,19 +726,11 @@ public enum MachineRegistry {
 	}
 
 	public boolean isPowerReceiver() {
-		return (TileEntityPowerReceiver.class.isAssignableFrom(te));
+		return TileEntityPowerReceiver.class.isAssignableFrom(te);
 	}
 
-	public boolean dealsContactDamage(Entity e) {
-		if (e instanceof EntityItem || e instanceof EntityXPOrb)
-			return false;
-		if (this == GRINDER)
-			return true;
-		if (this == WOODCUTTER)
-			return true;
-		if (this == FRICTION)
-			return true;
-		return false;
+	public boolean dealsContactDamage() {
+		return DamagingContact.class.isAssignableFrom(te);
 	}
 
 	public boolean dealsHeatDamage(Entity e) {
@@ -748,29 +742,11 @@ public enum MachineRegistry {
 		case IGNITER:
 		case OBSIDIAN:
 		case PULSEJET:
+		case FRICTION:
 			return true;
 		default:
 			return false;
 		}
-	}
-
-	public int getContactDamage(RotaryCraftTileEntity tile) {
-		if (this == WOODCUTTER) {
-			if (((TileEntityWoodcutter)tile).power <= 0)
-				return 0;
-			return 3;
-		}
-		if (this == GRINDER) {
-			if (((TileEntityGrinder)tile).power <= 0)
-				return 0;
-			return 2;
-		}
-		if (this == FRICTION) {
-			if (((TileEntityFurnaceHeater)tile).power <= 0)
-				return 0;
-			return 1;
-		}
-		return 0;
 	}
 
 	public boolean is4Sided() {
@@ -950,6 +926,10 @@ public enum MachineRegistry {
 		default:
 			return false;
 		}
+	}
+
+	public boolean isEnergyToPower() {
+		return EnergyToPowerBase.class.isAssignableFrom(te);
 	}
 
 	public boolean isPoweredTransmissionMachine() {

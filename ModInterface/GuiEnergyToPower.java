@@ -28,7 +28,6 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 public class GuiEnergyToPower extends GuiNonPoweredMachine {
 
 	private EnergyToPowerBase engine;
-	private int base;
 	private static final int SHIFT = -12;
 	private boolean flexible = false;
 
@@ -38,9 +37,6 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		ySize = 99;
 		xSize = 199;
 		ep = pl;
-		base = te.getTier();
-
-		flexible = te.isFlexibleMode();
 	}
 
 	@Override
@@ -67,7 +63,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+4, engine);
 		}
 		else if (b.id < 24000) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id, engine);
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id-2, engine);
 		}
 		this.initGui();
 	}

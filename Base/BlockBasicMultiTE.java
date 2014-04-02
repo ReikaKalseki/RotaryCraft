@@ -23,6 +23,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -68,11 +69,13 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
@@ -223,6 +226,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			}
 			return false;
 		}
+		if (is != null && te instanceof EnergyToPowerBase) {
+			EnergyToPowerBase eb = (EnergyToPowerBase)te;
+			if (ReikaItemHelper.matchStacks(is, eb.getUpgradeItemFromTier(eb.getTier()))) {
+				eb.upgrade();
+				if (!ep.capabilities.isCreativeMode)
+					is.stackSize--;
+				return true;
+			}
+		}
 		if (m == MachineRegistry.MUSICBOX) {
 			if (is != null && is.itemID == ItemRegistry.DISK.getShiftedID()) {
 				TileEntityMusicBox tile = (TileEntityMusicBox)te;
@@ -335,14 +347,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropItemFromInventory();
 			return true;
-		}/*
-		if (m == MachineRegistry.HYDRAULICLINE) {
-			TileEntityHydraulicLine th = (TileEntityHydraulicLine)te;
-			if (ReikaItemHelper.matchStacks(is, m.getCraftedProduct())) {
-				ForgeDirection dir = ForgeDirection.values()[side];
-				//th.setOutput(dir);
-			}
-		}*/
+		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
 			if (ex.getLevel()+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && is.itemID == Item.bucketWater.itemID) {
@@ -476,19 +481,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				}
 			}
 		}
-		/*
-		if (te instanceof TileEntityMusicBox) {
-			TileEntityMusicBox mb = (TileEntityMusicBox)te;
-			if (is != null && is.itemID == RotaryCraft.disk.itemID) {
-				if (is.hasTagCompound()) {
-					mb.setMusicFile(is);
-				}
-				else {
-					ep.setCurrentItemOrArmor(0, mb.getMusicFile());
-				}
-				return true;
-			}
-		}*/
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isPlayerAccessible(ep)) {
 			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
 			return true;
@@ -580,6 +572,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				NBTTagCompound nbt = ((NBTMachine)te).getTagsToWriteToStack();
 				is.stackTagCompound = (NBTTagCompound)(nbt != null ? nbt.copy() : null);
 			}
+			if (te instanceof EnergyToPowerBase) {
+				((EnergyToPowerBase)te).setItemTagFromTier(is);
+			}
 			if (m.isBroken((RotaryCraftTileEntity)te))
 				li = m.getBrokenProducts();
 			else
@@ -657,16 +652,18 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (m == null)
 			return;
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
-		if (m.dealsContactDamage(e)) {
-			int dmg = m.getContactDamage(tile);
-			if (dmg > 0)
-				e.attackEntityFrom(DamageSource.generic, dmg);
-		}
-		if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
-			int dmg = ((TemperatureTE)tile).getThermalDamage();
-			if (dmg > 0) {
-				e.attackEntityFrom(DamageSource.lava, dmg);
-				e.setFire(6);
+		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
+			if (tile instanceof DamagingContact) {
+				int dmg = ((DamagingContact)tile).getContactDamage();
+				if (((DamagingContact)tile).canDealDamage() && dmg > 0)
+					e.attackEntityFrom(DamageSource.generic, dmg);
+			}
+			if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
+				int dmg = ((TemperatureTE)tile).getThermalDamage();
+				if (dmg > 0) {
+					e.attackEntityFrom(DamageSource.lava, dmg);
+					e.setFire(6);
+				}
 			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {

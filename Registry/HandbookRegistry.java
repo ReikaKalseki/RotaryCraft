@@ -240,6 +240,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	ITEMPUMP(ItemRegistry.PUMP),
 	JUMPBOOTS("Spring Boots"),
 	TANKS(ItemRegistry.FUEL),
+	DISK(ItemRegistry.DISK),
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),

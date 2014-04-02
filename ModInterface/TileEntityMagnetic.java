@@ -11,18 +11,26 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.awt.Color;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyStorage;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
+
+	public static final int TIERS = 6;
 
 	@Override
 	public long getMaxPower() {
@@ -64,35 +72,27 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		}
 	}
 
-	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
-		switch(meta) {
+	@Override
+	public ItemStack getUpgradeItemFromTier(int tier) {
+		switch(tier) {
 		case 0:
-			readz = z-1;
-			writez = z+1;
-			facingDir = ForgeDirection.NORTH;
-			break;
+			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
 		case 1:
-			readx = x-1;
-			writex = x+1;
-			facingDir = ForgeDirection.WEST;
-			break;
+			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "conduitEnergyReinforced", 1);
 		case 2:
-			readz = z+1;
-			writez = z-1;
-			facingDir = ForgeDirection.SOUTH;
-			break;
+			return ItemStacks.generator;
 		case 3:
-			readx = x+1;
-			writex = x-1;
-			facingDir = ForgeDirection.EAST;
-			break;
+			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1);
+		case 4:
+			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellResonant", 1);
+		default:
+			return null;
 		}
+	}
+
+	@Override
+	public boolean isValidSupplier(TileEntity te) {
+		return te instanceof IEnergyHandler || te instanceof IEnergyStorage;
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public boolean canInterface(ForgeDirection from) {
-		return from == this.getFacing();
+		return from == this.getFacing() && this.isValidSupplier(this.getAdjacentTileEntity(from));
 	}
 
 	@Override
@@ -171,6 +171,21 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	@Override
 	public Color getPowerColor() {
 		return Color.red;
+	}
+
+	@Override
+	public int tierCount() {
+		return TIERS;
+	}
+
+	@Override
+	public int getTierTorque(int tier) {
+		return 8*ReikaMathLibrary.intpow2(4, tier);
+	}
+
+	@Override
+	public int getMaxSpeedBase(int tier) {
+		return 8+tier;
 	}
 
 }

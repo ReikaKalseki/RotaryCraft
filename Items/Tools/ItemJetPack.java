@@ -66,6 +66,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		nbt.setInteger("fuel", newFuel);
 	}
 
+	public Fluid getFuelType() {
+		return ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("jet fuel") : FluidRegistry.getFluid("rc ethanol");
+	}
+
 	public boolean useJetpack(EntityPlayer player)
 	{
 		int px = (int) Math.floor(player.posX);
@@ -217,7 +221,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public boolean isValidFluid(Fluid f, ItemStack is) {
-		return f.equals(FluidRegistry.getFluid("rc ethanol"));
+		return f.equals(this.getFuelType());
 	}
 
 	@Override
@@ -232,7 +236,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public int addFluid(ItemStack is, Fluid f, int amt) {
-		if (f == null || !f.equals(FluidRegistry.getFluid("rc ethanol")))
+		if (f == null || !f.equals(this.getFuelType()))
 			return 0;
 		NBTTagCompound nbt = is.stackTagCompound;
 		if (nbt == null) {
@@ -283,6 +287,6 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public Fluid getCurrentFluid(ItemStack is) {
-		return this.getCurrentFillLevel(is) > 0 ? FluidRegistry.getFluid("rc ethanol") : null;
+		return this.getCurrentFillLevel(is) > 0 ? this.getFuelType() : null;
 	}
 }

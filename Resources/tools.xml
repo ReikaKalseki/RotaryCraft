@@ -74,4 +74,7 @@
 	<tanks>
 		Backup fuel tanks allow you to carry some extra fuel for things like jetpacks in case of emergency. They can be filled in the filling station. Right-click to empty them into their target item.
 	</tanks>
+	<disk>
+		The music disc allows you to copy music between music boxes. Right-click a programmed music box with an empty disk to create a written copy; right-clicking a music box with a written disk will overwrite the music box with the disk contents.
+	</disk>
 </tools>

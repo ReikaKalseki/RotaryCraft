@@ -11,12 +11,15 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.awt.Color;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -34,12 +37,33 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	private StepTimer sound = new StepTimer(72);
 
+	public static final int TIERS = 4;
+
 	public TileEntityPneumaticEngine() {
 		super();
 		pp = new PowerHandler(this, PowerHandler.Type.MACHINE);
 		pp.configure(0, maxMJ, 0, maxMJ);
 		pp.configurePowerPerdition(0, 0);
 		sound.setTick(sound.getCap());
+	}
+
+	@Override
+	public ItemStack getUpgradeItemFromTier(int tier) {
+		switch(tier) {
+		case 0:
+			return ItemStacks.impeller;
+		case 1:
+			return ItemStacks.turbine;
+		case 2:
+			return ItemStacks.compoundturb;
+		default:
+			return null;
+		}
+	}
+
+	@Override
+	public boolean isValidSupplier(TileEntity te) {
+		return te.getClass().getSimpleName().contains("PipePower") || te.getClass().getSimpleName().equals("TileGenericPipe");
 	}
 
 	@Override
@@ -141,37 +165,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		return false;
 	}
 
-	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
-		switch(meta) {
-		case 0:
-			readz = z-1;
-			writez = z+1;
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 1:
-			readx = x-1;
-			writex = x+1;
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 2:
-			readz = z+1;
-			writez = z-1;
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			readx = x+1;
-			writex = x-1;
-			facingDir = ForgeDirection.EAST;
-			break;
-		}
-	}
-
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored());
@@ -198,7 +191,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	@Override
 	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return pp.getPowerReceiver();
+		return this.isValidSupplier(this.getAdjacentTileEntity(side)) ? pp.getPowerReceiver() : null;
 	}
 
 	@Override
@@ -219,6 +212,21 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	@Override
 	public Color getPowerColor() {
 		return new Color(50, 170, 255);
+	}
+
+	@Override
+	public int tierCount() {
+		return TIERS;
+	}
+
+	@Override
+	public int getTierTorque(int tier) {
+		return 2*ReikaMathLibrary.intpow2(4, tier+1);
+	}
+
+	@Override
+	public int getMaxSpeedBase(int tier) {
+		return 10+tier*2;
 	}
 
 }
