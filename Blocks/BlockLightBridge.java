@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockLightBridge extends BlockBasic {
@@ -114,6 +115,8 @@ public class BlockLightBridge extends BlockBasic {
 	}
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < 2; i++)
 			icons[0][i] = par1IconRegister.registerIcon("RotaryCraft:bridge_1");
 		for (int i = 0; i < 2; i++)

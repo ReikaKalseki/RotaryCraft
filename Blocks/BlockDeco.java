@@ -107,6 +107,8 @@ public class BlockDeco extends BlockBasic {
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		icons[0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 		icons[1][0] = par1IconRegister.registerIcon("RotaryCraft:anthra");
 		icons[2][0] = par1IconRegister.registerIcon("RotaryCraft:lons");

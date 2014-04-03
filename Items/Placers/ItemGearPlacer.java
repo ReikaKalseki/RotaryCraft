@@ -99,12 +99,14 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < RotaryNames.getNumberGearTypes(); i++) {
-			ItemStack item = new ItemStack(id, 1, i);
-			if (item.stackTagCompound == null)
-				item.setTagCompound(new NBTTagCompound());
-			item.stackTagCompound.setInteger("damage", 0);
-			list.add(item);
+		if (MachineRegistry.GEARBOX.isAvailableInCreativeInventory()) {
+			for (int i = 0; i < RotaryNames.getNumberGearTypes(); i++) {
+				ItemStack item = new ItemStack(id, 1, i);
+				if (item.stackTagCompound == null)
+					item.setTagCompound(new NBTTagCompound());
+				item.stackTagCompound.setInteger("damage", 0);
+				list.add(item);
+			}
 		}
 	}
 }

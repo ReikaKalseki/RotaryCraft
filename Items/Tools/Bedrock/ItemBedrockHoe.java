@@ -31,7 +31,7 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

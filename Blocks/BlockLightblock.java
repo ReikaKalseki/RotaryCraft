@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockLightblock extends BlockBasic {
@@ -107,6 +108,8 @@ public class BlockLightblock extends BlockBasic {
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		icon = par1IconRegister.registerIcon("RotaryCraft:trans");
 	}
 }

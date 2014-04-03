@@ -64,7 +64,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public final boolean canUpdate() {
-		return true;
+		return !RotaryCraft.instance.isLocked();
 	}
 
 	public int getTick() {

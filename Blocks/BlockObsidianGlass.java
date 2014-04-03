@@ -33,7 +33,7 @@ public class BlockObsidianGlass extends BlockBasic {
 		this.setResistance(6000F);
 		this.setLightValue(0F);
 		this.setStepSound(soundGlassFootstep);
-		this.setCreativeTab(RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 
 		//this.blockIndexInTexture = 74;
 	}
@@ -124,6 +124,8 @@ public class BlockObsidianGlass extends BlockBasic {
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < 6; i++)
 			icons[0][i] = par1IconRegister.registerIcon("RotaryCraft:obsidiglass");
 	}

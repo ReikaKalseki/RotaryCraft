@@ -42,7 +42,7 @@ public class BlockDecoTank extends Block {
 		this.setResistance(6000);
 		this.setHardness(0.35F);
 		this.setLightOpacity(0);
-		this.setCreativeTab(RotaryCraft.tabRotary);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 
 		for (int i = 1; i < 10; i++) {
 			allDirs.add(i);
@@ -105,6 +105,8 @@ public class BlockDecoTank extends Block {
 	@Override
 	public boolean canRenderInPass(int pass)
 	{
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		ClientProxy.tank.renderPass = pass;
 		return true;
 	}
@@ -207,6 +209,8 @@ public class BlockDecoTank extends Block {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < 10; i++) {
 			icons[i] = ico.registerIcon("rotarycraft:tank/tank_"+i);
 		}

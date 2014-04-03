@@ -23,7 +23,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -44,7 +43,6 @@ public class ItemMulti extends ItemBasic {
 		type = par2type;
 		maxStackSize = 64;
 		//this.setIconCoord(0, 0);
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 	}
 
 	public ItemMulti(int ID, int par2type, int max) {
@@ -54,7 +52,6 @@ public class ItemMulti extends ItemBasic {
 		type = par2type;
 		maxStackSize = max;
 		//this.setIconCoord(0, 0);
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
 	}
 
 	@Override

@@ -27,14 +27,18 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 	public Icon icon;
 
 	public BlockBlastGlass(int ID) {
-		super(ID, "RotaryCraft:obsidiglass", "RotaryCraft:obsidiglass_side", Material.glass, true); //there was a 74 here
+		super(ID, RotaryCraft.instance.isLocked() ? "" : "RotaryCraft:obsidiglass", "RotaryCraft:obsidiglass_side", Material.glass, true);
+		//there was a 74 here ^^
 		this.setHardness(12.5F);
 		this.setResistance(6000F);
 		this.setLightValue(0F);
 		this.setStepSound(soundGlassFootstep);
 		////this.requiresSelfNotify[this.blockID] = true;
 		//this.blockIndexInTexture = 74;
-		this.setCreativeTab(RotaryCraft.tabRotary);
+		if (!RotaryCraft.instance.isLocked())
+			this.setCreativeTab(RotaryCraft.tabRotary);
+		else
+			this.setCreativeTab(null);
 	}
 
 	@Override

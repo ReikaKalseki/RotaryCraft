@@ -68,7 +68,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	@Override
 	public int getConsumedUnitsPerTick() {
-		return (int)this.getMJPerTick();
+		return (int)Math.ceil(this.getMJPerTick());
 	}
 
 	public float getMJPerTick() {

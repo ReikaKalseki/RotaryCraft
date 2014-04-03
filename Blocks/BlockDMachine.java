@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -22,6 +23,8 @@ public class BlockDMachine extends BlockBasicMultiTE {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		//-------------Borer------------------------
 		int k = MachineRegistry.BORER.getMachineMetadata();
 		for (int i = 0; i < 6; i++)

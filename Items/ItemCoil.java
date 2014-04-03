@@ -28,7 +28,11 @@ public class ItemCoil extends ItemBasic implements TensionStorage
 		maxStackSize = 1;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	protected CreativeTabs getCreativePage() {
+		return RotaryCraft.tabRotaryTools;
 	}
 
 	@Override

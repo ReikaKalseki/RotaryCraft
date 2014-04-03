@@ -33,6 +33,7 @@ import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -53,7 +54,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 
 		this.hackDamage();
 	}
@@ -208,7 +209,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 
 	@Override
 	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
-		return Item.swordStone.getIconFromDamage(0);
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.swordStone.getIconFromDamage(0);
 	}
 
 	@Override

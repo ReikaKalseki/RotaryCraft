@@ -276,9 +276,11 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < EngineType.engineList.length; i++) {
-			ItemStack item = new ItemStack(id, 1, i);
-			list.add(item);
+		if (MachineRegistry.ENGINE.isAvailableInCreativeInventory()) {
+			for (int i = 0; i < EngineType.engineList.length; i++) {
+				ItemStack item = new ItemStack(id, 1, i);
+				list.add(item);
+			}
 		}
 	}
 

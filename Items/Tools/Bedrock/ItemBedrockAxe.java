@@ -25,6 +25,7 @@ import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
@@ -45,7 +46,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 6;
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	@Override
@@ -214,7 +215,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	@Override
 	public final Icon getIconFromDamage(int dmg) {
-		return Item.axeStone.getIconFromDamage(0);
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.axeStone.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {

@@ -18,6 +18,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +38,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	@Override
 	public final Icon getIconFromDamage(int dmg) {
-		return Item.shovelStone.getIconFromDamage(0);
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.shovelStone.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {

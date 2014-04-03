@@ -35,6 +35,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -69,7 +70,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 5;
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	@Override
@@ -267,7 +268,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	@Override
 	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
-		return Item.pickaxeStone.getIconFromDamage(0);
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.pickaxeStone.getIconFromDamage(0);
 	}
 
 	@Override

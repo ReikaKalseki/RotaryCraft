@@ -13,15 +13,13 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
 
-public class ItemEthanolMinecart extends ItemBasic {
+public class ItemEthanolMinecart extends ItemRotaryTool {
 
 	public ItemEthanolMinecart(int ID, int tex) {
 		super(ID, tex);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public final int getRenderType() {
-		return -1;
+		return RotaryCraft.instance.isLocked() ? 0 : -1;
 	}
 
 	@Override

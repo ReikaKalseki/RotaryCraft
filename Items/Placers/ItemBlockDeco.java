@@ -25,12 +25,6 @@ public class ItemBlockDeco extends ItemBlock {
 		this.setHasSubtypes(true);
 		//setItemName("machine");
 	}
-	/*
-	public void addCreativeItems(ArrayList list)
-	{
-		for (int i = 0; i < 4; i++)
-			list.add(new ItemStack(this.shiftedIndex, 1, i));
-	}*/
 
 	@Override
 	public int getMetadata (int damageValue) {

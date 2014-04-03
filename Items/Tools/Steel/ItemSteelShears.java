@@ -23,7 +23,7 @@ public class ItemSteelShears extends ItemShears implements IndexedItemSprites {
 		this.setIndex(tex);
 		maxStackSize = 1;
 		this.setMaxDamage(600);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	private void setIndex(int tex) {

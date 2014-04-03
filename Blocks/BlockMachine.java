@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -23,6 +24,8 @@ public class BlockMachine extends BlockBasicMultiTE {
 
 	@Override
 	public void registerIcons(IconRegister ico) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		icons[MachineRegistry.ECU.getMachineMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
 		icons[MachineRegistry.ECU.getMachineMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:ecu_top");
 		for (int i = 2; i < 6; i++)

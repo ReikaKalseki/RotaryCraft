@@ -30,7 +30,11 @@ public class ItemSlide extends ItemBasic {
 		maxStackSize = 1;
 		hasSubtypes = true;
 		this.setIndex(index);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	protected CreativeTabs getCreativePage() {
+		return RotaryCraft.tabRotaryTools;
 	}
 
 	@Override

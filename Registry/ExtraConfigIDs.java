@@ -15,7 +15,6 @@ import net.minecraft.potion.Potion;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 
-/** NEVER ALTER THE ORDER OF THIS LIST!! */
 public enum ExtraConfigIDs implements IDRegistry {
 
 	MACHINEPLACER("ItemBlock IDs", "Machine Items", 30616, Item.class),

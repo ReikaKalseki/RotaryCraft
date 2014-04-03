@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base;
 import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	public ItemBasic(int ID, int tex) {
 		super(ID);
 		maxStackSize = 64;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
+		this.setCreativeTab(this.isAvailableInCreativeMode() ? this.getCreativePage() : null);
 		this.setIndex(tex);
 	}
 
@@ -45,8 +46,21 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 		maxStackSize = max;
 		if (max == 1);
 		hasSubtypes = true;
-		this.setCreativeTab(RotaryCraft.tabRotaryItems);
+		if (this.isAvailableInCreativeMode())
+			this.setCreativeTab(RotaryCraft.tabRotaryItems);
+		else
+			this.setCreativeTab(null);
 		this.setIndex(tex);
+	}
+
+	protected CreativeTabs getCreativePage() {
+		return RotaryCraft.tabRotaryItems;
+	}
+
+	private boolean isAvailableInCreativeMode() {
+		if (RotaryCraft.instance.isLocked())
+			return false;
+		return true;
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {

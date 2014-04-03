@@ -23,6 +23,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -37,7 +38,10 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 		super(par1, par2, par3, par4);
 		maxStackSize = 1;
 		this.setIndex(ind);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		if (!RotaryCraft.instance.isLocked())
+			this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		else
+			this.setCreativeTab(null);
 	}
 
 	public abstract boolean providesProtection();
@@ -72,7 +76,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	@Override
 	public final Icon getIconFromDamage(int dmg) {
-		return Item.plateIron.getIconFromDamage(0);
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.plateIron.getIconFromDamage(0);
 	}
 
 	@Override

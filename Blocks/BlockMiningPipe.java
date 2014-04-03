@@ -142,6 +142,8 @@ public class BlockMiningPipe extends BlockBasic {
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 4; j++)
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:minepipe");

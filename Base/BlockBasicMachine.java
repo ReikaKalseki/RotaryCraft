@@ -139,6 +139,8 @@ public abstract class BlockBasicMachine extends Block implements SidedTextureInd
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9) {
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 
 		if (te instanceof TileEntityBase)

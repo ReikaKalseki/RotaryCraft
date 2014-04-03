@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class BlockBedrockSlice extends Block
 {
@@ -133,6 +134,8 @@ public class BlockBedrockSlice extends Block
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		icon = par1IconRegister.registerIcon("bedrock");
 	}
 }

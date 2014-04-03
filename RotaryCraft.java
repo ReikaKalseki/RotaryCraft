@@ -117,11 +117,11 @@ serverPacketHandlerSpec = @SidedPacketHandler(channels = { "RotaryCraftData" }, 
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
-	public static final CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(),"RotaryCraft");
-	public static final CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(),"RotaryItems");
-	public static final CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(),"RotaryTools");
-	public static final CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(),"RotaryModOres");
-	public static final CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(),"Spawners");
+	public static final CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(), "RotaryCraft");
+	public static final CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(), "RotaryItems");
+	public static final CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(), "RotaryTools");
+	public static final CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(), "RotaryModOres");
+	public static final CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(), "Spawners");
 
 	private static final int[] dmgs = {
 		EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0),
@@ -153,6 +153,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
 
 	static final Random rand = new Random();
+
+	private boolean isLocked = false;
 
 	public static Item shaftcraft;
 	public static Item enginecraft;
@@ -200,6 +202,10 @@ public class RotaryCraft extends DragonAPIMod {
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
+	public boolean isLocked() {
+		return isLocked;
+	}
+
 	@EventHandler
 	public void invalidFingerprint(final FMLFingerprintViolationEvent event)
 	{
@@ -223,9 +229,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 		this.setupClassFiles();
 
-		if (ConfigRegistry.ACHIEVEMENTS.getState()) {
-			achievements = new Achievement[RotaryAchievements.list.length];
-			RotaryAchievements.registerAchievements();
+		if (!this.isLocked()) {
+			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+				achievements = new Achievement[RotaryAchievements.list.length];
+				RotaryAchievements.registerAchievements();
+			}
 		}
 
 		int id = ExtraConfigIDs.FREEZEID.getValue();
@@ -243,10 +251,13 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		proxy.addArmorRenders();
-		proxy.registerRenderers();
+		if (!this.isLocked()) {
+			proxy.addArmorRenders();
+			proxy.registerRenderers();
+		}
 		RotaryRegistration.addBlocks();
-		RotaryNames.addNames();
+		if (!this.isLocked())
+			RotaryNames.addNames();
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
 		RotaryRegistration.addEntities();
@@ -255,8 +266,10 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
-		RotaryRecipes.addRecipes();
-		RotaryChests.addToChests();
+		if (!this.isLocked()) {
+			RotaryRecipes.addRecipes();
+			RotaryChests.addToChests();
+		}
 
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
@@ -286,7 +299,8 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
 
-		IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
+		if (!this.isLocked())
+			IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
 
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockRedstone);
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.blockLapis);
@@ -310,7 +324,8 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
-		RotaryRecipes.addPostLoadRecipes();
+		if (!this.isLocked())
+			RotaryRecipes.addPostLoadRecipes();
 
 		ReikaJavaLibrary.initClass(DifficultyEffects.class);
 		ReikaJavaLibrary.initClass(ExtractorBonus.class);
@@ -327,13 +342,16 @@ public class RotaryCraft extends DragonAPIMod {
 		TileEntityReservoir.initCreativeFluids();
 		ItemFuelTank.initCreativeFluids();
 
-		RecipesGrinder.getRecipes().addOreRecipes();
+		if (!this.isLocked())
+			RecipesGrinder.getRecipes().addOreRecipes();
 	}
 
 	@EventHandler
 	public void overrideRecipes(FMLServerStartedEvent evt) {
-		GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks);
-		GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
+		if (!this.isLocked()) {
+			GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks);
+			GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
+		}
 	}
 
 	private static void setupClassFiles() {
@@ -364,7 +382,7 @@ public class RotaryCraft extends DragonAPIMod {
 		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
 		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");
 
-		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner").setCreativeTab(tabSpawner);
+		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner").setCreativeTab(instance.isLocked() ? null : tabSpawner);
 
 		RotaryRegistration.instantiateMachines();
 
@@ -383,7 +401,8 @@ public class RotaryCraft extends DragonAPIMod {
 	@ForgeSubscribe
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
-		RotaryRegistration.setupLiquidIcons(event);
+		if (!this.isLocked())
+			RotaryRegistration.setupLiquidIcons(event);
 	}
 
 	@Override

@@ -38,6 +38,8 @@ public abstract class BlockBasic extends Block implements SidedTextureIndex {
 	}
 
 	public boolean isAvailableInCreativeMode(int ID) {
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		if (ID == ExtraConfigIDs.MININGPIPE.getValue())
 			return false;
 		if (ID == ExtraConfigIDs.LIGHTBLOCK.getValue())

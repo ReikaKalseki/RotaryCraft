@@ -199,6 +199,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	@Override
 	public final boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
@@ -947,6 +949,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof ConditionalOperation) {
 			currenttip.add(((ConditionalOperation) te).getOperationalStatus());
+		}
+		if (te instanceof EnergyToPowerBase) {
+			EnergyToPowerBase e = (EnergyToPowerBase)te;
+			currenttip.add(String.format("Consuming %d %s/t", e.getConsumedUnitsPerTick(), e.getUnitDisplay()));
 		}
 		return currenttip;
 	}

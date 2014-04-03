@@ -21,6 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -136,6 +137,8 @@ public class BlockGPR extends BlockBasicMachine {
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 11; j++) {
 				String biome;

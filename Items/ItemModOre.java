@@ -30,7 +30,11 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;
-		this.setCreativeTab(RotaryCraft.tabModOres);
+	}
+
+	@Override
+	protected CreativeTabs getCreativePage() {
+		return RotaryCraft.tabModOres;
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
 		this.setIndex(tex);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
 	@Override

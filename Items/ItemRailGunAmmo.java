@@ -25,7 +25,11 @@ public class ItemRailGunAmmo extends ItemBasic {
 		maxStackSize = 16;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	protected CreativeTabs getCreativePage() {
+		return RotaryCraft.tabRotaryTools;
 	}
 
 	@Override

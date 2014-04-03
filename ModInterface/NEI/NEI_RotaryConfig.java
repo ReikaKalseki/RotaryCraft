@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import codechicken.nei.api.API;
@@ -110,6 +111,20 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				li.add(i);
 		}
 		API.setItemDamageVariants(RotaryCraft.machineplacer.itemID, li);
+
+		if (RotaryCraft.instance.isLocked()) {
+			for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
+				ExtraConfigIDs ID = ExtraConfigIDs.idList[i];
+				if (ID.isBlock())
+					API.hideItem(ID.getValue());
+				else if (ID.isItem())
+					API.hideItem(ID.getValue()+256);
+			}
+			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+				ItemRegistry ir = ItemRegistry.itemList[i];
+				API.hideItem(ir.getShiftedID());
+			}
+		}
 	}
 
 	@Override

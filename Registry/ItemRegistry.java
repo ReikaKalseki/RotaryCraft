@@ -655,6 +655,8 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public boolean isAvailableInCreativeInventory() {
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		if (this.isDummiedOut())
 			return false;
 		return true;

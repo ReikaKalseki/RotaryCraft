@@ -46,6 +46,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class RotaryRecipes {
 
 	public static void addRecipes() {
+		if (RotaryCraft.instance.isLocked())
+			return;
 		OreDictionary.initVanillaEntries();
 		RotaryRegistration.loadOreDictionary();
 		addMachines();
@@ -109,6 +111,8 @@ public class RotaryRecipes {
 	}
 
 	public static void addPostLoadRecipes() {
+		if (RotaryCraft.instance.isLocked())
+			return;
 
 		addProps();
 		RecipesGrinder.getRecipes().addModRecipes();
@@ -661,7 +665,7 @@ public class RotaryRecipes {
 
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaloredust);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaldust);
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});

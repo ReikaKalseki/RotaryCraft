@@ -1015,6 +1015,8 @@ public enum MachineRegistry {
 	}
 
 	public boolean isDummiedOut() {
+		if (RotaryCraft.instance.isLocked())
+			return true;
 		if (DragonAPICore.isReikasComputer())
 			return false;
 		if (this == CCTV)

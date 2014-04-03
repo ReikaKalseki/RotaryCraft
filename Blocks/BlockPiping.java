@@ -54,6 +54,8 @@ public class BlockPiping extends BlockBasicMultiTE {
 	@Override
 	public final boolean canRenderInPass(int pass)
 	{
+		if (RotaryCraft.instance.isLocked())
+			return false;
 		ClientProxy.pipe.renderPass = pass;
 		return true;
 	}

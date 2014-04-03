@@ -86,21 +86,23 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < TileEntityAdvancedGear.GearType.list.length; i++) {
-			ItemStack item = new ItemStack(id, 1, i);
-			list.add(item);
-			if (GearType.list[i].storesEnergy()) {
-				item = item.copy();
-				item.stackTagCompound = new NBTTagCompound();
-				item.stackTagCompound.setBoolean("bedrock", true);
+		if (MachineRegistry.ADVANCEDGEARS.isAvailableInCreativeInventory()) {
+			for (int i = 0; i < TileEntityAdvancedGear.GearType.list.length; i++) {
+				ItemStack item = new ItemStack(id, 1, i);
 				list.add(item);
+				if (GearType.list[i].storesEnergy()) {
+					item = item.copy();
+					item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setBoolean("bedrock", true);
+					list.add(item);
 
-				item = item.copy();
-				item.stackTagCompound = new NBTTagCompound();
-				item.stackTagCompound.setLong("energy", TileEntityAdvancedGear.getMaxStorageCapacity(true)*20);
-				item.stackTagCompound.setBoolean("creative", true);
-				item.stackTagCompound.setBoolean("bedrock", true);
-				list.add(item);
+					item = item.copy();
+					item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setLong("energy", TileEntityAdvancedGear.getMaxStorageCapacity(true)*20);
+					item.stackTagCompound.setBoolean("creative", true);
+					item.stackTagCompound.setBoolean("bedrock", true);
+					list.add(item);
+				}
 			}
 		}
 	}
