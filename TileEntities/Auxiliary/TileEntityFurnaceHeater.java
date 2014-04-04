@@ -67,12 +67,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (id == Block.furnaceIdle.blockID || id == Block.furnaceBurning.blockID)
 			return true;
 		Block b = Block.blocksList[id];
-		if (!b.hasTileEntity(meta))
-			return false;
 		MachineRegistry m = MachineRegistry.getMachine(world, fx, fy, fz);
 		if (m != null && m.canBeFrictionHeated())
 			return true;
-		TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+		TileEntity te = this.getTileEntity(fx, fy, fz);
 		return te instanceof ThermalMachine;
 	}
 
@@ -120,7 +118,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				this.heatMachine(world, x, y, z);
 			}
 			else {
-				TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+				TileEntity te = this.getTileEntity(fx, fy, fz);
 				if (te instanceof ThermalMachine) {
 					ThermalMachine tm = (ThermalMachine)te;
 					if (tm.canBeFrictionHeated()) {
@@ -139,7 +137,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void heatMachine(World world, int x, int y, int z) {
-		FrictionHeatable te = (FrictionHeatable)world.getBlockTileEntity(fx, fy, fz);
+		FrictionHeatable te = (FrictionHeatable)this.getTileEntity(fx, fy, fz);
 		int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
 		te.addTemperature(tdiff);
 
@@ -151,11 +149,11 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private boolean hasHeatable(World world) {
-		return world.getBlockTileEntity(fx, fy, fz) instanceof FrictionHeatable;
+		return this.getTileEntity(fx, fy, fz) instanceof FrictionHeatable;
 	}
 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
-		TileEntity te = world.getBlockTileEntity(fx, fy, fz);
+		TileEntity te = this.getTileEntity(fx, fy, fz);
 		TileEntityFurnace tile = (TileEntityFurnace)te;
 		int burn = Math.max(this.getBurnTimeFromTemperature(), tile.furnaceBurnTime);
 		this.setFurnaceBlock(world, burn > 0);
@@ -241,7 +239,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	public boolean hasFurnace(World world) {
-		return world.getBlockTileEntity(fx, fy, fz) instanceof TileEntityFurnace;
+		return this.getTileEntity(fx, fy, fz) instanceof TileEntityFurnace;
 	}
 
 	private int getBurnTimeFromTemperature() {
@@ -279,9 +277,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		NBT.setInteger("furnz", fz);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
