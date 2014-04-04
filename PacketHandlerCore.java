@@ -106,6 +106,8 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
 
+	private static final Random rand = new Random();
+
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		this.process(packet, (EntityPlayer)player);
@@ -443,7 +445,6 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					engine.backFire(world, x, y, z);
 				break;
 			case MUSICPARTICLE:
-				Random rand = new Random();
 				music = (TileEntityMusicBox)te;
 				world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
 				break;

@@ -340,7 +340,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			PipeConnector pc = (PipeConnector)tile;
 			return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
 		}
-		else if (tile instanceof IFluidHandler)
+		else if (this.isInteractableTile(tile))
 			return true;
 		return false;
 	}
