@@ -365,7 +365,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
-		OreForcer.forceCompatibility();
+		OreForcer.instance.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
 		if (!this.isLocked())

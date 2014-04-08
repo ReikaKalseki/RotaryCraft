@@ -41,12 +41,18 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
 
-	public static void forceCompatibility() {
+	public static final OreForcer instance = new OreForcer();
+
+	private OreForcer() {
+
+	}
+
+	public void forceCompatibility() {
 		for (int i = 0; i < ModList.modList.length; i++) {
 			ModList mod = ModList.modList[i];
 			if (mod.isLoaded()) {
 				try {
-					force(mod);
+					this.force(mod);
 				}
 				catch (NullPointerException e) {
 					RotaryCraft.logger.logError("Could not force compatibility with "+mod+". Reason: ");
@@ -77,91 +83,127 @@ public final class OreForcer {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private static void force(ModList api) {
+	private void force(ModList api) {
 		if (!api.isReikasMod())
 			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
 		case APPENG:
-			intercraftQuartz();
+			this.intercraftQuartz();
 			break;
 		case FORESTRY:
-			intercraftApatite();
+			this.intercraftApatite();
 			break;
 		case THAUMCRAFT:
-			addThaumAspects();
+			this.addThaumAspects();
 			if (ConfigRegistry.MODORES.getState())
-				registerThaumcraft();
-			intercraftThaumcraft();
+				this.registerThaumcraft();
+			this.intercraftThaumcraft();
 			break;
 		case MFFS:
-			intercraftForcicium();
+			this.intercraftForcicium();
 			break;
 		case MEKANISM:
-			registerOsmium();
+			this.registerOsmium();
 			break;
 		case DARTCRAFT:
 			if (ConfigRegistry.MODORES.getState())
-				registerDart();
-			intercraftDart();
-			breakForceWrench();
+				this.registerDart();
+			this.intercraftDart();
+			this.breakForceWrench();
 			break;
 		case ARSMAGICA:
 			if (ConfigRegistry.MODORES.getState())
-				registerMagica();
-			intercraftMagica();
+				this.registerMagica();
+			this.intercraftMagica();
 			break;
 		case TRANSITIONAL:
-			intercraftMagmanite();
+			this.intercraftMagmanite();
 			break;
 		case RAILCRAFT:
-			intercraftFirestone();
+			this.intercraftFirestone();
 			break;
 		case IC2:
-			convertUranium();
+			this.convertUranium();
 			break;
 		case MAGICCROPS:
 			if (ConfigRegistry.MODORES.getState())
-				registerEssence();
+				this.registerEssence();
+			this.intercraftEssence();
 			break;
 		case MIMICRY:
-			intercraftMimichite();
+			this.intercraftMimichite();
 			break;
 		case FACTORIZATION:
-			intercraftDarkIron();
+			this.intercraftDarkIron();
 			break;
 		case QCRAFT:
 			if (ConfigRegistry.MODORES.getState())
-				registerQuantum();
+				this.registerQuantum();
+			this.intercraftQuantum();
+			break;
+		case PROJRED:
+			this.intercraftPRGems();
+			break;
 		}
 	}
 
-	private static void registerQuantum() {
+	private void intercraftPRGems() {
+		ItemStack ruby = this.getPRGem("gemRuby");
+		ItemStack sapphire = this.getPRGem("gemSapphire");
+		ItemStack peridot = this.getPRGem("gemPeridot");
+		if (ruby != null)
+			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.RUBY), ruby);
+		if (sapphire != null)
+			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.SAPPHIRE), sapphire);
+		if (peridot != null)
+			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.PERIDOT), peridot);
+		RotaryCraft.logger.log("RotaryCraft gems can now be crafted into Project Red gems!");
+	}
+
+	private ItemStack getPRGem(String oredict) {
+		ArrayList<ItemStack> gems = OreDictionary.getOres(oredict);
+		for (int i = 0; i < gems.size(); i++) {
+			ItemStack is = gems.get(i);
+			if (is.itemID != RotaryCraft.modingots.itemID) {
+				return is;
+			}
+		}
+		return null;
+	}
+
+	private void registerQuantum() {
 		QuantumOreHandler.getInstance().forceOreRegistration();
+	}
+
+	private void intercraftQuantum() {
 		ItemStack ore = new ItemStack(QuantumOreHandler.getInstance().dustID, 1, 0);
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.QUANTUM));
 		RotaryCraft.logger.log("RotaryCraft quantum dust can now be crafted into QCraft quantum dust!");
 	}
 
-	private static void intercraftDarkIron() {
+	private void intercraftDarkIron() {
 		ItemStack ingot = new ItemStack(FactorizationHandler.getInstance().ingotID, 1, 0);
 		GameRegistry.addShapelessRecipe(ingot, ItemStacks.getModOreIngot(ModOreList.DARKIRON));
 		RotaryCraft.logger.log("RotaryCraft dark iron ingots can now be crafted into Factorization equivalents!");
 	}
 
-	private static void intercraftMimichite() {
+	private void intercraftMimichite() {
 		ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
 		RotaryCraft.logger.log("RotaryCraft mimichite items can now be crafted into Mimicry mimichite!");
 	}
 
-	private static void registerEssence() {
+	private void registerEssence() {
 		MagicCropHandler.getInstance().registerEssence();
+	}
+
+	private void intercraftEssence() {
 		ItemStack ore = MagicCropHandler.getInstance().getWeakEssence();
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
 		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
 	}
 
-	private static void convertUranium() {
+	private void convertUranium() {
 		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
 		if (u == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null ItemStack for Uranium");
@@ -174,7 +216,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft uranium ingots can now be crafted into IC2 purified crushed uranium!");
 	}
 
-	private static void intercraftFirestone() {
+	private void intercraftFirestone() {
 		Item item = GameRegistry.findItem(ModList.RAILCRAFT.getModLabel(), "railcraft.firestone.raw");
 		if (item == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.RAILCRAFT, "Null ItemStack for Firestone");
@@ -182,7 +224,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft firestone can now be crafted into RailCraft firestone!");
 	}
 
-	private static void intercraftMagmanite() {
+	private void intercraftMagmanite() {
 		Class trans = ModList.TRANSITIONAL.getItemClass();
 		try {
 			Field f = trans.getField("MagmaDrop");
@@ -209,7 +251,7 @@ public final class OreForcer {
 		}
 	}
 
-	private static void intercraftMagica() {
+	private void intercraftMagica() {
 		RotaryCraft.logger.log("Adding ore item conversion recipes!");
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
@@ -223,17 +265,17 @@ public final class OreForcer {
 		}
 	}
 
-	private static void registerMagica() {
+	private void registerMagica() {
 		MagicaOreHandler.getInstance().forceOreRegistration();
 	}
 
-	private static void registerOsmium() {
+	private void registerOsmium() {
 		if (MekanismHandler.getInstance().oreID == -1)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.MEKANISM, "Null Item for Osmium");
 		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, MekanismHandler.osmiumMeta));
 	}
 
-	private static void addThaumAspects() {
+	private void addThaumAspects() {
 		RotaryCraft.logger.log("Adding ThaumCraft aspects.");
 		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
 		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
@@ -261,7 +303,7 @@ public final class OreForcer {
 		}
 	}
 
-	private static void breakForceWrench() {
+	private void breakForceWrench() {
 		try {
 			Class api = Class.forName("bluedart.api.DartAPI");
 			Field blacklist = api.getField("tileBlacklist");
@@ -296,16 +338,16 @@ public final class OreForcer {
 		}
 	}
 
-	private static void intercraftDart() {
+	private void intercraftDart() {
 		GameRegistry.addShapelessRecipe(DartOreHandler.getInstance().getForceGem(), ItemStacks.getModOreIngot(ModOreList.FORCE));
 		RotaryCraft.logger.log("RotaryCraft force gems can now be crafted into DartCraft force gems!");
 	}
 
-	private static void registerDart() {
+	private void registerDart() {
 		DartOreHandler.getInstance().forceOreRegistration();
 	}
 
-	private static void intercraftForcicium() {
+	private void intercraftForcicium() {
 		try {
 			Class mf = ModList.MFFS.getItemClass();
 			Field item = mf.getField("MFFSitemForcicium");
@@ -330,7 +372,7 @@ public final class OreForcer {
 		}
 	}
 
-	private static void intercraftQuartz() {
+	private void intercraftQuartz() {
 		ItemStack quartz = AppEngHandler.getInstance().getCertusQuartz();
 		if (quartz == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.APPENG, "Null ItemStack for Certus Quartz");
@@ -338,7 +380,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft certus quartz can now be crafted into AppliedEnergistics certus quartz!");
 	}
 
-	private static void intercraftApatite() {
+	private void intercraftApatite() {
 		int id = ForestryHandler.getInstance().apatiteID;
 		if (id == -1)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Apatite");
@@ -347,7 +389,7 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft apatite can now be crafted into Forestry apatite!");
 	}
 
-	private static void intercraftThaumcraft() {
+	private void intercraftThaumcraft() {
 		RotaryCraft.logger.log("Adding ore item conversion recipes!");
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
@@ -361,7 +403,7 @@ public final class OreForcer {
 		}
 	}
 
-	private static void registerThaumcraft() {
+	private void registerThaumcraft() {
 		ThaumOreHandler.getInstance().forceOreRegistration();
 	}
 
