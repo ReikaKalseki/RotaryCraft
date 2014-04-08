@@ -45,6 +45,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
@@ -381,6 +382,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.COMPACTOR, TileEntityCompactor.REQPRESS, TileEntityCompactor.REQTEMP);
 		addData(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELTTEMP);
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
+		addData(MachineRegistry.FRICTION, TileEntityFurnaceHeater.TUNGSTENTEMP);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
 		addData(MachineRegistry.GENERATOR, TileEntityGenerator.OUTPUT_VOLTAGE);
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());

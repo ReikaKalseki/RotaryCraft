@@ -60,7 +60,6 @@ public enum ExtractorBonus {
 	private List<ModList> bonusMods;
 	private boolean hasReq = false;
 	private ModList requirementMod;
-	public final long powerReq;
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ModList req) {
 		bonusItem = is.copy();

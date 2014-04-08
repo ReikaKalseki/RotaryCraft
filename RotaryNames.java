@@ -112,11 +112,13 @@ public class RotaryNames {
 		"extract.bluesolu", "extract.diasolu", "extract.greensolu", "extract.quartzsolu",
 
 		"extract.coalflakes", "extract.ironflakes", "extract.goldflakes", "extract.redflakes",
-		"extract.blueflakes", "extract.diaflakes", "extract.greenflakes", "extract.quartzflakes", "extract.silverflakes"
+		"extract.blueflakes", "extract.diaflakes", "extract.greenflakes", "extract.quartzflakes",
+
+		"extract.silverflakes", "extract.tungstenflakes"
 	};
 
 	public static final String[] compactNames = {
-		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "", "", "misc.agingot"
+		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "", "", "misc.agingot", "misc.wingot"
 	};
 
 	public static final String[] pipeNames = {

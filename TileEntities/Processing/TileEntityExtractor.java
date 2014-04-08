@@ -309,8 +309,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	private void bonusItems(ItemStack is) {
 		ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
-		if (e != null)
+		if (e != null) {
 			e.addBonusToItemStack(inv, 8);
+		}
+		else {
+
+		}
 	}
 
 	private boolean isValidModOre(ItemStack is) {

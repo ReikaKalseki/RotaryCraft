@@ -314,10 +314,6 @@ public class ItemMulti extends ItemBasic {
 		return ReikaStringParser.stripSpaces(s.toLowerCase());
 	}
 
-	public int getType() {
-		return type;
-	}
-
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		int offset = 0;
@@ -326,11 +322,16 @@ public class ItemMulti extends ItemBasic {
 			ty -= 16;
 		if (type == 9)
 			return 150;
-		if (item.getItemDamage() == ItemStacks.silverflakes.getItemDamage() && item.itemID == ItemStacks.silverflakes.itemID) {
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.silverflakes)) {
 			ty++;
 			offset = -1;
 		}
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.tungstenflakes)) {
+			ty++;
+			offset = -3;
+		}
 		return (16*ty+item.getItemDamage()+offset);
+		clean up this code
 	}
 
 }

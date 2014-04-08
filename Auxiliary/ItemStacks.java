@@ -41,8 +41,9 @@ public final class ItemStacks {
 	public static final ItemStack ethanolbucket = ItemRegistry.BUCKET.getStackOfMetadata(2);
 
 	public static final ItemStack bedingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 3);
-	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);
 	public static final ItemStack aluminumingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 4);
+	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);
+	public static final ItemStack tungsteningot = new ItemStack(RotaryCraft.compacts.itemID, 1, 8);
 
 	public static final ItemStack basepanel = new ItemStack(RotaryCraft.shaftcraft, 1, 0);
 	public static final ItemStack steelingot = new ItemStack(RotaryCraft.shaftcraft, 1, 1);
@@ -170,6 +171,7 @@ public final class ItemStacks {
 	public static final ItemStack emeraldoreflakes = new ItemStack(RotaryCraft.extracts, 1, 30);
 	public static final ItemStack netherquartzflakes = new ItemStack(RotaryCraft.extracts, 1, 31);
 	public static final ItemStack silverflakes = new ItemStack(RotaryCraft.extracts, 1, 32);
+	public static final ItemStack tungstenflakes = new ItemStack(RotaryCraft.extracts, 1, 33);
 
 	public static final ItemStack anthracite = new ItemStack(RotaryCraft.compacts, 1, 0);
 	public static final ItemStack prismane = new ItemStack(RotaryCraft.compacts, 1, 1);

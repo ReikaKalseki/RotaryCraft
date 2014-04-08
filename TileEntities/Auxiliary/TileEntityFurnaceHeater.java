@@ -11,13 +11,18 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -35,6 +40,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	public int fz;
 
 	public static final int MAXTEMP = 2000;
+	public static final int TUNGSTENTEMP = 1800;
 	private int smeltTime = 0;
 	private int soundtick = 0;
 
@@ -159,12 +165,23 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		this.setFurnaceBlock(world, burn > 0);
 		tile.currentItemBurnTime = burn;
 		tile.furnaceBurnTime = burn;
-		this.smeltCalculation();
-		smeltTime++;
-		tile.furnaceCookTime = Math.min(smeltTime, 195);
-		if (tile.getStackInSlot(0) != null) {
+		ItemStack in = tile.getStackInSlot(0);
+		ItemStack out = tile.getStackInSlot(2);
+		clean up this code
+		boolean canMakeTungsten = temperature >= TUNGSTENTEMP && (out == null || (out.stackSize < out.getMaxStackSize() && ReikaItemHelper.matchStacks(out, ItemStacks.tungsteningot)));
+		if (in != null) {
+			this.smeltCalculation();
+			smeltTime++;
+			tile.furnaceCookTime = Math.min(smeltTime, 195);
 			if (smeltTime >= 200) {
-				tile.smeltItem();
+				if (FurnaceRecipes.smelting().getSmeltingResult(in) != null) {
+					tile.smeltItem();
+				}
+				else if (canMakeTungsten && ReikaItemHelper.matchStacks(in, ItemStacks.tungstenflakes)) {
+					ReikaInventoryHelper.decrStack(0, tile, 1);
+					out = out != null ? ReikaItemHelper.getSizedItemStack(out, out.stackSize+1) : ItemStacks.tungsteningot.copy();
+					tile.setInventorySlotContents(2, out);
+				}
 				smeltTime = 0;
 			}
 		}
