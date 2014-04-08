@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -158,6 +159,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		return this.getTileEntity(fx, fy, fz) instanceof FrictionHeatable;
 	}
 
+	private boolean furnaceCanRun(TileEntityFurnace te) {
+
+	}
+
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
 		TileEntity te = this.getTileEntity(fx, fy, fz);
 		TileEntityFurnace tile = (TileEntityFurnace)te;
@@ -167,7 +172,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.furnaceBurnTime = burn;
 		ItemStack in = tile.getStackInSlot(0);
 		ItemStack out = tile.getStackInSlot(2);
-		clean up this code
+		need to generalize, make like Woodcutter getVanilla & getModTree code
+		ItemStack special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
 		boolean canMakeTungsten = temperature >= TUNGSTENTEMP && (out == null || (out.stackSize < out.getMaxStackSize() && ReikaItemHelper.matchStacks(out, ItemStacks.tungsteningot)));
 		if (in != null) {
 			this.smeltCalculation();

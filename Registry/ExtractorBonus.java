@@ -48,7 +48,8 @@ public enum ExtractorBonus {
 	SAPPHIRE(ExtractorModOres.getSolutionProduct(ModOreList.SAPPHIRE), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.0625F),
 	QUARTZ(ItemStacks.netherquartzsolution, ExtractorModOres.getFlakeProduct(ModOreList.CERTUSQUARTZ), 0.0625F),
 	CERTUS(ExtractorModOres.getSolutionProduct(ModOreList.CERTUSQUARTZ), ItemStacks.netherquartzflakes, 0.5F),
-	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F);
+	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F),
+	REDSTONE(ItemStacks.redoresolution, ItemStacks.tungstenflakes, 0.05F);
 
 	private static final ExtractorBonus[] bonusList = values();
 
