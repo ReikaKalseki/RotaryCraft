@@ -49,7 +49,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -190,14 +189,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	@Override
 	public final boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
+		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
 		if (RotaryCraft.instance.isLocked())
 			return false;
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
-
-		if (te instanceof TileEntityBase)
-			((TileEntityBase)te).syncAllData();
 
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);

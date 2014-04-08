@@ -56,11 +56,11 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	public static enum Upgrades {
 
 		PERFORMANCE("Performance Engine Upgrade"),
-		MAGNETOSTATIC1("Magnetostatic Tier 1 Upgrade"),
-		MAGNETOSTATIC2("Magnetostatic Tier 2 Upgrade"),
-		MAGNETOSTATIC3("Magnetostatic Tier 3 Upgrade"),
-		MAGNETOSTATIC4("Magnetostatic Tier 4 Upgrade"),
-		MAGNETOSTATIC5("Magnetostatic Tier 5 Upgrade");
+		MAGNETOSTATIC1("Magnetostatic Tier 1 Upgrade"), //Made with ethanol
+		MAGNETOSTATIC2("Magnetostatic Tier 2 Upgrade"), //Made in magnetizer
+		MAGNETOSTATIC3("Magnetostatic Tier 3 Upgrade"), //Made with pulse jet ingot
+		MAGNETOSTATIC4("Magnetostatic Tier 4 Upgrade"), //Made with 4MW extractor product
+		MAGNETOSTATIC5("Magnetostatic Tier 5 Upgrade"); //Made with bedrock
 
 		public final String desc;
 
