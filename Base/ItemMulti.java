@@ -19,10 +19,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -202,12 +202,6 @@ public class ItemMulti extends ItemBasic {
 		case 8: //powders
 			j = RotaryNames.powderNames.length;
 			break;
-		case 9: //spawner
-			j = 0;//RotaryNames.spawnerNames.length;
-			break;
-		case 10: //pipe items
-			j = RotaryNames.pipeNames.length;
-			break;
 		case 11: //shafts
 			j = RotaryNames.getNumberShaftTypes();
 			break;
@@ -223,25 +217,21 @@ public class ItemMulti extends ItemBasic {
 		}
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
-			if (type == 12) {
+			if (item.itemID == RotaryCraft.gbxitems.itemID) {
 				if (item.stackTagCompound == null)
-					item.setTagCompound(new NBTTagCompound());
+					item.stackTagCompound = new NBTTagCompound();
 				item.stackTagCompound.setInteger("damage", 0);
 			}
-			if (type == 6) {
-				if (i < 5 || i > 6)
-					par3List.add(item);
-			}
-			else if (type == 10) {
-				if (i != 3)
+			if (item.itemID == RotaryCraft.compacts.itemID) {
+				if (i != 5 && i != 6)
 					par3List.add(item);
 			}
 			else {
 				par3List.add(item);
 			}
-			if (item.itemID == ItemStacks.shaftcore.itemID && item.getItemDamage() == ItemStacks.shaftcore.getItemDamage()) {
+			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore)) {
 				ItemStack mag = item.copy();
-				if (DragonAPICore.isReikasComputer() && ReikaObfuscationHelper.isDeObfEnvironment()) {
+				if (DragonAPICore.isReikasComputer()) {
 					mag.stackTagCompound = new NBTTagCompound();
 					mag.stackTagCompound.setInteger("magnet", 32);
 					par3List.add(mag);
@@ -295,9 +285,6 @@ public class ItemMulti extends ItemBasic {
 		case 8:
 			s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 			break;
-		case 9:
-			s = super.getUnlocalizedName();// + "." + RotaryNames.spawnerNames[d];
-			break;
 		case 10:
 			s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
 			break;
@@ -316,22 +303,12 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
-		int offset = 0;
-		int ty = type;
-		while (ty >= 16)
-			ty -= 16;
-		if (type == 9)
-			return 150;
-		if (ReikaItemHelper.matchStacks(item, ItemStacks.silverflakes)) {
-			ty++;
-			offset = -1;
-		}
-		if (ReikaItemHelper.matchStacks(item, ItemStacks.tungstenflakes)) {
-			ty++;
-			offset = -3;
-		}
-		return (16*ty+item.getItemDamage()+offset);
-		clean up this code
+		int row = type;
+		while (row >= 16)
+			row -= 16;
+		if (item.itemID == RotaryCraft.extracts.itemID && item.getItemDamage() > 31)
+			row = 9+item.getItemDamage()/16;
+		return 16*row+item.getItemDamage();
 	}
 
 }

@@ -22,7 +22,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -159,8 +158,13 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		return this.getTileEntity(fx, fy, fz) instanceof FrictionHeatable;
 	}
 
-	private boolean furnaceCanRun(TileEntityFurnace te) {
-
+	private boolean canTileMake(TileEntityFurnace tile, ItemStack is) {
+		ItemStack out = tile.getStackInSlot(2);
+		if (out == null)
+			return true;
+		if (ReikaItemHelper.matchStacks(is, out) && is.stackSize+out.stackSize <= is.getMaxStackSize())
+			return true;
+		return false;
 	}
 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
@@ -172,20 +176,23 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.furnaceBurnTime = burn;
 		ItemStack in = tile.getStackInSlot(0);
 		ItemStack out = tile.getStackInSlot(2);
-		need to generalize, make like Woodcutter getVanilla & getModTree code
+		ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
 		ItemStack special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
-		boolean canMakeTungsten = temperature >= TUNGSTENTEMP && (out == null || (out.stackSize < out.getMaxStackSize() && ReikaItemHelper.matchStacks(out, ItemStacks.tungsteningot)));
-		if (in != null) {
+		if (!this.canTileMake(tile, special))
+			special = null;
+
+		if (smelt != null || special != null) {
 			this.smeltCalculation();
 			smeltTime++;
 			tile.furnaceCookTime = Math.min(smeltTime, 195);
 			if (smeltTime >= 200) {
-				if (FurnaceRecipes.smelting().getSmeltingResult(in) != null) {
+				if (smelt != null) {
 					tile.smeltItem();
 				}
-				else if (canMakeTungsten && ReikaItemHelper.matchStacks(in, ItemStacks.tungstenflakes)) {
+				else if (special != null) {
 					ReikaInventoryHelper.decrStack(0, tile, 1);
-					out = out != null ? ReikaItemHelper.getSizedItemStack(out, out.stackSize+1) : ItemStacks.tungsteningot.copy();
+					int amt = out != null ? out.stackSize+1 : 1;
+					out = ReikaItemHelper.getSizedItemStack(special, amt);
 					tile.setInventorySlotContents(2, out);
 				}
 				smeltTime = 0;
