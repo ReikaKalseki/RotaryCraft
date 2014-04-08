@@ -18,6 +18,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -64,7 +65,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			power = 0;
 			return;
 		}
-		this.getPower4Sided(0, -1, 0); //The spawner itself is the power input
+		this.getOffsetPower4Sided(0, -1, 0); //The spawner itself is the power input
 		if (power < MINPOWER) {
 			//this.shutdownSpawner(world, x, y, z);
 			disable = false;
@@ -76,7 +77,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private void shutdownSpawner(World world, int x, int y, int z) {
-		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
+		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return;
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
@@ -95,7 +96,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private void applyToSpawner(World world, int x, int y, int z) {
-		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
+		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return;
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
@@ -119,7 +120,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private boolean canSpawn(World world, int x, int y, int z) {
-		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
+		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return false;
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
@@ -138,7 +139,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	/** Fetches from real spawner! */
 	private int getSpawnDelay(World world, int x, int y, int z) {
-		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
+		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return -1;
 		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();

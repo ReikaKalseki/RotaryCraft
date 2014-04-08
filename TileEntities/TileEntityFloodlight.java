@@ -33,16 +33,12 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		this.getPower();
+		this.getPower(false);
+		if (power >= MINPOWER)
+			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 		power = (long)omega*(long)torque;
 		if ((world.getTotalWorldTime()&8) == 8) //almost unnoticeable light lag, but big FPS increase
 			this.makeBeam(world, x, y, z, meta);
-	}
-
-	public void getPower() {
-		super.getPower(false);
-		if (power >= MINPOWER)
-			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 	}
 
 	@Override

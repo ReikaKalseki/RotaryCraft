@@ -61,7 +61,10 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	private int getMystCraftTarget() {
-		return ReikaMystcraftHelper.getTargetDimensionIDFromPortalBlock(worldObj, writex, writey, writez);
+		int x = xCoord+write.offsetX;
+		int y = yCoord+write.offsetY;
+		int z = zCoord+write.offsetZ;
+		return ReikaMystcraftHelper.getTargetDimensionIDFromPortalBlock(worldObj, x, y, z);
 	}
 
 	public void setPortalType(World world, int x, int y, int z) {
@@ -80,7 +83,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-		if (ReikaBlockHelper.isPortalBlock(world, writex, writey, writez)) {
+		if (ReikaBlockHelper.isPortalBlock(world, x+write.offsetX, y+write.offsetY, z+write.offsetZ)) {
 			this.transferPower(world, x, y, z, meta);
 			this.emitPower(world, x, y, z);
 		}
@@ -111,32 +114,41 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		//ReikaJavaLibrary.pConsole(writex+":"+writey+":"+writez, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(dim, Side.SERVER);
 		World age = DimensionManager.getWorld(dim);
-		if (age != null && age.checkChunksExist(writex, writey, writez, writex, writey, writez)) {
-			int tg = this.getTargetDimensionBy(age, writex, writey, writez);
+		int ax = x+write.offsetX;
+		int ay = y+write.offsetY;
+		int az = z+write.offsetZ;
+		if (age != null && age.checkChunksExist(ax, ay, az, ax, ay, az)) {
+			int tg = this.getTargetDimensionBy(age, ax, ay, az);
 			//ReikaJavaLibrary.pConsole(tg, Side.SERVER);
 			//ReikaJavaLibrary.pConsole(tg, dim == 7);
 			if (tg == world.provider.dimensionId) {
 				//ReikaJavaLibrary.pConsole(writex+", "+writey+", "+writez+" >> "+Block.blocksList[id], Side.SERVER);
-				int dx = x+(writex-x)*2;
-				int dy = y+(writey-y)*2;
-				int dz = z+(writez-z)*2;
+				int dx = x+(write.offsetX)*2;
+				int dy = y+(write.offsetY)*2;
+				int dz = z+(write.offsetZ)*2;
 				MachineRegistry m = MachineRegistry.getMachine(age, dx, dy, dz);
 				//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
 				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
 				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, dim == 7);
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft te = (TileEntityShaft)age.getBlockTileEntity(dx, dy, dz);
-					if (te.readx == writex && te.ready == writey && te.readz == writez) {
+					int terx = te.getReadDirection().offsetX;
+					int tery = te.getReadDirection().offsetY;
+					int terz = te.getReadDirection().offsetZ;
+					if (terx == ax && tery == ay && terz == az) {
 						age.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
 						TileEntityPortalShaft ps = (TileEntityPortalShaft)age.getBlockTileEntity(dx, dy, dz);
 						ps.setBlockMetadata(te.getBlockMetadata());
-						ps.setPortalType(age, writex, writey, writez);
+						ps.setPortalType(age, ax, ay, az);
 						ps.material = material;
 					}
 				}
 				else if (m == MachineRegistry.PORTALSHAFT) {
 					TileEntityPortalShaft te = (TileEntityPortalShaft)age.getBlockTileEntity(dx, dy, dz);
-					if (te.readx == writex && te.ready == writey && te.readz == writez) {
+					int terx = te.getReadDirection().offsetX;
+					int tery = te.getReadDirection().offsetY;
+					int terz = te.getReadDirection().offsetZ;
+					if (terx == ax && tery == ay && terz == az) {
 						te.power = power;
 						te.omega = omega;
 						te.torque = torque;
@@ -149,40 +161,28 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	public void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
-			readx = x+1;
-			writex = x-1;
-			readz = writez = z;
-			ready = writey = y;
+			read = ForgeDirection.EAST;
+			write = read.getOpposite();
 			break;
 		case 1:
-			readx = x-1;
-			writex = x+1;
-			readz = writez = z;
-			ready = writey = y;
+			read = ForgeDirection.WEST;
+			write = read.getOpposite();
 			break;
 		case 2:
-			readz = z+1;
-			writez = z-1;
-			readx = writex = x;
-			ready = writey = y;
+			read = ForgeDirection.SOUTH;
+			write = read.getOpposite();
 			break;
 		case 3:
-			readz = z-1;
-			writez = z+1;
-			readx = writex = x;
-			ready = writey = y;
+			read = ForgeDirection.NORTH;
+			write = read.getOpposite();
 			break;
 		case 4:	//moving up
-			readx = writex = x;
-			readz = writez = z;
-			ready = y-1;
-			writey = y+1;
+			read = ForgeDirection.DOWN;
+			write = read.getOpposite();
 			break;
 		case 5:	//moving down
-			readx = writex = x;
-			readz = writez = z;
-			ready = y+1;
-			writey = y-1;
+			read = ForgeDirection.UP;
+			write = read.getOpposite();
 			break;
 		}
 	}
@@ -212,11 +212,11 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	public void readFromCross(TileEntityShaft cross) {
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -227,8 +227,8 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		MachineRegistry m = this.getMachine(read);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -236,7 +236,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+				if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
@@ -248,7 +248,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (te instanceof SimpleProvider) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
+				this.copyStandardPower(te);
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
@@ -263,7 +263,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 					this.readFromSplitter(devicein);
 					return;
 				}
-				else if (devicein.writex == x && devicein.writez == z) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
@@ -314,11 +314,11 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	public boolean isEnteringPortal() {
-		return ReikaBlockHelper.isPortalBlock(worldObj, writex, writey, writez);
+		return ReikaBlockHelper.isPortalBlock(worldObj, xCoord+write.offsetX, yCoord+write.offsetY, zCoord+write.offsetZ);
 	}
 
 	public boolean isExitingPortal() {
-		return ReikaBlockHelper.isPortalBlock(worldObj, readx, ready, readz);
+		return ReikaBlockHelper.isPortalBlock(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ);
 	}
 
 }

@@ -33,7 +33,7 @@ public class BlockObsidianGlass extends BlockBasic {
 		this.setResistance(6000F);
 		this.setLightValue(0F);
 		this.setStepSound(soundGlassFootstep);
-		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
 
 		//this.blockIndexInTexture = 74;
 	}

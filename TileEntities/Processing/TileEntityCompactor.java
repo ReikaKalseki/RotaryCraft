@@ -96,29 +96,24 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 		switch (metadata) {
 		case 0:
 			id = world.getBlockId(x+1, y, z);
-			readx = x+1;
-			readz = z;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
 			id = world.getBlockId(x-1, y, z);
-			readx = x-1;
-			readz = z;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
 			id = world.getBlockId(x, y, z+1);
-			readx = x;
-			readz = z+1;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 3:
 			id = world.getBlockId(x, y, z-1);
-			readx = x;
-			readz = z-1;
+			read = ForgeDirection.NORTH;
 			break;
 		default:
 			id = 0;
 			break;
 		}
-		ready = yCoord;
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, powinx, y, powinz, 4);
 		return true;
 	}

@@ -97,7 +97,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	private boolean hasOutputTile() {
-		TileEntity te = worldObj.getBlockTileEntity(writex, writey, writez);
+		TileEntity te = this.getAdjacentTileEntity(write);
 		return te instanceof IPowerReceptor;
 	}
 
@@ -124,7 +124,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		this.getPower(false);
 
 		if (power > 0) {
-			TileEntity tile = world.getBlockTileEntity(writex, writey, writez);
+			TileEntity tile = this.getAdjacentTileEntity(write);
 			if (tile instanceof IPowerReceptor) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
 				PowerReceiver pp = rc.getPowerReceiver(facingDir);
@@ -143,44 +143,28 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
 		switch(meta) {
 		case 0:
-			ready = y-1;
-			writey = y+1;
 			facingDir = ForgeDirection.DOWN;
 			break;
 		case 1:
-			ready = y+1;
-			writey = y-1;
 			facingDir = ForgeDirection.UP;
 			break;
 		case 2:
-			readz = z-1;
-			writez = z+1;
 			facingDir = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readx = x-1;
-			writex = x+1;
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 4:
-			readz = z+1;
-			writez = z-1;
 			facingDir = ForgeDirection.SOUTH;
 			break;
 		case 5:
-			readx = x+1;
-			writex = x-1;
 			facingDir = ForgeDirection.EAST;
 			break;
 		}
+		read = facingDir;
+		write = read.getOpposite();
 	}
 
 	public boolean isPipeConnected(ForgeDirection with) {

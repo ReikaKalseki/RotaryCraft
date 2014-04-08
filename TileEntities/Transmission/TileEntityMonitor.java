@@ -31,11 +31,11 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	}
 
 	public void readFromCross(TileEntityShaft cross) {
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -46,8 +46,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		MachineRegistry m = MachineRegistry.getMachine(world, readx, y, readz);
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		MachineRegistry m = this.getMachine(read);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -55,7 +55,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+				if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
@@ -67,7 +67,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 				torquein = pwr.getTorqueToSide(dir);
 			}
 			if (te instanceof SimpleProvider) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
+				this.copyStandardPower(te);
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
@@ -82,7 +82,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					this.readFromSplitter(devicein);
 					return;
 				}
-				else if (devicein.writex == x && devicein.writez == z) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

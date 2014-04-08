@@ -91,9 +91,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 		int dx = x-facingDir.offsetX;
 		int dy = y-facingDir.offsetY;
 		int dz = z-facingDir.offsetZ;
-		writex = x+facingDir.offsetX;
-		writey = y+facingDir.offsetY;
-		writez = z+facingDir.offsetZ;
+		write = facingDir;
 
 		this.getSteam(world, dx, dy, dz);
 		this.genPower();
@@ -167,17 +165,17 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 
 }

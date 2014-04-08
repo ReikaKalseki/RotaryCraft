@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -355,9 +356,7 @@ ConditionalOperation, DamagingContact {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.EAST;
 			editx = x-1;
 			edity = y;
 			editz = z;
@@ -369,9 +368,7 @@ ConditionalOperation, DamagingContact {
 			varyz = true;
 			break;
 		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.WEST;
 			editx = x+1;
 			edity = y;
 			editz = z;
@@ -383,9 +380,7 @@ ConditionalOperation, DamagingContact {
 			varyz = true;
 			break;
 		case 2:
-			readz = z+1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.SOUTH;
 			editx = x;
 			edity = y;
 			editz = z-1;
@@ -397,9 +392,7 @@ ConditionalOperation, DamagingContact {
 			varyz = false;
 			break;
 		case 3:
-			readz = z-1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.NORTH;
 			editx = x;
 			edity = y;
 			editz = z+1;

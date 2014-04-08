@@ -67,6 +67,9 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
+		int writex = x+write.offsetX;
+		int writey = y+write.offsetY;
+		int writez = z+write.offsetZ;
 		if (power > 0) {
 			int id = world.getBlockId(writex, writey, writez);
 			if (id != 0) {
@@ -96,44 +99,28 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
 		switch(meta) {
 		case 2:
-			readz = z-1;
-			writez = z+1;
 			facingDir = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readx = x-1;
-			writex = x+1;
 			facingDir = ForgeDirection.EAST;
 			break;
 		case 4:
-			readz = z+1;
-			writez = z-1;
 			facingDir = ForgeDirection.NORTH;
 			break;
 		case 5:
-			readx = x+1;
-			writex = x-1;
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 1:
-			ready = y+1;
-			writey = y-1;
 			facingDir = ForgeDirection.DOWN;
 			break;
 		case 0:
-			ready = y-1;
-			writey = y+1;
 			facingDir = ForgeDirection.UP;
 			break;
 		}
+		write = facingDir;
+		read = write.getOpposite();
 	}
 
 	@Override

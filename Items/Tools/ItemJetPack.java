@@ -169,7 +169,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}
 
 	private void explode(World world, EntityPlayer player) {
-		player.setCurrentItemOrArmor(3, null);
+		ItemStack to = itemID == ItemRegistry.BEDPACK.getShiftedID() ? ItemRegistry.BEDCHEST.getEnchantedStack() : null;
+		player.setCurrentItemOrArmor(3, to);
 		world.createExplosion(player, player.posX, player.posY, player.posZ, 2, false);
 		double v = 4;
 		double ang = itemRand.nextDouble()*360;

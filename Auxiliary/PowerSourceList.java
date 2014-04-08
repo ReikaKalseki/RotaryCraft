@@ -53,13 +53,13 @@ public class PowerSourceList {
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (tile instanceof TileEntityIOMachine) {
 				TileEntityIOMachine te = (TileEntityIOMachine)tile;
-				if (te.readx == io.xCoord && te.ready == io.yCoord && te.readz == io.zCoord)
+				if (te.isReadingFrom(io))
 					return pwr;
-				if (te.readx2 == io.xCoord && te.ready2 == io.yCoord && te.readz2 == io.zCoord)
+				if (te.isReadingFrom2(io))
 					return pwr;
-				if (te.readx3 == io.xCoord && te.ready3 == io.yCoord && te.readz3 == io.zCoord)
+				if (te.isReadingFrom3(io))
 					return pwr;
-				if (te.readx4 == io.xCoord && te.ready4 == io.yCoord && te.readz4 == io.zCoord)
+				if (te.isReadingFrom4(io))
 					return pwr;
 				pwr.addAll(te.getPowerSources(io, caller));
 				return pwr;

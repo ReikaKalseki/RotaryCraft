@@ -42,7 +42,7 @@ public class BlockDecoTank extends Block {
 		this.setResistance(6000);
 		this.setHardness(0.35F);
 		this.setLightOpacity(0);
-		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
 
 		for (int i = 1; i < 10; i++) {
 			allDirs.add(i);

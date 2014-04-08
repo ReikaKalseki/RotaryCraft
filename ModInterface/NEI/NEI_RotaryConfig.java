@@ -118,7 +118,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				if (ID.isBlock())
 					API.hideItem(ID.getValue());
 				else if (ID.isItem())
-					API.hideItem(ID.getValue()+256);
+					API.hideItem(ID.getShiftedValue());
 			}
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 				ItemRegistry ir = ItemRegistry.itemList[i];

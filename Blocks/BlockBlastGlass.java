@@ -35,10 +35,7 @@ public class BlockBlastGlass extends BlockPane implements SidedTextureIndex {
 		this.setStepSound(soundGlassFootstep);
 		////this.requiresSelfNotify[this.blockID] = true;
 		//this.blockIndexInTexture = 74;
-		if (!RotaryCraft.instance.isLocked())
-			this.setCreativeTab(RotaryCraft.tabRotary);
-		else
-			this.setCreativeTab(null);
+		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -61,24 +62,16 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.WEST;
 			break;
 		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.EAST;
 			break;
 		case 2:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.SOUTH;
 			break;
 		}
 	}

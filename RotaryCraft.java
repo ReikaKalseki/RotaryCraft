@@ -41,11 +41,13 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
+import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -202,8 +204,31 @@ public class RotaryCraft extends DragonAPIMod {
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
 
-	public boolean isLocked() {
+	public final boolean isLocked() {
 		return isLocked;
+	}
+
+	protected final boolean checkForLock() {
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			ItemRegistry r = ItemRegistry.itemList[i];
+			ItemStack is = r.getStackOf();
+			if (BannedItemReader.instance.containsID(is.itemID))
+				return true;
+		}
+		for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
+			ExtraConfigIDs entry = ExtraConfigIDs.idList[i];
+			if (entry.isBlock()) {
+				int id = entry.getValue();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
+			else if (entry.isItem()) {
+				int id = entry.getShiftedValue();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	@EventHandler
@@ -224,6 +249,22 @@ public class RotaryCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		proxy.registerSounds();
+
+		isLocked = this.checkForLock();
+		if (isLocked) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the RotaryCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
 
 		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
 
@@ -251,6 +292,8 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		if (this.isLocked())
+			GameRegistry.registerPlayerTracker(LockNotification.instance);
 		if (!this.isLocked()) {
 			proxy.addArmorRenders();
 			proxy.registerRenderers();

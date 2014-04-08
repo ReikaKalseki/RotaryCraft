@@ -200,7 +200,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 						}
 					}
 					if (control == PacketRegistry.BORER.getMinValue()+3) {
-						borer.step = 1;
+						borer.reset();
 					}
 					if (control == PacketRegistry.BORER.getMinValue()+1) {
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", data));

@@ -31,6 +31,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -122,20 +123,14 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 1:
-			readx = xCoord+1;
-			readz = zCoord;
-			readx2 = xCoord-1;
-			readz2 = zCoord;
+			read = ForgeDirection.EAST;
+			read2 = ForgeDirection.WEST;
 			break;
 		case 0:
-			readz = zCoord-1;
-			readx = xCoord;
-			readx2 = xCoord;
-			readz2 = zCoord+1;
+			read = ForgeDirection.NORTH;
+			read2 = ForgeDirection.SOUTH;
 			break;
 		}
-		ready = yCoord;
-		ready2 = yCoord;
 	}
 
 	public void dealDamage(World world, int x, int y, int z) {
@@ -250,7 +245,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	private ArrayList<ItemStack> getDrops(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		Block b = Block.blocksList[id];
-		if (TileEntityBorer.isLabyBedrock(world, x, y, z))
+		if (TileEntityBorer.isMineableBedrock(world, x, y, z))
 			return ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt()));
 		else
 			return b != null ? b.getBlockDropped(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
@@ -258,7 +253,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public int[] getBlockProduct(World world, int x, int y, int z, int id, int meta) {
 		int[] to = {0,0};
-		if (id == Block.bedrock.blockID && !TileEntityBorer.isLabyBedrock(world, x, y, z)) //does not break bedrock unless TF
+		if (id == Block.bedrock.blockID && !TileEntityBorer.isMineableBedrock(world, x, y, z)) //does not break bedrock unless TF
 			to[0] = id;
 		if (id == Block.stone.blockID)
 			to[0] = Block.cobblestone.blockID;

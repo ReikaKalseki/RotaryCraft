@@ -23,7 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.Data.ImmutableRecipeList;
+import Reika.DragonAPI.Instantiable.Data.ImmutableList;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
@@ -33,7 +33,7 @@ public class WorktableRecipes
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
 	/** A list of all the recipes added */
-	private ImmutableRecipeList recipes = new ImmutableRecipeList();
+	private ImmutableList<IRecipe> recipes = new ImmutableList();
 
 	/**
 	 * Returns the static instance of this class
@@ -208,7 +208,7 @@ public class WorktableRecipes
 		{
 			for (j = 0; j < recipes.size(); ++j)
 			{
-				IRecipe irecipe = (IRecipe)recipes.get(j);
+				IRecipe irecipe = recipes.get(j);
 
 				if (irecipe.matches(ic, par2World))
 				{
@@ -231,7 +231,7 @@ public class WorktableRecipes
 
 	public IRecipe getInputRecipe(ItemStack is) {
 		for (int i = 0; i < recipes.size(); i++) {
-			IRecipe ir = (IRecipe)recipes.get(i);
+			IRecipe ir = recipes.get(i);
 			ItemStack is2 = ir.getRecipeOutput();
 			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
 				return ir;

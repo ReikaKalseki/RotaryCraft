@@ -144,11 +144,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public void crossReadFromCross(TileEntityShaft cross, int dir) {
 		reading2Dir = true;
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			readomega[dir] = cross.readomega[0];
 			readtorque[dir] = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			readomega[dir] = cross.readomega[1];
 			readtorque[dir] = cross.readtorque[1];
 		}
@@ -158,11 +158,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public void readFromCross(TileEntityShaft cross) {
 		reading2Dir = true;
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -287,105 +287,72 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
-			readx = x+1;
-			writex = x-1;
-			readz = writez = z;
-			ready = writey = y;
+			read = ForgeDirection.EAST;
+			write = ForgeDirection.WEST;
 			break;
 		case 1:
-			readx = x-1;
-			writex = x+1;
-			readz = writez = z;
-			ready = writey = y;
+			read = ForgeDirection.WEST;
+			write = ForgeDirection.EAST;
 			break;
 		case 2:
-			readz = z+1;
-			writez = z-1;
-			readx = writex = x;
-			ready = writey = y;
+			read = ForgeDirection.SOUTH;
+			write = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = z-1;
-			writez = z+1;
-			readx = writex = x;
-			ready = writey = y;
+			read = ForgeDirection.NORTH;
+			write = ForgeDirection.SOUTH;
 			break;
 		case 4:	//moving up
-			readx = writex = x;
-			readz = writez = z;
-			ready = y-1;
-			writey = y+1;
+			read = ForgeDirection.DOWN;
+			write = ForgeDirection.UP;
 			break;
 		case 5:	//moving down
-			readx = writex = x;
-			readz = writez = z;
-			ready = y+1;
-			writey = y-1;
+			read = ForgeDirection.UP;
+			write = ForgeDirection.DOWN;
 			break;
 		case 6:	//cross - has 4 states
-			readx = x+1;
-			writex = x-1;
-			readz = z;
-			writez = z;
-			readx2 = x;
-			readz2 = z+1;
-			writex2 = x;
-			writez2 = z-1;
-			ready = writey = y;
+			read = ForgeDirection.EAST;
+			read2 = ForgeDirection.SOUTH;
+			write = ForgeDirection.WEST;
+			write2 = ForgeDirection.NORTH;
 			break;
 		case 7:	//cross - has 4 states
-			readx = x+1;
-			writex = x-1;
-			readz = z;
-			writez = z;
-			readx2 = x;
-			readz2 = z-1;
-			writex2 = x;
-			writez2 = z+1;
-			ready = writey = y;
+			read = ForgeDirection.EAST;
+			read2 = ForgeDirection.NORTH;
+			write = ForgeDirection.WEST;
+			write2 = ForgeDirection.SOUTH;
 			break;
 		case 8:	//cross - has 4 states
-			readx = x-1;
-			writex = x+1;
-			readz = z;
-			writez = z;
-			readx2 = x;
-			readz2 = z-1;
-			writex2 = x;
-			writez2 = z+1;
-			ready = writey = y;
+			read = ForgeDirection.WEST;
+			read2 = ForgeDirection.NORTH;
+			write = ForgeDirection.EAST;
+			write2 = ForgeDirection.SOUTH;
 			break;
 		case 9:	//cross - has 4 states
-			readx = x-1;
-			writex = x+1;
-			readz = z;
-			writez = z;
-			readx2 = x;
-			readz2 = z+1;
-			writex2 = x;
-			writez2 = z-1;
-			ready = writey = y;
+			read = ForgeDirection.WEST;
+			read2 = ForgeDirection.SOUTH;
+			write = ForgeDirection.EAST;
+			write2 = ForgeDirection.NORTH;
 			break;
 		}
 	}
 
 	private void crossTransfer(World world) {
-		ready = ready2 = ready;
 		readomega[0] = 0;
 		readomega[1] = 0;
 		readtorque[0] = 0;
 		readtorque[1] = 0;
-		TileEntity te1 = this.getTileEntity(readx, ready, readz);
-		TileEntity te2 = this.getTileEntity(readx2, ready2, readz2);
+		TileEntity te1 = this.getAdjacentTileEntity(read);
+		TileEntity te2 = this.getAdjacentTileEntity(read2);
 		if (this.isProvider(te1)) {
-			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
+			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te1;
 				if (devicein.isCross()) {
 					this.crossReadFromCross(devicein, 0);
 					return;
 				}
-				else if (devicein.writex == xCoord && devicein.writey == yCoord && devicein.writez == zCoord) {
+				else if (devicein.isWritingTo(this)) {
 					readomega[0] = devicein.omega;
 					readtorque[0] = devicein.torque;
 				}
@@ -407,21 +374,21 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					this.crossReadFromSplitter(devicein, 0);
 					return;
 				}
-				else if (devicein.writex == xCoord && devicein.writez == zCoord) {
+				else if (devicein.isWritingTo(this)) {
 					readtorque[0] = devicein.torque;
 					readomega[0] = devicein.omega;
 				}
 			}
 		}
 		if (this.isProvider(te2)) {
-			MachineRegistry m2 = MachineRegistry.getMachine(world, readx2, ready2, readz2);
+			MachineRegistry m2 = this.getMachine(read2);
 			if (m2 == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein2 = (TileEntityShaft)te2;
 				if (devicein2.isCross()) {
 					this.crossReadFromCross(devicein2, 1);
 					return;
 				}
-				else if (devicein2.writex == xCoord && devicein2.writey == yCoord && devicein2.writez == zCoord) {
+				else if (devicein2.isWritingTo(this)) {
 					readomega[1] = devicein2.omega;
 					readtorque[1] = devicein2.torque;
 				}
@@ -443,14 +410,14 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					this.crossReadFromSplitter(devicein2, 1);
 					return;
 				}
-				else if (devicein2.writex == xCoord && devicein2.writez == zCoord) {
+				else if (devicein2.isWritingTo(this)) {
 					readtorque[1] = devicein2.torque;
 					readomega[1] = devicein2.omega;
 				}
 			}
 		}
-		this.writeToPowerReceiverAt(world, writex, yCoord, writez, readomega[0], readtorque[0]);
-		this.writeToPowerReceiverAt(world, writex2, yCoord, writez2, readomega[1], readtorque[1]);
+		this.writeToPowerReceiverAt(world, xCoord+write.offsetX, yCoord+write.offsetY, zCoord+write.offsetZ, readomega[0], readtorque[0]);
+		this.writeToPowerReceiverAt(world, xCoord+write2.offsetX, yCoord+write2.offsetY, zCoord+write2.offsetZ, readomega[1], readtorque[1]);
 	}
 
 	@Override
@@ -461,27 +428,27 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return;
 		}
 		omegain = torquein = 0;
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		if (!this.isProvider(te)) {
 			omega = 0;
 			torque = 0;
 			power = 0;
 			return;
 		}
-		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
+		MachineRegistry m = this.getMachine(read);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.isCross()) {
 				this.readFromCross(devicein);
 				return;
 			}
-			else if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+			else if (devicein.isWritingTo(this)) {
 				torquein = devicein.torque;
 				omegain = devicein.omega;
 			}
 		}
 		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(worldObj, readx, ready, readz);
+			this.copyStandardPower(te);
 		}
 		if (m == MachineRegistry.POWERBUS) {
 			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
@@ -502,7 +469,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				this.readFromSplitter(devicein);
 				return;
 			}
-			else if (devicein.writex == x && devicein.writez == z) {
+			else if (devicein.isWritingTo(this)) {
 				torquein = devicein.torque;
 				omegain = devicein.omega;
 			}
@@ -583,12 +550,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		if (this.isCross()) {
-			boolean read1 = io.xCoord == writex && io.zCoord == writez;
+			boolean read1 = this.isWritingTo(io);
 			if (read1) {
-				return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
+				return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 			}
 			else {
-				return PowerSourceList.getAllFrom(worldObj, readx2, ready2, readz2, this, caller);
+				return PowerSourceList.getAllFrom(worldObj, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
 			}
 		}
 		else

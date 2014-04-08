@@ -58,24 +58,16 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.NORTH;
 			break;
 		}
 	}

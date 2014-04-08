@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -85,39 +86,27 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		switch (metadata) {
 		case 0:
 			id = world.getBlockId(x-1, y, z);
-			readx = x-1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.WEST;
 			break;
 		case 1:
 			id = world.getBlockId(x+1, y, z);
-			readx = x+1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.EAST;
 			break;
 		case 2:
 			id = world.getBlockId(x, y, z-1);
-			readx = x;
-			readz = z-1;
-			ready = y;
+			read = ForgeDirection.NORTH;
 			break;
 		case 3:
 			id = world.getBlockId(x, y, z+1);
-			readx = x;
-			readz = z+1;
-			ready = y;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 4:
 			id = world.getBlockId(x, y-1, z);
-			readx = x;
-			readz = z;
-			ready = y-1;
+			read = ForgeDirection.DOWN;
 			break;
 		case 5:
 			id = world.getBlockId(x, y+1, z);
-			readx = x;
-			readz = z;
-			ready = y+1;
+			read = ForgeDirection.UP;
 			break;
 		default:
 			id = 0;

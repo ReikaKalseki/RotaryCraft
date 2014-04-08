@@ -211,17 +211,17 @@ public class GuiBorer extends GuiMachine
 		long frac = ((borer.power*29L)/borer.MINPOWER);
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-132, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-146, 0, 0, (int)frac, 4);
 
 		frac = borer.omega*29L/borer.MINSPEED;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-73, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-86, 0, 0, (int)frac, 4);
 
 		frac = borer.torque*29L/borer.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
-		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-14, 0, 0, (int)frac, 4);
+		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-26, 0, 0, (int)frac, 4);
 
 		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+12, 0xff000000);
 		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+71, 0xff000000);

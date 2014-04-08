@@ -65,19 +65,22 @@ public class TorqueUsage {
 			if (tile instanceof TileEntitySplitter) { //check if splitter
 				TileEntitySplitter spl = (TileEntitySplitter)tile;
 				if (!spl.isSplitting()) { //check if merge mode or split mode (true if in merge mode)
-					if (TEMap.containsKey(world.getBlockTileEntity(spl.readx, tile.yCoord, spl.readz))) { //reads both inputs and if something is connected to the other input, it adds it as a negative torque "consumption"
-						TileEntity sc = world.getBlockTileEntity(spl.readx, tile.yCoord, spl.readz);
+					TileEntity read = spl.getReadTileEntity();
+					TileEntity read2 = spl.getReadTileEntity2();
+					TileEntity write = spl.getWriteTileEntity();
+					if (TEMap.containsKey(read)) { //reads both inputs and if something is connected to the other input, it adds it as a negative torque "consumption"
+						TileEntity sc = read;
 						TileEntityIOMachine scio = (TileEntityIOMachine)sc;
 						if (spl.torque - scio.torque > 0)
 							torque -= spl.torque - scio.torque;
 					}
-					else if (TEMap.containsKey(world.getBlockTileEntity(spl.readx2, tile.yCoord, spl.readz2))) {
-						TileEntity sc = world.getBlockTileEntity(spl.readx2, tile.yCoord, spl.readz2);
+					else if (TEMap.containsKey(read2)) {
+						TileEntity sc = read2;
 						TileEntityIOMachine scio = (TileEntityIOMachine)sc;
 						if (spl.torque - scio.torque > 0)
 							torque -= spl.torque - scio.torque;
 					}
-					TileEntity di = world.getBlockTileEntity(spl.writex, tile.yCoord, spl.writez);
+					TileEntity di = write;
 					if (!TEMap.containsKey(di) && isPoweredFrom(world, di)) {
 						addToList(di, tile); //records the following tile inside the list
 					}
@@ -149,18 +152,20 @@ public class TorqueUsage {
 			else if (tile instanceof TileEntityShaft) {
 				TileEntityShaft sha = (TileEntityShaft)tile;
 				if (((TileEntityShaft)tile).isCross()) {
-					TileEntity di1 = world.getBlockTileEntity(sha.readx, tile.yCoord, sha.readz);
-					TileEntity di2 = world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2);
+					TileEntity di1 = sha.getReadTileEntity();
+					TileEntity di2 = sha.getReadTileEntity2();
+					TileEntity write = sha.getWriteTileEntity();
+					TileEntity write2 = sha.getWriteTileEntity2();
 					if (TEMap.containsKey(di1) && TEMap.get(di1) == true) {
-						if (!TEMap.containsKey(world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez))
-								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez))) {
-							addToList(world.getBlockTileEntity(sha.writex, tile.yCoord, sha.writez), tile);
+						if (!TEMap.containsKey(write)
+								&& isPoweredFrom(world, write)) {
+							addToList(write, tile);
 						}
 					}
 					else if (TEMap.containsKey(di2) && TEMap.get(di2) == true) {
-						if (!TEMap.containsKey(world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2))
-								&& isPoweredFrom(world, world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2))) {
-							addToList(world.getBlockTileEntity(sha.writex2, tile.yCoord, sha.writez2), tile);
+						if (!TEMap.containsKey(write2)
+								&& isPoweredFrom(world, write2)) {
+							addToList(write2, tile);
 						}
 					}
 				}
@@ -194,9 +199,10 @@ public class TorqueUsage {
 					TileEntity di = world.getBlockTileEntity(hub.getTargetX(), hub.getTargetY(), hub.getTargetZ());
 					if (di != null && di instanceof TileEntityBeltHub) {
 						TileEntityBeltHub h2 = (TileEntityBeltHub)di;
+						TileEntity write = h2.getWriteTileEntity();
 						addToList(di, tile);
 						TEMap.put(di, true);
-						TileEntity dii = world.getBlockTileEntity(h2.writex, h2.writey, h2.writez);
+						TileEntity dii = write;
 						if (!TEMap.containsKey(dii) && isPoweredFrom(world, dii)) {
 							addToList(dii, di);
 						}
@@ -224,7 +230,11 @@ public class TorqueUsage {
 						TileEntity out = world.getBlockTileEntity(te.xCoord+dir.offsetX, te.yCoord+dir.offsetY, te.zCoord+dir.offsetZ);
 						if (out != null && out instanceof TileEntityIOMachine) {
 							TileEntityIOMachine io = (TileEntityIOMachine)out;
-							if ((io.getInput() == te || world.getBlockTileEntity(io.readx, out.yCoord, io.readz) == te || world.getBlockTileEntity(io.readx2, out.yCoord, io.readz2) == te || world.getBlockTileEntity(io.readx3, out.yCoord, io.readz3) == te || world.getBlockTileEntity(io.readx4, out.yCoord, io.readz4) == te)) {
+							TileEntity read = io.getReadTileEntity();
+							TileEntity read2 = io.getReadTileEntity2();
+							TileEntity read3 = io.getReadTileEntity3();
+							TileEntity read4 = io.getReadTileEntity4();
+							if ((io.getInput() == te || read == te || read2 == te || read3 == te || read4 == te)) {
 								double ratio = te.getAbsRatio(dir);
 								if (!te.isSideSpeedMode(dir))
 									ratio = 1D/ratio;
@@ -257,7 +267,11 @@ public class TorqueUsage {
 		boolean isPoweredFrom = false;
 		if (tile instanceof TileEntityIOMachine) {
 			TileEntityIOMachine io = (TileEntityIOMachine)tile;
-			isPoweredFrom = (TEMap.containsKey(io.getInput()) || TEMap.containsKey(world.getBlockTileEntity(io.readx, tile.yCoord, io.readz)) || TEMap.containsKey(world.getBlockTileEntity(io.readx2, tile.yCoord, io.readz2)) || TEMap.containsKey(world.getBlockTileEntity(io.readx3, tile.yCoord, io.readz3)) || TEMap.containsKey(world.getBlockTileEntity(io.readx4, tile.yCoord, io.readz4)));
+			TileEntity read = io.getReadTileEntity();
+			TileEntity read2 = io.getReadTileEntity2();
+			TileEntity read3 = io.getReadTileEntity3();
+			TileEntity read4 = io.getReadTileEntity4();
+			isPoweredFrom = (TEMap.containsKey(io.getInput()) || TEMap.containsKey(read) || TEMap.containsKey(read2) || TEMap.containsKey(read3) || TEMap.containsKey(read4));
 		}
 		return isPoweredFrom;
 	}
@@ -267,27 +281,35 @@ public class TorqueUsage {
 		count++;
 		if (tile instanceof TileEntitySplitter) {
 			TileEntitySplitter spl = (TileEntitySplitter)tile;
+			TileEntity write = spl.getWriteTileEntity();
+			TileEntity write2 = spl.getWriteTileEntity2();
 			if (!spl.isSplitting()) {
-				TileEntity di = world.getBlockTileEntity(spl.writex, spl.yCoord, spl.writez);
+				TileEntity di = write;
 				if (di != null && di instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di);
-					if (io.getInput() == tile || world.getBlockTileEntity(io.readx, di.yCoord, io.readz) == tile || world.getBlockTileEntity(io.readx2, di.yCoord, io.readz2) == tile) {
+					TileEntity read = io.getReadTileEntity();
+					TileEntity read2 = io.getReadTileEntity2();
+					if (io.getInput() == tile || read == tile || read2 == tile) {
 						count = recursiveCount(world, di, count);
 					}
 				}
 			}
 			else {
-				TileEntity di = world.getBlockTileEntity(spl.writex, spl.yCoord, spl.writez);
-				TileEntity di2 = world.getBlockTileEntity(spl.writex2, spl.yCoord, spl.writez2);
+				TileEntity di = write;
+				TileEntity di2 = write2;
 				if (di != null && di instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di);
-					if (io.getInput() == tile || world.getBlockTileEntity(io.readx, di.yCoord, io.readz) == tile || world.getBlockTileEntity(io.readx2, di.yCoord, io.readz2) == tile) {
+					TileEntity read = io.getReadTileEntity();
+					TileEntity read2 = io.getReadTileEntity2();
+					if (io.getInput() == tile || read == tile || read2 == tile) {
 						count = recursiveCount(world, di, count);
 					}
 				}
 				if (di2 != null && di2 instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di2);
-					if (io.getInput() == tile || world.getBlockTileEntity(io.readx, di2.yCoord, io.readz) == tile || world.getBlockTileEntity(io.readx2, di2.yCoord, io.readz2) == tile) {
+					TileEntity read = io.getReadTileEntity();
+					TileEntity read2 = io.getReadTileEntity2();
+					if (io.getInput() == tile || read == tile || read == tile) {
 						count = recursiveCount(world, di2, count);
 					}
 				}
@@ -309,7 +331,8 @@ public class TorqueUsage {
 				TileEntity di = world.getBlockTileEntity(hub.getTargetX(), hub.getTargetY(),hub.getTargetZ());
 				if (di != null) {
 					TileEntityBeltHub h2 = (TileEntityBeltHub)di;
-					TileEntity dii = world.getBlockTileEntity(h2.writex, h2.writey, h2.writez);
+					TileEntity write = h2.getWriteTileEntity();
+					TileEntity dii = write;
 					if (dii != null && dii instanceof TileEntityIOMachine) {
 						if (((TileEntityIOMachine) dii).getInput() == di) {
 							count = recursiveCount(world, dii, count);

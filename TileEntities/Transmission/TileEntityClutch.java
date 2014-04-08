@@ -36,11 +36,11 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 
 	public void readFromCross(TileEntityShaft cross) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -51,7 +51,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (world.isBlockIndirectlyGettingPowered(x, y, z) && this.isProvider(te)) {
 			MachineRegistry m = ((RotaryCraftTileEntity)(te)).getMachine();
@@ -61,13 +61,13 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+				if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
 			}
 			if (te instanceof SimpleProvider) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
+				this.copyStandardPower(te);
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
@@ -88,7 +88,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 					this.readFromSplitter(devicein);
 					return;
 				}
-				else if (devicein.writex == x && devicein.writez == z) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

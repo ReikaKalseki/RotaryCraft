@@ -180,7 +180,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block b) {
+	public float getStrVsBlock(ItemStack is, Block b, int meta) {
 		if (b == null)
 			return 0;
 		if (b.blockID == Block.obsidian.blockID)
@@ -227,6 +227,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (TwilightForestHandler.getInstance().isMazeStone(b))
 			return 60F;
 
+		if (ReikaBlockHelper.isOre(b.blockID, meta))
+			return 24F;
 		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
 			if (blocksEffectiveAgainst[i] == b)
 				return 12F;

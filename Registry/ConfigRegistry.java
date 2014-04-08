@@ -74,7 +74,8 @@ public enum ConfigRegistry implements ConfigList {
 	FLOWSPEED("Fluid Flow Speed", 5),
 	ATTACKBLOCKS("Block Damage from Destructive Machines", true),
 	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false),
-	JETFUELPACK("Jetpack Uses Jet Fuel", false);
+	JETFUELPACK("Jetpack Uses Jet Fuel", false),
+	ALLOWTNTCANNON("Allow TNT Cannon", true);
 
 	private String label;
 	private boolean defaultState;

@@ -43,18 +43,12 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		sound.update();
 		//isEmitting = true;
 		if (isEmitting) {
-			writex = readx;
-			writey = ready;
-			writez = readz;
-			readx = Integer.MIN_VALUE;
-			ready = Integer.MIN_VALUE;
-			readz = Integer.MIN_VALUE;
+			write = read;
+			read = null;
 			this.copyPower();
 		}
 		else {
-			writex = Integer.MIN_VALUE;
-			writey = Integer.MIN_VALUE;
-			writez = Integer.MIN_VALUE;
+			write = null;
 			this.getPower(false);
 		}
 
@@ -388,17 +382,17 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 
 }

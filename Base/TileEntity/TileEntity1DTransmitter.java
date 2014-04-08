@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -22,64 +23,32 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 		return ratio;
 	}
 
-	public static final int SHEARSTRENGTH = -1;
-	public static final int TENSILESTRENGTH = -1;
-
 	public void getIOSides(World world, int x, int y, int z, int meta, boolean hasVertical) {
 		switch(meta){
 		case 0:
-			readx = x+1;
-			ready = y;
-			readz = z;
-			writex = x-1;
-			writey = y;
-			writez = z;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = x-1;
-			ready = y;
-			readz = z;
-			writex = x+1;
-			writey = y;
-			writez = z;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			readx = x;
-			ready = y;
-			readz = z+1;
-			writex = x;
-			writey = y;
-			writez = z-1;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readx = x;
-			ready = y;
-			readz = z-1;
-			writex = x;
-			writey = y;
-			writez = z+1;
+			read = ForgeDirection.NORTH;
 			break;
 		case 4:
 			if (hasVertical) {
-				readx = x;
-				ready = y-1;
-				readz = z;
-				writex = x;
-				writey = y+1;
-				writez = z;
+				read = ForgeDirection.DOWN;
 			}
 			break;
 		case 5:
 			if (hasVertical) {
-				readx = x;
-				ready = y+1;
-				readz = z;
-				writex = x;
-				writey = y-1;
-				writez = z;
+				read = ForgeDirection.UP;
 			}
 			break;
 		}
+		write = read.getOpposite();
 	}
 
 	public abstract void transferPower(World world, int x, int y, int z, int meta);
@@ -91,6 +60,8 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return PowerSourceList.getAllFrom(worldObj, readx, ready, readz, this, caller);
+		if (read == null)
+			return new PowerSourceList();
+		return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 	}
 }

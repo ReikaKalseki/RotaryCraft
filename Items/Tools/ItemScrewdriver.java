@@ -142,7 +142,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 					clicked.torquemode = !clicked.torquemode;
 				}
 				else {
-					if (damage != 3 && damage != 7 && damage != 11)
+					if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
 						clicked.setBlockMetadata(damage+1);
 					else
 						clicked.setBlockMetadata(damage-3);

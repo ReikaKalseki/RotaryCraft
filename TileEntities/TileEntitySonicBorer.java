@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -52,49 +53,37 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	public final void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.WEST;
 			xstep = 1;
 			ystep = 0;
 			zstep = 0;
 			break;
 		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.EAST;
 			xstep = -1;
 			ystep = 0;
 			zstep = 0;
 			break;
 		case 3:
-			readz = z-1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.NORTH;
 			xstep = 0;
 			ystep = 0;
 			zstep = 1;
 			break;
 		case 2:
-			readz = z+1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.SOUTH;
 			xstep = 0;
 			ystep = 0;
 			zstep = -1;
 			break;
 		case 5:	//moving up
-			readx = x;
-			readz = z;
-			ready = y+1;
+			read = ForgeDirection.UP;
 			xstep = 0;
 			ystep = -1;
 			zstep = 0;
 			break;
 		case 4:	//moving down
-			readx = x;
-			readz = z;
-			ready = y-1;
+			read = ForgeDirection.DOWN;
 			xstep = 0;
 			ystep = 1;
 			zstep = 0;

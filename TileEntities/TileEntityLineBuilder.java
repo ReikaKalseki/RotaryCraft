@@ -75,39 +75,27 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.EAST;
 			dir = ForgeDirection.WEST;
 			break;
 		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.WEST;
 			dir = ForgeDirection.EAST;
 			break;
 		case 2:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.SOUTH;
 			dir = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.NORTH;
 			dir = ForgeDirection.SOUTH;
 			break;
 		case 4:	//moving up
-			readx = xCoord;
-			readz = zCoord;
-			ready = yCoord-1;
+			read = ForgeDirection.DOWN;
 			dir = ForgeDirection.UP;
 			break;
 		case 5:	//moving down
-			readx = xCoord;
-			readz = zCoord;
-			ready = yCoord+1;
+			read = ForgeDirection.UP;
 			dir = ForgeDirection.DOWN;
 			break;
 		}

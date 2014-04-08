@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -196,24 +197,16 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
-			break;
-		case 3:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
+			read = ForgeDirection.SOUTH;
+			break;
+		case 3:
+			read = ForgeDirection.NORTH;
 			break;
 		}
 	}

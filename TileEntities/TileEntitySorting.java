@@ -45,30 +45,19 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = xCoord+1;
-			readz = zCoord;
-			ready = yCoord;
 			facingDir = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = xCoord-1;
-			readz = zCoord;
-			ready = yCoord;
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = zCoord-1;
-			readx = xCoord;
-			ready = yCoord;
 			facingDir = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = zCoord+1;
-			readx = xCoord;
-			ready = yCoord;
 			facingDir = ForgeDirection.SOUTH;
 			break;
 		}
+		read = facingDir;
 	}
 
 	private void sortItems(World world, int x, int y, int z, List<EntityItem> li) {

@@ -38,196 +38,100 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	public void getIOSides(World world, int x, int y, int z) {
 		switch(direction) {
 		case 0://-x -> -z
-			readx = x-1;
-			writex = x;
-			readz = z;
-			writez = z-1;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.WEST;
+			write = ForgeDirection.NORTH;
 			break;
 		case 1:
-			readx = x;
-			writex = x+1;
-			readz = z-1;
-			writez = z;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.NORTH;
+			write = ForgeDirection.EAST;
 			break;
 		case 2:
-			readz = z;
-			writez = z+1;
-			readx = x+1;
-			writex = x;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.EAST;
+			write = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			writez = z;
-			readz = z+1;
-			writex = x-1;
-			readx = x;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.SOUTH;
+			write = ForgeDirection.WEST;
 			break;
 		case 4:
-			readx = x-1;
-			writex = x;
-			readz = z;
-			writez = z+1;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.WEST;
+			write = ForgeDirection.SOUTH;
 			break;
 		case 5:
-			readx = x;
-			writex = x-1;
-			readz = z-1;
-			writez = z;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.NORTH;
+			write = ForgeDirection.WEST;
 			break;
 		case 6:
-			readz = z;
-			writez = z-1;
-			readx = x+1;
-			writex = x;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.NORTH;
+			write = ForgeDirection.EAST;
 			break;
 		case 7:
-			writez = z;
-			readz = z+1;
-			writex = x+1;
-			readx = x;
-			ready = y;
-			writey = y;
+			read = ForgeDirection.SOUTH;
+			write = ForgeDirection.EAST;
 			break;
 		case 8:	//VERTICAL POSITIONS - going up from flat
-			readx = x-1;
-			readz = z;
-			ready = y;
-			writex = x;
-			writez = z;
-			writey = y+1;
+			read = ForgeDirection.WEST;
+			write = ForgeDirection.UP;
 			break;
 		case 9:
-			readx = x;
-			readz = z-1;
-			ready = y;
-			writex = x;
-			writez = z;
-			writey = y+1;
+			read = ForgeDirection.NORTH;
+			write = ForgeDirection.UP;
 			break;
 		case 10:
-			readz = z;
-			readx = x+1;
-			ready = y;
-			writex = x;
-			writez = z;
-			writey = y+1;
+			read = ForgeDirection.EAST;
+			write = ForgeDirection.UP;
 			break;
 		case 11:
-			readz = z+1;
-			readx = x;
-			ready = y;
-			writex = x;
-			writez = z;
-			writey = y+1;
+			read = ForgeDirection.SOUTH;
+			write = ForgeDirection.UP;
 			break;
 		case 12: //VERTICAL POSITIONS - going flat from up
-			readx = x;
-			readz = z;
-			ready = y-1;
-			writez = z;
-			writex = x-1;
-			writey = y;
+			read = ForgeDirection.DOWN;
+			write = ForgeDirection.WEST;
 			break;
 		case 13:
-			readx = x;
-			readz = z;
-			ready = y-1;
-			writez = z-1;
-			writex = x;
-			writey = y;
+			read = ForgeDirection.DOWN;
+			write = ForgeDirection.NORTH;
 			break;
 		case 14:
-			readz = z;
-			readx = x;
-			ready = y-1;
-			writez = z;
-			writex = x+1;
-			writey = y;
+			read = ForgeDirection.DOWN;
+			write = ForgeDirection.EAST;
 			break;
 		case 15:
-			readz = z;
-			readx = x;
-			ready = y-1;
-			writez = z+1;
-			writex = x;
-			writey = y;
+			read = ForgeDirection.DOWN;
+			write = ForgeDirection.SOUTH;
 			break;
 		case 16: //VERTICAL POSITIONS - going down from flat
-			readx = x-1;
-			readz = z;
-			ready = y;
-			writez = z;
-			writex = x;
-			writey = y-1;
+			write = ForgeDirection.DOWN;
+			read = ForgeDirection.WEST;
 			break;
 		case 17:
-			readx = x;
-			readz = z-1;
-			ready = y;
-			writez = z;
-			writex = x;
-			writey = y-1;
+			write = ForgeDirection.DOWN;
+			read = ForgeDirection.NORTH;
 			break;
 		case 18:
-			readz = z;
-			readx = x+1;
-			ready = y;
-			writez = z;
-			writex = x;
-			writey = y-1;
+			write = ForgeDirection.DOWN;
+			read = ForgeDirection.EAST;
 			break;
 		case 19:
-			readz = z+1;
-			readx = x;
-			ready = y;
-			writez = z;
-			writex = x;
-			writey = y-1;
+			write = ForgeDirection.DOWN;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 20: //VERTICAL POSITIONS - going flat from down
-			readx = x;
-			readz = z;
-			ready = y+1;
-			writez = z;
-			writex = x-1;
-			writey = y;
+			read = ForgeDirection.UP;
+			write = ForgeDirection.WEST;
 			break;
 		case 21:
-			readx = x;
-			readz = z;
-			ready = y+1;
-			writez = z-1;
-			writex = x;
-			writey = y;
+			read = ForgeDirection.UP;
+			write = ForgeDirection.NORTH;
 			break;
 		case 22:
-			readz = z;
-			readx = x;
-			ready = y+1;
-			writez = z;
-			writex = x+1;
-			writey = y;
+			read = ForgeDirection.UP;
+			write = ForgeDirection.EAST;
 			break;
 		case 23:
-			readz = z;
-			readx = x;
-			ready = y+1;
-			writez = z+1;
-			writex = x;
-			writey = y;
+			read = ForgeDirection.UP;
+			write = ForgeDirection.SOUTH;
 			break;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready, readz, 4);
@@ -235,11 +139,11 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	}
 
 	public void readFromCross(TileEntityShaft cross) {
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -250,22 +154,22 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		if (this.isProvider(te)) {
-			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
+			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+				if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
 			}
 			if (te instanceof SimpleProvider) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
+				this.copyStandardPower(te);
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
@@ -286,7 +190,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 					this.readFromSplitter(devicein);
 					return;
 				}
-				else if (devicein.writex == x && devicein.writez == z) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

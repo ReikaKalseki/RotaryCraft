@@ -12,15 +12,15 @@ package Reika.RotaryCraft.Base;
 import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Base.BlockTEBase;
 
-public abstract class BlockRotaryCraftMachine extends Block implements IWailaBlock {
+public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWailaBlock {
 
 	protected Random par5Random = new Random();
 

@@ -88,7 +88,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			this.generatePower(world, x, y, z);
 		}
 		else {
-			writex = writey = writez = Integer.MIN_VALUE;
+			write = null;
 		}
 		if (world.getBlockId(x, y+1, z) != 0)
 			return;
@@ -111,16 +111,14 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			lightMultiplier /= numberMirrors;
 		}
 
-		if (writex != Integer.MIN_VALUE && writey != Integer.MIN_VALUE && writez != Integer.MIN_VALUE) {
+		if (write != null) {
 			this.basicPowerReceiver();
 		}
 	}
 
 	private void generatePower(World world, int x, int y, int z) {
 		this.getTowerWater(world, x, y, z);
-		writex = x;
-		writez = z;
-		writey = y-1;
+		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		omega = GENOMEGA;
 		torque = (int)(2*this.getArrayOverallBrightness()*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1));
@@ -292,17 +290,17 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 
 }

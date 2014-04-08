@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDisk;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
@@ -133,7 +134,8 @@ public enum ItemRegistry implements RegistryEnum {
 	BEDSHEARS(25, false,		"item.bedrockshears",		ItemBedrockShears.class),
 	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class),
 	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class),
-	DISK(3, false,				"item.musicboxdisc",		ItemDisk.class);
+	DISK(3, false,				"item.musicboxdisc",		ItemDisk.class),
+	UPGRADE(240, true,			"#item.engineupgrade",		ItemEngineUpgrade.class);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -326,6 +328,8 @@ public enum ItemRegistry implements RegistryEnum {
 			return RotaryNames.getBucketName(dmg);
 		if (this == RAILGUN)
 			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
+		if (this == UPGRADE)
+			return ItemEngineUpgrade.Upgrades.values()[dmg].desc;
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
 
@@ -441,6 +445,8 @@ public enum ItemRegistry implements RegistryEnum {
 			return 16;
 		case BUCKET:
 			return 4;
+		case UPGRADE:
+			return ItemEngineUpgrade.Upgrades.values().length;
 		default:
 			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
 		}
@@ -494,6 +500,7 @@ public enum ItemRegistry implements RegistryEnum {
 		case SCREWDRIVER:
 		case KEY:
 		case TILESELECTOR:
+		case UPGRADE:
 			return true;
 		case PUMP:
 			return is.stackTagCompound != null;

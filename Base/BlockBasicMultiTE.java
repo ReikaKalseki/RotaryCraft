@@ -34,7 +34,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
@@ -163,14 +162,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 	}
 
-	public final AxisAlignedBB getBlockAABB() {
-		return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-	}
-
-	public final void setFullBlockBounds() {
-		this.setBlockBounds(0, 0, 0, 1, 1, 1);
-	}
-
 	/** Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
 	@Override
 	public abstract void registerIcons(IconRegister ico);
@@ -227,15 +218,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				return true;
 			}
 			return false;
-		}
-		if (is != null && te instanceof EnergyToPowerBase) {
-			EnergyToPowerBase eb = (EnergyToPowerBase)te;
-			if (ReikaItemHelper.matchStacks(is, eb.getUpgradeItemFromTier(eb.getTier()))) {
-				eb.upgrade();
-				if (!ep.capabilities.isCreativeMode)
-					is.stackSize--;
-				return true;
-			}
 		}
 		if (m == MachineRegistry.MUSICBOX) {
 			if (is != null && is.itemID == ItemRegistry.DISK.getShiftedID()) {

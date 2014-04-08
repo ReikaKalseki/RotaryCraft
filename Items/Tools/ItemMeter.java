@@ -52,6 +52,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
@@ -402,13 +403,7 @@ public class ItemMeter extends ItemRotaryTool
 				}
 
 				if (clicked.getGearType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
-					double loss = 0;
-					TileEntity read = world.getBlockTileEntity(clicked.readx, clicked.ready, clicked.readz);
-					if (read instanceof TileEntityIOMachine) {
-						TileEntityIOMachine io = (TileEntityIOMachine)read;
-						loss = (1-((double)(clicked.omega*TileEntityAdvancedGear.WORMRATIO)/io.omega))*100;
-						ReikaChatHelper.writeString(String.format("Power Loss: %.2f%s", loss, "%%"));
-					}
+					ReikaChatHelper.writeString(String.format("Power Loss: %.2f%s", clicked.getCurrentLoss(), "%%"));
 				}
 			}
 			if (m == MachineRegistry.BEVELGEARS) {
@@ -431,9 +426,9 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 				}
 
-				int dx = clicked.writex-clicked.xCoord;
-				int dy = clicked.writey-clicked.yCoord;
-				int dz = clicked.writez-clicked.zCoord;
+				int dx = clicked.getWriteDirection().offsetX;
+				int dy = clicked.getWriteDirection().offsetY;
+				int dz = clicked.getWriteDirection().offsetZ;
 				String sdx = String.valueOf(dx);
 				String sdy = String.valueOf(dy);
 				String sdz = String.valueOf(dz);
@@ -450,6 +445,14 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked == null)
 					return false;
 				ReikaChatHelper.writeString(String.format("%s generating %.3f MJ/t.", clicked.getName(), clicked.getGenMJ()));
+			}
+			if (m == MachineRegistry.BORER) {
+				TileEntityBorer clicked = (TileEntityBorer)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				ReikaChatHelper.writeString(String.format("%s head at %d, %d", clicked.getName(), clicked.getHeadX(), clicked.getHeadZ()));
+				if (clicked.isJammed())
+					ReikaChatHelper.writeString(String.format("%s is jammed, supply more torque or power!", clicked.getName()));
 			}
 
 			if (m == MachineRegistry.DYNAMO) {

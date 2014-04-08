@@ -271,15 +271,26 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				tier = is.stackTagCompound.getInteger("tier");
 			}
 			li.add(String.format("Tier %d", tier));
-			EnergyToPowerBase e = (EnergyToPowerBase)te;
-			int torque = e.getTierTorque(tier);
-			int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
-			long power = (long)torque*(long)speed;
-			double val = ReikaMathLibrary.getThousandBase(power);
-			String exp = ReikaEngLibrary.getSIPrefix(power);
-			li.add(String.format("Torque: %d Nm", torque));
-			li.add(String.format("Max Speed: %d rad/s", speed));
-			li.add(String.format("Max Power: %.3f%sW", val, exp));
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				EnergyToPowerBase e = (EnergyToPowerBase)te;
+				int torque = e.getTierTorque(tier);
+				int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
+				long power = (long)torque*(long)speed;
+				double val = ReikaMathLibrary.getThousandBase(power);
+				String exp = ReikaEngLibrary.getSIPrefix(power);
+				li.add(String.format("Torque: %d Nm", torque));
+				li.add(String.format("Max Speed: %d rad/s", speed));
+				li.add(String.format("Max Power: %.3f%sW", val, exp));
+			}
+			else {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Hold ");
+				sb.append(EnumChatFormatting.GREEN.toString());
+				sb.append("Shift");
+				sb.append(EnumChatFormatting.GRAY.toString());
+				sb.append(" for power data");
+				li.add(sb.toString());
+			}
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();

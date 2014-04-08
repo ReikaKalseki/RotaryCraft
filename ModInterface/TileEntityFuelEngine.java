@@ -146,24 +146,16 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
-			writex = x-1;
-			writey = y;
-			writez = z;
+			write = ForgeDirection.WEST;
 			break;
 		case 1:
-			writex = x+1;
-			writey = y;
-			writez = z;
+			write = ForgeDirection.EAST;
 			break;
 		case 2:
-			writex = x;
-			writey = y;
-			writez = z-1;
+			write = ForgeDirection.NORTH;
 			break;
 		case 3:
-			writex = x;
-			writey = y;
-			writez = z+1;
+			write = ForgeDirection.SOUTH;
 			break;
 		}
 	}
@@ -279,17 +271,17 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 
 }

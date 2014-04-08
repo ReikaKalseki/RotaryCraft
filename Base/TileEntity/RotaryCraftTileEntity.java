@@ -104,6 +104,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return this.getMachine().getBlockID();
 	}
 
+	public final MachineRegistry getMachine(ForgeDirection dir) {
+		int x = xCoord+dir.offsetX;
+		int y = yCoord+dir.offsetY;
+		int z = zCoord+dir.offsetZ;
+		return MachineRegistry.getMachine(worldObj, x, y, z);
+	}
+
 	public void giveNoSuperWarning() {
 		ReikaJavaLibrary.pConsole("TileEntity "+this.getName()+" does not call super()!");
 		ReikaChatHelper.write("TileEntity "+this.getName()+" does not call super()!");

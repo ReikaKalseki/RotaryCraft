@@ -145,9 +145,7 @@ public class ItemMulti extends ItemBasic {
 										double dz = z-te.zCoord-0.5;
 										double dd = ReikaMathLibrary.py3d(dx, dy, dz);
 										double v = ReikaMathLibrary.py3d(e.motionX, e.motionY, e.motionZ);
-										te.torque = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.getEngineType().getTorque()/dd);
-										te.omega = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*te.getEngineType().getSpeed()/dd/4D);
-										te.power = te.omega*te.torque;
+										te.magneticInterference(mag, dd);
 										te.soundtick = 1;
 									}
 								}

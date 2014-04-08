@@ -71,7 +71,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public static final int DIGPOWER = 64;
 	public static final int OBSIDIANTORQUE = 512;
 
-	public int step = 1;
+	private int step = 1;
 
 	public boolean[][] cutShape = new boolean[7][5]; // 7 cols, 5 rows
 
@@ -90,6 +90,22 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return s == 3 ? this.getActiveTexture() : 0;
 		}
 		return 0;
+	}
+
+	public boolean isJammed() {
+		return jammed;
+	}
+
+	public void reset() {
+		step = 1;
+	}
+
+	public int getHeadX() {
+		return xCoord+xstep*step;
+	}
+
+	public int getHeadZ() {
+		return zCoord+zstep*step;
 	}
 
 	@Override
@@ -185,7 +201,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			reqpow += (int)(DIGPOWER*10*hard);
 			mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
 
-			if (this.isLabyBedrock(world, xread, yread, zread)) {
+			if (this.isMineableBedrock(world, xread, yread, zread)) {
 				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
 				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
 			}
@@ -220,8 +236,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return id == TwilightForestHandler.getInstance().mazeStoneID || id == TwilightForestHandler.getInstance().shieldID;
 	}
 
-	public static boolean isLabyBedrock(World world, int x, int y, int z) {
-		return y > 4 && y < 40 && world.getBlockId(x, y, z) == Block.bedrock.blockID && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID();
+	public static boolean isMineableBedrock(World world, int x, int y, int z) {
+		if (world.getBlockId(x, y, z) != Block.bedrock.blockID)
+			return false;
+		if (y > 4 && y < 40 && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID())
+			return true;
+		if (y > 122 && world.provider.isHellWorld)
+			return true;
+		return false;
 	}
 
 	private void calcReqPower(World world, int x, int y, int z, int metadata) {
@@ -296,7 +318,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (tile instanceof RotaryCraftTileEntity)
 			return false;
 		if (drops && id != 0) {
-			if (this.isLabyBedrock(world, xread, yread, zread)) {
+			if (this.isMineableBedrock(world, xread, yread, zread)) {
 				ItemStack is = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt());
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);

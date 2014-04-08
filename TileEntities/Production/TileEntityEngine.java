@@ -71,6 +71,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoryIOMachine;
@@ -89,7 +90,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
-PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
+PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachine {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*RotaryConfig.MILLIBUCKET;
@@ -625,7 +626,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			return false;
 
 		boolean ac = ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
-		//ReikaJavaLibrary.pConsole(timer.getTickOf("fuel")+"/"+timer.getCapOf("fuel"));
 
 		if (!world.isRemote && ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
@@ -1110,14 +1110,13 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	private boolean isMuffled(World world, int x, int y, int z) {
-		ForgeDirection[] dirs = ForgeDirection.values();
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			if (dir != ForgeDirection.DOWN) {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				if ((dx != readx && dz != readz) && (dx != writex && dz != writez) || dir == ForgeDirection.UP) {
+				if ((dir != write.getOpposite() && dir != write) || dir == ForgeDirection.UP) {
 					int id = world.getBlockId(dx, dy, dz);
 					if (id != Block.cloth.blockID)
 						return false;
@@ -1255,31 +1254,26 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			writex = x-1;
-			writez = z;
+			write = ForgeDirection.WEST;
 			backx = x+1;
 			backz = z;
 			break;
 		case 1:
-			writez = z;
-			writex = x+1;
+			write = ForgeDirection.EAST;
 			backx = x-1;
 			backz = z;
 			break;
 		case 2:
-			writez = z-1;
-			writex = x;
+			write = ForgeDirection.NORTH;
 			backx = x;
 			backz = z+1;
 			break;
 		case 3:	//works
-			writez = z+1;
-			writex = x;
+			write = ForgeDirection.SOUTH;
 			backx = x;
 			backz = z-1;
 			break;
 		}
-		writey = y;
 	}
 
 	@Override
@@ -1666,9 +1660,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	public boolean isBackEndOfArray() {
-		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
+		MachineRegistry to = this.getMachine(write);
 		if (to == MachineRegistry.ENGINE) {
-			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(writex, writey, writez);
+			TileEntityEngine te = (TileEntityEngine)this.getAdjacentTileEntity(write);
 			return te.type == EngineType.HYDRO;
 		}
 		return false;
@@ -1676,7 +1670,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public boolean isFrontOfArray() {
 		MachineRegistry from = MachineRegistry.getMachine(worldObj, backx, yCoord, backz);
-		MachineRegistry to = MachineRegistry.getMachine(worldObj, writex, writey, writez);
+		MachineRegistry to = this.getMachine(write);
 		if (from == MachineRegistry.ENGINE && to != MachineRegistry.ENGINE) {
 			TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(backx, yCoord, backz);
 			return te.type == EngineType.HYDRO;
@@ -1848,16 +1842,34 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
+	}
+
+	public void magneticInterference(int mag, double dd) {
+		torque = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getTorque()/dd);
+		omega = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getSpeed()/dd/4D);
+		power = (long)omega*(long)torque;
+	}
+
+	@Override
+	public void upgrade() {
+		if (type == EngineType.GAS) {
+			type = EngineType.SPORT;
+			this.syncAllData();
+		}
+	}
+
+	public boolean canUpgradeWith(ItemStack item) {
+		return item.getItemDamage() == 0;
 	}
 }

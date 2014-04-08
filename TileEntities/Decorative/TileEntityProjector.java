@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -109,24 +110,16 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = x+1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = x-1;
-			readz = z;
-			ready = y;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = z-1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = z+1;
-			readx = x;
-			ready = y;
+			read = ForgeDirection.SOUTH;
 			break;
 		}
 	}

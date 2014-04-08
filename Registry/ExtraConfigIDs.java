@@ -88,6 +88,10 @@ public enum ExtraConfigIDs implements IDRegistry {
 		return RotaryCraft.config.getOtherID(this.ordinal());
 	}
 
+	public int getShiftedValue() {
+		return RotaryCraft.config.getOtherID(this.ordinal())+256;
+	}
+
 	@Override
 	public String getConfigName() {
 		return this.getName();

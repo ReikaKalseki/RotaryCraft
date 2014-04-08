@@ -95,6 +95,13 @@ public class EntitySonicShot extends EntityFireball {
 	@Override
 	public void onUpdate() {
 		this.onEntityUpdate();
+		ticksExisted++;
+
+		if (ticksExisted > 1200) {
+			this.setDead();
+			return;
+		}
+
 		if (te != null) {
 			int x = (int)Math.floor(posX);
 			int y = (int)Math.floor(posY);

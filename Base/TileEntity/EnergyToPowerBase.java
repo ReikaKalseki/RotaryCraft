@@ -25,8 +25,10 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController {
+public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine {
 
 	private static final int MINBASE = -1;
 
@@ -50,8 +52,14 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		return tier;
 	}
 
+	@Override
 	public final void upgrade() {
 		tier++;
+		this.syncAllData();
+	}
+
+	public boolean canUpgradeWith(ItemStack item) {
+		return item.itemID == ItemRegistry.UPGRADE.getShiftedID() && item.getItemDamage() == tier+1;
 	}
 
 	public final int getTierFromPowerOutput(long power) {
@@ -140,7 +148,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	public abstract int getMaxStorage();
 
 	public final long getPowerLevel() {
-		return this.isEmitting() ? (long)this.getSpeed()*(long)this.getTorque() : 0;
+		return this.isEmitting() ? this.getSpeed()*(long)this.getTorque() : 0;
 	}
 
 	public final int getSpeed() {
@@ -193,34 +201,22 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	protected final void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
 		switch(meta) {
 		case 0:
-			readz = z-1;
-			writez = z+1;
 			facingDir = ForgeDirection.NORTH;
 			break;
 		case 1:
-			readx = x-1;
-			writex = x+1;
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = z+1;
-			writez = z-1;
 			facingDir = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readx = x+1;
-			writex = x-1;
 			facingDir = ForgeDirection.EAST;
 			break;
 		}
+		read = facingDir;
+		write = read.getOpposite();
 	}
 
 	@Override
@@ -295,18 +291,18 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	@Override
-	public final int getEmittingX() {
-		return writex;
+	public int getEmittingX() {
+		return xCoord+write.offsetX;
 	}
 
 	@Override
-	public final int getEmittingY() {
-		return writey;
+	public int getEmittingY() {
+		return yCoord+write.offsetY;
 	}
 
 	@Override
-	public final int getEmittingZ() {
-		return writez;
+	public int getEmittingZ() {
+		return zCoord+write.offsetZ;
 	}
 
 }

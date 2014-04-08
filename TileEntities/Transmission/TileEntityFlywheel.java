@@ -220,49 +220,39 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
 		case 0:
-			readx = xCoord-1;
-			writex = xCoord+1;
-			readz = writez = zCoord;
+			read = ForgeDirection.WEST;
 			break;
 		case 1:
-			readx = xCoord+1;
-			writex = xCoord-1;
-			readz = writez = zCoord;
+			read = ForgeDirection.EAST;
 			break;
 		case 2:
-			readz = zCoord-1;
-			writez = zCoord+1;
-			readx = writex = xCoord;
+			read = ForgeDirection.NORTH;
 			break;
 		case 3:
-			readz = zCoord+1;
-			writez = zCoord-1;
-			readx = writex = xCoord;
+			read = ForgeDirection.SOUTH;
 			break;
 		}
-		ready = yCoord;
-		writey = yCoord;
+		write = read.getOpposite();
 	}
 
 	public void process(World world, int x, int y, int z) {
-		ready = y;
-		omegain=0;
+		omegain = 0;
 		tickcount++;
-		MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		MachineRegistry m = this.getMachine(read);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft devicein = (TileEntityShaft)te;
 			if (devicein.isCross()) {
 				omegain = this.readFromCross(devicein, false);
 				torquein = this.readFromCross(devicein, true);
 			}
-			else if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+			else if (devicein.isWritingTo(this)) {
 				omegain = devicein.omega;
 				torquein = devicein.torque;
 			}
 		}
 		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(worldObj, readx, ready, readz);
+			this.copyStandardPower(te);
 		}
 		if (m == MachineRegistry.POWERBUS) {
 			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
@@ -283,7 +273,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				this.readFromSplitter(devicein);
 				return;
 			}
-			else if (devicein.writex == xCoord && devicein.writez == zCoord) {
+			else if (devicein.isWritingTo(this)) {
 				omegain = devicein.omega;
 				torquein = devicein.torque;
 			}
@@ -405,12 +395,12 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	public int readFromCross(TileEntityShaft cross, boolean isTorque) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			if (isTorque)
 				return cross.readtorque[0];
 			return cross.readomega[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			if (isTorque)
 				return cross.readtorque[1];
 			return cross.readomega[1];
@@ -488,16 +478,16 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 }

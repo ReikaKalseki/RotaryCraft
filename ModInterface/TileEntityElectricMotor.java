@@ -62,34 +62,22 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	private boolean hasPower = false;
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
-		readx = x;
-		ready = y;
-		readz = z;
-		writex = x;
-		writey = y;
-		writez = z;
 		switch(meta) {
 		case 0:
-			readz = z-1;
-			writez = z+1;
 			facingDir = ForgeDirection.NORTH;
 			break;
 		case 1:
-			readx = x-1;
-			writex = x+1;
 			facingDir = ForgeDirection.WEST;
 			break;
 		case 2:
-			readz = z+1;
-			writez = z-1;
 			facingDir = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readx = x+1;
-			writex = x-1;
 			facingDir = ForgeDirection.EAST;
 			break;
 		}
+		read = facingDir;
+		write = read.getOpposite();
 	}
 
 	@Override
@@ -270,16 +258,16 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public int getEmittingX() {
-		return writex;
+		return xCoord+write.offsetX;
 	}
 
 	@Override
 	public int getEmittingY() {
-		return writey;
+		return yCoord+write.offsetY;
 	}
 
 	@Override
 	public int getEmittingZ() {
-		return writez;
+		return zCoord+write.offsetZ;
 	}
 }

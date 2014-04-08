@@ -66,20 +66,7 @@ public abstract class IORenderer {
 				return;
 			if (teb instanceof TileEntitySplitter) {
 				TileEntitySplitter ts = (TileEntitySplitter)teb;
-				if (ts.getBlockMetadata() < 8) { //Merging
-					double xdiff = ts.writex-ts.xCoord;
-					double zdiff = ts.writez-ts.zCoord;
-					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-					xdiff = ts.readx-ts.xCoord;
-					zdiff = ts.readz-ts.zCoord;
-					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-					xdiff = ts.readx2-ts.xCoord;
-					zdiff = ts.readz2-ts.zCoord;
-					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
-				}
-				else { //Splitting
+				if (ts.isSplitting()) { //Splitting
 					double xdiff = ts.writeinline[0]-ts.xCoord;
 					double zdiff = ts.writeinline[1]-ts.zCoord;
 					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
@@ -88,43 +75,65 @@ public abstract class IORenderer {
 					zdiff = ts.writebend[1]-ts.zCoord;
 					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
-					xdiff = ts.readx-ts.xCoord;
-					zdiff = ts.readz-ts.zCoord;
-					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					if (ts.getReadDirection() != null) {
+						xdiff = ts.getReadDirection().offsetX;
+						zdiff = ts.getReadDirection().offsetZ;
+						renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					}
+				}
+				else { //Merging
+					if (ts.getWriteDirection() != null) {
+						double xdiff = ts.getWriteDirection().offsetX;
+						double zdiff = ts.getWriteDirection().offsetZ;
+						renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					}
+
+					if (ts.getReadDirection() != null) {
+						double xdiff = ts.getReadDirection().offsetX;
+						double zdiff = ts.getReadDirection().offsetZ;
+						renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					}
+
+					if (ts.getReadDirection2() != null) {
+						double xdiff = ts.getReadDirection2().offsetX;
+						double zdiff = ts.getReadDirection2().offsetZ;
+						renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					}
 				}
 				return;
 			}
-			if (teb instanceof TileEntityShaft && teb.getBlockMetadata() >= 6) { //cross
+			if (teb instanceof TileEntityShaft && ((TileEntityShaft) teb).isCross()) { //cross
 				TileEntityShaft ts = (TileEntityShaft)teb;
-				double xdiff = ts.writex-ts.xCoord;
-				double zdiff = ts.writez-ts.zCoord;
+				double xdiff = ts.getWriteDirection().offsetX;
+				double zdiff = ts.getWriteDirection().offsetZ;
 				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
-				xdiff = ts.writex2-ts.xCoord;
-				zdiff = ts.writez2-ts.zCoord;
+				xdiff = ts.getWriteDirection2().offsetX;
+				zdiff = ts.getWriteDirection2().offsetZ;
 				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
-				xdiff = ts.readx-ts.xCoord;
-				zdiff = ts.readz-ts.zCoord;
+				xdiff = ts.getReadDirection().offsetX;
+				zdiff = ts.getReadDirection().offsetZ;
 				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
-				xdiff = ts.readx2-ts.xCoord;
-				zdiff = ts.readz2-ts.zCoord;
+				xdiff = ts.getReadDirection2().offsetX;
+				zdiff = ts.getReadDirection2().offsetZ;
 				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
 				return;
 			}
 			if (teb instanceof TileEntityWinder) {
 				TileEntityWinder ts = (TileEntityWinder)teb;
 				if (!ts.winding) {
-					double xdiff = ts.readx-ts.xCoord;
-					double ydiff = ts.ready-ts.yCoord;
-					double zdiff = ts.readz-ts.zCoord;
+					double xdiff = ts.getReadDirection().offsetX;
+					double ydiff = ts.getReadDirection().offsetY;
+					double zdiff = ts.getReadDirection().offsetZ;
 					renderOut(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
 				}
 				else {
-					double xdiff = ts.readx-ts.xCoord;
-					double zdiff = ts.readz-ts.zCoord;
-					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+					double xdiff = ts.getReadDirection().offsetX;
+					double ydiff = ts.getReadDirection().offsetY;
+					double zdiff = ts.getReadDirection().offsetZ;
+					renderIn(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
 				}
 				return;
 			}
@@ -144,41 +153,41 @@ public abstract class IORenderer {
 				return;
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", te.writex, te.writey, te.writez));
-			if (te.writex != Integer.MIN_VALUE && te.writey != Integer.MIN_VALUE && te.writez != Integer.MIN_VALUE) {
-				double xdiff = te.writex-te.xCoord;
-				double ydiff = te.writey-te.yCoord;
-				double zdiff = te.writez-te.zCoord;
+			if (te.getWriteDirection() != null) {
+				double xdiff = te.getWriteDirection().offsetX;
+				double ydiff = te.getWriteDirection().offsetY;
+				double zdiff = te.getWriteDirection().offsetZ;
 				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			if (te.writex2 != Integer.MIN_VALUE && te.writey2 != Integer.MIN_VALUE && te.writez2 != Integer.MIN_VALUE) {
-				double xdiff = te.writex2-te.xCoord;
-				double ydiff = te.writey2-te.yCoord;
-				double zdiff = te.writez2-te.zCoord;
+			if (te.getWriteDirection2() != null) {
+				double xdiff = te.getWriteDirection2().offsetX;
+				double ydiff = te.getWriteDirection2().offsetY;
+				double zdiff = te.getWriteDirection2().offsetZ;
 				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 			//ReikaChatHelper.writeInt(te.ready);
-			if (te.readx != Integer.MIN_VALUE && te.ready != Integer.MIN_VALUE && te.readz != Integer.MIN_VALUE) {
-				double xdiff = te.readx-te.xCoord;
-				double ydiff = te.ready-te.yCoord;
-				double zdiff = te.readz-te.zCoord;
+			if (te.getReadDirection() != null) {
+				double xdiff = te.getReadDirection().offsetX;
+				double ydiff = te.getReadDirection().offsetY;
+				double zdiff = te.getReadDirection().offsetZ;
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			if (te.readx2 != Integer.MIN_VALUE && te.ready2 != Integer.MIN_VALUE && te.readz2 != Integer.MIN_VALUE) {
-				double xdiff = te.readx2-te.xCoord;
-				double ydiff = te.ready2-te.yCoord;
-				double zdiff = te.readz2-te.zCoord;
+			if (te.getReadDirection2() != null) {
+				double xdiff = te.getReadDirection2().offsetX;
+				double ydiff = te.getReadDirection2().offsetY;
+				double zdiff = te.getReadDirection2().offsetZ;
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			if (te.readx3 != Integer.MIN_VALUE && te.ready3 != Integer.MIN_VALUE && te.readz3 != Integer.MIN_VALUE) {
-				double xdiff = te.readx3-te.xCoord;
-				double ydiff = te.ready3-te.yCoord;
-				double zdiff = te.readz3-te.zCoord;
+			if (te.getReadDirection3() != null) {
+				double xdiff = te.getReadDirection3().offsetX;
+				double ydiff = te.getReadDirection3().offsetY;
+				double zdiff = te.getReadDirection3().offsetZ;
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			if (te.readx4 != Integer.MIN_VALUE && te.ready4 != Integer.MIN_VALUE && te.readz4 != Integer.MIN_VALUE) {
-				double xdiff = te.readx4-te.xCoord;
-				double ydiff = te.ready4-te.yCoord;
-				double zdiff = te.readz4-te.zCoord;
+			if (te.getReadDirection4() != null) {
+				double xdiff = te.getReadDirection4().offsetX;
+				double ydiff = te.getReadDirection4().offsetY;
+				double zdiff = te.getReadDirection4().offsetZ;
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 		}

@@ -224,7 +224,7 @@ public enum EngineType {
 		case GAS:
 			return 12;
 		case AC:
-			return 12;
+			return 1200;
 		case SPORT:
 			return 6;
 		case MICRO:

@@ -145,13 +145,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		return true;
 	}
 
-	public void getIOSides(World world, int x, int y, int z, int metadata) {
-		readx = x;
-		ready = y;
-		readz = z;
-	}
-
-
 	public int getSizeInventory() {
 		return ingredients.length+1+1;
 	}

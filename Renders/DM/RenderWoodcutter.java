@@ -78,7 +78,7 @@ public class RenderWoodcutter extends RotaryTERenderer
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityWoodcutterAt((TileEntityWoodcutter)tile, par2, par4, par6, par8);
-		if (MinecraftForgeClient.getRenderPass() != 0) {
+		if (MinecraftForgeClient.getRenderPass() != 0 && tile.hasWorldObj()) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 			if (((TileEntityWoodcutter)tile).hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);

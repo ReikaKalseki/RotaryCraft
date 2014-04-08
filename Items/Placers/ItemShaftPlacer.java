@@ -65,15 +65,16 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				sha.xCoord = x;
 				sha.yCoord = y;
 				sha.zCoord = z;
-				int dx = sha.readx;
-				int dy = sha.ready;
-				int dz = sha.readz;
+				int dx = sha.getReadDirection().offsetX;
+				int dy = sha.getReadDirection().offsetY;
+				int dz = sha.getReadDirection().offsetZ;
 				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft te = (TileEntityShaft)world.getBlockTileEntity(dx, dy, dz);
-					if (te.writex == x && te.writey == y && te.writez == z) {
+					if (te.isWritingToCoordinate(x, y, z)) {
 						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
-						TileEntityPortalShaft ps = (TileEntityPortalShaft)world.getBlockTileEntity(dx, dy, dz);
+						TileEntityPortalShaft ps = new TileEntityPortalShaft();
+						world.setBlockTileEntity(dx, dy, dz, ps);
 						ps.setBlockMetadata(te.getBlockMetadata());
 						ps.setPortalType(world, x, y, z);
 						ps.material = te.getShaftType();

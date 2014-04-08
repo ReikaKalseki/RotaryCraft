@@ -603,6 +603,8 @@ public class RotaryRecipes {
 		ItemRegistry.FUEL.addRecipe("SBS", "BGB", "SPS", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', Block.glass);
 
 		ItemRegistry.DISK.addSizedRecipe(4, "wRw", "RSR", "wRw", 'w', ReikaItemHelper.blackWool, 'R', Item.redstone, 'S', ItemStacks.steelingot);
+
+		ItemRegistry.UPGRADE.addMetaRecipe(0, " R ", "gGg", " b ", 'b', ItemStacks.basepanel, 'R', ItemStacks.radiator, 'G', ItemStacks.gearunit, 'g', Item.ingotGold);
 	}
 
 	private static void addMisc() {

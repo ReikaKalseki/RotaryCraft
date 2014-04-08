@@ -26,9 +26,6 @@ public class RenderCrystal extends RotaryTERenderer
 
 	private ModelCrystallizer CrystalModel = new ModelCrystallizer();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityCrystallizerAt(TileEntityCrystallizer tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -77,7 +74,7 @@ public class RenderCrystal extends RotaryTERenderer
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
 			this.renderTileEntityCrystallizerAt((TileEntityCrystallizer)tile, par2, par4, par6, par8);
-		if (MinecraftForgeClient.getRenderPass() != 0) {
+		if (MinecraftForgeClient.getRenderPass() != 0 && tile.hasWorldObj()) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
 	}

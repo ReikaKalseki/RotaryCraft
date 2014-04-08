@@ -88,10 +88,8 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			}
 			omega = this.getUnwindSpeed();
 			torque = this.getUnwindTorque();
-			power = omega*torque;
-			writex = readx;
-			writez = readz;
-			writey = yCoord;
+			power = (long)omega*(long)torque;
+			write = read;
 			if (tickcount < this.getUnwindTime())
 				return;
 			tickcount = 0;

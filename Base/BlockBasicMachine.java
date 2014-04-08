@@ -14,7 +14,6 @@ import java.util.Random;
 import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -25,7 +24,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
@@ -35,6 +33,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -65,7 +64,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
-public abstract class BlockBasicMachine extends Block implements SidedTextureIndex, IWailaBlock {
+public abstract class BlockBasicMachine extends BlockTEBase implements SidedTextureIndex, IWailaBlock {
 
 	protected Random par5Random = new Random();
 
@@ -84,14 +83,6 @@ public abstract class BlockBasicMachine extends Block implements SidedTextureInd
 	@Override
 	public final boolean hasTileEntity(int meta) {
 		return true;
-	}
-
-	public final AxisAlignedBB getBlockAABB(int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
-	}
-
-	public final void setFullBlockBounds() {
-		this.setBlockBounds(0, 0, 0, 1, 1, 1);
 	}
 
 	@Override
@@ -157,7 +148,7 @@ public abstract class BlockBasicMachine extends Block implements SidedTextureInd
 		if (ep.isSneaking() && !(te instanceof TileEntityCaveFinder))
 			return false;
 		ItemRegistry ir = ItemRegistry.getEntry(is);
-		if (ir!= null && ir.overridesRightClick(is)) {
+		if (ir != null && ir.overridesRightClick(is)) {
 			return false;
 		}
 		if (te instanceof TileEntityAdvancedGear) {

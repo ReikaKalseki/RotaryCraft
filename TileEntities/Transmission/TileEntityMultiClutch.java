@@ -30,23 +30,23 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	@Override
 	public void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = this.getTileEntity(readx, ready, readz);
+		TileEntity te = this.getAdjacentTileEntity(read);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
 		if (this.isProvider(te)) {
-			MachineRegistry m = MachineRegistry.getMachine(world, readx, ready, readz);
+			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.writex == x && devicein.writey == y && devicein.writez == z) {
+				if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
 			}
 			if (te instanceof SimpleProvider) {
-				this.copyStandardPower(worldObj, readx, ready, readz);
+				this.copyStandardPower(te);
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
@@ -67,7 +67,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 					this.readFromSplitter(devicein);
 					return;
 				}
-				else if (devicein.writex == x && devicein.writez == z) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
@@ -82,11 +82,11 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 
 	public void readFromCross(TileEntityShaft cross) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
-		if (xCoord == cross.writex && zCoord == cross.writez) {
+		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
 		}
-		else if (xCoord == cross.writex2 && zCoord == cross.writez2) {
+		else if (cross.isWritingTo2(this)) {
 			omega = cross.readomega[1];
 			torque = cross.readtorque[1];
 		}
@@ -129,56 +129,39 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
-		ready = y;
 		switch(meta) {
 		case 0:
-			readx = x+1;
-			readz = z;
+			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			readx = x-1;
-			readz = z;
+			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			readx = x;
-			readz = z+1;
+			read = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			readx = x;
-			readz = z-1;
+			read = ForgeDirection.NORTH;
 			break;
 		}
 
 		switch(control[redLevel]) {
 		case 0:
-			writex = x;
-			writey = y-1;
-			writez = z;
+			write = ForgeDirection.DOWN;
 			break;
 		case 1:
-			writex = x;
-			writey = y+1;
-			writez = z;
+			write = ForgeDirection.UP;
 			break;
 		case 2:
-			writex = x;
-			writey = y;
-			writez = z-1;
+			write = ForgeDirection.NORTH;
 			break;
 		case 3:
-			writex = x;
-			writey = y;
-			writez = z+1;
+			write = ForgeDirection.SOUTH;
 			break;
 		case 4:
-			writex = x-1;
-			writey = y;
-			writez = z;
+			write = ForgeDirection.WEST;
 			break;
 		case 5:
-			writex = x+1;
-			writey = y;
-			writez = z;
+			write = ForgeDirection.EAST;
 			break;
 		}
 	}
