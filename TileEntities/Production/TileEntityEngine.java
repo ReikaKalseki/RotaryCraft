@@ -49,7 +49,6 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -806,7 +805,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachi
 				}
 				if (omega > 0) {
 					this.ingest(world, x, y, z, meta);
-					ReikaJavaLibrary.pConsole(lastpower+":"+power, Side.SERVER);
+					//ReikaJavaLibrary.pConsole(lastpower+":"+power, Side.SERVER);
 					if (lastpower == 0) {
 						SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
 					}

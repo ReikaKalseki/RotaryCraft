@@ -11,7 +11,6 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.awt.Color;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -19,7 +18,6 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -45,20 +43,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		pp.configure(0, maxMJ, 0, maxMJ);
 		pp.configurePowerPerdition(0, 0);
 		sound.setTick(sound.getCap());
-	}
-
-	@Override
-	public ItemStack getUpgradeItemFromTier(int tier) {
-		switch(tier) {
-		case 0:
-			return ItemStacks.impeller;
-		case 1:
-			return ItemStacks.turbine;
-		case 2:
-			return ItemStacks.compoundturb;
-		default:
-			return null;
-		}
 	}
 
 	@Override

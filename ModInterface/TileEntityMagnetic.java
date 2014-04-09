@@ -11,22 +11,18 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.awt.Color;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
 
@@ -69,24 +65,6 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 					SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
 				}
 			}
-		}
-	}
-
-	@Override
-	public ItemStack getUpgradeItemFromTier(int tier) {
-		switch(tier) {
-		case 0:
-			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
-		case 1:
-			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "conduitEnergyReinforced", 1);
-		case 2:
-			return ItemStacks.generator;
-		case 3:
-			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1);
-		case 4:
-			return GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellResonant", 1);
-		default:
-			return null;
 		}
 	}
 

@@ -87,8 +87,6 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public abstract int getMaxSpeedBase(int tier);
 
-	public abstract ItemStack getUpgradeItemFromTier(int tier);
-
 	public abstract boolean isValidSupplier(TileEntity te);
 
 	private static enum RedstoneState {
