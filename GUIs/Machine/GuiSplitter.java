@@ -61,9 +61,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		if (button.id == 1)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMaxValue(), splitter, 0);
-		else if (button.id <= 32) {
+		if (button.id <= 32) {
 			//this.updateMode(button.id);
 			mode = button.id;
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMinValue(), splitter, mode);
