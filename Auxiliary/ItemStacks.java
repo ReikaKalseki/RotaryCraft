@@ -35,6 +35,7 @@ public final class ItemStacks {
 	public static final ItemStack flour = new ItemStack(RotaryCraft.powders.itemID, 1, 9);
 	public static final ItemStack coaldust = new ItemStack(RotaryCraft.powders.itemID, 1, 10);
 	public static final ItemStack dryice = new ItemStack(RotaryCraft.powders.itemID, 1, 11);
+	public static final ItemStack redgolddust = new ItemStack(RotaryCraft.powders.itemID, 1, 12);
 
 	public static final ItemStack lubebucket = ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket = ItemRegistry.BUCKET.getStackOfMetadata(1);
@@ -42,8 +43,9 @@ public final class ItemStacks {
 
 	public static final ItemStack bedingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 3);
 	public static final ItemStack aluminumingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 4);
+	public static final ItemStack tungsteningot = new ItemStack(RotaryCraft.compacts.itemID, 1, 5);
+	public static final ItemStack redgoldingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 6);
 	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);
-	public static final ItemStack tungsteningot = new ItemStack(RotaryCraft.compacts.itemID, 1, 8);
 
 	public static final ItemStack basepanel = new ItemStack(RotaryCraft.shaftcraft, 1, 0);
 	public static final ItemStack steelingot = new ItemStack(RotaryCraft.shaftcraft, 1, 1);

@@ -223,8 +223,7 @@ public class ItemMulti extends ItemBasic {
 				item.stackTagCompound.setInteger("damage", 0);
 			}
 			if (item.itemID == RotaryCraft.compacts.itemID) {
-				if (i != 5 && i != 6)
-					par3List.add(item);
+				par3List.add(item);
 			}
 			else {
 				par3List.add(item);
@@ -307,8 +306,8 @@ public class ItemMulti extends ItemBasic {
 		while (row >= 16)
 			row -= 16;
 		if (item.itemID == RotaryCraft.extracts.itemID && item.getItemDamage() > 31)
-			row = 9+item.getItemDamage()/16;
-		return 16*row+item.getItemDamage();
+			return 16*9+item.getItemDamage()-32;
+		return 16*row+item.getItemDamage()%16;
 	}
 
 }

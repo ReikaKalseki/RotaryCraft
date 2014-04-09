@@ -37,6 +37,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final FridgeHandler fridge = new FridgeHandler();
 	private static final FillingStationHandler filling = new FillingStationHandler();
 	//private static final RightClickHandler rightclick = new RightClickHandler();
+	private static final FrictionHandler friction = new FrictionHandler();
 
 	@Override
 	public void loadConfig() {
@@ -82,6 +83,9 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 
 		//API.registerRecipeHandler(rightclick);
 		//API.registerUsageHandler(rightclick);
+
+		API.registerRecipeHandler(friction);
+		API.registerUsageHandler(friction);
 
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++)

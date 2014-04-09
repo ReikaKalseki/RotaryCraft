@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2014
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
 import java.util.List;
@@ -5,6 +14,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
@@ -49,7 +59,27 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < Upgrades.values().length; i++) {
 			ItemStack is = new ItemStack(par1, 1, i);
+			if (i == 2) {
+				is.stackTagCompound = new NBTTagCompound();
+				is.stackTagCompound.setInteger("magnet", 720);
+			}
 			par3List.add(is);
+		}
+	}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
+		if (is.stackTagCompound != null) {
+			int magnet = is.stackTagCompound.getInteger("magnet");
+			if (is.stackTagCompound.hasKey("magnet")) {
+				li.add(String.format("Magnetized to %d microTeslas", magnet));
+			}
+			if (magnet < 720) {
+				li.add("Must be magnetized to 720 microTeslas to be used");
+			}
+		}
+		else {
+			li.add("Must be magnetized to 720 microTeslas to be used");
 		}
 	}
 

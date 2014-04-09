@@ -20,6 +20,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation {
@@ -58,17 +59,26 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 			tickcount = 0;
 			return;
 		}
-		if (!this.hasCore()) {
-			tickcount = 0;
-			return;
-		}
 		if (!ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower))
 			return;
 		tickcount++;
 		if (tickcount < this.getOperationTime())
 			return;
+		if (!this.hasCore()) {
+			if (this.hasUpgrade()) {
+				this.magnetize();
+			}
+			else {
+				tickcount = 0;
+			}
+			return;
+		}
 		tickcount = 0;
 		this.magnetize();
+	}
+
+	private boolean hasUpgrade() {
+		return inv[0] != null && inv[0].itemID == ItemRegistry.UPGRADE.getShiftedID() && inv[0].getItemDamage() == 2;
 	}
 
 	private boolean hasCore() {

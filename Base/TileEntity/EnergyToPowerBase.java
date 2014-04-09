@@ -59,6 +59,12 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public boolean canUpgradeWith(ItemStack item) {
+		if (item.getItemDamage() == 2) {
+			if (item.stackTagCompound == null)
+				return false;
+			if (item.stackTagCompound.getInteger("magnet") < 720)
+				return false;
+		}
 		return item.itemID == ItemRegistry.UPGRADE.getShiftedID() && item.getItemDamage() == tier+1;
 	}
 

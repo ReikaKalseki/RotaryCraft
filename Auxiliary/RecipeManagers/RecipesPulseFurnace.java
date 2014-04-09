@@ -43,67 +43,72 @@ public class RecipesPulseFurnace
 
 	private RecipesPulseFurnace()
 	{
-		this.addSmelting(Block.obsidian.blockID, 0, new ItemStack(RotaryCraft.obsidianglass, 1, 0), 0.7F);
-		this.addSmelting(Item.ingotIron.itemID, 0, new ItemStack(RotaryCraft.shaftcraft, 1, 1), 0.4F);	//Iron ingot
+		this.addSmelting(Block.obsidian.blockID, new ItemStack(RotaryCraft.obsidianglass, 1, 0), 0.7F);
+		this.addSmelting(Item.ingotIron.itemID, new ItemStack(RotaryCraft.shaftcraft, 1, 1), 0.4F);	//Iron ingot
 
 		//RECYCLING
-		this.addSmelting(Item.helmetChain.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.helmetIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
-		this.addSmelting(Item.bootsChain.itemID, 0, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
-		this.addSmelting(Item.bootsIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 4, 0), 0F);
-		this.addSmelting(Item.legsChain.itemID, 0, new ItemStack(Item.ingotIron.itemID, 4, 0), 0F);
-		this.addSmelting(Item.legsIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
-		this.addSmelting(Item.plateChain.itemID, 0, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
-		this.addSmelting(Item.plateIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 8, 0), 0F);
+		this.addSmelting(Item.helmetChain.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.helmetIron.itemID, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
+		this.addSmelting(Item.bootsChain.itemID, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
+		this.addSmelting(Item.bootsIron.itemID, new ItemStack(Item.ingotIron.itemID, 4, 0), 0F);
+		this.addSmelting(Item.legsChain.itemID, new ItemStack(Item.ingotIron.itemID, 4, 0), 0F);
+		this.addSmelting(Item.legsIron.itemID, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
+		this.addSmelting(Item.plateChain.itemID, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
+		this.addSmelting(Item.plateIron.itemID, new ItemStack(Item.ingotIron.itemID, 8, 0), 0F);
 
-		this.addSmelting(Item.axeIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.axeGold.itemID, 0, new ItemStack(Item.ingotGold.itemID, 3, 0), 0F);
-		this.addSmelting(Item.swordIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
-		this.addSmelting(Item.swordGold.itemID, 0, new ItemStack(Item.ingotGold.itemID, 2, 0), 0F);
-		this.addSmelting(Item.shovelIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);
-		this.addSmelting(Item.shovelGold.itemID, 0, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
-		this.addSmelting(Item.pickaxeIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.pickaxeGold.itemID, 0, new ItemStack(Item.ingotGold.itemID, 3, 0), 0F);
-		this.addSmelting(Item.hoeGold.itemID, 0, new ItemStack(Item.ingotGold.itemID, 2, 0), 0F);
-		this.addSmelting(Item.hoeIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
+		this.addSmelting(Item.axeIron.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.axeGold.itemID, new ItemStack(Item.ingotGold.itemID, 3, 0), 0F);
+		this.addSmelting(Item.swordIron.itemID, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
+		this.addSmelting(Item.swordGold.itemID, new ItemStack(Item.ingotGold.itemID, 2, 0), 0F);
+		this.addSmelting(Item.shovelIron.itemID, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);
+		this.addSmelting(Item.shovelGold.itemID, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
+		this.addSmelting(Item.pickaxeIron.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.pickaxeGold.itemID, new ItemStack(Item.ingotGold.itemID, 3, 0), 0F);
+		this.addSmelting(Item.hoeGold.itemID, new ItemStack(Item.ingotGold.itemID, 2, 0), 0F);
+		this.addSmelting(Item.hoeIron.itemID, new ItemStack(Item.ingotIron.itemID, 2, 0), 0F);
 
-		this.addSmelting(Item.flintAndSteel.itemID, 0, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);
-		this.addSmelting(Item.bucketEmpty.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.bucketWater.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.bucketLava.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.bucketMilk.itemID, 0, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
-		this.addSmelting(Item.minecartEmpty.itemID, 0, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
-		this.addSmelting(Item.doorIron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 6, 0), 0F);
-		this.addSmelting(Item.cauldron.itemID, 0, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
-		this.addSmelting(Item.horseArmorIron.itemID, 0, new ItemStack(Item.ingotIron, 7), 1F);
-		this.addSmelting(Item.horseArmorDiamond.itemID, 0, new ItemStack(Item.diamond, 7), 1F);
-		this.addSmelting(Item.horseArmorGold.itemID, 0, new ItemStack(Item.ingotGold, 7), 1F);
-		this.addSmelting(ItemRegistry.STEELHELMET.getShiftedID(), 0, this.getSizedSteel(5), 0);
-		this.addSmelting(ItemRegistry.STEELBOOTS.getShiftedID(), 0, this.getSizedSteel(4), 0);
-		this.addSmelting(ItemRegistry.STEELCHEST.getShiftedID(), 0, this.getSizedSteel(8), 0);
-		this.addSmelting(ItemRegistry.STEELLEGS.getShiftedID(), 0, this.getSizedSteel(7), 0);
-		this.addSmelting(ItemRegistry.STEELAXE.getShiftedID(), 0, this.getSizedSteel(3), 0);
-		this.addSmelting(ItemRegistry.STEELPICK.getShiftedID(), 0, this.getSizedSteel(3), 0);
-		this.addSmelting(ItemRegistry.STEELSHOVEL.getShiftedID(), 0, this.getSizedSteel(1), 0);
+		this.addSmelting(Item.flintAndSteel.itemID, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);
+		this.addSmelting(Item.bucketEmpty.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.bucketWater.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.bucketLava.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.bucketMilk.itemID, new ItemStack(Item.ingotIron.itemID, 3, 0), 0F);
+		this.addSmelting(Item.minecartEmpty.itemID, new ItemStack(Item.ingotIron.itemID, 5, 0), 0F);
+		this.addSmelting(Item.doorIron.itemID, new ItemStack(Item.ingotIron.itemID, 6, 0), 0F);
+		this.addSmelting(Item.cauldron.itemID, new ItemStack(Item.ingotIron.itemID, 7, 0), 0F);
+		this.addSmelting(Item.horseArmorIron.itemID, new ItemStack(Item.ingotIron, 7), 1F);
+		this.addSmelting(Item.horseArmorDiamond.itemID, new ItemStack(Item.diamond, 7), 1F);
+		this.addSmelting(Item.horseArmorGold.itemID, new ItemStack(Item.ingotGold, 7), 1F);
+		this.addSmelting(ItemRegistry.STEELHELMET.getShiftedID(), this.getSizedSteel(5), 0);
+		this.addSmelting(ItemRegistry.STEELBOOTS.getShiftedID(), this.getSizedSteel(4), 0);
+		this.addSmelting(ItemRegistry.STEELCHEST.getShiftedID(), this.getSizedSteel(8), 0);
+		this.addSmelting(ItemRegistry.STEELLEGS.getShiftedID(), this.getSizedSteel(7), 0);
+		this.addSmelting(ItemRegistry.STEELAXE.getShiftedID(), this.getSizedSteel(3), 0);
+		this.addSmelting(ItemRegistry.STEELPICK.getShiftedID(), this.getSizedSteel(3), 0);
+		this.addSmelting(ItemRegistry.STEELSHOVEL.getShiftedID(), this.getSizedSteel(1), 0);
 
+		this.addSmelting(ItemStacks.redgolddust, ItemStacks.redgoldingot, 0.5F);
 
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 10, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//scrap
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 9, new ItemStack(RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap
-		this.addSmelting(Block.railDetector.blockID, 0, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//1 ingot per block of rail
-		this.addSmelting(Block.railPowered.blockID, 0, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
+		this.addSmelting(Block.railDetector.blockID, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//1 ingot per block of rail
+		this.addSmelting(Block.railPowered.blockID, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
 	}
 
 	private ItemStack getSizedSteel(int size) {
 		return new ItemStack(ItemStacks.steelingot.itemID, size, ItemStacks.steelingot.getItemDamage());
 	}
 
-	/**
-	 * Add a metadata-sensitive furnace recipe
-	 * @param itemID The Item ID
-	 * @param metadata The Item Metadata
-	 * @param itemstack The ItemStack for the result
-	 */
-	public void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
+	private void addSmelting(ItemStack in, ItemStack itemstack, float xp)
+	{
+		this.addSmelting(in.itemID, in.getItemDamage(), itemstack, xp);
+	}
+
+	private void addSmelting(int itemID, ItemStack itemstack, float xp)
+	{
+		this.addSmelting(itemID, 0, itemstack, xp);
+	}
+
+	private void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
 	{
 		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));

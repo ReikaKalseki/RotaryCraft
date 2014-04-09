@@ -175,27 +175,32 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		tile.currentItemBurnTime = burn;
 		tile.furnaceBurnTime = burn;
 		ItemStack in = tile.getStackInSlot(0);
-		ItemStack out = tile.getStackInSlot(2);
-		ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
-		ItemStack special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
-		if (!this.canTileMake(tile, special))
-			special = null;
+		if (in != null) {
+			ItemStack out = tile.getStackInSlot(2);
+			ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
+			ItemStack special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
+			if (!this.canTileMake(tile, special))
+				special = null;
 
-		if (smelt != null || special != null) {
-			this.smeltCalculation();
-			smeltTime++;
-			tile.furnaceCookTime = Math.min(smeltTime, 195);
-			if (smeltTime >= 200) {
-				if (smelt != null) {
-					tile.smeltItem();
+			if (smelt != null || special != null) {
+				this.smeltCalculation();
+				smeltTime++;
+				tile.furnaceCookTime = Math.min(smeltTime, 195);
+				if (smeltTime >= 200) {
+					if (smelt != null) {
+						tile.smeltItem();
+					}
+					else if (special != null) {
+						ReikaInventoryHelper.decrStack(0, tile, 1);
+						int amt = out != null ? out.stackSize+1 : 1;
+						out = ReikaItemHelper.getSizedItemStack(special, amt);
+						tile.setInventorySlotContents(2, out);
+					}
+					smeltTime = 0;
 				}
-				else if (special != null) {
-					ReikaInventoryHelper.decrStack(0, tile, 1);
-					int amt = out != null ? out.stackSize+1 : 1;
-					out = ReikaItemHelper.getSizedItemStack(special, amt);
-					tile.setInventorySlotContents(2, out);
-				}
-				smeltTime = 0;
+			}
+			else {
+				tile.furnaceCookTime = 0;
 			}
 		}
 		else {

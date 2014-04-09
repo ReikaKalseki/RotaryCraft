@@ -353,7 +353,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.compressor, new Object[]{
 				"SSS", "SGS", "SSS", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear});
 		GameRegistry.addRecipe(ItemStacks.turbine, new Object[]{
-				"sss", "sGs", "sss", 's', ItemStacks.prop, 'G', ItemStacks.compressor});
+				"tst", "sGs", "tst", 's', ItemStacks.prop, 't', ItemStacks.tungsteningot, 'G', ItemStacks.compressor});
 		GameRegistry.addRecipe(ItemStacks.diffuser, new Object[]{
 				" SS", "S  ", " SS", 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
@@ -605,6 +605,12 @@ public class RotaryRecipes {
 		ItemRegistry.DISK.addSizedRecipe(4, "wRw", "RSR", "wRw", 'w', ReikaItemHelper.blackWool, 'R', Item.redstone, 'S', ItemStacks.steelingot);
 
 		ItemRegistry.UPGRADE.addMetaRecipe(0, " R ", "gGg", " b ", 'b', ItemStacks.basepanel, 'R', ItemStacks.radiator, 'G', ItemStacks.gearunit, 'g', Item.ingotGold);
+
+		ItemRegistry.UPGRADE.addMetaRecipe(1, "SES", "ERE", "SES", 'R', Item.redstone, 'S', ItemStacks.steelingot, 'E', ItemRegistry.ETHANOL.getStackOf());
+		ItemRegistry.UPGRADE.addMetaRecipe(2, "SES", "ERE", "SES", 'R', ItemStacks.shaftcore, 'S', ItemStacks.steelingot, 'E', Item.ingotGold);
+		ItemRegistry.UPGRADE.addMetaRecipe(3, "SES", "ERE", "SES", 'R', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'E', ItemStacks.redgoldingot);
+		ItemRegistry.UPGRADE.addMetaRecipe(4, "SES", "ERE", "SES", 'R', ItemStacks.redgoldingot, 'S', ItemStacks.steelingot, 'E', ItemStacks.tungsteningot);
+		ItemRegistry.UPGRADE.addMetaRecipe(5, "SES", "ERE", "SES", 'R', ItemStacks.bedingot, 'S', ItemStacks.redgoldingot, 'E', ItemStacks.bedrockdust);
 	}
 
 	private static void addMisc() {
@@ -668,6 +674,7 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaldust);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, ItemStacks.goldoredust);
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});
