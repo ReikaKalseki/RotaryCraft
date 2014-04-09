@@ -51,7 +51,7 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 		write = read.getOpposite();
 	}
 
-	public abstract void transferPower(World world, int x, int y, int z, int meta);
+	protected abstract void transferPower(World world, int x, int y, int z, int meta);
 
 	@Override
 	public boolean canProvidePower() {

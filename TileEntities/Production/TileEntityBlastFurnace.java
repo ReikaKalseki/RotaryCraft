@@ -394,7 +394,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

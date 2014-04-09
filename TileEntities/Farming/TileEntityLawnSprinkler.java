@@ -33,7 +33,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 	private int speed;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (this.canPerformEffects()) {
 			if (speed < 24)
 				speed += 1;

@@ -33,7 +33,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	private boolean isOut = false;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (power >= MINPOWER && torque >= MINTORQUE)
 			phi = 1-timer.getFraction()-0.01F;
 	}

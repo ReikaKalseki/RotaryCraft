@@ -142,7 +142,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	//No read/write y2 since vertical shafts will not have cross equivalent
 	//(no way to make them look structurally sound)
 
-	public void crossReadFromCross(TileEntityShaft cross, int dir) {
+	private void crossReadFromCross(TileEntityShaft cross, int dir) {
 		reading2Dir = true;
 		if (cross.isWritingTo(this)) {
 			readomega[dir] = cross.readomega[0];
@@ -156,7 +156,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return; //not its output
 	}
 
-	public void readFromCross(TileEntityShaft cross) {
+	protected void readFromCross(TileEntityShaft cross) {
 		reading2Dir = true;
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
@@ -216,9 +216,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 	}
 
-	//FIX THIS;
 	@Override
-	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		reading2Dir = true;
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -421,7 +420,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public void transferPower(World world, int x, int y, int z, int meta) {
+	protected void transferPower(World world, int x, int y, int z, int meta) {
 		reading2Dir = false;
 		if (this.isCross()) {
 			this.crossTransfer(world);
@@ -523,7 +522,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

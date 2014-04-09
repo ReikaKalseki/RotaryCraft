@@ -200,7 +200,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.readx, this.yCoord, this.readz, 20);
 	}
 
-	public void readFromCross(TileEntityShaft cross) {
+	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
@@ -213,7 +213,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			return; //not its output
 	}
 
-	public void mergeReadFromCross(TileEntityShaft cross, int side) {
+	private void mergeReadFromCross(TileEntityShaft cross, int side) {
 		if (cross.isWritingTo(this)) {
 			if (side == 0) {
 				omegain = cross.readomega[0];
@@ -238,7 +238,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			return; //not its output
 	}
 
-	public void transferPower(World world, int x, int y, int z, int meta) {
+	protected void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
 		if (!this.isSplitting()) {
 			TileEntity te = this.getAdjacentTileEntity(read);
@@ -506,7 +506,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		omegain = spl.omega; //omegain always constant
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
@@ -568,7 +568,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

@@ -28,7 +28,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 	private HashMap<int[], int[]> cameras = new HashMap<int[], int[]>();
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

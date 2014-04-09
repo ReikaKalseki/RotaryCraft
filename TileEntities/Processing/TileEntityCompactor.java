@@ -428,7 +428,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (phi < 0.5F)
 			phi = 1F;
 		if (!this.isInWorld()) {

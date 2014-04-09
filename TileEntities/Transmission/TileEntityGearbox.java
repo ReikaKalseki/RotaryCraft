@@ -103,7 +103,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
 			return;
@@ -245,7 +245,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		ratio = (int)ReikaMathLibrary.intpow(2, tratio);
 	}
 
-	public void readFromCross(TileEntityShaft cross) {
+	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			if (reduction) {
 				omega = cross.readomega[0]/ratio;
@@ -271,7 +271,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public void transferPower(World world, int x, int y, int z, int meta) {
+	protected void transferPower(World world, int x, int y, int z, int meta) {
 		this.calculateRatio();
 		omegain = torquein = 0;
 		TileEntity te = this.getAdjacentTileEntity(read);
@@ -464,7 +464,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

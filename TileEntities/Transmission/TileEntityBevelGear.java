@@ -62,8 +62,8 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 			write = ForgeDirection.WEST;
 			break;
 		case 6:
-			read = ForgeDirection.NORTH;
-			write = ForgeDirection.EAST;
+			write = ForgeDirection.NORTH;
+			read = ForgeDirection.EAST;
 			break;
 		case 7:
 			read = ForgeDirection.SOUTH;
@@ -138,7 +138,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, writex, writey, writez, 49);
 	}
 
-	public void readFromCross(TileEntityShaft cross) {
+	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
 			torque = cross.readtorque[0];
@@ -152,7 +152,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	}
 
 	@Override
-	public void transferPower(World world, int x, int y, int z, int meta) {
+	protected void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
 		TileEntity te = this.getAdjacentTileEntity(read);
 		if (this.isProvider(te)) {
@@ -227,7 +227,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

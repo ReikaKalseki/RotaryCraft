@@ -34,7 +34,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 		this.basicPowerReceiver();
 	}
 
-	public void readFromCross(TileEntityShaft cross) {
+	protected void readFromCross(TileEntityShaft cross) {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
@@ -49,7 +49,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public void transferPower(World world, int x, int y, int z, int meta) {
+	protected void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
 		TileEntity te = this.getAdjacentTileEntity(read);
 		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
@@ -107,7 +107,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

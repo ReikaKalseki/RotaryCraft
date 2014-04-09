@@ -72,7 +72,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	@Override
-	public abstract void animateWithTick(World world, int x, int y, int z);
+	protected abstract void animateWithTick(World world, int x, int y, int z);
 
 	public abstract MachineRegistry getMachine();
 

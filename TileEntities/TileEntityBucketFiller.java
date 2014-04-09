@@ -55,7 +55,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

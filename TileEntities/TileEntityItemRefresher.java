@@ -23,7 +23,7 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 	public static final int FALLOFF = 1024;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

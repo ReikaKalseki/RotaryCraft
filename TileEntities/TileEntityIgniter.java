@@ -41,7 +41,7 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	public int theta;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

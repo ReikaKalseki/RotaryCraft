@@ -252,6 +252,15 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return wx & wy & wz;
 	}
 
+	public final boolean isWritingToCoordinate2(int x, int y, int z) {
+		if (write2 == null)
+			return false;
+		boolean wx = xCoord+write2.offsetX == x;
+		boolean wy = yCoord+write2.offsetY == y;
+		boolean wz = zCoord+write2.offsetZ == z;
+		return wx & wy & wz;
+	}
+
 	public final boolean isWritingTo(TileEntityIOMachine te) {
 		if (write == null)
 			return false;

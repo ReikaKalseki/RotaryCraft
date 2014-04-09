@@ -27,7 +27,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 	private StepTimer timer = new StepTimer(20);
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

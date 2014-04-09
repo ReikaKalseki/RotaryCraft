@@ -37,7 +37,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	private StepTimer timer = new StepTimer(20);
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

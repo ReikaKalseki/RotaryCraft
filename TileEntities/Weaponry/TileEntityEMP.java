@@ -147,7 +147,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	private boolean fired = false;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

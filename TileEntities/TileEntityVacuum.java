@@ -271,7 +271,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

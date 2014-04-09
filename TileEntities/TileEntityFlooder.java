@@ -168,7 +168,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

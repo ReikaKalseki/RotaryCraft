@@ -40,7 +40,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	private static final ArrayList<Integer> fertilizables = new ArrayList();
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;
 			return;

@@ -155,7 +155,7 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

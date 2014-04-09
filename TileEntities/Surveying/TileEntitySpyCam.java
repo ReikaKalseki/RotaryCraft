@@ -38,7 +38,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	public List inzone;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
 

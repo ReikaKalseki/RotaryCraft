@@ -37,7 +37,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	private ForgeDirection facingDir;
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (omega <= 1 || !this.hasOutputTile()) {
 			if (phi > 0) {
 				double speed = 0.0125;

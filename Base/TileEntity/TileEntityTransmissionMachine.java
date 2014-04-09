@@ -13,7 +13,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine {
 
-	public void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
 			return;

@@ -52,7 +52,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (this.getMessageLength() <= displayHeight)
 			return;
 		scroll += 0.05F;
