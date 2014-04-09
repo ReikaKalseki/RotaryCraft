@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IEnergyInterface;
-import universalelectricity.core.electricity.ElectricityPack;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -65,7 +64,7 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 					TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 					if (te instanceof IEnergyInterface) {
 						IEnergyInterface ie = (IEnergyInterface)te;
-						if (ie.canConnect(facingDir)) {
+						if (ie.canConnect(facingDir, this)) {
 							long energy = (long)(this.getGenCurrent()*OUTPUT_VOLTAGE);
 							ie.onReceiveEnergy(facingDir, energy, true);
 						}
@@ -95,14 +94,8 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection direction) {
+	public boolean canConnect(ForgeDirection direction, Object src) {
 		return direction == facingDir.getOpposite();
-	}
-
-	public ElectricityPack getProduction() {
-		float i = this.getGenCurrent();
-		ElectricityPack e = new ElectricityPack(i, OUTPUT_VOLTAGE);
-		return e;
 	}
 
 	private float getGenCurrent() {

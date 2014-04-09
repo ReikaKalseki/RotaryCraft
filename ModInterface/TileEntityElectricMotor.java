@@ -187,9 +187,6 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		//current = NBT.getFloat("a");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -206,7 +203,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	}
 
 	@Override
-	public boolean canConnect(ForgeDirection dir) {
+	public boolean canConnect(ForgeDirection dir, Object src) {
 		return dir == facingDir || dir == ForgeDirection.DOWN;
 	}
 
