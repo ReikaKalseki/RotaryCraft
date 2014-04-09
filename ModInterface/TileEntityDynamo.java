@@ -95,7 +95,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		long pwr = (long)tq*(long)om;
 		if (this.isFlexibleMode())
 			pwr = power;
-		return (int)((float)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+		return (int)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ());
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

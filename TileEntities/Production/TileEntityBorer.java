@@ -195,12 +195,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	private void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
-		int id = world.getBlockId(xread, yread, zread);
 		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
+			int id = world.getBlockId(xread, yread, zread);
 			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
-			reqpow += (int)(DIGPOWER*10*hard);
-			mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
-
 			if (this.isMineableBedrock(world, xread, yread, zread)) {
 				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
 				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
@@ -211,6 +208,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			else if (hard < 0) {
 				reqpow = -1;
+			}
+			else {
+				reqpow += (int)(DIGPOWER*10*hard);
+				mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
 			}
 		}
 	}
