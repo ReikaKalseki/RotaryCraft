@@ -69,17 +69,19 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
-		if (is.stackTagCompound != null) {
-			int magnet = is.stackTagCompound.getInteger("magnet");
-			if (is.stackTagCompound.hasKey("magnet")) {
-				li.add(String.format("Magnetized to %d microTeslas", magnet));
+		if (is.getItemDamage() == 2) {
+			if (is.stackTagCompound != null) {
+				int magnet = is.stackTagCompound.getInteger("magnet");
+				if (is.stackTagCompound.hasKey("magnet")) {
+					li.add(String.format("Magnetized to %d microTeslas", magnet));
+				}
+				if (magnet < 720) {
+					li.add("Must be magnetized to 720 microTeslas to be used");
+				}
 			}
-			if (magnet < 720) {
+			else {
 				li.add("Must be magnetized to 720 microTeslas to be used");
 			}
-		}
-		else {
-			li.add("Must be magnetized to 720 microTeslas to be used");
 		}
 	}
 
