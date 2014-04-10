@@ -674,7 +674,7 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaldust);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, ItemStacks.goldoredust);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, ItemStacks.goldoreflakes);
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});

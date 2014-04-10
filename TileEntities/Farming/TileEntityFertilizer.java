@@ -212,7 +212,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return from.offsetY == 0;
+		return from != ForgeDirection.DOWN;
 	}
 
 	@Override

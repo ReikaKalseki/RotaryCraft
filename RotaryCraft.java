@@ -328,7 +328,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);
 		DonatorController.instance.addDonation(instance, "EverRunes", 75.00F);
 		DonatorController.instance.addDonation(instance, "AnotherDeadBard", 25.00F);
-		DonatorController.instance.addDonation(instance, "Jason Wood", 25.00F);
+		DonatorController.instance.addDonation(instance, "hyper1on", 25.00F);
 		DonatorController.instance.addDonation(instance, "MarkyRedstone", 35.00F);
 		DonatorController.instance.addDonation(instance, "Darkholme", 10.00F);
 		DonatorController.instance.addDonation(instance, "william kirk", 10.00F);

@@ -388,7 +388,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	@Override
 	public int getMaxRange() {
-		return 32;
+		return distancelimit;
 	}
 
 	@Override
