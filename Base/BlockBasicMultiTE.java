@@ -326,7 +326,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.BEDROCKBREAKER && !ep.isSneaking()) {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
-			tb.dropItemFromInventory();
+			tb.dropInventory();
 			return true;
 		}
 		if (m == MachineRegistry.EXTRACTOR) {

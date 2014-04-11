@@ -658,14 +658,11 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
 			"b", 'b', Item.bucketEmpty});
 
-		GameRegistry.addRecipe(ItemStacks.steelblock, new Object[]{
-				"BBB", "BBB", "BBB", 'B', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ItemStacks.steelblock, "BBB", "BBB", "BBB", 'B', ItemStacks.steelingot);
+		GameRegistry.addRecipe(ItemStacks.anthrablock, "BBB", "BBB", "BBB", 'B', ItemStacks.anthracite);
+		GameRegistry.addRecipe(ItemStacks.lonsblock, "BBB", "BBB", "BBB", 'B', ItemStacks.lonsda);
 
-		GameRegistry.addRecipe(ItemStacks.anthrablock, new Object[]{
-				"BBB", "BBB", "BBB", 'B', ItemStacks.anthracite});
-
-		GameRegistry.addRecipe(ItemStacks.lonsblock, new Object[]{
-				"BBB", "BBB", "BBB", 'B', ItemStacks.lonsda});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.shieldblock, 4), " S ", "SOS", " S ", 'S', ItemStacks.steelingot, 'O', Block.obsidian);
 
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 9), ItemStacks.steelblock);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.anthracite, 9), ItemStacks.anthrablock);
@@ -674,7 +671,7 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ItemStacks.salt, Item.bucketWater);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaldust);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, ItemStacks.goldoreflakes);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, "dustGold"));
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});

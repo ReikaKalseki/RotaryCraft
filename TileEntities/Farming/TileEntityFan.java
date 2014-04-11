@@ -271,10 +271,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (crop && omega < HARVESTSPEED)
 			return;
 		if (crop) {
-			this.harvest(world, x, y, z, this.getBlockMetadata(), id);
+			this.harvest(world, x, y, z, meta, id);
 			return;
 		}
-		this.dropBlocks(world, x, y, z, id, world.getBlockMetadata(x, y, z));
+		this.dropBlocks(world, x, y, z, id, meta);
 		world.setBlock(x, y, z, 0);
 	}
 
@@ -289,7 +289,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	private void harvest(World world, int x, int y, int z, int meta, int id) {
-		ModCropList mod = ModCropList.getModCrop(id, world.getBlockMetadata(x, y, z));
+		ModCropList mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
 		if (mod != null && mod.isRipe(world, x, y, z)) {
@@ -310,9 +310,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					world.setBlockMetadataWithNotify(x, y, z, metato, 3);
 			}
 		}
-		if (crop != null && crop.isRipe(world.getBlockMetadata(x, y, z))) {
+		if (crop != null && crop.isRipe(meta)) {
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
-			metato = crop.harvestedMeta;
+			metato = crop.getHarvestedMeta(meta);
 			world.setBlockMetadataWithNotify(x, y, z, metato, 3);
 		}
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));

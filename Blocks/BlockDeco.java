@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
 import cpw.mods.fml.relauncher.Side;
@@ -43,7 +44,7 @@ public class BlockDeco extends BlockBasic {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
-		for (int var4 = 0; var4 < 3; ++var4)
+		for (int var4 = 0; var4 < RotaryNames.blockNames.length; ++var4)
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
 
@@ -100,8 +101,6 @@ public class BlockDeco extends BlockBasic {
 
 	@Override
 	public Icon getIcon(int s, int meta) {
-		if (meta > 2)
-			meta = 0;
 		return icons[meta][0];
 	}
 
@@ -112,6 +111,7 @@ public class BlockDeco extends BlockBasic {
 		icons[0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 		icons[1][0] = par1IconRegister.registerIcon("RotaryCraft:anthra");
 		icons[2][0] = par1IconRegister.registerIcon("RotaryCraft:lons");
+		icons[3][0] = par1IconRegister.registerIcon("RotaryCraft:shield");
 	}
 
 	@Override

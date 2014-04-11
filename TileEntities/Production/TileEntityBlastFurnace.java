@@ -46,7 +46,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	protected int getActiveTexture() {
-		return (temperature >= SMELTTEMP && this.hasSteelIngredients() ? 1 : 0);
+		return temperature >= SMELTTEMP && this.hasSteelIngredients() ? 1 : 0;
 	}
 
 	@Override
@@ -341,6 +341,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
 		}
+		worldObj.markBlockForUpdate(x, y, z);
 	}
 
 	public int getSizeInventory() {

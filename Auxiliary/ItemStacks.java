@@ -182,6 +182,7 @@ public final class ItemStacks {
 	public static final ItemStack steelblock = new ItemStack(RotaryCraft.decoblock, 1, 0);
 	public static final ItemStack anthrablock = new ItemStack(RotaryCraft.decoblock, 1, 1);
 	public static final ItemStack lonsblock = new ItemStack(RotaryCraft.decoblock, 1, 2);
+	public static final ItemStack shieldblock = new ItemStack(RotaryCraft.decoblock, 1, 3);
 
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 

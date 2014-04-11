@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
@@ -108,33 +109,45 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 			int dx = x+m*xstep;
 			int dy = y+m*ystep;
 			int dz = z+m*zstep;
+			boolean nonair = false;
 			int k = FOV;
 			if (xstep != 0) {
 				for (int i = z-k; i <= z+k; i++) {
 					for (int j = y-k; j <= y+k; j++) {
-						if (this.canDrop(world, dx, j, i))
-							return m;
+						if (!this.canDrop(world, dx, j, i))
+							return -1;
+						int id = world.getBlockId(dx, j, i);
+						if (id != 0)
+							nonair = true;
 					}
 				}
 			}
 			else if (zstep != 0) {
 				for (int i = x-k; i <= x+k; i++) {
 					for (int j = y-k; j <= y+k; j++) {
-						if (this.canDrop(world, i, j, dz))
-							return m;
+						if (!this.canDrop(world, i, j, dz))
+							return -1;
+						int id = world.getBlockId(i, j, dz);
+						if (id != 0)
+							nonair = true;
 					}
 				}
 			}
 			else if (ystep != 0) {
 				for (int i = x-k; i <= x+k; i++) {
 					for (int j = z-k; j <= z+k; j++) {
-						if (this.canDrop(world, i, dy, j))
-							return m;
+						if (!this.canDrop(world, i, dy, j))
+							return -1;
+						int id = world.getBlockId(i, dy, j);
+						if (id != 0)
+							nonair = true;
 					}
 				}
 			}
+			if (nonair)
+				return m;
 		}
-		return -1;
+		return this.getMaxRange();
 	}
 
 	private int getMaxRange() {
@@ -144,13 +157,16 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	public static boolean canDrop(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		if (id == 0)
-			return false;
+			return true;
 		Block b = Block.blocksList[id];
 		if (b.getBlockHardness(world, x, y, z) < 0)
 			return false;
 		if (b instanceof BlockFluid)
 			return false;
 		if (b instanceof BlockFluidBase)
+			return false;
+		int meta = world.getBlockMetadata(x, y, z);
+		if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage())
 			return false;
 		return true;
 	}
@@ -177,6 +193,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		int z = zCoord;
 		int[] arr = new int[3];
 		int r = this.getDistanceToSurface(world, x, y, z);
+		if (r < 0)
+			r = 0;
 		arr[0] = x+xstep*r;
 		arr[1] = y+ystep*r;
 		arr[2] = z+zstep*r;

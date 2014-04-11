@@ -233,10 +233,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 		NBT.setInteger("rs", this.getRedstoneState().ordinal());
 
-		if (reika && power > 0) {
-			tier = Math.max(tier, this.getTierFromPowerOutput(power));
-		}
-		if (!reika && baseomega > this.getMaxSpeedBase(tier)) {
+		if (baseomega > this.getMaxSpeedBase(tier)) {
 			baseomega = MINBASE;
 		}
 		NBT.setInteger("level", tier);
@@ -253,10 +250,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 		tier = NBT.getInteger("level");
 
-		if (reika && power > 0) {
-			tier =  Math.max(tier, this.getTierFromPowerOutput(power));
-		}
-		if (!reika && baseomega > this.getMaxSpeedBase(tier)) {
+		if (baseomega > this.getMaxSpeedBase(tier)) {
 			baseomega = MINBASE;
 		}
 

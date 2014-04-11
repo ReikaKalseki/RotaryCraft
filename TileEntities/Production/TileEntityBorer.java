@@ -194,9 +194,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		}
 	}
 
-	private void reqPowAdd(World world, int xread, int yread, int zread, int metadata) {
+	private void reqPowAdd(World world, int xread, int yread, int zread) {
 		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
 			int id = world.getBlockId(xread, yread, zread);
+			int meta = world.getBlockMetadata(xread, yread, zread);
 			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
 			if (this.isMineableBedrock(world, xread, yread, zread)) {
 				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
@@ -207,6 +208,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				reqpow += 65536;
 			}
 			else if (hard < 0) {
+				reqpow = -1;
+			}
+			else if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
 				reqpow = -1;
 			}
 			else {
@@ -261,7 +265,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
 					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
-					this.reqPowAdd(world, xread, yread, zread, metadata);
+					this.reqPowAdd(world, xread, yread, zread);
 				}
 			}
 		}

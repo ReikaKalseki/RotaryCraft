@@ -31,6 +31,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public final int MINTORQUE;
 	public final int MINSPEED;
 
+	private long prevpower;
+
 	public PowerReceivers machine;
 
 	private long[][] powerin = new long[4][3]; //stores P, T, omega
@@ -247,6 +249,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			torque = torquein;
 			omega = omegain;
 			power = (long)omega*(long)torque;
+			if (power != prevpower) {
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				prevpower = power;
+			}
 			return;
 		}
 		torquein = 0;
@@ -309,6 +315,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		torque = (int) powers[1];
 		omega = (int) powers[2];
 		power = (long)torque*(long)omega;
+		if (power != prevpower) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			prevpower = power;
+		}
 	}
 
 	public void getOffsetPower4Sided(int stepx, int stepy, int stepz) {
@@ -542,7 +552,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		torque = (int) powers[1];
 		omega = (int) powers[2];
 		power = (long)torque*(long)omega;
-
+		if (power != prevpower) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			prevpower = power;
+		}
 	}
 
 	public void getPowerBelow() {
@@ -605,6 +618,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			worldObj.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), rand.nextFloat()/2F, rand.nextFloat(), rand.nextFloat()/2F);
 			if (rand.nextInt(5) == 0)
 				worldObj.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
+			if (power != prevpower) {
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				prevpower = power;
+			}
 			return;
 		}
 		int i = 0;
@@ -614,6 +631,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omega = (int)powers[0][i];
 		torque = (int)ReikaArrayHelper.sumArray(powers[1]);
 		power = (long)omega * (long)torque;
+		if (power != prevpower) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			prevpower = power;
+		}
 	}
 
 	@Override

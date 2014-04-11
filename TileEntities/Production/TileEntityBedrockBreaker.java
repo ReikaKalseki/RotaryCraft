@@ -214,10 +214,11 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 					world.setBlock(harvestx, harvesty, harvestz, 0);
+					ItemStack is = this.getDrops();
 					if (this.isInventoryFull())
-						this.dropItem(world, x, y, z, meta, this.getDrops());
+						ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
 					else
-						ReikaInventoryHelper.addOrSetStack(this.getDrops(), inv, 0);
+						ReikaInventoryHelper.addOrSetStack(is, inv, 0);
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, harvestx, harvesty, harvestz));
 				}
@@ -225,29 +226,30 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		}
 	}
 
-	private void dropItem(World world, int x, int y, int z, int meta, ItemStack is) {
-		EntityItem itementity = new EntityItem(world, dropx, dropy, dropz, this.getDrops());
+	public void dropInventory() {
+		int meta = this.getBlockMetadata();
+		if (inv[0] == null)
+			return;
+		EntityItem itementity = new EntityItem(worldObj, dropx, dropy, dropz, inv[0]);
 		itementity.delayBeforeCanPickup = 0;
 		itementity.motionX = -0.025+0.05*rand.nextFloat();	// 0-0.5 m/s
 		itementity.motionZ = -0.025+0.05*rand.nextFloat();
 		if (meta != 5)
 			itementity.motionY = 0.1+0.2*rand.nextFloat()+0.25*rand.nextFloat()*rand.nextInt(2);	// 2-6m/s up, + a 50/50 chance of 0-5 m/s more up
 		itementity.velocityChanged = true;
-		if (!world.isRemote)
-			world.spawnEntityInWorld(itementity);
+		if (!worldObj.isRemote)
+			worldObj.spawnEntityInWorld(itementity);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+		inv[0] = null;
 	}
 
 	private ItemStack getDrops() {
-		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, DifficultyEffects.BEDROCKDUST.getInt());
+		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, this.getNumberDust());
 		return dust;
 	}
 
-	public void dropItemFromInventory() {
-		if (inv[0] == null)
-			return;
-		this.dropItem(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata(), ReikaItemHelper.getSizedItemStack(inv[0], 1));
-		ReikaInventoryHelper.decrStack(0, inv);
+	private int getNumberDust() {
+		return DifficultyEffects.BEDROCKDUST.getInt();
 	}
 
 	@Override

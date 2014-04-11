@@ -41,31 +41,32 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
+		//ReikaJavaLibrary.pConsole(storedEnergy+":"+this.getConsumedUnitsPerTick(), Side.SERVER);
 		if (!this.hasEnoughEnergy()) {
 			torque = 0;
 			omega = 0;
 			power = 0;
-			return;
+			//storedEnergy = 0;
 		}
-		if (!world.isRemote) {
+		else {
+			if (!world.isRemote) {
+				torque = this.getTorque();
+				omega = this.getSpeed();
 
-			torque = this.getTorque();
-			omega = this.getSpeed();
+				power = (long)torque*(long)omega;
 
-			power = (long)torque*(long)omega;
+				storedEnergy -= this.getConsumedUnitsPerTick();
 
-			storedEnergy -= this.getConsumedUnitsPerTick();
-
-			this.basicPowerReceiver();
-
-			tickcount++;
-			if (power > 0) {
-				if (tickcount >= 85) {
-					tickcount = 0;
-					SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
+				tickcount++;
+				if (power > 0) {
+					if (tickcount >= 85) {
+						tickcount = 0;
+						SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
+					}
 				}
 			}
 		}
+		this.basicPowerReceiver();
 	}
 
 	@Override

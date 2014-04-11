@@ -181,6 +181,8 @@ public class EntitySonicShot extends EntityFireball {
 		if (y == 0)
 			return;
 		int id = world.getBlockId(x, y, z);
+		if (id == 0)
+			return;
 		int meta = world.getBlockMetadata(x, y, z);
 		Block b = Block.blocksList[id];
 		if (!TileEntitySonicBorer.canDrop(world, x, y, z) && !(b instanceof BlockFluid))

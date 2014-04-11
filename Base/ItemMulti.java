@@ -302,7 +302,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
-		int row = type;
+		int row = type+item.getItemDamage()/16;
 		while (row >= 16)
 			row -= 16;
 		if (item.itemID == RotaryCraft.extracts.itemID && item.getItemDamage() > 31)
