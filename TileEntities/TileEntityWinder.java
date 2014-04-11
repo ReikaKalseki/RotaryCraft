@@ -50,9 +50,13 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getPower(false);
-		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
+		this.getPower(false);
+		if (!winding) {
+			write = read;
+			read = null;
+		}
+		tickcount++;
 		if (inv[0] == null) {
 			if (!winding) {
 				torque = 0;
@@ -89,7 +93,6 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			omega = this.getUnwindSpeed();
 			torque = this.getUnwindTorque();
 			power = (long)omega*(long)torque;
-			write = read;
 			if (tickcount < this.getUnwindTime())
 				return;
 			tickcount = 0;

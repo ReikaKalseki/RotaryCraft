@@ -123,17 +123,17 @@ public abstract class IORenderer {
 			}
 			if (teb instanceof TileEntityWinder) {
 				TileEntityWinder ts = (TileEntityWinder)teb;
-				if (!ts.winding) {
-					double xdiff = ts.getReadDirection().offsetX;
-					double ydiff = ts.getReadDirection().offsetY;
-					double zdiff = ts.getReadDirection().offsetZ;
-					renderOut(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
-				}
-				else {
+				if (ts.winding && ts.getReadDirection() != null) {
 					double xdiff = ts.getReadDirection().offsetX;
 					double ydiff = ts.getReadDirection().offsetY;
 					double zdiff = ts.getReadDirection().offsetZ;
 					renderIn(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
+				}
+				else if (ts.getWriteDirection() != null) {
+					double xdiff = ts.getWriteDirection().offsetX;
+					double ydiff = ts.getWriteDirection().offsetY;
+					double zdiff = ts.getWriteDirection().offsetZ;
+					renderOut(par2+xdiff, par4+ydiff, par6+zdiff, ts.iotick);
 				}
 				return;
 			}

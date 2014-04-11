@@ -101,7 +101,7 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 											return flag;
 										}
 									}
-									ReikaSoundHelper.playStepSound(world, dx, y, dz, Block.grass);
+									ReikaSoundHelper.playStepSound(world, dx, y, dz, Block.grass, 0.4F, 1);
 								}
 							}
 						}

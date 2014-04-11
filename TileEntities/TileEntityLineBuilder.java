@@ -19,13 +19,15 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityLineBuilder extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
+public class TileEntityLineBuilder extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, DiscreteFunction {
 
 	private ForgeDirection dir;
 
@@ -62,6 +64,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 
+		timer.setCap(this.getOperationTime());
 		timer.update();
 
 		if (timer.checkCap()) {
@@ -101,12 +104,13 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		}
 	}
 
-	private void shiftBlocks(World world, int x, int y, int z) {
+	private boolean shiftBlocks(World world, int x, int y, int z) {
+		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, x, y, z);
+		if (!this.canShift(world, x, y, z))
+			return false;
 		ItemStack is = this.getNextBlockToAdd();
 		if (is == null)
-			return;
-		if (!this.canShift(world, x, y, z))
-			return;
+			return false;
 		int r = this.getLineLength();
 		for (int i = r; i > 0; i--) {
 			int rx = x+dir.offsetX*i;
@@ -125,7 +129,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		int rz = z+dir.offsetZ;
 		world.setBlock(rx, ry, rz, is.itemID, is.getItemDamage(), 3);
 		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, rx, ry, rz);
-		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, x, y, z);
+		return true;
 	}
 
 	public boolean canShift(World world, int x, int y, int z) {
@@ -205,6 +209,12 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Blocks";
+	}
+
+	@Override
+	public int getOperationTime() {
+		int time = DurationRegistry.RAM.getOperationTime(omega);
+		return Math.max(3, time);
 	}
 
 }

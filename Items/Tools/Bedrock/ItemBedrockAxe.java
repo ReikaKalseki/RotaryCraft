@@ -150,7 +150,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
 						if (id2 == Block.leaves.blockID || ModWoodList.isModLeaf(id2, meta2)) {
 							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b, 0.25F, 1);
 							world.setBlock(x+i, y+j, z+k, 0);
 						}
 					}
@@ -191,7 +191,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			if (b != null) {
 				int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 				b.dropBlockAsItem(world, x, y, z, meta, fortune);
-				ReikaSoundHelper.playBreakSound(world, x, y, z, b);
+				ReikaSoundHelper.playBreakSound(world, x, y, z, b, 0.75F, 1);
 				world.setBlock(x, y, z, 0);
 			}
 		}

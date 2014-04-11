@@ -27,10 +27,11 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public final class BlockCanola extends BlockBasic implements IPlantable {
+public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop {
 
 	Random rand = new Random();
 
@@ -243,5 +244,29 @@ public final class BlockCanola extends BlockBasic implements IPlantable {
 	public static void addFarmBlock(int id) {
 		if (!farmBlocks.contains(id))
 			farmBlocks.add(id);
+	}
+
+	@Override
+	public boolean isReadyToHarvest(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		return id == blockID && meta == 9;
+	}
+
+	@Override
+	public void setPostHarvest(World world, int x, int y, int z) {
+		world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestProducts(World world, int x, int y, int z) {
+		ArrayList<ItemStack> li = new ArrayList();
+		li.add(this.getDrops(world.getBlockMetadata(x, y, z)));
+		return li;
+	}
+
+	@Override
+	public float getHarvestingSpeed() {
+		return 2F;
 	}
 }

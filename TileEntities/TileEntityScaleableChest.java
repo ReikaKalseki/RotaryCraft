@@ -202,10 +202,10 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		case 1:
 			read = ForgeDirection.WEST;
 			break;
-		case 2:
+		case 3:
 			read = ForgeDirection.SOUTH;
 			break;
-		case 3:
+		case 2:
 			read = ForgeDirection.NORTH;
 			break;
 		}

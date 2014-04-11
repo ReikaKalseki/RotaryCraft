@@ -22,11 +22,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -243,8 +245,16 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public void rip2(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		if (id != Block.snow.blockID && id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID && id != Block.fire.blockID &&
-				!ReikaCropHelper.isCrop(id) && !ModCropList.isModCrop(id, meta))
+		Block b = Block.blocksList[id];
+		if (b instanceof BlowableCrop) {
+			float sp = ((BlowableCrop)b).getHarvestingSpeed();
+			if (ReikaRandomHelper.doWithChance(0.0015*sp))
+				this.harvest(world, x, y, z, (BlowableCrop)b);
+			return;
+		}
+		boolean crop = ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta);
+		if (id != Block.snow.blockID && id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID &&
+				id != Block.fire.blockID && !crop)
 			return;
 		if ((rand.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (rand.nextInt(200) > 0 && id == Block.tallGrass.blockID))
 			return;
@@ -258,14 +268,24 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			return;
 		if (id == Block.snow.blockID && omega < FIRESPEED)
 			return;
-		if ((ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta)) && omega < HARVESTSPEED)
+		if (crop && omega < HARVESTSPEED)
 			return;
-		if (ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta)) {
+		if (crop) {
 			this.harvest(world, x, y, z, this.getBlockMetadata(), id);
 			return;
 		}
 		this.dropBlocks(world, x, y, z, id, world.getBlockMetadata(x, y, z));
 		world.setBlock(x, y, z, 0);
+	}
+
+	private void harvest(World world, int x, int y, int z, BlowableCrop b) {
+		if (b.isReadyToHarvest(world, x, y, z)) {
+			ArrayList<ItemStack> li = b.getHarvestProducts(world, x, y, z);
+			if (li != null)
+				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
+			b.setPostHarvest(world, x, y, z);
+			MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
+		}
 	}
 
 	private void harvest(World world, int x, int y, int z, int meta, int id) {

@@ -121,7 +121,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 	}
 
-	public void readFromCross(TileEntityShaft cross, int slot) {
+	private void readFromCross(TileEntityShaft cross, int slot) {
 		//ReikaChatHelper.writeInt(slot+400);
 		if (cross.isWritingTo(this)) {
 			//ReikaChatHelper.writeInt(cross.readomega[0]);
@@ -138,7 +138,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			return; //not its output
 	}
 
-	public void readFromSplitter(TileEntitySplitter spl, int slot) { //Complex enough to deserve its own function
+	protected void readFromSplitter(TileEntitySplitter spl, int slot) { //Complex enough to deserve its own function
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
 			return;
