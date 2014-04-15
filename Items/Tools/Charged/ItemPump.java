@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class ItemPump extends ItemChargedTool {
 
@@ -54,7 +54,7 @@ public class ItemPump extends ItemChargedTool {
 				Block b = Block.blocksList[id];
 				if (ReikaWorldHelper.isLiquidSourceBlock(world, x, y, z)) {
 					Fluid f = FluidRegistry.lookupFluidForBlock(b);
-					if (f != null) {
+					if (f != null && !world.isRemote) {
 						if (is.stackTagCompound == null) {
 							is.stackTagCompound = new NBTTagCompound();
 							is.stackTagCompound.setInteger("lvl", 1000);

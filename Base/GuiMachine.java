@@ -33,8 +33,8 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

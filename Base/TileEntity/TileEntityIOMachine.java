@@ -249,7 +249,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean wx = xCoord+write.offsetX == x;
 		boolean wy = yCoord+write.offsetY == y;
 		boolean wz = zCoord+write.offsetZ == z;
-		return wx & wy & wz;
+		return wx && wy && wz;
 	}
 
 	public final boolean isWritingToCoordinate2(int x, int y, int z) {
@@ -258,7 +258,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean wx = xCoord+write2.offsetX == x;
 		boolean wy = yCoord+write2.offsetY == y;
 		boolean wz = zCoord+write2.offsetZ == z;
-		return wx & wy & wz;
+		return wx && wy && wz;
 	}
 
 	public final boolean isWritingTo(TileEntityIOMachine te) {
@@ -267,7 +267,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+write.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+write.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+write.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	public final boolean isWritingTo2(TileEntityIOMachine te) {
@@ -276,7 +276,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+write2.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+write2.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+write2.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	public final boolean isReadingFrom(TileEntityIOMachine te) {
@@ -285,7 +285,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+read.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+read.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+read.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	public final boolean isReadingFrom2(TileEntityIOMachine te) {
@@ -294,7 +294,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+read2.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+read2.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+read2.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	public final boolean isReadingFrom3(TileEntityIOMachine te) {
@@ -303,7 +303,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+read3.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+read3.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+read3.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	public final boolean isReadingFrom4(TileEntityIOMachine te) {
@@ -312,7 +312,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		boolean x = xCoord+read4.offsetX == te.xCoord+te.pointoffsetx;
 		boolean y = yCoord+read4.offsetY == te.yCoord+te.pointoffsety;
 		boolean z = zCoord+read4.offsetZ == te.zCoord+te.pointoffsetz;
-		return x & y & z;
+		return x && y && z;
 	}
 
 	protected final void basicPowerReceiver() {

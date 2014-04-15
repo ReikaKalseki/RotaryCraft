@@ -30,19 +30,6 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 		this.basicPowerReceiver();
 	}
 
-	protected void readFromCross(TileEntityShaft cross) {
-		if (cross.isWritingTo(this)) {
-			omega = cross.readomega[0];
-			torque = cross.readtorque[0];
-		}
-		else if (cross.isWritingTo2(this)) {
-			omega = cross.readomega[1];
-			torque = cross.readtorque[1];
-		}
-		else
-			return; //not its output
-	}
-
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;

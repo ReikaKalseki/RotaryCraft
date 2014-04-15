@@ -21,11 +21,12 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidInOut;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
+public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implements ConditionalOperation {
 
 	public static final int CAPACITY = 32000;
 
@@ -225,6 +226,16 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidReceiver imp
 	@Override
 	public String getOperationalStatus() {
 		return tank.isEmpty() ? "No Liquid" : this.areConditionsMet() ? "Operational" : "No Fillable Items";
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return from == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.DOWN ? Flow.OUTPUT : Flow.INPUT;
 	}
 
 }

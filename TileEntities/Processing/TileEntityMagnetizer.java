@@ -68,9 +68,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 			if (this.hasUpgrade()) {
 				this.magnetize();
 			}
-			else {
-				tickcount = 0;
-			}
+			tickcount = 0;
 			return;
 		}
 		tickcount = 0;

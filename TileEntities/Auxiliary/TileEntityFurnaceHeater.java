@@ -40,7 +40,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	public int fz;
 
 	public static final int MAXTEMP = 2000;
-	public static final int TUNGSTENTEMP = 1750;
 	private int smeltTime = 0;
 	private int soundtick = 0;
 

@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelSonicBorer;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
+import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 
 public class RenderSonicBorer extends RotaryTERenderer
 {

@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
+import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 
 public class EntitySonicShot extends EntityFireball {
 

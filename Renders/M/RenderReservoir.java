@@ -29,7 +29,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelReservoir;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class RenderReservoir extends RotaryTERenderer
 {

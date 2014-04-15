@@ -60,6 +60,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
 				return false;
 		}
+		this.clearBlocks(world, x, y, z);
 		if (!this.checkValidBounds(is, ep, world, x, y, z)) {
 			return false;
 		}

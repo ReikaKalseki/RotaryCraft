@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class ContainerReservoir extends CoreContainer
 {

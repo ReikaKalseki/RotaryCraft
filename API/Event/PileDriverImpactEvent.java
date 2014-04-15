@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.API.Event;
 
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
+import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 
 public class PileDriverImpactEvent extends TileEntityEvent {
 

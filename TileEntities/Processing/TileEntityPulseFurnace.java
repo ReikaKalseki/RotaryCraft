@@ -62,6 +62,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	private HybridTank fuel = new HybridTank("fuel", MAXFUEL);
 	private HybridTank water = new HybridTank("water", CAPACITY);
+	private HybridTank accel = new HybridTank("accel", MAXFUEL);
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -210,29 +211,39 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		int reqtemp = this.getReqTemps(inv[0]);
 		if (tickcount >= 20) {
 			this.heatAmbient(world, x, y, z, meta);
+			this.updateTemperature(world, x, y, z, meta);
 			tickcount = 0;
 		}
 		if (soundtick >= 18 && this.canHeatUp()) {
 			soundtick = 0;
 			SoundRegistry.PULSEJET.playSoundAtBlock(world, x, y, z, 1, 1);
 		}
+		boolean canprocess = false;
 		if (this.canSmelt()) {
+			canprocess = true;
 			if (!flag2)
 				this.getFuel(world, x, y, z, meta);
-			this.updateTemperature(world, x, y, z, meta);
 		}
 
 		tickcount++;
 		tickcount2++;
 
+		int tick = 1;
+		if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
+			tick = 4;
+			accel.removeLiquid(10);
+			if (canprocess && rand.nextInt(4) == 0)
+				temperature += 1;
+		}
+
 		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt()) {
-			smelttick++;
+			smelttick += tick;
 			if (temperature >= 900) //2x speed if running uncooled
-				smelttick++;
+				smelttick += tick;
 			if (temperature >= 950) //4x speed if running uncooled and very hot
-				smelttick += 2;
+				smelttick += tick*2;
 			if (temperature >= 980) //8x speed if about to fail
-				smelttick += 4;
+				smelttick += tick*4;
 		}
 		else
 			smelttick = 0;
@@ -244,7 +255,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (!worldObj.isRemote) {
 			flag1 = true;
 			if (this.canSmelt()) {
-				pulseFurnaceCookTime++;
+				pulseFurnaceCookTime += tick;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
 				if (pulseFurnaceCookTime >= this.getOperationTime()) {
 					pulseFurnaceCookTime = 0;
@@ -275,20 +286,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (mintemp == -1 || mintemp > temperature)
 			return false;
 
-		if (this.hasScrap()) {
-			if (inv[0].stackSize < 9 && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage() && inv[0].itemID == ItemStacks.scrap.itemID)
-				return false;
-			if (inv[2] != null) {
-				if (inv[2].itemID != this.getCraftedScrapIngot().itemID || inv[2].getItemDamage() != this.getCraftedScrapIngot().getItemDamage())
-					return false;
-				if (inv[2].stackSize >= this.getInventoryStackLimit() || inv[2].stackSize >= inv[2].getMaxStackSize())
-					return false;
-			}
-			return true;
-		}
-		//if (this.fuelLevel <= 0)
-		//return false;
-
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
 		if (itemstack == null)
 			return false;
@@ -304,11 +301,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	/** Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack */
 	public void smeltItem() {
 		if (!this.canSmelt())
-			return;/*
-		if (this.hasScrap()) {
-			this.smeltScrap();
 			return;
-		}*/
 		flag2 = false;
 		this.smeltHeat();
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
@@ -340,16 +333,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (inv[0].itemID == ItemStacks.ironscrap.itemID && inv[0].getItemDamage() == ItemStacks.ironscrap.getItemDamage())
 			return new ItemStack(Item.ingotIron);
 		return null;
-	}
-
-	private boolean hasScrap() {
-		if (inv[0].itemID == ItemStacks.scrap.itemID && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage()) {
-			return true;
-		}
-		if ((inv[0].itemID == ItemStacks.ironscrap.itemID && inv[0].getItemDamage() == ItemStacks.ironscrap.getItemDamage())) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -421,6 +404,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
 			return fuel.fill(resource, doFill);
 		}
+		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
+			return accel.fill(resource, doFill);
+		}
 		return 0;
 	}
 
@@ -440,6 +426,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return from.offsetY == 0;
 		}
 		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+			return from.offsetY == 0;
+		}
+		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
 			return from.offsetY == 0;
 		}
 		return false;

@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelRam;
-import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLineBuilder;
 
 public class RenderLineBuilder extends RotaryTERenderer
 {

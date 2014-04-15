@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.API.Event;
 
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
 
 public class LightBridgePowerLossEvent extends TileEntityEvent {
 

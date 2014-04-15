@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import mrtjp.projectred.api.IScrewdriver;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
@@ -39,10 +39,11 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 import buildcraft.api.tools.IToolWrench;
 
 
-public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
+public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver
 {
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 
@@ -324,5 +325,10 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench
 	@Override
 	public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
 
+	}
+
+	@Override
+	public final void damageScrewdriver(World world, EntityPlayer player) {
+		//project red
 	}
 }

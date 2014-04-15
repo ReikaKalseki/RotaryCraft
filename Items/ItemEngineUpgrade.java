@@ -27,6 +27,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	public ItemEngineUpgrade(int ID, int index) {
 		super(ID, index);
 		hasSubtypes = true;
+		maxStackSize = 16;
 	}
 
 	@Override
@@ -60,8 +61,10 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		for (int i = 0; i < Upgrades.values().length; i++) {
 			ItemStack is = new ItemStack(par1, 1, i);
 			if (i == 2) {
-				is.stackTagCompound = new NBTTagCompound();
-				is.stackTagCompound.setInteger("magnet", 720);
+				ItemStack is2 = is.copy();
+				is2.stackTagCompound = new NBTTagCompound();
+				is2.stackTagCompound.setInteger("magnet", 720);
+				par3List.add(is2);
 			}
 			par3List.add(is);
 		}
@@ -88,11 +91,11 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	public static enum Upgrades {
 
 		PERFORMANCE("Performance Engine Upgrade"),
-		MAGNETOSTATIC1("Magnetostatic Tier 1 Upgrade"), //Made with ethanol
-		MAGNETOSTATIC2("Magnetostatic Tier 2 Upgrade"), //Made in magnetizer
-		MAGNETOSTATIC3("Magnetostatic Tier 3 Upgrade"), //Made with pulse jet ingot
-		MAGNETOSTATIC4("Magnetostatic Tier 4 Upgrade"), //Made with 4MW extractor product
-		MAGNETOSTATIC5("Magnetostatic Tier 5 Upgrade"); //Made with bedrock
+		MAGNETOSTATIC1("Converter Tier 1 Upgrade"), //Made with ethanol
+		MAGNETOSTATIC2("Converter Tier 2 Upgrade"), //Made in magnetizer
+		MAGNETOSTATIC3("Converter Tier 3 Upgrade"), //Made with pulse jet ingot
+		MAGNETOSTATIC4("Converter Tier 4 Upgrade"), //Made with 4MW extractor product
+		MAGNETOSTATIC5("Converter Tier 5 Upgrade"); //Made with bedrock
 
 		public final String desc;
 

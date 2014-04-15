@@ -80,20 +80,6 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		}
 	}
 
-	protected void readFromCross(TileEntityShaft cross) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
-		if (cross.isWritingTo(this)) {
-			omega = cross.readomega[0];
-			torque = cross.readtorque[0];
-		}
-		else if (cross.isWritingTo2(this)) {
-			omega = cross.readomega[1];
-			torque = cross.readtorque[1];
-		}
-		else
-			return; //not its output
-	}
-
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {

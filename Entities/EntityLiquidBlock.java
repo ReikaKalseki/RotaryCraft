@@ -17,7 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 
 public class EntityLiquidBlock extends Entity {
 

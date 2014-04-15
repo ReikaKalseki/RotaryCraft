@@ -1864,6 +1864,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachi
 	public void upgrade() {
 		if (type == EngineType.GAS) {
 			type = EngineType.SPORT;
+			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, type.ordinal(), 3);
 			this.syncAllData();
 		}
 	}

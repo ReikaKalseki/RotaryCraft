@@ -14,6 +14,7 @@ import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMachine implements SimpleProvider {
 
@@ -21,6 +22,21 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 
 	public final int getRatio() {
 		return ratio;
+	}
+
+	protected void readFromCross(TileEntityShaft cross) {
+		if (cross.isWritingTo(this)) {
+			omega = cross.readomega[0];
+			torque = cross.readtorque[0];
+		}
+		else if (cross.isWritingTo2(this)) {
+			omega = cross.readomega[1];
+			torque = cross.readtorque[1];
+		}
+		else {
+			omega = torque = 0;
+			return; //not its output
+		}
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int meta, boolean hasVertical) {

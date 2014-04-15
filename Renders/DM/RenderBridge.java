@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelBridge;
-import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
 
 public class RenderBridge extends RotaryTERenderer
 {

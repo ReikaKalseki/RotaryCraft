@@ -16,10 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 
-public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
+public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements ISidedInventory {
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
@@ -45,9 +44,11 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 	}
 
 	@Override
-	public final boolean isInvNameLocalized() {
+	public boolean isInvNameLocalized() {
 		return false;
 	}
+
+	public abstract boolean isItemValidForSlot(int slot, ItemStack is);
 
 	public final ItemStack decrStackSize(int par1, int par2) {
 		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
@@ -57,13 +58,13 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
 	}
 
-	public final int[] getAccessibleSlotsFromSide(int var1) {
+	public int[] getAccessibleSlotsFromSide(int var1) {
 		if (this instanceof InertIInv)
 			return new int[0];
 		return ReikaInventoryHelper.getWholeInventoryForISided(this);
 	}
 
-	public final boolean canInsertItem(int i, ItemStack is, int side) {
+	public boolean canInsertItem(int i, ItemStack is, int side) {
 		if (this instanceof InertIInv)
 			return false;
 		return ((IInventory)this).isItemValidForSlot(i, is);
@@ -87,10 +88,9 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setShort("Slot", (short)i);
+				nbttagcompound.setByte("Slot", (byte)i);
 				inv[i].writeToNBT(nbttagcompound);
 				nbttaglist.appendTag(nbttagcompound);
-				//ReikaJavaLibrary.pConsole(i+":"+inv[i]);
 			}
 		}
 
@@ -108,16 +108,12 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
 			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			short byte0 = nbttagcompound.getShort("Slot");
+			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < inv.length) {
 				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-				//ReikaJavaLibrary.pConsole(byte0+":"+inv[byte0]);
-			}
-			else {
-				RotaryCraft.logger.logError(this+" tried to load an inventory slot "+byte0+" from NBT!");
-				//Thread.dumpStack();
 			}
 		}
 	}
+
 }

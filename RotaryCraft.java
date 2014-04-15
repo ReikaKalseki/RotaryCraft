@@ -91,7 +91,8 @@ import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -384,6 +385,7 @@ public class RotaryCraft extends DragonAPIMod {
 		ReikaJavaLibrary.initClass(LuaMethods.class);
 
 		TileEntityReservoir.initCreativeFluids();
+		TileEntityGasCompressor.initCreativeFluids();
 		ItemFuelTank.initCreativeFluids();
 
 		if (!this.isLocked())

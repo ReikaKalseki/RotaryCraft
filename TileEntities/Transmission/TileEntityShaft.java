@@ -156,18 +156,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			return; //not its output
 	}
 
+	@Override
 	protected void readFromCross(TileEntityShaft cross) {
 		reading2Dir = true;
-		if (cross.isWritingTo(this)) {
-			omega = cross.readomega[0];
-			torque = cross.readtorque[0];
-		}
-		else if (cross.isWritingTo2(this)) {
-			omega = cross.readomega[1];
-			torque = cross.readtorque[1];
-		}
-		else
-			return; //not its output
+		super.readFromCross(cross);
 	}
 
 	private void crossReadFromSplitter(TileEntitySplitter spl, int dir) {
@@ -277,6 +269,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		//this.testFailure();
 		this.getIOSides(world, x, y, z, meta);
 		this.transferPower(world, x, y, z, meta);
+
+		//ReikaJavaLibrary.pConsole(Arrays.toString(readtorque)+":"+Arrays.toString(readomega), Side.SERVER);
 	}
 
 	public boolean isCross() {
@@ -343,6 +337,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		readtorque[1] = 0;
 		TileEntity te1 = this.getAdjacentTileEntity(read);
 		TileEntity te2 = this.getAdjacentTileEntity(read2);
+
+
+		//ReikaJavaLibrary.pConsole(read.name()+":"+read2.name(), Side.SERVER);
+
+		//ReikaJavaLibrary.pConsole(te1, Side.SERVER);
+
 		if (this.isProvider(te1)) {
 			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
@@ -357,8 +357,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 			if (te1 instanceof SimpleProvider) {
-				readtorque[0] = ((TileEntityIOMachine)te1).torque;
-				readomega[0] = ((TileEntityIOMachine)te1).omega;
+				if (((TileEntityIOMachine)te1).isWritingTo(this)) {
+					readtorque[0] = ((TileEntityIOMachine)te1).torque;
+					readomega[0] = ((TileEntityIOMachine)te1).omega;
+				}
 			}
 			if (te1 instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te1;
@@ -379,6 +381,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 		}
+
 		if (this.isProvider(te2)) {
 			MachineRegistry m2 = this.getMachine(read2);
 			if (m2 == MachineRegistry.SHAFT) {
@@ -388,8 +391,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					return;
 				}
 				else if (devicein2.isWritingTo(this)) {
-					readomega[1] = devicein2.omega;
-					readtorque[1] = devicein2.torque;
+					if (((TileEntityIOMachine)te2).isWritingTo(this)) {
+						readomega[1] = devicein2.omega;
+						readtorque[1] = devicein2.torque;
+					}
 				}
 			}
 			if (te2 instanceof SimpleProvider) {
@@ -415,8 +420,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 		}
+		//ReikaJavaLibrary.pConsole(Arrays.toString(readtorque)+":"+Arrays.toString(readomega), Side.SERVER);
+
 		this.writeToPowerReceiverAt(world, xCoord+write.offsetX, yCoord+write.offsetY, zCoord+write.offsetZ, readomega[0], readtorque[0]);
 		this.writeToPowerReceiverAt(world, xCoord+write2.offsetX, yCoord+write2.offsetY, zCoord+write2.offsetZ, readomega[1], readtorque[1]);
+
 	}
 
 	@Override

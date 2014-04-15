@@ -106,7 +106,6 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 		BlockDecoTank b = (BlockDecoTank)block;
 		v5.addTranslation(x, y, z);
 
-
 		int mix = b.getMixedBrightnessForBlock(world, x, y, z);
 		v5.setBrightness(mix);
 		v5.setNormal(0, 1, 0);

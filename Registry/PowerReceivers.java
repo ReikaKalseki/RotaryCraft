@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Registry;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
+import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 
 
 public enum PowerReceivers {
@@ -95,7 +95,8 @@ public enum PowerReceivers {
 	GRINDSTONE(256, 1, 16384),
 	BLOWER(1, 256, 1024),
 	PORTALSHAFT(),
-	REFRIGERATOR(2048, 1, 32768);
+	REFRIGERATOR(2048, 1, 32768),
+	GASTANK(1024, 1, 16384);
 
 	private final int minT;
 	private final int minS;

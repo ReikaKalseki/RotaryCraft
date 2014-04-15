@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelPileDriver;
-import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
+import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 
 public class RenderPileDriver extends RotaryTERenderer
 {

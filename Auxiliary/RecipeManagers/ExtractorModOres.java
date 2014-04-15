@@ -145,6 +145,12 @@ public class ExtractorModOres {
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.URANIUM.ordinal());
 		case NETHERIRIDIUM:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.IRIDIUM.ordinal());
+		case NETHERSULFUR:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.SULFUR.ordinal());
+		case NETHERTITANIUM:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.TITANIUM.ordinal());
+		case NETHEROSMIUM:
+			return new ItemStack(RotaryCraft.modingots.itemID, 1, ModOreList.OSMIUM.ordinal());
 		default:
 			return new ItemStack(RotaryCraft.modingots.itemID, 1, ore.ordinal());
 		}

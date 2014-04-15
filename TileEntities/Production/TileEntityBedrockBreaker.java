@@ -116,7 +116,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	public boolean getBlockInFront(World world, int x, int y, int z, int metadata) {
-		if (y == 0)
+		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
 		int id;
 		for (int a = 1; a < 6; a++) {
@@ -198,7 +198,9 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	public void grind(World world, int x, int y, int z, int meta) {
-		if (y <= 0)
+		if (y < 0)
+			return;
+		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return;
 		if (!world.isRemote) {
 			if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {

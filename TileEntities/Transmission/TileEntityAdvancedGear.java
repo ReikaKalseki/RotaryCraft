@@ -444,6 +444,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return 32;
 	}
 
+	@Override
 	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
@@ -461,8 +462,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			if (this.getGearType() == GearType.WORM)
 				torque = torque * WORMRATIO;
 		}
-		else
+		else {
+			omega = torque = 0;
 			return; //not its output
+		}
 	}
 
 	@Override

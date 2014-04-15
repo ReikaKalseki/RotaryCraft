@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -122,7 +123,8 @@ public class RotaryRegistration {
 	}
 
 	public static void loadOreDictionary() {
-		OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
+		if (!ModList.GREGTECH.isLoaded()) //GT unificator causes an exploit, and no mods even use this anyways
+			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
 		if (ConfigRegistry.HSLADICT.getState())
 			OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
 		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);

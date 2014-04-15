@@ -57,8 +57,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 
 import com.google.common.collect.TreeMultimap;
 

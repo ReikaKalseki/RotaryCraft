@@ -15,6 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModInteract.RailcraftHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,4 +54,10 @@ public abstract class ItemBlockPlacer extends ItemBasic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public abstract void getSubItems(int id, CreativeTabs tab, List list);
+
+	protected void clearBlocks(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (id == RailcraftHandler.getInstance().hiddenID)
+			world.setBlock(x, y, z, 0);
+	}
 }

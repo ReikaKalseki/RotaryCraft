@@ -57,6 +57,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				--x;
 			if (side == 5)
 				++x;
+			this.clearBlocks(world, x, y, z);
 			int id = world.getBlockId(x, y, z);
 			if (ReikaBlockHelper.isPortalBlock(world, x, y, z)) {
 				TileEntityShaft sha = new TileEntityShaft();
@@ -84,6 +85,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
 				return false;
 		}
+		this.clearBlocks(world, x, y, z);
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		List inblock = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		if (inblock.size() > 0)

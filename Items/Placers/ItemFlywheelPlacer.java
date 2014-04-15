@@ -55,6 +55,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
 				return false;
 		}
+		this.clearBlocks(world, x, y, z);
 		if (!this.checkValidBounds(is, ep, world, x, y, z))
 			return false;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);

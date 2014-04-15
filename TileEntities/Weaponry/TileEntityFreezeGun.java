@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -42,13 +41,6 @@ public class TileEntityFreezeGun extends TileEntityAimedCannon implements ISided
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		for (int i = 0; i < world.loadedEntityList.size(); i++) {
-			Entity e = (Entity) world.loadedEntityList.get(i);
-			if (e instanceof EntityLivingBase) {
-				EntityLivingBase el = (EntityLivingBase) e;
-				el.addPotionEffect(this.getFreezeEffect(6000));
-			}
-		}
 		super.updateTileEntity();
 		if (!this.isAimingAtTarget(world, x, y, z, target))
 			return;

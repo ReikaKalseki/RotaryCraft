@@ -88,13 +88,7 @@ import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
-import Reika.RotaryCraft.TileEntities.TileEntityLamp;
-import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
-import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
@@ -110,6 +104,8 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
@@ -118,6 +114,10 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
 
 public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 

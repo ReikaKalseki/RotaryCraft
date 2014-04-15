@@ -98,7 +98,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	}
 
 	private void genPower() {
-		omega = this.getGenOmega();
+		omega = Math.min(GEN_OMEGA, this.getGenOmega());
 		torque = Math.min(this.getGenTorque(), MAX_TORQUE);
 		power = (long)omega*(long)torque;
 		steamLevel -= steamLevel/200+1;

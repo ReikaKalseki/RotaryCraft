@@ -75,28 +75,15 @@ import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
-import Reika.RotaryCraft.TileEntities.TileEntityBeamMirror;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
-import Reika.RotaryCraft.TileEntities.TileEntityDefoliator;
-import Reika.RotaryCraft.TileEntities.TileEntityFlooder;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
 import Reika.RotaryCraft.TileEntities.TileEntityGrindstone;
-import Reika.RotaryCraft.TileEntities.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
-import Reika.RotaryCraft.TileEntities.TileEntityLamp;
-import Reika.RotaryCraft.TileEntities.TileEntityLightBridge;
-import Reika.RotaryCraft.TileEntities.TileEntityLineBuilder;
-import Reika.RotaryCraft.TileEntities.TileEntityPileDriver;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
-import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
-import Reika.RotaryCraft.TileEntities.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
-import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
@@ -149,6 +136,9 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -182,6 +172,17 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
+import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.World.TileEntityIgniter;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
+import Reika.RotaryCraft.TileEntities.World.TileEntityLineBuilder;
+import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
+import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
@@ -305,7 +306,8 @@ public enum MachineRegistry {
 	GRINDSTONE(			"machine.grindstone",		BlockDMIMachine.class,		TileEntityGrindstone.class,			10, "RenderGrindstone"),
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
 	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft"),
-	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge");
+	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge"),
+	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityGasCompressor.class,		20);
 
 	private final String name;
 	private final Class te;

@@ -22,7 +22,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityScaleableChest;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,7 +81,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		int oldpage = page;
-		if (button.id == 0 && page < scale.getMaxPage())
+		if (button.id == 0 && page < scale.getMaxPage()-1)
 			page++;
 		if (button.id == 1 && page > 0)
 			page--;
@@ -115,6 +115,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		int color1 = 0xffeeeeee;
 		int color2 = 0xff939393;
 		int color3 = 0xffc6c6c6;
+
 		ReikaGuiAPI.drawRect(var4, var5, var4+18*diff, var5+18, color3);
 		if (pagerows < scale.MAXROWS) {
 			var4 = 7;
@@ -124,9 +125,6 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

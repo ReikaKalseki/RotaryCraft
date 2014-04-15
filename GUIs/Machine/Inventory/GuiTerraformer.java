@@ -28,7 +28,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerTerraformer;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityTerraformer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 
 public class GuiTerraformer extends GuiPowerOnlyMachine {
 

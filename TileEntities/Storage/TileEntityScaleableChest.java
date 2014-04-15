@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.Storage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,13 +21,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Interfaces.MultiPageInventory;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
-public class TileEntityScaleableChest extends InventoriedPowerReceiver {
+public class TileEntityScaleableChest extends InventoriedPowerReceiver implements MultiPageInventory {
 
 	public static final int FALLOFF = 128;
 	public static final int MAXROWS = 6;
@@ -46,6 +47,8 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	public float prevLidAngle;
 
 	public int numUsingPlayers;
+
+	public int page;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -79,11 +82,31 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		return Math.min(this.getMaxPages(), (int)Math.ceil(size));
 	}
 
+	@Override
+	public int getNumberPages() {
+		return this.getMaxPage();
+	}
+
+	@Override
+	public int getSlotsOnPage(int page) {
+		int max = this.getMaxPage();
+		if (page == max)
+			return this.getNumberSlots()-max*9*MAXROWS;
+		else if (page < max)
+			return 9*MAXROWS;
+		else
+			return 0;
+	}
+
+	public int getCurrentPage() {
+		return page;
+	}
+
 	public static int getMaxPages() {
 		int size = MAXSIZE;
-		size /= 9D;
+		size /= 9;
 		size /= MAXROWS;
-		return Math.min((int)Math.ceil(size), 10);
+		return size;
 	}
 
 	private boolean testInconsistentPower() {
@@ -211,9 +234,6 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 		}
 	}
 
-	/**
-	 * Called when a client event is received with the event number and argument, see World.sendClientEvent
-	 */
 	@Override
 	public boolean receiveClientEvent(int par1, int par2)
 	{
@@ -241,13 +261,10 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 	@Override
 	public void closeChest()
 	{
-		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord, zCoord) == MachineRegistry.SCALECHEST)
-		{
-			--numUsingPlayers;
-			worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getTileEntityBlockID(), 1, numUsingPlayers);
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, this.getTileEntityBlockID());
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord - 1, zCoord, this.getTileEntityBlockID());
-		}
+		--numUsingPlayers;
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getTileEntityBlockID(), 1, numUsingPlayers);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, this.getTileEntityBlockID());
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord - 1, zCoord, this.getTileEntityBlockID());
 	}
 
 	@Override
@@ -262,6 +279,8 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 		NBT.setInteger("chng", numchanges);
 		NBT.setInteger("player", numUsingPlayers);
+
+		NBT.setInteger("pg", page);
 	}
 
 	@Override
@@ -271,6 +290,8 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 		numchanges = NBT.getInteger("chng");
 		numUsingPlayers = NBT.getInteger("player");
+
+		page = NBT.getInteger("pg");
 	}
 
 	@Override
@@ -280,7 +301,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return true;
+		return slot < this.getNumberSlots();
 	}
 
 	@Override

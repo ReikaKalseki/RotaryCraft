@@ -22,7 +22,7 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelLamp;
 import Reika.RotaryCraft.Models.ModelVLamp;
-import Reika.RotaryCraft.TileEntities.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 
 public class RenderLamp extends RotaryTERenderer
 {

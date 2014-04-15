@@ -45,7 +45,6 @@ import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
@@ -57,6 +56,8 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
@@ -132,6 +133,13 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
 			else
 				RotaryAux.writeMessage("emptyres");
+		}
+		if (m == MachineRegistry.GASTANK) {
+			TileEntityGasCompressor clicked = (TileEntityGasCompressor)world.getBlockTileEntity(x, y, z);
+			if (clicked.isEmpty())
+				ReikaChatHelper.writeString(String.format("%s is empty.", m.getName()));
+			else
+				ReikaChatHelper.writeString(String.format("%s contains %d.3fB of %s.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName()));
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);

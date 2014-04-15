@@ -27,7 +27,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 		int id = worldObj.getBlockId(x, y, z);
 		this.getIOSides(world, x, y, z);
 		this.transferPower(world, x, y, z, meta);
@@ -36,6 +36,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	}
 
 	public void getIOSides(World world, int x, int y, int z) {
+		//ReikaJavaLibrary.pConsole(direction, Side.SERVER);
 		switch(direction) {
 		case 0://-x -> -z
 			read = ForgeDirection.WEST;
@@ -136,19 +137,6 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready, readz, 4);
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, writex, writey, writez, 49);
-	}
-
-	protected void readFromCross(TileEntityShaft cross) {
-		if (cross.isWritingTo(this)) {
-			omega = cross.readomega[0];
-			torque = cross.readtorque[0];
-		}
-		else if (cross.isWritingTo2(this)) {
-			omega = cross.readomega[1];
-			torque = cross.readtorque[1];
-		}
-		else
-			return; //not its output
 	}
 
 	@Override

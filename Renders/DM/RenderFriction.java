@@ -65,19 +65,19 @@ public class RenderFriction extends RotaryTERenderer
 		}
 
 		if (tile.isInWorld()) {
-			if (tile.getTemperature() >= 1150) {
+			if (tile.getTemperature() >= 1600) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-5.png");
 			}
-			else if (tile.getTemperature() >= 1000) {
+			else if (tile.getTemperature() >= 1300) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-4.png");
 			}
-			else if (tile.getTemperature() >= 800) {
+			else if (tile.getTemperature() >= 1000) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-3.png");
 			}
-			else if (tile.getTemperature() >= 500) {
+			else if (tile.getTemperature() >= 700) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-2.png");
 			}
-			else if (tile.getTemperature() >= 300) {
+			else if (tile.getTemperature() >= 400) {
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-1.png");
 			}
 		}

@@ -545,7 +545,7 @@
 	</itemcannon>
 	<friction>
 		<desc>
-			The friction heater is a tool to warm up a standard furnace without fuel. Higher torques and speeds mean higher temperatures, but beware: spend too long at high temperatures and you can melt the furnace entirely. Also of note is that high temperatures can speed up the furnace operation. A furnace over %dC degrees is also the only way to smelt tungsten flakes into tungsten ingots.
+			The friction heater is a tool to warm up a standard furnace without fuel. Higher torques and speeds mean higher temperatures, but beware: spend too long at high temperatures and you can melt the furnace entirely. Also of note is that high temperatures can speed up the furnace operation. A hot furnace is also the only way to smelt tungsten flakes into tungsten ingots.
 		</desc>
 		<note>
 			Required Power: %dW

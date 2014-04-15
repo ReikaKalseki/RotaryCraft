@@ -245,6 +245,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		ratio = (int)ReikaMathLibrary.intpow(2, tratio);
 	}
 
+	@Override
 	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			if (reduction) {
@@ -266,8 +267,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 				torque = cross.readtorque[1]/ratio;
 			}
 		}
-		else
+		else {
+			omega = torque = 0;
 			return; //not its output
+		}
 	}
 
 	@Override
