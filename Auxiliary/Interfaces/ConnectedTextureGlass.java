@@ -23,8 +23,6 @@ public interface ConnectedTextureGlass {
 
 	public Icon getIconForEdge(int edge);
 
-	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int side);
-
 	public boolean renderCentralTextureForItem(int meta);
 
 }

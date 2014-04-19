@@ -13,7 +13,6 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,8 +20,6 @@ import net.minecraft.nbt.NBTTagList;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemCraftPattern extends ItemRotaryTool {
-
-	private final RenderItem ri = new RenderItem();
 
 	public ItemCraftPattern(int ID, int index) {
 		super(ID, index);

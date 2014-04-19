@@ -163,7 +163,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 		if (renderPass == 0) {
 			ArrayList<Integer> li = b.getEdgesForFace(world, x, y, z, ForgeDirection.UP);
 			this.setFaceBrightness(v5, ForgeDirection.UP);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -186,7 +186,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 			li = b.getEdgesForFace(world, x, y, z, ForgeDirection.DOWN);
 			this.setFaceBrightness(v5, ForgeDirection.DOWN);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -208,7 +208,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 			li = b.getEdgesForFace(world, x, y, z, ForgeDirection.EAST);
 			this.setFaceBrightness(v5, ForgeDirection.EAST);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -229,7 +229,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 			li = b.getEdgesForFace(world, x, y, z, ForgeDirection.WEST);
 			this.setFaceBrightness(v5, ForgeDirection.WEST);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -250,7 +250,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 			li = b.getEdgesForFace(world, x, y, z, ForgeDirection.SOUTH);
 			this.setFaceBrightness(v5, ForgeDirection.SOUTH);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -271,7 +271,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 			li = b.getEdgesForFace(world, x, y, z, ForgeDirection.NORTH);
 			this.setFaceBrightness(v5, ForgeDirection.NORTH);
-			if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal()))
+			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
 					Icon ico = b.getIconForEdge(edge);
@@ -320,7 +320,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 					float dz = vv/16F;
 
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.UP);
 						v5.addVertexWithUV(1-d, 1-d, d, u, v);
@@ -329,7 +329,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 						v5.addVertexWithUV(1-d, 1-d, 1-d, u, dv);
 					}
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.DOWN);
 						v5.addVertexWithUV(d, d, d, du, v);
@@ -338,7 +338,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 						v5.addVertexWithUV(d, d, 1-d, du, dv);
 					}
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.EAST);
 						v5.addVertexWithUV(1-d, d, d, du, v);
@@ -347,7 +347,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 						v5.addVertexWithUV(1-d, d, 1-d, du, dv);
 					}
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.WEST);
 						v5.addVertexWithUV(d, 1-d, d, u, v);
@@ -356,7 +356,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 						v5.addVertexWithUV(d, 1-d, 1-d, u, dv);
 					}
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.SOUTH);
 						v5.addVertexWithUV(d, 1-d, 1-d, u, v);
@@ -365,7 +365,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 						v5.addVertexWithUV(1-d, 1-d, 1-d, u, dv);
 					}
 
-					if (b.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal())) {
+					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal())) {
 						if (f.getLuminosity() == 0)
 							this.setFaceBrightness(v5, ForgeDirection.NORTH);
 						v5.addVertexWithUV(d, d, d, du, v);
