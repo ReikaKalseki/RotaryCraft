@@ -20,7 +20,6 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -29,7 +28,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -83,6 +81,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	@Override
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
 	{
+		if (ep.isSneaking())
+			return false;
 		World world = ep.worldObj;
 		TreeReader tree = new TreeReader();
 		tree.setWorld(world);
@@ -92,9 +92,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		if (id == TwilightForestHandler.getInstance().rootID) {
 			Block b = Block.blocksList[id];
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
-			for (int i = -2; i <= 2; i++) {
-				for (int j = -2; j <= 2; j++) {
-					for (int k = -2; k <= 2; k++) {
+			int r = 2;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
 						int id2 = world.getBlockId(x+i, y+j, z+k);
 						if (id2 == id) {
 							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
@@ -139,43 +140,6 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				this.cutEntireTree(is, world, tree);
 				return true;
 			}
-		}
-		else if (id == Block.leaves.blockID || ModWoodList.isModLeaf(id, meta)) {
-			Block b = Block.blocksList[id];
-			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
-			for (int i = -2; i <= 2; i++) {
-				for (int j = -2; j <= 2; j++) {
-					for (int k = -2; k <= 2; k++) {
-						int id2 = world.getBlockId(x+i, y+j, z+k);
-						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == Block.leaves.blockID || ModWoodList.isModLeaf(id2, meta2)) {
-							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b, 0.25F, 1);
-							world.setBlock(x+i, y+j, z+k, 0);
-						}
-					}
-				}
-			}
-			return true;
-		}
-		else if (ModList.DYETREES.isLoaded() && (id == TreeGetter.getNaturalDyeLeafID() || id == TreeGetter.getRainbowLeafID() || id == TreeGetter.getHeldDyeLeafID())) {
-			Block b = Block.blocksList[id];
-			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
-			int r = 2;
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					for (int k = -r; k <= r; k++) {
-						int id2 = world.getBlockId(x+i, y+j, z+k);
-						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == TreeGetter.getNaturalDyeLeafID() || id2 == TreeGetter.getRainbowLeafID() || id2 == TreeGetter.getHeldDyeLeafID()) {
-							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
-							world.setBlock(x+i, y+j, z+k, 0);
-						}
-					}
-				}
-			}
-			return true;
 		}
 		else if (id == Block.mushroomCapRed.blockID || id == Block.mushroomCapBrown.blockID) {
 			Block b = Block.blocksList[id];

@@ -179,7 +179,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	private int getFuseTime() {
-		return Math.max(this.getMinFuse(), selectedFuse);
+		return targetMode ? 50 : Math.max(this.getMinFuse(), selectedFuse);
 	}
 
 	/**

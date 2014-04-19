@@ -90,8 +90,6 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
-		if (y == 0)
-			return false;
 		int id = 0;
 		switch (metadata) {
 		case 0:
@@ -321,6 +319,7 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		this.getReceptor(world, x, y, z, meta);
 		this.getPower(false);
 		if (envirotick >= 20) {
 			this.updatePressure(world, x, y, z, meta);

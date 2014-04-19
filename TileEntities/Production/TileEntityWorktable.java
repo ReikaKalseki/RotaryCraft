@@ -102,7 +102,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		for (int i = 0; i < 9; i++) {
 			ItemStack is = inv[i];
 			if (i == 4) {
-				if (is == null)
+				if (is == null || this.isNotUncraftable(is))
 					return false;
 				else {
 					IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
@@ -130,6 +130,22 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			}
 		}
 		return can;
+	}
+
+	private boolean isNotUncraftable(ItemStack is) {
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		if (ir != null && (ir.isTool() || ir.isArmor())) {
+			return is.getItemDamage() > 0;
+		}
+		if (is.stackTagCompound == null)
+			return false;
+		if (is.stackTagCompound.getInteger("dmg") > 0)
+			return true;
+		if (is.stackTagCompound.getInteger("lvl") > 0)
+			return true;
+		if (is.stackTagCompound.hasKey("ench"))
+			return true;
+		return false;
 	}
 
 	private void uncraft() {

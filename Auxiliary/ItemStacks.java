@@ -36,6 +36,7 @@ public final class ItemStacks {
 	public static final ItemStack coaldust = new ItemStack(RotaryCraft.powders.itemID, 1, 10);
 	public static final ItemStack dryice = new ItemStack(RotaryCraft.powders.itemID, 1, 11);
 	public static final ItemStack redgolddust = new ItemStack(RotaryCraft.powders.itemID, 1, 12);
+	public static final ItemStack compost = new ItemStack(RotaryCraft.powders.itemID, 1, 13);
 
 	public static final ItemStack lubebucket = ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket = ItemRegistry.BUCKET.getStackOfMetadata(1);

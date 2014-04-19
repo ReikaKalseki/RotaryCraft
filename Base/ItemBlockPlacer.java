@@ -34,7 +34,7 @@ public abstract class ItemBlockPlacer extends ItemBasic {
 	public abstract boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float par8, float par9, float par10);
 
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
-		return true;
+		return y >= 0 && y < world.provider.getHeight();
 	}
 
 	protected void checkAndBreakAdjacent(World world, int x, int y, int z) {}

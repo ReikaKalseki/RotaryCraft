@@ -23,11 +23,11 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
-	public final ItemStack getStackInSlot(int par1) {
+	public ItemStack getStackInSlot(int par1) {
 		return inv[par1];
 	}
 
-	public final void setInventorySlotContents(int par1, ItemStack is) {
+	public void setInventorySlotContents(int par1, ItemStack is) {
 		inv[par1] = is;
 	}
 

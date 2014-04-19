@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -29,6 +27,7 @@ import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -166,12 +165,13 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	public boolean isValidFertilizer(ItemStack is) {
-		List<ItemStack> li = OreDictionary.getOres("gemApatite");
 		if (ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal))
 			return true;
-		if (is.itemID == ForestryHandler.getInstance().apatiteID)
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost))
 			return true;
-		return ReikaItemHelper.listContainsItemStack(li, is);
+		if (is.itemID == ForestryHandler.getInstance().fertilizerID)
+			return true;
+		return false;
 	}
 
 	public boolean hasFertilizer() {

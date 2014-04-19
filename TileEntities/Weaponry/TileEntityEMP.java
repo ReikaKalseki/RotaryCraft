@@ -53,6 +53,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	private boolean loading = true;
 	private boolean canLoad = true;
 
+	private long energy;
+
 	static {
 		addEntry(TileEntityChest.class);
 		addEntry(TileEntityEnderChest.class);
@@ -172,6 +174,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		tickcount++;
 
 		this.getPowerBelow();
+		energy += power;
 
 		if (fired)
 			return;
@@ -202,7 +205,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		//power = (long)BLAST_ENERGY+800;
 
-		if (power >= MINPOWER && !loading && !world.isRemote)
+		if (energy/20L >= MINPOWER && !loading && !world.isRemote)
 			this.fire(world, x, y, z);
 	}
 
@@ -366,9 +369,6 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		return !fired;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -376,11 +376,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		NBT.setBoolean("load", loading);
 		NBT.setBoolean("cload", canLoad);
 		NBT.setBoolean("fire", fired);
+		NBT.setLong("e", energy);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -388,6 +386,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		loading = NBT.getBoolean("load");
 		canLoad = NBT.getBoolean("cload");
 		fired = NBT.getBoolean("fire");
+
+		energy = NBT.getLong("e");
 	}
 
 	public void updateListing() {

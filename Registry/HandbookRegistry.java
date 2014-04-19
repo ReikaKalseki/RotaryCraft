@@ -128,6 +128,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	FURNACE(MachineRegistry.BIGFURNACE),
 	STATIC(MachineRegistry.DYNAMO),
 	CRYSTAL(MachineRegistry.CRYSTALLIZER),
+	COMPOST(MachineRegistry.COMPOSTER),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -213,6 +214,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	DEFOLIATOR(MachineRegistry.DEFOLIATOR),
 	GRINDSTONE(MachineRegistry.GRINDSTONE),
 	BLOWER(MachineRegistry.BLOWER),
+	GASTANK(MachineRegistry.GASTANK),
+	CRAFTER(MachineRegistry.CRAFTER),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

@@ -96,7 +96,8 @@ public enum PowerReceivers {
 	BLOWER(1, 256, 1024),
 	PORTALSHAFT(),
 	REFRIGERATOR(2048, 1, 32768),
-	GASTANK(1024, 1, 16384);
+	GASTANK(1024, 1, 16384),
+	CRAFTER(1024);
 
 	private final int minT;
 	private final int minS;

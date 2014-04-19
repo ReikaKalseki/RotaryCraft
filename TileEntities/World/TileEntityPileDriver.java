@@ -255,6 +255,10 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		int[] to = {0,0};
 		if (id == Block.bedrock.blockID && !TileEntityBorer.isMineableBedrock(world, x, y, z)) //does not break bedrock unless TF
 			to[0] = id;
+		if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
+			to[0] = id;
+			to[1] = meta;
+		}
 		if (id == Block.stone.blockID)
 			to[0] = Block.cobblestone.blockID;
 		if (id == Block.stoneBrick.blockID && meta == 0) {

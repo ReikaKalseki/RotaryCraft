@@ -45,7 +45,6 @@ public class ModelBevel extends RotaryModelBase
 	ModelRenderer Shape4;
 	ModelRenderer Shape5;
 	ModelRenderer Shape6;
-	ModelRenderer Shape7;
 
 	public ModelBevel()
 	{
@@ -58,9 +57,9 @@ public class ModelBevel extends RotaryModelBase
 		Shape1.setTextureSize(128, 32);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape3 = new ModelRenderer(this, 64, 0);
-		Shape3.addBox(0F, 0F, 0F, 1, 14, 16);
-		Shape3.setRotationPoint(-8F, 9F, -8F);
+		Shape3 = new ModelRenderer(this, 48, 1);
+		Shape3.addBox(0F, 0F, 0F, 1, 15, 16);
+		Shape3.setRotationPoint(-8F, 8F, -8F);
 		Shape3.setTextureSize(128, 32);
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
@@ -139,36 +138,30 @@ public class ModelBevel extends RotaryModelBase
 		Shape23.setTextureSize(128, 32);
 		Shape23.mirror = true;
 		this.setRotation(Shape23, 0F, 0F, 0.7853982F);
-		Shape2 = new ModelRenderer(this, 0, 0);
-		Shape2.addBox(0F, 0F, 0F, 15, 14, 1);
-		Shape2.setRotationPoint(-7F, 9F, -8F);
+		Shape2 = new ModelRenderer(this, 66, 0);
+		Shape2.addBox(0F, 0F, 0F, 15, 15, 1);
+		Shape2.setRotationPoint(-7F, 8F, -8F);
 		Shape2.setTextureSize(128, 32);
 		Shape2.mirror = true;
 		this.setRotation(Shape2, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 0, 0);
+		Shape4 = new ModelRenderer(this, 90, 16);
 		Shape4.addBox(0F, 0F, 0F, 1, 15, 1);
 		Shape4.setRotationPoint(7F, 8F, 7F);
 		Shape4.setTextureSize(128, 32);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0F, 0F, 0F);
-		Shape5 = new ModelRenderer(this, 0, 0);
-		Shape5.addBox(0F, 0F, 0F, 1, 1, 15);
-		Shape5.setRotationPoint(7F, 8F, -8F);
+		Shape5 = new ModelRenderer(this, 17, 17);
+		Shape5.addBox(0F, 0F, 0F, 1, 1, 14);
+		Shape5.setRotationPoint(7F, 8F, -7F);
 		Shape5.setTextureSize(128, 32);
 		Shape5.mirror = true;
 		this.setRotation(Shape5, 0F, 0F, 0F);
-		Shape6 = new ModelRenderer(this, 0, 0);
-		Shape6.addBox(0F, 0F, 0F, 15, 1, 1);
-		Shape6.setRotationPoint(-8F, 8F, 7F);
+		Shape6 = new ModelRenderer(this, 0, 19);
+		Shape6.addBox(0F, 0F, 0F, 14, 1, 1);
+		Shape6.setRotationPoint(-7F, 8F, 7F);
 		Shape6.setTextureSize(128, 32);
 		Shape6.mirror = true;
 		this.setRotation(Shape6, 0F, 0F, 0F);
-		Shape7 = new ModelRenderer(this, 0, 0);
-		Shape7.addBox(0F, 0F, 0F, 1, 1, 1);
-		Shape7.setRotationPoint(-8F, 8F, -8F);
-		Shape7.setTextureSize(128, 32);
-		Shape7.mirror = true;
-		this.setRotation(Shape7, 0F, 0F, 0F);
 	}
 
 	@Override
@@ -180,7 +173,6 @@ public class ModelBevel extends RotaryModelBase
 		Shape4.render(f5);
 		Shape5.render(f5);
 		Shape6.render(f5);
-		Shape7.render(f5);
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 0, 0, 1);
 		GL11.glTranslated(0, -1, 0);

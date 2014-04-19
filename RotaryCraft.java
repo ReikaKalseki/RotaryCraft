@@ -315,6 +315,12 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryChests.addToChests();
 		}
 
+		float iron = ConfigRegistry.EXTRAIRON.getFloat();
+		if (iron > 1) {
+			GameRegistry.registerWorldGenerator(new ExtraIronGenerator(iron));
+			logger.log(String.format("Extra iron ore gen enabled, with a scaling factor of %.1fx.", iron));
+		}
+
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);

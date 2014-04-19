@@ -119,6 +119,14 @@ public class RotaryRecipes {
 
 		if (ModList.TINKERER.isLoaded())
 			GameRegistry.addRecipe(new ItemStack(RotaryCraft.decoTank.blockID, 4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
+
+		if (ModList.THERMALEXPANSION.isLoaded()) {
+			ItemStack hardGlass = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "hardenedGlass", 1);
+			if (ConfigRegistry.TEGLASS.getState()) {
+				//GameRegistry.addRecipe(new ShapedOreRecipe(hardGlass, " L ", "LGL", " L ", 'L', "nuggetLead", 'G', RotaryCraft.obsidianglass));
+				ReikaRecipeHelper.replaceIngredientInAllRecipes(hardGlass, new ItemStack(RotaryCraft.obsidianglass), true);
+			}
+		}
 	}
 
 	private static void addMachines() {
@@ -153,6 +161,7 @@ public class RotaryRecipes {
 		MachineRegistry.BEDROCKBREAKER.addCrafting("BDO", "BSO", "BDO", 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel);
 
 		MachineRegistry.FERMENTER.addCrafting("BPB", "PIP", "BPB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel);
+		MachineRegistry.FERMENTER.addOreRecipe("BPB", "PIP", "BPB", 'B', "ingotTin", 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel);
 
 		MachineRegistry.GRINDER.addCrafting("B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw);
 
@@ -180,12 +189,14 @@ public class RotaryRecipes {
 		MachineRegistry.BORER.addCrafting("SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb);
 
 		MachineRegistry.SPRINKLER.addSizedCrafting(4, " s ", " p ", " i ", 's', ItemStacks.steelingot, 'p', ItemStacks.pipe, 'i', ItemStacks.impeller);
+		MachineRegistry.SPRINKLER.addSizedOreRecipe(4, " s ", " p ", " i ", 's', "ingotTin", 'p', ItemStacks.pipe, 'i', ItemStacks.impeller);
 
 		MachineRegistry.SPAWNERCONTROLLER.addCrafting("PCP", "OGO", "g g", 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold, 'g', Block.glowStone, 'C', ItemStacks.pcb);
 
 		MachineRegistry.PLAYERDETECTOR.addCrafting("LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', ItemStacks.radar, 'O', Block.obsidian, 'P', ItemStacks.basepanel, 'G', Item.ingotGold);
 
 		MachineRegistry.OBSIDIAN.addCrafting("SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Block.thinGlass, 'P', ItemStacks.pipe);
+		MachineRegistry.OBSIDIAN.addOreRecipe("SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', "ingotInvar", 'p', Block.thinGlass, 'P', ItemStacks.pipe);
 
 		MachineRegistry.HEATER.addCrafting("sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Block.fenceIron, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor);
 
@@ -210,6 +221,7 @@ public class RotaryRecipes {
 		MachineRegistry.FORCEFIELD.addCrafting("lnl", "ddd", "sgs", 'd', Item.diamond, 's', ItemStacks.basepanel, 'n', Item.netherStar, 'g', Item.ingotGold, 'l', ReikaItemHelper.lapisDye);
 
 		MachineRegistry.MUSICBOX.addSizedCrafting(4, "sns", "ncn", "sns", 'n', Block.music, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb);
+		MachineRegistry.MUSICBOX.addSizedOreRecipe(4, "sns", "ncn", "sns", 'n', Block.music, 's', "ingotSilver", 'c', ItemStacks.pcb);
 
 		MachineRegistry.WEATHERCONTROLLER.addCrafting("s s", "sls", "pcp", 'l', Block.daylightSensor, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel);
 
@@ -217,7 +229,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.PROJECTOR.addCrafting("sss", "gcl", "ppp", 'c', ItemStacks.pcb, 's', ItemStacks.steelingot, 'g', Block.glass, 'l', Block.glowStone, 'p', ItemStacks.basepanel);
 
-		MachineRegistry.REFRESHER.addCrafting("ses", "epe", "ses", 'p', Item.enderPearl, 's', ItemStacks.steelingot, 'e', Block.whiteStone);
+		MachineRegistry.REFRESHER.addCrafting("ses", "epe", "ses", 'p', Item.enderPearl, 's', ItemStacks.steelingot, 'e', ReikaItemHelper.lapisDye);
 
 		MachineRegistry.CAVESCANNER.addCrafting("sps", "pcp", "sns", 'n', ItemStacks.sonar, 's', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'p', ItemStacks.basepanel);
 
@@ -262,6 +274,7 @@ public class RotaryRecipes {
 		MachineRegistry.SPYCAM.addCrafting("SCS", "PRP", "SGS", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'C', ItemStacks.pcb, 'G', Block.thinGlass, 'R', Item.redstone);
 
 		MachineRegistry.COOLINGFIN.addSizedCrafting(3, "SSS", "SSS", "PPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem);
+		MachineRegistry.COOLINGFIN.addSizedOreRecipe(2, "SSS", "SSS", "PPP", 'P', "ingotTin", 'S', "ingotCopper");
 
 		MachineRegistry.SELFDESTRUCT.addCrafting("STS", "TCs", "STS", 'T', Block.tnt, 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem, 'C', ItemStacks.pcb);
 
@@ -334,6 +347,7 @@ public class RotaryRecipes {
 		MachineRegistry.BUSCONTROLLER.addCrafting("SMS", "MCM", "SMS", 'S', ItemStacks.steelingot, 'M', ItemStacks.bearing, 'C', ItemStacks.pcb);
 
 		MachineRegistry.PARTICLE.addSizedCrafting(4, "SDS", "PCP", "SIS", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'D', Block.dispenser, 'I', ItemStacks.impeller);
+		MachineRegistry.PARTICLE.addSizedOreRecipe(4, "SDS", "PCP", "SIS", 'S', "ingotTin", 'P', ItemStacks.basepanel, 'C', ItemStacks.pcb, 'D', Block.dispenser, 'I', ItemStacks.impeller);
 
 		MachineRegistry.LAWNSPRINKLER.addCrafting("PPP", " P ", "BIB", 'I', ItemStacks.impeller, 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel);
 
@@ -344,26 +358,25 @@ public class RotaryRecipes {
 		MachineRegistry.DEFOLIATOR.addCrafting("P P", "SPS", "BIB", 'B', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'I', ItemStacks.impeller, 'S', ItemStacks.steelingot);
 
 		MachineRegistry.REFRIGERATOR.addCrafting("SPS", "CcD", "pPp", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.condenser, 'S', ItemStacks.steelingot);
+
+		MachineRegistry.COMPOSTER.addCrafting(" S ", "S S", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
+		MachineRegistry.COMPOSTER.addOreRecipe(" S ", "S S", "BBB", 'B', ItemStacks.basepanel, 'S', "ingotTin");
+
+		MachineRegistry.GASTANK.addCrafting("SIS", "PRP", "PPP", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+
+		//MachineRegistry.CRAFTER.addCrafting("SCS", "PcP", "SPS", 'S', ItemStacks.steelingot, 'C', Block.workbench, 'P', ItemStacks.basepanel, 'c', ItemStacks.pcb);
 	}
 
 	private static void addCraftItems() {
-
-		GameRegistry.addRecipe(ItemStacks.impeller, new Object[]{
-				" S ", "SGS", " S ", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear});
-		GameRegistry.addRecipe(ItemStacks.compressor, new Object[]{
-				"SSS", "SGS", "SSS", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear});
-		GameRegistry.addRecipe(ItemStacks.turbine, new Object[]{
-				"tst", "sGs", "tst", 's', ItemStacks.prop, 't', ItemStacks.tungsteningot, 'G', ItemStacks.compressor});
-		GameRegistry.addRecipe(ItemStacks.diffuser, new Object[]{
-				" SS", "S  ", " SS", 'S', ItemStacks.steelingot});
-		GameRegistry.addRecipe(ItemStacks.combustor, new Object[]{
-				"SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Item.redstone});
-		GameRegistry.addRecipe(ItemStacks.radiator, new Object[]{
-				"GGG", "PPP", "SSS", 'G', Item.ingotGold, 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe});
-		GameRegistry.addRecipe(ItemStacks.condenser, new Object[]{
-				"SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe});
-		GameRegistry.addRecipe(ItemStacks.goldcoil, new Object[]{
-				"GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', Item.ingotGold});
+		GameRegistry.addRecipe(ItemStacks.impeller, " S ", "SGS", " S ", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear);
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.impeller, " S ", "SGS", " S ", 'S', "ingotTin", 'G', ItemStacks.steelgear));
+		GameRegistry.addRecipe(ItemStacks.compressor, "SSS", "SGS", "SSS", 'S', ItemStacks.steelingot, 'G', ItemStacks.steelgear);
+		GameRegistry.addRecipe(ItemStacks.turbine, "tst", "sGs", "tst", 's', ItemStacks.prop, 't', ItemStacks.tungsteningot, 'G', ItemStacks.compressor);
+		GameRegistry.addRecipe(ItemStacks.diffuser, " SS", "S  ", " SS", 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(ItemStacks.combustor, "SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Item.redstone);
+		GameRegistry.addRecipe(ItemStacks.radiator, "GGG", "PPP", "SSS", 'G', Item.ingotGold, 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe);
+		GameRegistry.addRecipe(ItemStacks.condenser, "SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe);
+		GameRegistry.addRecipe(ItemStacks.goldcoil, "GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', Item.ingotGold);
 
 		ReikaRecipeHelper.addOreRecipe(ItemStacks.goldcoil, "GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', "ingotElectrum");
 
@@ -403,8 +416,8 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.basepanel, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
 			"SSS", 'S', ItemStacks.steelingot});
 
-		GameRegistry.addRecipe(ItemStacks.mount, new Object[]{
-				"S S","SBS", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ItemStacks.mount, "S S","SBS", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.mount, "S S", "SBS", 'B', ItemStacks.basepanel, 'S', "ingotTin"));
 
 		GameRegistry.addRecipe(ItemStacks.drill, new Object[]{
 				"SSS", "SSS", " S ", 'S', ItemStacks.steelingot});
@@ -558,6 +571,7 @@ public class RotaryRecipes {
 		ItemRegistry.BEDHOE.addRecipe("II ", " S ", " S ", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDHOE.addRecipe(" II", " S ", " S ", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDSHEARS.addRecipe(" B", "B ", 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDSICKLE.addRecipe(" B ", "  B", "SB ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 
 		ItemRegistry.STEELPICK.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELPICK.getStackOf(), "BBB", " S ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
 		ItemRegistry.STEELAXE.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELAXE.getStackOf(), "BB ", "BS ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
@@ -566,6 +580,7 @@ public class RotaryRecipes {
 		ItemRegistry.STEELHOE.addRecipe("II ", " S ", " S ", 'S', Item.stick, 'I', ItemStacks.steelingot);
 		ItemRegistry.STEELHOE.addRecipe(" II", " S ", " S ", 'S', Item.stick, 'I', ItemStacks.steelingot);
 		ItemRegistry.STEELSHEARS.addRecipe(" B", "B ", 'B', ItemStacks.steelingot);
+		ItemRegistry.STEELSICKLE.addRecipe(" B ", "  B", "SB ", 'S', Item.stick, 'B', ItemStacks.steelingot);
 
 		ItemRegistry.BEDHELM.addEnchantedRecipe("III", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDBOOTS.addEnchantedRecipe("I I", "I I", 'I', ItemStacks.bedingot);
@@ -603,6 +618,8 @@ public class RotaryRecipes {
 		ItemRegistry.FUEL.addRecipe("SBS", "BGB", "SPS", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', Block.glass);
 
 		ItemRegistry.DISK.addSizedRecipe(4, "wRw", "RSR", "wRw", 'w', ReikaItemHelper.blackWool, 'R', Item.redstone, 'S', ItemStacks.steelingot);
+
+		ItemRegistry.CRAFTPATTERN.addSizedRecipe(4, " S ", " B ", " S ", 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel);
 
 		ItemRegistry.UPGRADE.addMetaRecipe(0, " R ", "gGg", " b ", 'b', ItemStacks.basepanel, 'R', ItemStacks.radiator, 'G', ItemStacks.gearunit, 'g', Item.ingotGold);
 

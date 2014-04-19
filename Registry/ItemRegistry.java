@@ -40,6 +40,7 @@ import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
@@ -57,6 +58,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShovel;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSickle;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSword;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemFlamethrower;
@@ -74,6 +76,7 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelHoe;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelPick;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShears;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -135,7 +138,10 @@ public enum ItemRegistry implements RegistryEnum {
 	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class),
 	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class),
 	DISK(3, false,				"item.musicboxdisc",		ItemDisk.class),
-	UPGRADE(240, true,			"#item.engineupgrade",		ItemEngineUpgrade.class);
+	UPGRADE(240, true,			"#item.engineupgrade",		ItemEngineUpgrade.class),
+	CRAFTPATTERN(34, false,		"item.craftpattern",		ItemCraftPattern.class),
+	BEDSICKLE(36, false,		"item.bedsickle",			ItemBedrockSickle.class),
+	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class);
 
 	private int index;
 	private boolean hasSubtypes;

@@ -29,10 +29,11 @@ import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConnectedTextureGlass;
 import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 
-public class BlockDecoTank extends Block {
+public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	private final ArrayList<Integer> allDirs = new ArrayList();
 	private final Icon[] icons = new Icon[10];
@@ -99,7 +100,7 @@ public class BlockDecoTank extends Block {
 
 	@Override
 	public int getRenderType() {
-		return RotaryCraft.proxy.tankRender;
+		return RotaryCraft.proxy.connectedRender;
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class BlockDecoTank extends Block {
 	{
 		if (RotaryCraft.instance.isLocked())
 			return false;
-		ClientProxy.tank.renderPass = pass;
+		ClientProxy.connected.renderPass = pass;
 		return true;
 	}
 
@@ -116,15 +117,11 @@ public class BlockDecoTank extends Block {
 		return 1;
 	}
 
-	public boolean isConnectedOnSide(IBlockAccess iba, int x, int y, int z, ForgeDirection side) {
-		int dx = x+side.offsetX;
-		int dy = y+side.offsetY;
-		int dz = z+side.offsetZ;
-		return iba.getBlockId(dx, dy, dz) == blockID;
+	@Override
+	public boolean renderCentralTextureForItem(int meta) {
+		return meta == 0;
 	}
 
-	/** Returns the unconnected sides. Each integer represents one of 8 adjacent corners to a face, with the same
-	 * numbering convention as is found on a calculator or computer number pad. */
 	public ArrayList<Integer> getEdgesForFace(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		ArrayList<Integer> li = new ArrayList();
 		li.addAll(allDirs);

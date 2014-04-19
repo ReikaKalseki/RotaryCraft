@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -42,7 +43,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
+		return i == 0;
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	@Override
 	public int getSizeInventory() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -126,7 +127,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return false;
+		return slot == 1 && ReikaItemHelper.matchStacks(is, ItemStacks.dryice);
 	}
 
 	@Override
@@ -184,6 +185,13 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			Tamb -= 15;
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != null)
 			Tamb -= 30;
+
+		if (ReikaItemHelper.matchStacks(ItemStacks.dryice, inv[1])) {
+			Tamb -= 40;
+			if (temperature > Tamb+4 || rand.nextInt(20) == 0)
+				ReikaInventoryHelper.decrStack(1, inv);
+		}
+
 		int dT = Tamb-temperature;
 		temperature += dT/4;
 	}

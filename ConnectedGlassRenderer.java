@@ -22,19 +22,19 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.RotaryCraft.Blocks.BlockDecoTank;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConnectedTextureGlass;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 
-public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
+public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public int renderPass = 0;
 
-	public DecoTankRenderer(int ID) {
+	public ConnectedGlassRenderer(int ID) {
 		renderID = ID;
 	}
 
@@ -45,13 +45,21 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 		GL11.glColor3f(1, 1, 1);
 		v5.startDrawingQuads();
 
-		BlockDecoTank b = (BlockDecoTank)block;
+		ConnectedTextureGlass b = (ConnectedTextureGlass)block;
+
+		boolean render5 = b.renderCentralTextureForItem(metadata);
 
 		Icon ico = b.getIconForEdge(0);
+		Icon ico2 = b.getIconForEdge(5);
 		float u = ico.getMinU();
 		float du = ico.getMaxU();
 		float v = ico.getMinV();
 		float dv = ico.getMaxV();
+
+		float u2 = ico2.getMinU();
+		float du2 = ico2.getMaxU();
+		float v2 = ico2.getMinV();
+		float dv2 = ico2.getMaxV();
 
 		float dx = -0.5F;
 		float dy = -0.5F;
@@ -65,11 +73,25 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 		v5.addVertexWithUV(0, 1, 1, du, dv);
 		v5.addVertexWithUV(1, 1, 1, u, dv);
 
+		if (render5) {
+			v5.addVertexWithUV(1, 1, 0, u2, v2);
+			v5.addVertexWithUV(0, 1, 0, du2, v2);
+			v5.addVertexWithUV(0, 1, 1, du2, dv2);
+			v5.addVertexWithUV(1, 1, 1, u2, dv2);
+		}
+
 		this.setFaceBrightness(v5, ForgeDirection.DOWN);
 		v5.addVertexWithUV(0, 0, 0, du, v);
 		v5.addVertexWithUV(1, 0, 0, u, v);
 		v5.addVertexWithUV(1, 0, 1, u, dv);
 		v5.addVertexWithUV(0, 0, 1, du, dv);
+
+		if (render5) {
+			v5.addVertexWithUV(0, 0, 0, du2, v2);
+			v5.addVertexWithUV(1, 0, 0, u2, v2);
+			v5.addVertexWithUV(1, 0, 1, u2, dv2);
+			v5.addVertexWithUV(0, 0, 1, du2, dv2);
+		}
 
 		this.setFaceBrightness(v5, ForgeDirection.EAST);
 		v5.addVertexWithUV(1, 0, 0, du, v);
@@ -77,11 +99,25 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 		v5.addVertexWithUV(1, 1, 1, u, dv);
 		v5.addVertexWithUV(1, 0, 1, du, dv);
 
+		if (render5) {
+			v5.addVertexWithUV(1, 0, 0, du2, v2);
+			v5.addVertexWithUV(1, 1, 0, u2, v2);
+			v5.addVertexWithUV(1, 1, 1, u2, dv2);
+			v5.addVertexWithUV(1, 0, 1, du2, dv2);
+		}
+
 		this.setFaceBrightness(v5, ForgeDirection.WEST);
 		v5.addVertexWithUV(0, 1, 0, u, v);
 		v5.addVertexWithUV(0, 0, 0, du, v);
 		v5.addVertexWithUV(0, 0, 1, du, dv);
 		v5.addVertexWithUV(0, 1, 1, u, dv);
+
+		if (render5) {
+			v5.addVertexWithUV(0, 1, 0, u2, v2);
+			v5.addVertexWithUV(0, 0, 0, du2, v2);
+			v5.addVertexWithUV(0, 0, 1, du2, dv2);
+			v5.addVertexWithUV(0, 1, 1, u2, dv2);
+		}
 
 		this.setFaceBrightness(v5, ForgeDirection.SOUTH);
 		v5.addVertexWithUV(0, 1, 1, u, v);
@@ -89,11 +125,25 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 		v5.addVertexWithUV(1, 0, 1, du, dv);
 		v5.addVertexWithUV(1, 1, 1, u, dv);
 
+		if (render5) {
+			v5.addVertexWithUV(0, 1, 1, u2, v2);
+			v5.addVertexWithUV(0, 0, 1, du2, v2);
+			v5.addVertexWithUV(1, 0, 1, du2, dv2);
+			v5.addVertexWithUV(1, 1, 1, u2, dv2);
+		}
+
 		this.setFaceBrightness(v5, ForgeDirection.NORTH);
 		v5.addVertexWithUV(0, 0, 0, du, v);
 		v5.addVertexWithUV(0, 1, 0, u, v);
 		v5.addVertexWithUV(1, 1, 0, u, dv);
 		v5.addVertexWithUV(1, 0, 0, du, dv);
+
+		if (render5) {
+			v5.addVertexWithUV(0, 0, 0, du2, v2);
+			v5.addVertexWithUV(0, 1, 0, u2, v2);
+			v5.addVertexWithUV(1, 1, 0, u2, dv2);
+			v5.addVertexWithUV(1, 0, 0, du2, dv2);
+		}
 
 		v5.addTranslation(-dx, -dy, -dz);
 
@@ -103,10 +153,10 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks rb) {
 		Tessellator v5 = Tessellator.instance;
-		BlockDecoTank b = (BlockDecoTank)block;
+		ConnectedTextureGlass b = (ConnectedTextureGlass)block;
 		v5.addTranslation(x, y, z);
 
-		int mix = b.getMixedBrightnessForBlock(world, x, y, z);
+		int mix = block.getMixedBrightnessForBlock(world, x, y, z);
 		v5.setBrightness(mix);
 		v5.setNormal(0, 1, 0);
 
@@ -240,7 +290,7 @@ public class DecoTankRenderer implements ISimpleBlockRenderingHandler {
 					v5.addVertexWithUV(1, 0, 0, du, dv);
 				}
 		}
-		else {
+		else if (block.blockID == RotaryCraft.decoTank.blockID) {
 			double d = 0.001;
 
 			TileEntityDecoTank tile = (TileEntityDecoTank)world.getBlockTileEntity(x, y, z);

@@ -104,21 +104,27 @@ public abstract class IORenderer {
 			}
 			if (teb instanceof TileEntityShaft && ((TileEntityShaft) teb).isCross()) { //cross
 				TileEntityShaft ts = (TileEntityShaft)teb;
-				double xdiff = ts.getWriteDirection().offsetX;
-				double zdiff = ts.getWriteDirection().offsetZ;
-				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				if (ts.getWriteDirection() != null) {
+					double xdiff = ts.getWriteDirection().offsetX;
+					double zdiff = ts.getWriteDirection().offsetZ;
+					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				if (ts.getWriteDirection2() != null) {
+					double xdiff = ts.getWriteDirection2().offsetX;
+					double zdiff = ts.getWriteDirection2().offsetZ;
+					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
 
-				xdiff = ts.getWriteDirection2().offsetX;
-				zdiff = ts.getWriteDirection2().offsetZ;
-				renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-				xdiff = ts.getReadDirection().offsetX;
-				zdiff = ts.getReadDirection().offsetZ;
-				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
-
-				xdiff = ts.getReadDirection2().offsetX;
-				zdiff = ts.getReadDirection2().offsetZ;
-				renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				if (ts.getReadDirection() != null) {
+					double xdiff = ts.getReadDirection().offsetX;
+					double zdiff = ts.getReadDirection().offsetZ;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				if (ts.getReadDirection2() != null) {
+					double xdiff = ts.getReadDirection2().offsetX;
+					double zdiff = ts.getReadDirection2().offsetZ;
+					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
 				return;
 			}
 			if (teb instanceof TileEntityWinder) {

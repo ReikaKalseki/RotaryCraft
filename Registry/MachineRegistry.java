@@ -101,6 +101,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityLawnSprinkler;
@@ -115,6 +116,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySeparatorPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
@@ -307,7 +309,9 @@ public enum MachineRegistry {
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
 	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft"),
 	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge"),
-	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityGasCompressor.class,		20);
+	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityGasCompressor.class,		20, "RenderGasCompressor"),
+	CRAFTER(			"machine.crafter",			BlockIMachine.class,		TileEntityAutoCrafter.class,		7),
+	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter");
 
 	private final String name;
 	private final Class te;
@@ -609,6 +613,8 @@ public enum MachineRegistry {
 			return 0.75F;
 		if (this == GRINDSTONE)
 			return 0.9375F;
+		if (this == COMPOSTER)
+			return 0.75F;
 		return 1;
 	}
 

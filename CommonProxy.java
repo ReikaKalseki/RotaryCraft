@@ -22,7 +22,7 @@ public class CommonProxy
 
 	public static int pipeRender;
 	public static int cubeRender;
-	public static int tankRender;
+	public static int connectedRender;
 
 	/**
 	 * Client side only register stuff...

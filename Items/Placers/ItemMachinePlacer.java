@@ -245,7 +245,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				return false;
 			return (Block.blocksList[world.getBlockId(x, y+1, z)].isOpaqueCube());
 		}
-		return true;
+		return super.checkValidBounds(is, ep, world, x, y, z);
 	}
 
 	@Override

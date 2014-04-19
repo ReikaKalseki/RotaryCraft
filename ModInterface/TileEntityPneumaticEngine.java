@@ -47,6 +47,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	@Override
 	public boolean isValidSupplier(TileEntity te) {
+		if (te == null)
+			return false;
 		return te.getClass().getSimpleName().contains("PipePower") || te.getClass().getSimpleName().equals("TileGenericPipe");
 	}
 

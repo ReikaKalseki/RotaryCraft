@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2014
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package Reika.RotaryCraft.Items.Tools;
+
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+
+public class ItemCraftPattern extends ItemRotaryTool {
+
+	private final RenderItem ri = new RenderItem();
+
+	public ItemCraftPattern(int ID, int index) {
+		super(ID, index);
+	}
+
+	//right click to open programming gui
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
+		FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+		if (is.stackTagCompound == null) {
+			li.add("No Crafting Pattern.");
+		}
+		else {
+			ItemStack[] items = new ItemStack[10];
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items");
+			for (int k = 0; k < nbttaglist.tagCount(); k++)				{
+				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(k);
+				short byte0 = nbttagcompound.getShort("Slot");
+				items[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			}
+			li.add("Crafts "+items[9].stackSize+" "+items[9].getDisplayName()+" with:");
+			for (int i = 0; i < 3; i++) {
+				StringBuilder sb = new StringBuilder();
+				for (int k = 0; k < 3; k++) {
+					String name = items[i*3+k] != null ? items[i].getDisplayName() : "-Nothing-";
+					sb.append(name);
+					if (k < 2)
+						sb.append(", ");
+				}
+				li.add("  "+sb.toString());
+			}
+		}
+	}
+
+}

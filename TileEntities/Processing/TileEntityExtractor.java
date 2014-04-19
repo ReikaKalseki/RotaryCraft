@@ -172,8 +172,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
 		super.updateTileEntity();
-		//this.getPower(false);
-		//this.getReceptor(world, x, y, z, meta);
 		this.getPowerBelow();
 		this.testIdle();
 		this.throughPut();

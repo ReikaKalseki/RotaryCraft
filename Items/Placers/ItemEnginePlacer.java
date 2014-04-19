@@ -177,7 +177,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				}
 			}
 		}
-		return true;
+		return super.checkValidBounds(is, ep, world, x, y, z);
 	}
 
 	@Override

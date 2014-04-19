@@ -104,10 +104,10 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			input3 = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+124, 26, 16);
 			input3.setFocused(false);
 			input3.setMaxStringLength(3);
+			input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
+			input4.setFocused(false);
+			input4.setMaxStringLength(3);
 		}
-		input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
-		input4.setFocused(false);
-		input4.setMaxStringLength(3);
 	}
 
 	@Override
@@ -317,9 +317,9 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			fontRenderer.drawString("Launch Angle", xSize/3-46-12, 80, 4210752);
 			fontRenderer.drawString("Compass Angle", xSize/3+36+24, 80, 4210752);
 			fontRenderer.drawString("Velocity", xSize/3-26+24+44, 116, 4210752);
+			if (tnt instanceof TileEntityTNTCannon)
+				fontRenderer.drawString("Fuse Time", xSize/3-26-32, 116, 4210752);
 		}
-		if (tnt instanceof TileEntityTNTCannon)
-			fontRenderer.drawString("Fuse Time", xSize/3-26-32, 116, 4210752);
 
 		if (targetMode) {
 			if (!input.isFocused())
@@ -336,10 +336,10 @@ public class GuiCannon extends GuiPowerOnlyMachine
 				fontRenderer.drawString(String.format("%d", tnt.theta), 35, 96, 0xffffffff);
 			if (!input3.isFocused())
 				fontRenderer.drawString(String.format("%d", tnt.velocity), 122+36, 116, 0xffffffff);
+			if (tnt instanceof TileEntityTNTCannon)
+				if (!input4.isFocused())
+					fontRenderer.drawString(String.format("%d", fuse), 122-54, 116, 0xffffffff);
 		}
-		if (tnt instanceof TileEntityTNTCannon)
-			if (!input4.isFocused())
-				fontRenderer.drawString(String.format("%d", fuse), 122-54, 116, 0xffffffff);
 	}
 
 	/**

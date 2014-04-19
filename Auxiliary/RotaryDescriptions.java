@@ -43,6 +43,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
@@ -449,5 +450,8 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 		addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
 		addNotes(MachineRegistry.REFRIGERATOR, PowerReceivers.REFRIGERATOR.getMinPower(), PowerReceivers.REFRIGERATOR.getMinTorque());
+		addNotes(MachineRegistry.COMPOSTER, TileEntityComposter.MINTEMP, TileEntityComposter.MAXTEMP);
+		addNotes(MachineRegistry.GASTANK, PowerReceivers.GASTANK.getMinPower(), PowerReceivers.GASTANK.getMinTorque());
+		addNotes(MachineRegistry.CRAFTER, PowerReceivers.CRAFTER.getMinPower());
 	}
 }

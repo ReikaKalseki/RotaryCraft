@@ -75,7 +75,9 @@ public enum ConfigRegistry implements ConfigList {
 	ATTACKBLOCKS("Block Damage from Destructive Machines", true),
 	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false),
 	JETFUELPACK("Jetpack Uses Jet Fuel", false),
-	ALLOWTNTCANNON("Allow TNT Cannon", true);
+	ALLOWTNTCANNON("Allow TNT Cannon", true),
+	EXTRAIRON("Iron Ore Density", 1F),
+	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", true);
 
 	private String label;
 	private boolean defaultState;
@@ -84,7 +86,7 @@ public enum ConfigRegistry implements ConfigList {
 	private Class type;
 	private boolean enforcing = false;
 
-	public static final ConfigRegistry[] optionList = ConfigRegistry.values();
+	public static final ConfigRegistry[] optionList = values();
 
 	private ConfigRegistry(String l, boolean d) {
 		label = l;

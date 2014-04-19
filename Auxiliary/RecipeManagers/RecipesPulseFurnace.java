@@ -85,6 +85,9 @@ public class RecipesPulseFurnace
 		this.addSmelting(ItemRegistry.STEELAXE.getShiftedID(), this.getSizedSteel(3), 0);
 		this.addSmelting(ItemRegistry.STEELPICK.getShiftedID(), this.getSizedSteel(3), 0);
 		this.addSmelting(ItemRegistry.STEELSHOVEL.getShiftedID(), this.getSizedSteel(1), 0);
+		this.addSmelting(ItemRegistry.STEELHOE.getShiftedID(), this.getSizedSteel(2), 0);
+		this.addSmelting(ItemRegistry.STEELSHEARS.getShiftedID(), this.getSizedSteel(2), 0);
+		this.addSmelting(ItemRegistry.STEELSICKLE.getShiftedID(), this.getSizedSteel(3), 0);
 
 		this.addSmelting(ItemStacks.redgolddust, ItemStacks.redgoldingot, 0.5F);
 

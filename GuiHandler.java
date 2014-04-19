@@ -19,6 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
@@ -35,6 +36,7 @@ import Reika.RotaryCraft.Containers.ContainerBlower;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
+import Reika.RotaryCraft.Containers.ContainerComposter;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
 import Reika.RotaryCraft.Containers.ContainerDefoliator;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
@@ -95,6 +97,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCVT;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiComposter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDefoliator;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiEthanol;
@@ -140,6 +143,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
@@ -321,6 +325,9 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityRefrigerator) {
 			return new ContainerFridge(player, (TileEntityRefrigerator)te);
 		}
+		if (te instanceof TileEntityComposter) {
+			return new ContainerComposter(player, (TileEntityComposter)te);
+		}
 
 		if (te instanceof OneSlotMachine)
 			return new OneSlotContainer(player, te);
@@ -339,6 +346,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+		
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
 		if (gr == GuiRegistry.HANDBOOK)
@@ -527,6 +535,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityRefrigerator) {
 			return new GuiFridge(player, (TileEntityRefrigerator)te);
+		}
+		if (te instanceof TileEntityComposter) {
+			return new GuiComposter(player, (TileEntityComposter)te);
 		}
 
 		if (te instanceof OneSlotMachine) {
