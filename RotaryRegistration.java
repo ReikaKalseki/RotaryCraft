@@ -136,6 +136,8 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 
+		OreDictionary.registerOre("glassHardened", RotaryCraft.obsidianglass);
+
 		OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 		OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 		ExtractorModOres.registerRCIngots();

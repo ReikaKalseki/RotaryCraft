@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ColumnArray;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -99,6 +100,11 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 		if (coords.isEmpty()) {
 			return;
+		}
+
+		if (!ConfigRegistry.ALLOWTERRAFORMER.getState()) {
+			ReikaChatHelper.sendChatToPlayer(this.getPlacer(), "The use of the terraformer has been disabled in the config.");
+			coords.clear();
 		}
 
 		if (!world.isBlockIndirectlyGettingPowered(x, y, z))

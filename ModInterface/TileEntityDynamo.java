@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -27,12 +26,6 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 
 	public static final int MAXTORQUE = 8192;
 	public static final int MAXOMEGA = 8192;
-
-	private static final boolean reika = DragonAPICore.isReikasComputer();
-
-	public final boolean isFlexibleMode() {
-		return reika;
-	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -93,8 +86,6 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		int tq = Math.min(torque, MAXTORQUE);
 		int om = Math.min(omega, MAXOMEGA);
 		long pwr = (long)tq*(long)om;
-		if (this.isFlexibleMode())
-			pwr = power;
 		return (int)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ());
 	}
 

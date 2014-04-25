@@ -61,6 +61,10 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	private boolean hasPower = false;
 
+	public ForgeDirection getFacing() {
+		return facingDir != null ? facingDir : ForgeDirection.EAST;
+	}
+
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0:
@@ -204,7 +208,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	@Override
 	public boolean canConnect(ForgeDirection dir, Object src) {
-		return dir == facingDir || dir == ForgeDirection.DOWN;
+		return dir == this.getFacing() || dir == ForgeDirection.DOWN;
 	}
 
 	public boolean isGettingSufficientPower() {

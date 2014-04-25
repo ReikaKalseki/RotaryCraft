@@ -490,6 +490,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
 			accepted = true;
 		}
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.sharpness, is))	 {
+			enchantments.put(Enchantment.sharpness, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness, is));
+			accepted = true;
+		}
 		return accepted;
 	}
 
@@ -498,6 +502,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		li.add(Enchantment.fortune);
 		li.add(Enchantment.silkTouch);
 		li.add(Enchantment.efficiency);
+		li.add(Enchantment.sharpness);
 		return li;
 	}
 

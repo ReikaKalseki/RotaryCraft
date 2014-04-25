@@ -77,7 +77,8 @@ public enum ConfigRegistry implements ConfigList {
 	JETFUELPACK("Jetpack Uses Jet Fuel", false),
 	ALLOWTNTCANNON("Allow TNT Cannon", true),
 	EXTRAIRON("Iron Ore Density", 1F),
-	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", true);
+	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false, false),
+	ALLOWTERRAFORMER("Allow Terraformer", true);
 
 	private String label;
 	private boolean defaultState;

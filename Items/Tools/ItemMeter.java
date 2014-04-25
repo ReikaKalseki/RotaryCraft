@@ -468,7 +468,7 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked == null)
 					return false;
 				ReikaChatHelper.writeString(String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
-				if ((clicked.torque > clicked.MAXTORQUE || clicked.omega > clicked.MAXOMEGA) && !clicked.isFlexibleMode())
+				if ((clicked.torque > clicked.MAXTORQUE || clicked.omega > clicked.MAXOMEGA))
 					ReikaChatHelper.writeString("Conversion limits exceeded; Power is being wasted.");
 			}
 			if (m == MachineRegistry.FLYWHEEL) {

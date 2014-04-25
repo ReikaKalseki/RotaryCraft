@@ -638,6 +638,9 @@ public enum ItemRegistry implements RegistryEnum {
 		case BEDSWORD:
 			is.addEnchantment(Enchantment.sharpness, 5);
 			is.addEnchantment(Enchantment.looting, 5);
+			break;
+		case BEDSICKLE:
+			is.addEnchantment(Enchantment.fortune, 5);
 		default:
 			break;
 		}

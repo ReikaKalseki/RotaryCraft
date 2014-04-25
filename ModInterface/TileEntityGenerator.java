@@ -25,6 +25,10 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 
 	private ForgeDirection facingDir;
 
+	public ForgeDirection getFacing() {
+		return facingDir != null ? facingDir : ForgeDirection.EAST;
+	}
+
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 
@@ -95,7 +99,7 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 
 	@Override
 	public boolean canConnect(ForgeDirection direction, Object src) {
-		return direction == facingDir.getOpposite();
+		return direction == this.getFacing().getOpposite();
 	}
 
 	private float getGenCurrent() {

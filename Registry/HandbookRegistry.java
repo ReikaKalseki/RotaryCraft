@@ -812,6 +812,7 @@ public enum HandbookRegistry implements HandbookEntry {
 			li.add(ItemRegistry.BEDSWORD.getStackOf());
 			li.add(ItemRegistry.BEDHOE.getStackOf());
 			li.add(ItemRegistry.BEDSHEARS.getStackOf());
+			li.add(ItemRegistry.BEDSICKLE.getStackOf());
 			return li;
 		}
 		if (this == BEDARMOR) {
@@ -830,6 +831,7 @@ public enum HandbookRegistry implements HandbookEntry {
 			li.add(ItemRegistry.STEELSWORD.getStackOf());
 			li.add(ItemRegistry.STEELHOE.getStackOf());
 			li.add(ItemRegistry.STEELSHEARS.getStackOf());
+			li.add(ItemRegistry.STEELSICKLE.getStackOf());
 			return li;
 		}
 		if (this == STEELARMOR) {
