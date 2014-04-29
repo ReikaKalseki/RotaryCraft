@@ -149,7 +149,7 @@ public class ItemMeter extends ItemRotaryTool
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %d kPa.", m.getName(), clicked.getLiquidLevel()/1000D, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getLiquidLevel()/1000D, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
