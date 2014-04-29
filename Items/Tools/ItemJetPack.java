@@ -97,14 +97,28 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			power = 0.005F+(float)(power*factor*factor);
 		}
 
+		boolean hover = false;
+		boolean fwd = false;
+
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && Keyboard.isKeyDown(ReikaKeyHelper.getForwardKey())) {
 			//power += 100;
+			fwd = true;
+		}
+
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && Keyboard.isKeyDown(ReikaKeyHelper.getSneakKey())) {
+			hover = true;
 		}
 
 		boolean electric = true;
 		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
-		ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, PacketRegistry.JETPACK.getMinValue(), player.worldObj, px, py, pz, power);
+		int id = PacketRegistry.JETPACK.getMinValue();
+		if (hover && fwd)
+			ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, id+2, player.worldObj, px, py, pz, power);
+		else if (hover)
+			ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, id+1, player.worldObj, px, py, pz, power);
+		else
+			ReikaPacketHelper.sendFloatPacket(RotaryCraft.packetChannel, id, player.worldObj, px, py, pz, power);
 
 		//player.motionY = Math.min(player.motionY + power * 0.2F, 0.6000000238418579D);
 

@@ -16,8 +16,8 @@ import net.minecraft.potion.PotionEffect;
 
 public class FreezePotion extends Potion {
 
-	public FreezePotion(int par1, boolean par2) {
-		super(par1, par2, 0x289EFF);
+	public FreezePotion(int par1) {
+		super(par1, true, 0x289EFF);
 		this.func_111184_a(SharedMonsterAttributes.movementSpeed, "2532FA5D-7CC8-4440-140E-514A1A162299", -10, 2);
 	}
 

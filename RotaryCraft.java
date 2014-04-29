@@ -48,6 +48,7 @@ import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
+import Reika.RotaryCraft.Auxiliary.PotionGrowthHormone;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -192,6 +193,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Entity fallblock;
 
 	public static FreezePotion freeze;
+	public static PotionGrowthHormone growth;
 
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
@@ -280,7 +282,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 		int id = ExtraConfigIDs.FREEZEID.getValue();
 		PotionCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
-		freeze = (FreezePotion)new FreezePotion(id, true).setPotionName("Frozen Solid");
+		freeze = (FreezePotion)new FreezePotion(id).setPotionName("Frozen Solid");
+
+		id = ExtraConfigIDs.GROWTHID.getValue();
+		PotionCollisionTracker.instance.addPotionID(instance, id, PotionGrowthHormone.class);
+		growth = (PotionGrowthHormone)new PotionGrowthHormone(id).setPotionName("Frozen Solid");
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);

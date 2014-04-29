@@ -54,9 +54,6 @@ public class TileEntityDecoTank extends TileEntityBase {
 		ReikaNBTHelper.writeFluidToNBT(NBT, f);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -79,6 +76,11 @@ public class TileEntityDecoTank extends TileEntityBase {
 			if (is.stackTagCompound.getInteger("level") >= ItemBlockDecoTank.FILL)
 				f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
 		}
+	}
+
+	@Override
+	public int getRedstoneOverride() {
+		return 0;
 	}
 
 }

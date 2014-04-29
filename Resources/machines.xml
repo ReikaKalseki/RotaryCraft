@@ -992,7 +992,7 @@
 	</refrigerator>
 	<composter>
 		<desc>
-			The composter allows discarded food, plant matter, and other organics to be broken down into something that, while unappealing to you, is highly valued by plants and is often very conducive to their growth.
+			The composter allows discarded food, plant matter, and other organics to be broken down into something that, while unappealing to you, is highly valued by plants and is often very conducive to their growth. This process requires yeast to facilitiate the process.
 		</desc>
 		<note>
 			Required Temperature: Between %dC and %dC

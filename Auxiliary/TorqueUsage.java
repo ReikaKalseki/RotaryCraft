@@ -16,6 +16,7 @@ import java.util.Map;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
@@ -215,6 +216,9 @@ public class TorqueUsage {
 			else
 				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, 1);
 		}
+		if (tile instanceof ShaftPowerReceiver) {
+			torque += 16;
+		}
 	}
 
 	private static void manageBus(World world, TileEntityBusController tile) {
@@ -341,7 +345,7 @@ public class TorqueUsage {
 				}
 			}
 		}
-		else{
+		else {
 			TileEntity di = ((TileEntityIOMachine) tile).getOutput();
 			if (di != null && di instanceof TileEntityIOMachine) {
 				if (((TileEntityIOMachine) di).getInput() == tile) {

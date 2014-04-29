@@ -40,6 +40,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.MFRHandler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.OpenBlockHandler;
@@ -221,6 +222,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b.blockID == ThaumBlockHandler.getInstance().totemID)
 			return 48F;
 		if (b.blockID == MekanismHandler.getInstance().cableID)
+			return 20F;
+		if (b.blockID == MFRHandler.getInstance().cableID)
 			return 20F;
 		if (b.blockID == OpenBlockHandler.getInstance().tankID)
 			return 20F;

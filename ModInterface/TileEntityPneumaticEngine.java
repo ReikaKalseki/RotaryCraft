@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import pneumaticCraft.api.tileentity.IAirHandler;
 import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -29,10 +28,9 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPowerReceptor, IPipeConnection, IPneumaticMachine {
+public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPowerReceptor, IPipeConnection {
 
 	private PowerHandler pp;
-	private IAirHandler air;
 
 	public static final int maxMJ = 36000;
 
@@ -46,7 +44,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		pp.configure(0, maxMJ, 0, maxMJ);
 		pp.configurePowerPerdition(0, 0);
 		sound.setTick(sound.getCap());
-		//air = AirHandlerSupplier.getAirHandler(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
 	}
 
 	@Override
@@ -102,9 +99,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
-
-		if (air != null)
-			air.updateEntityI();
 
 		if (pp.getEnergyStored() > 0)
 			pp.addEnergy(0.01F); //To nullify the mandatory power loss... why the HELL was that added?
@@ -185,24 +179,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
-		if (air != null)
-			air.readFromNBTI(NBT);
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
-		if (air != null)
-			air.writeToNBTI(NBT);
-	}
-
-	@Override
 	public void validate() {
 		super.validate();
-		if (air != null)
-			air.validateI(this);
 	}
 
 	@Override
@@ -248,16 +226,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	@Override
 	public int getMaxSpeedBase(int tier) {
 		return 10+tier*2;
-	}
-
-	@Override
-	public IAirHandler getAirHandler() {
-		return air;
-	}
-
-	@Override
-	public boolean isConnectedTo(ForgeDirection side) {
-		return this.isPipeConnected(side);
 	}
 
 }

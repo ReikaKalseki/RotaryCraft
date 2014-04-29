@@ -18,8 +18,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
@@ -105,6 +107,7 @@ public class ContainerWorktable extends CoreContainer {
 			}
 		}
 		SoundRegistry.CRAFT.playSoundAtBlock(world, tile.xCoord, tile.yCoord, tile.zCoord, 0.3F, 1.5F);
+		MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(tile, ep.getEntityName(), false, is));
 		this.updateCraftMatrix();
 		tile.craftable = false;
 	}

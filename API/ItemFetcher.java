@@ -63,6 +63,15 @@ public class ItemFetcher {
 		return null;
 	}
 
+	public static boolean isPlayerHoldingAngularTransducer(EntityPlayer ep) {
+		ItemStack is = ep.getCurrentEquippedItem();
+		if (is != null) {
+			return is.itemID == getItemByOrdinal(1).itemID;
+		}
+		return false;
+	}
+
+
 	public static boolean isPlayerHoldingBedrockPick(EntityPlayer ep) {
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (is != null) {

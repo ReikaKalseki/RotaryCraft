@@ -48,7 +48,8 @@ public enum ExtraConfigIDs implements IDRegistry {
 	BLASTGLASS("Extra Block IDs", "Blast Glass", 459, Block.class),
 	BEAMBLOCK("Extra Block IDs", "Beam Block", 460, Block.class),
 	DECOTANK("Extra Block IDs", "Decorative Tank", 452, Block.class),
-	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class);
+	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class),
+	GROWTHID("Other IDs", "Growth Hormone ID", 36, Potion.class);
 
 	private String name;
 	private String category;

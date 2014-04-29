@@ -467,18 +467,25 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					eng.incrementRedstoneState();
 				break;
 			case JETPACK:
-				boolean move = floatdata > 100;
-				if (move) {
-					floatdata -= 100;
-					float retruster = 0.3F;
-					float forwardpower = floatdata * retruster * 2.0F;
-					if (forwardpower > 0.0F) {
-						ep.moveFlying(0.0F, forwardpower, 2F);
+				if (control == PacketRegistry.JETPACK.getMinValue()) {
+					boolean move = floatdata > 100;
+					if (move) {
+						floatdata -= 100;
+						float retruster = 0.3F;
+						float forwardpower = floatdata * retruster * 2.0F;
+						if (forwardpower > 0.0F) {
+							ep.moveFlying(0.0F, forwardpower, 2F);
+						}
 					}
+					ep.motionY += floatdata*4.25;
+					if (ep.motionY > 0.6)
+						ep.motionY = 0.6;
 				}
-				ep.motionY += floatdata*4.25;
-				if (ep.motionY > 0.6)
-					ep.motionY = 0.6;
+				else {
+					ep.motionY = 0;
+					float f = control == PacketRegistry.JETPACK.getMinValue()+2 ? 0.025F : 0;
+					ep.moveFlying(0.0F, f, 1F);
+				}
 				double vx = ep.motionX;
 				double vz = ep.motionZ;
 				if (DragonAPICore.isOnActualServer()) {

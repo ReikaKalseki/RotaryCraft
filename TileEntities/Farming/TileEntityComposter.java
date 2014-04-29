@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -40,9 +42,9 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 	private static enum CompostMatter {
 
-		CRAP(1, Item.egg, Item.cookie),
+		CRAP(1, Item.egg, Item.cookie, Item.wheat),
 		SUGARCANE(2, Item.reed),
-		SAPLING(1, Block.sapling),
+		PLANT(1, Block.sapling, Block.waterlily, Block.plantRed, Block.plantYellow, Block.mushroomBrown, Block.mushroomRed),
 		LEAF(2, Block.leaves),
 		MEAT(4, Item.beefRaw, Item.beefCooked, Item.porkCooked, Item.porkRaw, Item.chickenCooked, Item.chickenRaw),
 		FISH(3, Item.fishCooked, Item.fishRaw),
@@ -82,6 +84,22 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 			return null;
 		}
 
+		public List<ItemStack> getAllItems() {
+			return ReikaJavaLibrary.copyList(items);
+		}
+	}
+
+	public static final ArrayList<ItemStack> getAllCompostables() {
+		ArrayList<ItemStack> items = new ArrayList();
+		for (int i = 0; i < CompostMatter.list.length; i++) {
+			items.addAll(CompostMatter.list[i].getAllItems());
+		}
+		return items;
+	}
+
+	public static int getCompostValue(ItemStack is) {
+		CompostMatter c = CompostMatter.getMatterType(is);
+		return c != null ? c.value : 0;
 	}
 
 	public int getScaledTimer(int a) {
