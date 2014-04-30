@@ -52,7 +52,7 @@ public class TorqueUsage {
 		while (TEMap.containsValue(false)) {
 			Multimap <Boolean, TileEntity> invert = ArrayListMultimap.create();
 			Multimaps.invertFrom(Multimaps.forMap(TEMap), invert);
-			recursiveFind(te.worldObj, (TileEntity)invert.get(false).toArray()[0]);
+			recursiveFind(te.worldObj, (TileEntity)invert.get(false).toArray()[0], te);
 		}
 		TEMap.clear();
 		if (torque < 0)
@@ -60,7 +60,7 @@ public class TorqueUsage {
 		return torque;
 	}
 
-	private static void recursiveFind(World world, TileEntity tile) {
+	private static void recursiveFind(World world, TileEntity tile, TileEntityFlywheel reader) {
 		TEMap.put(tile,true);
 		if (tile instanceof TileEntityTransmissionMachine) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
 			if (tile instanceof TileEntitySplitter) { //check if splitter
@@ -217,7 +217,7 @@ public class TorqueUsage {
 				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, 1);
 		}
 		if (tile instanceof ShaftPowerReceiver) {
-			torque += 16;
+			torque += ((ShaftPowerReceiver)tile).getMinTorque(reader.torque);
 		}
 	}
 

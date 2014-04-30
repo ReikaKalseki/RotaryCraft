@@ -92,11 +92,11 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
-			if (a == 33)
+			if (a == PacketRegistry.ITEMCANNON.getMinValue())
 				outputStream.writeInt(target[0]);
-			if (a == 34)
+			if (a == PacketRegistry.ITEMCANNON.getMinValue()+1)
 				outputStream.writeInt(target[1]);
-			if (a == 35)
+			if (a == PacketRegistry.ITEMCANNON.getMinValue()+2)
 				outputStream.writeInt(target[2]);
 			outputStream.writeInt(ica.xCoord);
 			outputStream.writeInt(ica.yCoord);

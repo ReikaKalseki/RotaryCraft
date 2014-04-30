@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -20,14 +21,18 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPipe extends TileEntityPiping {
+public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 
 	private Fluid liquid;
 	private int liquidLevel = 0;
+
+	private int temperature;
 
 	public static final int HORIZLOSS = 1*0;	// all are 1(friction)+g (10m) * delta h (0 or 1m)
 	public static final int UPLOSS = 1*0;
@@ -38,7 +43,13 @@ public class TileEntityPipe extends TileEntityPiping {
 	public static final int DOWNPRESSURE = 0;
 
 	public int getPressure() {
-		return 101300+(liquidLevel*24);
+		if (liquid == null || liquidLevel <= 0)
+			return 101300;
+		//PV = nRT approximation, with V = 1m^3
+		if (liquid.isGaseous())
+			return 101300+(128*(int)(liquidLevel/1000D*liquid.getTemperature()*Math.abs(liquid.getDensity())/1000D));
+		else
+			return 101300+liquidLevel*24;
 	}
 
 	@Override
@@ -65,25 +76,24 @@ public class TileEntityPipe extends TileEntityPiping {
 				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
 			}
 		}
+
+		if (rand.nextInt(60) == 0) {
+			ReikaWorldHelper.temperatureEnvironment(world, x, y, z, this.getTemperature());
+		}
+
+		if (liquid != null) {
+			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
+			temperature = temp > 750 ? temp-425 : temp-273;
+
+			if (temperature > 2500) {
+				this.overheat(worldObj, xCoord, yCoord, zCoord);
+			}
+		}
 	}
 
 	@Override
 	protected void onIntake(TileEntity te) {
-		if (liquid != null) {
-			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
 
-			if (temp > 2500) {
-				BlockArray blocks = new BlockArray();
-				blocks.recursiveAddWithMetadata(worldObj, xCoord, yCoord, zCoord, this.getMachine().getBlockID(), this.getMachine().getMachineMetadata());
-
-				for (int i = 0; i < blocks.getSize(); i++) {
-					int[] xyz = blocks.getNthBlock(i);
-					ReikaSoundHelper.playSoundAtBlock(worldObj, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
-					ReikaParticleHelper.LAVA.spawnAroundBlock(worldObj, xyz[0], xyz[1], xyz[2], 36);
-					worldObj.setBlock(xyz[0], xyz[1], xyz[2], Block.lavaMoving.blockID);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -169,5 +179,51 @@ public class TileEntityPipe extends TileEntityPiping {
 	@Override
 	public boolean canOutputToIFluidHandler(ForgeDirection side) {
 		return side.offsetY == 0;
+	}
+
+	@Override
+	public void updateTemperature(World world, int x, int y, int z, int meta) {}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public int getThermalDamage() {
+		return this.getTemperature() >= 100 ? this.getTemperature()/400 : 0;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+		BlockArray blocks = new BlockArray();
+		MachineRegistry m = this.getMachine();
+		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlockID(), m.getMachineMetadata());
+
+		for (int i = 0; i < blocks.getSize(); i++) {
+			int[] xyz = blocks.getNthBlock(i);
+			ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
+			ReikaParticleHelper.LAVA.spawnAroundBlock(world, xyz[0], xyz[1], xyz[2], 36);
+			world.setBlock(xyz[0], xyz[1], xyz[2], Block.lavaMoving.blockID);
+		}
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+		temperature = NBT.getInteger("temp");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+		NBT.setInteger("temp", temperature);
 	}
 }

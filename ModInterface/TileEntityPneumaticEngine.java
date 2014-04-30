@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -51,8 +50,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		if (te == null)
 			return false;
 		if (te.getClass().getSimpleName().contains("PipePower") || te.getClass().getSimpleName().equals("TileGenericPipe"))
-			return true;
-		if (te instanceof IPneumaticMachine)
 			return true;
 		return false;
 	}

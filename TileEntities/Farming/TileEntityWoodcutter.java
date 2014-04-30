@@ -150,8 +150,10 @@ ConditionalOperation, DamagingContact {
 		int id = world.getBlockId(x, y+1, z);
 		if (id != 0) {
 			Block b = Block.blocksList[id];
-			ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getBlockDropped(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
-			world.setBlock(x, y+1, z, 0);
+			if (b.blockMaterial == Material.wood || b.blockMaterial == Material.leaves) {
+				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getBlockDropped(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
+				world.setBlock(x, y+1, z, 0);
+			}
 		}
 
 		RotaryCraft.logger.debug(tree);

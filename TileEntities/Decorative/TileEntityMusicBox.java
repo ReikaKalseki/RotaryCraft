@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Event.NoteEvent;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -185,6 +187,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;
+		NoteEvent e = new NoteEvent(this, n, channel);
+		MinecraftForge.EVENT_BUS.post(e);
 	}
 
 	@Override
@@ -408,6 +412,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			this.length = length;
 			this.pitch = pitch;
 			this.voice = voice;
+		}
+
+		public static String getNoteName(int pitch) {
+			return notes[pitch%12];
 		}
 
 		public String getName() {

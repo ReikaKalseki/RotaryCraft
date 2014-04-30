@@ -122,7 +122,9 @@ public class RotaryRecipes {
 
 		if (ModList.THERMALEXPANSION.isLoaded()) {
 			ItemStack hardGlass = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "hardenedGlass", 1);
-			if (ConfigRegistry.TEGLASS.getState()) {
+			if (hardGlass == null)
+				hardGlass = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "glassHardened", 1);
+			if (ConfigRegistry.TEGLASS.getState() && hardGlass != null) {
 				//GameRegistry.addRecipe(new ShapedOreRecipe(hardGlass, " L ", "LGL", " L ", 'L', "nuggetLead", 'G', RotaryCraft.obsidianglass));
 				ReikaRecipeHelper.replaceIngredientInAllRecipes(hardGlass, new ItemStack(RotaryCraft.obsidianglass), true);
 			}

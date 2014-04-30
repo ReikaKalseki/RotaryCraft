@@ -229,6 +229,20 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				return true;
 			}
 		}
+		if (m == MachineRegistry.BUSCONTROLLER) {
+			if (is != null) {
+				if (FluidContainerRegistry.isFilledContainer(is)) {
+					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
+						TileEntityBusController tb = (TileEntityBusController)te;
+						tb.fill(ForgeDirection.DOWN, f, true);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+						return true;
+					}
+				}
+			}
+		}
 		if (m == MachineRegistry.FUELENGINE) {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
@@ -237,7 +251,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						TileEntityFuelEngine tf = (TileEntityFuelEngine)te;
 						tf.fill(ForgeDirection.DOWN, f, true);
 						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+							ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
 						return true;
 					}
 				}
@@ -772,6 +786,11 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					if (!world.isRemote)
 						world.spawnEntityInWorld(new EntityItem(world, x, y, z, is));
 				}
+			}
+
+			if (m.hasTemperature()) {
+				TemperatureTE te = (TemperatureTE)world.getBlockTileEntity(x, y, z);
+				ReikaWorldHelper.temperatureEnvironment(world, x, y, z, te.getTemperature());
 			}
 		}
 	}

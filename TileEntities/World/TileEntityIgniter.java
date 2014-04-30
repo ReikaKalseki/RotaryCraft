@@ -225,9 +225,6 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 		return temperature/50;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -235,10 +232,6 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 		temperature = NBT.getInteger("temperature");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

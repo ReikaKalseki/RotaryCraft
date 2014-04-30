@@ -59,7 +59,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 			omega = 0;
 		}
 		else {
-			if (timer.checkCap())
+			if (power > 0 && timer.checkCap())
 				tank.removeLiquid(1);
 		}
 

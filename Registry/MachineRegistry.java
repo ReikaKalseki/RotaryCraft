@@ -40,6 +40,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
@@ -1260,6 +1261,10 @@ public enum MachineRegistry {
 
 	public boolean hasNBTVariants() {
 		return NBTMachine.class.isAssignableFrom(te);
+	}
+
+	public boolean hasTemperature() {
+		return TemperatureTE.class.isAssignableFrom(te);
 	}
 
 	/** Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal) */

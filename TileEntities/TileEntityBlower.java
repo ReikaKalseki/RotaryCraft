@@ -126,28 +126,32 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 		if (max <= 0)
 			return;
 
+		int size = target.getSizeInventory();
+
 		for (int slot : map.keySet()) {
 			ItemStack is = map.get(slot);
 			if (this.isItemTransferrable(is)) {
 				int maxadd = Math.min(max-items, Math.min(is.getMaxStackSize(), target.getInventoryStackLimit()));
 				for (int i = 0; i < maxadd; i++) {
-					if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
-						if (target instanceof ISidedInventory) {
-							if (((ISidedInventory) target).canInsertItem(slot, is, dir.getOpposite().ordinal())) {
+					for (int k = 0; k < size; k++) {
+						if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
+							if (target instanceof ISidedInventory) {
+								if (((ISidedInventory) target).canInsertItem(k, is, dir.getOpposite().ordinal())) {
+									if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
+										ReikaInventoryHelper.decrStack(slot, source, 1);
+										items += 1;
+									}
+								}
+							}
+							else {
 								if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
 									ReikaInventoryHelper.decrStack(slot, source, 1);
 									items += 1;
 								}
 							}
+							if (items >= max)
+								return;
 						}
-						else {
-							if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
-								ReikaInventoryHelper.decrStack(slot, source, 1);
-								items += 1;
-							}
-						}
-						if (items >= max)
-							return;
 					}
 				}
 			}

@@ -298,6 +298,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 				t.setBlockMetadata(meta+1);
 			else
 				t.setBlockMetadata(0);
+			world.markBlockForUpdate(x, y, z);
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}
 		else {

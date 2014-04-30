@@ -31,7 +31,8 @@ public interface ShaftPowerReceiver extends ShaftMachine {
 	/** When there is no input machine. Usually used to set power, speed, torque = 0 */
 	public void noInputMachine();
 
-	/** The minimum torque the machine requires to operate. Pick something reasonable. */
-	//public int getMinTorque();
+	/** The minimum torque the machine requires to operate. Also controls flywheel deceleration.
+	 * Pick something reasonable, preferably as realistic as possible. */
+	public int getMinTorque(int available);
 
 }
