@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,12 +44,14 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	}
 
 	protected void noCharge() {
-		ReikaChatHelper.clearChat();
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		ReikaChatHelper.write("Tool charge is depleted!");
 	}
 
 	protected void warnCharge(ItemStack is) {
-		ReikaChatHelper.clearChat();
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		if (is.getItemDamage() == 2) {
 			ReikaChatHelper.write("Tool charge is very low (2 kJ)!");
 		}

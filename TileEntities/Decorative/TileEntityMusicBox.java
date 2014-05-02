@@ -422,6 +422,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return notes[pitch%12];
 		}
 
+		public int getTickLength() {
+			return length.tickLength;
+		}
+
 		public boolean isRest() {
 			return pitch < 0;
 		}

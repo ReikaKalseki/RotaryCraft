@@ -78,7 +78,8 @@ public enum ConfigRegistry implements ConfigList {
 	ALLOWTNTCANNON("Allow TNT Cannon", true),
 	EXTRAIRON("Iron Ore Density", 1F),
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
-	ALLOWTERRAFORMER("Allow Terraformer", true);
+	ALLOWTERRAFORMER("Allow Terraformer", true),
+	CLEARCHAT("Tools Clear Chat", true);
 
 	private String label;
 	private boolean defaultState;

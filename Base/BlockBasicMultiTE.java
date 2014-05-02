@@ -193,6 +193,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
 		if (RotaryCraft.instance.isLocked())
 			return false;
+		world.markBlockForUpdate(x, y, z);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
@@ -790,7 +791,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 			if (m.hasTemperature()) {
 				TemperatureTE te = (TemperatureTE)world.getBlockTileEntity(x, y, z);
-				ReikaWorldHelper.temperatureEnvironment(world, x, y, z, te.getTemperature());
+				int temp = Math.min(te.getTemperature(), 800);
+				//ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temp);
 			}
 		}
 	}

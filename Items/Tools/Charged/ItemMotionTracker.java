@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class ItemMotionTracker extends ItemChargedTool {
 
@@ -52,7 +53,8 @@ public class ItemMotionTracker extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		ReikaChatHelper.clearChat(); //clr
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat(); //clr
 		rendertick = 512;
 		for (float i = 1; i <= 128; i += 0.5) {
 			Vec3 look = ep.getLookVec();

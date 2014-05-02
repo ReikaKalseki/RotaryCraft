@@ -18,6 +18,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class ItemUltrasound extends ItemChargedTool {
 
@@ -28,7 +29,6 @@ public class ItemUltrasound extends ItemChargedTool {
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
 		if (is.getItemDamage() <= 0) {
-			ReikaChatHelper.clearChat(); //clr
 			this.noCharge();
 			return is;
 		}
@@ -66,7 +66,8 @@ public class ItemUltrasound extends ItemChargedTool {
 				ReikaChatHelper.write("Cave Detected!");
 			}
 			if (!ores && !silver && !cave && !liq) {
-				ReikaChatHelper.clearChat(); //clr
+				if (ConfigRegistry.CLEARCHAT.getState())
+					ReikaChatHelper.clearChat(); //clr
 			}
 		}
 		return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);

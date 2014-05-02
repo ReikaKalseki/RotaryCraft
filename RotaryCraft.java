@@ -372,7 +372,7 @@ public class RotaryCraft extends DragonAPIMod {
 		VanillaIntegrityTracker.instance.addWatchedBlock(instance, Block.glass);
 
 		if (ConfigRegistry.HANDBOOK.getState())
-			PlayerFirstTimeTracker.addTracker(new HandbookTracker("RotaryCraft_Handbook"));
+			PlayerFirstTimeTracker.addTracker(new HandbookTracker());
 	}
 
 	@Override

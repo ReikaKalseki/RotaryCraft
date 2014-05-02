@@ -105,7 +105,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (buttontimer > 0)
 			return;
 		else
-			buttontimer = 12;
+			buttontimer = 8;
 		if (button.id == 0) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, 0);
 			redstone = !redstone;

@@ -41,6 +41,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
@@ -75,7 +76,8 @@ public class ItemMeter extends ItemRotaryTool
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
-		ReikaChatHelper.clearChat();
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		int ratioclicked = 1;
 		String geartype = null;
 		boolean reductionclicked = true;

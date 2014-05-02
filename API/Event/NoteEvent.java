@@ -13,23 +13,19 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
 
 public class NoteEvent extends TileEntityEvent {
 
 	public final int notePitch;
 	public final int noteChannel;
-	public final Instrument voice;
-	public final NoteLength length;
+	public final int length;
 
 	public NoteEvent(TileEntityMusicBox te, Note n, int channel) {
 		super(te);
 		noteChannel = channel;
 		notePitch = n.pitch;
-		voice = n.voice;
-		length = n.length;
+		length = n.getTickLength();
 	}
 
 	public boolean match(TileEntityMusicBox te) {

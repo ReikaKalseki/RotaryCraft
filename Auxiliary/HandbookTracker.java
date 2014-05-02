@@ -11,14 +11,10 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Base.PlayerTracker;
+import Reika.DragonAPI.Interfaces.PlayerTracker;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class HandbookTracker extends PlayerTracker {
-
-	public HandbookTracker(String name) {
-		super(name);
-	}
+public class HandbookTracker implements PlayerTracker {
 
 	@Override
 	public void onNewPlayer(EntityPlayer ep) {
@@ -28,6 +24,11 @@ public class HandbookTracker extends PlayerTracker {
 
 	public ItemStack getItem() {
 		return ItemRegistry.HANDBOOK.getStackOf();
+	}
+
+	@Override
+	public String getID() {
+		return "RotaryCraft_Handbook";
 	}
 
 }

@@ -83,6 +83,8 @@ public class GuiFermenter extends GuiMachine
 		int k = (height - ySize) / 2;
 
 		int i1 = ferm.getCookProgressScaled(48);
+		if (i1 > 48)
+			i1 = 48;
 		this.drawTexturedModalRect(j + 79, k + 34, 176, 14, 1*(i1)+1, 16);
 
 		int i2 = ferm.getTemperatureScaled(54);
