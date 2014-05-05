@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -25,6 +27,7 @@ import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
@@ -137,7 +140,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				}
 			}
 			if (!tree.isEmpty() && tree.isValidTree()) {
-				this.cutEntireTree(is, world, tree);
+				this.cutEntireTree(is, world, tree, x, y, z);
 				return true;
 			}
 		}
@@ -163,7 +166,13 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		return false;
 	}
 
-	private void cutEntireTree(ItemStack is, World world, TreeReader tree) {
+	private void cutEntireTree(ItemStack is, World world, TreeReader tree, int dx, int dy, int dz) {
+		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+		boolean rainbow = tree.isRainbowTree();
+		if (rainbow) {
+			ArrayList<ItemStack> items = tree.getAllDroppedItems(world, fortune);
+			ReikaItemHelper.dropItems(world, dx, dy, dz, items);
+		}
 		for (int i = 0; i < tree.getSize(); i++) {
 			int[] xyz = tree.getNthBlock(i);
 			int x = xyz[0];
@@ -173,9 +182,9 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			int meta = world.getBlockMetadata(x, y, z);
 			Block b = Block.blocksList[id];
 			if (b != null) {
-				int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
-				b.dropBlockAsItem(world, x, y, z, meta, fortune);
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b, 0.75F, 1);
+				if (!rainbow)
+					b.dropBlockAsItem(world, x, y, z, meta, fortune);
 				world.setBlock(x, y, z, 0);
 			}
 		}

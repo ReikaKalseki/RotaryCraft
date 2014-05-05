@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,7 +60,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 			}
 			return true;
 		}
-		else if (ModList.DYETREES.isLoaded() && (id == TreeGetter.getNaturalDyeLeafID() || id == TreeGetter.getRainbowLeafID() || id == TreeGetter.getHeldDyeLeafID())) {
+		else if (ModList.DYETREES.isLoaded() && (id == TreeGetter.getNaturalDyeLeafID() || id == TreeGetter.getHeldDyeLeafID())) {
 			Block b = Block.blocksList[id];
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getLeafRange();
@@ -67,7 +69,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						int id2 = world.getBlockId(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == TreeGetter.getNaturalDyeLeafID() || id2 == TreeGetter.getRainbowLeafID() || id2 == TreeGetter.getHeldDyeLeafID()) {
+						if (id2 == TreeGetter.getNaturalDyeLeafID() || id2 == TreeGetter.getHeldDyeLeafID()) {
 							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
 							world.setBlock(x+i, y+j, z+k, 0);
@@ -75,6 +77,28 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			return true;
+		}
+		else if (ModList.DYETREES.isLoaded() && id == TreeGetter.getRainbowLeafID()) {
+			Block b = Block.blocksList[id];
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getLeafRange();
+			ArrayList<ItemStack> items = new ArrayList();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int id2 = world.getBlockId(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (id2 == TreeGetter.getRainbowLeafID()) {
+							//b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							items.addAll(b.getBlockDropped(world, x, y, z, meta2, fortune));
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
+							world.setBlock(x+i, y+j, z+k, 0);
+						}
+					}
+				}
+			}
+			ReikaItemHelper.dropItems(world, x, y, z, items);
 			return true;
 		}
 		else if (crop != null) {
