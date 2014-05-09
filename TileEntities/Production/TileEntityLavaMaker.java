@@ -9,22 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -38,9 +33,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	public static final int MAXTEMP = 1500;
 
 	private long energy;
-
-	private static final HashMap<Integer, FluidStack> recipes = new HashMap();
-	private static final List<Integer> fuels = new ArrayList();
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -57,30 +49,35 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 			world.spawnParticle("crit", x+rand.nextDouble(), y, z+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 		}
 
+		//ReikaJavaLibrary.pConsole(energy/20L+":"+MELT_ENERGY, Side.SERVER);
+
 		if (energy/20 >= MELT_ENERGY) {
-			for (int i = 0; i < fuels.size(); i++) {
-				int id = fuels.get(i);
-				int slot = ReikaInventoryHelper.locateIDInInventory(id, this);
-				if (slot != -1) {
-					if (this.melt(slot))
-						return;
+			for (int i = 0; i < inv.length; i++) {
+				ItemStack is = inv[i];
+				if (is != null) {
+					FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
+					if (fs != null) {
+						if (this.canMake(fs)) {
+							tank.addLiquid(fs.amount, fs.getFluid());
+							ReikaInventoryHelper.decrStack(i, inv);
+							energy -= MELT_ENERGY*20;
+							return;
+						}
+					}
 				}
 			}
 		}
 	}
 
-	private boolean melt(int slot) {
+	private boolean canMake(FluidStack liq) {
 		if (worldObj.isRemote)
 			return false;
-		if (inv[slot] == null)
+		if (tank.isEmpty())
+			return true;
+		if (!tank.getActualFluid().equals(liq.getFluid()))
 			return false;
-		int id = inv[slot].itemID;
-		FluidStack liq = recipes.get(id);
 		if (tank.getLevel()+liq.amount > tank.getCapacity())
 			return false;
-		tank.addLiquid(liq.amount, FluidRegistry.LAVA);
-		ReikaInventoryHelper.decrStack(slot, inv);
-		energy -= MELT_ENERGY*20;
 		return true;
 	}
 
@@ -101,7 +98,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return fuels.contains(is.itemID);
+		return RecipesLavaMaker.getRecipes().isValidFuel(is);
 	}
 
 	@Override
@@ -133,26 +130,16 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	}
 
 	private boolean canMake() {
-		for (int i = 0; i < fuels.size(); i++) {
-			int id = fuels.get(i);
-			int slot = ReikaInventoryHelper.locateIDInInventory(id, this);
-			if (slot != -1) {
-				return true;
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack is = inv[i];
+			if (is != null) {
+				FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
+				if (fs != null)
+					if (this.canMake(fs))
+						return true;
 			}
 		}
 		return false;
-	}
-
-	private static void addFuel(Block b, int amt) {
-		fuels.add(b.blockID);
-		recipes.put(b.blockID, new FluidStack(FluidRegistry.LAVA, amt));
-	}
-
-	static {
-		addFuel(Block.stone, 1000);
-		addFuel(Block.cobblestone, 500);
-		addFuel(Block.netherrack, 2000);
-		addFuel(Block.stoneBrick, 1000);
 	}
 
 	@Override
@@ -206,7 +193,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	@Override
 	public String getOperationalStatus() {
-		return this.areConditionsMet() ? "Operational" : "No Rock";
+		return this.areConditionsMet() ? "Operational" : "No Items";
 	}
 
 }

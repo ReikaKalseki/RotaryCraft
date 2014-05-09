@@ -14,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -32,11 +31,7 @@ public class RenderRockMelter extends RotaryTERenderer
 {
 
 	private ModelLavaMaker LavaMakerModel = new ModelLavaMaker();
-	//private ModelLavaMakerV LavaMakerModelV = new ModelLavaMakerV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityLavaMakerAt(TileEntityLavaMaker tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -113,7 +108,7 @@ public class RenderRockMelter extends RotaryTERenderer
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityLavaMaker tr = (TileEntityLavaMaker)tile;
 		if (!tr.isEmpty() && tr.isInWorld()) {
-			Fluid f = FluidRegistry.LAVA;
+			Fluid f = tr.getContainedFluid();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			Icon ico = f.getIcon();
 			float u = ico.getMinU();

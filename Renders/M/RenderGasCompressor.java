@@ -18,7 +18,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelGasCompressor;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,7 +31,7 @@ public class RenderGasCompressor extends RotaryTERenderer
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityGasCompressorAt(TileEntityGasCompressor tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityGasCompressorAt(TileEntityFluidCompressor tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -67,7 +67,7 @@ public class RenderGasCompressor extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityGasCompressorAt((TileEntityGasCompressor)tile, par2, par4, par6, par8);
+			this.renderTileEntityGasCompressorAt((TileEntityFluidCompressor)tile, par2, par4, par6, par8);
 	}
 
 	@Override

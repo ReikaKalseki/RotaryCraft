@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -28,6 +29,7 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -42,8 +44,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
 public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
-
-	public boolean[] attractive = new boolean[inv.length];
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
@@ -62,23 +62,32 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 		int range = this.getRange();
 		AxisAlignedBB box = this.getBox(x, y, z, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
-		if (tickcount >= 20) {
-			for (int i = 0; i < inbox.size() && (i < this.maxMobs() || this.maxMobs() == -1); i++) {
-				EntityLiving ent = (EntityLiving)inbox.get(i);
+		Iterator<EntityLiving> it = inbox.iterator();
+		while (it.hasNext()) {
+			EntityLiving e = it.next();
+			NBTTagCompound nbt = e.getEntityData();
+			if (world.getTotalWorldTime()-nbt.getLong("baitbox") < 400)
+				it.remove();
+		}
+		if (!inbox.isEmpty() && (world.getTotalWorldTime()&3) == 0) {
+			for (int i = 0; i < Math.min(1, inbox.size()); i++) {
+				EntityLiving ent = (EntityLiving)inbox.get(rand.nextInt(inbox.size()));
 				//ReikaChatHelper.write(this.canAttract(ent)+"  "+ent.getEntityName());
 				//ReikaJavaLibrary.pConsole(this.canRepel(ent), ent instanceof EntityPigZombie);
 				if (this.canRepel(ent)) {
 					this.applyEffect(world, x, y, z, ent, false);
 					//ReikaChatHelper.write(this.canAttract(ent));
 				}
-				else if (this.canAttract(ent))
+				else if (this.canAttract(ent)) {
 					this.applyEffect(world, x, y, z, ent, true);
+				}
+				ent.getEntityData().setLong("baitbox", world.getTotalWorldTime());
 				//ReikaChatHelper.write(ent.getNavigator().getPath());
 				//PathEntity path = ent.getNavigator().getPathToXYZ(x, y, z);
 				//ent.getNavigator().setPath(path, 0.3F);
 			}
-			tickcount = 0;
 		}
+		tickcount = 0;
 	}
 
 	private int maxMobs() { //Omega + config file
@@ -139,6 +148,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 		if (world.isRemote)
 			;//return;
 		//ReikaChatHelper.write(attract+" for "+ent.getEntityName());
+		int r = this.getRange();
 		PathEntity path = null;
 		int[] xyz = new int[3];
 		if (!attract) {
@@ -149,9 +159,14 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			ent.getNavigator().clearPathEntity();
 			if (attract) {
 				path = ent.getNavigator().getPathToXYZ(x, y, z);
+				if (path == null)
+					path =  worldObj.getEntityPathToXYZ(ent, x, y, z, r, true, false, true, true);
+				//ReikaJavaLibrary.pConsole(x+":"+y+":"+z, Side.SERVER);
+				//ReikaJavaLibrary.pConsole(ent.getNavigator().getPathToXYZ(x, y, z), Side.SERVER);
 			}
 			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
+				//path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
+				path =  worldObj.getEntityPathToXYZ(ent, xyz[0], xyz[1], xyz[2], r, true, false, true, true);
 			}/*
 			ent.posY = 75;
 			if (ent.posY > 60) {

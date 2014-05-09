@@ -28,17 +28,18 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGasCompressor extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector, NBTMachine {
+public class TileEntityFluidCompressor extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector, NBTMachine {
 
 	private HybridTank tank = new HybridTank("gastank", 1000000000);
 	private int timer = 0;
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
-	public int getCapacity() {
+	public int getCapacity(Fluid f) {
 		int log2 = (int)(ReikaMathLibrary.logbase(torque, 2)/2);
 		long power = ReikaMathLibrary.longpow(10, log2);
-		return Math.min((int)(power/10), tank.getCapacity());
+		int factor = f.isGaseous() ? 8 : 1;
+		return factor*Math.min((int)(power/40), tank.getCapacity());
 	}
 
 	public Fluid getFluid() {
@@ -98,8 +99,10 @@ public class TileEntityGasCompressor extends TileEntityPowerReceiver implements 
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		int toadd = Math.min(resource.amount, this.getCapacity()-tank.getLevel());
-		if (toadd <= 0 || resource.getFluid() == null)
+		if (resource.getFluid() == null)
+			return 0;
+		int toadd = Math.min(resource.amount, this.getCapacity(resource.getFluid())-tank.getLevel());
+		if (toadd <= 0)
 			return 0;
 		FluidStack fs = new FluidStack(resource.getFluid(), toadd);
 		return this.canFill(from, resource.getFluid()) ? tank.fill(fs, doFill) : 0;
@@ -117,7 +120,7 @@ public class TileEntityGasCompressor extends TileEntityPowerReceiver implements 
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.isGaseous();
+		return true;//fluid.isGaseous();
 	}
 
 	@Override

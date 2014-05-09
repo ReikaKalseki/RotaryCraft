@@ -56,7 +56,7 @@ public class RecipesExtractor
 	 * @param metadata The Item Metadata
 	 * @param itemstack The ItemStack for the result
 	 */
-	public void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
+	private void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
 	{
 		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));

@@ -40,10 +40,11 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
 
 
-public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver
+public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer
 {
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 
@@ -320,16 +321,26 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 
 	@Override
 	public boolean canWrench(EntityPlayer player, int x, int y, int z) {
-		return true;
+		return true;//buildcraft
 	}
 
 	@Override
 	public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
-
+		//buildcraft
 	}
 
 	@Override
 	public final void damageScrewdriver(World world, EntityPlayer player) {
 		//project red
+	}
+
+	@Override
+	public boolean isActive(ItemStack is) {
+		return true;//extratrees
+	}
+
+	@Override
+	public void onHammerUsed(ItemStack is, EntityPlayer ep) {
+		//extratrees
 	}
 }

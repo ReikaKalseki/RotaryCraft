@@ -54,12 +54,14 @@ import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
 import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockGrafter;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShovel;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSickle;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSword;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemChargedGrafter;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemFireballLauncher;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemFlamethrower;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemGravelGun;
@@ -141,7 +143,9 @@ public enum ItemRegistry implements RegistryEnum {
 	UPGRADE(240, true,			"#item.engineupgrade",		ItemEngineUpgrade.class),
 	CRAFTPATTERN(34, false,		"item.craftpattern",		ItemCraftPattern.class),
 	BEDSICKLE(36, false,		"item.bedsickle",			ItemBedrockSickle.class),
-	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class);
+	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class),
+	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class),
+	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class);
 
 	private int index;
 	private boolean hasSubtypes;

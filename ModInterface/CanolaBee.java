@@ -51,7 +51,7 @@ public class CanolaBee implements IAlleleBeeSpecies {
 
 	@Override
 	public int getComplexity() {
-		return 1;
+		return 0;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class CanolaBee implements IAlleleBeeSpecies {
 
 	@Override
 	public ItemStack[] getResearchBounty(World paramWorld, String paramString, IIndividual paramIIndividual, int paramInt) {
-		return null;
+		return new ItemStack[0];
 	}
 
 	@Override

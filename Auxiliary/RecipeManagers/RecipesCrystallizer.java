@@ -46,13 +46,13 @@ public class RecipesCrystallizer
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Block.stone));
 	}
 
-	public void addRecipe(Fluid f, int amount, ItemStack out)
+	private void addRecipe(Fluid f, int amount, ItemStack out)
 	{
 		recipeList.put(f, out);
 		amounts.put(f, amount);
 	}
 
-	public void addRecipe(String s, int amount, ItemStack out)
+	private void addRecipe(String s, int amount, ItemStack out)
 	{
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)

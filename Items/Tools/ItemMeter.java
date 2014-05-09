@@ -57,7 +57,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -137,7 +137,7 @@ public class ItemMeter extends ItemRotaryTool
 				RotaryAux.writeMessage("emptyres");
 		}
 		if (m == MachineRegistry.GASTANK) {
-			TileEntityGasCompressor clicked = (TileEntityGasCompressor)world.getBlockTileEntity(x, y, z);
+			TileEntityFluidCompressor clicked = (TileEntityFluidCompressor)world.getBlockTileEntity(x, y, z);
 			if (clicked.isEmpty())
 				ReikaChatHelper.writeString(String.format("%s is empty.", m.getName()));
 			else

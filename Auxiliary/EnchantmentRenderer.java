@@ -104,13 +104,13 @@ public abstract class EnchantmentRenderer {
 		if (tile.hasWorldObj())
 			ReikaRenderHelper.enableLighting();
 
-		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
 		GL11.glPopMatrix();
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	public static void renderShine(double p2, double p4, double p6, double dx, double dy, double dz) {
