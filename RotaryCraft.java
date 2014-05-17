@@ -405,8 +405,9 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!this.isLocked())
 			RecipesGrinder.getRecipes().addOreRecipes();
 
-		if (ModList.FORESTRY.isLoaded())
-			new CanolaBee();
+		if (ModList.FORESTRY.isLoaded()) {
+			new CanolaBee().register();
+		}
 	}
 
 	@EventHandler

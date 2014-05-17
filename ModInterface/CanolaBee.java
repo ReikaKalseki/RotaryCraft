@@ -12,15 +12,11 @@ package Reika.RotaryCraft.ModInterface;
 import java.awt.Color;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -28,8 +24,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
@@ -37,10 +31,9 @@ import forestry.api.genetics.IPollinatable;
 public class CanolaBee extends BeeSpecies {
 
 	public CanolaBee() { //cultivated + meadows
-		super();
-		this.addSpecialty(ItemStacks.slipperyComb, 40); //make produce normal waxy combs;
+		super("Slippery", "bee.canola", "Lubrica", "Reika");
+		this.addSpecialty(ItemStacks.slipperyComb, 40); //make produce normal waxy combs for normal products;
 		this.addBreeding("Meadows", "Cultivated", 20);
-		AlleleManager.alleleRegistry.getClassification("family.apidae").addMemberGroup(new BranchCanola());
 	}
 
 	private final class AlleleCanola implements IAlleleFlowers {
@@ -103,98 +96,9 @@ public class CanolaBee extends BeeSpecies {
 		}
 	}
 
-	private final class BranchCanola implements IClassification {
-
-		@Override
-		public EnumClassLevel getLevel() {
-			return EnumClassLevel.GENUS;
-		}
-
-		@Override
-		public String getUID() {
-			return "bees.canola";
-		}
-
-		@Override
-		public String getName() {
-			return "Slippery";
-		}
-
-		@Override
-		public String getScientific() {
-			return "Lubrica";
-		}
-
-		@Override
-		public String getDescription() {
-			return "These bees produce a greasy comb that can be processed into a fluid that seems to aid mechanical motion.";
-		}
-
-		@Override
-		public IClassification[] getMemberGroups() {
-			return new IClassification[0];
-		}
-
-		@Override
-		public void addMemberGroup(IClassification icl) {
-
-		}
-
-		@Override
-		public IAlleleSpecies[] getMemberSpecies() {
-			return new IAlleleSpecies[0];
-		}
-
-		@Override
-		public void addMemberSpecies(IAlleleSpecies ias) {
-
-		}
-
-		@Override
-		public IClassification getParent() {
-			return null;
-		}
-
-		@Override
-		public void setParent(IClassification icl) {
-
-		}
-
-	}
-
 	@Override
 	public String getDescription() {
 		return "These bees produce a greasy comb that can be processed into a fluid that seems to aid mechanical motion.";
-	}
-
-	@Override
-	public String getBinomial() {
-		return "Lubrica";
-	}
-
-	@Override
-	public String getAuthority() {
-		return "Reika";
-	}
-
-	@Override
-	public IClassification getBranch() {
-		return null;
-	}
-
-	@Override
-	public int getComplexity() {
-		return 0;
-	}
-
-	@Override
-	public float getResearchSuitability(ItemStack is) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack[] getResearchBounty(World paramWorld, String paramString, IIndividual paramIIndividual, int paramInt) {
-		return new ItemStack[0];
 	}
 
 	@Override
@@ -228,18 +132,8 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public String getUID() {
-		return "bee.canola";
-	}
-
-	@Override
 	public boolean isDominant() {
 		return true;
-	}
-
-	@Override
-	public String getName() {
-		return "Slippery";
 	}
 
 	@Override
@@ -260,12 +154,6 @@ public class CanolaBee extends BeeSpecies {
 	@Override
 	public String getEntityTexture() {
 		return "";
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(short ps) {
-		return ReikaTextureHelper.getMissingIcon();
 	}
 
 	@Override
@@ -311,6 +199,21 @@ public class CanolaBee extends BeeSpecies {
 	@Override
 	public int getHumidityTolerance() {
 		return 1;
+	}
+
+	@Override
+	public ToleranceDirection getHumidityToleranceDir() {
+		return ToleranceDirection.BOTH;
+	}
+
+	@Override
+	public ToleranceDirection getTemperatureToleranceDir() {
+		return ToleranceDirection.BOTH;
+	}
+
+	@Override
+	public Effect getEffect() {
+		return Effect.NONE;
 	}
 
 }
