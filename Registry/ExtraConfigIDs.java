@@ -35,6 +35,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	//HYDRAULICITEMS("ItemBlock IDs", "Hydraulic Items", 30646, Item.class),
 	MODEXTRACTS("Resource Item IDs", "Mod Ore Extractor Items", 30644, Item.class),
 	MODINGOTS("Resource Item IDs", "Mod Ore Ingots", 30645, Item.class),
+	INTERFACE("Resource Item IDs", "Mod Interface", 30646, Item.class),
 
 	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 

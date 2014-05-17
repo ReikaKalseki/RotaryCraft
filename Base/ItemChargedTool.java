@@ -43,13 +43,13 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 		par3List.add(new ItemStack(par1, 1, 32000));
 	}
 
-	protected void noCharge() {
+	protected final void noCharge() {
 		if (ConfigRegistry.CLEARCHAT.getState())
 			ReikaChatHelper.clearChat();
 		ReikaChatHelper.write("Tool charge is depleted!");
 	}
 
-	protected void warnCharge(ItemStack is) {
+	protected final void warnCharge(ItemStack is) {
 		if (ConfigRegistry.CLEARCHAT.getState())
 			ReikaChatHelper.clearChat();
 		if (is.getItemDamage() == 2) {

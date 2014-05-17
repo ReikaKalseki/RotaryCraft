@@ -116,6 +116,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private void setJammed(boolean jam) {
 		jammed = jam;
 		ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -326,7 +327,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (this.isMineableBedrock(world, xread, yread, zread)) {
 				ItemStack is = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt());
 				if (!this.chestCheck(world, x, y, z, is)) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 				}
 				return true;
 			}
@@ -336,7 +337,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					ItemStack is = new ItemStack(RotaryCraft.spawner);
 					ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 					if (!this.chestCheck(world, x, y, z, is))
-						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+						ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 					return true;
 				}
 			}
@@ -348,14 +349,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					ItemStack is = contents.get(i);
 					boolean fits = this.chestCheck(world, x, y, z, is);
 					if (!fits) {
-						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+						ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 					}
 				}
 			}
 			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(world, xread, yread, zread)) {
 				ItemStack is = new ItemStack(id, 1, this.getSilkTouchMetaDropped(id, meta));
 				if (!this.chestCheck(world, x, y, z, is)) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 				}
 				return true;
 			}
@@ -363,7 +364,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			for (int i = 0; i < items.size(); i++) {
 				ItemStack is = items.get(i);
 				if (!this.chestCheck(world, x, y, z, is)) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, is);
+					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 				}
 			}
 		}

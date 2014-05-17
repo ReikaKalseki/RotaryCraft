@@ -75,6 +75,7 @@ import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
+import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.OreForcer;
 import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -177,6 +178,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Item modextracts;
 	public static Item modingots;
 	public static Item spawner;
+	public static Item modinterface;
 
 	public static Block canola;
 	public static Block miningpipe;
@@ -402,6 +404,9 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (!this.isLocked())
 			RecipesGrinder.getRecipes().addOreRecipes();
+
+		if (ModList.FORESTRY.isLoaded())
+			new CanolaBee();
 	}
 
 	@EventHandler
@@ -423,6 +428,7 @@ public class RotaryCraft extends DragonAPIMod {
 		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
 		engineitems = new ItemEnginePlacer(ExtraConfigIDs.ENGINEITEMS.getValue()).setUnlocalizedName("engines");
 		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 8).setUnlocalizedName("powder");
+		modinterface = new ItemMulti(ExtraConfigIDs.INTERFACE.getValue(), 9).setUnlocalizedName("modinterface");
 
 		shaftitems = new ItemShaftPlacer(ExtraConfigIDs.SHAFTITEMS.getValue()).setUnlocalizedName("shafts");
 		gbxitems = new ItemGearPlacer(ExtraConfigIDs.GEARBOXITEMS.getValue()).setUnlocalizedName("gbxs");

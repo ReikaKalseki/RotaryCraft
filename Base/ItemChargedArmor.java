@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public abstract class ItemChargedArmor extends ItemRotaryArmor {
 
@@ -21,8 +22,9 @@ public abstract class ItemChargedArmor extends ItemRotaryArmor {
 		hasSubtypes = true;
 	}
 
-	protected void warnCharge(ItemStack is) {
-		ReikaChatHelper.clearChat();
+	protected final void warnCharge(ItemStack is) {
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		if (is.getItemDamage() == 2) {
 			ReikaChatHelper.write("Armor charge is very low (2 kJ)!");
 		}
@@ -37,8 +39,9 @@ public abstract class ItemChargedArmor extends ItemRotaryArmor {
 		}
 	}
 
-	protected void noCharge() {
-		ReikaChatHelper.clearChat();
+	protected final void noCharge() {
+		if (ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		ReikaChatHelper.write("Armor charge is depleted!");
 	}
 

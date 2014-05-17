@@ -35,6 +35,7 @@ import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -77,6 +78,10 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public abstract MachineRegistry getMachine();
 
 	public final TextureFetcher getRenderer() {
+		return this.getTileRenderer();
+	}
+
+	public final RotaryTERenderer getTileRenderer() {
 		if (this.getMachine().hasRender())
 			return RotaryRenderList.getRenderForMachine(this.getMachine());
 		else
@@ -118,7 +123,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final double getMaxRenderDistanceSquared() {
+	public double getMaxRenderDistanceSquared() {
 		return 4096D;
 	}
 

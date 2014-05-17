@@ -185,6 +185,8 @@ public final class ItemStacks {
 	public static final ItemStack lonsblock = new ItemStack(RotaryCraft.decoblock, 1, 2);
 	public static final ItemStack shieldblock = new ItemStack(RotaryCraft.decoblock, 1, 3);
 
+	public static final ItemStack slipperyComb = new ItemStack(RotaryCraft.modinterface, 1, 0);
+
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 
 	public static final PreferentialItemStack electric = new PreferentialItemStack(new ItemStack(Item.ingotGold), "ingotElectrum");

@@ -9,25 +9,158 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.util.Map;
+import java.awt.Color;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.IIconProvider;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IClassification;
+import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
 
-public class CanolaBee implements IAlleleBeeSpecies {
+public class CanolaBee extends BeeSpecies {
+
+	public CanolaBee() { //cultivated + meadows
+		super();
+		this.addSpecialty(ItemStacks.slipperyComb, 40); //make produce normal waxy combs;
+		this.addBreeding("Meadows", "Cultivated", 20);
+		AlleleManager.alleleRegistry.getClassification("family.apidae").addMemberGroup(new BranchCanola());
+	}
+
+	private final class AlleleCanola implements IAlleleFlowers {
+
+		public AlleleCanola() {
+			AlleleManager.alleleRegistry.registerAllele(this);
+		}
+
+		@Override
+		public String getUID() {
+			return "flower.canola";
+		}
+
+		@Override
+		public boolean isDominant() {
+			return true;
+		}
+
+		@Override
+		public String getName() {
+			return "Canola";
+		}
+
+		@Override
+		public IFlowerProvider getProvider() {
+			return new FlowerProviderCanola();
+		}
+	}
+
+	private final class FlowerProviderCanola implements IFlowerProvider {
+
+		@Override
+		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
+			return world.getBlockId(x, y, z) == RotaryCraft.canola.blockID;
+		}
+
+		@Override
+		public boolean isAcceptedPollinatable(World world, IPollinatable p) {
+			return false;
+		}
+
+		@Override
+		public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
+			return true;
+		}
+
+		@Override
+		public String getDescription() {
+			return "Canola Plants";
+		}
+
+		@Override
+		public ItemStack[] affectProducts(World world, IIndividual individual, int x, int y, int z, ItemStack[] products) {
+			return products;
+		}
+
+		@Override
+		public ItemStack[] getItemStacks() {
+			return new ItemStack[]{new ItemStack(RotaryCraft.canola)};
+		}
+	}
+
+	private final class BranchCanola implements IClassification {
+
+		@Override
+		public EnumClassLevel getLevel() {
+			return EnumClassLevel.GENUS;
+		}
+
+		@Override
+		public String getUID() {
+			return "bees.canola";
+		}
+
+		@Override
+		public String getName() {
+			return "Slippery";
+		}
+
+		@Override
+		public String getScientific() {
+			return "Lubrica";
+		}
+
+		@Override
+		public String getDescription() {
+			return "These bees produce a greasy comb that can be processed into a fluid that seems to aid mechanical motion.";
+		}
+
+		@Override
+		public IClassification[] getMemberGroups() {
+			return new IClassification[0];
+		}
+
+		@Override
+		public void addMemberGroup(IClassification icl) {
+
+		}
+
+		@Override
+		public IAlleleSpecies[] getMemberSpecies() {
+			return new IAlleleSpecies[0];
+		}
+
+		@Override
+		public void addMemberSpecies(IAlleleSpecies ias) {
+
+		}
+
+		@Override
+		public IClassification getParent() {
+			return null;
+		}
+
+		@Override
+		public void setParent(IClassification icl) {
+
+		}
+
+	}
 
 	@Override
 	public String getDescription() {
@@ -36,7 +169,7 @@ public class CanolaBee implements IAlleleBeeSpecies {
 
 	@Override
 	public String getBinomial() {
-		return "Illitus";
+		return "Lubrica";
 	}
 
 	@Override
@@ -91,18 +224,12 @@ public class CanolaBee implements IAlleleBeeSpecies {
 
 	@Override
 	public int getIconColour(int paramInt) {
-		return 0;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return null;
+		return Color.WHITE.getRGB();
 	}
 
 	@Override
 	public String getUID() {
-		return null;
+		return "bee.canola";
 	}
 
 	@Override
@@ -112,12 +239,7 @@ public class CanolaBee implements IAlleleBeeSpecies {
 
 	@Override
 	public String getName() {
-		return "Canola";
-	}
-
-	@Override
-	public IBeeRoot getRoot() {
-		return null;
+		return "Slippery";
 	}
 
 	@Override
@@ -126,29 +248,69 @@ public class CanolaBee implements IAlleleBeeSpecies {
 	}
 
 	@Override
-	public Map getProducts() {
-		return null;
-	}
-
-	@Override
-	public Map getSpecialty() {
-		return null;
-	}
-
-	@Override
-	public boolean isJubilant(IBeeGenome paramIBeeGenome, IBeeHousing paramIBeeHousing) {
-		return false;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(EnumBeeType paramEnumBeeType, int paramInt) {
-		return null;
+	public boolean isJubilant(IBeeGenome ibg, IBeeHousing ibh) {
+		World world = ibh.getWorld();
+		int x = ibh.getXCoord();
+		int y = ibh.getYCoord();
+		int z = ibh.getZCoord();
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		return Tamb > 15 && Tamb < 35;
 	}
 
 	@Override
 	public String getEntityTexture() {
-		return null;
+		return "";
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(short ps) {
+		return ReikaTextureHelper.getMissingIcon();
+	}
+
+	@Override
+	public IAllele getFlowerAllele() {
+		return new AlleleCanola();
+	}
+
+	@Override
+	public Speeds getProductionSpeed() {
+		return Speeds.FASTER;
+	}
+
+	@Override
+	public Fertility getFertility() {
+		return Fertility.NORMAL;
+	}
+
+	@Override
+	public Flowering getFloweringRate() {
+		return Flowering.FASTER;
+	}
+
+	@Override
+	public Life getLifespan() {
+		return Life.SHORTENED;
+	}
+
+	@Override
+	public Territory getTerritorySize() {
+		return Territory.DEFAULT;
+	}
+
+	@Override
+	public boolean isCaveDwelling() {
+		return false;
+	}
+
+	@Override
+	public int getTemperatureTolerance() {
+		return 1;
+	}
+
+	@Override
+	public int getHumidityTolerance() {
+		return 1;
 	}
 
 }

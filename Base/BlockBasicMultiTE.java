@@ -467,8 +467,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						}
 					}
 					td.setMessage(sb.toString());
-					//String text = sb.toString();
-					//ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.DISPLAY.getMinValue(), text, td);
 				}
 				catch (Exception e) {
 					ReikaChatHelper.writeString("Error reading book.");

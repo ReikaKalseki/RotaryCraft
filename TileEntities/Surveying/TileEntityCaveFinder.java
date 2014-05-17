@@ -14,11 +14,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Renders.M.RenderCaveFinder;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityCaveFinder extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -29,8 +33,37 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	private boolean[][][] points = new boolean[this.getRange()*2+1][this.getRange()*2+1][this.getRange()*2+1];
 	private boolean needsCalc = true;
 
-	public TileEntityCaveFinder() {
-		this.setSrc(xCoord, yCoord, zCoord);
+	private Scanner scanner = new Scanner(this);
+
+	private final class Scanner implements Runnable {
+
+		private final TileEntityCaveFinder tile;
+
+		private Scanner(TileEntityCaveFinder te) {
+			tile = te;
+		}
+
+		@Override
+		public void run() {
+			int r = tile.getRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int x = tile.getSourceX()+i;
+						int y = tile.getSourceY()+j;
+						int z = tile.getSourceZ()+k;
+						if (ReikaWorldHelper.cornerHasAirAdjacent(worldObj, x, y, z)) {
+							tile.points[i+r][j+r][k+r] = true;
+							//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
+							//ReikaJavaLibrary.pConsole((i+r)+", "+(j+r)+", "+(k+r));
+						}
+						else {
+							tile.points[i+r][j+r][k+r] = false;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -43,7 +76,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 		}
 		on = true;
 
-		if (src[0] == 0 && src[1] == 0 && src[2] == 0)
+		if (src[0] == 0 && src[1] == 0 && src[2] == 0 && this.getTicksExisted() < 2)
 			this.setSrc(x, y, z);
 
 		if (rendermode == 0) {
@@ -59,40 +92,51 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 			this.setSrc(px, py, pz);
 		}
 
-		if (needsCalc)
+		int t = this.getUpdateFrequency();
+		if (needsCalc || (world.getTotalWorldTime()&t) == 0)
 			this.calculatePoints();
 
 		//ReikaJavaLibrary.pConsole(Arrays.deepToString(points));
 	}
 
-	private void calculatePoints() {
+	private int getUpdateFrequency() {
 		int r = this.getRange();
-		for (int i = -r; i <= r; i++) {
-			for (int j = -r; j <= r; j++) {
-				for (int k = -r; k <= r; k++) {
-					int x = this.getSourceX()+i;
-					int y = this.getSourceY()+j;
-					int z = this.getSourceZ()+k;
-					if (ReikaWorldHelper.cornerHasAirAdjacent(worldObj, x, y, z)) {
-						points[i+r][j+r][k+r] = true;
-					}
-					else
-						points[i+r][j+r][k+r] = false;
-				}
-			}
-		}
-		needsCalc = false;
+		if (r < 16)
+			return 1;
+		else if (r < 32)
+			return 3;
+		else if (r < 64)
+			return 7;
+		else if (r < 128)
+			return 15;
+		return 31;
 	}
 
-	public boolean hasPointAt(int x, int y, int z) {
+	private void calculatePoints() {
+		Thread t = new Thread(scanner);
+		t.start();
+		needsCalc = false;
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			RenderCaveFinder rcf = (RenderCaveFinder)this.getRenderer();
+			rcf.removeListFor(this);
+		}
+	}
+
+	public boolean hasPointAt(int dx, int dy, int dz) {
 		int r = this.getRange();
-		int ix = x-this.getSourceX();
-		int iy = y-this.getSourceY();
-		int iz = z-this.getSourceZ();
+		if (Math.abs(dx) > r*2 || Math.abs(dy) > r*2 || Math.abs(dz) > r*2) {
+			//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz);
+			return false;
+		}
+		if (Math.abs(dx) < 0 || Math.abs(dy) < 0 || Math.abs(dz) < 0) {
+			//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz);
+			return false;
+		}
 		try {
-			return points[ix+r][iy+r][iz+r];
+			return points[dx][dy][dz];
 		}
 		catch (Exception e) {
+			ReikaJavaLibrary.pConsole("Exception at "+dx+", "+dy+", "+dz+"!");
 			return false;
 		}
 	}
@@ -106,11 +150,11 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	protected void animateWithTick(World world, int x, int y, int z) {
 
 	}
-	/*
+
 	@Override
 	public double getMaxRenderDistanceSquared() {
 		return 65536D;
-	}*/
+	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {

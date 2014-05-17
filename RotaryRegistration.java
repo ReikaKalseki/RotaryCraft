@@ -20,6 +20,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
@@ -144,6 +145,13 @@ public class RotaryRegistration {
 		ItemStacks.registerSteels();
 
 		OreDictionary.registerOre("dustCoal", ItemStacks.coaldust);
+
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			String name = ore.getProductLabel();
+			ItemStack is = ExtractorModOres.getFlakeProduct(ore);
+			OreDictionary.registerOre("dust"+name, is);
+		}
 	}
 
 	public static void setupLiquids() {

@@ -17,12 +17,14 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ColumnArray;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
@@ -38,6 +40,8 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.api.core.IAreaProvider;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {
 
@@ -98,6 +102,10 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			}
 			}*/
 
+		if (this.getTicksExisted() < 1)
+			this.getCoordsFromIAP(world, x, y, z);
+		//ReikaJavaLibrary.pConsole(coords, Side.SERVER);
+
 		if (coords.isEmpty()) {
 			return;
 		}
@@ -110,7 +118,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		if (!world.isBlockIndirectlyGettingPowered(x, y, z))
 			return;
 
-		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.operationComplete(tickcount, 0));
+		ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.getOperationTime(), Side.SERVER);
 
 		if (tickcount >= this.getOperationTime()) {
 			int index = rand.nextInt(coords.getSize());
@@ -126,16 +134,38 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		}
 	}
 
+	private void getCoordsFromIAP(World world, int x, int y, int z) {
+		coords.clear();
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+			if (te instanceof IAreaProvider) {
+				IAreaProvider iap = (IAreaProvider)te;
+				for (int mx = iap.xMin()-1; mx <= iap.xMax()+1; mx++) {
+					for (int mz = iap.zMin()-1; mz <= iap.zMax()+1; mz++) {
+						this.addTile(mx, y, mz);
+					}
+				}
+				iap.removeFromWorld();
+				return;
+			}
+		}
+	}
+
 	public int[] getUniqueID() {
 		return new int[]{xCoord, yCoord, zCoord};
 	}
 
 	private boolean setBiome(World world, int x, int z) {
 		BiomeGenBase from = world.getBiomeGenForCoords(x, z);
-		if (!this.isValidTarget(from))
+		if (!this.isValidTarget(from)) {
 			return false;
-		if (!this.getReqsForTransform(from, target))
-			;//return false;
+		}
+		if (!DragonAPICore.debugtest && !this.getReqsForTransform(from, target))
+			return false;
 		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		if (this.modifyBlocks())
 			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);

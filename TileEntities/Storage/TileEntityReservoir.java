@@ -391,6 +391,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		addCreativeFluid("rc sodium");
 		addCreativeFluid("rc chlorine");
 		addCreativeFluid("rc oxygen");
+		addCreativeFluid("rc co2");
 		addCreativeFluid("heavy water");
 		addCreativeFluid("fuel");
 		addCreativeFluid("oil");

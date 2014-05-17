@@ -105,17 +105,21 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			}
 			charge = 0;
 		}
-		if (charge > 2097152) {
-			EntityLightningBolt b = new EntityLightningBolt(world, x+0.5, y, z+0.5);
-			world.spawnEntityInWorld(b);
-			charge = 0;
-			world.setBlock(x, y, z, 0);
-			world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4F, true, true);
+		if (charge > 2097152 && !world.isRemote) {
+			this.detonate(world, x, y, z);
 		}
 
 		if (world.isRaining() && world.canBlockSeeTheSky(x, y+1, z)) {
 			charge *= 0.5;
 		}
+	}
+
+	private void detonate(World world, int x, int y, int z) {
+		EntityLightningBolt b = new EntityLightningBolt(world, x+0.5, y, z+0.5);
+		world.spawnEntityInWorld(b);
+		charge = 0;
+		world.setBlock(x, y, z, 0);
+		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4F, true, true);
 	}
 
 	public void dischargeToBlock(int x, int y, int z, Shockable s) {

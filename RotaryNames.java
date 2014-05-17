@@ -101,6 +101,10 @@ public class RotaryNames {
 		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice", "misc.redgolddust", "misc.compost"
 	};
 
+	public static final String[] interfaceNames = {
+		"comb.slippery", "propolis.slippery"
+	};
+
 	public static final String[] extractNames = {
 		"extract.coaldust", "extract.irondust", "extract.golddust", "extract.reddust",
 		"extract.bluedust", "extract.diadust", "extract.greendust", "extract.quartzdust",
