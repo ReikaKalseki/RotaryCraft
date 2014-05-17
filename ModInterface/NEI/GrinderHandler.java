@@ -20,8 +20,10 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -106,7 +108,10 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (RecipesGrinder.getRecipes().isProduct(result)) {
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.lubebucket)) {
+			arecipes.add(new CanolaRecipe());
+		}
+		else if (RecipesGrinder.getRecipes().isProduct(result)) {
 			List<ItemStack> is = RecipesGrinder.getRecipes().getSources(result);
 			if (is != null && !is.isEmpty())
 				arecipes.add(new GrinderRecipe(is));

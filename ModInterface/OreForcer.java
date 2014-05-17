@@ -23,6 +23,7 @@ import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.DartOreHandler;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.GalacticCraftHandler;
 import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
@@ -144,7 +145,15 @@ public final class OreForcer {
 		case PROJRED:
 			this.intercraftPRGems();
 			break;
+		case GALACTICRAFT:
+			this.intercraftSilicon();
+			break;
 		}
+	}
+
+	private void intercraftSilicon() {
+		ItemStack silicon = new ItemStack(GalacticCraftHandler.getInstance().basicItemID, 1, GalacticCraftHandler.siliconMeta);
+		GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.SILICON), silicon);
 	}
 
 	private void intercraftPRGems() {

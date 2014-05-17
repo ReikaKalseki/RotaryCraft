@@ -186,6 +186,7 @@ public final class ItemStacks {
 	public static final ItemStack shieldblock = new ItemStack(RotaryCraft.decoblock, 1, 3);
 
 	public static final ItemStack slipperyComb = new ItemStack(RotaryCraft.modinterface, 1, 0);
+	public static final ItemStack slipperyPropolis = new ItemStack(RotaryCraft.modinterface, 1, 1);
 
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 

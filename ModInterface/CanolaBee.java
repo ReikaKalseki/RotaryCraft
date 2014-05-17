@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -31,8 +31,12 @@ import forestry.api.genetics.IPollinatable;
 public class CanolaBee extends BeeSpecies {
 
 	public CanolaBee() { //cultivated + meadows
-		super("Slippery", "bee.canola", "Lubrica", "Reika");
-		this.addSpecialty(ItemStacks.slipperyComb, 40); //make produce normal waxy combs for normal products;
+		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika");
+		this.addSpecialty(ItemStacks.slipperyComb, 40);
+		this.addSpecialty(ItemRegistry.CANOLA.getStackOf(), 5);
+		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
+		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
+		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
 		this.addBreeding("Meadows", "Cultivated", 20);
 	}
 
@@ -127,8 +131,8 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public int getIconColour(int paramInt) {
-		return Color.WHITE.getRGB();
+	public int getOutlineColor() {
+		return 0xffd500;
 	}
 
 	@Override
@@ -178,7 +182,7 @@ public class CanolaBee extends BeeSpecies {
 
 	@Override
 	public Life getLifespan() {
-		return Life.SHORTENED;
+		return Life.SHORT;
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 		if (m == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
-			return te.getFuelMultiplier() > 0;
+			return te.canProducePower();
 		}
 		return true;
 	}
@@ -107,7 +107,10 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 			}
 		}
 		else {
-			torque = genomega = 0;
+			genomega = 0;
+			if (omega == 0) {
+				torque = 0;
+			}
 		}
 		this.updateSpeed(genomega, genomega >= omega);
 		power = omega*torque;

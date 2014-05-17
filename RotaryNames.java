@@ -102,7 +102,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] interfaceNames = {
-		"comb.slippery", "propolis.slippery"
+		"interface.slipperycomb", "interface.slipperypropolis"
 	};
 
 	public static final String[] extractNames = {
@@ -183,6 +183,10 @@ public class RotaryNames {
 		for (int i = 0; i < powderNames.length; i++) {
 			ItemStack powderstack = new ItemStack(RotaryCraft.powders, 1, i);
 			LanguageRegistry.addName(powderstack, getName(powderNames, powderstack.getItemDamage()));
+		}
+		for (int i = 0; i < interfaceNames.length; i++) {
+			ItemStack interstack = new ItemStack(RotaryCraft.modinterface, 1, i);
+			LanguageRegistry.addName(interstack, getName(interfaceNames, interstack.getItemDamage()));
 		}
 		for (int i = 0; i < shaftItemNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), getName(shaftItemNames, i));

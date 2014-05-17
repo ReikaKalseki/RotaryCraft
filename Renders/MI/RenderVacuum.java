@@ -26,11 +26,8 @@ public class RenderVacuum extends RotaryTERenderer
 {
 
 	private ModelVacuum VacuumModel = new ModelVacuum();
-	//private ModelVacuumV VacuumModelV = new ModelVacuumV();
+	private int glList = -1;
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityVacuumAt(TileEntityVacuum tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -56,6 +53,7 @@ public class RenderVacuum extends RotaryTERenderer
 		float var13;
 
 		var14.renderAll(null, 0, 0);
+
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

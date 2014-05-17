@@ -205,6 +205,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.compacts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.extracts.itemID, items[0]);
 		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gearunits.itemID, items[0]);
+		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modinterface.itemID, items[0]);
 
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getShiftedID()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());

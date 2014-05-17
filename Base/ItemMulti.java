@@ -202,7 +202,7 @@ public class ItemMulti extends ItemBasic {
 		case 8: //powders
 			j = RotaryNames.powderNames.length;
 			break;
-		case 9: //mod interface
+		case 14: //mod interface
 			j = RotaryNames.interfaceNames.length;
 			break;
 		case 11: //shafts
@@ -287,7 +287,7 @@ public class ItemMulti extends ItemBasic {
 		case 8:
 			s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 			break;
-		case 9:
+		case 14:
 			s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
 			break;
 		case 10:

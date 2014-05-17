@@ -24,6 +24,8 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
@@ -112,6 +114,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.recipes.RecipeManagers;
 
 
 @Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
@@ -407,6 +410,9 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (ModList.FORESTRY.isLoaded()) {
 			new CanolaBee().register();
+			RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
+			FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 150);
+			RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
 		}
 	}
 
@@ -428,8 +434,8 @@ public class RotaryCraft extends DragonAPIMod {
 		extracts = new ItemMulti(ExtraConfigIDs.EXTRACTS.getValue(), 4).setUnlocalizedName("extracts");
 		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
 		engineitems = new ItemEnginePlacer(ExtraConfigIDs.ENGINEITEMS.getValue()).setUnlocalizedName("engines");
-		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 8).setUnlocalizedName("powder");
-		modinterface = new ItemMulti(ExtraConfigIDs.INTERFACE.getValue(), 9).setUnlocalizedName("modinterface");
+		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 12).setUnlocalizedName("powder");
+		modinterface = new ItemMulti(ExtraConfigIDs.INTERFACE.getValue(), 14).setUnlocalizedName("modinterface");
 
 		shaftitems = new ItemShaftPlacer(ExtraConfigIDs.SHAFTITEMS.getValue()).setUnlocalizedName("shafts");
 		gbxitems = new ItemGearPlacer(ExtraConfigIDs.GEARBOXITEMS.getValue()).setUnlocalizedName("gbxs");
