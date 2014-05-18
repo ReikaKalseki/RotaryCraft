@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop {
 
-	Random rand = new Random();
+	private final Random rand = new Random();
 
 	private static final ArrayList<Integer> farmBlocks = new ArrayList();
 
@@ -55,7 +55,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return ItemRegistry.CANOLA.getStackOf	();
+		return ItemRegistry.CANOLA.getStackOf();
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 		}
 		else if (world.getBlockLightValue(x, y, z) >= 9)  {
 			int metadata = world.getBlockMetadata(x, y, z);
-			if (metadata < 9) {
+			if (metadata < 9 && world.getBlockMetadata(x, y-1, z) > 0) {
 				if (par5Random.nextInt(3) == 0) {
 					metadata++;
 					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);

@@ -71,7 +71,7 @@ public class CanolaBee extends BeeSpecies {
 
 		@Override
 		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
-			return world.getBlockId(x, y, z) == RotaryCraft.canola.blockID;
+			return world.getBlockId(x, y, z) == RotaryCraft.canola.blockID && world.getBlockMetadata(x, y, z) < 9;
 		}
 
 		@Override
@@ -81,7 +81,28 @@ public class CanolaBee extends BeeSpecies {
 
 		@Override
 		public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
-			return true;
+			int r = 24;
+			boolean flag = false;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int dx = x+i;
+						int dy = y+j;
+						int dz = z+k;
+						if (dy > 0) {
+							int id = world.getBlockId(dx, dy, dz);
+							int meta = world.getBlockMetadata(dx, dy, dz);
+							if (id == RotaryCraft.canola.blockID) {
+								if (meta < 9) {
+									world.scheduleBlockUpdate(dx, dy, dz, id, 20+rand.nextInt(300));
+									flag = true;
+								}
+							}
+						}
+					}
+				}
+			}
+			return flag;
 		}
 
 		@Override
@@ -167,7 +188,7 @@ public class CanolaBee extends BeeSpecies {
 
 	@Override
 	public Speeds getProductionSpeed() {
-		return Speeds.FASTER;
+		return Speeds.FAST;
 	}
 
 	@Override
