@@ -176,11 +176,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	@Override
-	public void validate() {
-		super.validate();
-	}
-
-	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
 		return type == PipeType.POWER && this.isPipeConnected(with) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}

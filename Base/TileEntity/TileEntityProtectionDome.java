@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver implements RangedEffect, GuiController {
 
@@ -60,6 +62,13 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 		if (range > max)
 			return max;
 		return range;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final double getMaxRenderDistanceSquared()
+	{
+		return 16384D;
 	}
 
 	@Override

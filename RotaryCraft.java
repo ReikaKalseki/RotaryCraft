@@ -409,7 +409,9 @@ public class RotaryCraft extends DragonAPIMod {
 			RecipesGrinder.getRecipes().addOreRecipes();
 
 		if (ModList.FORESTRY.isLoaded()) {
-			new CanolaBee().register();
+			CanolaBee bee = new CanolaBee();
+			bee.register();
+			bee.addBreeding("Meadows", "Cultivated", 20);
 			RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
 			FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 150);
 			RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
@@ -434,7 +436,7 @@ public class RotaryCraft extends DragonAPIMod {
 		extracts = new ItemMulti(ExtraConfigIDs.EXTRACTS.getValue(), 4).setUnlocalizedName("extracts");
 		compacts = new ItemMulti(ExtraConfigIDs.COMPACTS.getValue(), 6).setUnlocalizedName("compacts");
 		engineitems = new ItemEnginePlacer(ExtraConfigIDs.ENGINEITEMS.getValue()).setUnlocalizedName("engines");
-		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 12).setUnlocalizedName("powder");
+		powders = new ItemMulti(ExtraConfigIDs.POWDERS.getValue(), 8).setUnlocalizedName("powder");
 		modinterface = new ItemMulti(ExtraConfigIDs.INTERFACE.getValue(), 14).setUnlocalizedName("modinterface");
 
 		shaftitems = new ItemShaftPlacer(ExtraConfigIDs.SHAFTITEMS.getValue()).setUnlocalizedName("shafts");

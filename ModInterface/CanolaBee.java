@@ -37,7 +37,6 @@ public class CanolaBee extends BeeSpecies {
 		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
 		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
 		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
-		this.addBreeding("Meadows", "Cultivated", 20);
 	}
 
 	private final class AlleleCanola implements IAlleleFlowers {
@@ -177,11 +176,6 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public String getEntityTexture() {
-		return "";
-	}
-
-	@Override
 	public IAllele getFlowerAllele() {
 		return new AlleleCanola();
 	}
@@ -227,18 +221,18 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public ToleranceDirection getHumidityToleranceDir() {
-		return ToleranceDirection.BOTH;
+	public Tolerance getHumidityToleranceDir() {
+		return Tolerance.BOTH;
 	}
 
 	@Override
-	public ToleranceDirection getTemperatureToleranceDir() {
-		return ToleranceDirection.BOTH;
+	public Tolerance getTemperatureToleranceDir() {
+		return Tolerance.BOTH;
 	}
 
 	@Override
-	public Effect getEffect() {
-		return Effect.NONE;
+	public IAllele getEffectAllele() {
+		return Effect.NONE.getAllele();
 	}
 
 }

@@ -40,7 +40,7 @@ public class RotaryChests {
 		data.addItem(1, Location.MINESHAFT, ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 10);
 		data.addItem(2, Location.MINESHAFT, ItemRegistry.SCREWDRIVER.getStackOf(), 1, 1, 1);
 		data.addItem(3, Location.MINESHAFT, ItemRegistry.METER.getStackOf(), 1, 1, 1);
-		data.addItem(4, Location.MINESHAFT, ItemStacks.bedrockdust, 1, 3, 1);
+		//data.addItem(4, Location.MINESHAFT, ItemStacks.bedrockdust, 1, 3, 1);
 		data.addItem(2, Location.MINESHAFT, ItemStacks.sawdust, 1, 10, 7);
 		data.addItem(2, Location.MINESHAFT, ItemRegistry.ETHANOL.getStackOf(), 1, 4, 5);
 

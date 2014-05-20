@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -46,6 +47,10 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
+
+		if (DragonAPICore.debugtest) {
+			ReikaInventoryHelper.addToIInv(new ItemStack(Item.arrow), this);
+		}
 
 		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
 

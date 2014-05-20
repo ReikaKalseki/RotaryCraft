@@ -319,7 +319,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	private void store(World world, int x, int y, int z, int meta) {
 		this.transferPower(world, x, y, z, meta);
 		isReleasing = world.isBlockIndirectlyGettingPowered(x, y, z);
-		//ReikaJavaLibrary.pConsole(isCreative);
 		//ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Side.SERVER);
 		if (!isCreative && !world.isRemote && energy/20 >= this.getMaxStorageCapacity()) {
 			this.overChargeExplosion(world, x, y, z);
@@ -512,7 +511,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			TileEntitySplitter devicein = (TileEntitySplitter)te;
 			if (devicein.isSplitting()) {
 				this.readFromSplitter(devicein);
-				//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
+				omegain = omega;
+				torquein = torque;
+				//ReikaJavaLibrary.pConsole(torque+" @ "+omega, Side.SERVER);
 				return;
 			}
 			else if (devicein.isWritingTo(this)) {

@@ -849,6 +849,14 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		World world = acc.getWorld();
+		MovingObjectPosition mov = acc.getPosition();
+		if (mov != null) {
+			int x = mov.blockX;
+			int y = mov.blockY;
+			int z = mov.blockZ;
+			currenttip.add(EnumChatFormatting.WHITE+this.getPickBlock(mov, world, x, y, z).getDisplayName());
+		}
 		return currenttip;
 	}
 
@@ -953,6 +961,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		String s1 = EnumChatFormatting.ITALIC.toString();
+		String s2 = EnumChatFormatting.BLUE.toString();
+		currenttip.add(s2+s1+"RotaryCraft");
 		return currenttip;
 	}
 

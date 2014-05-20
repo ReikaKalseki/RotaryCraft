@@ -124,8 +124,12 @@ public class RotaryRegistration {
 	}
 
 	public static void loadOreDictionary() {
-		if (!ModList.GREGTECH.isLoaded()) //GT unificator causes an exploit, and no mods even use this anyways
+		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
 			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
+
+			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
+			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
+		}
 		if (ConfigRegistry.HSLADICT.getState())
 			OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
 		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
@@ -139,8 +143,6 @@ public class RotaryRegistration {
 
 		OreDictionary.registerOre("glassHardened", RotaryCraft.obsidianglass);
 
-		OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
-		OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
 

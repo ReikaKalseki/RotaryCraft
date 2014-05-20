@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -367,7 +368,15 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 		return MachineRegistry.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
 	}
 
-	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		World world = acc.getWorld();
+		MovingObjectPosition mov = acc.getPosition();
+		if (mov != null) {
+			int x = mov.blockX;
+			int y = mov.blockY;
+			int z = mov.blockZ;
+			currenttip.add(EnumChatFormatting.WHITE+this.getPickBlock(mov, world, x, y, z).getDisplayName());
+		}
 		return currenttip;
 	}
 
@@ -424,7 +433,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 		return currenttip;
 	}
 
-	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		String s1 = EnumChatFormatting.ITALIC.toString();
+		String s2 = EnumChatFormatting.BLUE.toString();
+		currenttip.add(s2+s1+"RotaryCraft");
 		return currenttip;
 	}
 }
