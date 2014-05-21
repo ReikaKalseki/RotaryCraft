@@ -41,7 +41,6 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.core.IAreaProvider;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {
 
@@ -118,7 +117,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		if (!world.isBlockIndirectlyGettingPowered(x, y, z))
 			return;
 
-		ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.getOperationTime(), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.getOperationTime(), Side.SERVER);
 
 		if (tickcount >= this.getOperationTime()) {
 			int index = rand.nextInt(coords.getSize());
