@@ -125,6 +125,11 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityWeather", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityRedstonePump", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityHopperTicker", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntitySignalScaler", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityColumnDecrementer", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityAnalogTransmitter", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityAnalogReceiver", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityEqualizer", ModList.EXPANDEDREDSTONE);
 	}
 
 	private static void addEntry(Class<? extends TileEntity> cl) {

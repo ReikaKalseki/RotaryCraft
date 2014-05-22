@@ -120,10 +120,6 @@ public final class ItemStacks {
 	public static final ItemStack diamondgear = new ItemStack(RotaryCraft.enginecraft, 1, 11);
 	public static final ItemStack bedrockgear = new ItemStack(RotaryCraft.enginecraft, 1, 12);
 
-	public static final ItemStack stonerod = new ItemStack(RotaryCraft.borecraft, 1, 13);
-	public static final ItemStack diamondshaft = new ItemStack(RotaryCraft.borecraft, 1, 14);
-	public static final ItemStack bedrockshaft = new ItemStack(RotaryCraft.borecraft, 1, 15);
-
 	public static final ItemStack drill = new ItemStack(RotaryCraft.borecraft, 1, 0);
 	public static final ItemStack presshead = new ItemStack(RotaryCraft.borecraft, 1, 1);
 	public static final ItemStack radar = new ItemStack(RotaryCraft.borecraft, 1, 2);
@@ -137,6 +133,10 @@ public final class ItemStacks {
 	public static final ItemStack ballbearing = new ItemStack(RotaryCraft.borecraft, 1, 10);
 	public static final ItemStack brake = new ItemStack(RotaryCraft.borecraft, 1, 11);
 	public static final ItemStack tenscoil = new ItemStack(RotaryCraft.borecraft, 1, 12);
+
+	public static final ItemStack stonerod = new ItemStack(RotaryCraft.borecraft, 1, 13);
+	public static final ItemStack diamondshaft = new ItemStack(RotaryCraft.borecraft, 1, 14);
+	public static final ItemStack bedrockshaft = new ItemStack(RotaryCraft.borecraft, 1, 15);
 
 	public static final ItemStack coaloredust = new ItemStack(RotaryCraft.extracts, 1, 0);
 	public static final ItemStack ironoredust = new ItemStack(RotaryCraft.extracts, 1, 1);

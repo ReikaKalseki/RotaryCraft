@@ -11,11 +11,15 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.HashMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -24,6 +28,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoryIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv {
 
@@ -104,7 +109,17 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 			return 8;
 		if (ReikaItemHelper.matchStacks(is, ItemStacks.gearunit16))
 			return 16;
+		if (is.itemID == RotaryCraft.gearunits.itemID)
+			return ReikaMathLibrary.intpow2(2, 1+is.getItemDamage()%4);
+		if (is.itemID == Item.stick.itemID)
+			return 1;
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.stonerod))
+			return 1;
 		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftitem))
+			return 1;
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.diamondshaft))
+			return 1;
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft))
 			return 1;
 		return 0;
 	}
@@ -157,8 +172,15 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		int ratio = this.getAbsRatio(dir);
 		if (ratio == 0)
 			return 0;
-		else
-			return this.isSideSpeedMode(dir) ? tbase/ratio : tbase*ratio;
+		else {
+			int trq = this.isSideSpeedMode(dir) ? tbase/ratio : tbase*ratio;
+			if (this.verifyTorque(trq, dir))
+				return trq;
+			else {
+				this.breakItem(dir);
+				return 0;
+			}
+		}
 	}
 
 	public int getSpeedToSide(ForgeDirection dir) {
@@ -170,8 +192,33 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		int ratio = this.getAbsRatio(dir);
 		if (ratio == 0)
 			return 0;
-		else
-			return this.isSideSpeedMode(dir) ? sbase*ratio : sbase/ratio;
+		else {
+			int spd = this.isSideSpeedMode(dir) ? sbase*ratio : sbase/ratio;
+			if (this.verifySpeed(spd, dir))
+				return spd;
+			else {
+				this.breakItem(dir);
+				return 0;
+			}
+		}
+	}
+
+	private boolean verifySpeed(int speed, ForgeDirection dir) {
+		ItemStack is = inv[dir.ordinal()-2];
+		MaterialRegistry mat = MaterialRegistry.getMaterialFromItem(is);
+		return mat.getMaxShaftSpeed() >= speed;
+	}
+
+	private boolean verifyTorque(int torque, ForgeDirection dir) {
+		ItemStack is = inv[dir.ordinal()-2];
+		MaterialRegistry mat = MaterialRegistry.getMaterialFromItem(is);
+		return mat.getMaxShaftTorque() >= torque;
+	}
+
+	private void breakItem(ForgeDirection dir) {
+		inv[dir.ordinal()-2] = null;
+		for (int i = 0; i < 3; i++)
+			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.break", 2, 1);
 	}
 
 	@Override

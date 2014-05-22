@@ -276,9 +276,10 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = this.getInputForgeDirection();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
+				//ReikaJavaLibrary.pConsole(omegain, doublesided && this.getSide() == Side.SERVER);
 			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);

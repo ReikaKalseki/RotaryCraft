@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.IO.ReikaImageLoader;
 import Reika.DragonAPI.Instantiable.Rendering.PixelRenderer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -274,8 +275,8 @@ public class RenderProjector extends RotaryTERenderer {
 			GL11.glTranslated(-a-d, 0.5, 0.5);
 			GL11.glColor4f(1, 1, 1, 1);
 			//ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{100, 192, 255}, 0);
-			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, 0, 5);
-			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, 0, 5);
+			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), 0, 5);
+			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), 0, 5);
 			ReikaRenderHelper.prepareGeoDraw(false);
 			v5.startDrawing(GL11.GL_LINES); //hour hand
 			v5.setColorOpaque(hourhand.getRed(), hourhand.getGreen(), hourhand.getBlue());
@@ -338,8 +339,8 @@ public class RenderProjector extends RotaryTERenderer {
 			GL11.glTranslated(0.5, 0.5, -c+d);
 			GL11.glColor4f(1, 1, 1, 1);
 			//ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{100, 192, 255}, 0);
-			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, Math.toRadians(90), 5);
-			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, new int[]{frame.getRed(), frame.getGreen(), frame.getBlue()}, Math.toRadians(90), 5);
+			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), Math.toRadians(90), 5);
+			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), Math.toRadians(90), 5);
 			ReikaRenderHelper.prepareGeoDraw(false);
 			v5.startDrawing(GL11.GL_LINES); //hour hand
 			v5.setColorOpaque(hourhand.getRed(), hourhand.getGreen(), hourhand.getBlue());

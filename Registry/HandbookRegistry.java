@@ -167,6 +167,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	TNT(MachineRegistry.TNTCANNON),
 	SONIC(MachineRegistry.SONICWEAPON),
 	FORCE(MachineRegistry.FORCEFIELD),
+	ANTIAIR(MachineRegistry.ANTIAIR),
 	RAILGUN(MachineRegistry.RAILGUN),
 	FREEZE(MachineRegistry.FREEZEGUN),
 	CONTAIN(MachineRegistry.CONTAINMENT),

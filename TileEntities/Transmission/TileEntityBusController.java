@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
@@ -53,6 +54,9 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 		this.getPower(false);
 
 		timer.update();
+
+		if (DragonAPICore.debugtest)
+			tank.addLiquid(5, FluidRegistry.getFluid("lubricant"));
 
 		if (tank.isEmpty()) {
 			torque = 0;

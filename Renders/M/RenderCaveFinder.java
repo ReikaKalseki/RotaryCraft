@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -180,9 +181,9 @@ public class RenderCaveFinder extends RotaryTERenderer {
 			int vsc = 64;
 			int hexcolor;
 			hexcolor = Color.HSBtoRGB(((((Math.abs(y)-12)%vsc)))/(float)vsc, 1, 1);
-			color[0] = ReikaRenderHelper.HextoColorMultiplier(hexcolor, 0);
-			color[1] = ReikaRenderHelper.HextoColorMultiplier(hexcolor, 1);
-			color[2] = ReikaRenderHelper.HextoColorMultiplier(hexcolor, 2);
+			color[0] = ReikaColorAPI.HextoColorMultiplier(hexcolor, 0);
+			color[1] = ReikaColorAPI.HextoColorMultiplier(hexcolor, 1);
+			color[2] = ReikaColorAPI.HextoColorMultiplier(hexcolor, 2);
 			depthColors[y] = color;
 			return color;
 		}

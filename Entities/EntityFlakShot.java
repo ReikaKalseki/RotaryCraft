@@ -14,21 +14,21 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 
-public class EntityFreezeGunShot extends EntityTurretShot {
+public class EntityFlakShot extends EntityTurretShot {
 
-	public EntityFreezeGunShot(World world) {
+	public EntityFlakShot(World world) {
 		super(world);
 	}
 
-	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz) {
+	public EntityFlakShot(World world, double x, double y, double z, double vx, double vy, double vz) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
@@ -39,7 +39,7 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 
 	@Override
 	public void onImpact(MovingObjectPosition mov) {
-		if (mov != null && MachineRegistry.getMachine(worldObj, mov.blockX, mov.blockY, mov.blockZ) == MachineRegistry.FREEZEGUN) {
+		if (mov != null && MachineRegistry.getMachine(worldObj, mov.blockX, mov.blockY, mov.blockZ) == MachineRegistry.ANTIAIR) {
 			this.setDead();
 			return;
 		}
@@ -55,7 +55,7 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 		EntityLivingBase el;
 		Entity ent;
 
-		AxisAlignedBB splash = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(2, 2, 2);
+		AxisAlignedBB splash = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(4, 4, 4);
 		List dmgd = world.getEntitiesWithinAABB(Entity.class, splash);
 		for (int l = 0; l < dmgd.size(); l++) {
 			ent = (Entity)dmgd.get(l);
@@ -70,7 +70,8 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 
 	@Override
 	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
-		el.addPotionEffect(TileEntityFreezeGun.getFreezeEffect(60000));
+		el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+		el.playSound("damage.hit", 2, 1);
 	}
 
 	@Override
@@ -132,6 +133,6 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 
 	@Override
 	public int getAttackDamage() {
-		return 0;
+		return 2;
 	}
 }

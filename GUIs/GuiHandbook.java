@@ -450,6 +450,8 @@ public class GuiHandbook extends GuiScreen
 
 		if (subpage == 0)
 			this.drawMachineRender(posX, posY);
+
+		RenderHelper.disableStandardItemLighting();
 	}
 
 	protected HandbookEntry getEntry() {

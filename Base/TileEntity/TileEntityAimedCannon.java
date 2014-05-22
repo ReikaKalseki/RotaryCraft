@@ -148,7 +148,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
 		if (tg[2] - phi > 180)
 			tg[2] -= 360;
-		float movespeed = 1F;
+		float movespeed = this.getAimingSpeed();
 		if (phi < tg[2])
 			phi += movespeed*2;
 		if (phi > tg[2])
@@ -161,6 +161,10 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 			theta = MAXLOWANGLE;
 		if (theta > -MAXLOWANGLE && dir == -1)
 			theta = MAXLOWANGLE;
+	}
+
+	protected float getAimingSpeed() {
+		return 1;
 	}
 
 	public abstract boolean hasAmmo();

@@ -10,14 +10,18 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.MekToolHandler;
 import Reika.DragonAPI.ModInteract.RedstoneArsenalHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum MaterialRegistry {
 
@@ -190,5 +194,32 @@ public enum MaterialRegistry {
 		int type = this.ordinal();
 		ratio = (int)ReikaMathLibrary.logbase(ratio, 2)-1;
 		return MachineRegistry.GEARBOX.getCraftedMetadataProduct(5*ratio+type);
+	}
+
+	public static MaterialRegistry getMaterialFromItem(ItemStack is) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftitem)) {
+			return STEEL;
+		}
+		else if (is.itemID == RotaryCraft.shaftcraft.itemID) {
+			if (ReikaMathLibrary.isValueInsideBoundsIncl(ItemStacks.gearunit.getItemDamage(), ItemStacks.gearunit16.getItemDamage(), is.getItemDamage()))
+				return STEEL;
+		}
+		else if (is.itemID == RotaryCraft.gearunits.itemID) {
+			int dmg = is.getItemDamage()/4;
+			return dmg > 1 ? matList[dmg+1] : matList[dmg];
+		}
+		else if (is.itemID == Item.stick.itemID) {
+			return WOOD;
+		}
+		else if (ReikaItemHelper.matchStacks(is, ItemStacks.stonerod)) {
+			return STONE;
+		}
+		else if (ReikaItemHelper.matchStacks(is, ItemStacks.diamondshaft)) {
+			return DIAMOND;
+		}
+		else if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft)) {
+			return BEDROCK;
+		}
+		return null;
 	}
 }

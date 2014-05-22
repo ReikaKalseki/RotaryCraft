@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
+import Reika.RotaryCraft.Entities.EntityFlakShot;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
 import Reika.RotaryCraft.Entities.EntityIceBlock;
@@ -113,6 +114,10 @@ public class RotaryRegistration {
 		//id = EntityRegistry.findGlobalUniqueEntityId();
 		//EntityRegistry.registerGlobalEntityID(EntityFlamethrowerFire.class, "CustomTNT", id);
 		//EntityRegistry.registerModEntity(EntityFlamethrower.class, "CustomTNT", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
+
+		id = EntityRegistry.findGlobalUniqueEntityId();
+		EntityRegistry.registerGlobalEntityID(EntityFlakShot.class, "Flak Shot", id);
+		EntityRegistry.registerModEntity(EntityFlakShot.class, "Flak Shot", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
 	}
 
 	public static void instantiateMachines() {

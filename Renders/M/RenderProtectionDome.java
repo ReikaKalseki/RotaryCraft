@@ -85,7 +85,8 @@ public class RenderProtectionDome extends RotaryTERenderer
 		if (te.getRange() <= 0)
 			return;
 		Color c = te.getDomeColor();
-		int[] color = new int[]{c.getRed(), c.getGreen(), c.getBlue()};
+		ReikaRenderHelper.prepareGeoDraw(false);
+		int color = c.getRGB();
 		for (double k = -te.getRange(); k <= te.getRange(); k += 0.5*te.getRange()/8)
 			ReikaRenderHelper.renderCircle(Math.sqrt(te.getRange()*te.getRange()-k*k), x, y+k, z, color, 15);
 		for (int k = 0; k < 360; k += 15)
@@ -97,6 +98,7 @@ public class RenderProtectionDome extends RotaryTERenderer
 			ReikaRenderHelper.renderVCircle(0.125, x, y+0.5, z, color, Math.toRadians((System.nanoTime()/7500000)%360+k), 15);
 			ReikaRenderHelper.renderLine(x, y, z, x+te.getRange()*Math.sin(Math.toRadians(ang)*Math.cos(Math.toRadians(k))), y+te.getRange()-Math.sin(Math.toRadians(ang)), z+te.getRange()*Math.sin(Math.toRadians(ang)*Math.sin(Math.toRadians(k))), color);
 		}
+		ReikaRenderHelper.exitGeoDraw();
 	}
 
 	@Override

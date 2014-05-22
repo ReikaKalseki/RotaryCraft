@@ -19,14 +19,14 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.Turret.ModelRailGun;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
+import Reika.RotaryCraft.Models.Turret.ModelAAGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
 
-public class RenderRailGun extends RotaryTERenderer {
+public class RenderAAGun extends RotaryTERenderer {
 
-	private ModelRailGun railgunModel = new ModelRailGun();
+	private ModelAAGun aagunModel = new ModelAAGun();
 
-	public void renderTileEntityRailGunAt(TileEntityRailGun tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityAAGunAt(TileEntityAAGun tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -35,9 +35,9 @@ public class RenderRailGun extends RotaryTERenderer {
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelRailGun var14;
-		var14 = railgunModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/railguntex.png");
+		ModelAAGun var14;
+		var14 = aagunModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/aagun.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -74,13 +74,13 @@ public class RenderRailGun extends RotaryTERenderer {
 		if (tile == null)
 			return;
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityRailGunAt((TileEntityRailGun)tile, par2, par4, par6, par8);
+			this.renderTileEntityAAGunAt((TileEntityAAGun)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "railguntex.png";
+		return "aagun.png";
 	}
 }

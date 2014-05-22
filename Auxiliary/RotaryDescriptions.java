@@ -453,5 +453,6 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.COMPOSTER, TileEntityComposter.MINTEMP, TileEntityComposter.MAXTEMP);
 		addNotes(MachineRegistry.GASTANK, PowerReceivers.GASTANK.getMinPower(), PowerReceivers.GASTANK.getMinTorque());
 		addNotes(MachineRegistry.CRAFTER, PowerReceivers.CRAFTER.getMinPower());
+		addNotes(MachineRegistry.ANTIAIR, PowerReceivers.ANTIAIR.getMinPower(), PowerReceivers.ANTIAIR.getMinTorque());
 	}
 }

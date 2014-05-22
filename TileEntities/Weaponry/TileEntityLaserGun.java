@@ -45,7 +45,8 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x-this.getRange(), y-this.getRange(), z-this.getRange(), x+1+this.getRange(), y+1+this.getRange(), z+1+this.getRange());
+		int r = this.getRange();
+		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
 		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;

@@ -51,6 +51,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	DECOTANK("Extra Block IDs", "Decorative Tank", 452, Block.class),
 	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class),
 	GROWTHID("Other IDs", "Growth Hormone ID", 36, Potion.class);
+	//DEAFID("Other IDs", "Deafness ID", 37, Potion.class);
 
 	private String name;
 	private String category;

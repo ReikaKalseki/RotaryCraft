@@ -1000,7 +1000,7 @@
 	</composter>
 	<gastank>
 		<desc>
-			The gas compression chamber can store up to one million buckets of any one gas. Higher torques allow for higher achievable pressures; if your torque is not high enough, you will not be able to pump in further gas. Only gases can be stored; liquids like water and jet fuel cannot be compressed.
+			The fluid compression chamber can store up to one million buckets of any one fluid. Higher torques allow for higher achievable pressures; if your torque is not high enough, you will not be able to pump in further fluid. Both gases and liquids can be stored, but liquids take many, many times more torque to compress.
 		</desc>
 		<note>
 			Power Input: Bottom
@@ -1017,4 +1017,14 @@
 			Required Power: %dW
 		</note>
 	</crafter>
+	<antiair>
+		<desc>
+			A cheaper and more specialized version of the railgun, the antiair gun will shoot scrap at flying mobs as a form of base defence. It only deals one heart of damage per impact, but can fire over 3 rounds per second, and the ammunition is much cheaper than that of the railgun.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Torque: %d Nm
+			Power Input: Bottom or top, orientation dependent
+		</note>
+	</antiair>
 </machines>

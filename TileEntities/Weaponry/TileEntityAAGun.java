@@ -11,44 +11,52 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
-import Reika.RotaryCraft.Entities.EntityExplosiveShell;
-import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Entities.EntityFlakShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityRailGun extends TileEntityInventoriedCannon {
+public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISidedInventory {
 
-	private boolean isExplosiveShell = false;
+	@Override
+	public int getRange() {
+		return 128;
+	}
 
-	public int getPowerLevel() {
-		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getShiftedID(), inv);
-		return meta;
+	@Override
+	public int getMaxRange() {
+		return 128;
 	}
 
 	@Override
 	public boolean hasAmmo() {
-		if (ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getShiftedID(), inv)) {
-			isExplosiveShell = false;
-			return true;
-		}
-		else {
-			isExplosiveShell = true;
-			return ReikaInventoryHelper.checkForItem(ItemRegistry.SHELL.getShiftedID(), inv);
-		}
+		return ReikaInventoryHelper.checkForItemStack(ItemStacks.scrap, inv, false);
+	}
+
+	@Override
+	protected float getAimingSpeed() {
+		return 2;
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		if (power < MINPOWER)
+		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 		if (!this.hasAmmo())
 			return;
@@ -56,12 +64,18 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 			return;
 		if (tickcount < this.getOperationTime())
 			return;
+		//ReikaJavaLibrary.pConsole(Arrays.toString(target), Side.SERVER);
 		tickcount = 0;
 		if (target[3] == 1) {
-			if (!world.isRemote)
-				this.fire(world, target);
+			this.fire(world, target);
 		}
 	}
+
+	@Override
+	public int getOperationTime() {
+		return 6;
+	}
+
 
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
@@ -101,18 +115,15 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public void fire(World world, double[] xyz) {
-		double speed = 4;
-		int maxmeta = this.getMaxThrust();
-		if (isExplosiveShell) {
-			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getShiftedID(), inv, maxmeta);
-			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SHELL.getShiftedID(), m, inv);
+		ReikaSoundHelper.playSoundAtBlock(world, xCoord, yCoord, zCoord, "random.explode", 1F, 1.3F);
+		ReikaSoundHelper.playSoundAtBlock(world, xCoord, yCoord, zCoord, "random.explode", 1F, 0.5F);
+
+		if (rand.nextBoolean()) {
+			int slot = ReikaInventoryHelper.locateInInventory(ItemStacks.scrap, inv, false);
 			ReikaInventoryHelper.decrStack(slot, inv);
 		}
-		else {
-			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getShiftedID(), inv, maxmeta);
-			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getShiftedID(), m, inv);
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
+
+		double speed = 2;
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
 		v[1] = xyz[1]-yCoord;
@@ -126,42 +137,32 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 		double dx = v[0]/dd;
 		double dy = v[1]/dd;
 		double dz = v[2]/dd;
+
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			if (isExplosiveShell)
-				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this));
-			else
-				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this.getPowerLevel(), this));
+			EntityFlakShot flak = new EntityFlakShot(world, xCoord+0.5+dx, yCoord+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2]);
+			world.spawnEntityInWorld(flak);
 		}
 	}
 
-	private int getMaxThrust() {
-		double m = ReikaMathLibrary.doubpow(torque/512D, 2);
-		return (int)ReikaMathLibrary.logbase(m, 2);
-	}
-
-	public int getRange() {
-		return 164;
-	}
-
-	public EntityLivingBase getClosestMob() {
-		return closestMob;
-	}
-
-	/*
-    public AxisAlignedBB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
-    }*/
-
 	@Override
 	protected double randomOffset() {
-		//return -0.5+par5Random.nextFloat();
-		return 0;
+		return -1;
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return 54;
+	protected boolean isValidTarget(EntityLivingBase ent) {
+		if (ent.onGround || ent.isInWater() || ent.isInsideOfMaterial(Material.lava))
+			return false;
+		if (ent instanceof EntityFlying || ent instanceof EntityBlaze || ent instanceof EntityWither || ent instanceof EntityDragon) {
+			return ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
+		}
+		return false;
+	}
+
+	@Override
+	public MachineRegistry getMachine() {
+		return MachineRegistry.ANTIAIR;
 	}
 
 	@Override
@@ -170,28 +171,18 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
-		return MachineRegistry.RAILGUN;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.RAILGUN.getShiftedID();
-	}
-
-	@Override
-	public int getMaxRange() {
-		return 256;
-	}
-
-	@Override
 	public int getRedstoneOverride() {
-		return this.getMaxThrust();
+		return 0;
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLivingBase ent) {
-		return this.isMobOrUnlistedPlayer(ent);
+	public int getSizeInventory() {
+		return 27;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return ReikaItemHelper.matchStacks(itemstack, ItemStacks.scrap);
 	}
 
 }

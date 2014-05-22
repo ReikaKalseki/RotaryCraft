@@ -50,6 +50,7 @@ import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
+import Reika.RotaryCraft.Auxiliary.PotionDeafness;
 import Reika.RotaryCraft.Auxiliary.PotionGrowthHormone;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -199,6 +200,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static FreezePotion freeze;
 	public static PotionGrowthHormone growth;
+	public static PotionDeafness deafness;
 
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
@@ -291,7 +293,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 		id = ExtraConfigIDs.GROWTHID.getValue();
 		PotionCollisionTracker.instance.addPotionID(instance, id, PotionGrowthHormone.class);
-		growth = (PotionGrowthHormone)new PotionGrowthHormone(id).setPotionName("Frozen Solid");
+		growth = (PotionGrowthHormone)new PotionGrowthHormone(id).setPotionName("Growth Hormone");
+
+		//id = ExtraConfigIDs.DEAFID.getValue();
+		//PotionCollisionTracker.instance.addPotionID(instance, id, PotionDeafness.class);
+		//deafness = (PotionDeafness)new PotionDeafness(id).setPotionName("Deafness");
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);

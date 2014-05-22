@@ -160,6 +160,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAirGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
@@ -312,7 +313,8 @@ public enum MachineRegistry {
 	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge"),
 	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityFluidCompressor.class,		20, "RenderGasCompressor"),
 	CRAFTER(			"machine.crafter",			BlockIMachine.class,		TileEntityAutoCrafter.class,		7),
-	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter");
+	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter"),
+	ANTIAIR(			"machine.antiair",			BlockMIMachine.class,		TileEntityAAGun.class,				24, "RenderAAGun");
 
 	private final String name;
 	private final Class te;
