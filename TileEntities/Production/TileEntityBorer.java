@@ -397,6 +397,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (id == Block.fire.blockID)
 			return false;
+		if (id == Block.cauldron.blockID)
+			return false;
 		if (id == Block.redstoneComparatorActive.blockID || id == Block.redstoneComparatorIdle.blockID)
 			return false;
 		if (id == Block.redstoneRepeaterActive.blockID || id == Block.redstoneRepeaterIdle.blockID)

@@ -39,6 +39,9 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		if (power < MINPOWER)
 			return;
 
+		if (world.isRemote)
+			return;
+
 		if (this.canMakeFuel()) {
 			this.makeFuel();
 		}
@@ -48,11 +51,6 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 				this.fill();
 			}
 		}
-		//else if (this.hasContainer()) {
-		//	this.fillContainer();
-		//}
-
-		//ReikaJavaLibrary.pConsole(this.getSide()+":"+tank);
 	}
 
 	private boolean hasContainer() {
@@ -147,7 +145,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 1;
+		return 64;
 	}
 
 	@Override

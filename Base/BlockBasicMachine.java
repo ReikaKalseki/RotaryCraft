@@ -16,8 +16,6 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -337,12 +335,6 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	public int getFlammability(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face)
 	{
 		return 0;
-	}
-
-	@Override
-	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
-	{
-		return e instanceof EntityDragon;
 	}
 
 	@Override

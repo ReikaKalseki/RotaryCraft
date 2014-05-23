@@ -44,7 +44,7 @@ import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
 
 
-public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer
+public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer, powercrystals.minefactoryreloaded.api.IToolHammer
 {
 	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
 

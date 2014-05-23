@@ -92,7 +92,8 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 		//overpower  = (int)(this.power/MINPOWER);
 		if (!this.checkValidCoil())
 			return 0;
-		overpower = (int)(ReikaMathLibrary.logbase(ReikaMathLibrary.intpow(inv[0].getItemDamage(), 2), 2));
+		int dmg = inv[0].getItemDamage();
+		overpower = ReikaMathLibrary.logbase(dmg*dmg, 2);
 		if (overpower > 8)
 			return 8;
 		return overpower;

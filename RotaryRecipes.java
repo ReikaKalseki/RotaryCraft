@@ -57,7 +57,8 @@ public class RotaryRecipes {
 		addMisc();
 		addFurnace();
 
-		addThermalExpansion();
+		if (ModList.THERMALEXPANSION.isLoaded())
+			addThermalExpansion();
 	}
 
 	private static void addProps() {
@@ -92,22 +93,22 @@ public class RotaryRecipes {
 	}
 
 	private static void addThermalExpansion() {
-		if (ModList.THERMALEXPANSION.isLoaded()) {
-			FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
-			int energy = 750;
-			ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
+		FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
+		int energy = 750;
+		ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
 
-			ItemStack bedrock = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy();
-			ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);;
+		ItemStack bedrock = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy();
+		ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);;
 
-			ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
-			ItemStack receptionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
-			//ItemStack energyCell = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1);
-			ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
+		ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
+		ItemStack receptionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
+		//ItemStack energyCell = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1);
+		ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
 
-			MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', transmissionCoil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Item.redstone);
-			MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', "ingotCopper", 'C', receptionCoil, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'l', "ingotLead", 's', "ingotSilver");
-		}
+		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', transmissionCoil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Item.redstone);
+		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', "ingotCopper", 'C', receptionCoil, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'l', "ingotLead", 's', "ingotSilver");
+
+		ThermalRecipeHelper.addCoolant(RotaryCraft.nitrogenFluid, 40000);
 	}
 
 	public static void addPostLoadRecipes() {

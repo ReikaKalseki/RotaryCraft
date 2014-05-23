@@ -224,6 +224,18 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return null;
 	}
 
+	public final int getPointingOffsetX() {
+		return pointoffsetx;
+	}
+
+	public final int getPointingOffsetY() {
+		return pointoffsety;
+	}
+
+	public final int getPointingOffsetZ() {
+		return pointoffsetz;
+	}
+
 	protected final void setPointingOffset(int x, int y, int z) {
 		pointoffsetx = x;
 		pointoffsety = y;

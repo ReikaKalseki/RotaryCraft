@@ -173,27 +173,27 @@ public abstract class IORenderer {
 			}
 			//ReikaChatHelper.writeInt(te.ready);
 			if (te.getReadDirection() != null) {
-				double xdiff = te.getReadDirection().offsetX;
-				double ydiff = te.getReadDirection().offsetY;
-				double zdiff = te.getReadDirection().offsetZ;
+				double xdiff = te.getReadDirection().offsetX+te.getPointingOffsetX();
+				double ydiff = te.getReadDirection().offsetY+te.getPointingOffsetY();
+				double zdiff = te.getReadDirection().offsetZ+te.getPointingOffsetZ();
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 			if (te.getReadDirection2() != null) {
-				double xdiff = te.getReadDirection2().offsetX;
-				double ydiff = te.getReadDirection2().offsetY;
-				double zdiff = te.getReadDirection2().offsetZ;
+				double xdiff = te.getReadDirection2().offsetX+te.getPointingOffsetX();
+				double ydiff = te.getReadDirection2().offsetY+te.getPointingOffsetY();
+				double zdiff = te.getReadDirection2().offsetZ+te.getPointingOffsetZ();
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 			if (te.getReadDirection3() != null) {
-				double xdiff = te.getReadDirection3().offsetX;
-				double ydiff = te.getReadDirection3().offsetY;
-				double zdiff = te.getReadDirection3().offsetZ;
+				double xdiff = te.getReadDirection3().offsetX+te.getPointingOffsetX();
+				double ydiff = te.getReadDirection3().offsetY+te.getPointingOffsetY();
+				double zdiff = te.getReadDirection3().offsetZ+te.getPointingOffsetZ();
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 			if (te.getReadDirection4() != null) {
-				double xdiff = te.getReadDirection4().offsetX;
-				double ydiff = te.getReadDirection4().offsetY;
-				double zdiff = te.getReadDirection4().offsetZ;
+				double xdiff = te.getReadDirection4().offsetX+te.getPointingOffsetX();
+				double ydiff = te.getReadDirection4().offsetY+te.getPointingOffsetY();
+				double zdiff = te.getReadDirection4().offsetZ+te.getPointingOffsetZ();
 				renderIn(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
 		}

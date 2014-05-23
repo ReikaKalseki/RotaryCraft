@@ -136,8 +136,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 	}
 
 	private int getMaxThrust() {
-		double m = ReikaMathLibrary.doubpow(torque/512D, 2);
-		return (int)ReikaMathLibrary.logbase(m, 2);
+		return ReikaMathLibrary.logbase(torque*torque/512, 2);
 	}
 
 	public int getRange() {

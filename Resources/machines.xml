@@ -247,7 +247,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Min Delay: %d-2*log_2(Speed)
+			Min Delay: %d-40*log_2(Speed)
 			Power Input: Spawner Block
 		</note>
 	</spawnercontroller>

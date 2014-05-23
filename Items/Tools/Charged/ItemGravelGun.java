@@ -156,7 +156,7 @@ public class ItemGravelGun extends ItemChargedTool {
 	private int getAttackDamage(ItemStack is) {
 		if (is == null)
 			return 0;
-		double pow = 2+ReikaMathLibrary.intpow(is.getItemDamage()/2, 6);
+		int pow = 2+ReikaMathLibrary.intpow2(is.getItemDamage()/2, 6);
 		return (int)((ReikaMathLibrary.logbase(pow, 2)/4)*ReikaMathLibrary.doubpow(1.0001, is.getItemDamage()));
 	}
 

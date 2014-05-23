@@ -84,7 +84,11 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 
 	public AxisAlignedBB getBox() {
 		//return AxisAlignedBB.getBoundingBox(this.xCoord-4, this.yCoord-4, this.zCoord-4, this.xCoord+5, this.yCoord+5, this.zCoord+5);
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord+1, zCoord, xCoord+1, yCoord+2, zCoord+1);
+		return AxisAlignedBB.getBoundingBox(xCoord, yCoord+1, zCoord, xCoord+1, yCoord+this.getHeight()+1, zCoord+1);
+	}
+
+	private int getHeight() {
+		return 3;
 	}
 
 	public AxisAlignedBB getLaser() {

@@ -63,6 +63,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			setDelay = 0;
 			omega = torque = 0;
 			power = 0;
+			this.setPointingOffset(0, -1, 0);
 			return;
 		}
 		this.getOffsetPower4Sided(0, -1, 0); //The spawner itself is the power input

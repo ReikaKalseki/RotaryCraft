@@ -172,7 +172,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	}
 
 	public int getRange() {
-		return 2*(int)ReikaMathLibrary.logbase(power-MINPOWER, 2);
+		return 2*ReikaMathLibrary.logbase(power-MINPOWER, 2);
 	}
 
 	@Override

@@ -837,7 +837,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachi
 		if (revup) {
 			if (omega < maxspeed) {
 				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Side.SERVER);
-				omega += 4*(int)ReikaMathLibrary.logbase(maxspeed+1, 2);
+				omega += 4*ReikaMathLibrary.logbase(maxspeed+1, 2);
 				timer.setCap("fuel", Math.max(type.getFuelUnitDuration()/4, 1)); //4x fuel burn while spinning up
 				if (omega > maxspeed)
 					omega = maxspeed;
@@ -1398,7 +1398,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachi
 		if (type == EngineType.HYDRO) {
 			mult = 256F/type.getSpeed();
 		}
-		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(mult*omega+1, 2), pow);
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase((int)(mult*omega+1), 2), pow);
 	}
 
 	@Override

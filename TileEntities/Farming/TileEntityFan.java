@@ -125,6 +125,21 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		return range;
 	}
 
+	private boolean isStoppedBy(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (id == 0)
+			return false;
+		if (Block.opaqueCubeLookup[id]) {
+			return true;
+		}
+		Block b = Block.blocksList[id];
+		if (b.isOpaqueCube() || b.renderAsNormalBlock())
+			return true;
+		if (b.blockMaterial.isSolid())
+			return true;
+		return false;
+	}
+
 	@Override
 	public void makeBeam(World world, int x, int y, int z, int meta) {
 		if (power < MINPOWER)
@@ -133,7 +148,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int range = this.getRange();
 		boolean blocked = false;
 		for (int i = 1; i <= range && !blocked; i++) { //Limit range to line-of-sight
-			if (Block.opaqueCubeLookup[world.getBlockId(x+i*xstep, y+i*ystep, z+i*zstep)]) {
+			if (this.isStoppedBy(world, x+i*xstep, y+i*ystep, z+i*zstep)) {
 				blocked = true;
 				range = i;
 			}

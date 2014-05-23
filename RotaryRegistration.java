@@ -152,6 +152,8 @@ public class RotaryRegistration {
 		ItemStacks.registerSteels();
 
 		OreDictionary.registerOre("dustCoal", ItemStacks.coaldust);
+		OreDictionary.registerOre("dustSalt", ItemStacks.salt);
+		OreDictionary.registerOre("foodSalt", ItemStacks.salt);
 
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];

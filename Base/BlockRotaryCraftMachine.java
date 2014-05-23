@@ -13,8 +13,6 @@ import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -53,12 +51,6 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWa
 	public int getFlammability(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face)
 	{
 		return 0;
-	}
-
-	@Override
-	public boolean canEntityDestroy(World world, int x, int y, int z, Entity e)
-	{
-		return e instanceof EntityDragon;
 	}
 
 }
