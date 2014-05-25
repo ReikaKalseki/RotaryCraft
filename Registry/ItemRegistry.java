@@ -144,8 +144,8 @@ public enum ItemRegistry implements RegistryEnum {
 	CRAFTPATTERN(34, false,		"item.craftpattern",		ItemCraftPattern.class),
 	BEDSICKLE(36, false,		"item.bedsickle",			ItemBedrockSickle.class),
 	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class),
-	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class),
-	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class);
+	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class, ModList.FORESTRY),
+	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY);
 
 	private int index;
 	private boolean hasSubtypes;
