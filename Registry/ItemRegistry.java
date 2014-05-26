@@ -57,6 +57,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockGrafter;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSaw;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShovel;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockSickle;
@@ -145,7 +146,8 @@ public enum ItemRegistry implements RegistryEnum {
 	BEDSICKLE(36, false,		"item.bedsickle",			ItemBedrockSickle.class),
 	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class),
 	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class, ModList.FORESTRY),
-	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY);
+	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY),
+	BEDSAW(39, false,			"item.bedsaw",				ItemBedrockSaw.class, ModList.MULTIPART);
 
 	private int index;
 	private boolean hasSubtypes;

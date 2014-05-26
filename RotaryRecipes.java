@@ -590,6 +590,8 @@ public class RotaryRecipes {
 		ItemRegistry.GRAFTER.addRecipe("  S", "Ss ", "CS ", 'C', ItemRegistry.SPRING.getStackOf(), 'S', ItemStacks.steelingot, 's', Item.stick);
 		ItemRegistry.BEDGRAFTER.addRecipe("  S", " s ", "s  ", 'S', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
 
+		ItemRegistry.BEDSAW.addRecipe("sss", " SS", " bb", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'S', Item.ingotIron);
+
 		ItemRegistry.BEDHELM.addEnchantedRecipe("III", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDBOOTS.addEnchantedRecipe("I I", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDCHEST.addEnchantedRecipe("I I", "III", "III", 'I', ItemStacks.bedingot);

@@ -228,7 +228,7 @@
 			Required Speed: %d rad/s
 			Maximum Temperature: %dC
 			Liquid Capacity: %d m^3
-			Power Input: Any horizontal side
+			Power Input: Bottom
 		</note>
 	</obsidian>
 	<playerdetector>

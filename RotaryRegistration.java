@@ -170,6 +170,7 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.jetFuelFluid);
 		FluidRegistry.registerFluid(RotaryCraft.lubeFluid);
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
+		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.LUBE_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.JET_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Item.bucketEmpty));

@@ -30,6 +30,8 @@ import forestry.api.genetics.IPollinatable;
 
 public class CanolaBee extends BeeSpecies {
 
+	private final AlleleCanola canola = new AlleleCanola();
+
 	public CanolaBee() { //cultivated + meadows
 		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika");
 		this.addSpecialty(ItemStacks.slipperyComb, 40);
@@ -177,7 +179,7 @@ public class CanolaBee extends BeeSpecies {
 
 	@Override
 	public IAllele getFlowerAllele() {
-		return new AlleleCanola();
+		return canola;
 	}
 
 	@Override

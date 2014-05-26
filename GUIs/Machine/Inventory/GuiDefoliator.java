@@ -38,7 +38,7 @@ public class GuiDefoliator extends GuiPowerOnlyMachine
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
 		if (api.isMouseInBox(j+133, j+150, k+16, k+69)) {
-			int lvl = tile.getPotionLevel();
+			int lvl = tile.getLevel();
 			String sg = String.format("Poison: %d/%d", lvl, tile.CAPACITY);
 			api.drawTooltipAt(fontRenderer, sg, x-j, y-k);
 		}
@@ -54,7 +54,7 @@ public class GuiDefoliator extends GuiPowerOnlyMachine
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int i1 = tile.getPotionScaled(52);
+		int i1 = tile.getPoisonScaled(52);
 		this.drawTexturedModalRect(j+134, k+69-i1, 177, 69-i1, 16, i1);
 
 	}

@@ -16,12 +16,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
@@ -34,13 +36,11 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
-public class TileEntityDefoliator extends InventoriedPowerReceiver implements RangedEffect {
-
-	private int potionLevel;
+public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver implements RangedEffect {
 
 	public static final int CAPACITY = 4000;
 
@@ -53,8 +53,8 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
-	public int getPotionScaled(int i) {
-		return potionLevel * i / CAPACITY;
+	public int getPoisonScaled(int i) {
+		return tank.getLevel() * i / CAPACITY;
 	}
 
 	@Override
@@ -67,10 +67,10 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 
 		this.consumePotions();
 
-		if (potionLevel > 0) {
+		if (!tank.isEmpty()) {
 			int r = this.getRange();
 			int n = this.getNumberPasses();
-			for (int i = 0; i < n && potionLevel > 0; i++) {
+			for (int i = 0; i < n && !tank.isEmpty(); i++) {
 				int rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 				int ry = ReikaRandomHelper.getRandomPlusMinus(y, r);
 				int rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
@@ -86,17 +86,13 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 	}
 
 	private void consumePotions() {
-		if (inv[0] != null && potionLevel+1000 <= CAPACITY) {
+		if (inv[0] != null && tank.canTakeIn(1000)) {
 			if (this.isItemValidForSlot(0, inv[0])) {
-				potionLevel += 1000;
+				tank.addLiquid(1000, FluidRegistry.getFluid("poison"));
 				ReikaInventoryHelper.decrStack(0, inv);
 				ReikaInventoryHelper.addOrSetStack(Item.glassBottle.itemID, 1, 0, inv, 1);
 			}
 		}
-	}
-
-	public int getPotionLevel() {
-		return potionLevel;
 	}
 
 	private void decay(World world, int x, int y, int z) {
@@ -144,7 +140,7 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 
 				if (world.checkChunksExist(x, y, z, x, y, z))
 					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, x, y, z);
-				potionLevel--;
+				tank.removeLiquid(1);
 			}
 		}
 	}
@@ -189,7 +185,7 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 
 	@Override
 	public int getRange() {
-		int r = 8*(int)ReikaMathLibrary.logbase(torque, 2);
+		int r = (int)(8*ReikaMathLibrary.logbase(torque, 2));
 		return r > this.getMaxRange() ? this.getMaxRange() : r;
 	}
 
@@ -199,19 +195,23 @@ public class TileEntityDefoliator extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
-		super.readSyncTag(NBT);
-
-		potionLevel = NBT.getInteger("level");
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.PIPE;
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
+	public Fluid getInputFluid() {
+		return FluidRegistry.getFluid("poison");
+	}
 
-		NBT.setInteger("level", potionLevel);
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public int getCapacity() {
+		return CAPACITY;
 	}
 
 }

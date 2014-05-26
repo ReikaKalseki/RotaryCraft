@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.DragonAPICore;
@@ -156,6 +157,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
 	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950);
 	public static final EnhancedFluid nitrogenFluid = (EnhancedFluid)new EnhancedFluid("liquid nitrogen").setColor(0xffffff).setDensity(808).setViscosity(158).setTemperature(77);
+	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");

@@ -101,12 +101,16 @@ public class ItemMeter extends ItemRotaryTool
 			ThermalMachine th = (ThermalMachine)tile;
 			ReikaChatHelper.writeString(String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
 		}
+		boolean flag = false;
+		boolean flag1 = false;
 		if (tile instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)tile).getMessages(world, x, y, z, s);
 			if (li != null) {
 				for (int i = 0; i < li.size(); i++)
 					ReikaChatHelper.writeString(li.get(i));
 			}
+			flag = tile instanceof ShaftPowerEmitter;
+			flag1 = tile instanceof ShaftPowerReceiver;
 		}
 		else if (b instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)b).getMessages(world, x, y, z, s);
@@ -175,7 +179,7 @@ public class ItemMeter extends ItemRotaryTool
 			ReikaChatHelper.writeString(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
 			return true;
 		}*/
-		if (tile instanceof ShaftPowerEmitter) {
+		if (!flag && tile instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
 			power = sp.getPower();
 			String pre = ReikaEngLibrary.getSIPrefix(power);
@@ -183,7 +187,7 @@ public class ItemMeter extends ItemRotaryTool
 			ReikaChatHelper.writeString(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			return true;
 		}
-		if (tile instanceof ShaftPowerReceiver) {
+		if (!flag1 && tile instanceof ShaftPowerReceiver) {
 			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
 			power = sp.getPower();
 			String pre = ReikaEngLibrary.getSIPrefix(power);
