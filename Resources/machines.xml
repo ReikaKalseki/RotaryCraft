@@ -968,6 +968,7 @@
 			Power Input: Back
 			Required Power: %dW
 			Required Torque: %d Nm
+			Requires water
 		</note>
 	</grindstone>
 	<blower>
