@@ -33,6 +33,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -320,6 +321,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, int id, int meta) {
 		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
+		if (!ReikaPlayerAPI.playerCanBreakAt(world, xread, yread, zread, id, meta, placer))
+			return false;
 		TileEntity tile = this.getTileEntity(xread, yread, zread);
 		if (tile instanceof RotaryCraftTileEntity)
 			return false;

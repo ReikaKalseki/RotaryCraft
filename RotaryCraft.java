@@ -223,9 +223,11 @@ public class RotaryCraft extends DragonAPIMod {
 	protected final boolean checkForLock() {
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry r = ItemRegistry.itemList[i];
-			ItemStack is = r.getStackOf();
-			if (BannedItemReader.instance.containsID(is.itemID))
-				return true;
+			if (!r.isDummiedOut()) {
+				int id = r.getShiftedID();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
 		}
 		for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {
 			ExtraConfigIDs entry = ExtraConfigIDs.idList[i];
@@ -365,6 +367,8 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Sibmer", 50.00F);
 		DonatorController.instance.addDonation(instance, "Hezmana", 10.00F);
 		DonatorController.instance.addDonation(instance, "Josh Ricker", 20.00F);
+		DonatorController.instance.addDonation(instance, "Karapol", 25.00F);
+		DonatorController.instance.addDonation(instance, "RiComikka", 15.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");

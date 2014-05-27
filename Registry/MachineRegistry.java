@@ -47,6 +47,7 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
@@ -1267,6 +1268,21 @@ public enum MachineRegistry {
 
 	public boolean hasTemperature() {
 		return TemperatureTE.class.isAssignableFrom(te);
+	}
+
+	public boolean isTransmissionMachine() {
+		return TileEntityTransmissionMachine.class.isAssignableFrom(te);
+	}
+
+	public boolean isAdvancedTransmission() {
+		switch(this) {
+		case ADVANCEDGEARS:
+		case GEARBOX:
+		case SPLITTER:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	/** Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal) */

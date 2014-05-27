@@ -33,6 +33,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -80,14 +81,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		this.getPower(true);
 		int speed = BASESPEED;
 		int minpower = BASEPOWER*(step+1);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", readx, ready, readz));
 		if (power < minpower || torque < MINTORQUE) {
-			//this.climbing = true;
 			return;
 		}
 		if (power > minpower)
 			speed = ReikaMathLibrary.extrema(BASESPEED/((int)(power/minpower)), MINTIME, "max");
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", step, step2));
 		tickcount++;
 
 		if (!this.drawPile3(world, x, y, z, speed) && step != 0)
@@ -97,7 +95,6 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		if (this.smash(world, x, y-step-1, z)) {
 			step += 1;
 		}
-		//if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		this.bounce(world, x, y-step-1, z);
 		this.dealDamage(world, x, y-step-1, z);
 		this.addNausea(world, x, y-step-1, z);
@@ -107,14 +104,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public void bounce(World world, int x, int y, int z) { //bounce entities
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-2, y, z-2, x+3, y+1, z+3).expand(24, 24, 24);
 		List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inzone.size()));
 		for (int i = 0; i < inzone.size(); i++) {
 			Entity ent = (Entity)inzone.get(i);
 			if (ent != null) {
 				if (ent.onGround && !world.isRemote)
 					ent.motionY += 0.5 / ReikaMathLibrary.doubpow(ReikaMathLibrary.py3d(ent.posX-x, ent.posY-y, ent.posZ-z), 0.5);
-				//ent.motionX += (-0.05+par5Random.nextFloat()*0.1F);
-				//ent.motionZ += (-0.05+par5Random.nextFloat()*0.1F);
 				ent.velocityChanged = true;
 			}
 		}
@@ -400,33 +394,35 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
 				int id = world.getBlockId(x+i, y, z+j);
-				if (id != 0 && i*j != 4 && i*j != -4) {
-					if (id == Block.mobSpawner.blockID) {
-						TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x+i, y, z+j);
-						if (spw != null) {
-							this.spawnSpawner(world, x+i, y, z+j, spw);
+				int meta = world.getBlockMetadata(x+i, y, z+j);
+				if (ReikaPlayerAPI.playerCanBreakAt(world, x+i, y, z+j, id, meta, placer)) {
+					if (id != 0 && i*j != 4 && i*j != -4) {
+						if (id == Block.mobSpawner.blockID) {
+							TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x+i, y, z+j);
+							if (spw != null) {
+								this.spawnSpawner(world, x+i, y, z+j, spw);
+							}
 						}
+						if (world.getBlockId(x+i, y-1, z+j) == Block.netherrack.blockID) {
+							Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
+							world.setBlock(x+i, y-1, z+j, 0);
+							world.markBlockForUpdate(x+i, y-1, z+j);
+							//this.step++;
+						}
+						if (world.getBlockId(x+i, y-2, z+j) == Block.netherrack.blockID) {
+							Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
+							world.setBlock(x+i, y-2, z+j, 0);
+							world.markBlockForUpdate(x+i, y-2, z+j);
+							//this.step++;
+						}
+						int[] blockTo = this.getBlockProduct(world, x, y, z, id, meta);
+						world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
+						if (blockTo[0] == 0) {
+							//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
+							this.dropItems(world, x+i, y, z+j);
+						}
+						world.markBlockForUpdate(x+i, y, z+j);
 					}
-					if (world.getBlockId(x+i, y-1, z+j) == Block.netherrack.blockID) {
-						Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
-						world.setBlock(x+i, y-1, z+j, 0);
-						world.markBlockForUpdate(x+i, y-1, z+j);
-						//this.step++;
-					}
-					if (world.getBlockId(x+i, y-2, z+j) == Block.netherrack.blockID) {
-						Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
-						world.setBlock(x+i, y-2, z+j, 0);
-						world.markBlockForUpdate(x+i, y-2, z+j);
-						//this.step++;
-					}
-					int meta = world.getBlockMetadata(x+i, y, z+j);
-					int[] blockTo = this.getBlockProduct(world, x, y, z, id, meta);
-					world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
-					if (blockTo[0] == 0) {
-						//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
-						this.dropItems(world, x+i, y, z+j);
-					}
-					world.markBlockForUpdate(x+i, y, z+j);
 				}
 			}
 		}

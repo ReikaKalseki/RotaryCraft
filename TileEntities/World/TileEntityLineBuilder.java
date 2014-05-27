@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -163,6 +164,8 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		int id = worldObj.getBlockId(rx, ry, rz);
 		if (id == Block.bedrock.blockID)
 			return Integer.MIN_VALUE;
+		if (!ReikaPlayerAPI.playerCanBreakAt(worldObj, rx, ry, rz, placer))
+			return Integer.MIN_VALUE;
 		int maxr = this.getMaxRange();
 		TileEntity te = worldObj.getBlockTileEntity(rx, ry, rz);
 		if (te != null)
@@ -174,6 +177,8 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 			rz = zCoord+dir.offsetZ*i;
 			id = worldObj.getBlockId(rx, ry, rz);
 			if (id == Block.bedrock.blockID)
+				return Integer.MIN_VALUE;
+			if (!ReikaPlayerAPI.playerCanBreakAt(worldObj, rx, ry, rz, placer))
 				return Integer.MIN_VALUE;
 			TileEntity tile = worldObj.getBlockTileEntity(rx, ry, rz);
 			if (tile != null)

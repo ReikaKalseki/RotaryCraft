@@ -97,7 +97,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		if (r < 0)
 			return;
 
-		EntitySonicShot e = new EntitySonicShot(world, this);
+		EntitySonicShot e = new EntitySonicShot(world, this, placer);
 		if (!world.isRemote) {
 			world.spawnEntityInWorld(e);
 		}

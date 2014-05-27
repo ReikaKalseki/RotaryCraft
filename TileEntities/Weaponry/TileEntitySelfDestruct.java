@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -57,7 +59,11 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 			double rx = x+0.5+rand.nextInt(2*n+1)-n;
 			double ry = y+0.5+rand.nextInt(2*n+1)-n;
 			double rz = z+0.5+rand.nextInt(2*n+1)-n;
-			world.createExplosion(null, rx, ry, rz, 3F, true);
+			int irx = MathHelper.floor_double(rx);
+			int iry = MathHelper.floor_double(ry);
+			int irz = MathHelper.floor_double(rz);
+			if (ReikaPlayerAPI.playerCanBreakAt(worldObj, irx, iry, irz, placer))
+				world.createExplosion(null, rx, ry, rz, 3F, true);
 			for (int i = 0; i < 32; i++)
 				world.spawnParticle("lava", rx+rand.nextInt(7)-3, ry+rand.nextInt(7)-3, rz+rand.nextInt(7)-3, 0, 0, 0);
 			if (tickcount > count) {

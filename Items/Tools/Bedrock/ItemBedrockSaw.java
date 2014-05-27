@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2014
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import net.minecraft.item.ItemStack;
@@ -14,6 +23,10 @@ public class ItemBedrockSaw extends ItemRotaryTool implements Saw {
 	@Override
 	public int getMaxCuttingStrength() {
 		return 5;
+	}
+
+	public int getCuttingStrength() {
+		return this.getMaxCuttingStrength();
 	}
 
 	@Override

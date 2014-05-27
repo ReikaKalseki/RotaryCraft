@@ -24,6 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -34,15 +35,18 @@ import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 public class EntitySonicShot extends EntityFireball {
 
 	private final TileEntitySonicBorer te;
+	private final String player;
 
 	public EntitySonicShot(World par1World) {
 		super(par1World);
 		te = null;
+		player = null;
 	}
 
-	public EntitySonicShot(World world, TileEntitySonicBorer tile) {
+	public EntitySonicShot(World world, TileEntitySonicBorer tile, String player) {
 		super(world, tile.xCoord, tile.yCoord, tile.zCoord, 0, 0, 0);
 		te = tile;
+		this.player = player;
 		this.setPosition(tile.xCoord+0.5+tile.xstep, tile.yCoord+0.5+tile.ystep, tile.zCoord+0.5+tile.zstep);
 
 		double dd = 2;
@@ -184,6 +188,8 @@ public class EntitySonicShot extends EntityFireball {
 		if (id == 0)
 			return;
 		int meta = world.getBlockMetadata(x, y, z);
+		if (!ReikaPlayerAPI.playerCanBreakAt(world, x, y, z, id, meta, player))
+			return;
 		Block b = Block.blocksList[id];
 		if (!TileEntitySonicBorer.canDrop(world, x, y, z) && !(b instanceof BlockFluid))
 			return;

@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -98,6 +99,8 @@ public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver impleme
 	private void decay(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		if (!ReikaPlayerAPI.playerCanBreakAt(worldObj, x, y, z, id, meta, placer))
+			return;
 		boolean flag = false;
 		if (id != 0) {
 			Block b = Block.blocksList[id];

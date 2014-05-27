@@ -29,7 +29,7 @@ import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ColumnArray;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -109,11 +109,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			return;
 		}
 
-		if (!ConfigRegistry.ALLOWTERRAFORMER.getState()) {
-			ReikaChatHelper.sendChatToPlayer(this.getPlacer(), "The use of the terraformer has been disabled in the config.");
-			coords.clear();
-		}
-
 		if (!world.isBlockIndirectlyGettingPowered(x, y, z))
 			return;
 
@@ -159,6 +154,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	private boolean setBiome(World world, int x, int z) {
+		if (!ReikaPlayerAPI.playerCanBreakAt(world, x, yCoord, z, placer))
+			return false;
 		BiomeGenBase from = world.getBiomeGenForCoords(x, z);
 		if (!this.isValidTarget(from)) {
 			return false;
@@ -170,8 +167,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);
 		else
 			ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
-		//ReikaWorldHelper.causeAdjacentUpdates(world, x, yCoord, z);
-		//world.markBlockRangeForRenderUpdate(x, 0, z, x, world.provider.getHeight(), z);
 		return true;
 	}
 

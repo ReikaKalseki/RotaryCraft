@@ -17,7 +17,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -26,12 +25,6 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Lo
 
 	public TileEntityChunkLoader() {
 		ForgeChunkManager.setForcedChunkLoadingCallback(RotaryCraft.instance, this);
-	}
-
-	@Override
-	public void onChunkUnload() {
-		ReikaChatHelper.write("CHUNK UNLOADED AT:");
-		ReikaChatHelper.writeCoords(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
