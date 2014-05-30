@@ -18,6 +18,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
@@ -141,6 +142,12 @@ public class RecipesGrinder {
 		this.addRecipe(new ItemStack(i), out, xp);
 	}
 
+	public void addOreDictRecipe(String in, ItemStack out, float xp) {
+		ArrayList<ItemStack> li = OreDictionary.getOres(in);
+		for (int i = 0; i < li.size(); i++)
+			this.addRecipe(li.get(i), out, xp);
+	}
+
 	public void addRecipe(ItemStack in, ItemStack out, float xp)
 	{
 		metaSmeltingList.put(Arrays.asList(in.itemID, in.getItemDamage()), out);
@@ -153,11 +160,6 @@ public class RecipesGrinder {
 		arr.add(out.getItemDamage());
 	}
 
-	/**
-	 * Used to get the resulting ItemStack form a source ItemStack
-	 * @param item The Source ItemStack
-	 * @return The result ItemStack
-	 */
 	public ItemStack getGrindingResult(ItemStack item)
 	{
 		if (item == null)

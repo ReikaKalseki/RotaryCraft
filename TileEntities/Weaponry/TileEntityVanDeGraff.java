@@ -145,17 +145,19 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 	private void shock(EntityLivingBase e) {
 		int dmg = this.getAttackDamage();
 
-		boolean insul = ReikaEntityHelper.isEntityWearingArmorOf(e, EnumArmorMaterial.CLOTH);
-		if (insul)
+		if (ReikaEntityHelper.isEntityWearingFullSuitOf(e, EnumArmorMaterial.CHAIN))
+			dmg = 0;
+		else if (ReikaEntityHelper.isEntityWearingFullSuitOf(e, EnumArmorMaterial.CLOTH))
 			dmg /= 2;
 
-		e.attackEntityFrom(RotaryCraft.shock, dmg);
-		MinecraftForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));
-		//ReikaJavaLibrary.pConsole(charge+":"+this.getAttackDamage());
-		if (e instanceof EntityCreeper) {
-			worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 3F, true);
-			e.attackEntityFrom(DamageSource.magic, Integer.MAX_VALUE);
+		if (dmg > 0) {
+			e.attackEntityFrom(RotaryCraft.shock, dmg);
+			if (e instanceof EntityCreeper) {
+				worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 3F, true);
+				e.attackEntityFrom(DamageSource.magic, Integer.MAX_VALUE);
+			}
 		}
+		MinecraftForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));
 		SoundRegistry.SPARK.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1.25F, 1F);
 	}
 
