@@ -17,55 +17,56 @@ package Reika.RotaryCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelGasCompressor extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
-	ModelRenderer Shape3;
-	ModelRenderer Shape4;
-	ModelRenderer Shape5;
-	ModelRenderer Shape5a;
+	LODModelPart Shape1;
+	LODModelPart Shape2;
+	LODModelPart Shape3;
+	LODModelPart Shape4;
+	LODModelPart Shape5;
+	LODModelPart Shape5a;
 
 	public ModelGasCompressor()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1.setRotationPoint(-8F, 23F, -8F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 65, 0);
+		Shape2 = new LODModelPart(this, 65, 0);
 		Shape2.addBox(-2F, 0F, -2F, 4, 15, 4);
 		Shape2.setRotationPoint(0F, 8F, 0F);
 		Shape2.setTextureSize(128, 128);
 		Shape2.mirror = true;
 		this.setRotation(Shape2, 0F, 0F, 0F);
-		Shape3 = new ModelRenderer(this, 0, 19);
+		Shape3 = new LODModelPart(this, 0, 19);
 		Shape3.addBox(-7F, 0F, -7F, 14, 8, 14);
 		Shape3.setRotationPoint(0F, 15F, 0F);
 		Shape3.setTextureSize(128, 128);
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 0, 42);
+		Shape4 = new LODModelPart(this, 0, 42);
 		Shape4.addBox(-5F, 0F, -5F, 10, 5, 10);
 		Shape4.setRotationPoint(0F, 10F, 0F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0F, 0F, 0F);
-		Shape5 = new ModelRenderer(this, 78, 21);
+		Shape5 = new LODModelPart(this, 78, 21);
 		Shape5.addBox(-5.5F, 0F, -5.5F, 11, 1, 11);
 		Shape5.setRotationPoint(0F, 14.5F, 0F);
 		Shape5.setTextureSize(128, 128);
 		Shape5.mirror = true;
 		this.setRotation(Shape5, 0F, 0F, 0F);
-		Shape5a = new ModelRenderer(this, 83, 0);
+		Shape5a = new LODModelPart(this, 83, 0);
 		Shape5a.addBox(-2.5F, 0F, -2.5F, 5, 1, 5);
 		Shape5a.setRotationPoint(0F, 9.5F, 0F);
 		Shape5a.setTextureSize(128, 128);
@@ -74,14 +75,14 @@ public class ModelGasCompressor extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape3.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape5a.render(f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
+		Shape3.render(te, f5);
+		Shape4.render(te, f5);
+		Shape5.render(te, f5);
+		Shape5a.render(te, f5);
 	}
 
 	@Override

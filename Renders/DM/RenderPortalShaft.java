@@ -92,20 +92,20 @@ public class RenderPortalShaft extends RenderShaft {
 		double d = tile.isInWorld() ? tile.isEnteringPortal() ? 0.25 : tile.isExitingPortal() ? -0.25 : 0 : 0;
 		double ss = 0.5;
 		if (meta <= 3) {
-			var14.renderMount();
+			var14.renderMount(tile);
 			GL11.glTranslated(-d, 0, 0);
 			GL11.glScaled(s, 1, 1);
-			var14.renderShaft(-tile.phi);
+			var14.renderShaft(tile, -tile.phi);
 			GL11.glScaled(1/s, 1, 1);
 			GL11.glTranslated(d, 0, 0);
 		}
 		else if (meta <= 5) {
 			d += 0.5*dir;
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
-			var15.renderMount();
+			var15.renderMount(tile);
 			GL11.glTranslated(0, -d*dir, 0);
 			GL11.glScaled(1, s, 1);
-			var15.renderShaft(-tile.phi*dir);
+			var15.renderShaft(tile, -tile.phi*dir);
 			GL11.glScaled(1, 1/s, 1);
 			GL11.glTranslated(0, d*dir, 0);
 		}

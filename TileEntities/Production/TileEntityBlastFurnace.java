@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -27,6 +26,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -41,12 +42,42 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int BEDROCKTEMP = 1000;
 	public static final int MAXTEMP = 1500;
 	public static final float SMELT_XP = 0.6F;
+	private static final int SLOT_1 = 0;
+	private static final int SLOT_2 = 11;
+	private static final int SLOT_3 = 14;
 
 	private float xp;
 
 	@Override
 	protected int getActiveTexture() {
-		return temperature >= SMELTTEMP && this.hasSteelIngredients() ? 1 : 0;
+		return this.getRecipe() != null ? 1 : 0;
+	}
+
+	private BlastRecipe getRecipe() {
+		ItemStack[] center = new ItemStack[9];
+		System.arraycopy(inv, 1, center, 0, 9);
+		BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[0], inv[11], inv[14], center, temperature);
+
+		if (rec == null)
+			return null;
+
+		ItemStack out = rec.outputItem();
+		int num = this.getProducedFor(rec);
+		if (inv[10] != null) {
+			if (inv[10].itemID != out.itemID || inv[10].getItemDamage() != out.getItemDamage() || inv[10].stackSize+num >= out.getMaxStackSize()) {
+				if (inv[13] != null) {
+					if (inv[13].itemID != out.itemID || inv[13].getItemDamage() != out.getItemDamage() || inv[13].stackSize+num >= out.getMaxStackSize()) {
+						if (inv[12] != null) {
+							if (inv[12].itemID != out.itemID || inv[12].getItemDamage() != out.getItemDamage() || inv[12].stackSize+num >= out.getMaxStackSize()) {
+								return null;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return rec;
 	}
 
 	@Override
@@ -57,188 +88,89 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			tickcount = 0;
 		}
 
-		boolean steel = false;
-		boolean bedrock = false;
-		boolean scrap = false;
-
-		if (this.canMakeSteel()) {
-			steel = true;
-		}
-		else if (this.canMakeBedrock()) {
-			bedrock = true;
-		}
-		else if (this.canMeltScrap()) {
-			scrap = true;
+		BlastRecipe rec = this.getRecipe();
+		if (rec != null) {
+			smeltTime++;
+			if (smeltTime >= this.getOperationTime()) {
+				this.make(rec);
+			}
 		}
 		else {
 			smeltTime = 0;
 			return;
 		}
-
-		smeltTime++;
-		if (smeltTime >= this.getOperationTime()) {
-			if (steel)
-				this.makeSteel();
-			else if (bedrock)
-				this.makeBedrock();
-			else if (scrap)
-				this.meltScrap();
-		}
 	}
 
-	private void meltScrap() {
-		smeltTime = 0;
-		if (worldObj.isRemote)
-			return;
-		int num = 1;
-		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 10))
-			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 12))
-				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 13))
-					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
-						return;
-
-		for (int i = 1; i < 10; i++) {
-			ReikaInventoryHelper.decrStack(i, inv);
-		}
-		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
-	}
-
-	private boolean canMeltScrap() {
-		if (temperature < SMELTTEMP)
-			return false;
-		for (int i = 1; i < 10; i++) {
-			ItemStack is = inv[i];
-			if (!ReikaItemHelper.matchStacks(is, ItemStacks.scrap))
-				return false;
-		}
-		return true;
-	}
-
-	private void makeBedrock() {
+	private void make(BlastRecipe rec) {
 		smeltTime = 0;
 		if (worldObj.isRemote)
 			return;
 
-		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 10))
-			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 12))
-				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.bedingot.itemID, 1, ItemStacks.bedingot.getItemDamage(), inv, 13))
-					if (!this.checkSpreadFit(ItemStacks.bedingot, 1))
+		int num = this.getProducedFor(rec);
+		int made = num;
+		ItemStack out = rec.outputItem();
+
+		if (rec.hasBonus) {
+			double chance = DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1);
+			if (ReikaRandomHelper.doWithChance(chance)) {
+				num *= 1+rand.nextFloat();
+			}
+		}
+
+		if (!ReikaInventoryHelper.addOrSetStack(out.itemID, num, out.getItemDamage(), inv, 10))
+			if (!ReikaInventoryHelper.addOrSetStack(out.itemID, num, out.getItemDamage(), inv, 12))
+				if (!ReikaInventoryHelper.addOrSetStack(out.itemID, num, out.getItemDamage(), inv, 13))
+					if (!this.checkSpreadFit(out, num))
 						return;
 
-		for (int i = 0; i < 4; i++)
-			ReikaInventoryHelper.decrStack(0, inv);
-		ReikaInventoryHelper.decrStack(1, inv);
-	}
+		xp += rec.xp*num;
 
-	public boolean canMakeSteel() {
-		return temperature >= SMELTTEMP && this.hasSteelIngredients();
-	}
+		for (int i = 0; i < rec.primary.numberToUse; i++) {
+			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.primary.chanceToUse*made)))
+				ReikaInventoryHelper.decrStack(0, inv);
+		}
+		for (int i = 0; i < rec.secondary.numberToUse; i++) {
+			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.secondary.chanceToUse*made)))
+				ReikaInventoryHelper.decrStack(11, inv);
+		}
+		for (int i = 0; i < rec.tertiary.numberToUse; i++) {
+			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.tertiary.chanceToUse*made)))
+				ReikaInventoryHelper.decrStack(14, inv);
+		}
 
-	public boolean canMakeBedrock() {
-		return temperature >= BEDROCKTEMP && this.hasBedrockIngredients();
-	}
-
-	private boolean hasBedrockIngredients() {
-		if (inv[0] == null)
-			return false;
-		if (!ReikaItemHelper.matchStacks(inv[0], ItemStacks.bedrockdust))
-			return false;
-		if (inv[0].stackSize < 4)
-			return false;
-		if (inv[11] != null)
-			return false;
-		if (inv[1] == null)
-			return false;
-		if (!ReikaItemHelper.matchStacks(inv[1], ItemStacks.steelingot))
-			return false;
-		for (int i = 2; i < 10; i++) {
+		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null)
-				return false;
+				ReikaInventoryHelper.decrStack(i, inv);
 		}
+		RotaryAchievements a = this.getAchievement(rec);
+		if (a != null)
+			a.triggerAchievement(this.getPlacer());
 
-		if (inv[10] != null) {
-			if (inv[10].itemID != ItemStacks.bedingot.itemID || inv[10].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[10].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
-				if (inv[13] != null) {
-					if (inv[13].itemID != ItemStacks.bedingot.itemID || inv[13].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[13].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
-						if (inv[12] != null) {
-							if (inv[12].itemID != ItemStacks.bedingot.itemID || inv[12].getItemDamage() != ItemStacks.bedingot.getItemDamage() || inv[12].stackSize+9 >= ItemStacks.bedingot.getMaxStackSize()) {
-								return false;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return true;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	private boolean hasSteelIngredients() {
-		if (inv[0] == null)
-			return false;
-		if (inv[0].itemID != Item.coal.itemID)
-			return false;
-		if (inv[11] == null)
-			return false;
-		if (inv[11].itemID != Item.gunpowder.itemID)
-			return false;
-		if (inv[14] == null)
-			return false;
-		if (inv[14].itemID != Block.sand.blockID)
-			return false;
-
-
-		if (inv[10] != null) {
-			if (inv[10].itemID != ItemStacks.steelingot.itemID || inv[10].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[10].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
-				if (inv[13] != null) {
-					if (inv[13].itemID != ItemStacks.steelingot.itemID || inv[13].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[13].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
-						if (inv[12] != null) {
-							if (inv[12].itemID != ItemStacks.steelingot.itemID || inv[12].getItemDamage() != ItemStacks.steelingot.getItemDamage() || inv[12].stackSize+9 >= ItemStacks.steelingot.getMaxStackSize()) {
-								return false;
-							}
-						}
-					}
-				}
+	private int getProducedFor(BlastRecipe rec) {
+		int num = 0;
+		ItemStack main = rec.mainItem();
+		for (int i = 1; i < 10; i++) {
+			if (inv[i] != null) {
+				if (ReikaItemHelper.matchStacks(inv[i], main))
+					num++;
 			}
 		}
-		if (!ReikaInventoryHelper.checkForItem(Item.ingotIron.itemID, inv))
-			return false;
-		return true;
+		return rec.getNumberProduced(num);
+	}
+
+	private RotaryAchievements getAchievement(BlastRecipe rec) {
+		if (ReikaItemHelper.matchStacks(ItemStacks.scrap, rec.mainItem()))
+			return RotaryAchievements.RECYCLE;
+		if (ReikaItemHelper.matchStacks(rec.outputItem(), ItemStacks.steelingot))
+			return RotaryAchievements.MAKESTEEL;
+		return null;
 	}
 
 	public int getTemperatureScaled(int p1) {
 		return ((p1*temperature)/MAXTEMP);
-	}
-
-	private void makeSteel() {
-		smeltTime = 0;
-		if (worldObj.isRemote)
-			return;
-		ReikaInventoryHelper.decrStack(0, inv);
-		int num = ReikaInventoryHelper.countNumStacks(Item.ingotIron.itemID, -1, inv);
-		if (ReikaRandomHelper.doWithChance(0.001*num)) {
-			ReikaInventoryHelper.decrStack(11, inv);
-		}
-		if (ReikaRandomHelper.doWithChance(0.018*num)) {
-			ReikaInventoryHelper.decrStack(14, inv);
-		}
-		if (ReikaRandomHelper.doWithChance(DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1))) {
-			num *= 1+rand.nextFloat();
-		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(num));
-		if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 10))
-			if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 12))
-				if (!ReikaInventoryHelper.addOrSetStack(ItemStacks.steelingot.itemID, num, ItemStacks.steelingot.getItemDamage(), inv, 13))
-					if (!this.checkSpreadFit(ItemStacks.steelingot, num))
-						return;
-		for (int i = 1; i < 10; i++) {
-			if (inv[i] != null) {
-				if (inv[i].itemID == Item.ingotIron.itemID) {
-					ReikaInventoryHelper.decrStack(i, inv);
-				}
-			}
-		}
-		xp += SMELT_XP*num;
 	}
 
 	public void dropXP() {
@@ -373,20 +305,23 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		if (is == null)
+		return is != null && this.getSlotForItem(i, is);
+	}
+
+	private boolean getSlotForItem(int slot, ItemStack is) {
+		int type = RecipesBlastFurnace.getRecipes().getInputTypeForItem(is);
+		switch (type) {
+		case 0:
+			return slot >= 1 && slot <= 9;
+		case 1:
+			return slot == 0;
+		case 2:
+			return slot == 11;
+		case 3:
+			return slot == 14;
+		default:
 			return false;
-		if (i == 0)
-			return is.itemID == Item.coal.itemID || ReikaItemHelper.matchStacks(is, ItemStacks.bedrockdust);
-		else if (i == 1)
-			return is.itemID == Item.ingotIron.itemID || ReikaItemHelper.matchStacks(is, ItemStacks.scrap) || ReikaItemHelper.matchStacks(is, ItemStacks.steelingot);
-		else if (i == 11)
-			return is.itemID == Item.gunpowder.itemID;
-		else if (i == 14)
-			return is.itemID == Block.sand.blockID;
-		else if (i <= 9)
-			return is.itemID == Item.ingotIron.itemID;
-		else
-			return false;
+		}
 	}
 
 	@Override
@@ -416,9 +351,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.hasSteelIngredients())
-			return 15;
-		return 0;
+		return this.getRecipe() == null ? 15 : 0;
 	}
 
 	@Override
@@ -446,11 +379,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public boolean areConditionsMet() {
-		return this.canMakeBedrock() || this.canMakeSteel() || this.canMeltScrap();
+		return this.getRecipe() != null;
 	}
 
 	@Override
 	public String getOperationalStatus() {
-		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
+		return this.areConditionsMet() ? "Operational" : "Insufficient Temperature or Invalid or Missing Items";
 	}
 }

@@ -73,7 +73,7 @@ public class RenderAirGun extends RotaryTERenderer
 			}
 		}
 
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

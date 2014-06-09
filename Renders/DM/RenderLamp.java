@@ -95,11 +95,11 @@ public class RenderLamp extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 		// if (tile.getBlockMetadata() < 4)
 		if (tile.isInWorld() && tile.getBlockMetadata() > 3)
-			var15.renderAll(ReikaJavaLibrary.makeListFrom(tile.beammode), 0, 0);
+			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.beammode), 0, 0);
 		else
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(false), 0, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(false), 0, 0);
 		// else
-		//var15.renderAll();
+		//var15.renderAll(tile, );
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

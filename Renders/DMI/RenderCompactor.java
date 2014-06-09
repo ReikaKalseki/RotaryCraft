@@ -75,7 +75,7 @@ public class RenderCompactor extends RotaryTERenderer
 		float p = tile.phi;
 		if (!tile.isInWorld())
 			p = 1;
-		var14.renderAll(null, p, 0);
+		var14.renderAll(tile, null, p, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

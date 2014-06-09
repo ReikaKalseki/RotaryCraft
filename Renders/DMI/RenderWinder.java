@@ -79,7 +79,7 @@ public class RenderWinder extends RotaryTERenderer
 		}
 
 		boolean hasSpring = tile.getStackInSlot(0) != null && tile.getStackInSlot(0).getItem() instanceof ItemCoil;
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

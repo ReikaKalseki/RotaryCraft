@@ -1573,7 +1573,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, UpgradeableMachi
 		float burnprogress = 0;
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
-		float factor = type.getFuelUnitDuration()/timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
+		float factor = type.getFuelUnitDuration()/(float)timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
 		if (factor <= 0)
 			return 0;
 		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/RotaryConfig.MILLIBUCKET);

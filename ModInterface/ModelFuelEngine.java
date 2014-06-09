@@ -281,10 +281,6 @@ public class ModelFuelEngine extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta) {
-
-	}
-
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		Shape1.render(te, f5);

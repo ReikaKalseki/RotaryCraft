@@ -13,28 +13,55 @@ import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
 import java.util.ArrayList;
 
-import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
-	public class SteelRecipe extends CachedRecipe {
+	public class BlastFurnRecipe extends CachedRecipe {
+
+		public final BlastRecipe recipe;
+		private final ArrayList<Integer> inputs;
+
+		private BlastFurnRecipe(BlastRecipe r) {
+			recipe = r;
+			inputs = this.getValidInputNumbers(r);
+		}
+
+		private ArrayList<Integer> getValidInputNumbers(BlastRecipe r) {
+			ArrayList<Integer> li = new ArrayList();
+			for (int i = r.mainRequired; i <= 9; i += r.mainRequired) {
+				if (i == r.mainRequired || !r.matchInputExactly())
+					li.add(i);
+			}
+			return li;
+		}
+
+		private int getInput() {
+			long time = System.currentTimeMillis();
+			int index = (int)((time/1000)%inputs.size());
+			return inputs.get(index);
+		}
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 9), 143, 24);
+			int in = this.getInput();
+			int num = recipe.getNumberProduced(in);
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(recipe.outputItem(), num), 143, 24);
 		}
 
 		@Override
@@ -43,59 +70,21 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			int dx = 57;
 			int dy = 6;
+			int num = this.getInput();
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
-					stacks.add(new PositionedStack(new ItemStack(Item.ingotIron), dx+18*j, dy+18*i));
+					if (i*3+j < num) {
+						stacks.add(new PositionedStack(recipe.mainItem(), dx+18*j, dy+18*i));
+					}
 				}
 			}
 
-			stacks.add(new PositionedStack(new ItemStack(Block.sand), 21, 5));
-			stacks.add(new PositionedStack(new ItemStack(Item.coal), 21, 24));
-			stacks.add(new PositionedStack(new ItemStack(Item.gunpowder), 21, 43));
-
-			return stacks;
-		}
-	}
-
-	public class BedrockRecipe extends CachedRecipe {
-
-		@Override
-		public PositionedStack getResult() {
-			return new PositionedStack(ItemStacks.bedingot, 143, 24);
-		}
-
-		@Override
-		public ArrayList<PositionedStack> getIngredients()
-		{
-			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			int dx = 57;
-			int dy = 6;
-			stacks.add(new PositionedStack(ItemStacks.steelingot, dx, dy));
-
-			stacks.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), 21, 24));
-
-			return stacks;
-		}
-	}
-
-	public class ScrapRecipe extends CachedRecipe {
-
-		@Override
-		public PositionedStack getResult() {
-			return new PositionedStack(ItemStacks.steelingot, 143, 24);
-		}
-
-		@Override
-		public ArrayList<PositionedStack> getIngredients()
-		{
-			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			int dx = 57;
-			int dy = 6;
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					stacks.add(new PositionedStack(ItemStacks.scrap, dx+18*j, dy+18*i));
-				}
-			}
+			if (recipe.tertiary.getItem() != null)
+				stacks.add(new PositionedStack(recipe.tertiary.getItem(), 21, 5));
+			if (recipe.primary.getItem() != null)
+				stacks.add(new PositionedStack(recipe.primary.getItem(), 21, 24));
+			if (recipe.secondary.getItem() != null)
+				stacks.add(new PositionedStack(recipe.secondary.getItem(), 21, 43));
 
 			return stacks;
 		}
@@ -130,26 +119,16 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (ReikaItemHelper.matchStacks(result, ItemStacks.steelingot)) {
-			arecipes.add(new SteelRecipe());
-			arecipes.add(new ScrapRecipe());
-		}
-		if (ReikaItemHelper.matchStacks(result, ItemStacks.bedingot)) {
-			arecipes.add(new BedrockRecipe());
-		}
+		ArrayList<BlastRecipe> li = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(result);
+		for (int i = 0; i < li.size(); i++)
+			arecipes.add(new BlastFurnRecipe(li.get(i)));
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ingredient.itemID == Item.ingotIron.itemID || ingredient.itemID == Item.coal.itemID || ingredient.itemID == Item.gunpowder.itemID) {
-			arecipes.add(new SteelRecipe());
-		}
-		if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, ingredient) || ReikaItemHelper.matchStacks(ItemStacks.bedrockdust, ingredient)) {
-			arecipes.add(new BedrockRecipe());
-		}
-		if (ReikaItemHelper.matchStacks(ItemStacks.scrap, ingredient)) {
-			arecipes.add(new ScrapRecipe());
-		}
+		ArrayList<BlastRecipe> li = RecipesBlastFurnace.getRecipes().getAllRecipesUsing(ingredient);
+		for (int i = 0; i < li.size(); i++)
+			arecipes.add(new BlastFurnRecipe(li.get(i)));
 	}
 
 	@Override
@@ -162,6 +141,10 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	public void drawExtras(int recipe)
 	{
 		drawTexturedModalRect(6, 17, 176, 44, 11, 43);
+		BlastRecipe r = ((BlastFurnRecipe)arecipes.get(recipe)).recipe;
+		String s = String.format("%dC", r.temperature);
+		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, f.getStringWidth(s)/2-2*(s.length()/5), 61, 0);
 	}
 
 }

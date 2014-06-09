@@ -18,6 +18,7 @@ package Reika.RotaryCraft.ModInterface;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
@@ -168,7 +169,7 @@ public class ModelSteamTurbine extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		double dd = 1;
 

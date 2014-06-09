@@ -17,83 +17,84 @@ package Reika.RotaryCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelComposter extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
-	ModelRenderer Shape2a;
-	ModelRenderer Shape3;
-	ModelRenderer Shape3a;
-	ModelRenderer Shape4;
-	ModelRenderer Shape4a;
-	ModelRenderer Shape5;
-	ModelRenderer Shape5a;
-	ModelRenderer Shape6;
+	LODModelPart Shape1;
+	LODModelPart Shape2;
+	LODModelPart Shape2a;
+	LODModelPart Shape3;
+	LODModelPart Shape3a;
+	LODModelPart Shape4;
+	LODModelPart Shape4a;
+	LODModelPart Shape5;
+	LODModelPart Shape5a;
+	LODModelPart Shape6;
 
 	public ModelComposter()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1.setRotationPoint(-8F, 23F, -8F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 0, 19);
+		Shape2 = new LODModelPart(this, 0, 19);
 		Shape2.addBox(0F, 0F, 0F, 1, 4, 16);
 		Shape2.setRotationPoint(7F, 19F, -8F);
 		Shape2.setTextureSize(128, 128);
 		Shape2.mirror = true;
 		this.setRotation(Shape2, 0F, 0F, 0F);
-		Shape2a = new ModelRenderer(this, 65, 0);
+		Shape2a = new LODModelPart(this, 65, 0);
 		Shape2a.addBox(0F, 0F, 0F, 1, 4, 16);
 		Shape2a.setRotationPoint(-8F, 19F, -8F);
 		Shape2a.setTextureSize(128, 128);
 		Shape2a.mirror = true;
 		this.setRotation(Shape2a, 0F, 0F, 0F);
-		Shape3 = new ModelRenderer(this, 0, 46);
+		Shape3 = new LODModelPart(this, 0, 46);
 		Shape3.addBox(0F, 0F, 0F, 14, 4, 1);
 		Shape3.setRotationPoint(-7F, 19F, 7F);
 		Shape3.setTextureSize(128, 128);
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
-		Shape3a = new ModelRenderer(this, 0, 40);
+		Shape3a = new LODModelPart(this, 0, 40);
 		Shape3a.addBox(0F, 0F, 0F, 14, 4, 1);
 		Shape3a.setRotationPoint(-7F, 19F, -8F);
 		Shape3a.setTextureSize(128, 128);
 		Shape3a.mirror = true;
 		this.setRotation(Shape3a, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 0, 63);
+		Shape4 = new LODModelPart(this, 0, 63);
 		Shape4.addBox(0F, -8F, -1F, 16, 8, 1);
 		Shape4.setRotationPoint(-8F, 19F, 8F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0.5235988F, 0F, 0F);
-		Shape4a = new ModelRenderer(this, 0, 53);
+		Shape4a = new LODModelPart(this, 0, 53);
 		Shape4a.addBox(0F, -8F, 0F, 16, 8, 1);
 		Shape4a.setRotationPoint(-8F, 19F, -8F);
 		Shape4a.setTextureSize(128, 128);
 		Shape4a.mirror = true;
 		this.setRotation(Shape4a, -0.5235988F, 0F, 0F);
-		Shape5 = new ModelRenderer(this, 0, 98);
+		Shape5 = new LODModelPart(this, 0, 98);
 		Shape5.addBox(-1F, -8F, 0F, 1, 8, 16);
 		Shape5.setRotationPoint(8F, 19F, -8F);
 		Shape5.setTextureSize(128, 128);
 		Shape5.mirror = true;
 		this.setRotation(Shape5, 0F, 0F, -0.5235988F);
-		Shape5a = new ModelRenderer(this, 0, 73);
+		Shape5a = new LODModelPart(this, 0, 73);
 		Shape5a.addBox(0F, -8F, 0F, 1, 8, 16);
 		Shape5a.setRotationPoint(-8F, 19F, -8F);
 		Shape5a.setTextureSize(128, 128);
 		Shape5a.mirror = true;
 		this.setRotation(Shape5a, 0F, 0F, 0.5235988F);
-		Shape6 = new ModelRenderer(this, 63, 22);
+		Shape6 = new LODModelPart(this, 63, 22);
 		Shape6.addBox(-5F, 0F, -5F, 10, 1, 10);
 		Shape6.setRotationPoint(0F, 15F, 0F);
 		Shape6.setTextureSize(128, 128);
@@ -101,18 +102,18 @@ public class ModelComposter extends RotaryModelBase
 		this.setRotation(Shape6, 0F, 0F, 0F);
 	}
 
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape2a.render(f5);
-		Shape3.render(f5);
-		Shape3a.render(f5);
-		Shape4.render(f5);
-		Shape4a.render(f5);
-		Shape5.render(f5);
-		Shape5a.render(f5);
-		Shape6.render(f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
+		Shape2a.render(te, f5);
+		Shape3.render(te, f5);
+		Shape3a.render(te, f5);
+		Shape4.render(te, f5);
+		Shape4a.render(te, f5);
+		Shape5.render(te, f5);
+		Shape5a.render(te, f5);
+		Shape6.render(te, f5);
 	}
 
 	@Override

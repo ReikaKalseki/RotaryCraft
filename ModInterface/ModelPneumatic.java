@@ -18,6 +18,7 @@ package Reika.RotaryCraft.ModInterface;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
@@ -217,7 +218,7 @@ public class ModelPneumatic extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 1, 0, 0);

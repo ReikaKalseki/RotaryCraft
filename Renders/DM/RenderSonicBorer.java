@@ -94,9 +94,9 @@ public class RenderSonicBorer extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.getBlockMetadata()<4), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.getBlockMetadata()<4), -tile.phi, 0);
 		// else
-		//var15.renderAll();
+		//var15.renderAll(tile, );
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

@@ -73,7 +73,7 @@ public class RenderClutch extends RotaryTERenderer
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

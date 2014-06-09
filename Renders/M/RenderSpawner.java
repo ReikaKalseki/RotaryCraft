@@ -57,10 +57,10 @@ public class RenderSpawner extends RotaryTERenderer
 
 		if (!tile.isInWorld()) {
 			GL11.glTranslated(0, -0.4, 0);
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(true), 0, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(true), 0, 0);
 		}
 		else
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.isValidLocation(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord)), 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

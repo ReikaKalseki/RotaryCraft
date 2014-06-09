@@ -46,6 +46,8 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
+import Reika.GeoStrata.API.AcceleratorBlacklist;
+import Reika.GeoStrata.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -427,6 +429,13 @@ public class RotaryCraft extends DragonAPIMod {
 			RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
 			FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 150);
 			RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
+		}
+
+		if (ModList.GEOSTRATA.isLoaded()) {
+			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+				MachineRegistry m = MachineRegistry.machineList[i];
+				AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+			}
 		}
 	}
 

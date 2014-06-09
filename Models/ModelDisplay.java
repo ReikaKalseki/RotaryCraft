@@ -17,83 +17,84 @@ package Reika.RotaryCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelDisplay extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
-	ModelRenderer Shape3;
-	ModelRenderer Shape3a;
-	ModelRenderer Shape3b;
-	ModelRenderer Shape4;
-	ModelRenderer Shape4a;
-	ModelRenderer Shape4b;
-	ModelRenderer Shape4c;
-	ModelRenderer Shape5;
+	LODModelPart Shape1;
+	LODModelPart Shape2;
+	LODModelPart Shape3;
+	LODModelPart Shape3a;
+	LODModelPart Shape3b;
+	LODModelPart Shape4;
+	LODModelPart Shape4a;
+	LODModelPart Shape4b;
+	LODModelPart Shape4c;
+	LODModelPart Shape5;
 
 	public ModelDisplay()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1.setRotationPoint(-8F, 23F, -8F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 65, 0);
+		Shape2 = new LODModelPart(this, 65, 0);
 		Shape2.addBox(0F, 0F, 0F, 6, 1, 6);
 		Shape2.setRotationPoint(-3F, 22F, -3F);
 		Shape2.setTextureSize(128, 128);
 		Shape2.mirror = true;
 		this.setRotation(Shape2, 0F, 0F, 0F);
-		Shape3 = new ModelRenderer(this, 14, 18);
+		Shape3 = new LODModelPart(this, 14, 18);
 		Shape3.addBox(0F, 0F, 0F, 6, 1, 2);
 		Shape3.setRotationPoint(-3F, 10F, -1F);
 		Shape3.setTextureSize(128, 128);
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
-		Shape3a = new ModelRenderer(this, 0, 53);
+		Shape3a = new LODModelPart(this, 0, 53);
 		Shape3a.addBox(0F, 0F, 0F, 16, 1, 1);
 		Shape3a.setRotationPoint(-8F, 8F, -0.5F);
 		Shape3a.setTextureSize(128, 128);
 		Shape3a.mirror = true;
 		this.setRotation(Shape3a, 0F, 0F, 0F);
-		Shape3b = new ModelRenderer(this, 0, 32);
+		Shape3b = new LODModelPart(this, 0, 32);
 		Shape3b.addBox(0F, 0F, 0F, 12, 1, 2);
 		Shape3b.setRotationPoint(-6F, 9F, -1F);
 		Shape3b.setTextureSize(128, 128);
 		Shape3b.mirror = true;
 		this.setRotation(Shape3b, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 7, 18);
+		Shape4 = new LODModelPart(this, 7, 18);
 		Shape4.addBox(0F, 0F, 0F, 1, 11, 2);
 		Shape4.setRotationPoint(2F, 11F, -1F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0F, 0F, 0F);
-		Shape4a = new ModelRenderer(this, 5, 36);
+		Shape4a = new LODModelPart(this, 5, 36);
 		Shape4a.addBox(0F, 0F, 0F, 1, 15, 1);
 		Shape4a.setRotationPoint(7F, 8.6F, -0.5F);
 		Shape4a.setTextureSize(128, 128);
 		Shape4a.mirror = true;
 		this.setRotation(Shape4a, 0F, 0F, 0.3490659F);
-		Shape4b = new ModelRenderer(this, 0, 18);
+		Shape4b = new LODModelPart(this, 0, 18);
 		Shape4b.addBox(0F, 0F, 0F, 1, 11, 2);
 		Shape4b.setRotationPoint(-3F, 11F, -1F);
 		Shape4b.setTextureSize(128, 128);
 		Shape4b.mirror = true;
 		this.setRotation(Shape4b, 0F, 0F, 0F);
-		Shape4c = new ModelRenderer(this, 0, 36);
+		Shape4c = new LODModelPart(this, 0, 36);
 		Shape4c.addBox(0F, 0F, 0F, 1, 15, 1);
 		Shape4c.setRotationPoint(-8F, 9F, -0.5F);
 		Shape4c.setTextureSize(128, 128);
 		Shape4c.mirror = true;
 		this.setRotation(Shape4c, 0F, 0F, -0.3490659F);
-		Shape5 = new ModelRenderer(this, 10, 36);
+		Shape5 = new LODModelPart(this, 10, 36);
 		Shape5.addBox(0F, 0F, 0F, 4, 11, 1);
 		Shape5.setRotationPoint(-2F, 11F, -0.5F);
 		Shape5.setTextureSize(128, 128);
@@ -102,18 +103,18 @@ public class ModelDisplay extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape3.render(f5);
-		Shape3a.render(f5);
-		Shape3b.render(f5);
-		Shape4.render(f5);
-		Shape4a.render(f5);
-		Shape4b.render(f5);
-		Shape4c.render(f5);
-		Shape5.render(f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
+		Shape3.render(te, f5);
+		Shape3a.render(te, f5);
+		Shape3b.render(te, f5);
+		Shape4.render(te, f5);
+		Shape4a.render(te, f5);
+		Shape4b.render(te, f5);
+		Shape4c.render(te, f5);
+		Shape5.render(te, f5);
 	}
 
 	@Override

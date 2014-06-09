@@ -83,7 +83,7 @@ public class RenderExtractor extends RotaryTERenderer
 
 		}
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(MinecraftForgeClient.getRenderPass() == 1), 0, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(MinecraftForgeClient.getRenderPass() == 1), 0, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

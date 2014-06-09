@@ -33,11 +33,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.GeoStrata.Registry.GeoBlocks;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -142,15 +144,12 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	}
 
 	public void breakGlass(World world, int x, int y, int z) {
-		//if (par5Random.nextInt(5) > 0)
-		//return;
 		int range = 5;
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = -range; k <= range; k++) {
 					int id = world.getBlockId(x+i, y+j, z+k);
 					this.breakGlass_do(world, x+i, y+j, z+k, id);
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
 				}
 			}
 		}
@@ -232,10 +231,6 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 	}
 
-	private void dropItems(World world, int x, int y, int z) {
-		ReikaItemHelper.dropItems(world, x, y, z, this.getDrops(world, x, y, z));
-	}
-
 	private ArrayList<ItemStack> getDrops(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		Block b = Block.blocksList[id];
@@ -255,6 +250,16 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 		if (id == Block.stone.blockID)
 			to[0] = Block.cobblestone.blockID;
+		if (ModList.GEOSTRATA.isLoaded()) {
+			if (id == GeoBlocks.SMOOTH.getBlockID()) {
+				to[0] = GeoBlocks.COBBLE.getBlockID();
+				to[1] = meta;
+			}
+			if (id == GeoBlocks.SMOOTH2.getBlockID()) {
+				to[0] = GeoBlocks.COBBLE2.getBlockID();
+				to[1] = meta;
+			}
+		}
 		if (id == Block.stoneBrick.blockID && meta == 0) {
 			to[0] = id;
 			to[1] = 2;
@@ -415,11 +420,13 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 							world.markBlockForUpdate(x+i, y-2, z+j);
 							//this.step++;
 						}
-						int[] blockTo = this.getBlockProduct(world, x, y, z, id, meta);
-						world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
+						int[] blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
+						ArrayList<ItemStack> li = this.getDrops(world, x+i, y, z+j);
+						if (!world.isRemote)
+							world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
 						if (blockTo[0] == 0) {
 							//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
-							this.dropItems(world, x+i, y, z+j);
+							ReikaItemHelper.dropItems(world, x+i, y, z+j, li);
 						}
 						world.markBlockForUpdate(x+i, y, z+j);
 					}
@@ -427,7 +434,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			}
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("FDD");
-		world.playSoundEffect(x+0.5D, y, z+0.5D, "Reika.RotaryCraft.piledriver", 1F, 1F);
+		SoundRegistry.PILEDRIVER.playSoundAtBlock(world, x, y, z, 1, 1);
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
 				if (i*j != 4 && i*j != -4 && world.getBlockId(x+i, y, z+j) != 0 && world.getBlockMaterial(x+i, y, z+j) != Material.water && world.getBlockMaterial(x+i, y, z+j) != Material.lava) {

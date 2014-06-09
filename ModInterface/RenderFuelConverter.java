@@ -48,7 +48,7 @@ public class RenderFuelConverter extends RotaryTERenderer
 		float var13;
 
 
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

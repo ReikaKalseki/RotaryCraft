@@ -63,7 +63,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;	 //used to rotate the model about metadata
 
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi, 0);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

@@ -148,28 +148,28 @@ public class RenderGearbox extends RotaryTERenderer
 			case 3:
 			case 4:
 			case 5:
-				var14.renderAll(null, 0, 0);
+				var14.renderAll(tile, null, 0, 0);
 				break;
 			case 6:
 			case 7:
 			case 8:
 			case 9:
 			case 10:
-				var15.renderAll(null, 0, 0);
+				var15.renderAll(tile, null, 0, 0);
 				break;
 			case 11:
 			case 12:
 			case 13:
 			case 14:
 			case 15:
-				var16.renderAll(null, 0, 0);
+				var16.renderAll(tile, null, 0, 0);
 				break;
 			case 16:
 			case 17:
 			case 18:
 			case 19:
 			case 20:
-				var17.renderAll(null, 0, 0);
+				var17.renderAll(tile, null, 0, 0);
 				break;
 			}
 
@@ -179,16 +179,16 @@ public class RenderGearbox extends RotaryTERenderer
 
 		switch(tile.getRatio()) {
 		case 2:
-			var14.renderAll(null, -tile.phi, 0);
+			var14.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case 4:
-			var15.renderAll(null, -tile.phi, 0);
+			var15.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case 8:
-			var16.renderAll(null, -tile.phi, 0);
+			var16.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case 16:
-			var17.renderAll(null, -tile.phi, 0);
+			var17.renderAll(tile, null, -tile.phi, 0);
 			break;
 		}
 

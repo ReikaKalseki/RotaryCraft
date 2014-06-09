@@ -17,118 +17,119 @@ package Reika.RotaryCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelFridge extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
-	ModelRenderer Shape1b;
-	ModelRenderer Shape1c;
-	ModelRenderer Shape1d;
-	ModelRenderer Shape1e;
-	ModelRenderer Shape1g;
-	ModelRenderer Shape1h;
-	ModelRenderer Shape3;
-	ModelRenderer Shape3a;
-	ModelRenderer Shape4;
-	ModelRenderer Shape4a;
-	ModelRenderer Shape3b;
-	ModelRenderer Shape4c;
-	ModelRenderer Shape3d;
+	LODModelPart Shape1;
+	LODModelPart Shape2;
+	LODModelPart Shape1b;
+	LODModelPart Shape1c;
+	LODModelPart Shape1d;
+	LODModelPart Shape1e;
+	LODModelPart Shape1g;
+	LODModelPart Shape1h;
+	LODModelPart Shape3;
+	LODModelPart Shape3a;
+	LODModelPart Shape4;
+	LODModelPart Shape4a;
+	LODModelPart Shape3b;
+	LODModelPart Shape4c;
+	LODModelPart Shape3d;
 
 	public ModelFridge()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 65, 12);
+		Shape1 = new LODModelPart(this, 65, 12);
 		Shape1.addBox(-1F, -1F, 0F, 2, 2, 5);
 		Shape1.setRotationPoint(0F, 13F, 0F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 0, 0);
+		Shape2 = new LODModelPart(this, 0, 0);
 		Shape2.addBox(0F, 0F, 0F, 16, 7, 16);
 		Shape2.setRotationPoint(-8F, 17F, -8F);
 		Shape2.setTextureSize(128, 128);
 		Shape2.mirror = true;
 		this.setRotation(Shape2, 0F, 0F, 0F);
-		Shape1b = new ModelRenderer(this, 109, 15);
+		Shape1b = new LODModelPart(this, 109, 15);
 		Shape1b.addBox(-3F, -3F, 0F, 6, 6, 2);
 		Shape1b.setRotationPoint(0F, 13F, -4F);
 		Shape1b.setTextureSize(128, 128);
 		Shape1b.mirror = true;
 		this.setRotation(Shape1b, 0F, 0F, 0F);
-		Shape1c = new ModelRenderer(this, 65, 5);
+		Shape1c = new LODModelPart(this, 65, 5);
 		Shape1c.addBox(-2F, -2F, 0F, 4, 4, 2);
 		Shape1c.setRotationPoint(0F, 13F, -2F);
 		Shape1c.setTextureSize(128, 128);
 		Shape1c.mirror = true;
 		this.setRotation(Shape1c, 0F, 0F, 0F);
-		Shape1d = new ModelRenderer(this, 109, 6);
+		Shape1d = new LODModelPart(this, 109, 6);
 		Shape1d.addBox(-3F, -3F, 0F, 6, 6, 1);
 		Shape1d.setRotationPoint(0F, 13F, 5F);
 		Shape1d.setTextureSize(128, 128);
 		Shape1d.mirror = true;
 		this.setRotation(Shape1d, 0F, 0F, 0F);
-		Shape1e = new ModelRenderer(this, 83, 0);
+		Shape1e = new LODModelPart(this, 83, 0);
 		Shape1e.addBox(-5F, -5F, 0F, 10, 9, 2);
 		Shape1e.setRotationPoint(0F, 13F, 6F);
 		Shape1e.setTextureSize(128, 128);
 		Shape1e.mirror = true;
 		this.setRotation(Shape1e, 0F, 0F, 0F);
-		Shape1g = new ModelRenderer(this, 87, 24);
+		Shape1g = new LODModelPart(this, 87, 24);
 		Shape1g.addBox(-5F, -5F, 0F, 10, 9, 2);
 		Shape1g.setRotationPoint(0F, 13F, -8F);
 		Shape1g.setTextureSize(128, 128);
 		Shape1g.mirror = true;
 		this.setRotation(Shape1g, 0F, 0F, 0F);
-		Shape1h = new ModelRenderer(this, 87, 12);
+		Shape1h = new LODModelPart(this, 87, 12);
 		Shape1h.addBox(-4F, -4F, 0F, 8, 8, 2);
 		Shape1h.setRotationPoint(0F, 13F, -6F);
 		Shape1h.setTextureSize(128, 128);
 		Shape1h.mirror = true;
 		this.setRotation(Shape1h, 0F, 0F, 0F);
-		Shape3 = new ModelRenderer(this, 5, 24);
+		Shape3 = new LODModelPart(this, 5, 24);
 		Shape3.addBox(0F, 0F, 0F, 1, 7, 1);
 		Shape3.setRotationPoint(0.5F, 11.5F, 3.5F);
 		Shape3.setTextureSize(128, 128);
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
-		Shape3a = new ModelRenderer(this, 11, 24);
+		Shape3a = new LODModelPart(this, 11, 24);
 		Shape3a.addBox(0F, 0F, 0F, 1, 3, 1);
 		Shape3a.setRotationPoint(-1.5F, 11.5F, 2.5F);
 		Shape3a.setTextureSize(128, 128);
 		Shape3a.mirror = true;
 		this.setRotation(Shape3a, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 0, 33);
+		Shape4 = new LODModelPart(this, 0, 33);
 		Shape4.addBox(0F, 0F, 0F, 3, 1, 1);
 		Shape4.setRotationPoint(-1.5F, 13.5F, 2F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, 0F, 0F, 0F);
-		Shape4a = new ModelRenderer(this, 0, 33);
+		Shape4a = new LODModelPart(this, 0, 33);
 		Shape4a.addBox(0F, 0F, 0F, 3, 1, 1);
 		Shape4a.setRotationPoint(-1.5F, 11.5F, 3F);
 		Shape4a.setTextureSize(128, 128);
 		Shape4a.mirror = true;
 		this.setRotation(Shape4a, 0F, 0F, 0F);
-		Shape3b = new ModelRenderer(this, 0, 24);
+		Shape3b = new LODModelPart(this, 0, 24);
 		Shape3b.addBox(0F, 0F, 0F, 1, 7, 1);
 		Shape3b.setRotationPoint(-1.5F, 11.5F, 0.5F);
 		Shape3b.setTextureSize(128, 128);
 		Shape3b.mirror = true;
 		this.setRotation(Shape3b, 0F, 0F, 0F);
-		Shape4c = new ModelRenderer(this, 0, 33);
+		Shape4c = new LODModelPart(this, 0, 33);
 		Shape4c.addBox(0F, 0F, 0F, 3, 1, 1);
 		Shape4c.setRotationPoint(-1.5F, 11.5F, 1F);
 		Shape4c.setTextureSize(128, 128);
 		Shape4c.mirror = true;
 		this.setRotation(Shape4c, 0F, 0F, 0F);
-		Shape3d = new ModelRenderer(this, 5, 24);
+		Shape3d = new LODModelPart(this, 5, 24);
 		Shape3d.addBox(0F, 0F, 0F, 1, 3, 1);
 		Shape3d.setRotationPoint(0.5F, 11.5F, 1.5F);
 		Shape3d.setTextureSize(128, 128);
@@ -137,23 +138,23 @@ public class ModelFridge extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape1b.render(f5);
-		Shape1c.render(f5);
-		Shape1d.render(f5);
-		Shape1e.render(f5);
-		Shape1g.render(f5);
-		Shape1h.render(f5);
-		Shape3.render(f5);
-		Shape3a.render(f5);
-		Shape4.render(f5);
-		Shape4a.render(f5);
-		Shape3b.render(f5);
-		Shape4c.render(f5);
-		Shape3d.render(f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
+		Shape1b.render(te, f5);
+		Shape1c.render(te, f5);
+		Shape1d.render(te, f5);
+		Shape1e.render(te, f5);
+		Shape1g.render(te, f5);
+		Shape1h.render(te, f5);
+		Shape3.render(te, f5);
+		Shape3a.render(te, f5);
+		Shape4.render(te, f5);
+		Shape4a.render(te, f5);
+		Shape3b.render(te, f5);
+		Shape4c.render(te, f5);
+		Shape3d.render(te, f5);
 	}
 
 	@Override

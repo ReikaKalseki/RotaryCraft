@@ -70,7 +70,7 @@ public class RenderMagnetizer extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItemStack(ItemStacks.shaftcore, tile, false)), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItemStack(ItemStacks.shaftcore, tile, false)), -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

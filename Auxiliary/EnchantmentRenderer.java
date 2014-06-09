@@ -89,7 +89,7 @@ public abstract class EnchantmentRenderer {
 
 		double f = 0.01*0;
 		GL11.glTranslated(par2*f, par4*f, -par6*f);
-		model.renderAll(li, 0, 0);
+		model.renderAll(tile, li, 0, 0);
 
 		GL11.glTranslated(0, p, 0);
 		GL11.glScaled(1D/d, 1D/d, 1D/d);

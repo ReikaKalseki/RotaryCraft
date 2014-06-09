@@ -84,10 +84,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public abstract MachineRegistry getMachine();
 
+	@Override
+	@SideOnly(Side.CLIENT)
 	public final TextureFetcher getRenderer() {
 		return this.getTileRenderer();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public final RotaryTERenderer getTileRenderer() {
 		if (this.getMachine().hasRender())
 			return RotaryRenderList.getRenderForMachine(this.getMachine());

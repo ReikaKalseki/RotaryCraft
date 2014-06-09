@@ -18,7 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
@@ -87,12 +89,36 @@ public class BlockMiningPipe extends BlockBasic {
 
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x+1, y, z, RotaryCraft.miningpipe.blockID, -1, x+1, y, z, 16);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x-1, y, z, RotaryCraft.miningpipe.blockID, -1, x-1, y, z, 16);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+1, z, RotaryCraft.miningpipe.blockID, -1, x, y+1, z, 16);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-1, z, RotaryCraft.miningpipe.blockID, -1, x, y-1, z, 16);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+1, RotaryCraft.miningpipe.blockID, -1, x, y, z+1, 16);
-		ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-1, RotaryCraft.miningpipe.blockID, -1, x, y, z-1, 16);
+		ForgeDirection dir = this.getDirectionFromMeta(meta);
+		ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
+		int r = 0; //some way to make bigger on demand...?
+		int d = 64;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -d; k <= d; k++) {
+					int dx = x+left.offsetX*i+dir.offsetX*k;
+					int dy = y+j;
+					int dz = z+left.offsetZ*i+dir.offsetZ*k;
+					int id = world.getBlockId(dx, dy, dz);
+					if (id == blockID) {
+						ReikaSoundHelper.playBreakSound(world, dx, dy, dz, this);
+						world.setBlock(dx, dy, dz, 0);
+						world.markBlockForUpdate(dx, dy, dz);
+					}
+				}
+			}
+		}
+	}
+
+	private ForgeDirection getDirectionFromMeta(int meta) {
+		switch (meta) {
+		case 0:
+			return ForgeDirection.EAST;
+		case 2:
+			return ForgeDirection.SOUTH;
+		default:
+			return ForgeDirection.UNKNOWN;
+		}
 	}
 
 	@Override

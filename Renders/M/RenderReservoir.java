@@ -96,13 +96,13 @@ public class RenderReservoir extends RotaryTERenderer
 		if (tile.isInWorld()) {
 			for (int i = 2; i < 6; i++) {
 				if (!tile.isConnectedOnSide(dirs[i])) {
-					var14.renderSide(dirs[i]);
+					var14.renderSide(tile, dirs[i]);
 				}
 			}
-			var14.renderSide(ForgeDirection.DOWN);
+			var14.renderSide(tile, ForgeDirection.DOWN);
 		}
 		else {
-			var14.renderAll(null, 0, 0);
+			var14.renderAll(tile, null, 0, 0);
 		}
 
 		if (tile.isInWorld())

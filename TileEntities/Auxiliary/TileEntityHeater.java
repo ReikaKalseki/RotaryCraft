@@ -386,14 +386,12 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 		}
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temperature");
+		setTemperature = NBT.getInteger("stemp");
 	}
 
 	@Override
@@ -401,6 +399,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("temperature", temperature);
+		NBT.setInteger("stemp", setTemperature);
 	}
 
 	@Override

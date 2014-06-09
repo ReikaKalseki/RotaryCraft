@@ -27,6 +27,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
@@ -94,16 +95,12 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		return 1;
 	}
 
-	/**
-	 * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-	 * the damage on the stack.
-	 */
 	@Override
 	public boolean hitEntity(ItemStack is, EntityLivingBase target, EntityLivingBase player)
 	{
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getCurrentItemOrArmor(i);
-			if (arm != null) {
+			if (arm != null && this.canDamageArmorOf(target)) {
 				if (arm.getItem() instanceof MuseElectricItem) {
 					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
 					ms.extractEnergy(arm, 5000, false);
@@ -132,6 +129,11 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 			}
 		}
 		return true;
+	}
+
+	private boolean canDamageArmorOf(EntityLivingBase target) {
+		MinecraftServer ms = MinecraftServer.getServer();
+		return target instanceof EntityPlayer ? ms != null && ms.isPVPEnabled() : true;
 	}
 
 	@Override

@@ -17,65 +17,66 @@ package Reika.RotaryCraft.Models.Animated;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelBeamMirror extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape4;
-	ModelRenderer Shape5;
-	ModelRenderer Shape5a;
-	ModelRenderer Shape5b;
-	ModelRenderer Shape5c;
-	ModelRenderer Shape5d;
+	LODModelPart Shape1;
+	LODModelPart Shape4;
+	LODModelPart Shape5;
+	LODModelPart Shape5a;
+	LODModelPart Shape5b;
+	LODModelPart Shape5c;
+	LODModelPart Shape5d;
 
 	public ModelBeamMirror()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 0, 71);
+		Shape1 = new LODModelPart(this, 0, 71);
 		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1.setRotationPoint(-8F, 23F, -8F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 0, 19);
+		Shape4 = new LODModelPart(this, 0, 19);
 		Shape4.addBox(-1F, -4.1F, -4F, 2, 11, 1);
 		Shape4.setRotationPoint(0F, 23F, 0F);
 		Shape4.setTextureSize(128, 128);
 		Shape4.mirror = true;
 		this.setRotation(Shape4, -1.047198F, 0F, 0F);
-		Shape5 = new ModelRenderer(this, 66, 0);
+		Shape5 = new LODModelPart(this, 66, 0);
 		Shape5.addBox(-7F, 6.1F, 5.3F, 14, 3, 1);
 		Shape5.setRotationPoint(0F, 9F, 0F);
 		Shape5.setTextureSize(128, 128);
 		Shape5.mirror = true;
 		this.setRotation(Shape5, -0.7853982F, 0F, 0F);
-		Shape5a = new ModelRenderer(this, 0, 57);
+		Shape5a = new LODModelPart(this, 0, 57);
 		Shape5a.addBox(-4F, 3F, 1.5F, 8, 11, 1);
 		Shape5a.setRotationPoint(0F, 9F, 0F);
 		Shape5a.setTextureSize(128, 128);
 		Shape5a.mirror = true;
 		this.setRotation(Shape5a, 0F, 0F, 0F);
-		Shape5b = new ModelRenderer(this, 66, 11);
+		Shape5b = new LODModelPart(this, 66, 11);
 		Shape5b.addBox(-7F, 3F, 2.1F, 14, 3, 1);
 		Shape5b.setRotationPoint(0F, 9F, 0F);
 		Shape5b.setTextureSize(128, 128);
 		Shape5b.mirror = true;
 		this.setRotation(Shape5b, -0.2617994F, 0F, 0F);
-		Shape5c = new ModelRenderer(this, 66, 5);
+		Shape5c = new LODModelPart(this, 66, 5);
 		Shape5c.addBox(-7F, 4.7F, 3.5F, 14, 3, 1);
 		Shape5c.setRotationPoint(0F, 9F, 0F);
 		Shape5c.setTextureSize(128, 128);
 		Shape5c.mirror = true;
 		this.setRotation(Shape5c, -0.5235988F, 0F, 0F);
-		Shape5d = new ModelRenderer(this, 66, 17);
+		Shape5d = new LODModelPart(this, 66, 17);
 		Shape5d.addBox(-7F, 0.6F, 1.3F, 14, 3, 1);
 		Shape5d.setRotationPoint(0F, 9F, 0F);
 		Shape5d.setTextureSize(128, 128);
@@ -84,30 +85,30 @@ public class ModelBeamMirror extends RotaryModelBase
 	}
 	/*
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape5a.render(f5);
-		Shape5b.render(f5);
-		Shape5c.render(f5);
-		Shape5d.render(f5);
+		Shape1.render(te, f5);
+		Shape4.render(te, f5);
+		Shape5.render(te, f5);
+		Shape5a.render(te, f5);
+		Shape5b.render(te, f5);
+		Shape5c.render(te, f5);
+		Shape5d.render(te, f5);
 	}*/
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape4.render(f5);
+		Shape1.render(te, f5);
+		Shape4.render(te, f5);
 
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(theta, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
-		Shape5d.render(f5);
-		Shape5.render(f5);
-		Shape5b.render(f5);
-		Shape5c.render(f5);
+		Shape5d.render(te, f5);
+		Shape5.render(te, f5);
+		Shape5b.render(te, f5);
+		Shape5c.render(te, f5);
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(-theta, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
@@ -117,7 +118,7 @@ public class ModelBeamMirror extends RotaryModelBase
 		GL11.glTranslated(0, d, 0);
 		GL11.glScaled(1, sc, 1);
 		GL11.glTranslated(0, -d, 0);
-		Shape5a.render(f5);
+		Shape5a.render(te, f5);
 		GL11.glTranslated(0, d, 0);
 		GL11.glScaled(1, 1D/sc, 1);
 		GL11.glTranslated(0, -d, 0);

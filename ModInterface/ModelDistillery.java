@@ -18,6 +18,7 @@ package Reika.RotaryCraft.ModInterface;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelDistillery extends RotaryModelBase
@@ -109,7 +110,7 @@ public class ModelDistillery extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		Shape1a.render(f5);
 		Shape1.render(f5);

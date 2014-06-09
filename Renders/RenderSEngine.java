@@ -30,7 +30,6 @@ import Reika.RotaryCraft.Models.Engine.ModelMicroTurbine;
 import Reika.RotaryCraft.Models.Engine.ModelPerformance;
 import Reika.RotaryCraft.Models.Engine.ModelSteam;
 import Reika.RotaryCraft.Models.Engine.ModelWind;
-import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -171,7 +170,7 @@ public class RenderSEngine extends RotaryTERenderer
 			switch(itemMetadata) {
 			case 1:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
-				var14.renderAll(null, 0, 0);
+				var14.renderAll(tile, null, 0, 0);
 				break;
 			case 2:
 				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
@@ -182,7 +181,7 @@ public class RenderSEngine extends RotaryTERenderer
 				GL11.glTranslated(0, d, 0);
 				GL11.glTranslated(d2, 0, 0);
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
-				var22.renderAll(null, 0, 0);
+				var22.renderAll(tile, null, 0, 0);
 				GL11.glTranslated(0, -d, 0);
 				GL11.glTranslated(-d2, 0, 0);
 				GL11.glScaled(1D/s, 1D/s, 1D/s);
@@ -190,19 +189,19 @@ public class RenderSEngine extends RotaryTERenderer
 				break;
 			case 3:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
-				var15.renderAll(null, 0, 0);
+				var15.renderAll(tile, null, 0, 0);
 				break;
 			case 4:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
-				var16.renderAll(null, 0, 0);
+				var16.renderAll(tile, null, 0, 0);
 				break;
 			case 5:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
-				var17.renderAll(null, 0, 0);
+				var17.renderAll(tile, null, 0, 0);
 				break;
 			case 6:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
-				var18.renderAll(null, Float.MIN_NORMAL, 0);
+				var18.renderAll(tile, null, Float.MIN_NORMAL, 0);
 				break;
 			case 7:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/hydrotex.png");
@@ -210,19 +209,19 @@ public class RenderSEngine extends RotaryTERenderer
 				d = 0.375;
 				GL11.glTranslated(0, d, 0);
 				GL11.glScaled(s, s, s);
-				var21.renderAll(null, 0, 0);
+				var21.renderAll(tile, null, 0, 0);
 				GL11.glScaled(1D/s, 1D/s, 1D/s);
 				GL11.glTranslated(0, -d, 0);
 				break;
 			case 8:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
 				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-				var19.renderAll(null, 0, 0);
+				var19.renderAll(tile, null, 0, 0);
 				break;
 			case 9:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex.png");
 				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-				var20.renderAll(null, 0, 0);
+				var20.renderAll(tile, null, 0, 0);
 				break;
 			}
 
@@ -232,33 +231,33 @@ public class RenderSEngine extends RotaryTERenderer
 
 		switch (tile.getEngineType()) {
 		case DC:
-			var14.renderAll(null, -tile.phi, 0);
+			var14.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case WIND:
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-			var22.renderAll(null, -tile.phi, 0);
+			var22.renderAll(tile, null, -tile.phi, 0);
 			GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
 			break;
 		case STEAM:
-			var15.renderAll(null, -tile.phi, 0);
+			var15.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case GAS:
-			var16.renderAll(null, -tile.phi, 0);
+			var16.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case AC:
-			var17.renderAll(null, -tile.phi, 0);
+			var17.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case SPORT:
-			var18.renderAll(null, -tile.phi, 0);
+			var18.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case HYDRO:
-			var21.renderAll(null, -tile.phi, 0);
+			var21.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case MICRO:
-			var19.renderAll(null, -tile.phi, 0);
+			var19.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case JET:
-			var20.renderAll(null, -tile.phi, 0);
+			var20.renderAll(tile, null, -tile.phi, 0);
 			break;
 		}
 
@@ -282,10 +281,10 @@ public class RenderSEngine extends RotaryTERenderer
 			 */
 			TileEntityEngine eng = (TileEntityEngine)tile;
 			eng.power = 1;
-			if (eng.getEngineType() == EngineType.JET && eng.power > 0) {
-				jetGlow.setPosition(tile.xCoord+0.5, tile.yCoord+0.5, tile.zCoord+0.5);
-				jetGlow.render();
-			}
+			//if (eng.getEngineType() == EngineType.JET && eng.power > 0) {
+			//	jetGlow.setPosition(tile.xCoord+0.5, tile.yCoord+0.5, tile.zCoord+0.5);
+			//	jetGlow.render();
+			//}
 		}
 	}
 

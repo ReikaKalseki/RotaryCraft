@@ -17,21 +17,22 @@ package Reika.RotaryCraft.Models;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelFullBlock extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
+	LODModelPart Shape1;
 
 	public ModelFullBlock()
 	{
 		textureWidth = 64;
 		textureHeight = 32;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 16, 16);
 		Shape1.setRotationPoint(-8F, 8F, -8F);
 		Shape1.setTextureSize(64, 32);
@@ -40,9 +41,9 @@ public class ModelFullBlock extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(ArrayList li, float phi, float theta)
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
+		Shape1.render(te, f5);
 	}
 
 	@Override

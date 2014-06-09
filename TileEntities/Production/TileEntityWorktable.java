@@ -144,6 +144,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			return false;
 		if (is.stackTagCompound.getInteger("dmg") > 0)
 			return true;
+		if (is.stackTagCompound.getInteger("damage") > 0)
+			return true;
 		if (is.stackTagCompound.getInteger("lvl") > 0)
 			return true;
 		if (is.stackTagCompound.hasKey("ench"))

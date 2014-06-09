@@ -91,7 +91,7 @@ public class RenderFin extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(ReikaJavaLibrary.makeListFrom(tile.isInWorld()), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.isInWorld()), -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

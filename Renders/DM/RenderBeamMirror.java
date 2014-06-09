@@ -67,7 +67,7 @@ public class RenderBeamMirror extends RotaryTERenderer {
 			}
 			GL11.glRotatef(var11+90, 0, 1, 0);
 		}
-		var14.renderAll(null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

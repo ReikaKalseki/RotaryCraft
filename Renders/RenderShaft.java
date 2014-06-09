@@ -126,28 +126,28 @@ public class RenderShaft extends RotaryTERenderer
 		if (meta == 5)
 			dir = -1;
 		if (meta <= 3)
-			var14.renderAll(ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
 		else if (meta <= 5) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
-			var15.renderAll(ReikaJavaLibrary.makeListFrom(failed), -tile.phi*dir, 0);
+			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi*dir, 0);
 		}
 		else {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/crosstex.png"); // has own tex
 			switch(tile.getBlockMetadata()) {
 			case 0:
-				var16.renderAll(null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
+				var16.renderAll(tile, null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
 				break;
 			case 6:
-				var16.renderAll(null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
+				var16.renderAll(tile, null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
 				break;
 			case 7:
-				var16.renderAll(null, tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
+				var16.renderAll(tile, null, tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
 				break;
 			case 8:
-				var16.renderAll(null, tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
+				var16.renderAll(tile, null, tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
 				break;
 			case 9:
-				var16.renderAll(null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
+				var16.renderAll(tile, null, -tile.crossphi2, 0); //4-way symmetry, really, so no need to change direction
 				break;
 			}
 		}

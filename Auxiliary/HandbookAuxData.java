@@ -351,7 +351,7 @@ public final class HandbookAuxData {
 			int k = (int)((System.nanoTime()/2000000000)%2);
 			if (k == 0) {
 				ItemStack out = ItemRegistry.JETPACK.getEnchantedStack();
-				List li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
+				ArrayList li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
 				ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 			}
 			else {

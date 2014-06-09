@@ -65,7 +65,7 @@ public class RenderObsidian extends RotaryTERenderer
 		Object[] pars = new Object[2];
 		pars[0] = (MinecraftForgeClient.getRenderPass() == 1 && (tile.getWater() > 0 || tile.getLava() > 0));
 		pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
-		var14.renderAll(ReikaJavaLibrary.makeListFromArray(pars), 0, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFromArray(pars), 0, 0);
 
 		if (tile.isInWorld() || MinecraftForgeClient.getRenderPass() == 1)
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

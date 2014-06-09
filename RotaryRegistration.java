@@ -20,6 +20,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -157,7 +158,7 @@ public class RotaryRegistration {
 
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
-			String name = ore.getProductLabel();
+			String name = ReikaStringParser.stripSpaces(ore.displayName);
 			ItemStack is = ExtractorModOres.getFlakeProduct(ore);
 			OreDictionary.registerOre("dust"+name, is);
 		}

@@ -27,7 +27,6 @@ public class RecipesPulseFurnace
 {
 	private static final RecipesPulseFurnace PulseFurnaceBase = new RecipesPulseFurnace();
 
-	/** The list of smelting results. */
 	private Map metaSmeltingList = new HashMap();
 
 	private List<ItemStack> outputs = new ArrayList();
@@ -114,22 +113,15 @@ public class RecipesPulseFurnace
 	private void addSmelting(int itemID, int metadata, ItemStack itemstack, float xp)
 	{
 		metaSmeltingList.put(Arrays.asList(itemID, metadata), itemstack);
-		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
 
 		inputs.add(new ItemStack(itemID, 1, metadata));
 		outputs.add(itemstack);
 	}
 
-	/**
-	 * Used to get the resulting ItemStack form a source ItemStack
-	 * @param item The Source ItemStack
-	 * @return The result ItemStack
-	 */
 	public ItemStack getSmeltingResult(ItemStack item)
 	{
 		if (item == null)
 			return null;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
 		return (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
 	}
 
