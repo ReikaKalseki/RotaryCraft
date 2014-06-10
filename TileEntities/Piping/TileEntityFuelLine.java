@@ -15,10 +15,11 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFuelLine extends TileEntityPiping {
+public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe {
 
 	private int fuel = 0;
 	private Fluid fluid;
@@ -52,12 +53,12 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	}
 
 	@Override
-	public Fluid getLiquidType() {
+	public Fluid getFluidType() {
 		return fluid;
 	}
 
 	@Override
-	public int getLiquidLevel() {
+	public int getFluidLevel() {
 		return fuel;
 	}
 
@@ -109,5 +110,20 @@ public class TileEntityFuelLine extends TileEntityPiping {
 	@Override
 	public boolean canOutputToIFluidHandler(ForgeDirection side) {
 		return side.offsetY == 0;
+	}
+
+	@Override
+	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
+		if (p instanceof TileEntityFuelLine) {
+			Fluid f = ((TileEntityFuelLine)p).fluid;
+			return f != null ? f.equals(fluid) : true;
+		}
+		return false;
+	}
+
+	@Override
+	public void transferFrom(PumpablePipe from, int amt) {
+		((TileEntityFuelLine)from).fuel -= amt;
+		fuel += amt;
 	}
 }

@@ -153,7 +153,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	private void renderLiquid(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
-		Fluid f = tile.getLiquidType();
+		Fluid f = tile.getFluidType();
 		if (f == null)
 			return;
 		Tessellator v5 = Tessellator.instance;

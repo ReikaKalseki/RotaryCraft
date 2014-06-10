@@ -151,25 +151,25 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			if (clicked.getLiquidType() == null || clicked.getLiquidLevel() <= 0) {
+			if (clicked.getFluidType() == null || clicked.getFluidLevel() <= 0) {
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getLiquidLevel()/1000D, clicked.getLiquidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()/1000D));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine clicked = (TileEntityFuelLine)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getLiquidLevel()/1000D));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getFluidLevel()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose clicked = (TileEntityHose)world.getBlockTileEntity(x, y, z);
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getLiquidLevel()/1000D));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getFluidLevel()/1000D));
 			return true;
 		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {

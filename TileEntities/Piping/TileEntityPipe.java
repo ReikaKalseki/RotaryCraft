@@ -23,11 +23,12 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
+public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, PumpablePipe {
 
 	private Fluid liquid;
 	private int liquidLevel = 0;
@@ -117,7 +118,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 	}
 
 	@Override
-	public Fluid getLiquidType() {
+	public Fluid getFluidType() {
 		return liquid;
 	}
 
@@ -131,7 +132,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 	}
 
 	@Override
-	public int getLiquidLevel() {
+	public int getFluidLevel() {
 		return liquidLevel;
 	}
 
@@ -225,5 +226,20 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("temp", temperature);
+	}
+
+	@Override
+	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
+		if (p instanceof TileEntityPipe) {
+			Fluid f = ((TileEntityPipe)p).liquid;
+			return f != null ? f.equals(liquid) : true;
+		}
+		return false;
+	}
+
+	@Override
+	public void transferFrom(PumpablePipe from, int amt) {
+		((TileEntityPipe)from).liquidLevel -= amt;
+		liquidLevel += amt;
 	}
 }

@@ -98,7 +98,8 @@ public enum PowerReceivers {
 	REFRIGERATOR(2048, 1, 32768),
 	GASTANK(1024, 1, 16384),
 	CRAFTER(1024),
-	ANTIAIR(1024, 1, 65536);
+	ANTIAIR(1024, 1, 65536),
+	PIPEPUMP(1, 4096, 4096);
 
 	private final int minT;
 	private final int minS;

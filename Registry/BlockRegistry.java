@@ -57,7 +57,8 @@ public enum BlockRegistry implements RegistryEnum {
 	MODELINV2(BlockMIMachine.class, Material.iron),
 	SOLAR(BlockSolar.class, Material.iron),
 	BCENGINE(BlockModEngine.class, Material.iron),
-	MODEL2(BlockMMachine.class, Material.iron);
+	MODEL2(BlockMMachine.class, Material.iron),
+	DIRMODEL2(BlockDMMachine.class, Material.iron);
 
 	private Class block;
 	private Material mat;
@@ -69,7 +70,7 @@ public enum BlockRegistry implements RegistryEnum {
 
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Transmission Bus"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Transmission Bus", "DM-Type Machines 2"
 	};
 
 	private BlockRegistry(Class cl, Material m) {

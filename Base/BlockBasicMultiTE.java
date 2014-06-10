@@ -832,9 +832,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe te = (TileEntityPipe)world.getBlockTileEntity(x, y, z);
-			if (te.getLiquidLevel() <= 0 || te.getLiquidType() == null)
+			if (te.getFluidLevel() <= 0 || te.getFluidType() == null)
 				return 0;
-			Fluid f = te.getLiquidType();
+			Fluid f = te.getFluidType();
 			return f.getLuminosity();
 		}
 		if (m == MachineRegistry.DYNAMO) {
@@ -919,7 +919,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof TileEntityPiping) {
 			TileEntityPiping tp = (TileEntityPiping)te;
-			Fluid f = tp.getLiquidType();
+			Fluid f = tp.getFluidType();
 			if (f != null) {
 				currenttip.add(String.format("%s", f.getLocalizedName()));
 				if (tp instanceof TileEntityPipe) {

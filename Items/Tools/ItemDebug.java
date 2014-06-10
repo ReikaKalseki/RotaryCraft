@@ -86,7 +86,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose tile = (TileEntityHose)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d", tile.getLiquidLevel()));
+				ReikaChatHelper.write(String.format("%d", tile.getFluidLevel()));
 			}
 		}
 		if (world.getBlockId(x, y, z) == Block.mobSpawner.blockID) {
@@ -99,7 +99,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%s  %d  %d", tile.getLiquidType().getLocalizedName(), tile.getLiquidLevel(), tile.getPressure()));
+				ReikaChatHelper.write(String.format("%s  %d  %d", tile.getFluidType().getLocalizedName(), tile.getFluidLevel(), tile.getPressure()));
 			}
 		}
 		if (m == MachineRegistry.PUMP) {

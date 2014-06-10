@@ -38,10 +38,10 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 		int dz = z+dir.offsetZ;
 		if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
 			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
-			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getLiquidLevel() > 0) {
+			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getFluidLevel() > 0) {
 				if (liquid < this.getCapacity()) {
-					oldLevel = tile.getLiquidLevel();
-					int toremove = tile.getLiquidLevel()/4+1;
+					oldLevel = tile.getFluidLevel();
+					int toremove = tile.getFluidLevel()/4+1;
 					tile.removeLiquid(toremove);
 					liquid = ReikaMathLibrary.extrema(liquid+oldLevel/4+1, 0, "max");
 				}

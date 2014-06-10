@@ -28,7 +28,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public int getLiquidLevel() {
+	public int getFluidLevel() {
 		return level;
 	}
 
@@ -93,7 +93,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public Fluid getLiquidType() {
+	public Fluid getFluidType() {
 		return fluid;
 	}
 

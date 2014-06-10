@@ -31,7 +31,7 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 public class PipeRenderer extends RotaryTERenderer {
 
 	protected void renderLiquid(RenderableDuct tile, double par2, double par4, double par6, ForgeDirection dir) {
-		Fluid f = tile.getLiquidType();
+		Fluid f = tile.getFluidType();
 		if (f == null)
 			return;
 
@@ -43,7 +43,7 @@ public class PipeRenderer extends RotaryTERenderer {
 		double in2 = 0.5-size+0.01;
 		double dd2 = in-in2;
 
-		Icon ico = tile.getLiquidType().getIcon();
+		Icon ico = tile.getFluidType().getIcon();
 		ReikaLiquidRenderer.bindFluidTexture(f);
 		if (f.getLuminosity() > 0)
 			ReikaRenderHelper.disableLighting();

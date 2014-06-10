@@ -30,7 +30,7 @@ public interface RenderableDuct {
 	public boolean isConnectedToNonSelf(ForgeDirection dir);
 
 	/** The contained liquid type. Null if empty. */
-	public Fluid getLiquidType();
+	public Fluid getFluidType();
 
 	public Icon getGlassIcon();
 

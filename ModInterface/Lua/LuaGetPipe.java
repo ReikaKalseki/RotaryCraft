@@ -22,7 +22,7 @@ public class LuaGetPipe extends LuaMethod {
 	@Override
 	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
 		TileEntityPiping p = (TileEntityPiping) te;
-		return new Object[]{p.getLiquidType().getLocalizedName(), p.getLiquidLevel()};
+		return new Object[]{p.getFluidType().getLocalizedName(), p.getFluidLevel()};
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	private boolean[] connections = new boolean[6];
 
-	public abstract int getLiquidLevel();
+	public abstract int getFluidLevel();
 
 	public abstract boolean canConnectToPipe(MachineRegistry p);
 
@@ -55,7 +55,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public final boolean canIntakeFluid(Fluid f) {
 		if (f == null)
 			return false;
-		return this.isValidFluid(f) && (this.getLiquidType() == null || this.getLiquidLevel() == 0 || this.getLiquidType().equals(f));
+		return this.isValidFluid(f) && (this.getFluidType() == null || this.getFluidLevel() == 0 || this.getFluidType().equals(f));
 	}
 
 	public abstract boolean isValidFluid(Fluid f);
@@ -78,7 +78,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				this.dumpContents(world, x, y, z);
 			}
 		}
-		if (this.getLiquidLevel() <= 0) {
+		if (this.getFluidLevel() <= 0) {
 			this.setLevel(0);
 			this.setFluid(null);
 		}
@@ -120,15 +120,15 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	public final int getPipeOutput(int max) {
-		return Math.min(TransferAmount.QUARTER.getTransferred(max), this.getLiquidLevel()-5);
+		return Math.min(TransferAmount.QUARTER.getTransferred(max), this.getFluidLevel()-5);
 	}
 
 	public void dumpContents(World world, int x, int y, int z) {
-		Fluid f = this.getLiquidType();
-		if (this.getLiquidLevel() <= 1 || f == null)
+		Fluid f = this.getFluidType();
+		if (this.getFluidLevel() <= 1 || f == null)
 			return;
 		for (int i = 0; i < 6; i++) {
-			int level = this.getLiquidLevel();
+			int level = this.getFluidLevel();
 			if (level <= 0) {
 				this.setFluid(null);
 				return;
@@ -144,7 +144,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					if (this.canConnectToPipe(tp.getMachine()) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
 						//ReikaJavaLibrary.pConsole(dir, this.getSide() == Side.SERVER && this instanceof TileEntitySeparatorPipe);
 						if (tp.canIntakeFluid(f)) {
-							int otherlevel = tp.getLiquidLevel();
+							int otherlevel = tp.getFluidLevel();
 							int dL = level-otherlevel;
 							int toadd = this.getPipeOutput(dL);
 							if (toadd > 0) {
@@ -158,7 +158,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					PipeConnector pc = (PipeConnector)te;
 					Flow flow = pc.getFlowForSide(dir.getOpposite());
 					if (flow.canIntake) {
-						int toadd = this.getPipeOutput(this.getLiquidLevel());
+						int toadd = this.getPipeOutput(this.getFluidLevel());
 						//int toadd = pc.getFluidRemoval().getTransferred(this.getLiquidLevel());
 						if (toadd > 0) {
 							FluidStack fs = new FluidStack(f, toadd);
@@ -174,7 +174,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				else if (te instanceof IFluidHandler && this.canOutputToIFluidHandler(dir)) {
 					IFluidHandler fl = (IFluidHandler)te;
 					if (fl.canFill(dir.getOpposite(), f)) {
-						int toadd = this.getPipeOutput(this.getLiquidLevel());
+						int toadd = this.getPipeOutput(this.getFluidLevel());
 						if (toadd > 0) {
 							int added = fl.fill(dir.getOpposite(), new FluidStack(f, toadd), true);
 							if (added > 0) {
@@ -188,11 +188,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	public final void removeLiquid(int toremove) {
-		this.setLevel(this.getLiquidLevel()-toremove);
+		this.setLevel(this.getFluidLevel()-toremove);
 	}
 
 	public final void addFluid(int toadd) {
-		this.setLevel(this.getLiquidLevel()+toadd);
+		this.setLevel(this.getFluidLevel()+toadd);
 	}
 
 	public void intakeFluid(World world, int x, int y, int z) {
@@ -206,9 +206,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
 					if (this.canConnectToPipe(tp.getMachine()) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
-						Fluid f = tp.getLiquidType();
-						int amt = tp.getLiquidLevel();
-						int dL = amt-this.getLiquidLevel();
+						Fluid f = tp.getFluidType();
+						int amt = tp.getFluidLevel();
+						int dL = amt-this.getFluidLevel();
 						int todrain = this.getPipeIntake(dL);
 						if (todrain > 0 && this.canIntakeFluid(f)) {
 							this.setFluid(f);
@@ -224,7 +224,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					if (flow.canOutput) {
 						FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 						if (fs != null) {
-							int level = this.getLiquidLevel();
+							int level = this.getFluidLevel();
 							int todrain = this.getPipeIntake(fs.amount-level);
 							if (todrain > 0) {
 								if (this.canIntakeFluid(fs.getFluid())) {
@@ -242,7 +242,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					FluidStack fs = fl.drain(dir.UNKNOWN, 16000, false);
 					//ReikaJavaLibrary.pConsole(fs);
 					if (fs != null) {
-						int level = this.getLiquidLevel();
+						int level = this.getFluidLevel();
 						int todrain = this.getPipeIntake(fs.amount-level);
 						if (todrain > 0) {
 							if (this.canIntakeFluid(fs.getFluid())) {
@@ -285,7 +285,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public abstract boolean hasLiquid();
 
-	public abstract Fluid getLiquidType();
+	public abstract Fluid getFluidType();
 
 	public void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
@@ -354,8 +354,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			NBT.setBoolean("conn"+i, connections[i]);
 		}
 
-		ReikaNBTHelper.writeFluidToNBT(NBT, this.getLiquidType());
-		NBT.setInteger("level", this.getLiquidLevel());
+		ReikaNBTHelper.writeFluidToNBT(NBT, this.getFluidType());
+		NBT.setInteger("level", this.getFluidLevel());
 	}
 
 	@Override
