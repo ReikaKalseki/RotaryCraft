@@ -122,7 +122,8 @@ public class RotaryNames {
 	};
 
 	public static final String[] compactNames = {
-		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "misc.wingot", "misc.redgoldingot", "misc.agingot"
+		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "misc.wingot", "misc.redgoldingot", "misc.agingot",
+		"misc.coke"
 	};
 
 	public static final String[] pipeNames = {

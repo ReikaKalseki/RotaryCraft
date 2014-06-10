@@ -83,4 +83,9 @@ public class TileEntityDecoTank extends TileEntityBase {
 		return 0;
 	}
 
+	@Override
+	public final boolean hasModel() {
+		return false;
+	}
+
 }

@@ -1028,4 +1028,14 @@
 			Power Input: Bottom or top, orientation dependent
 		</note>
 	</antiair>
+	<pipepump>
+		<desc>
+			The pipe pump helps pump fluids through pipes, reducing the amount that gets stuck in pipes and increasing overall flow rate. Faster input speeds mean faster liquid pumping. Note that pumping too much liquid into a pipe will cause it to burst.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Speed: %d rad/s
+			Power Input: Any side
+		</note>
+	</pipepump>
 </machines>

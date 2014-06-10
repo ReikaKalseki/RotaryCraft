@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -102,12 +103,15 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
 			return this.canConnectToPipe(m);
-		return this.interactsWithMachines() && this.isInteractableTile(this.getTileEntity(dx, dy, dz));
+		return this.interactsWithMachines() && this.isInteractableTile(this.getTileEntity(dx, dy, dz), side);
 	}
 
-	private boolean isInteractableTile(TileEntity te) {
+	private boolean isInteractableTile(TileEntity te, ForgeDirection side) {
 		if (te == null)
 			return false;
+		if (te instanceof PipeRenderConnector) {
+			return ((PipeRenderConnector)te).canConnectToPipeOnSide(side);
+		}
 		if (te instanceof IFluidHandler) {
 			String name = te.getClass().getSimpleName().toLowerCase();
 			return !name.contains("conduit") && !name.contains("pipe");
@@ -340,7 +344,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			PipeConnector pc = (PipeConnector)tile;
 			return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
 		}
-		else if (this.isInteractableTile(tile))
+		else if (this.isInteractableTile(tile, dir))
 			return true;
 		return false;
 	}

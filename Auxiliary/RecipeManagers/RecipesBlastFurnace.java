@@ -136,9 +136,9 @@ public class RecipesBlastFurnace
 	private RecipesBlastFurnace()
 	{
 		BlastInput in1 = new BlastInput(Item.coal, 100, 1);
-		BlastInput in2 = new BlastInput(Item.gunpowder, 1.8F, 1);
-		BlastInput in3 = new BlastInput(Block.sand, 0.1F, 1);
-		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Item.ingotIron, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		BlastInput in2 = new BlastInput(Item.gunpowder, 3.6F, 1);
+		BlastInput in3 = new BlastInput(Block.sand, 0.2F, 1);
+		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Item.ingotIron, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		recipeList.add(hsla);
 
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
@@ -152,6 +152,18 @@ public class RecipesBlastFurnace
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
 		recipeList.add(scrap);
+
+		in1 = new BlastInput(ItemStacks.coke, 100, 1);
+		in2 = new BlastInput(Item.gunpowder, 1.8F, 1);
+		in3 = new BlastInput(Block.sand, 0.1F, 1);
+		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Item.ingotIron, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		recipeList.add(hsla2);
+
+		in1 = new BlastInput((ItemStack)null, 0, 1);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Item.coal, ItemStacks.coke, false, 0, 400);
+		recipeList.add(coke);
 	}
 
 	public BlastRecipe getRecipe(ItemStack in1, ItemStack in2, ItemStack in3, ItemStack[] main, int temp) {

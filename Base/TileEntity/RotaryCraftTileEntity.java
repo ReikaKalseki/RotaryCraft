@@ -132,12 +132,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public double getMaxRenderDistanceSquared() {
-		return 4096D;
-	}
-
-	@Override
 	public final boolean shouldRenderInPass(int pass)
 	{
 		if (!this.isInWorld())
@@ -369,5 +363,10 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public final void onDisconnect(Node node) {}
 	@Override
 	public final void onMessage(Message message) {}
+
+	@Override
+	public final boolean hasModel() {
+		return this.getMachine().hasModel();
+	}
 
 }

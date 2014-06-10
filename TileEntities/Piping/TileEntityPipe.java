@@ -43,10 +43,12 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public static final int HORIZPRESSURE = 20;
 	public static final int DOWNPRESSURE = 0;
 
+	public static final int MAXPRESSURE = 2400000;
+
 	public int getPressure() {
 		if (liquid == null || liquidLevel <= 0)
 			return 101300;
-		//PV = nRT approximation, with V = 1m^3
+		//p = rho*R*T approximation
 		if (liquid.isGaseous())
 			return 101300+(128*(int)(liquidLevel/1000D*liquid.getTemperature()*Math.abs(liquid.getDensity())/1000D));
 		else
@@ -89,6 +91,25 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 			if (temperature > 2500) {
 				this.overheat(worldObj, xCoord, yCoord, zCoord);
 			}
+		}
+		else {
+			temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		}
+
+		if (this.getPressure() > MAXPRESSURE) {
+			this.overpressure(world, x, y, z);
+		}
+	}
+
+	private void overpressure(World world, int x, int y, int z) {
+		if (liquid.canBePlacedInWorld()) {
+			if (!world.isRemote) {
+				world.setBlock(x, y, z, liquid.getBlockID());
+				world.markBlockForUpdate(x, y, z);
+				world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlockID());
+			}
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
+			ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 		}
 	}
 
@@ -240,6 +261,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	@Override
 	public void transferFrom(PumpablePipe from, int amt) {
 		((TileEntityPipe)from).liquidLevel -= amt;
+		liquid = ((TileEntityPipe)from).liquid;
 		liquidLevel += amt;
 	}
 }

@@ -47,6 +47,7 @@ public final class ItemStacks {
 	public static final ItemStack tungsteningot = new ItemStack(RotaryCraft.compacts.itemID, 1, 5);
 	public static final ItemStack redgoldingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 6);
 	public static final ItemStack silveringot = new ItemStack(RotaryCraft.compacts.itemID, 1, 7);
+	public static final ItemStack coke = new ItemStack(RotaryCraft.compacts.itemID, 1, 8);
 
 	public static final ItemStack basepanel = new ItemStack(RotaryCraft.shaftcraft, 1, 0);
 	public static final ItemStack steelingot = new ItemStack(RotaryCraft.shaftcraft, 1, 1);

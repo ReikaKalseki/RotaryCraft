@@ -124,6 +124,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	@Override
 	public void transferFrom(PumpablePipe from, int amt) {
 		((TileEntityFuelLine)from).fuel -= amt;
+		fluid = ((TileEntityFuelLine)from).fluid;
 		fuel += amt;
 	}
 }

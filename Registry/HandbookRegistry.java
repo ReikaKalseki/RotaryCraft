@@ -160,6 +160,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	COOLINGFIN(MachineRegistry.COOLINGFIN),
 	SORTING(MachineRegistry.SORTING),
 	FILLING(MachineRegistry.FILLINGSTATION),
+	PIPEPUMP(MachineRegistry.PIPEPUMP),
 
 	WEPMACHINEDESC("Defence/Offence Machines", "Defence/Offense"),
 	ARROWGUN(MachineRegistry.ARROWGUN),

@@ -83,7 +83,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityGrindstone;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
-import Reika.RotaryCraft.TileEntities.TileEntityPipePump;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
@@ -95,6 +94,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityPipePump;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityFireworkMachine;
@@ -317,7 +317,7 @@ public enum MachineRegistry {
 	CRAFTER(			"machine.crafter",			BlockIMachine.class,		TileEntityAutoCrafter.class,		7),
 	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter"),
 	ANTIAIR(			"machine.antiair",			BlockMIMachine.class,		TileEntityAAGun.class,				24, "RenderAAGun"),
-	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16);
+	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16,	"RenderPipePump");
 
 	private final String name;
 	private final Class te;
@@ -488,7 +488,7 @@ public enum MachineRegistry {
 	}
 
 	public int getMachineMetadata() {
-		return meta;
+		return meta%16;
 	}
 
 	public String getName() {
@@ -822,6 +822,7 @@ public enum MachineRegistry {
 		case BELT:
 		case DYNAMO:
 		case BLOWER:
+		case PIPEPUMP:
 			return true;
 		default:
 			return false;
