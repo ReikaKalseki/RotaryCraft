@@ -18,7 +18,6 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 
@@ -32,7 +31,6 @@ public class PotionDeafness extends Potion {
 	@Override
 	public void performEffect(EntityLivingBase elb, int par2)
 	{
-		ReikaJavaLibrary.pConsole(elb);
 		//no-op
 	}
 
