@@ -15,7 +15,7 @@ import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 
 public class ContainerSteam extends CoreContainer
 {

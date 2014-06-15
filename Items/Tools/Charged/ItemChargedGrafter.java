@@ -71,7 +71,7 @@ public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter 
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
-		return null;
+		return is;
 	}
 
 }

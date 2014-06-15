@@ -144,7 +144,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		ItemMachineRenderer ir = ClientProxy.machineItems;
-		TileEntity te = ir.getRenderingInstance(m);
+		TileEntity te = ir.getRenderingInstance(m, variable);
 		if (m.hasModel() && !m.isPipe()) {
 			double dx = x;
 			double dy = y+21;

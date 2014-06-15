@@ -63,12 +63,13 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				TileEntityShaft sha = new TileEntityShaft();
 				sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
 				sha.getIOSides(world, x, y, z, sha.getBlockMetadata());
+				sha.worldObj = world;
 				sha.xCoord = x;
 				sha.yCoord = y;
 				sha.zCoord = z;
-				int dx = sha.getReadDirection().offsetX;
-				int dy = sha.getReadDirection().offsetY;
-				int dz = sha.getReadDirection().offsetZ;
+				int dx = x+sha.getReadDirection().offsetX;
+				int dy = y+sha.getReadDirection().offsetY;
+				int dz = z+sha.getReadDirection().offsetZ;
 				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft te = (TileEntityShaft)world.getBlockTileEntity(dx, dy, dz);

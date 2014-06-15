@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesCrystallizer
 {
@@ -44,6 +45,8 @@ public class RecipesCrystallizer
 
 		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Block.ice));
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Block.stone));
+
+		this.addRecipe("rc ethanol", 100, ItemRegistry.ETHANOL.getStackOf());
 	}
 
 	private void addRecipe(Fluid f, int amount, ItemStack out)
@@ -59,11 +62,6 @@ public class RecipesCrystallizer
 			this.addRecipe(f, amount, out);
 	}
 
-	/**
-	 * Used to get the resulting ItemStack form a source ItemStack
-	 * @param item The Source ItemStack
-	 * @return The result ItemStack
-	 */
 	public ItemStack getFreezingResult(FluidStack liquid)
 	{
 		Fluid f = liquid.getFluid();

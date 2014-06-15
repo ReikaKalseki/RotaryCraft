@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -96,6 +97,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				in.add(TreeGetter.getHeldDyeLeaf(j));
 			}
 		}
+		if (ModList.EMASHER.isLoaded()) {
+			in.add(new ItemStack(ModCropList.ALGAE.blockID, 1, 0));
+		}
 		return in;
 	}
 
@@ -132,6 +136,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		}
 		if (ModList.FORESTRY.isLoaded() && is.itemID == ForestryHandler.getInstance().saplingID)
 			return 2;
+		if (ModList.EMASHER.isLoaded() && is.itemID == ModCropList.ALGAE.blockID)
+			return 3;
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
 			return PlantMaterials.SAPLING.getPlantValue()*getModWoodValue(sap);

@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Models.Engine.ModelAC;
 import Reika.RotaryCraft.Models.Engine.ModelCombustion;
 import Reika.RotaryCraft.Models.Engine.ModelDC;
@@ -30,7 +31,6 @@ import Reika.RotaryCraft.Models.Engine.ModelMicroTurbine;
 import Reika.RotaryCraft.Models.Engine.ModelPerformance;
 import Reika.RotaryCraft.Models.Engine.ModelSteam;
 import Reika.RotaryCraft.Models.Engine.ModelWind;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

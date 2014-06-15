@@ -34,6 +34,7 @@ import Reika.DragonAPI.Auxiliary.DonatorController;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
+import Reika.DragonAPI.Auxiliary.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Exception.RegistrationException;
@@ -41,6 +42,7 @@ import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -157,7 +159,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 	public static final EnhancedFluid jetFuelFluid = (EnhancedFluid)new EnhancedFluid("jet fuel").setColor(0xFB5C90).setDensity(810).setViscosity(800);
 	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
-	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950);
+	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950).setTemperature(340);
 	public static final EnhancedFluid nitrogenFluid = (EnhancedFluid)new EnhancedFluid("liquid nitrogen").setColor(0xffffff).setDensity(808).setViscosity(158).setTemperature(77);
 	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
 
@@ -222,11 +224,19 @@ public class RotaryCraft extends DragonAPIMod {
 		return isLocked;
 	}
 
-	protected final boolean checkForLock() {
+	private final boolean checkForLock() {
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry r = ItemRegistry.itemList[i];
 			if (!r.isDummiedOut()) {
 				int id = r.getShiftedID();
+				if (BannedItemReader.instance.containsID(id))
+					return true;
+			}
+		}
+		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
+			BlockRegistry r = BlockRegistry.blockList[i];
+			if (!r.isDummiedOut()) {
+				int id = r.getBlockID();
 				if (BannedItemReader.instance.containsID(id))
 					return true;
 			}
@@ -267,7 +277,7 @@ public class RotaryCraft extends DragonAPIMod {
 		proxy.registerSounds();
 
 		isLocked = this.checkForLock();
-		if (isLocked) {
+		if (this.isLocked()) {
 			ReikaJavaLibrary.pConsole("");
 			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
 			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
@@ -335,8 +345,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (!this.isLocked()) {
 			RotaryRecipes.addRecipes();
-			RotaryChests.addToChests();
 		}
+		RotaryChests.addToChests();
 
 		float iron = ConfigRegistry.EXTRAIRON.getFloat();
 		if (iron > 1) {
@@ -392,6 +402,14 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker());
+
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.REACTORCRAFT, "Endgame power generation of multiple gigawatts");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.ELECTRICRAFT, "Easier and lower-CPU-load power transmission and distribution");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.BCENERGY, "Access to MJ power conversion and alternate lubricant production");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.THERMALEXPANSION, "Access to RF power conversion and some interface recipes");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.FORESTRY, "Access to Canola bees to speed canola growth and produce some lubricant");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
 	}
 
 	@Override
@@ -434,7 +452,12 @@ public class RotaryCraft extends DragonAPIMod {
 		if (ModList.GEOSTRATA.isLoaded()) {
 			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 				MachineRegistry m = MachineRegistry.machineList[i];
-				AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+				if (!m.allowsAcceleration())
+					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+			}
+			for (int i = 0; i < EngineType.engineList.length; i++) {
+				EngineType type = EngineType.engineList[i];
+				AcceleratorBlacklist.addBlacklist(type.engineClass, type.name(), BlacklistReason.EXPLOIT);
 			}
 		}
 	}
@@ -442,8 +465,12 @@ public class RotaryCraft extends DragonAPIMod {
 	@EventHandler
 	public void overrideRecipes(FMLServerStartedEvent evt) {
 		if (!this.isLocked()) {
-			GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks);
-			GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
+			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.BLASTFURNACE.getCraftedProduct())) {
+				GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Item.redstone, 'S', ReikaItemHelper.stoneBricks);
+			}
+			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.WORKTABLE.getCraftedProduct())) {
+				GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Item.redstone, 'S', ItemStacks.steelingot, 'B', Block.brick, 'C', Block.workbench, 's', ReikaItemHelper.stoneSlab);
+			}
 		}
 	}
 
@@ -522,7 +549,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public URL getWiki() {
 		try {
-			return new URL("http://www.minecraftforum.net/topic/1969694-");
+			return new URL("http://rotarycraft.wikia.com/wiki/RotaryCraft_Wiki");
 		}
 		catch (MalformedURLException e) {
 			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");

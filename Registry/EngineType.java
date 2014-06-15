@@ -11,20 +11,33 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityDCEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityGasEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityMicroturbine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityWindEngine;
 
 public enum EngineType {
-	DC(256, 4),
-	WIND(1024, 4),
-	STEAM(512, 32),
-	GAS(512, 128),
-	AC(256, 512),
-	SPORT(1024, 256),
-	HYDRO(32, 16384), //double speed, add new lava engine as 524kW?
-	MICRO(131072, 16),
-	JET(65536, 1024);
+	DC(256, 4, TileEntityDCEngine.class),
+	WIND(1024, 4, TileEntityWindEngine.class),
+	STEAM(512, 32, TileEntitySteamEngine.class),
+	GAS(512, 128, TileEntityGasEngine.class),
+	AC(256, 512, TileEntityACEngine.class),
+	SPORT(1024, 256, TileEntityPerformanceEngine.class),
+	HYDRO(32, 16384, TileEntityHydroEngine.class), //double speed, add new lava engine as 524kW?
+	MICRO(131072, 16, TileEntityMicroturbine.class),
+	JET(65536, 1024, TileEntityJetEngine.class);
 
 	/** Standard Motor TorqueSpeeds:
 	 * DC Engine = 1-4Nm @ 1600-2400 rpm (168 - 251 rad/s) 			-> 0.672kW - 1.004kW
@@ -39,13 +52,16 @@ public enum EngineType {
 
 	private final int torque;
 	private final int omega;
+	public final Class<? extends TileEntityEngine> engineClass;
+	private TileEntity renderInstance;
 
-	public static final EngineType[] engineList = EngineType.values();
+	public static final EngineType[] engineList = values();
 
-	private EngineType(int rpm, int tq)
+	private EngineType(int rpm, int tq, Class c)
 	{
 		omega = rpm;
 		torque = tq;
+		engineClass = c;
 	}
 
 	public int getSpeed() {
@@ -104,38 +120,27 @@ public enum EngineType {
 		return EngineType.values()[type];
 	}
 
-	public int getSoundLength(int FOD, float factor) {
-		//Minor corrections
-		if (factor == 2.5F && this.carNoise())
-			factor = 1.81F;
-		if (factor == 2.5F && this.turbineNoise()) {
-			factor = 2F;
-		}
-		if (this.jetNoise()) {
-			factor += 0.0125F;
-		}
-
+	public int getSoundLength() {
 		if (this.carNoise()) {
-			return (int)(88*factor);
+			return 88;
 		}
 		if (this.electricNoise()) {
-			return (int)(74*factor);
+			return 74;
 		}
 		if (this.steamNoise()) {
-			return (int)(49*factor);
+			return 49;
 		}
 		if (this.waterNoise()) {
-			return (int)(59*factor);
+			return 59;
 		}
 		if (this.windNoise()) {
-			return (int)(105*factor);
+			return 105;
 		}
 		if (this.jetNoise()) {
-			FOD = Math.min(7, FOD);
-			return (int)((79+FOD*11)*factor);
+			return 79;
 		}
 		if (this.turbineNoise()) {
-			return (int)(20*factor);
+			return 20;
 		}
 		return 0;
 	}
@@ -184,16 +189,6 @@ public enum EngineType {
 		if (this == WIND)
 			return true;
 		if (this == HYDRO)
-			return true;
-		return false;
-	}
-
-	public boolean hasTemperature() {
-		if (this == SPORT)
-			return true;
-		if (this == STEAM)
-			return true;
-		if (this == JET)
 			return true;
 		return false;
 	}
@@ -345,5 +340,26 @@ public enum EngineType {
 
 	public boolean needsWater() {
 		return this == STEAM || this == SPORT;
+	}
+
+	public TileEntityEngine newTileEntity() {
+		try {
+			return engineClass.newInstance();
+		}
+		catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new RegistrationException(RotaryCraft.instance, "Engine type "+this+" has a noninstantiable class!");
+		}
+		catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RegistrationException(RotaryCraft.instance, "Engine type "+this+" has an inaccessible class!");
+		}
+	}
+
+	public TileEntity getTEInstanceForRender() {
+		if (renderInstance == null) {
+			renderInstance = this.newTileEntity();
+		}
+		return renderInstance;
 	}
 }

@@ -52,9 +52,9 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
@@ -93,7 +93,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityItemCannon icannon;
 	private TileEntityMirror mirror;
 	private TileEntityAimedCannon aimed;
-	private TileEntityEngine engine;
+	private TileEntityJetEngine engine;
 	private TileEntityDisplay display;
 	private TileEntityMultiClutch redgear;
 	private TileEntityTerraformer terra;
@@ -441,7 +441,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				aimed.removePlayerFromWhiteList(stringdata);
 				break;
 			case ENGINEBACKFIRE:
-				engine = (TileEntityEngine)te;
+				engine = (TileEntityJetEngine)te;
 				if (engine != null)
 					engine.backFire(world, x, y, z);
 				break;

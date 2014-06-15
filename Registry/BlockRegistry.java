@@ -63,14 +63,14 @@ public enum BlockRegistry implements RegistryEnum {
 	private Class block;
 	private Material mat;
 	public final int indexOffset;
-	public static final BlockRegistry[] blockList = BlockRegistry.values();
+	public static final BlockRegistry[] blockList = values();
 
 	private static final HashMap<Integer, BlockRegistry> IDMap = new HashMap();
 	private static final HashMap<Class, ArrayList<BlockRegistry>> classMap = new HashMap();
 
 	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
 		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "Transmission Bus", "DM-Type Machines 2"
+		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "DM-Type Machines 2"
 	};
 
 	private BlockRegistry(Class cl, Material m) {
@@ -154,7 +154,7 @@ public enum BlockRegistry implements RegistryEnum {
 	}
 
 	public String getBasicName() {
-		return "TECHNICAL BLOCK "+this.getBlockVariableName();
+		return "[TECHNICAL BLOCK] "+this.getBlockVariableName();
 	}
 
 	public Class[] getConstructorParamTypes() {

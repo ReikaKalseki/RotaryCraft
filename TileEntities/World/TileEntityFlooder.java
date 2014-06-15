@@ -106,9 +106,6 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		tank.writeToNBT(NBT);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

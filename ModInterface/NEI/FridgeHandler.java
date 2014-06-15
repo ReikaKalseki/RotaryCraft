@@ -80,6 +80,8 @@ public class FridgeHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(ItemStack result) {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.dryice))
 			arecipes.add(new FridgeRecipe());
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.nitrogenbucket))
+			arecipes.add(new FridgeRecipe());
 	}
 
 	@Override

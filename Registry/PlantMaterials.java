@@ -22,7 +22,8 @@ public enum PlantMaterials {
 	ROSE(Block.plantRed, 1),
 	FLOWER(Block.plantYellow, 1),
 	VINES(Block.vine, 2),
-	LEAVES(Block.leaves, 2);
+	LEAVES(Block.leaves, 2),
+	POTATO(Item.potato, 1);
 
 	private ItemStack item;
 	private int multiplier;

@@ -13,17 +13,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerPerformance;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 
 public class GuiPerformance extends GuiNonPoweredMachine
 {
-	private TileEntityEngine Engine;
+	private TileEntityPerformanceEngine Engine;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
 	int y;
 
-	public GuiPerformance(EntityPlayer p5ep, TileEntityEngine te)
+	public GuiPerformance(EntityPlayer p5ep, TileEntityPerformanceEngine te)
 	{
 		super(new ContainerPerformance(p5ep, te), te);
 		Engine = te;
@@ -58,12 +58,12 @@ public class GuiPerformance extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = Engine.getLiquidScaled(54);
+		int i2 = Engine.getWaterScaled(54);
 		int i3 = Engine.getTempScaled(54);
 		this.drawTexturedModalRect(j+41, k+71-i2, 193, 55-i2, 5, i2);
 		this.drawTexturedModalRect(j+128, k+71-i3, 177, 99-i3, 9, i3);
 
-		int i1 = Engine.getEthanolScaled(54);
+		int i1 = Engine.getFuelScaled(54);
 		this.drawTexturedModalRect(j+82, k+71-i1, 200, 55-i1, 6, i1);
 		int i4 = Engine.getAdditivesScaled(54);
 		this.drawTexturedModalRect(j+89, k+71-i4, 207, 55-i4, 6, i4);

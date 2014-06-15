@@ -19,7 +19,6 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
@@ -28,6 +27,7 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.ContainerBigFurnace;
@@ -143,6 +143,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
@@ -154,7 +155,6 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
@@ -220,7 +220,7 @@ public class GuiHandler implements IGuiHandler {
 			case AC:
 				return new OneSlotContainer(player, te);
 			case SPORT:
-				return new ContainerPerformance(player, (TileEntityEngine) te);
+				return new ContainerPerformance(player, (TileEntityPerformanceEngine) te);
 			case MICRO:
 			case JET:
 				return new ContainerJet(player, (TileEntityEngine)te);
@@ -346,7 +346,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		
+
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
 		if (gr == GuiRegistry.HANDBOOK)
@@ -392,7 +392,7 @@ public class GuiHandler implements IGuiHandler {
 			case AC:
 				return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 			case SPORT:
-				return new GuiPerformance(player, (TileEntityEngine) te);
+				return new GuiPerformance(player, (TileEntityPerformanceEngine) te);
 			case MICRO:
 			case JET:
 				return new GuiJet(player, (TileEntityEngine) te);

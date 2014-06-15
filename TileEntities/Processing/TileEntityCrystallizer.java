@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -104,7 +105,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	}
 
 	public int getFreezingPoint() {
-		return !tank.isEmpty() ? -273+(int)(0.9*tank.getActualFluid().getTemperature(tank.getFluid())) : 0;
+		return !tank.isEmpty() ? this.getFreezingPoint(tank.getFluid()) : 0;
+	}
+
+	public static int getFreezingPoint(FluidStack fs) {
+		return -273+(int)(0.9*fs.getFluid().getTemperature(fs));
 	}
 
 	public int getProgressScaled(int s) {

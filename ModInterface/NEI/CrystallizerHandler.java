@@ -10,19 +10,24 @@
 package Reika.RotaryCraft.ModInterface.NEI;
 
 import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -93,7 +98,13 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+		if (fs != null) {
+			ItemStack is = RecipesCrystallizer.getRecipes().getFreezingResult(fs);
+			if (is != null) {
+				arecipes.add(new CrystallizerRecipe(fs.getFluid()));
+			}
+		}
 	}
 
 	@Override
@@ -106,6 +117,18 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 	public void drawExtras(int recipe)
 	{
 		this.drawFluids(recipe);
+		this.drawTemperatures(recipe);
+	}
+
+	private void drawTemperatures(int recipe) {
+		CrystallizerRecipe r = (CrystallizerRecipe)arecipes.get(recipe);
+		FluidStack fs = r.getEntry();
+		if (fs != null) {
+			int freeze = TileEntityCrystallizer.getFreezingPoint(fs);
+			FontRenderer f = Minecraft.getMinecraft().fontRenderer;
+			String s = String.format("%dC", freeze);
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, 45, 20, 0);
+		}
 	}
 
 	private void drawFluids(int recipe) {

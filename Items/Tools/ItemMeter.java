@@ -36,11 +36,13 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -48,12 +50,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
@@ -217,11 +219,13 @@ public class ItemMeter extends ItemRotaryTool
 				torque = omega = 0;
 				if (clicked.getEngineType().isAirBreathing() && clicked.isDrowned(world, x, y, z))
 					RotaryAux.writeMessage("drowning");
-				if (clicked.getEngineType() == EngineType.JET && clicked.getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
-					RotaryAux.writeMessage("choke");
-				if (clicked.FOD >= 8)
-					RotaryAux.writeMessage("fod");
-				if (clicked.getEngineType().isCooled() || clicked.isJetFailing) {
+				if (clicked.getEngineType() == EngineType.JET) {
+					if (((TileEntityJetEngine)clicked).getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
+						RotaryAux.writeMessage("choke");
+					if (((TileEntityJetEngine)clicked).FOD >= 8)
+						RotaryAux.writeMessage("fod");
+				}
+				if (clicked.hasTemperature()) {
 					ReikaChatHelper.writeString(String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
 				}
 				if (clicked.getEngineType().burnsFuel()) {
@@ -468,7 +472,23 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.isJammed())
 					ReikaChatHelper.writeString(String.format("%s is jammed, supply more torque or power!", clicked.getName()));
 			}
-
+			if (m == MachineRegistry.FUELENGINE) {
+				TileEntityFuelEngine clicked = (TileEntityFuelEngine)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				torque = clicked.torque;
+				omega = clicked.omega;
+				power = torque*omega;
+				clicked.iotick = 512;
+				world.markBlockForUpdate(x, y, z);
+				if (power >= 1000000)
+					ReikaChatHelper.writeString(String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+				if (power >= 1000 && power < 1000000)
+					ReikaChatHelper.writeString(String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+				if (power < 1000)
+					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
+				torque = omega = 0;
+			}
 			if (m == MachineRegistry.DYNAMO) {
 				TileEntityDynamo clicked = (TileEntityDynamo)world.getBlockTileEntity(x, y, z);
 				if (clicked == null)

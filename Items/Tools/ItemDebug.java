@@ -19,8 +19,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
@@ -28,7 +30,6 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
@@ -185,7 +186,8 @@ public class ItemDebug extends ItemRotaryTool {
 			}
 			if (player.isSneaking()) {
 				tile.addFuel(tile.FUELCAP);
-				tile.additives = tile.FUELCAP/1000;
+				if (tile instanceof TileEntityPerformanceEngine)
+					((TileEntityPerformanceEngine)tile).additives = tile.FUELCAP/1000;
 				tile.addWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
 				tile.omega = tile.getEngineType().getSpeed();

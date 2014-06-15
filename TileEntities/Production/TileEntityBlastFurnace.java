@@ -229,8 +229,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	public int getCookScaled(int p1) {
-		if (temperature < SMELTTEMP)
-			return 0;
 		return ((p1*smeltTime)/this.getOperationTime());
 	}
 

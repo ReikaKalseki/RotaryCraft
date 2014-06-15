@@ -12,8 +12,8 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiEthanol extends GuiNonPoweredMachine
 {
@@ -56,7 +56,7 @@ public class GuiEthanol extends GuiNonPoweredMachine
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int i1 = Ethanol.getEthanolScaled(54);
+		int i1 = Ethanol.getFuelScaled(54);
 		this.drawTexturedModalRect(j+85, k+71-i1, 200, 55-i1, 5, i1);
 
 	}

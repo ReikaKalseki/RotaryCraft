@@ -9,38 +9,54 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, ConditionalOperation {
+public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, TemperatureTE, ConditionalOperation {
 
 	public static final int CAPACITY = 64000;
 
 	public static final int MELT_ENERGY = 2820000; //approx
 
-	public static final int MAXTEMP = 1500;
+	public static final int MAXTEMP = 1800;
 
+	private int temperature;
 	private long energy;
+
+	private StepTimer timer = new StepTimer(20);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
-		tickcount++;
-		energy += power;
 
+		timer.update();
+		if (timer.checkCap())
+			this.updateTemperature(world, x, y, z, meta);
+		if (temperature > this.getMeltingTemperature())
+			energy += power;
+		else
+			energy *= 0.85;
+
+		//ReikaJavaLibrary.pConsole(this.getMeltingTemperature()+":"+energy/20F/MELT_ENERGY, Side.SERVER);
+
+		tickcount++;
 		if (omega > 0 && power > 0) {
 			if (tickcount > 98) {
 				SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 0.5F);
@@ -67,6 +83,19 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 				}
 			}
 		}
+	}
+
+	private int getMeltingTemperature() {
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack is = inv[i];
+			if (is != null) {
+				int temp = RecipesLavaMaker.getRecipes().getMeltTemperature(is);
+				if (temp > Integer.MIN_VALUE) {
+					return temp;
+				}
+			}
+		}
+		return Integer.MAX_VALUE;
 	}
 
 	private boolean canMake(FluidStack liq) {
@@ -149,6 +178,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		tank.readFromNBT(NBT);
 
 		energy = NBT.getLong("e");
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override
@@ -158,6 +188,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		tank.writeToNBT(NBT);
 
 		NBT.setLong("e", energy);
+		NBT.setInteger("temp", temperature);
 	}
 
 	public boolean isEmpty() {
@@ -194,6 +225,54 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Items";
+	}
+
+	@Override
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		if (power > 0) {
+			temperature += ReikaMathLibrary.logbase(power, 2);
+		}
+		if (temperature > Tamb) {
+			temperature -= (temperature-Tamb)/64;
+		}
+		else {
+			temperature += (temperature-Tamb)/64;
+		}
+		if (temperature - Tamb <= 64 && temperature > Tamb)
+			temperature--;
+		if (temperature > MAXTEMP) {
+			temperature = MAXTEMP;
+			this.overheat(world, x, y, z);
+		}
+		if (temperature > 50) {
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			if (side != null)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+			if (side != null)
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+		}
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+
 	}
 
 }

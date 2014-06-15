@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
@@ -71,6 +72,11 @@ public class RotaryRegistration {
 			String label = "RC"+MachineRegistry.machineList[i].getDefaultName().toLowerCase().replaceAll("\\s","");
 			GameRegistry.registerTileEntity(MachineRegistry.machineList[i].getTEClass(), label);
 			ReikaJavaLibrary.initClass(MachineRegistry.machineList[i].getTEClass());
+		}
+		for (int i = 0; i < EngineType.engineList.length; i++) {
+			String label = "RC"+EngineType.engineList[i].name().toLowerCase().replaceAll("\\s","");
+			GameRegistry.registerTileEntity(EngineType.engineList[i].engineClass, label);
+			ReikaJavaLibrary.initClass(EngineType.engineList[i].engineClass);
 		}
 		GameRegistry.registerTileEntity(TileEntityDecoTank.class, "RCDecoTank");
 	}
@@ -155,13 +161,14 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustCoal", ItemStacks.coaldust);
 		OreDictionary.registerOre("dustSalt", ItemStacks.salt);
 		OreDictionary.registerOre("foodSalt", ItemStacks.salt);
-
+		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			String name = ReikaStringParser.stripSpaces(ore.displayName);
 			ItemStack is = ExtractorModOres.getFlakeProduct(ore);
 			OreDictionary.registerOre("dust"+name, is);
 		}
+		 */
 	}
 
 	public static void setupLiquids() {

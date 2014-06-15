@@ -473,7 +473,7 @@ public class GuiHandbook extends GuiScreen
 		if (m == null)
 			return;
 		MaterialRegistry[] mats = MaterialRegistry.values();
-		TileEntity te = m.createTEInstanceForRender();
+		TileEntity te = m.createTEInstanceForRender(0);
 		int timeStep = (int)((System.nanoTime()/SECOND)%mats.length);
 		int r = (int)(System.nanoTime()/20000000)%360;
 		float variable = 0;

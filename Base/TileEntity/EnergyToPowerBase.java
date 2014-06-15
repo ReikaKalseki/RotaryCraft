@@ -164,7 +164,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getTorque() {
-		return baseomega >= 0 ? this.getTierTorque(this.getTier()) : 0;
+		return omega > 0 ? this.getTierTorque(this.getTier()) : 0;
 	}
 
 	public final boolean hasEnoughEnergy() {

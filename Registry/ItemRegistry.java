@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.Random;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
@@ -578,6 +580,8 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public void addRecipe(Object... params) {
+		if (new Random().nextInt(3) == 0)
+			return;
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOf(), params);
 			WorktableRecipes.getInstance().addRecipe(this.getStackOf(), params);

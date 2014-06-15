@@ -12,8 +12,8 @@ package Reika.RotaryCraft.GUIs.Machine;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerJet;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiJet extends GuiNonPoweredMachine
 {
@@ -58,7 +58,7 @@ public class GuiJet extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = eng.getJetFuelScaled(54);
+		int i2 = eng.getFuelScaled(54);
 		this.drawTexturedModalRect(j+85, k+71-i2, 207, 55-i2, 5, i2);
 	}
 

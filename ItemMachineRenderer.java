@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -26,9 +25,9 @@ import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -39,22 +38,10 @@ public class ItemMachineRenderer implements IItemRenderer {
 	private int Renderid;
 	private int metadata;
 
-	private final HashMap<Class, TileEntity> TEs = new HashMap();
 	private final RenderBlocks rb = new RenderBlocks();
 
-	public TileEntity getRenderingInstance(MachineRegistry m) {
-		Class c = m.getTEClass();
-		TileEntity te = TEs.get(c);
-		if (te == null) {
-			try {
-				te = (TileEntity)c.newInstance();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			TEs.put(c, te);
-		}
-		return te;
+	public TileEntity getRenderingInstance(MachineRegistry m, int offset) {
+		return m.createTEInstanceForRender(offset);
 	}
 
 	public ItemMachineRenderer() {
@@ -85,7 +72,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 		}
 		float a = 0; float b = 0;
 		if (item.itemID == RotaryCraft.engineitems.itemID) {
-			TileEntity te = this.getRenderingInstance(MachineRegistry.ENGINE);
+			TileEntity te = this.getRenderingInstance(MachineRegistry.ENGINE, item.getItemDamage());
 			TileEntityEngine eng = (TileEntityEngine)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
@@ -94,7 +81,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(eng, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.gbxitems.itemID) {
-			TileEntity te = this.getRenderingInstance(MachineRegistry.GEARBOX);
+			TileEntity te = this.getRenderingInstance(MachineRegistry.GEARBOX, item.getItemDamage());
 			TileEntityGearbox gbx = (TileEntityGearbox)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
@@ -103,7 +90,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(gbx, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.advgearitems.itemID) {
-			TileEntity te = this.getRenderingInstance(MachineRegistry.ADVANCEDGEARS);
+			TileEntity te = this.getRenderingInstance(MachineRegistry.ADVANCEDGEARS, item.getItemDamage());
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
@@ -116,7 +103,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(adv, a, -0.1D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (item.itemID == RotaryCraft.flywheelitems.itemID) {
-			TileEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL);
+			TileEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL, item.getItemDamage());
 			TileEntityFlywheel fly = (TileEntityFlywheel)te;
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
@@ -134,7 +121,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			TileEntityRenderer.instance.renderTileEntityAt(hyd, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}*/
 		else if (item.itemID == RotaryCraft.shaftitems.itemID) {
-			TileEntity te = this.getRenderingInstance(MachineRegistry.SHAFT);
+			TileEntity te = this.getRenderingInstance(MachineRegistry.SHAFT, item.getItemDamage());
 			TileEntityShaft sha = (TileEntityShaft)te;
 			if (type == type.ENTITY) {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
@@ -162,7 +149,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				rb.renderBlockAsItem(BlockRegistry.PIPING.getBlockVariable(), machine.getMachineMetadata(), 1);
 			}
 			else if (machine.hasModel()) {
-				TileEntity te = this.getRenderingInstance(machine);
+				TileEntity te = this.getRenderingInstance(machine, 0);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;
 					em.getEnchantments().clear();

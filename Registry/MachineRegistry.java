@@ -33,7 +33,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.SpecialConfigLoader;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -46,6 +45,7 @@ import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
@@ -132,7 +132,6 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
@@ -485,6 +484,19 @@ public enum MachineRegistry {
 			return null;
 		metad += BlockRegistry.getOffsetFromBlockID(id)*16;
 		return getMachineMapping(id, metad);
+	}
+
+	public static MachineRegistry getMachineMapping(int id, int meta) {
+		if (id == BlockRegistry.GPR.getBlockID())
+			return GPR;
+		if (id == BlockRegistry.SHAFT.getBlockID())
+			return SHAFT;
+		if (id == BlockRegistry.ENGINE.getBlockID())
+			return ENGINE;
+		if (id == BlockRegistry.GEARBOX.getBlockID())
+			return GEARBOX;
+		List li = Arrays.asList(id, meta);
+		return machineMappings.get(li);
 	}
 
 	public int getMachineMetadata() {
@@ -1001,7 +1013,7 @@ public enum MachineRegistry {
 		if (this == FLYWHEEL)
 			return ((TileEntityFlywheel)tile).failed;
 		if (this == ENGINE)
-			return (((TileEntityEngine)tile).FOD >= 8);
+			return (((TileEntityEngine)tile).isBroken());
 		if (this == MIRROR)
 			return ((TileEntityMirror)tile).broken;
 		return false;
@@ -1037,6 +1049,8 @@ public enum MachineRegistry {
 		if (this == CCTV)
 			return true;
 		if (this == CHUNKLOADER)
+			return true;
+		if (this == SPILLER)
 			return true;
 		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
 			return true;
@@ -1079,6 +1093,15 @@ public enum MachineRegistry {
 		if (this == DYNAMO)
 			return true;
 		return false;
+	}
+
+	public boolean allowsAcceleration() {
+		switch(this) {
+		case BLASTFURNACE:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public boolean matches(MachineRegistry m) {
@@ -1195,15 +1218,18 @@ public enum MachineRegistry {
 		//this.addSizedMetaOreRecipe(num, metadata, obj);
 	}
 
-	private boolean isCraftable() {
-		if (!SpecialConfigLoader.exists())
-			return true;
-		if (this.isCritical())
-			return true;
-		return SpecialConfigLoader.getMachine(this);
+	public boolean isCraftable() {
+		return !this.isDummiedOut() && !this.isTechnical();
 	}
 
-	public TileEntity createTEInstanceForRender() {
+	public boolean isTechnical() {
+		return this == PORTALSHAFT;
+	}
+
+	public TileEntity createTEInstanceForRender(int offset) {
+		if (this == ENGINE) {
+			return EngineType.engineList[offset].getTEInstanceForRender();
+		}
 		if (renderInstance != null)
 			return renderInstance;
 		try {
@@ -1237,24 +1263,11 @@ public enum MachineRegistry {
 			if (m.isEnchantable()) {
 				Object[] o = new Object[2];
 				o[0] = m;
-				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender())).getValidEnchantments();
+				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getValidEnchantments();
 				li.add(o);
 			}
 		}
 		return li;
-	}
-
-	public static MachineRegistry getMachineMapping(int id, int meta) {
-		if (id == BlockRegistry.GPR.getBlockID())
-			return GPR;
-		if (id == BlockRegistry.SHAFT.getBlockID())
-			return SHAFT;
-		if (id == BlockRegistry.ENGINE.getBlockID())
-			return ENGINE;
-		if (id == BlockRegistry.GEARBOX.getBlockID())
-			return GEARBOX;
-		List li = Arrays.asList(id, meta);
-		return machineMappings.get(li);
 	}
 
 	public boolean isIncomplete() {
@@ -1401,7 +1414,7 @@ public enum MachineRegistry {
 		for (int i = 0; i < machineList.length; i++) {
 			MachineRegistry m = machineList[i];
 			int id = m.getBlockID();
-			int meta = m.getMachineMetadata();
+			int meta = m.meta;
 			machineMappings.put(Arrays.asList(id, meta), m);
 		}
 	}

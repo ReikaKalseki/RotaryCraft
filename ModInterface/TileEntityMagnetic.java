@@ -49,12 +49,12 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 			//storedEnergy = 0;
 		}
 		else {
+			omega = this.getSpeed();
+			torque = this.getTorque();
+
+			power = (long)torque*(long)omega;
+
 			if (!world.isRemote) {
-				torque = this.getTorque();
-				omega = this.getSpeed();
-
-				power = (long)torque*(long)omega;
-
 				storedEnergy -= this.getConsumedUnitsPerTick();
 
 				tickcount++;

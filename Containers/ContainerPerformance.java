@@ -15,13 +15,13 @@ import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 
 public class ContainerPerformance extends CoreContainer
 {
-	private TileEntityEngine Engine;
+	private TileEntityPerformanceEngine Engine;
 
-	public ContainerPerformance(EntityPlayer player, TileEntityEngine par2TileEntityEngine)
+	public ContainerPerformance(EntityPlayer player, TileEntityPerformanceEngine par2TileEntityEngine)
 	{
 		super(player, par2TileEntityEngine);
 		Engine = par2TileEntityEngine;

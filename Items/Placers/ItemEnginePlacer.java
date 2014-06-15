@@ -30,9 +30,9 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,10 +81,10 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			if (eng != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 				//eng.type = EngineType.setType(is.getItemDamage());
+				eng.setType(is);
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				eng.placer = ep.getEntityName();
-				if (is.stackTagCompound != null)
-					eng.FOD = is.stackTagCompound.getInteger("damage");
+				eng.setDataFromPlacer(is);
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 					eng.isFlipped = true;
 				}

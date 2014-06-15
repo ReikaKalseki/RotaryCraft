@@ -24,8 +24,9 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 
 public class BlockEngine extends BlockModelledMachine {
 
@@ -128,24 +129,30 @@ public class BlockEngine extends BlockModelledMachine {
 			return;
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
-			if (eng.FOD >= 8 && eng.getEngineType() == EngineType.JET) {
-				ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
-				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-				item.delayBeforeCanPickup = 10;
-				if (!world.isRemote)
-					world.spawnEntityInWorld(item);
-				todrop = new ItemStack(ItemStacks.scrap.itemID, 16+par5Random.nextInt(17), ItemStacks.scrap.getItemDamage());	//drop scrap
-				item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-				item.delayBeforeCanPickup = 10;
-				if (!world.isRemote && !ep.capabilities.isCreativeMode)
-					world.spawnEntityInWorld(item);
+			if (eng.getEngineType() == EngineType.JET) {
+				TileEntityJetEngine tj = (TileEntityJetEngine)eng;
+				if (tj.FOD >= 8) {
+					ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
+					EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+					item.delayBeforeCanPickup = 10;
+					if (!world.isRemote)
+						world.spawnEntityInWorld(item);
+					todrop = new ItemStack(ItemStacks.scrap.itemID, 16+par5Random.nextInt(17), ItemStacks.scrap.getItemDamage());	//drop scrap
+					item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+					item.delayBeforeCanPickup = 10;
+					if (!world.isRemote && !ep.capabilities.isCreativeMode)
+						world.spawnEntityInWorld(item);
+				}
 			}
 			else {
 				int metat = eng.getEngineType().ordinal();
 				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
-				if (eng.getEngineType() == EngineType.JET && eng.FOD > 0) {
-					todrop.stackTagCompound = new NBTTagCompound();
-					todrop.stackTagCompound.setInteger("damage", eng.FOD);
+				if (eng.getEngineType() == EngineType.JET) {
+					TileEntityJetEngine tj = (TileEntityJetEngine)eng;
+					if (tj.FOD > 0) {
+						todrop.stackTagCompound = new NBTTagCompound();
+						todrop.stackTagCompound.setInteger("damage", tj.FOD);
+					}
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
@@ -167,7 +174,7 @@ public class BlockEngine extends BlockModelledMachine {
 	@Override
 	public TileEntity createTileEntity(World world, int meta)
 	{
-		return new TileEntityEngine(EngineType.engineList[meta]);
+		return EngineType.engineList[meta].newTileEntity();
 	}
 
 	@Override
@@ -187,9 +194,10 @@ public class BlockEngine extends BlockModelledMachine {
 			return ret;
 		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.getEngineType().ordinal());
 		ret.add(is);
-		if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
+		if (tile.getEngineType() == EngineType.JET) {
+			TileEntityJetEngine tj = (TileEntityJetEngine)tile;
 			is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setInteger("damage", tile.FOD);
+			is.stackTagCompound.setInteger("damage", tj.FOD);
 		}
 		return ret;
 	}

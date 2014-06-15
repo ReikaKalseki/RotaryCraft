@@ -48,13 +48,14 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
@@ -162,16 +163,16 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 		else if (te instanceof TileEntityEngine) {
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
-				if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
-					tile.repairJet();
+				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+					((TileEntityJetEngine)tile).repairJet();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;
 					return true;
 				}
 			}
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
-				if (tile.getEngineType() == EngineType.JET && tile.FOD > 0) {
-					tile.repairJetPartial();
+				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+					((TileEntityJetEngine)tile).repairJetPartial();
 					if (!ep.capabilities.isCreativeMode)
 						--is.stackSize;
 					return true;
@@ -418,7 +419,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			if (eng.getEngineType().burnsFuel()) {
 				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
 			}
-			if (eng.getEngineType().hasTemperature()) {
+			if (eng.hasTemperature()) {
 				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));
 			}
 		}

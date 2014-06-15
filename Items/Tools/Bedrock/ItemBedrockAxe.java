@@ -22,6 +22,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -87,14 +88,17 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		if (ep.isSneaking())
 			return false;
 		World world = ep.worldObj;
-		TreeReader tree = new TreeReader();
-		tree.setWorld(world);
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		ModWoodList wood = ModWoodList.getModWood(id, meta);
+		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+		TreeReader tree = new TreeReader();
+		tree.setWorld(world);
+		tree.checkAndAddRainbowTree(world, x, y, z);
+		if (tree.isEmpty() || !tree.isValidTree())
+			tree.clear();
+		tree.checkAndAddDyeTree(world, x, y, z);
 		if (id == TwilightForestHandler.getInstance().rootID) {
 			Block b = Block.blocksList[id];
-			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = 2;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {
@@ -110,43 +114,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			}
 			return true;
 		}
-		else if (id == Block.wood.blockID || wood != null) {
-			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(id, meta);
-			tree.checkAndAddRainbowTree(world, x, y, z);
-			if (tree.isEmpty() || !tree.isValidTree())
-				tree.clear();
-			tree.checkAndAddDyeTree(world, x, y, z);
-			if (tree.isEmpty() || !tree.isValidTree())
-				tree.clear();
-			if (tree.isEmpty()) {
-				if (wood == ModWoodList.SEQUOIA) {
-					for (int i = -32; i < 255; i += 16)
-						tree.addSequoia(world, x, y, z, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.DARKWOOD) {
-					tree.addDarkForest(world, x, y, z, x-8, x+8, z-8, z+8, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.IRONWOOD) {
-					for (int i = -2; i < 128; i += 16)
-						tree.addIronwood(world, x, y+i, z, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood != null) {
-					tree.setModTree(wood);
-					tree.addModTree(world, x, y, z);
-				}
-				else if (vanilla != null) {
-					tree.setTree(vanilla);
-					tree.addTree(world, x, y, z);
-				}
-			}
-			if (!tree.isEmpty() && tree.isValidTree()) {
-				this.cutEntireTree(is, world, tree, x, y, z);
-				return true;
-			}
-		}
 		else if (id == Block.mushroomCapRed.blockID || id == Block.mushroomCapBrown.blockID) {
 			Block b = Block.blocksList[id];
-			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = 3;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {
@@ -162,6 +131,22 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				}
 			}
 			return true;
+		}
+		else if (!tree.isEmpty() && tree.isValidTree()) {
+			this.cutEntireTree(is, world, tree, x, y, z);
+			return true;
+		}
+		else if (!world.isRemote) {
+			ModWoodList wood = ModWoodList.getModWood(id, meta);
+			ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
+			if (wood != null) {
+				ProgressiveRecursiveBreaker.instance.addCoordinate(world, x, y, z, wood, fortune, false);
+				return true;
+			}
+			else if (tree2 != null) {
+				ProgressiveRecursiveBreaker.instance.addCoordinate(world, x, y, z, tree2, fortune, false);
+				return true;
+			}
 		}
 		return false;
 	}

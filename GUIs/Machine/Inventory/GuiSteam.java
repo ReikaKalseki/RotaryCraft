@@ -11,8 +11,8 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerSteam;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
 
 public class GuiSteam extends GuiNonPoweredMachine
 {
@@ -41,7 +41,7 @@ public class GuiSteam extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = Steam.getLiquidScaled(54);
+		int i2 = Steam.getWaterScaled(54);
 		int i3 = Steam.getTempScaled(54);
 		this.drawTexturedModalRect(j+49, k+71-i2, 193, 55-i2, 5, i2);
 		this.drawTexturedModalRect(j+119, k+71-i3, 177, 99-i3, 9, i3);

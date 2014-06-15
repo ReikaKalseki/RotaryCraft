@@ -41,6 +41,7 @@ public final class ItemStacks {
 	public static final ItemStack lubebucket = ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket = ItemRegistry.BUCKET.getStackOfMetadata(1);
 	public static final ItemStack ethanolbucket = ItemRegistry.BUCKET.getStackOfMetadata(2);
+	public static final ItemStack nitrogenbucket = ItemRegistry.BUCKET.getStackOfMetadata(3);
 
 	public static final ItemStack bedingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 3);
 	public static final ItemStack aluminumingot = new ItemStack(RotaryCraft.compacts.itemID, 1, 4);

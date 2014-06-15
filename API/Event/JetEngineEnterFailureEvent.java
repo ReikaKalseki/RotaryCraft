@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.API.Event;
 
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 
 public class JetEngineEnterFailureEvent extends TileEntityEvent {
 

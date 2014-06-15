@@ -168,9 +168,6 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		NBT.setLong("energy", storedEnergy);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

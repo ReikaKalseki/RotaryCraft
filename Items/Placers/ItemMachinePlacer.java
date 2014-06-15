@@ -215,7 +215,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (!m.hasCustomPlacerItem() && m.isAvailableInCreativeInventory()) {
 				ItemMachineRenderer ir = ClientProxy.machineItems;
-				TileEntity te = ir.getRenderingInstance(m);
+				TileEntity te = m.createTEInstanceForRender(0);
 				ItemStack item = m.getCraftedProduct();
 				par3List.add(item);
 				if (m.isEnergyToPower()) {
@@ -259,7 +259,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		int i = is.getItemDamage();
 		MachineRegistry m = MachineRegistry.machineList[i];
 		ItemMachineRenderer ir = ClientProxy.machineItems;
-		TileEntity te = ir.getRenderingInstance(m);
+		TileEntity te = ir.getRenderingInstance(m, 0);
 		if (m.isIncomplete()) {
 			li.add("This machine is in development. Use at your own risk.");
 		}
