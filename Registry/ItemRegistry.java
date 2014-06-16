@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.util.Random;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
@@ -28,6 +26,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -580,8 +579,6 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public void addRecipe(Object... params) {
-		if (new Random().nextInt(3) == 0)
-			return;
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOf(), params);
 			WorktableRecipes.getInstance().addRecipe(this.getStackOf(), params);
@@ -606,6 +603,27 @@ public enum ItemRegistry implements RegistryEnum {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+		}
+	}
+
+	public void addBlastRecipe(int temperature, Object... params) {
+		if (!this.isDummiedOut()) {
+			ItemStack is = this.getStackOf();
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
+		}
+	}
+
+	public void addMetaBlastRecipe(int temperature, int meta, Object... params) {
+		if (!this.isDummiedOut()) {
+			ItemStack is = this.getStackOfMetadata(meta);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
+		}
+	}
+
+	public void addEnchantedBlastRecipe(int temperature, Object... params) {
+		if (!this.isDummiedOut()) {
+			ItemStack is = this.getEnchantedStack();
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
 		}
 	}
 

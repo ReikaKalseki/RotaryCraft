@@ -32,6 +32,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	private static final int MINBASE = -1;
 
+	public static final int TIERS = 6;
+
 	protected int storedEnergy;
 
 	protected int baseomega = -1;
@@ -42,10 +44,19 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	private RedstoneState rsState;
 
-	private static final boolean reika = DragonAPICore.isReikasComputer();
-
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
+	}
+
+	@Override
+	public void updateTileEntity() {
+		super.updateTileEntity();
+		if (DragonAPICore.debugtest) {
+			storedEnergy = this.getMaxStorage();
+		}
+		if (storedEnergy < 0) {
+			storedEnergy = 0;
+		}
 	}
 
 	public final int getTier() {
@@ -58,7 +69,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		this.syncAllData();
 	}
 
-	public boolean canUpgradeWith(ItemStack item) {
+	public final boolean canUpgradeWith(ItemStack item) {
 		if (item.getItemDamage() == 2) {
 			if (item.stackTagCompound == null)
 				return false;
@@ -69,7 +80,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getTierFromPowerOutput(long power) {
-		for (int i = 0; i < this.tierCount(); i++) {
+		for (int i = 0; i < TIERS; i++) {
 			long tier = this.getTierPower(i);
 			if (tier >= power)
 				return i;
@@ -78,14 +89,16 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final long getTierPower(int tier) {
-		return this.getTierTorque(tier)*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
+		return this.getGenTorque()*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
 	}
 
-	public abstract int tierCount();
+	public final int getGenTorque() {
+		return 128;
+	}
 
-	public abstract int getTierTorque(int tier);
-
-	public abstract int getMaxSpeedBase(int tier);
+	public final int getMaxSpeedBase(int tier) {
+		return 4+3*tier;
+	}
 
 	public abstract boolean isValidSupplier(TileEntity te);
 
@@ -164,7 +177,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getTorque() {
-		return omega > 0 ? this.getTierTorque(this.getTier()) : 0;
+		return omega > 0 ? this.getGenTorque() : 0;
 	}
 
 	public final boolean hasEnoughEnergy() {

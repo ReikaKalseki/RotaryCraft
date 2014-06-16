@@ -11,6 +11,7 @@ package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.input.Mouse;
 
@@ -67,20 +68,22 @@ public class GuiBevel extends GuiNonPoweredMachine
 		String file = "/Reika/RotaryCraft/Textures/GUI/bevelgui2.png";
 		int px = 176;
 		for (int i = 0; i < 6; i++) {
+			String s = ForgeDirection.VALID_DIRECTIONS[i].name().substring(0, 1);
 			if (in == i)
-				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px+18, i*18, file, RotaryCraft.class));
+				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px+18, i*18, s, 0, false, file, RotaryCraft.class));
 			else
-				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px, i*18, file, RotaryCraft.class));
+				buttonList.add(new ImagedGuiButton(i, j+40, k+8+48+i*22, 18, 18, px, i*18, s, 0, false, file, RotaryCraft.class));
 		}
 		for (int i = 0; i < 6; i++) {
+			String s = ForgeDirection.VALID_DIRECTIONS[i].name().substring(0, 1);
 			if (isValid[i]) {
 				if (out == i)
-					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px+18, i*18, file, RotaryCraft.class));
+					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px+18, i*18, s, 0, false, file, RotaryCraft.class));
 				else
-					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px, i*18, file, RotaryCraft.class));
+					buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, px, i*18, s, 0, false, file, RotaryCraft.class));
 			}
 			else
-				buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, 212, 0, file, RotaryCraft.class));
+				buttonList.add(new ImagedGuiButton(i+6, j+xSize-40-18, k+8+48+i*22, 18, 18, 212, 0, s, 0, false, file, RotaryCraft.class));
 		}
 	}
 

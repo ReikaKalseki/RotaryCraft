@@ -9,7 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.awt.Color;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageInput;
@@ -18,81 +21,14 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
-import Reika.RotaryCraft.API.ShaftMerger;
-import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
-import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityElectricMotor extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IEnergyInterface, IVoltageInput {
+public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, IEnergyInterface, IVoltageInput {
 
-	public static enum Tier {
-		LOW(240, 36, 32, 256),
-		MEDIUM(560, 250, 128, 1024),
-		HIGH(2400, 480, 512, 2048);
-
-		public final int inputVoltage;
-		public final int inputCurrent;
-		public final int outputTorque;
-		public final int outputSpeed;
-
-		public static final Tier[] list = values();
-
-		private Tier(int voltage, int current, int torque, int speed) {
-			inputCurrent = current;
-			inputVoltage = voltage;
-			outputSpeed = speed;
-			outputTorque = torque;
-		}
-
-		public double getPowerForDisplay() {
-			return ReikaMathLibrary.getThousandBase(outputSpeed*outputTorque);
-		}
-	}
-
-	public static final int MAXCOILS = 5;
-	private Tier type = Tier.LOW;
-
-	private int numberCoils = 0;
-
-	private ForgeDirection facingDir;
-
-	private boolean hasPower = false;
-
-	public ForgeDirection getFacing() {
-		return facingDir != null ? facingDir : ForgeDirection.EAST;
-	}
-
-	private void getIOSides(World world, int x, int y, int z, int meta) {
-		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 1:
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 2:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.EAST;
-			break;
-		}
-		read = facingDir;
-		write = read.getOpposite();
-	}
-
-	@Override
-	public boolean canProvidePower() {
-		return true;
-	}
-
-	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return new PowerSourceList().addSource(this);
-	}
+	public static int CAPACITY = 90000;
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -123,6 +59,10 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		super.updateTileEntity();
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
+		read = this.getFacing();
+		write = read.getOpposite();
+
+		/*
 		if (numberCoils == 5) {
 			type = Tier.HIGH;
 		}
@@ -149,24 +89,40 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 			omega = torque = 0;
 			tickcount = 2000;
 		}
-		power = (long)omega*(long)torque;
+		power = (long)omega*(long)torque;*/
+		if (!this.hasEnoughEnergy()) {
+			torque = 0;
+			omega = 0;
+			power = 0;
+			//storedEnergy = 0;
+		}
+		else {
+			omega = this.getSpeed();
+			torque = this.getTorque();
+
+			power = (long)torque*(long)omega;
+
+			if (!world.isRemote) {
+				storedEnergy -= this.getConsumedUnitsPerTick();
+
+				tickcount++;
+				if (power > 0) {
+					if (tickcount >= 294) {
+						tickcount = 0;
+						SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.2F, 0.51F);
+					}
+				}
+			}
+		}
 
 		this.basicPowerReceiver();
 	}
 
-	public boolean addCoil() {
-		if (numberCoils < MAXCOILS) {
-			numberCoils++;
-			return true;
-		}
-		return false;
-	}
-
 	@Override
 	public long getMaxPower() {
-		return this.getPowerOut();
+		return power;
 	}
-
+	/*
 	@Override
 	public long getCurrentPower() {
 		return this.getPowerOut();
@@ -178,51 +134,21 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 
 	public Tier getVoltageTier() {
 		return type;
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
-		super.readSyncTag(NBT);
-
-		numberCoils = NBT.getInteger("coils");
-
-		//voltage = NBT.getFloat("v");
-		//current = NBT.getFloat("a");
-	}
-
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
-
-		NBT.setInteger("coils", numberCoils);
-
-		//NBT.setFloat("v", voltage);
-		//NBT.setFloat("a", current);
-	}
-
-	public int getNumberCoils() {
-		return numberCoils;
-	}
+	}*/
 
 	@Override
 	public boolean canConnect(ForgeDirection dir, Object src) {
 		return dir == this.getFacing() || dir == ForgeDirection.DOWN;
 	}
 
-	public boolean isGettingSufficientPower() {
-		return hasPower;//current >= type.inputCurrent && voltage >= type.inputVoltage;
-	}
-
 	@Override
 	public long getVoltageInput(ForgeDirection dir) {
-		return dir == facingDir ? type.inputVoltage : 0;
+		return dir == this.getFacing() ? this.getInputVoltage() : 0;
 	}
 
 	@Override
 	public void onWrongVoltage(ForgeDirection dir, long voltage) {
-		int req = type.inputVoltage;
+		int req = this.getInputVoltage();
 		float factor = voltage/(float)req;
 		if (factor > 100) {
 			worldObj.newExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 9F, true, true);
@@ -237,7 +163,7 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 				ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.fizz");
 			}
 			if (rand.nextInt(15) == 0)
-				SoundRegistry.ELECTRIC.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.36F, 2F);
+				SoundRegistry.ELECTRIC.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.2F, 2F);
 		}
 		else if (factor < 1) {
 			omega = 0;
@@ -246,9 +172,14 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 		}
 	}
 
+	private int getInputVoltage() {
+		return ReikaMathLibrary.intpow2(2, 3*(1+this.getTier()));
+	}
+
 	@Override
 	public long onReceiveEnergy(ForgeDirection from, long receive, boolean doReceive) {
-		hasPower = true;
+		if (doReceive)
+			storedEnergy += receive/1000D;
 		return receive;
 	}
 
@@ -270,5 +201,30 @@ public class TileEntityElectricMotor extends TileEntityIOMachine implements Powe
 	@Override
 	public int getEmittingZ() {
 		return zCoord+write.offsetZ;
+	}
+
+	@Override
+	public boolean isValidSupplier(TileEntity te) {
+		return te instanceof IEnergyInterface;
+	}
+
+	@Override
+	public int getMaxStorage() {
+		return CAPACITY;
+	}
+
+	@Override
+	public int getConsumedUnitsPerTick() {
+		return MathHelper.ceiling_double_int(power/1000D);
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "kJ";
+	}
+
+	@Override
+	public Color getPowerColor() {
+		return new Color(255, 220, 0);
 	}
 }

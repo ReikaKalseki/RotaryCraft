@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -34,8 +35,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	public static final int maxMJ = 36000;
 
 	private StepTimer sound = new StepTimer(72);
-
-	public static final int TIERS = 4;
 
 	public TileEntityPneumaticEngine() {
 		super();
@@ -95,6 +94,9 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		if (DragonAPICore.debugtest) {
+			pp.setEnergy(pp.getMaxEnergyStored());
+		}
 		this.getIOSides(world, x, y, z, meta);
 
 		if (pp.getEnergyStored() > 0)
@@ -205,19 +207,9 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		return new Color(50, 170, 255);
 	}
 
-	@Override
-	public int tierCount() {
-		return TIERS;
-	}
-
-	@Override
-	public int getTierTorque(int tier) {
-		return 2*ReikaMathLibrary.intpow2(4, tier+1);
-	}
-
-	@Override
-	public int getMaxSpeedBase(int tier) {
-		return 10+tier*2;
-	}
+	//@Override
+	//public int getMaxSpeedBase(int tier) {
+	//	return 7+4*tier;
+	//}
 
 }

@@ -110,9 +110,9 @@ public class GuiHandbook extends GuiScreen
 
 		String file = HandbookRegistry.TOC.getTabImageFile();
 		if (!this.isLimitedView()) {
-			buttonList.add(new ImagedGuiButton(10, j-20, 17+k+163, 20, 20, "-", 220, 0, 0, false, file, RotaryCraft.class)); //Prev Page
-			buttonList.add(new ImagedGuiButton(11, j-20, 17+k+143, 20, 20, "+", 220, 20, 0, false, file, RotaryCraft.class));	//Next page
-			buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, "<<", 220, 20, 0, false, file, RotaryCraft.class));	//First page
+			buttonList.add(new ImagedGuiButton(10, j-20, 17+k+163, 20, 20, 220, 0, "-", 0, false, file, RotaryCraft.class)); //Prev Page
+			buttonList.add(new ImagedGuiButton(11, j-20, 17+k+143, 20, 20, 220, 20, "+", 0, false, file, RotaryCraft.class));	//Next page
+			buttonList.add(new ImagedGuiButton(15, j-20, 17+k+183, 20, 20, 220, 20, "<<", 0, false, file, RotaryCraft.class));	//First page
 		}
 		buttonList.add(new GuiButton(12, j+xSize-27, k+6, 20, 20, "X"));	//Close gui button
 

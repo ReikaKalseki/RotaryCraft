@@ -56,13 +56,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	private boolean craft() {
 		EntityPlayer ep = this.getPlacer();
-		boolean isPlacer = true;
-		if (ep == null && !worldObj.playerEntities.isEmpty()) {
-			ep = (EntityPlayer)worldObj.playerEntities.get(0);
-			isPlacer = false;
-		}
-		if (ep == null)
-			return false;
 		ContainerWorktable cw = new ContainerWorktable(ep, this, worldObj);
 		InventoryCrafting cm = new InventoryCrafting(cw, 3, 3);
 		for (int i = 0; i < 9; i++)
@@ -79,8 +72,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 						this.getStackInSlot(i).stackSize--;
 				}
 			}
-			if (isPlacer)
-				is.onCrafting(worldObj, ep, is.stackSize);
+			is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
 			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep.getEntityName(), true, is));

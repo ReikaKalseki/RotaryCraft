@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -210,10 +211,10 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 	public int getDupeChance(int recipe) {
 		ExtractorRecipe ir = (ExtractorRecipe)arecipes.get(recipe);
 		if (ir != null && ir.modore != null) {
-			if (ir.modore.isNetherOres())
-				return TileEntityExtractor.oreCopyNether;
-			if (ir.modore.isRare())
+			if (ir.modore.getRarity() == OreRarity.RARE)
 				return TileEntityExtractor.oreCopyRare;
+			else if (ir.modore.isNether()) //.isNetherOres()
+				return TileEntityExtractor.oreCopyNether;
 		}
 		return TileEntityExtractor.oreCopy;
 	}

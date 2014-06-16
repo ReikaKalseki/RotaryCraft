@@ -26,8 +26,6 @@ import cofh.api.energy.IEnergyStorage;
 
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
 
-	public static final int TIERS = 6;
-
 	@Override
 	public long getMaxPower() {
 		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
@@ -152,19 +150,9 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		return Color.red;
 	}
 
-	@Override
-	public int tierCount() {
-		return TIERS;
-	}
-
-	@Override
-	public int getTierTorque(int tier) {
-		return 8*ReikaMathLibrary.intpow2(4, tier);
-	}
-
-	@Override
-	public int getMaxSpeedBase(int tier) {
-		return 8+tier;
-	}
+	//@Override
+	//public int getMaxSpeedBase(int tier) {
+	//	return 5+3*tier;
+	//}
 
 }

@@ -56,6 +56,7 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
@@ -411,6 +412,12 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			}
 			currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
 		}
+		if (te instanceof TileEntityAdvancedGear) {
+			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
+			if (adv.getGearType().consumesLubricant()) {
+				currenttip.add(String.format("Lubricant: %d mB", adv.getLubricant()));
+			}
+		}
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine eng = (TileEntityEngine)te;
 			if (eng.getEngineType().requiresLubricant()) {
@@ -418,6 +425,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			}
 			if (eng.getEngineType().burnsFuel()) {
 				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
+			}
+			if (eng instanceof TileEntityPerformanceEngine) {
+				currenttip.add(String.format("Additives: %d mB", ((TileEntityPerformanceEngine)eng).additives));
 			}
 			if (eng.hasTemperature()) {
 				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));

@@ -59,8 +59,9 @@ public enum RotaryAchievements {
 	GPRENDPORTAL(	-2, 8,	Block.endPortalFrame, 											GPRSPAWNER,		true), //gpr thru end portal
 	CUTKNOT(		4, 4,	ItemStacks.drill, 												BORER,			true),
 	RAREEXTRACT(	4, 0,	ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM),			EXTRACTOR,		true),
-	MASSIVEHIT(		0, -6,	Item.flint,														GRAVELGUN,		true),
-	OVERPRESSURE(	-8, 2,	MachineRegistry.COOLINGFIN,										STEAMENGINE,	false);
+	MASSIVEHIT(		0, -8,	Item.flint,														GRAVELGUN,		true),
+	OVERPRESSURE(	-8, 2,	MachineRegistry.COOLINGFIN,										STEAMENGINE,	false),
+	DOUBLEKILL(		-2, -6, Item.arrow,														GRAVELGUN,		true);
 
 	public static final RotaryAchievements[] list = values();
 

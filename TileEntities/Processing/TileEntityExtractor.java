@@ -15,10 +15,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Interfaces.OreType;
+import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
@@ -72,16 +76,16 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return i == 7 || i == 8 || extractableSlots[i/2];
 	}
 
-	private int getSmeltNumber(ModOreList ore) {
+	private int getSmeltNumber(OreType ore) {
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
-			if (ore.isRare()) {
+			if (ore.getRarity() == OreRarity.RARE) {
 				if (ReikaRandomHelper.doWithChance(oreCopyRare/100D))
 					return 2;
 				else
 					return 1;
 			}
-			if (ore.isNetherOres()) {
+			if (ore.isNether()) { //.isNetherOres()
 				if (ReikaRandomHelper.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
@@ -108,9 +112,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
 	public int getSizeInventory()
 	{
 		return 9;
@@ -164,15 +165,13 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return (extractorCookTime[i] * par1)/2 / time;
 	}
 
-	/**
-	 * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-	 * ticks and creates a new spawn inside its implementation.
-	 */
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
 		super.updateTileEntity();
 		this.getPowerBelow();
+		if (DragonAPICore.debugtest)
+			tank.addLiquid(1000, FluidRegistry.WATER);
 		this.testIdle();
 		this.throughPut();
 		if (world.isRemote)
@@ -283,7 +282,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			return;
 		ItemStack itemstack = RecipesExtractor.smelting().getSmeltingResult(inv[i]);
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
-		int num = this.getSmeltNumber(null);
+		ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].itemID) : this.getVanillaOreByItem(inv[i]);
+		//ReikaJavaLibrary.pConsole(ore, Side.SERVER);
+		int num = this.getSmeltNumber(ore);
 		if (inv[i+4] == null) {
 			inv[i+4] = itemstack.copy();
 			inv[i+4].stackSize *= num;
@@ -303,6 +304,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;
 
+	}
+
+	private ReikaOreHelper getVanillaOreByItem(ItemStack is) {
+		return ReikaOreHelper.oreList[is.getItemDamage()%ReikaOreHelper.oreList.length];
 	}
 
 	private void bonusItems(ItemStack is) {
@@ -353,7 +358,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 						ReikaInventoryHelper.decrStack(i, inv);
 						this.bonusItems(inv[i]);
 						RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
-						if (m.isRare())
+						if (m.getRarity() == OreRarity.RARE)
 							RotaryAchievements.RAREEXTRACT.triggerAchievement(this.getPlacer());
 					}
 					return true;

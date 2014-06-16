@@ -154,6 +154,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return GearType.list[meta/4];
 	}
 
+	public int getLubricant() {
+		return lubricant.getLevel();
+	}
+
 	public void addLubricant(int amt) {
 		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
 	}

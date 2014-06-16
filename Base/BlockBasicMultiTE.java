@@ -82,7 +82,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
-import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -333,17 +332,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						return true;
 					}
 				}
-			}
-		}
-		if (m == MachineRegistry.ELECTRICMOTOR) {
-			if (ReikaItemHelper.matchStacks(is, ItemStacks.goldcoil)) {
-				TileEntityElectricMotor tc = (TileEntityElectricMotor)te;
-				if (tc.addCoil()) {
-					if (!ep.capabilities.isCreativeMode) {
-						is.stackSize--;
-					}
-				}
-				return true;
 			}
 		}
 		if (m == MachineRegistry.SCALECHEST) {
@@ -620,12 +608,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof TileEntityPiping) {
 			((TileEntityPiping)te).deleteFromAdjacentConnections(world, x, y, z);
-		}
-		if (te instanceof TileEntityElectricMotor) {
-			int num = ((TileEntityElectricMotor)te).getNumberCoils();
-			for (int i = 0; i < num; i++) {
-				ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.goldcoil.copy());
-			}
 		}
 		if (te instanceof TileEntityBeltHub) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)te;

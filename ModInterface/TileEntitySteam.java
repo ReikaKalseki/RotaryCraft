@@ -9,53 +9,33 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.awt.Color;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
-import Reika.RotaryCraft.API.ShaftMerger;
-import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
-public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerator, SimpleProvider, IPipeConnection, IFluidHandler, PipeConnector {
+public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, IPipeConnection, IFluidHandler, PipeConnector {
 
 	public static final int CAPACITY = 300000;
-	public static final int GEN_OMEGA = 2048;
-	public static final int MAX_TORQUE = 256;
 
-	private HybridTank steam = new HybridTank("steamturb", CAPACITY);
-
-	private ForgeDirection facingDir;
-
-	@Override
-	public boolean canProvidePower() {
-		return true;
-	}
-
-	public ForgeDirection getFacing() {
-		return facingDir != null ? facingDir : ForgeDirection.UNKNOWN;
-	}
-
-	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return new PowerSourceList().addSource(this);
-	}
+	//private HybridTank steam = new HybridTank("steamturb", CAPACITY);
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -63,7 +43,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 			phi = 0;
 			return;
 		}
-		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
+		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 4), 1.0);
 	}
 
 	@Override
@@ -84,33 +64,38 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 1:
-			facingDir = ForgeDirection.EAST;
-			break;
-		case 2:
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.WEST;
-			break;
-		}
-		write = this.getFacing();
+		this.getIOSides(world, x, y, z, meta);
+		write = this.getFacing().getOpposite();
 
 		if (this.getTicksExisted() < 2)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-
+		/*
 		if (steam.isEmpty()) {
 			power = 0;
 			torque = omega = 0;
 		}
 		else
-			this.genPower();
-	}
+			this.genPower();*/
 
+		if (!this.hasEnoughEnergy()) {
+			torque = 0;
+			omega = 0;
+			power = 0;
+			//storedEnergy = 0;
+		}
+		else {
+			omega = this.getSpeed();
+			torque = this.getTorque();
+
+			power = (long)torque*(long)omega;
+
+			if (!world.isRemote) {
+				storedEnergy -= this.getConsumedUnitsPerTick();
+			}
+		}
+		this.basicPowerReceiver();
+	}
+	/*
 	private void genPower() {
 		omega = Math.min(GEN_OMEGA, this.getGenOmega());
 		torque = Math.min(this.getGenTorque(), MAX_TORQUE);
@@ -122,6 +107,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 		return this.getGenOmega() * this.getGenTorque();
 	}
 
+	@Override
 	public int getGenTorque() {
 		return !steam.isEmpty() ? 8*steam.getLevel()/FluidContainerRegistry.BUCKET_VOLUME : 0;
 	}
@@ -129,21 +115,27 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	public int getGenOmega() {
 		return this.getGenTorque() > 0 ? (int)(this.getGenTorque()/(double)MAX_TORQUE*GEN_OMEGA) : 0;
 	}
-
+	 */
 	private void getSteam(World world, int dx, int dy, int dz) {
-		if (steam.getLevel() <= CAPACITY-FluidContainerRegistry.BUCKET_VOLUME) {
+		int drain = 25;
+		if (storedEnergy <= this.getMaxStorage()-drain) {
 			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
 			if (te instanceof IFluidHandler) {
 				IFluidHandler ic = (IFluidHandler)te;
-				FluidStack liq = ic.drain(facingDir.getOpposite(), FluidContainerRegistry.BUCKET_VOLUME, true);
+				FluidStack liq = ic.drain(this.getFacing().getOpposite(), drain, true);
 				if (liq != null && liq.amount > 0 && liq.getFluid().equals(FluidRegistry.getFluid("water")))
-					steam.addLiquid(liq.amount, FluidRegistry.getFluid("steam"));
+					//steam.addLiquid(liq.amount, FluidRegistry.getFluid("steam"));
+					this.addEnergy(liq.amount, true);
 			}
 		}
 	}
 
-	public int getSteam() {
-		return steam.getLevel();
+	private int addEnergy(int amount, boolean doAdd) {
+		int max = this.getMaxStorage()-storedEnergy;
+		int add = Math.min(max, amount);
+		if (doAdd)
+			storedEnergy += add;
+		return add;
 	}
 
 	@Override
@@ -152,29 +144,8 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 	}
 
 	@Override
-	public long getCurrentPower() {
-		return power;
-	}
-
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
-		steam.writeToNBT(NBT);
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
-		super.readSyncTag(NBT);
-		steam.readFromNBT(NBT);
-	}
-
-	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection dir) {
-		if (facingDir == null)
-			return ConnectOverride.DEFAULT;
-		return dir == facingDir.getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		return dir == this.getFacing().getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 
 	@Override
@@ -209,7 +180,7 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return this.canFill(from, resource.getFluid()) ? steam.fill(resource, doFill) : 0;
+		return this.canFill(from, resource.getFluid()) ? this.addEnergy(resource.amount, doFill) : 0;
 	}
 
 	@Override
@@ -234,7 +205,32 @@ public class TileEntitySteam extends TileEntityIOMachine implements PowerGenerat
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{steam.getInfo()};
+		return new FluidTankInfo[0];
+	}
+
+	@Override
+	public boolean isValidSupplier(TileEntity te) {
+		return te instanceof IFluidHandler || te instanceof TileEntityPipe;
+	}
+
+	@Override
+	public int getMaxStorage() {
+		return CAPACITY;
+	}
+
+	@Override
+	public int getConsumedUnitsPerTick() {
+		return (int)Math.ceil(Math.sqrt(power));
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "mB";
+	}
+
+	@Override
+	public Color getPowerColor() {
+		return new Color(255, 255, 255);
 	}
 
 }

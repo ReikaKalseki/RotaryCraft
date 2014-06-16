@@ -50,7 +50,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	protected int getActiveTexture() {
-		return this.getRecipe() != null ? 1 : 0;
+		return this.getRecipe() != null || this.getCrafting() != null ? 1 : 0;
+	}
+
+	private ItemStack getCrafting() {
+		ItemStack[] center = new ItemStack[9];
+		System.arraycopy(inv, 1, center, 0, 9);
+		ItemStack is = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
+		return is;
 	}
 
 	private BlastRecipe getRecipe() {
@@ -63,21 +70,28 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		ItemStack out = rec.outputItem();
 		int num = this.getProducedFor(rec);
-		if (inv[10] != null) {
-			if (inv[10].itemID != out.itemID || inv[10].getItemDamage() != out.getItemDamage() || inv[10].stackSize+num >= out.getMaxStackSize()) {
-				if (inv[13] != null) {
-					if (inv[13].itemID != out.itemID || inv[13].getItemDamage() != out.getItemDamage() || inv[13].stackSize+num >= out.getMaxStackSize()) {
-						if (inv[12] != null) {
-							if (inv[12].itemID != out.itemID || inv[12].getItemDamage() != out.getItemDamage() || inv[12].stackSize+num >= out.getMaxStackSize()) {
-								return null;
-							}
-						}
-					}
-				}
-			}
-		}
-
+		out = ReikaItemHelper.getSizedItemStack(out, num);
+		if (!this.checkCanMakeItem(out))
+			return null;
 		return rec;
+	}
+
+	private boolean checkCanMakeItem(ItemStack out) {
+		return this.canAdd(out, 10) || this.canAdd(out, 13) || this.canAdd(out, 12);
+	}
+
+	private boolean canAdd(ItemStack is, int slot) {
+		if (inv[slot] == null)
+			return true;
+		else {
+			ItemStack in = inv[slot];
+			if (!ReikaItemHelper.matchStacks(in, in))
+				return false;
+			int sum = in.stackSize+is.stackSize;
+			if (sum > in.getMaxStackSize() || sum > this.getInventoryStackLimit())
+				return false;
+			return ItemStack.areItemStackTagsEqual(is, in);
+		}
 	}
 
 	@Override
@@ -89,7 +103,15 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 
 		BlastRecipe rec = this.getRecipe();
-		if (rec != null) {
+		ItemStack is = this.getCrafting();
+		if (is != null) {
+			if (worldObj.getTotalWorldTime()%4 == 0) //4x slower
+				smeltTime++;
+			if (smeltTime >= this.getOperationTime()) {
+				this.craft(is);
+			}
+		}
+		else if (rec != null) {
 			smeltTime++;
 			if (smeltTime >= this.getOperationTime()) {
 				this.make(rec);
@@ -99,6 +121,24 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			smeltTime = 0;
 			return;
 		}
+	}
+
+	private void craft(ItemStack out) {
+		smeltTime = 0;
+		if (worldObj.isRemote)
+			return;
+
+		if (!ReikaInventoryHelper.addOrSetStack(out, inv, 10))
+			if (!ReikaInventoryHelper.addOrSetStack(out, inv, 12))
+				if (!ReikaInventoryHelper.addOrSetStack(out, inv, 13))
+					if (!this.checkSpreadFit(out, out.stackSize))
+						return;
+
+		for (int i = 1; i < 10; i++) {
+			if (inv[i] != null)
+				ReikaInventoryHelper.decrStack(i, inv);
+		}
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	private void make(BlastRecipe rec) {

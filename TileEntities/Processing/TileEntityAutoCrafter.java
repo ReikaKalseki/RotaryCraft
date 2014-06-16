@@ -14,15 +14,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.RecipePattern;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -33,50 +30,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public boolean continuous;
 	private final HashMap<List<Integer>, Integer> ingredients = new HashMap();
 
-	private static final BlankContainer craft = new BlankContainer();
 	private static final HashMap<RecipePattern, ItemStack> recipeTable = new HashMap();
-
-	private static final class BlankContainer extends Container {
-		@Override
-		public final void onCraftMatrixChanged(IInventory inventory) {}
-		@Override
-		public final boolean canInteractWith(EntityPlayer player) {return false;}
-		@Override
-		public final void onContainerClosed(EntityPlayer par1EntityPlayer) {}
-	}
-
-	private static final class RecipePattern extends InventoryCrafting {
-
-		private final ItemStack[] items = new ItemStack[9];
-
-		protected RecipePattern(ItemStack... items) {
-			super(craft, 3, 3);
-			System.arraycopy(items, 0, this.items, 0, items.length);
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (o instanceof RecipePattern) {
-				for (int i = 0; i < 9; i++) {
-					if (!ReikaItemHelper.matchStacks(items[i], ((RecipePattern) o).items[i]))
-						return false;
-				}
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public final void openChest() {}
-		@Override
-		public final void closeChest() {}
-	}
 
 	private ItemStack getRecipeOutput(ItemStack... in) {
 		RecipePattern ic = new RecipePattern(in);
-		for (int i = 0; i < 9; i++) {
-			ic.setInventorySlotContents(i, in[i]);
-		}
 		if (!recipeTable.containsKey(ic)) {
 			ItemStack is = CraftingManager.getInstance().findMatchingRecipe(ic, worldObj);
 			recipeTable.put(ic, is);

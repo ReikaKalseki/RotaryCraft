@@ -72,9 +72,9 @@ public class GuiBorer extends GuiMachine
 				if (i == 3 && l == 4)
 					u = 36;
 				if (dig[i][l])
-					buttonList.add(new ImagedGuiButton(50+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u, 0, 0, false, file, RotaryCraft.class));
+					buttonList.add(new ImagedGuiButton(50+i+7*l, j+25+18*i, k+16+18*l, 18, 18, u, 0, file, RotaryCraft.class));
 				else
-					buttonList.add(new ImagedGuiButton(10+i+7*l, j+25+18*i, k+16+18*l, 18, 18, "", u+18, 0, 0, false, file, RotaryCraft.class));
+					buttonList.add(new ImagedGuiButton(10+i+7*l, j+25+18*i, k+16+18*l, 18, 18, u+18, 0, file, RotaryCraft.class));
 			}
 
 		buttonList.add(new GuiButton(8, j+14, -1+k+116, 72, 20, "Reset Pos'n"));

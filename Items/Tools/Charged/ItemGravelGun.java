@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -58,9 +59,15 @@ public class ItemGravelGun extends ItemChargedTool {
 			Vec3 look = ep.getLookVec();
 			double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(looks[0]-0.5, looks[1]-0.5, looks[2]-0.5, looks[0]+0.5, looks[1]+0.5, looks[2]+0.5);
-			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
+			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
+			ArrayList<EntityLivingBase> infov = new ArrayList();
+			for (int k = 0; k < li.size(); k++) {
+				EntityLivingBase e = li.get(k);
+				if (!this.isFiringPlayer(e, ep))
+					infov.add(e);
+			}
 			for (int k = 0; k < infov.size(); k++) {
-				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
+				EntityLivingBase ent = infov.get(k);
 				if (!ep.equals(ent) && this.isEntityAttackable(ent) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
 					double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
 					double x = ep.posX+look.xCoord;
@@ -88,10 +95,10 @@ public class ItemGravelGun extends ItemChargedTool {
 						}
 						if (ent instanceof EntityDragon) {
 							EntityDragon ed = (EntityDragon)ent;
-							ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
+							ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
 						}
 						else {
-							int dmg = this.getAttackDamage(is);
+							int dmg = this.getAttackDamage(is.getItemDamage());
 							if (ent instanceof EntityPlayer) {
 								for (int n = 1; n < 5; n++) {
 									ItemRegistry ir = ItemRegistry.getEntry(ent.getCurrentItemOrArmor(n));
@@ -113,13 +120,20 @@ public class ItemGravelGun extends ItemChargedTool {
 						world.spawnParticle("crit", x, y, z, dx/dist*t, dy/dist*t, dz/dist*t);
 				}
 			}
-			if (infov.size() > 0 && !(infov.size() == 1 && infov.get(0) instanceof EntityPlayer)) {
+			if (infov.size() > 1) {
+				RotaryAchievements.DOUBLEKILL.triggerAchievement(ep);
+			}
+			if (infov.size() > 0) {
 				if (!ep.capabilities.isCreativeMode)
 					ReikaInventoryHelper.findAndDecrStack(Block.gravel.blockID, -1, ep.inventory.mainInventory);
 				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
 			}
 		}
 		return is;
+	}
+
+	private boolean isFiringPlayer(EntityLivingBase e, EntityPlayer ep) {
+		return e instanceof EntityPlayer && (e.getEntityName().equals(ep.getEntityName()));
 	}
 
 	private boolean isEntityAttackable(EntityLivingBase ent) {
@@ -147,23 +161,21 @@ public class ItemGravelGun extends ItemChargedTool {
 				ReikaParticleHelper.EXPLODE.spawnAt(world, ent.posX, ent.posY, ent.posZ);
 				world.playSoundAtEntity(ent, "random.explode", 1, 1);
 			}
-			ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is));
+			ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
 			ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 			//ent.setRevengeTarget(ep);
 		}
 	}
 
-	private int getAttackDamage(ItemStack is) {
-		if (is == null)
-			return 0;
-		int pow = 2+ReikaMathLibrary.intpow2(is.getItemDamage()/2, 6);
-		double base = 1.0001+Math.pow(is.getItemDamage(), 0.1875)/150000D;
-		return (int)((ReikaMathLibrary.logbase(pow, 2)/4)*ReikaMathLibrary.doubpow(base, is.getItemDamage()));
+	private int getAttackDamage(int charge) {
+		long pow = ReikaMathLibrary.longpow(charge/2, 3); //fits in long (^6 does not)
+		double base = 1.0001+Math.pow(charge, 0.1875)/150000D;
+		return (int)(1+(ReikaMathLibrary.logbase(pow, 2)/2)*ReikaMathLibrary.doubpow(base, charge));
 	}
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
-		int dmg = this.getAttackDamage(is);
+		int dmg = this.getAttackDamage(is.getItemDamage());
 		li.add(String.format("Dealing %.1f hearts of damage per shot", dmg/2F));
 	}
 

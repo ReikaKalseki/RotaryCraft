@@ -10,11 +10,13 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
+import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -49,6 +52,20 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		damageVsEntity = 6;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onUpdate(ItemStack is, World world, Entity entity, int slot, boolean par5) {
+		this.forceNoSilkTouch(is, world, entity, slot);
+	}
+
+	private void forceNoSilkTouch(ItemStack is, World world, Entity entity, int slot) {
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+			HashMap<Enchantment, Integer> map = ReikaEnchantmentHelper.getEnchantments(is);
+			is.stackTagCompound = null;
+			map.remove(Enchantment.silkTouch);
+			ReikaEnchantmentHelper.applyEnchantments(is, map);
+		}
 	}
 
 	@Override
@@ -140,11 +157,17 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			ModWoodList wood = ModWoodList.getModWood(id, meta);
 			ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
 			if (wood != null) {
-				ProgressiveRecursiveBreaker.instance.addCoordinate(world, x, y, z, wood, fortune, false);
+				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, wood);
+				b.player = ep;
+				b.fortune = fortune;
+				ProgressiveRecursiveBreaker.instance.addCoordinate(world, b);
 				return true;
 			}
 			else if (tree2 != null) {
-				ProgressiveRecursiveBreaker.instance.addCoordinate(world, x, y, z, tree2, fortune, false);
+				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, tree2);
+				b.player = ep;
+				b.fortune = fortune;
+				ProgressiveRecursiveBreaker.instance.addCoordinate(world, b);
 				return true;
 			}
 		}

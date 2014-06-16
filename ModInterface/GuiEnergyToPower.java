@@ -44,12 +44,12 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		super.initGui();
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int inset = 23;
+		int inset = 21;
 		if (flexible) {
-			buttonList.add(new GuiButton(0, SHIFT+j+inset, k+ySize-30-48+0, 20, 20, "-"));;
+			buttonList.add(new GuiButton(0, SHIFT+j+inset-1, k+ySize-30-48+0, 20, 20, "-"));;
 			buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+0, 20, 20, "+"));
 		}
-		buttonList.add(new GuiButton(2, SHIFT+j+inset, k+ySize-30-48+25, 20, 20, "-"));;
+		buttonList.add(new GuiButton(2, SHIFT+j+inset-1, k+ySize-30-48+25, 20, 20, "-"));;
 		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
 
 		buttonList.add(new GuiButton(4, SHIFT+j+xSize-20-inset, k+ySize-30-48+50, 20, 20, ""));
@@ -79,7 +79,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int omega = engine.getSpeed();
 		long power = engine.getPowerLevel();
 		int inset = 1;
-		int w = 50;
+		int w = 55;
 		int h = 20;
 		int dy = h+5;
 
@@ -108,7 +108,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		}
 
 		int ddy = engine.isRedstoneControlEnabled() ? 0 : 1;
-		api.drawItemStack(itemRenderer, fontRenderer, engine.getRedstoneStateIcon(), 146, 71+ddy);
+		api.drawItemStack(itemRenderer, fontRenderer, engine.getRedstoneStateIcon(), 148, 71+ddy);
 	}
 
 	@Override

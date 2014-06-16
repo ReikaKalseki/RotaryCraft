@@ -98,7 +98,7 @@ public class RotaryRecipes {
 		ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
 
 		ItemStack bedrock = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy();
-		ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);;
+		//ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);
 
 		ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
 		ItemStack receptionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
@@ -257,7 +257,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.PURIFIER.addCrafting("sbs", "prp", "sps", 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'r', Item.redstone, 'b', Block.fenceIron);
 
-		MachineRegistry.MIRROR.addCrafting(" m ", " g ", "pcp", 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'm', ItemStacks.mirror, 'g', ItemStacks.steelgear);
+		MachineRegistry.MIRROR.addCrafting("bmb", " g ", "pcp", 'b', RotaryCraft.blastglass, 'p', ItemStacks.basepanel, 'c', ItemStacks.pcb, 'm', ItemStacks.mirror, 'g', ItemStacks.steelgear);
 
 		MachineRegistry.SOLARTOWER.addCrafting("pPp", "iPi", "pPp", 'p', ItemStacks.basepanel, 'P', ItemStacks.pipe, 'i', ReikaItemHelper.inksac);
 
@@ -572,14 +572,20 @@ public class RotaryRecipes {
 		ItemRegistry.METER.addOreRecipe("WWW", "WEW", " S ", 'S', "stickWood", 'E', Item.enderPearl, 'I', Item.ingotIron, 'W', "plankWood");
 		ItemRegistry.HANDBOOK.addRecipe("RSR", "PPP", "PPP", 'R', Item.redstone, 'S', Item.ingotIron, 'P', Item.paper);
 
-		ItemRegistry.BEDPICK.addEnchantedRecipe("BBB", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
-		ItemRegistry.BEDAXE.addRecipe("BB ", "BS ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
-		ItemRegistry.BEDSHOVEL.addRecipe(" B ", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
-		ItemRegistry.BEDSWORD.addEnchantedRecipe("B", "B", "S", 'B', ItemStacks.bedingot, 'S', ItemStacks.shaftitem);
-		ItemRegistry.BEDHOE.addRecipe("II ", " S ", " S ", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDHOE.addRecipe(" II", " S ", " S ", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDSHEARS.addRecipe(" B", "B ", 'B', ItemStacks.bedingot);
-		ItemRegistry.BEDSICKLE.addEnchantedRecipe(" B ", "  B", "SB ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDPICK.addEnchantedBlastRecipe(1000, "BBB", " S ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDAXE.addBlastRecipe(1000, "BB ", "BS ", " S ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDSHOVEL.addBlastRecipe(1000, "B", "S", "S", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDSWORD.addEnchantedBlastRecipe(1000, "B", "B", "S", 'B', ItemStacks.bedingot, 'S', ItemStacks.shaftitem);
+		ItemRegistry.BEDHOE.addBlastRecipe(1000, "II", " S", " S", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDHOE.addBlastRecipe(1000, "II", "S ", "S ", 'S', ItemStacks.shaftitem, 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDSHEARS.addBlastRecipe(1000, " B", "B ", 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDSICKLE.addEnchantedBlastRecipe(1000, " B ", "  B", "SB ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
+		ItemRegistry.BEDGRAFTER.addBlastRecipe(1000, "  S", " s ", "s  ", 'S', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
+		ItemRegistry.BEDSAW.addBlastRecipe(1000, "sss", " SS", " bb", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'S', Item.ingotIron);
+		ItemRegistry.BEDHELM.addEnchantedBlastRecipe(1200, "III", "I I", 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDBOOTS.addEnchantedBlastRecipe(1200, "I I", "I I", 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDCHEST.addEnchantedBlastRecipe(1200, "I I", "III", "III", 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDLEGS.addEnchantedBlastRecipe(1200, "III", "I I", "I I", 'I', ItemStacks.bedingot);
 
 		ItemRegistry.STEELPICK.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELPICK.getStackOf(), "BBB", " S ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
 		ItemRegistry.STEELAXE.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELAXE.getStackOf(), "BB ", "BS ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
@@ -591,14 +597,7 @@ public class RotaryRecipes {
 		ItemRegistry.STEELSICKLE.addRecipe(" B ", "  B", "SB ", 'S', Item.stick, 'B', ItemStacks.steelingot);
 
 		ItemRegistry.GRAFTER.addRecipe("  S", "Ss ", "CS ", 'C', ItemRegistry.SPRING.getStackOf(), 'S', ItemStacks.steelingot, 's', Item.stick);
-		ItemRegistry.BEDGRAFTER.addRecipe("  S", " s ", "s  ", 'S', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
 
-		ItemRegistry.BEDSAW.addRecipe("sss", " SS", " bb", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'S', Item.ingotIron);
-
-		ItemRegistry.BEDHELM.addEnchantedRecipe("III", "I I", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDBOOTS.addEnchantedRecipe("I I", "I I", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDCHEST.addEnchantedRecipe("I I", "III", "III", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDLEGS.addEnchantedRecipe("III", "I I", "I I", 'I', ItemStacks.bedingot);
 
 		ItemRegistry.STEELHELMET.addRecipe("III", "I I", 'I', ItemStacks.steelingot);
 		ItemRegistry.STEELBOOTS.addRecipe("I I", "I I", 'I', ItemStacks.steelingot);
@@ -640,7 +639,7 @@ public class RotaryRecipes {
 		ItemRegistry.UPGRADE.addMetaRecipe(2, "SES", "ERE", "SES", 'R', ItemStacks.shaftcore, 'S', ItemStacks.steelingot, 'E', Item.ingotGold);
 		ItemRegistry.UPGRADE.addMetaRecipe(3, "SES", "ERE", "SES", 'R', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'E', ItemStacks.redgoldingot);
 		ItemRegistry.UPGRADE.addMetaRecipe(4, "SES", "ERE", "SES", 'R', ItemStacks.redgoldingot, 'S', ItemStacks.steelingot, 'E', ItemStacks.tungsteningot);
-		ItemRegistry.UPGRADE.addMetaRecipe(5, "SES", "ERE", "SES", 'R', ItemStacks.bedingot, 'S', ItemStacks.redgoldingot, 'E', ItemStacks.bedrockdust);
+		ItemRegistry.UPGRADE.addMetaBlastRecipe(1800, 5, "SES", "ERE", "SES", 'R', ItemStacks.bedingot, 'S', ItemStacks.redgoldingot, 'E', ItemStacks.bedrockdust);
 	}
 
 	private static void addMisc() {
@@ -703,6 +702,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Item.gunpowder, Item.redstone, ItemStacks.salt, ItemStacks.coaldust);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, "dustGold"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Item.redstone, ItemStacks.goldoreflakes));
 
 		GameRegistry.addRecipe(ItemRegistry.RAILGUN.getCraftedProduct(3), new Object[]{
 			"ss ", "s  ", 's', ItemStacks.steelingot});

@@ -140,7 +140,7 @@ public class RotaryEventManager {
 					}
 					else {
 						if (ev.isCanceled())
-							RotaryCraft.logger.log("Something successfully cancelled the placement of "+m+". Unless this machine really needs to be disabled, it is recommend you remove this placement ban.");
+							RotaryCraft.logger.log("Something successfully cancelled the placement of "+m+". Unless this machine really needs to be disabled, it is recommended you remove this placement ban.");
 					}
 				}
 				else {

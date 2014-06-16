@@ -52,7 +52,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
 			int u = tile.isSideSpeedMode(dir) ? 54 : 36;
 			if (tile.canHaveItemInSlot(dir))
-				buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, "", u, 36, 0, false, file, RotaryCraft.class));
+				buttonList.add(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, u, 36, file, RotaryCraft.class));
 		}
 	}
 

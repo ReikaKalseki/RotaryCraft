@@ -63,7 +63,7 @@ public class GuiParticle extends GuiNonPoweredMachine {
 				x = j+8+dx*20;
 				dy = 2+(i-12)/8;
 			}
-			buttonList.add(new ImagedGuiButton(i, x, k+19+dy*20, 18, 18, "", 0, 36, 0, false, tex, RotaryCraft.class));
+			buttonList.add(new ImagedGuiButton(i, x, k+19+dy*20, 18, 18, 0, 36, tex, RotaryCraft.class));
 		}
 	}
 

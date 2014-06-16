@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import codechicken.nei.PositionedStack;
@@ -32,7 +33,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
-	public class BlastFurnRecipe extends CachedRecipe {
+	public class BlastFurnRecipe extends CachedRecipe implements BlastTempRecipe {
 
 		public final BlastRecipe recipe;
 		private final ArrayList<Integer> inputs;
@@ -88,6 +89,65 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 			return stacks;
 		}
+
+		@Override
+		public int getRecipeTemperature() {
+			return recipe.temperature;
+		}
+	}
+
+	public class BlastFurnCrafting extends CachedRecipe implements BlastTempRecipe {
+
+		public final BlastCrafting recipe;
+
+		private BlastFurnCrafting(BlastCrafting c) {
+			recipe = c;
+		}
+
+		@Override
+		public ArrayList<PositionedStack> getIngredients()
+		{
+			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+			int w = recipe.recipeWidth;
+			int h = recipe.recipeHeight;
+			int dx = w == 1 ? 57+18 : 57;
+			int dy = h == 1 ? 6+18 : 6;
+			try {
+				for (int i = 0; i < 3; i++) {
+					if (i < h) {
+						for (int j = 0; j < 3; j++) {
+							if (j < w) {
+								ItemStack is = recipe.recipeItems[i*w+j];
+								if (is != null) {
+									stacks.add(new PositionedStack(is, dx+18*j, dy+18*i));
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return stacks;
+		}
+
+		@Override
+		public PositionedStack getResult() {
+			return new PositionedStack(recipe.getRecipeOutput(), 143, 24);
+		}
+
+		@Override
+		public int getRecipeTemperature() {
+			return recipe.temperature;
+		}
+
+	}
+
+	public static interface BlastTempRecipe {
+
+		public int getRecipeTemperature();
+
 	}
 
 	@Override
@@ -122,6 +182,9 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		ArrayList<BlastRecipe> li = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(result);
 		for (int i = 0; i < li.size(); i++)
 			arecipes.add(new BlastFurnRecipe(li.get(i)));
+		ArrayList<BlastCrafting> li2 = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(result);
+		for (int i = 0; i < li2.size(); i++)
+			arecipes.add(new BlastFurnCrafting(li2.get(i)));
 	}
 
 	@Override
@@ -129,6 +192,9 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		ArrayList<BlastRecipe> li = RecipesBlastFurnace.getRecipes().getAllRecipesUsing(ingredient);
 		for (int i = 0; i < li.size(); i++)
 			arecipes.add(new BlastFurnRecipe(li.get(i)));
+		ArrayList<BlastCrafting> li2 = RecipesBlastFurnace.getRecipes().getAllCraftingUsing(ingredient);
+		for (int i = 0; i < li2.size(); i++)
+			arecipes.add(new BlastFurnCrafting(li2.get(i)));
 	}
 
 	@Override
@@ -141,8 +207,8 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	public void drawExtras(int recipe)
 	{
 		drawTexturedModalRect(6, 17, 176, 44, 11, 43);
-		BlastRecipe r = ((BlastFurnRecipe)arecipes.get(recipe)).recipe;
-		String s = String.format("%dC", r.temperature);
+		BlastTempRecipe r = ((BlastTempRecipe)arecipes.get(recipe));
+		String s = String.format("%dC", r.getRecipeTemperature());
 		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, f.getStringWidth(s)/2-2*(s.length()/5), 61, 0);
 	}

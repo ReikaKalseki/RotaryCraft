@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -222,8 +223,17 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 					ItemStack item2 = item.copy();
 					if (item2.stackTagCompound == null)
 						item2.stackTagCompound = new NBTTagCompound();
-					item2.stackTagCompound.setInteger("tier", ((EnergyToPowerBase)te).tierCount()-1);
-					par3List.add(item2);
+					if (DragonAPICore.isReikasComputer()) {
+						for (int k = 1; k < EnergyToPowerBase.TIERS; k++) {
+							item2 = item2.copy();
+							item2.stackTagCompound.setInteger("tier", k);
+							par3List.add(item2);
+						}
+					}
+					else {
+						item2.stackTagCompound.setInteger("tier", EnergyToPowerBase.TIERS-1);
+						par3List.add(item2);
+					}
 				}
 				if (m.hasNBTVariants()) {
 					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
@@ -274,7 +284,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			li.add(String.format("Tier %d", tier));
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				EnergyToPowerBase e = (EnergyToPowerBase)te;
-				int torque = e.getTierTorque(tier);
+				int torque = e.getGenTorque();
 				int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
 				long power = (long)torque*(long)speed;
 				double val = ReikaMathLibrary.getThousandBase(power);
