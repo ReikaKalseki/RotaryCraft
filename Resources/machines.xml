@@ -723,11 +723,10 @@
 	</boiler>
 	<steamturbine>
 		<desc>
-			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power.
+			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power. Use the GUI to select the power usage (and steam consumption).
 		</desc>
 		<note>
-			Speed: %d rad/s
-			Max Torque: %d Nm
+			Steam Input: Back
 		</note>
 	</steamturbine>
 	<beammirror>
@@ -768,13 +767,10 @@
 	</generator>
 	<electricmotor>
 		<desc>
-			The electric motor uses electrical power to produce shaft power. Depending on the amount of gold coil wiring inside, it can produce three different power levels. Each level has a small loss, ranging from 5 to 10 percent, increasing at high tiers. Right-click the machine with coils to add more wiring.
+			The electric motor uses UE electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
 		</desc>
 		<note>
-			Electric Power Input: Back
-			Tier 1: %dV, %dA in, %dNm @ %d rad/s out (%.3fkW)
-			Tier 2: %dV, %dA in, %dNm @ %d rad/s out (%.3fkW)
-			Tier 3: %dV, %dA in, %dNm @ %d rad/s out (%.3fMW)
+			Wire Connection: Back
 		</note>
 	</electricmotor>
 	<hose>
