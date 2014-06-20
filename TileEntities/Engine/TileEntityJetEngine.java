@@ -437,7 +437,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			}
 		}
 		if (rand.nextInt(2) == 0)
-			temperature++;
+			temperature += 5;
 
 		if (temperature >= 800) {
 			RotaryCraft.logger.warn("WARNING: "+this+" is near explosion!");

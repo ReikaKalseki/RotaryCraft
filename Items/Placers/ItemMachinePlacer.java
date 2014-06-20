@@ -284,7 +284,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			li.add(String.format("Tier %d", tier));
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				EnergyToPowerBase e = (EnergyToPowerBase)te;
-				int torque = e.getGenTorque();
+				int torque = e.getGenTorque(tier);
 				int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
 				long power = (long)torque*(long)speed;
 				double val = ReikaMathLibrary.getThousandBase(power);

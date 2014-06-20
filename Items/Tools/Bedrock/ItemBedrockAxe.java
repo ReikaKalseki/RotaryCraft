@@ -75,7 +75,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	@Override
 	public boolean canHarvestBlock(Block b) {
-		return true;
+		return b.blockMaterial == Material.wood || b.blockMaterial == Material.pumpkin || b.blockMaterial.isToolNotRequired();
 	}
 
 	@Override

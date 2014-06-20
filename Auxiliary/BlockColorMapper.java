@@ -296,7 +296,7 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 		for (int i = 0; i < ModCropList.cropList.length; i++) {
 			ModCropList crop = ModCropList.cropList[i];
 			if (crop.exists()) {
-				int minmeta = crop.harvestedMeta;
+				int minmeta = 0; //not best
 				int maxmeta = crop.ripeMeta;
 				int color = crop.cropColor;
 				int id = -1;

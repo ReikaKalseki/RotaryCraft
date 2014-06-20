@@ -203,7 +203,7 @@ public enum ItemRegistry implements RegistryEnum {
 
 	public static final ItemRegistry[] itemList = values();
 
-
+	@Override
 	public Class[] getConstructorParamTypes() {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
@@ -228,6 +228,7 @@ public enum ItemRegistry implements RegistryEnum {
 		return false;
 	}
 
+	@Override
 	public Object[] getConstructorParams() {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())

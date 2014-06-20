@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -39,6 +40,9 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	protected int baseomega = -1;
 
 	private ForgeDirection facingDir;
+
+	private static final boolean reika = DragonAPICore.isReikasComputer();
+	private final HybridTank tank = new HybridTank("energytopower", 24000);
 
 	private int tier;
 
@@ -89,15 +93,15 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final long getTierPower(int tier) {
-		return this.getGenTorque()*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
+		return this.getGenTorque(tier)*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
 	}
 
-	public final int getGenTorque() {
-		return 128;
+	public final int getGenTorque(int tier) {
+		return 8*ReikaMathLibrary.intpow2(4, tier);
 	}
 
 	public final int getMaxSpeedBase(int tier) {
-		return 4+3*tier;
+		return 8+tier;
 	}
 
 	public abstract boolean isValidSupplier(TileEntity te);
@@ -177,12 +181,12 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	}
 
 	public final int getTorque() {
-		return omega > 0 ? this.getGenTorque() : 0;
+		return omega > 0 ? this.getGenTorque(this.getTier()) : 0;
 	}
 
 	public final boolean hasEnoughEnergy() {
 		float energy = this.getStoredPower();
-		return energy > this.getConsumedUnitsPerTick();
+		return energy > this.getConsumedUnitsPerTick() && (reika || !tank.isEmpty());
 	}
 
 	public abstract int getConsumedUnitsPerTick();

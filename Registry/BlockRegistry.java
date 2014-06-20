@@ -157,12 +157,14 @@ public enum BlockRegistry implements RegistryEnum {
 		return "[TECHNICAL BLOCK] "+this.getBlockVariableName();
 	}
 
+	@Override
 	public Class[] getConstructorParamTypes() {
 		return new Class[]{int.class, Material.class};
 	}
 
+	@Override
 	public Object[] getConstructorParams() {
-		return new Object[]{RotaryCraft.config.getBlockID(this.ordinal()), this.getBlockMaterial()};
+		return new Object[]{this.getBlockID(), this.getBlockMaterial()};
 	}
 
 	@Override

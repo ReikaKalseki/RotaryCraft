@@ -318,7 +318,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
 				mod.removeOneSeed(li);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-				metato = mod.harvestedMeta;
+				metato = mod.getHarvestedMetadata(world, x, y, z);
 				if (mod.isTileEntity())
 					mod.runTEHarvestCode(world, x, y, z);
 				else
