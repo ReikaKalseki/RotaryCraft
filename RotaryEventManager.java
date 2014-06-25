@@ -11,6 +11,7 @@ package Reika.RotaryCraft;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -27,9 +28,12 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -94,11 +98,27 @@ public class RotaryEventManager {
 					ReikaObfuscationHelper.getMethod("dropRareDrop").invoke(e, 1);
 			}
 			catch (Exception ex) {
-				RotaryCraft.logger.debug("Could not fire harvester drops event!");
+				RotaryCraft.logger.debug("Could not process harvester drops event!");
 				if (RotaryCraft.logger.shouldDebug())
 					ex.printStackTrace();
 			}
 			e.captureDrops = false;
+		}
+	}
+
+	@ForgeSubscribe
+	public void meatGrinding(LivingDropsEvent ev) {
+		if (ev.source instanceof GrinderDamage) {
+			ItemStack food = ReikaEntityHelper.getFoodItem(ev.entityLiving);
+			ev.drops.clear();
+			if (food != null) {
+				World world = ev.entityLiving.worldObj;
+				Random rand = RotaryCraft.rand;
+				int num = 4+rand.nextInt(4)+rand.nextInt(4)+rand.nextInt(4);
+				ItemStack is = ReikaItemHelper.getSizedItemStack(food, num);
+				ReikaItemHelper.dropItem(world, ev.entityLiving.posX, ev.entityLiving.posY, ev.entityLiving.posZ, is);
+			}
+			ev.setCanceled(true);
 		}
 	}
 

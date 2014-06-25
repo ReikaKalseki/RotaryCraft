@@ -22,6 +22,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
@@ -577,5 +578,10 @@ ConditionalOperation, DamagingContact {
 
 	public boolean canDealDamage() {
 		return power >= MINPOWER && torque >= MINTORQUE;
+	}
+
+	@Override
+	public DamageSource getDamageType() {
+		return DamageSource.generic;
 	}
 }

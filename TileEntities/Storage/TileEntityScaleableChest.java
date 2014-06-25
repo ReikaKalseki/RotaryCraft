@@ -18,10 +18,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.MultiPageInventory;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -292,6 +294,44 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 		numUsingPlayers = NBT.getInteger("player");
 
 		page = NBT.getInteger("pg");
+	}
+
+	public void writeInventoryToItem(ItemStack is) {
+		is.stackTagCompound = new NBTTagCompound();
+
+		NBTTagList nbttaglist = new NBTTagList();
+
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i] != null) {
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				nbttagcompound.setShort("Slot", (short)i);
+				inv[i].writeToNBT(nbttagcompound);
+				nbttaglist.appendTag(nbttagcompound);
+				//ReikaJavaLibrary.pConsole(i+":"+inv[i]);
+			}
+		}
+
+		is.stackTagCompound.setTag("Items", nbttaglist);
+	}
+
+	public void readInventoryFromItem(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items");
+			inv = new ItemStack[this.getSizeInventory()];
+
+			for (int i = 0; i < nbttaglist.tagCount(); i++)
+			{
+				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+				short byte0 = nbttagcompound.getShort("Slot");
+
+				if (byte0 >= 0 && byte0 < inv.length) {
+					inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+				}
+				else {
+					RotaryCraft.logger.logError(this+" tried to load an inventory slot "+byte0+" from NBT!");
+				}
+			}
+		}
 	}
 
 	@Override

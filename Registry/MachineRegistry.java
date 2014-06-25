@@ -152,6 +152,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityChainDrive;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -316,7 +317,8 @@ public enum MachineRegistry {
 	CRAFTER(			"machine.crafter",			BlockIMachine.class,		TileEntityAutoCrafter.class,		7),
 	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter"),
 	ANTIAIR(			"machine.antiair",			BlockMIMachine.class,		TileEntityAAGun.class,				24, "RenderAAGun"),
-	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16,	"RenderPipePump");
+	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16,	"RenderPipePump"),
+	CHAIN(				"machine.chain",			BlockDMMachine.class,		TileEntityChainDrive.class,			17, "RenderBelt");
 
 	private final String name;
 	private final Class te;
@@ -835,6 +837,7 @@ public enum MachineRegistry {
 		case DYNAMO:
 		case BLOWER:
 		case PIPEPUMP:
+		case CHAIN:
 			return true;
 		default:
 			return false;

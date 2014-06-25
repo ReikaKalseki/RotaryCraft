@@ -57,6 +57,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	private HybridTank tank = new HybridTank("gear", 24000);
 	private boolean failed;
 
+	private static final int MAX_DAMAGE = 480;
+
 	private boolean lastPower;
 
 	public TileEntityGearbox(MaterialRegistry type) {
@@ -212,7 +214,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		int oldlube = 0;
 		if (type.isDamageableGear() && omegain > 0) {
 			if (tank.isEmpty()) {
-				if (!world.isRemote && rand.nextInt(40) == 0) {
+				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0) {
 					damage++;
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 				}

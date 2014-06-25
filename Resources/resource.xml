@@ -4,13 +4,13 @@
 		The steel ingot, made by smelting an iron ingot in a blast or pulse jet furnace, is the basis for all the machines, as only steel has sufficient tensile and shear strength to handle the loads applied by the machines.
 	</steelingot>
 	<othershaft>
-		Shafts can also be crafted from wood, stone, diamond, or bedrock. Use a stick as the shaft part in a wood shaft. Stronger materials allow for more torque to be transmitted at higher speeds. Overloading a shaft will cause it to violently fail.
+		Shafts can also be crafted from wood, stone, diamond, or bedrock. Use a stick as the shaft part in a wood shaft. Bedrock varieties are crafting in the blast furnace like bedrock tools. Stronger materials allow for more torque to be transmitted at higher speeds. Overloading a shaft will cause it to violently fail.
 	</othershaft>
 	<othergearunit>
 		Gear units can be made of the alternative gear types. Stronger gears wear down more slowly, and bedrock gears do not wear down at all. Simply craft them using the same base materials as a shaft, but subtituting a gear unit for the rod/shaft.
 	</othergearunit>
 	<othergear>
-		Gears can be crafted from materials other than steel. Wood, Stone, Diamond, and Bedrock can also be used. Different materials consume lubricant and acquire damage at different rates. Bedrock gears do not require lubricant.
+		Gears can be crafted from materials other than steel. Wood, Stone, Diamond, and Bedrock can also be used. Different materials consume lubricant and acquire damage at different rates. Bedrock gears do not require lubricant. Bedrock varieties are crafting in the blast furnace like bedrock tools.
 	</othergear>
 	<netherdust>
 		Netherrack dust is made from grinding netherrack blocks in the grinder, while tar is made by grinding soul sand. Both of these are required constituents of jet fuel due to their hydrocarbon content.
@@ -19,7 +19,7 @@
 		Make 20 stacks of wooden stairs? No problem; various wood items can be put in the grinder and ground into sawdust, which can be made back into wood or, to save sugarcane, into paper. Dye can be added to get alternate wood types.
 	</sawdust>
 	<beddust>
-		Bedrock dust is produced when bedrock breakers completely grind away a bedrock block. This is an essential part of the compactor, as bedrock is the only material hard enough to withstand the enormous pressures and temperatures. Additionally, it can be used to craft Bedrock Tools and Armor, and the best tier of shafts and gearboxes.
+		Bedrock dust is produced when bedrock breakers completely grind away a bedrock block. This is an essential part of some machines, as bedrock is the only material hard enough to withstand the enormous pressures and temperatures. Additionally, it can be used to craft Bedrock Tools and Armor, and the best tier of shafts and gearboxes.
 	</beddust>
 	<extracts>
 		Ore dust, slurry, and solution are intermediate products of the extractor. Slurry and solution require high input shaft speeds and a constant water supply, while the dust requires high input torque. None of these items has any other use.

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -18,6 +19,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
@@ -29,14 +31,15 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver {
 
 	private boolean isEmitting;
+	private int wetTimer = 0;
 
 	private int[] source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 	private int[] target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
-	private StepTimer sound = new StepTimer(25);
+	private StepTimer sound = new StepTimer(26);
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
 
@@ -52,8 +55,14 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			this.getPower(false);
 		}
 
-		if (omega > 0)
+		if (power > 0)
 			this.playSound(world, x, y, z);
+
+		if (world.isRaining() && world.canBlockSeeTheSky(x, y+1, z) && world.getTotalWorldTime()%1024 == 0)
+			this.makeWet();
+
+		if (wetTimer > 0 && power > 0)
+			wetTimer--;
 	}
 
 	private void playSound(World world, int x, int y, int z) {
@@ -62,7 +71,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		}
 	}
 
-	public boolean areInSamePlane(TileEntityBeltHub belt) {
+	public final boolean areInSamePlane(TileEntityBeltHub belt) {
 		int meta = this.getBlockMetadata();
 		int meta2 = belt.getBlockMetadata();
 		if (meta == 0 || meta == 1)
@@ -74,30 +83,30 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return false;
 	}
 
-	public void reset() {
+	public final void reset() {
 		//ReikaJavaLibrary.pConsole(this);
 		source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 		target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 	}
 
-	public void resetOther() {
+	public final void resetOther() {
 		if (!isEmitting) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]);
-			if (m == MachineRegistry.BELT) {
+			if (m == this.getMachine()) {
 				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getBlockTileEntity(target[0], target[1], target[2]);
 				te.reset();
 			}
 		}
 		else {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
-			if (m == MachineRegistry.BELT) {
+			if (m == this.getMachine()) {
 				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getBlockTileEntity(source[0], source[1], source[2]);
 				te.reset();
 			}
 		}
 	}
 
-	public boolean canConnect(int x, int y, int z) {
+	public final boolean canConnect(int x, int y, int z) {
 		int dx = x-xCoord;
 		int dy = y-yCoord;
 		int dz = z-zCoord;
@@ -140,10 +149,10 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return true;
 	}
 
-	public boolean shouldRenderBelt() {
+	public final boolean shouldRenderBelt() {
 		if (isEmitting) {
 			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
-			return m == MachineRegistry.BELT && this.canConnect(source[0], source[1], source[2]);
+			return m == this.getMachine() && this.canConnect(source[0], source[1], source[2]);
 		}
 		else {
 			if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
@@ -153,7 +162,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		}
 	}
 
-	public boolean setTarget(int x, int y, int z) {
+	public final boolean setTarget(int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
@@ -163,10 +172,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		target[0] = x;
 		target[1] = y;
 		target[2] = z;
+		//ReikaJavaLibrary.pConsole(this, Side.SERVER);
 		return true;
 	}
 
-	public boolean setSource(int x, int y, int z) {
+	public final boolean setSource(int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
@@ -176,10 +186,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		source[0] = x;
 		source[1] = y;
 		source[2] = z;
+		//ReikaJavaLibrary.pConsole(this, Side.SERVER);
 		return true;
 	}
 
-	public boolean setEmitting(boolean emit) {
+	public final boolean setEmitting(boolean emit) {
 		boolean flag = isEmitting;
 		isEmitting = emit;
 		return flag;
@@ -189,37 +200,39 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return 8192;
 	}
 
+	public int getTorque(int input) {
+		int max = this.isWet() ? this.getMaxTorque()/4 : this.getMaxTorque();
+		return Math.min(input, max);
+	}
+
 	public static int getMaxSmoothSpeed() {
 		return 8192;
 	}
 
-	public int getSlipOmega(int omega) {
-		int s = this.getMaxSmoothSpeed();
-		if (omega <= s)
-			return omega;
-		else
-			return (int)(s+Math.sqrt(omega-s));
+	public int getOmega(int input) {
+		int s = this.isWet() ? this.getMaxSmoothSpeed()/4 : this.getMaxSmoothSpeed();
+		return input <= s ? input : (int)(s+Math.sqrt(input-s));
 	}
 
 	private void copyPower() {
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(source));
-		if (m == MachineRegistry.BELT && this.canConnect(source[0], source[1], source[2])) {
+		if (m == this.getMachine() && this.canConnect(source[0], source[1], source[2])) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getBlockTileEntity(source[0], source[1], source[2]);
-			omega = this.getSlipOmega(tile.omega);
-			torque = Math.min(this.getMaxTorque(), tile.torque);
+			omega = this.getOmega(tile.omega);
+			torque = this.getTorque(tile.torque);
 			power = tile.power;
 		}
 		else {
 			if (omega > 0)
-				omega--;
+				omega *= 0.98;
 			else
 				torque = 0;
 			power = omega*torque;
 		}
 	}
 
-	public ForgeDirection getBeltDirection() {
+	public final ForgeDirection getBeltDirection() {
 		int dx = 0;
 		int dy = 0;
 		int dz = 0;
@@ -251,7 +264,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return dir;
 	}
 
-	public int getDistanceToTarget() {
+	public final int getDistanceToTarget() {
 		if (isEmitting) {
 			int dx = xCoord-source[0];
 			int dy = yCoord-source[1];
@@ -266,7 +279,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		}
 	}
 
-	public boolean isValidDirection(ForgeDirection dir) {
+	public final boolean isValidDirection(ForgeDirection dir) {
 		switch(this.getBlockMetadata()) {
 		case 0:
 		case 1:
@@ -282,16 +295,16 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	@Override
-	public boolean canProvidePower() {
-		return isEmitting;
+	public final boolean canProvidePower() {
+		return this.isEmitting();
 	}
 
-	public boolean isEmitting() {
+	public final boolean isEmitting() {
 		return isEmitting;
 	}
 
 	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public final PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		return new PowerSourceList().addSource(this);
 	}
 
@@ -320,13 +333,21 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	@Override
-	public long getMaxPower() {
+	public final long getMaxPower() {
 		return power;
 	}
 
 	@Override
-	public long getCurrentPower() {
+	public final long getCurrentPower() {
 		return power;
+	}
+
+	public final boolean isWet() {
+		return wetTimer > 0;
+	}
+
+	public final void makeWet() {
+		wetTimer = Math.min(wetTimer+3600, 18000); //3 to 15 min
 	}
 
 	@Override
@@ -338,6 +359,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 		NBT.setIntArray("tg", target);
 		NBT.setIntArray("src", source);
+
+		NBT.setInteger("wet", wetTimer);
 	}
 
 	@Override
@@ -349,10 +372,12 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 		source = NBT.getIntArray("src");
 		target = NBT.getIntArray("tg");
+
+		wetTimer = NBT.getInteger("wet");
 	}
 
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {/*
+	public final AxisAlignedBB getRenderBoundingBox() {/*
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord);
 		ForgeDirection dir = this.getBeltDirection();
 		int a = this.getDistanceToTarget();
@@ -368,31 +393,39 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		//return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(a, a, a);
 	}
 
-	public int getTargetX() {
+	public final int getTargetX() {
 		return target[0];
 	}
 
-	public int getTargetY() {
+	public final int getTargetY() {
 		return target[1];
 	}
 
-	public int getTargetZ() {
+	public final int getTargetZ() {
 		return target[2];
 	}
 
 	@Override
-	public int getEmittingX() {
+	public final int getEmittingX() {
 		return xCoord+write.offsetX;
 	}
 
 	@Override
-	public int getEmittingY() {
+	public final int getEmittingY() {
 		return yCoord+write.offsetY;
 	}
 
 	@Override
-	public int getEmittingZ() {
+	public final int getEmittingZ() {
 		return zCoord+write.offsetZ;
+	}
+
+	public int[] getBeltColor() {
+		return new int[]{192, 120, 70};
+	}
+
+	public ItemStack getBeltItem() {
+		return ItemStacks.belt.copy();
 	}
 
 }

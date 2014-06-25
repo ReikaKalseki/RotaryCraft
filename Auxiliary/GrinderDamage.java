@@ -7,16 +7,14 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary.Interfaces;
+package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.util.DamageSource;
 
-public interface DamagingContact {
+public class GrinderDamage extends DamageSource {
 
-	public boolean canDealDamage();
-
-	public int getContactDamage();
-
-	public DamageSource getDamageType();
+	public GrinderDamage() {
+		super("grinder");
+	}
 
 }

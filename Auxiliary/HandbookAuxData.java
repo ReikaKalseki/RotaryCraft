@@ -50,6 +50,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -464,6 +465,32 @@ public final class HandbookAuxData {
 					ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.ingotIron), dx+99+i*18, dy+10+j*18);
 				}
 			}
+		}
+		else if (h == HandbookRegistry.BEDTOOLS) {
+			ArrayList<ItemStack> li = new ArrayList();
+			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+				ItemRegistry ir = ItemRegistry.itemList[i];
+				if (ir.isBedrockTool()) {
+					li.add(ir.getEnchantedStack());
+				}
+			}
+			int index = (int)((System.currentTimeMillis()/2000)%li.size());
+			ItemStack is = li.get(index);
+			List c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(is);
+			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, c, dx+99, dy+18, dx+181, dy+32);
+		}
+		else if (h == HandbookRegistry.BEDARMOR) {
+			ArrayList<ItemStack> li = new ArrayList();
+			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+				ItemRegistry ir = ItemRegistry.itemList[i];
+				if (ir.isBedrockArmor()) {
+					li.add(ir.getEnchantedStack());
+				}
+			}
+			int index = (int)((System.currentTimeMillis()/2000)%li.size());
+			ItemStack is = li.get(index);
+			List c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(is);
+			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, c, dx+99, dy+18, dx+181, dy+32);
 		}
 	}
 

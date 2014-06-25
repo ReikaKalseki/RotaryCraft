@@ -24,9 +24,6 @@ public class RenderMagnetic extends RotaryTERenderer
 
 	private ModelMagnetic DynamoModel = new ModelMagnetic();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityDynamoAt(TileEntityMagnetic tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;

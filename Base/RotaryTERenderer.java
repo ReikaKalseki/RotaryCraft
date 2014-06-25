@@ -22,8 +22,11 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -181,6 +184,19 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		if (tile.isInWorld() && tile.isFlipped && MinecraftForgeClient.getRenderPass() == 0) {
 			GL11.glRotated(180, 1, 0, 0);
 			GL11.glTranslated(0, -2, 0);
+			MachineRegistry m = tile.getMachine();
+			boolean rot = false;
+			if (m.isEnergyToPower()) {
+				rot = ((EnergyToPowerBase)tile).getFacing().offsetZ != 0;
+			}
+			else if (tile instanceof TileEntityGenerator) {
+				rot = ((TileEntityGenerator)tile).getFacing().offsetZ != 0;
+			}
+			else {
+				rot = tile.getBlockMetadata() > 1;
+			}
+			if (rot)
+				GL11.glRotated(180, 0, 1, 0);
 		}
 	}
 

@@ -38,7 +38,6 @@ public class RenderProjector extends RotaryTERenderer {
 
 	private ModelProjector ProjectorModel = new ModelProjector();
 	private boolean[] hasImages = new boolean[TileEntityProjector.MAXCHANNELS];
-	//private ModelProjectorV ProjectorModelV = new ModelProjectorV();
 
 	public RenderProjector() {
 		for (int i = 0; i < hasImages.length; i++) {
@@ -48,9 +47,6 @@ public class RenderProjector extends RotaryTERenderer {
 		}
 	}
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityProjectorAt(TileEntityProjector tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -62,8 +58,7 @@ public class RenderProjector extends RotaryTERenderer {
 
 		ModelProjector var14;
 		var14 = ProjectorModel;
-		//ModelProjectorV var15;
-		//var14 = this.ProjectorModelV;
+
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/projtex.png");
 
 		GL11.glPushMatrix();
@@ -339,8 +334,8 @@ public class RenderProjector extends RotaryTERenderer {
 			GL11.glTranslated(0.5, 0.5, -c+d);
 			GL11.glColor4f(1, 1, 1, 1);
 			//ReikaRenderHelper.renderVCircle(r, 0, 0, 0, new int[]{100, 192, 255}, 0);
-			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), Math.toRadians(90), 5);
-			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), Math.toRadians(90), 5);
+			ReikaRenderHelper.renderVCircle(r, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), 90, 5);
+			ReikaRenderHelper.renderVCircle(r*0.015, 0, 0, 0, ReikaColorAPI.RGBtoHex(frame.getRed(), frame.getGreen(), frame.getBlue()), 90, 5);
 			ReikaRenderHelper.prepareGeoDraw(false);
 			v5.startDrawing(GL11.GL_LINES); //hour hand
 			v5.setColorOpaque(hourhand.getRed(), hourhand.getGreen(), hourhand.getBlue());

@@ -64,13 +64,17 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 		}
 		else {
 			if (power > 0 && timer.checkCap())
-				tank.removeLiquid(1);
+				tank.removeLiquid(this.getLubricantUsed());
 		}
 
 		power = (long)torque*(long)omega;
 		if (tickcount%10 == 0)
 			bus.update();
 		//ReikaJavaLibrary.pConsole(bus.getInputPower()+":"+bus.getTotalOutputSides(), Side.SERVER);
+	}
+
+	private int getLubricantUsed() {
+		return 2*bus.getSize()+bus.getTotalOutputSides();
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {

@@ -99,7 +99,8 @@ public enum PowerReceivers {
 	GASTANK(1024, 1, 16384),
 	CRAFTER(1024),
 	ANTIAIR(1024, 1, 65536),
-	PIPEPUMP(1, 4096, 4096);
+	PIPEPUMP(1, 4096, 4096),
+	CHAIN();
 
 	private final int minT;
 	private final int minS;

@@ -93,6 +93,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	BELT(MachineRegistry.BELT),
 	BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
 	BUS(MachineRegistry.POWERBUS),
+	CHAIN(MachineRegistry.CHAIN),
 
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),
@@ -729,6 +730,10 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == JETPACK)
 			return false;
 		if (this == JUMPBOOTS)
+			return false;
+		if (this == BEDTOOLS)
+			return false;
+		if (this == BEDARMOR)
 			return false;
 		return true;
 	}

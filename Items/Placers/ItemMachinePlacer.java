@@ -44,6 +44,7 @@ import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import cpw.mods.fml.relauncher.Side;
@@ -114,6 +115,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m == MachineRegistry.BUSCONTROLLER) {
 
+		}
+		if (m == MachineRegistry.SCALECHEST) {
+			((TileEntityScaleableChest)te).readInventoryFromItem(is);
 		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
@@ -223,17 +227,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 					ItemStack item2 = item.copy();
 					if (item2.stackTagCompound == null)
 						item2.stackTagCompound = new NBTTagCompound();
-					if (DragonAPICore.isReikasComputer()) {
-						for (int k = 1; k < EnergyToPowerBase.TIERS; k++) {
-							item2 = item2.copy();
-							item2.stackTagCompound.setInteger("tier", k);
-							par3List.add(item2);
-						}
-					}
-					else {
-						item2.stackTagCompound.setInteger("tier", EnergyToPowerBase.TIERS-1);
-						par3List.add(item2);
-					}
+					item2.stackTagCompound.setInteger("tier", EnergyToPowerBase.TIERS-1);
+					par3List.add(item2);
 				}
 				if (m.hasNBTVariants()) {
 					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();

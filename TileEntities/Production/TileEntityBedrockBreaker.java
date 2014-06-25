@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
@@ -55,7 +56,9 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public void process(World world, int x, int y, int z, int metadata) {
 		if (power >= MINPOWER && torque >= MINTORQUE && this.hasInventorySpace()) {
 			if (this.getBlockInFront(world, x, y, z, metadata)) {
-				this.grind(world, harvestx, harvesty, harvestz, metadata);
+				if (ReikaPlayerAPI.playerCanBreakAt(world, harvestx, harvesty, harvestz, placer)) {
+					this.grind(world, harvestx, harvesty, harvestz, metadata);
+				}
 			}
 		}
 	}

@@ -55,6 +55,9 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 		if (world.isRemote)
 			return;
 
+		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			canlight = false;
+
 		if (!canlight) {
 			this.goDark();
 			return;

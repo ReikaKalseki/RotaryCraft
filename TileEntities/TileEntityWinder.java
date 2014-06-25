@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.TensionStorage;
@@ -23,7 +22,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlotMachine, SimpleProvider, DiscreteFunction, ConditionalOperation {
 
@@ -108,15 +106,17 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	}
 
 	private boolean breakCoil() {
-		if (inv[0] == null)
+		ItemStack is = inv[0];
+		if (is == null)
 			return false;
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID())
+		if (!(is.getItem() instanceof TensionStorage))
+			return false;
+		TensionStorage ts = (TensionStorage)is.getItem();
+		if (!ts.isBreakable(is))
 			return false;
 		int dmg = inv[0].getItemDamage();
 		float diff = (float)dmg/65536*0.05F;
 		boolean rand = ReikaRandomHelper.doWithChance(diff);
-		if (rand)
-			ReikaJavaLibrary.pConsole(dmg, Side.SERVER);
 		return rand;
 	}
 

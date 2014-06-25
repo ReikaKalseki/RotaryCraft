@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -244,7 +245,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public static boolean isMineableBedrock(World world, int x, int y, int z) {
-		if (world.getBlockId(x, y, z) != Block.bedrock.blockID)
+		int id = world.getBlockId(x, y, z);
+		if (id != Block.bedrock.blockID && id != FactorizationHandler.getInstance().bedrockID)
 			return false;
 		if (y > 4 && y < 40 && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID())
 			return true;

@@ -225,7 +225,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 					tile.updateSide(ForgeDirection.VALID_DIRECTIONS[s]);
 				}
 			}*/
-			if (m == MachineRegistry.BELT) {
+			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
 				if (ep.isSneaking()) {
 					TileEntityBeltHub clicked = (TileEntityBeltHub)te;
 					if (clicked != null) {

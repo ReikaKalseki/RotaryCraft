@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Decorative;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -283,7 +283,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		String base = save.getPath();
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
 		try {
-			BufferedReader p = new BufferedReader(new InputStreamReader(new FileInputStream(base+"/RotaryCraft/"+name)));
+			BufferedReader p = ReikaFileReader.getReader(base+"/RotaryCraft/"+name);
 			p.close();
 			return true;
 		}
@@ -308,7 +308,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			if (internal)
 				p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
 			else
-				p = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
+				p = ReikaFileReader.getReader(path);
 			String line = p.readLine();
 			while (line != null) {
 				linecount++;

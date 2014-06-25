@@ -190,7 +190,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	@Override
 	public final boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
 		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
-
 		if (RotaryCraft.instance.isLocked())
 			return false;
 		world.markBlockForUpdate(x, y, z);
@@ -248,12 +247,26 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
-					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
+					if (f != null) {
 						TileEntityFuelEngine tf = (TileEntityFuelEngine)te;
-						tf.fill(ForgeDirection.DOWN, f, true);
-						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
-						return true;
+						if (f.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
+							tf.fill(ForgeDirection.DOWN, f, true);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							return true;
+						}
+						else if (f.getFluid().equals(FluidRegistry.WATER)) {
+							tf.addWater(f.amount);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							return true;
+						}
+						else if (f.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
+							tf.addLube(f.amount);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							return true;
+						}
 					}
 				}
 			}
@@ -570,6 +583,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (te instanceof EnergyToPowerBase) {
 				((EnergyToPowerBase)te).setItemTagFromTier(is);
 			}
+			if (m == MachineRegistry.SCALECHEST) {
+				((TileEntityScaleableChest)te).writeInventoryToItem(is);
+			}
 			if (m.isBroken((RotaryCraftTileEntity)te))
 				li = m.getBrokenProducts();
 			else
@@ -581,7 +597,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	@Override
 	public final void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof IInventory)
+		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
 			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntityVacuum) {
 			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).experience);
@@ -618,7 +634,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!tile.shouldRenderBelt())
 					num = 0;
 				for (int i = 0; i < num; i++) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ItemStacks.belt.copy());
+					ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, tile.getBeltItem());
 				}
 			}
 			tile.resetOther();
@@ -648,9 +664,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
 		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
 			if (tile instanceof DamagingContact) {
-				int dmg = ((DamagingContact)tile).getContactDamage();
-				if (((DamagingContact)tile).canDealDamage() && dmg > 0)
-					e.attackEntityFrom(DamageSource.generic, dmg);
+				DamagingContact dg = (DamagingContact)tile;
+				int dmg = dg.getContactDamage();
+				if (dg.canDealDamage() && dmg > 0)
+					e.attackEntityFrom(dg.getDamageType(), dmg);
 			}
 			if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
 				int dmg = ((TemperatureTE)tile).getThermalDamage();
@@ -713,8 +730,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	@Override
-	public void fillWithRain(World world, int x, int y, int z) {
-		//MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+	public void fillWithRain(World world, int x, int y, int z) {/*
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.BELT) {
+			TileEntityBeltHub te = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+			te.makeWet();
+		}*/
 	}
 
 	@Override

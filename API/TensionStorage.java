@@ -25,4 +25,7 @@ public interface TensionStorage {
 	 * Please return a power of 2. Note that the actual power produced scales with the SQUARE of this number. */
 	public int getPowerScale(ItemStack is);
 
+	/** Whether your item may fail and break as it charges. */
+	public boolean isBreakable(ItemStack is);
+
 }

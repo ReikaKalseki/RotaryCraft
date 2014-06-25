@@ -131,4 +131,8 @@ public class ShaftPowerBus {
 		return ReikaJavaLibrary.copyList(blocks);
 	}
 
+	public int getSize() {
+		return blocks.size();
+	}
+
 }

@@ -303,7 +303,7 @@
 			The coil winder is used to wind up coil items, to store mechanical energy for later use. It can also use previously-wound coils as an energy source, thus allowing you to transport power in item form.
 		</desc>
 		<note>
-			Maximum energy acheivable: Torque input
+			Maximum energy acheivable is proportional to torque input
 		</note>
 	</winder>
 	<tntcannon>
@@ -827,7 +827,7 @@
 	</aggregator>
 	<fuelengine>
 		<desc>
-			The fuel-powered engine runs off of BuildCraft fuel to produce shaft power. It performs similarly to that mod's combustion engines in terms of power output.
+			The fuel-powered engine runs off of BuildCraft fuel to produce shaft power. It performs similarly to that mod's combustion engines in terms of power output. It requires both lubricant and water cooling, and it will decelerate as it overheats.
 		</desc>
 		<note>
 			Torque Produced: %d Nm

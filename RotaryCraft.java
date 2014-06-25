@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
@@ -29,6 +28,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.DonatorController;
 import Reika.DragonAPI.Auxiliary.IntegrityChecker;
@@ -37,13 +37,11 @@ import Reika.DragonAPI.Auxiliary.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
-import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
@@ -108,7 +106,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -257,20 +254,12 @@ public class RotaryCraft extends DragonAPIMod {
 		return false;
 	}
 
-	@EventHandler
-	public void invalidFingerprint(final FMLFingerprintViolationEvent event)
-	{
-		//throw new RuntimeException("This is an illegitimate copy of RotaryCraft! You must download the mod from the forum thread!");
-	}
-
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
-
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
-		MinecraftForge.EVENT_BUS.register(this);
 
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
@@ -315,12 +304,12 @@ public class RotaryCraft extends DragonAPIMod {
 		//PotionCollisionTracker.instance.addPotionID(instance, id, PotionDeafness.class);
 		//deafness = (PotionDeafness)new PotionDeafness(id).setPotionName("Deafness");
 
-		ReikaRegistryHelper.setupModData(instance, evt);
-		ReikaRegistryHelper.setupVersionChecking(evt);
 		//version = evt.getModMetadata().version;
 
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
+
+		this.basicSetup(evt);
 	}
 
 	@Override
@@ -538,36 +527,21 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@Override
 	public URL getDocumentationSite() {
-		return DragonAPICore.getReikaForumPage(instance);
+		return DragonAPICore.getReikaForumPage();
 	}
 
 	@Override
-	public boolean hasWiki() {
-		return true;
-	}
-
-	@Override
-	public URL getWiki() {
-		try {
-			return new URL("http://rotarycraft.wikia.com/wiki/RotaryCraft_Wiki");
-		}
-		catch (MalformedURLException e) {
-			throw new RegistrationException(instance, "The mod provided a malformed URL for its documentation site!");
-		}
-	}
-
-	@Override
-	public boolean hasVersion() {
-		return true;
-	}
-
-	@Override
-	public String getVersionName() {
-		return "Gamma";
+	public String getWiki() {
+		return "http://rotarycraft.wikia.com/wiki/RotaryCraft_Wiki";
 	}
 
 	@Override
 	public ModLogger getModLogger() {
 		return logger;
+	}
+
+	@Override
+	public String getUpdateCheckURL() {
+		return CommandableUpdateChecker.reikaURL;
 	}
 }

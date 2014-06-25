@@ -416,7 +416,7 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public boolean isBedrockTool() {
-		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL || this == BEDSWORD || this == BEDSHEARS || this == BEDHOE;
+		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL || this == BEDSWORD || this == BEDSHEARS || this == BEDHOE || this == BEDSICKLE;
 	}
 
 	public boolean isCreativeOnly() {

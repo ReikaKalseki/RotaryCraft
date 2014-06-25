@@ -72,4 +72,9 @@ public class ItemCoil extends ItemBasic implements TensionStorage
 			return 1;
 		}
 	}
+
+	@Override
+	public boolean isBreakable(ItemStack is) {
+		return is.itemID == ItemRegistry.SPRING.getShiftedID();
+	}
 }

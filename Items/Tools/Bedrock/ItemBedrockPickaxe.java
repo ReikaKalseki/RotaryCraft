@@ -175,7 +175,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		world.setBlock(x, y, z, 0);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			ReikaRenderHelper.spawnModBlockDropParticles(world, x, y, z, block.itemID);
+			ReikaRenderHelper.spawnDropParticles(world, x, y, z, block.itemID, block.getItemDamage());
 		}
 		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), block);
 	}

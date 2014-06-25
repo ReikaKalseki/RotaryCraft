@@ -19,7 +19,7 @@
 		The dynamometer will display its input torque, speed, and power while outputting them to the other side.
 	</dyna>
 	<flywheel>
-		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure.
+		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure. Flywheel deceleration is based on the torque requirement of what they are running. Unconnected, they spin forever.
 	</flywheel>
 	<worm>
 		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent 16:1 ratio. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
@@ -37,7 +37,7 @@
 		The multi-clutch allows you to redirect power according to a redstone signal. Simply choose an output side for each signal strength from 0 to 15.
 	</multi>
 	<belt>
-		The belt hub can be used to transport power cheaply over a large distance. Simply place two hubs such that they are able to connect (clear line of sight and in-plane connection). To connect belts, right-click one with a stack of belts, then right-click the other with the same stack. For each meter travelled, you need one additional belt item (up to a maximum of 64 blocks). The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent. Shafts can only be connected if one is in output mode.
+		The belt hub can be used to transport power cheaply over a large distance. Simply place two hubs such that they are able to connect (clear line of sight and in-plane connection). To connect belts, right-click one with a stack of belts, then right-click the other with the same stack. For each meter travelled, you need one additional belt item (up to a maximum of 64 blocks). The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent, and less when wet. Belts can only be connected if one is in output mode.
 	</belt>
 	<buscontroller>
 		The shaft power bus controller is the brain of a shaft power bus unit. This multiblock structure can distribute power intelligently depending on the number of selected outputs. This makes it far easier to use one engine for multiple machines. Each selected output receives an equal fraction of the input torque, at the input speed. The bus requires lubricant to function.
@@ -45,4 +45,7 @@
 	<bus>
 		The power bus pieces actually distribute the power depending on their selected options. Each side has a corresponding item slot; put a shaft or gear unit there to control the outputted speed and torque. Invalid or missing items cause the side to be ignored. Use the adjecent buttons to control the torque(τ)/speed(ω) options.
 	</bus>
+	<chain>
+		The chain drive is a more advanced version of the belt hub. It can take twice as much torque, at up to 65536 rad/s before it fails. It is also impervious to rain.
+	</chain>
 </trans>

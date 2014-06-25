@@ -147,7 +147,7 @@ public class ItemMeter extends ItemRotaryTool
 			if (clicked.isEmpty())
 				ReikaChatHelper.writeString(String.format("%s is empty.", m.getName()));
 			else
-				ReikaChatHelper.writeString(String.format("%s contains %d.3fB of %s.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName()));
+				ReikaChatHelper.writeString(String.format("%s contains %.3fB of %s.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName()));
 		}
 		if (m == MachineRegistry.PIPE) {
 			TileEntityPipe clicked = (TileEntityPipe)world.getBlockTileEntity(x, y, z);

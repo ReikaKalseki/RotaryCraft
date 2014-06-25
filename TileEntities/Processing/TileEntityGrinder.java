@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -25,6 +26,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -404,5 +406,10 @@ ConditionalOperation, DamagingContact {
 
 	public boolean canDealDamage() {
 		return power >= MINPOWER && torque >= MINTORQUE;
+	}
+
+	@Override
+	public DamageSource getDamageType() {
+		return new GrinderDamage();
 	}
 }

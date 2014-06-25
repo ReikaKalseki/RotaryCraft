@@ -101,7 +101,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			}
 		}
 		if (!lubricant.isEmpty() && omega > 0) {
-			if (world.getWorldTime()%40 == 0)
+			if (world.getWorldTime()%10 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}

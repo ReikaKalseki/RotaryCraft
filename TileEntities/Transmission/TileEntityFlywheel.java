@@ -287,7 +287,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		double iner = (h*r*r*Math.PI)*this.getDensity()*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
 		updateticks = 0;
 		ticks++;
-		if (torquein > this.getMinTorque(this.getTypeOrdinal())) {
+		if (torquein >= this.getMinTorque()) {
 			int count2 = TorqueUsage.recursiveCount(world, this, 0);
 			if (count != count2) {
 				count = count2;

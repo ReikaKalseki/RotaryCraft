@@ -150,7 +150,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	private void transferToFuelEngine(TileEntityFuelEngine te) {
 		FluidStack liq = tank.getFluid();
-		int toadd = Math.min(liq.amount/4+1, te.getMaxFuel()-te.getFuelLevel());
+		int toadd = Math.min(liq.amount/4+1, te.CAPACITY-te.getFuelLevel());
 		if (toadd > 0) {
 			te.addFuel(toadd);
 			tank.removeLiquid(toadd);

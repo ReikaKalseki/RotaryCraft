@@ -318,6 +318,8 @@ public class GuiHandbook extends GuiScreen
 			else
 				return PageType.GRINDER;
 		}
+		if (h == HandbookRegistry.BEDTOOLS || h == HandbookRegistry.BEDARMOR)
+			return PageType.BLASTFURNACE;
 
 		if (h.isMachine() || h.isEngine() || h.isTrans()) {
 			return PageType.MACHINERENDER;
