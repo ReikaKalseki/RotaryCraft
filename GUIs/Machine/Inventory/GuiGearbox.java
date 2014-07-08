@@ -23,11 +23,9 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
 		gbx = Gearbox;
 		ep = p5ep;
+		ySize = 84;
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -75,9 +73,6 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -90,7 +85,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		int i3 = 0;
 		if (i2 != 0)
 			i3 = 1;
-		this.drawTexturedModalRect(j + 24, ySize/2+k-7-i2, 176, 126-i2, 8, i2);
+		this.drawTexturedModalRect(j + 24, ySize/2+k+34-i2, 176, 126-i2, 8, i2);
 	}
 
 	@Override

@@ -44,10 +44,6 @@ public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 		colors = NBT.getIntArray("color");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.  Maybe was not saving inv since seems to be acting like
-	 * extends TileEntityPowerReceiver, NOT InventoriedPowerReceiver
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

@@ -80,6 +80,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			if (is.stackTagCompound == null)
 				is.setTagCompound(new NBTTagCompound());
 			((TileEntityGearbox)tile).setDamage(is.stackTagCompound.getInteger("damage"));
+			((TileEntityGearbox)tile).setLubricant(is.stackTagCompound.getInteger("lube"));
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 				((TileEntityGearbox)tile).isFlipped = true;
 			}
@@ -91,10 +92,15 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
-		if (is.stackTagCompound.hasKey("damage") && MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length].isDamageableGear())
-			par3List.add("Damage: "+(int)(100*(1-ReikaMathLibrary.doubpow(0.99, is.stackTagCompound.getInteger("damage"))))+"%");
-		else
-			;//par3List.add("ERROR");
+		MaterialRegistry mat = MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length];
+		if (is.stackTagCompound.hasKey("damage") && mat.isDamageableGear()) {
+			int dmg = (int)(100*(1-ReikaMathLibrary.doubpow(0.99, is.stackTagCompound.getInteger("damage"))));
+			par3List.add("Damage: "+dmg+"%");
+		}
+
+		if (is.stackTagCompound.hasKey("lube") && mat.isDamageableGear()) {
+			par3List.add("Lubricant: "+is.stackTagCompound.getInteger("lube")+" mB");
+		}
 	}
 
 	@Override
@@ -106,6 +112,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 				if (item.stackTagCompound == null)
 					item.setTagCompound(new NBTTagCompound());
 				item.stackTagCompound.setInteger("damage", 0);
+				item.stackTagCompound.setInteger("lube", 0);
 				list.add(item);
 			}
 		}

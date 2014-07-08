@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -39,7 +40,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
 
 	public static final int oreCopy = 50; //50% chance of doubling -> 1.5^4 = 5.1
-	public static final int oreCopyNether = 75; //75% chance of doubling -> 1.75^4 = 9.3
+	public static final int oreCopyNether = 80; //80% chance of doubling -> 1.8^4 = 10.5
 	public static final int oreCopyRare = 90; //90% chance of doubling -> 1.9^4 = 13.1
 
 	/** The number of ticks that the current item has been cooking for */
@@ -76,7 +77,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return i == 7 || i == 8 || extractableSlots[i/2];
 	}
 
-	private int getSmeltNumber(OreType ore) {
+	private int getSmeltNumber(OreType ore, ItemStack is) {
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
 			if (ore.getRarity() == OreRarity.RARE) {
@@ -85,7 +86,13 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				else
 					return 1;
 			}
-			if (ore.isNether()) { //.isNetherOres()
+			boolean nether = ore.isNether();
+			if (is.getItemDamage() == 1 && (ore == ModOreList.FORCE || ore == ModOreList.MIMICHITE))
+				nether = true;
+			if (is.itemID == MagicCropHandler.getInstance().netherOreID)
+				nether = true;
+
+			if (nether) { //.isNetherOres()
 				if (ReikaRandomHelper.doWithChance(oreCopyNether/100D))
 					return 2;
 				else
@@ -284,7 +291,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
 		ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].itemID) : this.getVanillaOreByItem(inv[i]);
 		//ReikaJavaLibrary.pConsole(ore, Side.SERVER);
-		int num = this.getSmeltNumber(ore);
+		int num = this.getSmeltNumber(ore, inv[i]);
 		if (inv[i+4] == null) {
 			inv[i+4] = itemstack.copy();
 			inv[i+4].stackSize *= num;
@@ -330,7 +337,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			if (ModOreList.isModOre(inv[i]) && i == 0) {
 				m = ModOreList.getModOreFromOre(inv[0]);
 				ItemStack is = ExtractorModOres.getDustProduct(m);
-				if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+				if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m, inv[0]), is.getItemDamage(), inv, i+4)) {
 					ReikaInventoryHelper.decrStack(i, inv);
 				}
 				return true;
@@ -338,7 +345,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			else if (ExtractorModOres.isModOreIngredient(inv[i])) {
 				if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						tank.removeLiquid(RotaryConfig.MILLIBUCKET/8);
 					}
@@ -346,7 +353,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						tank.removeLiquid(RotaryConfig.MILLIBUCKET/8);
 					}
@@ -354,7 +361,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
 					ItemStack is = ExtractorModOres.getFlakeProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.itemID, this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						this.bonusItems(inv[i]);
 						RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());

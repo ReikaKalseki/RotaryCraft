@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
@@ -88,12 +89,15 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		this.getSummativeSidedPower();
 		if (power < MINPOWER)
 			return;
-		this.getEffectRanges();
 		if (setpitch > this.getMaxPitch())
 			setpitch = this.getMaxPitch();
 		if (setvolume > this.getMaxVolume())
 			setvolume = this.getMaxVolume();
 		this.applyEffects(world, x, y, z);
+		if (tickcount >= 10) {
+			SoundRegistry.SONIC.playSoundAtBlock(world, x, y, z);
+			tickcount = 0;
+		}
 	}
 
 	public void applyEffects(World world, int x, int y, int z) {
@@ -138,11 +142,11 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	}
 
 	public void testEye(World world, int x, int y, int z) {
-		boolean vuln = true;
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
+			boolean vuln = true;
 			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
@@ -163,11 +167,11 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	}
 
 	public void testBrain(World world, int x, int y, int z) {
-		boolean vuln = true;
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
+			boolean vuln = true;
 			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
@@ -203,11 +207,11 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	}
 
 	public void testLung(World world, int x, int y, int z) {
-		boolean vuln = true;
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
+			boolean vuln = true;
 			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
@@ -223,19 +227,20 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	}
 
 	public void testKill(World world, int x, int y, int z) {
-		boolean vuln = true;
 		//ReikaChatHelper.write(this.getMaxVolume());
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);/*
 		if (inbox.size() > 0) {
 			for (int i = 0; i < inbox.size(); i++) {
+		boolean vuln = true;
 				EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 				if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LETHALVOLUME)
 					ReikaJavaLibrary.pConsole(ent.getEntityName()+" @ "+ent.posX+", "+ent.posZ+" ("+i+"/"+inbox.size()+") @ Range "+Math.sqrt(this.getVolume()/LETHALVOLUME));
 			}
 		}*/
 		for (int i = 0; i < inbox.size(); i++) {
+			boolean vuln = true;
 			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
@@ -278,10 +283,6 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (overpower > ConfigRegistry.SONICRANGE.getValue())
 			return ConfigRegistry.SONICRANGE.getValue();
 		return overpower;
-	}
-
-	public void getEffectRanges() {
-		int maxrange = this.getRange();
 	}
 
 	private boolean isPlayerVulnerable(EntityPlayer ep) {

@@ -74,7 +74,7 @@ public class ToolChargingHandler extends TemplateRecipeHandler {
 		if (ingredient != null && ingredient.itemID == ItemRegistry.SPRING.getShiftedID()) {
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 				ItemRegistry ir = ItemRegistry.itemList[i];
-				if (ir.isCharged()) {
+				if (ir.isCharged() && !ir.isDummiedOut()) {
 					arecipes.add(new ChargingRecipe(ir.getStackOf(), ingredient.getItemDamage()));
 				}
 			}

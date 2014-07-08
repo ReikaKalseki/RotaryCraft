@@ -27,6 +27,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -40,7 +41,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	public static final int SMELTTEMP = 600;
 	public static final int BEDROCKTEMP = 1000;
-	public static final int MAXTEMP = 1500;
+	public static final int MAXTEMP = 2000;
 	public static final float SMELT_XP = 0.6F;
 	private static final int SLOT_1 = 0;
 	private static final int SLOT_2 = 11;
@@ -53,11 +54,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		return this.getRecipe() != null || this.getCrafting() != null ? 1 : 0;
 	}
 
-	private ItemStack getCrafting() {
+	private BlastCrafting getCrafting() {
 		ItemStack[] center = new ItemStack[9];
 		System.arraycopy(inv, 1, center, 0, 9);
-		ItemStack is = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
-		return is;
+		BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
+		return c;
 	}
 
 	private BlastRecipe getRecipe() {
@@ -103,12 +104,12 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 
 		BlastRecipe rec = this.getRecipe();
-		ItemStack is = this.getCrafting();
-		if (is != null) {
-			if (worldObj.getTotalWorldTime()%4 == 0) //4x slower
+		BlastCrafting bc = this.getCrafting();
+		if (bc != null) {
+			if (bc.speed <= 1 || worldObj.getTotalWorldTime()%bc.speed == 0)
 				smeltTime++;
 			if (smeltTime >= this.getOperationTime()) {
-				this.craft(is);
+				this.craft(bc);
 			}
 		}
 		else if (rec != null) {
@@ -123,10 +124,12 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 	}
 
-	private void craft(ItemStack out) {
+	private void craft(BlastCrafting bc) {
 		smeltTime = 0;
 		if (worldObj.isRemote)
 			return;
+
+		ItemStack out = bc.getRecipeOutput();
 
 		if (!ReikaInventoryHelper.addOrSetStack(out, inv, 10))
 			if (!ReikaInventoryHelper.addOrSetStack(out, inv, 12))
@@ -262,7 +265,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	public int getOperationTime() {
-		int time = 2*((MAXTEMP-(temperature-SMELTTEMP))/12);
+		int time = 2*((1500-(temperature-SMELTTEMP))/12); //1500 was MAXTEMP
 		if (time < 1)
 			return 1;
 		return time;

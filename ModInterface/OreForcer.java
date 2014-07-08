@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.ModReflectionException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -30,13 +29,11 @@ import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.MimicryHandler;
 import Reika.DragonAPI.ModInteract.QuantumOreHandler;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -95,7 +92,6 @@ public final class OreForcer {
 			this.intercraftApatite();
 			break;
 		case THAUMCRAFT:
-			this.addThaumAspects();
 			if (ConfigRegistry.MODORES.getState())
 				this.registerThaumcraft();
 			this.intercraftThaumcraft();
@@ -285,34 +281,6 @@ public final class OreForcer {
 		if (MekanismHandler.getInstance().oreID == -1)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.MEKANISM, "Null Item for Osmium");
 		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, MekanismHandler.osmiumMeta));
-	}
-
-	private void addThaumAspects() {
-		RotaryCraft.logger.log("Adding ThaumCraft aspects.");
-		ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
-		ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
-		ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
-
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);
-		ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
-
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);
-		ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.ENERGY, 7, Aspect.PLANT, 3);
-
-		ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), Aspect.FIRE, 8, Aspect.WEAPON, 8);
-
-		ReikaThaumHelper.addAspects(ItemStacks.steelingot, Aspect.METAL, 10, Aspect.MECHANISM, 6);
-		ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, Aspect.FIRE, 4);
-		ReikaThaumHelper.addAspects(ItemStacks.sludge, Aspect.ENERGY, 1);
-		ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
-		ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 2, Aspect.ENERGY, 2);
-
-		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
-			ReikaThaumHelper.clearAspects(m.getCraftedProduct());
-		}
 	}
 
 	private void breakForceWrench() {

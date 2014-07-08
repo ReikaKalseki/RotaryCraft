@@ -960,6 +960,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (te instanceof EnergyToPowerBase) {
 			EnergyToPowerBase e = (EnergyToPowerBase)te;
 			currenttip.add(String.format("Consuming %d %s/t", e.getConsumedUnitsPerTick(), e.getUnitDisplay()));
+			currenttip.add(String.format("Lubricant: %d mB", e.getLubricant()));
 		}
 		return currenttip;
 	}

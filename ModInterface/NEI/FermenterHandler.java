@@ -39,6 +39,12 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	public class FermenterRecipe extends CachedRecipe {
 
 		private ItemStack output;
+		private ItemStack input;
+
+		public FermenterRecipe(ItemStack in, ItemStack out) {
+			this(out);
+			input = in;
+		}
 
 		public FermenterRecipe(ItemStack out) {
 			output = out;
@@ -46,7 +52,8 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack is = output.itemID == ItemRegistry.YEAST.getShiftedID() ? output : ReikaItemHelper.getSizedItemStack(output, TileEntityFermenter.getPlantValue(this.getEntry(this.getBottomSlot())));
+			ItemStack in = input != null ? input : this.getEntry(this.getBottomSlot());
+			ItemStack is = output.itemID == ItemRegistry.YEAST.getShiftedID() ? output : ReikaItemHelper.getSizedItemStack(output, TileEntityFermenter.getPlantValue(in));
 			return new PositionedStack(is, 111, 36);
 		}
 
@@ -55,9 +62,14 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			stacks.add(new PositionedStack(this.getTopSlot(), 50, 18));
-			//stacks.add(new PositionedStack(this.getMiddleSlot(), 50, 36));
-			List li = this.getBottomSlot();
-			stacks.add(new PositionedStack(this.getEntry(li), 50, 54));
+			if (input != null) {
+				stacks.add(new PositionedStack(input, 50, 54));
+			}
+			else {
+				//stacks.add(new PositionedStack(this.getMiddleSlot(), 50, 36));
+				List li = this.getBottomSlot();
+				stacks.add(new PositionedStack(this.getEntry(li), 50, 54));
+			}
 			return stacks;
 		}
 
@@ -134,9 +146,9 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (this.isEthanolIngredient(ingredient) || this.isYeastIngredient(ingredient)) {
 			if (this.isYeastIngredient(ingredient))
-				arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
+				arecipes.add(new FermenterRecipe(ingredient, ItemRegistry.YEAST.getStackOf()));
 			else
-				arecipes.add(new FermenterRecipe(ItemStacks.sludge.copy()));
+				arecipes.add(new FermenterRecipe(ingredient, ItemStacks.sludge.copy()));
 		}
 	}
 

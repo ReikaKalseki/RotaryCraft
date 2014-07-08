@@ -412,6 +412,10 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public boolean isCharged() {
+		if (this == BEDJUMP)
+			return false;
+		if (this == NVH)
+			return false;
 		return ItemChargedTool.class.isAssignableFrom(itemClass) || ItemChargedArmor.class.isAssignableFrom(itemClass);
 	}
 
@@ -490,8 +494,6 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
-		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
-			return null;
 		return new ItemStack(this.getShiftedID(), amt, 0);
 	}
 
@@ -607,24 +609,24 @@ public enum ItemRegistry implements RegistryEnum {
 		}
 	}
 
-	public void addBlastRecipe(int temperature, Object... params) {
+	public void addBlastRecipe(int temperature, int speed, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getStackOf();
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
 		}
 	}
 
-	public void addMetaBlastRecipe(int temperature, int meta, Object... params) {
+	public void addMetaBlastRecipe(int temperature, int speed, int meta, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getStackOfMetadata(meta);
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
 		}
 	}
 
-	public void addEnchantedBlastRecipe(int temperature, Object... params) {
+	public void addEnchantedBlastRecipe(int temperature, int speed, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getEnchantedStack();
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
 		}
 	}
 

@@ -129,20 +129,17 @@ public class BlockEngine extends BlockModelledMachine {
 			return;
 		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
 		if (eng != null) {
-			if (eng.getEngineType() == EngineType.JET) {
-				TileEntityJetEngine tj = (TileEntityJetEngine)eng;
-				if (tj.FOD >= 8) {
-					ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
-					EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-					item.delayBeforeCanPickup = 10;
-					if (!world.isRemote)
-						world.spawnEntityInWorld(item);
-					todrop = new ItemStack(ItemStacks.scrap.itemID, 16+par5Random.nextInt(17), ItemStacks.scrap.getItemDamage());	//drop scrap
-					item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
-					item.delayBeforeCanPickup = 10;
-					if (!world.isRemote && !ep.capabilities.isCreativeMode)
-						world.spawnEntityInWorld(item);
-				}
+			if (eng.getEngineType() == EngineType.JET && ((TileEntityJetEngine)eng).FOD >= 8) {
+				ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
+				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+				item.delayBeforeCanPickup = 10;
+				if (!world.isRemote)
+					world.spawnEntityInWorld(item);
+				todrop = new ItemStack(ItemStacks.scrap.itemID, 16+par5Random.nextInt(17), ItemStacks.scrap.getItemDamage());	//drop scrap
+				item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
+				item.delayBeforeCanPickup = 10;
+				if (!world.isRemote && !ep.capabilities.isCreativeMode)
+					world.spawnEntityInWorld(item);
 			}
 			else {
 				int metat = eng.getEngineType().ordinal();

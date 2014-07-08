@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -28,10 +27,6 @@ public class ContainerGearbox extends CoreContainer
 		int posX = gearbox.xCoord;
 		int posY = gearbox.yCoord;
 		int posZ = gearbox.zCoord;
-
-		this.addSlotToContainer(new Slot(par2TileEntityGearbox, 0, 35, 60));
-
-		this.addPlayerInventory(player);
 
 	}
 

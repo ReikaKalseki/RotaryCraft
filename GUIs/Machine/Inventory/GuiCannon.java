@@ -93,6 +93,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			input3 = new GuiTextField(fontRenderer, j+xSize/2, k+58, 46, 16);
 			input3.setFocused(false);
 			input3.setMaxStringLength(6);
+
+			//offscreen
+			input4 = new GuiTextField(fontRenderer, -100, -100, 0, 0);
+			input4.setFocused(false);
+			input4.setMaxStringLength(0);
 		}
 		else {
 			input = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+104, 26, 16);

@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import cpw.mods.fml.relauncher.Side;
@@ -37,6 +38,7 @@ public class ItemNightVisionGoggles extends ItemChargedArmor {
 				ep.setCurrentItemOrArmor(4, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
 				this.warnCharge(is);
 			}
+			ReikaEntityHelper.setNoPotionParticles(ep);
 		}
 	}
 

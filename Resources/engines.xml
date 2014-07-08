@@ -76,7 +76,7 @@
 			Power: %.3fkW
 			Power Source: Ethanol And Additives
 			Requires Consumables: Ethanol and Redstone/Gunpowder/Blaze Powder
-			Risks: Overheating at 1000C
+			Risks: Overheating at 240C
 		</note>
 	</sport>
 	<hydro>

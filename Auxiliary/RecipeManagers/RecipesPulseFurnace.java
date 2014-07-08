@@ -18,10 +18,12 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesPulseFurnace
 {
@@ -94,6 +96,12 @@ public class RecipesPulseFurnace
 		//addSmelting(RotaryCraft.shaftcraft.itemID, 9, new ItemStack(RotaryCraft.shaftcraft.itemID, 1, 1), 0F);	//Iron scrap
 		this.addSmelting(Block.railDetector.blockID, new ItemStack(Item.ingotIron.itemID, 1, 0), 0F);	//1 ingot per block of rail
 		this.addSmelting(Block.railPowered.blockID, new ItemStack(Item.ingotGold.itemID, 1, 0), 0F);
+
+		if (ModList.THERMALEXPANSION.isLoaded()) {
+			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "dustEnderium", 1);
+			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "ingotEnderium", 1);
+			this.addSmelting(enderdust, enderingot, 1);
+		}
 	}
 
 	private ItemStack getSizedSteel(int size) {

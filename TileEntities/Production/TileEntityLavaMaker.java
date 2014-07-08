@@ -32,8 +32,6 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	public static final int CAPACITY = 64000;
 
-	public static final int MELT_ENERGY = 2820000; //approx
-
 	public static final int MAXTEMP = 1800;
 
 	private int temperature;
@@ -65,20 +63,19 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 			world.spawnParticle("crit", x+rand.nextDouble(), y, z+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
 		}
 
-		//ReikaJavaLibrary.pConsole(energy/20L+":"+MELT_ENERGY, Side.SERVER);
 
-		if (energy/20 >= MELT_ENERGY) {
-			for (int i = 0; i < inv.length; i++) {
-				ItemStack is = inv[i];
-				if (is != null) {
-					FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
-					if (fs != null) {
-						if (this.canMake(fs)) {
-							tank.addLiquid(fs.amount, fs.getFluid());
-							ReikaInventoryHelper.decrStack(i, inv);
-							energy -= MELT_ENERGY*20;
-							return;
-						}
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack is = inv[i];
+			if (is != null) {
+				FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
+				long melt_energy = RecipesLavaMaker.getRecipes().getMeltingEnergy(is);
+				//ReikaJavaLibrary.pConsole(energy/20L+":"+melt_energy, Side.SERVER);
+				if (fs != null) {
+					if (this.canMake(fs) && energy >= melt_energy*20) {
+						tank.addLiquid(fs.amount, fs.getFluid());
+						ReikaInventoryHelper.decrStack(i, inv);
+						energy -= melt_energy*20;
+						return;
 					}
 				}
 			}

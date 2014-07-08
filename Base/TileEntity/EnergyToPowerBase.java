@@ -18,6 +18,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Interfaces.GuiController;
@@ -25,11 +30,14 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine {
+public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine, IFluidHandler, PipeConnector {
 
 	private static final int MINBASE = -1;
 
@@ -57,9 +65,13 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		super.updateTileEntity();
 		if (DragonAPICore.debugtest) {
 			storedEnergy = this.getMaxStorage();
+			tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("lubricant"));
 		}
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
+		}
+		if (power > 0 && !tank.isEmpty() && worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
+			tank.removeLiquid(1);
 		}
 	}
 
@@ -186,7 +198,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final boolean hasEnoughEnergy() {
 		float energy = this.getStoredPower();
-		return energy > this.getConsumedUnitsPerTick() && (reika || !tank.isEmpty());
+		return energy > this.getConsumedUnitsPerTick() && !tank.isEmpty();
 	}
 
 	public abstract int getConsumedUnitsPerTick();
@@ -254,6 +266,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 			baseomega = MINBASE;
 		}
 		NBT.setInteger("level", tier);
+
+		tank.writeToNBT(NBT);
 	}
 
 	@Override
@@ -272,6 +286,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		}
 
 		baseomega = NBT.getInteger("tiero");
+
+		tank.readFromNBT(NBT);
 	}
 
 	@Override
@@ -318,6 +334,55 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	@Override
 	public int getEmittingZ() {
 		return zCoord+write.offsetZ;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return this.canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return fluid.equals(FluidRegistry.getFluid("lubricant"));
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[]{tank.getInfo()};
+	}
+
+	@Override
+	public boolean canConnectToPipe(MachineRegistry m) {
+		return m == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return p == MachineRegistry.HOSE;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return Flow.INPUT;
+	}
+
+	public final int getLubricant() {
+		return tank.getLevel();
 	}
 
 }

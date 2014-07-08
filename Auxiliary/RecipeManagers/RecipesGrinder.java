@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -90,6 +91,7 @@ public class RecipesGrinder {
 		this.addRecipe(Block.trapdoor, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.fenceGate, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Item.bone, new ItemStack(Item.dyePowder.itemID, 9, 15), 0.3F);
+		this.addRecipe(Item.blazeRod, new ItemStack(Item.blazePowder.itemID, 6, 0), 0.6F);
 
 		this.addRecipe(Block.oreCoal, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 24), 0F);
 		this.addRecipe(Block.oreIron, new ItemStack(RotaryCraft.extracts.itemID, ore_rate, 25), 0F);
@@ -178,7 +180,8 @@ public class RecipesGrinder {
 			for (int k = 0; k < li.size(); k++) {
 				ItemStack is = li.get(k);
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
+				int amt = ore.getRarity() == OreRarity.RARE ? 4 : ore.isNether() ? 2 : 1;
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate*amt), 1F);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}

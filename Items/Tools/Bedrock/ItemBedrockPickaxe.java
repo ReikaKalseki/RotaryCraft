@@ -46,6 +46,7 @@ import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.OpenBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.ThermalHandler;
 import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -53,6 +54,9 @@ import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import com.xcompwiz.mystcraft.api.MystObjects;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -226,6 +230,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b.blockID == MFRHandler.getInstance().cableID)
 			return 15F;
 		if (b.blockID == OpenBlockHandler.getInstance().tankID)
+			return 20F;
+		if (b.blockID == ThermalHandler.getInstance().ductID)
+			return 30F;
+		if (MystObjects.crystal != null && b.blockID == MystObjects.crystal.blockID)
 			return 20F;
 		if (TwilightForestHandler.getInstance().isMazeStone(b))
 			return 60F;

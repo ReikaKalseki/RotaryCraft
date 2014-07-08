@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -36,7 +38,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine, DiscreteFunction {
 
-	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+	private HashMap<Enchantment, Integer> enchantments = new HashMap();
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -49,19 +51,31 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 			return;
 
 		if (DragonAPICore.debugtest) {
-			ReikaInventoryHelper.addToIInv(new ItemStack(Item.arrow), this);
+			ReikaInventoryHelper.addToIInv(Item.arrow, this);
 		}
 
 		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
 
 		if (tickcount >= this.getOperationTime() && ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv)) {
-			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
+			AxisAlignedBB box = this.drawAABB(world, x, y, z, meta);
 			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false) && !(li.size() == 1 && li.get(0).getEntityName().equals("Reika_Kalseki"))) {
+			if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false) && !this.isReikaOnly(li)) {
 				this.fire(world, x, y, z, meta);
 			}
 			tickcount = 0;
 		}
+	}
+
+	private boolean isReikaOnly(List<EntityLivingBase> li) {
+		if (li.size() != 1)
+			return false;
+		EntityLivingBase e = li.get(0);
+		if (!(e instanceof EntityPlayer))
+			return false;
+		if (e.getEntityName().equals("Reika_Kalseki")) {
+			return !((EntityPlayer)e).capabilities.isCreativeMode;
+		}
+		return false;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -142,25 +156,26 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.bow", 1, 1);
 	}
 
-	private AxisAlignedBB drawAABB(int x, int y, int z, int meta) {
+	private AxisAlignedBB drawAABB(World world, int x, int y, int z, int meta) {
 		double d = 0.1;
 		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).contract(d, d, d);
+		int r = this.getRange();
 		switch(meta) {
 		case 1:
 			box.offset(1, 0, 0);
-			box.maxX += this.getRange();
+			box.maxX += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.EAST, r), r);
 			break;
 		case 0:
 			box.offset(-1, 0, 0);
-			box.minX -= this.getRange();
+			box.minX -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.WEST, r), r);
 			break;
 		case 2:
 			box.offset(0, 0, 1);
-			box.maxZ += this.getRange();
+			box.maxZ += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.SOUTH, r), r);
 			break;
 		case 3:
 			box.offset(0, 0, -1);
-			box.minZ -= this.getRange();
+			box.minZ -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.NORTH, r), r);
 			break;
 		}
 

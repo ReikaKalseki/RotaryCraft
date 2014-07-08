@@ -67,7 +67,6 @@ import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
-import Reika.RotaryCraft.ModInterface.TileEntityDistillery;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
@@ -123,6 +122,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDistillery;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
@@ -300,7 +300,7 @@ public enum MachineRegistry {
 	VANDEGRAFF(			"machine.vandegraff",		BlockMMachine.class,		TileEntityVanDeGraff.class,			17, "RenderVanDeGraff"),
 	DEFOLIATOR(			"machine.defoliator",		BlockMIMachine.class,		TileEntityDefoliator.class,			21, "RenderDefoliator"),
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
-	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery", ModList.BCENERGY),
+	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery"),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
 	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
 	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
@@ -895,9 +895,6 @@ public enum MachineRegistry {
 		if (this == ADVANCEDGEARS) {
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, 0);
 		}
-		//if (this == HYDRAULIC) {
-		//	return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, 0);
-		//}
 		if (this == FLYWHEEL) {
 			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, 0);
 		}
@@ -910,9 +907,6 @@ public enum MachineRegistry {
 		if (this == GEARBOX) {
 			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, 0);
 		}
-		//if (this == POWERBUS) {
-		//	return new ItemStack(RotaryCraft.gbxitems.itemID, 1, 0);
-		//}
 		return new ItemStack(RotaryCraft.machineplacer.itemID, 1, this.ordinal());
 	}
 
@@ -920,9 +914,6 @@ public enum MachineRegistry {
 		if (this == ADVANCEDGEARS) {
 			return new ItemStack(RotaryCraft.advgearitems.itemID, 1, metadata);
 		}
-		//if (this == HYDRAULIC) {
-		//	return new ItemStack(RotaryCraft.hydraulicitems.itemID, 1, metadata);
-		//}
 		if (this == FLYWHEEL) {
 			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata);
 		}
@@ -935,7 +926,7 @@ public enum MachineRegistry {
 		if (this == GEARBOX) {
 			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, metadata);
 		}
-		return null;
+		return this.getCraftedProduct();
 	}
 
 	public boolean isEnchantable() {
@@ -973,7 +964,6 @@ public enum MachineRegistry {
 		case SHAFT:
 		case ADVANCEDGEARS:
 		case FLYWHEEL:
-			//case HYDRAULIC:
 			return true;
 		default:
 			return false;

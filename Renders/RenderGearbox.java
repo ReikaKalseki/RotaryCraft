@@ -255,6 +255,9 @@ public class RenderGearbox extends RotaryTERenderer
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
 			double h = 0.0625+(4D/16D*tr.getLubricant()/tr.getMaxLubricant())*0.9;
+			if (tr.isFlipped) {
+				h = 1-h;
+			}
 			Tessellator v5 = Tessellator.instance;
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);

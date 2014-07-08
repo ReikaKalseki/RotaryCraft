@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import Reika.DragonAPI.Instantiable.RecipePattern;
 import Reika.DragonAPI.Instantiable.Data.ImmutableList;
@@ -34,32 +35,60 @@ public class RecipesBlastFurnace
 		return BlastFurnaceBase;
 	}
 
-	public void add3x3Crafting(ItemStack out, int temperature, Object... in) {
-		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
-		BlastCrafting c = new BlastCrafting(r.recipeWidth, r.recipeHeight, r.recipeItems, out, temperature);
+	public void add3x3Recipe(ItemStack out, int temperature, IRecipe in, int speed) {
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, in);
 		craftingList.add(c);
 	}
 
-	public static final class BlastCrafting extends ShapedRecipes {
+	public void add3x3Crafting(ItemStack out, int temperature, int speed, Object... in) {
+		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, r);
+		craftingList.add(c);
+	}
+
+	public static final class BlastCrafting {
 
 		public final int temperature;
+		private final IRecipe recipe;
 		private final ItemStack output;
+		public final int speed;
 
+		/*
 		public BlastCrafting(int width, int height, ItemStack[] input, ItemStack out, int temp) {
 			super(width, height, input, out);
 			temperature = temp;
 			output = out.copy();
+		}*/
+
+		public BlastCrafting(ItemStack out, int temp, int speed, IRecipe ir) {
+			recipe = ir;
+			output = out;
+			temperature = temp;
+			this.speed = speed;
 		}
 
-		@Override
 		public final ItemStack getRecipeOutput() {
 			return output.copy();
 		}
 
 		public BlastCrafting copy() {
-			return new BlastCrafting(recipeWidth, recipeHeight, recipeItems, output, temperature);
+			//return new BlastCrafting(recipeWidth, recipeHeight, recipeItems, output, temperature);
+			return new BlastCrafting(output, temperature, speed, recipe);
 		}
 
+		public boolean matches(RecipePattern ic, int temperature) {
+			return temperature >= this.temperature && recipe.matches(ic, null);
+		}
+
+		public boolean usesItem(ItemStack is) {
+			return ReikaItemHelper.listContainsItemStack(ReikaRecipeHelper.getAllItemsInRecipe(recipe), is);
+		}
+
+		public ItemStack[] getArrayForDisplay() {
+			ItemStack[] iss = new ItemStack[9];
+			ReikaRecipeHelper.copyRecipeToItemStackArray(iss, recipe);
+			return iss;
+		}
 	}
 
 	public static final class BlastInput {
@@ -164,6 +193,15 @@ public class RecipesBlastFurnace
 		public boolean matchInputExactly() {
 			return matchNumberExactly;
 		}
+
+		public ArrayList<Integer> getValidInputNumbers() {
+			ArrayList<Integer> li = new ArrayList();
+			for (int i = mainRequired; i <= 9; i += mainRequired) {
+				if (i == mainRequired || !this.matchInputExactly())
+					li.add(i);
+			}
+			return li;
+		}
 	}
 
 	private RecipesBlastFurnace()
@@ -199,12 +237,12 @@ public class RecipesBlastFurnace
 		recipeList.add(coke);
 	}
 
-	public ItemStack getCrafting(ItemStack[] main, int temp) {
+	public BlastCrafting getCrafting(ItemStack[] main, int temp) {
 		RecipePattern ic = new RecipePattern(main);
 		for (int i = 0; i < craftingList.size(); i++) {
 			BlastCrafting c = craftingList.get(i);
-			if (c.matches(ic, null)) {
-				return c.getRecipeOutput();
+			if (c.matches(ic, temp)) {
+				return c;
 			}
 		}
 		return null;
@@ -300,12 +338,17 @@ public class RecipesBlastFurnace
 		ArrayList<BlastCrafting> li = new ArrayList();
 		for (int i = 0; i < craftingList.size(); i++) {
 			BlastCrafting r = craftingList.get(i);
+			if (r.usesItem(is)) {
+				li.add(r.copy());
+			}
+			/*
 			for (int k = 0; k < r.recipeItems.length; k++) {
 				if (ReikaItemHelper.matchStacks(is, r.recipeItems[k])) {
 					li.add(r.copy());
 					k = r.recipeItems.length;
 				}
 			}
+			 */
 		}
 		return li;
 	}

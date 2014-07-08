@@ -144,7 +144,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public void makeBeam(World world, int x, int y, int z, int meta) {
 		if (power < MINPOWER)
 			return;
-		long power2 = ReikaMathLibrary.extrema((int)(power - MINPOWER), (int)MAXPOWER, "absmin");
+		long power2 = Math.min(power, MAXPOWER);
 		int range = this.getRange();
 		boolean blocked = false;
 		for (int i = 1; i <= range && !blocked; i++) { //Limit range to line-of-sight
@@ -159,27 +159,19 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		for (int k = 0; k < inzone.size(); k++) {
 			Entity caught = (Entity)inzone.get(k);
 			double mass = ReikaEntityHelper.getEntityMass(caught);
-			double speedstep = ReikaMathLibrary.extremad((power2-MINPOWER)*BASESPEED/mass, AXISSPEEDCAP, "absmin");
 			if (caught.motionX < AXISSPEEDCAP && xstep != 0) {
 				double d = caught.posX-x;
-				if (d == 0) //add a test to make sure do not reduce walk speed
+				if (d == 0)
 					d = 1;
-				double multiplier = Math.abs(1/(d-this.getMaxRange()));
+				double multiplier = 1/(d-this.getMaxRange());
 				if (d-this.getMaxRange() > 12)
 					multiplier = 0;
-				if (multiplier > 1 || (Math.abs(caught.posX - xCoord) < this.getMaxRange()))
+				if (multiplier > 1 || multiplier < 0)
 					multiplier = 1;
-				//if (caught instanceof EntityPlayer)
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%f  %f", d, multiplier));
-				double oldmotion = caught.motionX;
-				if (Math.abs(d) < this.getMaxRange()) {
-					if (Math.abs(d) >= this.getMaxRange()-8) {
-						multiplier -= -0.125*(this.getMaxRange()-Math.abs(d));
-					}
-					caught.motionX = xstep*ReikaMathLibrary.extremad(Math.abs(caught.motionX) + multiplier*(power2-MINPOWER)*BASESPEED/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-					if (Math.abs(caught.motionX) < Math.abs(oldmotion))
-						caught.motionX = oldmotion;
-				}
+				double base = power2*BASESPEED;
+				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+				double a = xstep > 0 ? 0.004 : 0;
+				caught.motionX = xstep*speedstep+a;
 			}
 			if (caught.motionY < AXISSPEEDCAP && ystep != 0) {
 				double d = caught.posY-y;
@@ -190,7 +182,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					multiplier = 0;
 				if (multiplier > 1 || multiplier < 0)
 					multiplier = 1;
-				caught.motionY = ystep*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + multiplier*(power2-MINPOWER)*BASESPEED/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+				double base = multiplier*power2*BASESPEED;
+				caught.motionY = ystep*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 			}
 			if (caught.motionZ < AXISSPEEDCAP && zstep != 0) {
 				double d = caught.posZ-z;
@@ -201,10 +194,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					multiplier = 0;
 				if (multiplier > 1 || multiplier < 0)
 					multiplier = 1;
-				caught.motionZ = zstep*ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + multiplier*(power2-MINPOWER)*BASESPEED/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-			}/*
-    		if (!world.isRemote)
-    			caught.velocityChanged = true;*/
+				double base = multiplier*power2*BASESPEED;
+				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+				double a = zstep > 0 ? 0.004 : 0;
+				caught.motionZ = zstep*speedstep+a;
+			}
 		}
 		this.clearBlocks(world, x, y, z, meta, range);
 		this.spreadFire(world, x, y, z, meta, range);

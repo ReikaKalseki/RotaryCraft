@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
@@ -30,6 +31,7 @@ public class ItemNightVisionHelmet extends ItemRotaryArmor {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
 		ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
+		ReikaEntityHelper.setNoPotionParticles(ep);
 	}
 
 	@Override

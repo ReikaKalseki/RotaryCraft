@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +29,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
+import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -126,6 +128,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			if (todrop.stackTagCompound == null)
 				todrop.setTagCompound(new NBTTagCompound());
 			todrop.stackTagCompound.setInteger("damage", gbx.getDamage());
+			todrop.stackTagCompound.setInteger("lube", gbx.getLubricant());
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 	}
@@ -190,16 +193,30 @@ public class BlockGearbox extends BlockModelledMachine {
 				fix = new ItemStack(Block.stone);
 				break;
 			}
-			if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().itemID == fix.itemID && ep.getCurrentEquippedItem().getItemDamage() == fix.getItemDamage())) {
-				tile.repair(1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio()));
-				if (!ep.capabilities.isCreativeMode) {
-					int num = ep.getCurrentEquippedItem().stackSize;
-					if (num > 1)
-						ep.inventory.setInventorySlotContents(ep.inventory.currentItem, new ItemStack(fix.itemID, num-1, fix.getItemDamage()));
-					else
-						ep.inventory.setInventorySlotContents(ep.inventory.currentItem, null);
+			ItemStack held = ep.getCurrentEquippedItem();
+			if (held != null) {
+				if ((ReikaItemHelper.matchStacks(fix, held))) {
+					tile.repair(1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio()));
+					if (!ep.capabilities.isCreativeMode) {
+						int num = held.stackSize;
+						if (num > 1)
+							ep.inventory.setInventorySlotContents(ep.inventory.currentItem, new ItemStack(fix.itemID, num-1, fix.getItemDamage()));
+						else
+							ep.inventory.setInventorySlotContents(ep.inventory.currentItem, null);
+					}
+					return true;
 				}
-				return false;
+				else if (ReikaItemHelper.matchStacks(held, ItemStacks.lubebucket) && held.stackSize == 1) {
+					if (tile.getGearboxType().isDamageableGear()) {
+						int amt = ItemFuelLubeBucket.LUBE_VALUE*1000;
+						if (tile.canTakeLubricant(amt)) {
+							tile.addLubricant(amt);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						}
+					}
+					return true;
+				}
 			}
 		}
 
@@ -226,6 +243,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		ItemStack is = new ItemStack(RotaryCraft.gbxitems.itemID, 1, (gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("damage", gbx.getDamage());
+		is.stackTagCompound.setInteger("lube", gbx.getLubricant());
 		ret.add(is);
 		return ret;
 	}

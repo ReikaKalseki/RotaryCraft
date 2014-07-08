@@ -45,7 +45,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = 8+Power/%d m
+			Range = 8+(Power-%d)W/%d m
 			Power Input: Back
 		</note>
 	</heatray>
@@ -318,7 +318,7 @@
 	</tntcannon>
 	<sonicweapon>
 		<desc>
-			The sonic weapon is a ranged defense weapon designed to protect against hostile mobs and players. At higher and higher volumes (made possible by higher input torques), it can cause more and more debilitating effects on those in its effect radius, from confusion to blindness to drowning to death. This machine follows the inverse-square law, and the severity of its effects decrease accordingly.
+			The sonic weapon is a ranged defense weapon designed to protect against hostile mobs and players. At higher and higher volumes (made possible by higher input torques), it can cause more and more debilitating effects on those in its effect radius, from confusion to blindness to drowning to death. This machine follows the inverse-square law, and thus the sound intensity and the severity of its effects decrease accordingly. 
 		</desc>
 		<note>
 			Required Power: %dW
@@ -900,12 +900,14 @@
 	</bigfurnace>
 	<distiller>
 		<desc>
-			The distiller is used to convert one fluid type to another. For example, it can make lubricant from BuildCraft oil. Simply pump the fluid upwards through the machine.
+			The distiller is used to convert one fluid type to another. Simply pump the fluid upwards through the machine.
 		</desc>
 		<note>
 			Required power: %dW
 			Required torque: %d Nm
-			Power Input: Back
+			Power Input: Bottom
+			Valid Conversions:
+			%s
 		</note>
 	</distiller>
 	<suction>

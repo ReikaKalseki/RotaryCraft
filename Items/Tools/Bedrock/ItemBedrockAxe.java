@@ -107,13 +107,17 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		World world = ep.worldObj;
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		ModWoodList wood = ModWoodList.getModWood(id, meta);
+		ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		TreeReader tree = new TreeReader();
-		tree.setWorld(world);
-		tree.checkAndAddRainbowTree(world, x, y, z);
-		if (tree.isEmpty() || !tree.isValidTree())
-			tree.clear();
-		tree.checkAndAddDyeTree(world, x, y, z);
+		if (wood != ModWoodList.SEQUOIA) {
+			tree.setWorld(world);
+			tree.checkAndAddRainbowTree(world, x, y, z);
+			if (tree.isEmpty() || !tree.isValidTree())
+				tree.clear();
+			tree.checkAndAddDyeTree(world, x, y, z);
+		}
 		if (id == TwilightForestHandler.getInstance().rootID) {
 			Block b = Block.blocksList[id];
 			int r = 2;
@@ -154,8 +158,6 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			return true;
 		}
 		else if (!world.isRemote) {
-			ModWoodList wood = ModWoodList.getModWood(id, meta);
-			ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
 			if (wood != null) {
 				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, wood);
 				b.player = ep;

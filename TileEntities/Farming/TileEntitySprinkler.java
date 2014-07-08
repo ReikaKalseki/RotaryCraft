@@ -89,8 +89,11 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							world.setBlockMetadataWithNotify(x+i, ytop, z+j, metaf+1, 3);
 					}
 				}
-				if (world.getBlockId(x+i, ytop-2, z+j) == Block.tilledField.blockID)
-					world.spawnParticle("splash", x+i+0.5, ytop-0.875, z+j+0.5, 0, 0, 0);
+				if (world.getBlockId(x+i, ytop-2, z+j) == Block.tilledField.blockID) {
+					int d = Math.max(1, 5-ConfigRegistry.SPRINKLER.getValue());
+					if (rand.nextInt(d) == 0)
+						world.spawnParticle("splash", x+i+0.5, ytop-0.875, z+j+0.5, 0, 0, 0);
+				}
 			}
 		}
 	}

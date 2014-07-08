@@ -20,6 +20,11 @@ public class GuiHandbookPage extends GuiHandbook {
 	}
 
 	@Override
+	public boolean isLimitedView() {
+		return true;
+	}
+
+	@Override
 	public void actionPerformed(GuiButton button) {
 		if (button.id == 12) {
 			mc.thePlayer.closeScreen();

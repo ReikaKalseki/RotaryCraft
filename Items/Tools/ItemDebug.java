@@ -38,7 +38,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
 public class ItemDebug extends ItemRotaryTool {
 
@@ -139,21 +138,6 @@ public class ItemDebug extends ItemRotaryTool {
 				tile.setLava(tile.CAPACITY);
 				tile.setWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
-			}
-		}
-		if (m == MachineRegistry.TNTCANNON) {
-			TileEntityTNTCannon tile = (TileEntityTNTCannon)te;
-			if (tile != null) {
-				if (player.isSneaking()) {
-					if (tile.isCreative) {
-						tile.isCreative = false;
-						ReikaChatHelper.write("Set to default mode.");
-					}
-					else {
-						tile.isCreative = true;
-						ReikaChatHelper.write("Set to infinite-TNT mode.");
-					}
-				}
 			}
 		}
 		if (m == MachineRegistry.PULSEJET) {

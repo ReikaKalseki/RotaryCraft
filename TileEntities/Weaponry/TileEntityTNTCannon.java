@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -31,8 +32,6 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	public static final double gTNT = 7.5;	//Calculated from EntityTNTPrimed; vy -= 0.04, *0.98, 20x a sec
 
 	public static final double torquecap = 32768D;
-
-	public boolean isCreative = false;
 
 	public int selectedFuse;
 
@@ -72,6 +71,10 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
+
+		if (DragonAPICore.debugtest)
+			ReikaInventoryHelper.addToIInv(Block.tnt, this);
+
 		if (power < MINPOWER)
 			return;
 		tickcount++;
@@ -149,7 +152,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	private boolean canFire() {
 		boolean hasTNT = ReikaInventoryHelper.checkForItem(Block.tnt.blockID, inv);
-		return (hasTNT || isCreative);
+		return hasTNT;
 	}
 
 	@Override
@@ -182,26 +185,18 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 		return targetMode ? 50 : Math.max(this.getMinFuse(), selectedFuse);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-		isCreative = NBT.getBoolean("creative");
 
 		selectedFuse = NBT.getInteger("selfuse");
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-		NBT.setBoolean("creative", isCreative);
 
 		NBT.setInteger("selfuse", selectedFuse);
 	}

@@ -56,7 +56,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public void process(World world, int x, int y, int z, int metadata) {
 		if (power >= MINPOWER && torque >= MINTORQUE && this.hasInventorySpace()) {
 			if (this.getBlockInFront(world, x, y, z, metadata)) {
-				if (ReikaPlayerAPI.playerCanBreakAt(world, harvestx, harvesty, harvestz, placer)) {
+				if (!world.isRemote && ReikaPlayerAPI.playerCanBreakAt(world, harvestx, harvesty, harvestz, placer)) {
 					this.grind(world, harvestx, harvesty, harvestz, metadata);
 				}
 			}
@@ -205,28 +205,26 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			return;
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return;
-		if (!world.isRemote) {
-			if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {
+		if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {
+			world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
+			world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0, 3);
+		}
+		else {
+			int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
+			if (rockmetadata < 15) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-				world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0, 3);
+				world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
 			}
 			else {
-				int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
-				if (rockmetadata < 15) {
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
-				}
-				else {
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					world.setBlock(harvestx, harvesty, harvestz, 0);
-					ItemStack is = this.getDrops();
-					if (this.isInventoryFull())
-						ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
-					else
-						ReikaInventoryHelper.addOrSetStack(is, inv, 0);
-					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
-					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, harvestx, harvesty, harvestz));
-				}
+				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
+				world.setBlock(harvestx, harvesty, harvestz, 0);
+				ItemStack is = this.getDrops();
+				if (this.isInventoryFull())
+					ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
+				else
+					ReikaInventoryHelper.addOrSetStack(is, inv, 0);
+				RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
+				MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, harvestx, harvesty, harvestz));
 			}
 		}
 	}
@@ -255,6 +253,14 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	private int getNumberDust() {
 		return DifficultyEffects.BEDROCKDUST.getInt();
+	}
+
+	public int getContents() {
+		return inv[0] != null && ReikaItemHelper.matchStacks(inv[0], ItemStacks.bedrockdust) ? inv[0].stackSize : 0;
+	}
+
+	private void setContents(int num) {
+		inv[0] = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, num);
 	}
 
 	@Override
@@ -314,4 +320,20 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public int getOperationTime() {
 		return DurationRegistry.BEDROCK.getOperationTime(omega);
 	}
+	/*
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("dust", this.getContents());
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		this.setContents(NBT.getInteger("dust"));
+	}*/
 }

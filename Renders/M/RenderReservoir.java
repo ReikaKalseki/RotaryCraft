@@ -35,11 +35,7 @@ public class RenderReservoir extends RotaryTERenderer
 {
 
 	private ModelReservoir ReservoirModel = new ModelReservoir();
-	//private ModelReservoirV ReservoirModelV = new ModelReservoirV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityReservoirAt(TileEntityReservoir tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;

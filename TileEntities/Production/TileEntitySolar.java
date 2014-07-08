@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -42,6 +43,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler {
 
 	private BlockArray solarBlocks = new BlockArray();
+	private final StepTimer mirrorTimer = new StepTimer(100);
 	private int numberMirrors = 0;
 
 	private float lightMultiplier = 0;
@@ -92,23 +94,27 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		}
 		if (world.getBlockId(x, y+1, z) != 0)
 			return;
-		if (solarBlocks.isEmpty()) {
-			lightMultiplier = 0;
-			solarBlocks.recursiveAdd(world, x, y, z, this.getTileEntityBlockID());
-			numberMirrors = solarBlocks.getSize();
-			while (solarBlocks.getSize() > 0) {
-				int[] xyz = solarBlocks.getNextAndMoveOn();
-				MachineRegistry m = MachineRegistry.getMachine(world, xyz[0], xyz[1], xyz[2]);
-				if (m == MachineRegistry.MIRROR) {
-					TileEntityMirror te = (TileEntityMirror)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
-					te.targetloc = new int[]{x,y,z};
-					float light = te.getLightLevel();
-					lightMultiplier += light;
+
+		mirrorTimer.update();
+		if (mirrorTimer.checkCap()) {
+			if (solarBlocks.isEmpty()) {
+				lightMultiplier = 0;
+				solarBlocks.recursiveAdd(world, x, y, z, this.getTileEntityBlockID());
+				numberMirrors = solarBlocks.getSize();
+				while (solarBlocks.getSize() > 0) {
+					int[] xyz = solarBlocks.getNextAndMoveOn();
+					MachineRegistry m = MachineRegistry.getMachine(world, xyz[0], xyz[1], xyz[2]);
+					if (m == MachineRegistry.MIRROR) {
+						TileEntityMirror te = (TileEntityMirror)world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+						te.targetloc = new int[]{x,y,z};
+						float light = te.getLightLevel();
+						lightMultiplier += light;
+					}
+					else numberMirrors--;
 				}
-				else numberMirrors--;
+				lightMultiplier /= 15F;
+				lightMultiplier /= numberMirrors;
 			}
-			lightMultiplier /= 15F;
-			lightMultiplier /= numberMirrors;
 		}
 
 		if (write != null) {

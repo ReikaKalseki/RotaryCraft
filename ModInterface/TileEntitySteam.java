@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -165,47 +164,29 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m == MachineRegistry.PIPE || super.canConnectToPipe(m);
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p) && side == this.getFacing().getOpposite();
+		return this.canConnectToPipe(p) && side == this.getFacing() || super.canConnectToPipeOnSide(p, side);
 	}
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side == this.getFacing().getOpposite() ? Flow.INPUT : Flow.NONE;
+		return side == this.getFacing() ? Flow.INPUT : super.getFlowForSide(side);
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (super.canFill(from, resource.getFluid()))
+			return super.fill(from, resource, doFill);
 		return this.canFill(from, resource.getFluid()) ? this.addEnergy(resource.amount, doFill) : 0;
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from == this.getFacing().getOpposite() && fluid.equals(FluidRegistry.getFluid("steam"));
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[0];
+		return super.canFill(from, fluid) || from == this.getFacing() && fluid.equals(FluidRegistry.getFluid("steam"));
 	}
 
 	@Override

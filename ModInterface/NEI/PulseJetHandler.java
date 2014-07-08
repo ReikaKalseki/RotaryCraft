@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
@@ -30,35 +30,36 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 
 	public class PulseJetRecipe extends CachedRecipe {
 
-		private List<ItemStack> input;
-		private ItemStack output;
+		private ItemStack input;
+		private List<ItemStack> inputs;
 
-		public PulseJetRecipe(ItemStack in, ItemStack out) {
-			input = ReikaJavaLibrary.makeListFrom(in);
-			output = out;
+		public PulseJetRecipe(ItemStack in) {
+			input = ReikaItemHelper.getSizedItemStack(in, 1);
 		}
 
 		public PulseJetRecipe(List<ItemStack> in) {
-			input = in;
-			output = RecipesPulseFurnace.smelting().getSmeltingResult(in.get(0));
+			inputs = in;
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack is = output;
-			if (input != null && input.size() > 1)
-				is = RecipesPulseFurnace.smelting().getSmeltingResult(this.getEntry());
-			return new PositionedStack(is, 120, 41);
+			ItemStack in = this.getInput();
+			ItemStack out = RecipesPulseFurnace.smelting().getSmeltingResult(in);
+			return new PositionedStack(out, 120, 41);
+		}
+
+		private ItemStack getInput() {
+			return input != null ? input : this.getEntry();
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(this.getEntry(), 120, 5);
+			return new PositionedStack(this.getInput(), 120, 5);
 		}
 
 		public ItemStack getEntry() {
-			return input.get((int)(System.nanoTime()/1000000000)%input.size());
+			return inputs.get((int)(System.nanoTime()/1000000000)%inputs.size());
 		}
 	}
 
@@ -92,16 +93,16 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (RecipesPulseFurnace.smelting().isProduct(result)) {
-			List<ItemStack> is = RecipesPulseFurnace.smelting().getSources(result);
-			if (is != null && !is.isEmpty())
-				arecipes.add(new PulseJetRecipe(is));
+			List<ItemStack> li = RecipesPulseFurnace.smelting().getSources(result);
+			if (li != null && !li.isEmpty())
+				arecipes.add(new PulseJetRecipe(li));
 		}
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesPulseFurnace.smelting().isSmeltable(ingredient)) {
-			arecipes.add(new PulseJetRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
+			arecipes.add(new PulseJetRecipe(ingredient));
 		}
 	}
 

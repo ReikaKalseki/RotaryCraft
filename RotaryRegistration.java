@@ -20,8 +20,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
@@ -144,11 +142,8 @@ public class RotaryRegistration {
 		}
 		if (ConfigRegistry.HSLADICT.getState())
 			OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
-		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
-		OreDictionary.registerOre("dustGold", ItemStacks.goldoreflakes);
-		OreDictionary.registerOre("dustIron", ItemStacks.ironoreflakes);
 
 		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
@@ -161,6 +156,9 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustCoal", ItemStacks.coaldust);
 		OreDictionary.registerOre("dustSalt", ItemStacks.salt);
 		OreDictionary.registerOre("foodSalt", ItemStacks.salt);
+
+		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
+		OreDictionary.registerOre("pulpWood", ItemStacks.sawdust);
 		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
@@ -168,6 +166,8 @@ public class RotaryRegistration {
 			ItemStack is = ExtractorModOres.getFlakeProduct(ore);
 			OreDictionary.registerOre("dust"+name, is);
 		}
+		OreDictionary.registerOre("dustGold", ItemStacks.goldoreflakes);
+		OreDictionary.registerOre("dustIron", ItemStacks.ironoreflakes);
 		 */
 	}
 

@@ -320,6 +320,10 @@ public class GuiHandbook extends GuiScreen
 		}
 		if (h == HandbookRegistry.BEDTOOLS || h == HandbookRegistry.BEDARMOR)
 			return PageType.BLASTFURNACE;
+		if (h == HandbookRegistry.BEDINGOT)
+			return PageType.BLASTFURNACE;
+		if (h == HandbookRegistry.STRONGSPRING)
+			return PageType.BLASTFURNACE;
 
 		if (h.isMachine() || h.isEngine() || h.isTrans()) {
 			return PageType.MACHINERENDER;
@@ -466,7 +470,7 @@ public class GuiHandbook extends GuiScreen
 	}
 
 	public boolean isLimitedView() {
-		return this instanceof GuiHandbookPage;
+		return false;
 	}
 
 	protected void doRenderMachine(double x, double y, HandbookEntry he) {

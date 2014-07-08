@@ -428,6 +428,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			}
 			if (eng instanceof TileEntityPerformanceEngine) {
 				currenttip.add(String.format("Additives: %d mB", ((TileEntityPerformanceEngine)eng).additives));
+				currenttip.add(String.format("Water: %d mB", ((TileEntityPerformanceEngine)eng).getWater()));
 			}
 			if (eng.hasTemperature()) {
 				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));

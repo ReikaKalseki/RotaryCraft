@@ -162,7 +162,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 		if (tickcount >= this.getOperationTime()) {
 			this.calcReqPower(world, x, y, z, meta);
-			if (power > reqpow && reqpow != -1) {
+			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
 					this.forceGenAndPopulate(world, x, y, z, meta);
@@ -193,32 +193,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			catch (RuntimeException e) {
 				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population!");
 				e.printStackTrace();
-			}
-		}
-	}
-
-	private void reqPowAdd(World world, int xread, int yread, int zread) {
-		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
-			int id = world.getBlockId(xread, yread, zread);
-			int meta = world.getBlockMetadata(xread, yread, zread);
-			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
-			if (this.isMineableBedrock(world, xread, yread, zread)) {
-				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
-				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
-			}
-			else if (this.isTwilightForestToughBlock(id)) {
-				mintorque += 2048;
-				reqpow += 65536;
-			}
-			else if (hard < 0) {
-				reqpow = -1;
-			}
-			else if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
-				reqpow = -1;
-			}
-			else {
-				reqpow += (int)(DIGPOWER*10*hard);
-				mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
 			}
 		}
 	}
@@ -283,6 +257,31 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 
+	private void reqPowAdd(World world, int xread, int yread, int zread) {
+		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
+			int id = world.getBlockId(xread, yread, zread);
+			int meta = world.getBlockMetadata(xread, yread, zread);
+			float hard = Block.blocksList[id].getBlockHardness(world, xread, yread, zread);
+			if (this.isMineableBedrock(world, xread, yread, zread)) {
+				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
+				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
+			}
+			else if (this.isTwilightForestToughBlock(id)) {
+				mintorque += 2048;
+				reqpow += 65536;
+			}
+			else if (hard < 0) {
+				reqpow = -1;
+			}
+			else if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
+				reqpow = -1;
+			}
+			else {
+				reqpow += (int)(DIGPOWER*10*hard);
+				mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
+			}
+		}
+	}
 
 	private void support(World world, int x, int y, int z, int metadata) {
 		int a = 0;

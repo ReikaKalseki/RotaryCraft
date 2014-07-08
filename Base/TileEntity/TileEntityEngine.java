@@ -411,6 +411,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	{
 		super.writeSyncTag(NBT);
 
+		NBT.setInteger("type", type.ordinal());
+
 		if (this.hasTemperature())
 			NBT.setInteger("temperature", temperature);
 
@@ -428,8 +430,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	{
 		super.readSyncTag(NBT);
 
-		if (type == null)
-			this.readFromNBT(NBT);
+		type = EngineType.setType(NBT.getInteger("type"));
 
 		if (this.hasTemperature())
 			temperature = NBT.getInteger("temperature");
@@ -445,7 +446,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
-		NBT.setInteger("type", type.ordinal());
 		super.writeToNBT(NBT);
 
 		timer.writeToNBT(NBT, "engine");
@@ -453,8 +453,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
-		type = EngineType.setType(NBT.getInteger("type"));
-
 		super.readFromNBT(NBT);
 
 		timer.readFromNBT(NBT, "engine");

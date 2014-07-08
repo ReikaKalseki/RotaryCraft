@@ -10,13 +10,9 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -26,7 +22,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -35,22 +30,19 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements ISidedInventory, PipeConnector, IFluidHandler {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
 	private int damage = 0;
-	private ItemStack[] inv = new ItemStack[1];
 
 	private MaterialRegistry type;
 
@@ -199,12 +191,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
 		this.getLube(world, x, y, z, meta);
-		if (inv[0] != null && tank.getLevel()+ItemFuelLubeBucket.LUBE_VALUE*1000 <= this.getMaxLubricant()) {
-			if (inv[0].itemID == ItemStacks.lubebucket.itemID && inv[0].getItemDamage() == ItemStacks.lubebucket.getItemDamage()) {
-				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				tank.addLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000, FluidRegistry.getFluid("lubricant"));
-			}
-		}
 
 		this.basicPowerReceiver();
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
@@ -417,39 +403,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 	public void writeToNBT(NBTTagCompound NBT) {
 		NBT.setInteger("type", type.ordinal());
 		super.writeToNBT(NBT);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; i++)
-		{
-			if (inv[i] != null)
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte)i);
-				inv[i].writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
-		NBT.setTag("Items", nbttaglist);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		type = MaterialRegistry.setType(NBT.getInteger("type"));
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
-		inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte byte0 = nbttagcompound.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < inv.length)
-			{
-				inv[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			}
-		}
 	}
 
 	@Override
@@ -475,108 +434,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 			return;
 		}
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inv.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv[i];
-	}
-
-	public ItemStack decrStackSize(int par1, int par2)
-	{
-		if (inv[par1] != null)
-		{
-			if (inv[par1].stackSize <= par2)
-			{
-				ItemStack itemstack = inv[par1];
-				inv[par1] = null;
-				return itemstack;
-			}
-
-			ItemStack itemstack1 = inv[par1].splitStack(par2);
-
-			if (inv[par1].stackSize <= 0)
-			{
-				inv[par1] = null;
-			}
-
-			return itemstack1;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 *
-	 */
-	public ItemStack getStackInSlotOnClosing(int par1)
-	{
-		if (inv[par1] != null)
-		{
-			ItemStack itemstack = inv[par1];
-			inv[par1] = null;
-			return itemstack;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 *
-	 */
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-	{
-		inv[par1] = par2ItemStack;
-
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public void openChest() {
-	}
-
-	@Override
-	public void closeChest() {
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (itemstack == null)
-			return false;
-		return (itemstack.itemID == ItemStacks.lubebucket.itemID && itemstack.getItemDamage() == ItemStacks.lubebucket.getItemDamage());
-	}
-
-	@Override
-	public MachineRegistry getMachine() {
-		return MachineRegistry.GEARBOX;
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return itemstack.itemID == Item.bucketEmpty.itemID;
 	}
 
 	@Override
@@ -639,32 +496,29 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements ISided
 		return tank.getLevel();
 	}
 
+	public void setLubricant(int amt) {
+		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
+	}
+
 	public void fillWithLubricant() {
-		tank.setContents(this.getMaxLubricant(), FluidRegistry.getFluid("lubricant"));
+		this.setLubricant(this.getMaxLubricant());
 	}
 
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		if (this instanceof InertIInv)
-			return new int[0];
-		return ReikaInventoryHelper.getWholeInventoryForISided(this);
+	public boolean canTakeLubricant(int amt) {
+		return tank.getLevel()+amt <= this.getMaxLubricant();
 	}
 
-	public boolean canInsertItem(int i, ItemStack is, int side) {
-		if (this instanceof InertIInv)
-			return false;
-		return ((IInventory)this).isItemValidForSlot(i, is);
-	}
-
-	public final String getInvName() {
-		return this.getMultiValuedName();
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return this.isPlayerAccessible(var1);
+	public void addLubricant(int amt) {
+		tank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side != ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
+	}
+
+	@Override
+	public MachineRegistry getMachine() {
+		return MachineRegistry.GEARBOX;
 	}
 }

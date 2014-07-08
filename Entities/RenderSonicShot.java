@@ -41,7 +41,7 @@ public class RenderSonicShot extends Render
 		float var16 = 1.0F;
 		float var17 = 0.5F;
 		float var18 = 0.25F;
-		//ReikaRenderHelper.prepareGeoDraw(true);
+		ReikaRenderHelper.prepareGeoDraw(true);
 		int var19 = par1EntitySonicShot.getBrightnessForRender(par9);
 		int var20 = var19 % 65536;
 		int var21 = var19 / 65536;

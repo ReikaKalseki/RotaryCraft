@@ -153,6 +153,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		if (phi >= 360)
 			phi = phi%360;
 		NBT.setFloat("phi", phi);
+
+		if (isFlipped)
+			NBT.setBoolean("flip", isFlipped);
 	}
 
 	@Override
@@ -161,13 +164,17 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		phi = NBT.getFloat("phi");
 		if (phi >= 360)
 			phi = phi%360;
+
+		isFlipped = NBT.getBoolean("flip");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 		NBT.setInteger("tick", tickcount);
-		NBT.setBoolean("emp", disabled);
+
+		if (disabled)
+			NBT.setBoolean("emp", disabled);
 
 		if (node != null)
 			node.save(NBT);

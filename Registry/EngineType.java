@@ -260,15 +260,11 @@ public enum EngineType {
 		case GAS:
 			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
 				return true;
-			if (fluid.equals(FluidRegistry.getFluid("bioethanol")))
-				return true;
 			break;
 		case SPORT:
 			if (fluid.equals(FluidRegistry.WATER))
 				return true;
 			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
-				return true;
-			if (fluid.equals(FluidRegistry.getFluid("bioethanol")))
 				return true;
 			break;
 		case HYDRO:

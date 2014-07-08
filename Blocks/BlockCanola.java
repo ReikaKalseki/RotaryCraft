@@ -10,8 +10,12 @@
 package Reika.RotaryCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -19,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -31,11 +36,13 @@ import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop {
+public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaBlock {
 
 	private final Random rand = new Random();
 
 	private static final ArrayList<Integer> farmBlocks = new ArrayList();
+
+	public static final int GROWN = 9;
 
 	public BlockCanola(int ID) {
 		super(ID, Material.plants);
@@ -91,12 +98,12 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5Random) {
-		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || world.getBlockId(x, y-1, z) != Block.tilledField.blockID) {
+		if ((world.getBlockLightValue(x, y, z) < GROWN && !world.canBlockSeeTheSky(x, y, z)) || world.getBlockId(x, y-1, z) != Block.tilledField.blockID) {
 			this.die(world, x, y, z);
 		}
 		else if (world.getBlockLightValue(x, y, z) >= 9)  {
 			int metadata = world.getBlockMetadata(x, y, z);
-			if (metadata < 9 && world.getBlockMetadata(x, y-1, z) > 0) {
+			if (metadata < GROWN && world.getBlockMetadata(x, y-1, z) > 0) {
 				if (par5Random.nextInt(3) == 0) {
 					metadata++;
 					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
@@ -112,7 +119,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 
 	public ItemStack getDrops(int metadata) {
 		int ndrops = 2+rand.nextInt(8)+rand.nextInt(5);
-		if (metadata < 9)
+		if (metadata < GROWN)
 			ndrops = 1;
 		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
 		return items;
@@ -122,8 +129,8 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par5, float f1, float f2, float f3) {
 		if (par5EntityPlayer.getCurrentEquippedItem() != null) {
 			if (par5EntityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDye && par5EntityPlayer.getCurrentEquippedItem().getItemDamage() == 15) {
-				if (world.getBlockMetadata(x, y, z) < 9) {
-					world.setBlockMetadataWithNotify(x, y, z, 9, 3);
+				if (world.getBlockMetadata(x, y, z) < GROWN) {
+					world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z)+1, 3);
 					for (int i = 0; i < 16; i++)
 						world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
 					if (!par5EntityPlayer.capabilities.isCreativeMode)
@@ -156,14 +163,15 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
 	{
-		return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, world.getBlockMetadata(x, y, z)/9F, z + maxZ);
+		int meta = world.getBlockMetadata(x, y, z);
+		return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, meta/(float)GROWN, z + maxZ);
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
 	{
 		int var5 = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-		float var6 = var5/9.0F;
+		float var6 = var5/(float)GROWN;
 		if (var6 < 0.125F)
 			var6 = 0.125F;
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var6, 1.0F);
@@ -206,7 +214,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	public void registerIcons(IconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;
-		for (int j = 0; j <= 9; j++) {
+		for (int j = 0; j <= GROWN; j++) {
 			for (int i = 0; i < 6; i++) {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola"+String.valueOf(j));
 			}
@@ -226,7 +234,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	/** What is this <u>for?</u> Nothing calls it... */
 	@Override
 	public int getPlantMetadata(World world, int x, int y, int z) {
-		return 9;
+		return GROWN;
 	}
 
 	public static boolean isValidFarmBlock(World world, int x, int y, int z, int id) {
@@ -250,7 +258,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	public boolean isReadyToHarvest(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		return id == blockID && meta == 9;
+		return id == blockID && meta == GROWN;
 	}
 
 	@Override
@@ -268,5 +276,31 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	@Override
 	public float getHarvestingSpeed() {
 		return 2F;
+	}
+
+	@Override
+	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		return ItemRegistry.CANOLA.getStackOf();
+	}
+
+	@Override
+	public List<String> getWailaHead(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		currenttip.add(EnumChatFormatting.WHITE+"Canola Plant");
+		return currenttip;
+	}
+
+	@Override
+	public List<String> getWailaBody(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		int meta = acc.getMetadata();
+		currenttip.add(String.format("Growth Stage: %d%s", 100*meta/GROWN, "%"));
+		return currenttip;
+	}
+
+	@Override
+	public List<String> getWailaTail(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		String s1 = EnumChatFormatting.ITALIC.toString();
+		String s2 = EnumChatFormatting.BLUE.toString();
+		currenttip.add(s2+s1+"RotaryCraft");
+		return currenttip;
 	}
 }

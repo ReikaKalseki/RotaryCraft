@@ -50,7 +50,9 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -308,7 +310,7 @@ public final class HandbookAuxData {
 			ItemStack[] out = (ItemStack[])obj[1];
 			String oreName = (String)obj[2][0];
 
-			ReikaGuiAPI.instance.drawExtractor(ri, f, dx+66, dy+17, in, dx+66, dy+59, out);
+			MachineRecipeRenderer.instance.drawExtractor(dx+66, dy+17, in, dx+66, dy+59, out);
 			String[] words = oreName.split(" ");
 			for (int i = 0; i < words.length; i++)
 				f.drawString(words[i], dx+194, dy+60+f.FONT_HEIGHT*i-words.length*f.FONT_HEIGHT/2, 0);
@@ -342,7 +344,7 @@ public final class HandbookAuxData {
 				in = new ItemStack(RotaryCraft.compacts.itemID, 1, k-1);
 			if (k != 3)
 				out = new ItemStack(RotaryCraft.compacts.itemID, 2, k);
-			ReikaGuiAPI.instance.drawCompressor(ri, f, dx+66, dy+14, in, dx+120, dy+41, out);
+			MachineRecipeRenderer.instance.drawCompressor(dx+66, dy+14, in, dx+120, dy+41, out);
 		}
 		else if (h == HandbookRegistry.GLASS) {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.obsidian), dx+87, dy+28);
@@ -379,7 +381,7 @@ public final class HandbookAuxData {
 			ItemStack[] args = fermenter.get(k);
 			ItemStack[] in = new ItemStack[]{args[1], args[2]};
 			ItemStack out = args[0];
-			ReikaGuiAPI.instance.drawFermenter(ri, f, dx+102, dy+18, in, dx+159, dy+32, out);
+			MachineRecipeRenderer.instance.drawFermenter(dx+102, dy+18, in, dx+159, dy+32, out);
 		}
 		else if (h == HandbookRegistry.NETHERDUST) {
 			if ((System.nanoTime()/2000000000)%2 == 0) {
@@ -452,20 +454,6 @@ public final class HandbookAuxData {
 			}
 			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 		}
-		else if (h == HandbookRegistry.STEELINGOT) {
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.steelingot, dx+185, dy+10);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 64), dx+185, dy+28);
-
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.sand), dx+63, dy+9);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.coal), dx+63, dy+28);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.gunpowder), dx+63, dy+47);
-
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.ingotIron), dx+99+i*18, dy+10+j*18);
-				}
-			}
-		}
 		else if (h == HandbookRegistry.BEDTOOLS) {
 			ArrayList<ItemStack> li = new ArrayList();
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
@@ -476,8 +464,7 @@ public final class HandbookAuxData {
 			}
 			int index = (int)((System.currentTimeMillis()/2000)%li.size());
 			ItemStack is = li.get(index);
-			List c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(is);
-			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, c, dx+99, dy+18, dx+181, dy+32);
+			MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, is);
 		}
 		else if (h == HandbookRegistry.BEDARMOR) {
 			ArrayList<ItemStack> li = new ArrayList();
@@ -489,8 +476,21 @@ public final class HandbookAuxData {
 			}
 			int index = (int)((System.currentTimeMillis()/2000)%li.size());
 			ItemStack is = li.get(index);
-			List c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(is);
-			ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, c, dx+99, dy+18, dx+181, dy+32);
+			MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, is);
+		}
+		else if (h == HandbookRegistry.STRONGSPRING) {
+			ItemStack is = ItemRegistry.STRONGCOIL.getStackOf();
+			MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, is);
+		}
+		else if (h == HandbookRegistry.BEDINGOT) {
+			ItemStack is = ItemStacks.bedingot;
+			List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(is);
+			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(0));
+		}
+		else if (h == HandbookRegistry.STEELINGOT) {
+			ItemStack is = ItemStacks.steelingot;
+			List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(is);
+			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(0));
 		}
 	}
 

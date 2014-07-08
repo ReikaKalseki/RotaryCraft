@@ -96,6 +96,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				in.add(TreeGetter.getDyeSapling(j));
 				in.add(TreeGetter.getHeldDyeLeaf(j));
 			}
+			in.add(TreeGetter.getRainbowLeaf());
+			in.add(TreeGetter.getRainbowSapling());
 		}
 		if (ModList.EMASHER.isLoaded()) {
 			in.add(new ItemStack(ModCropList.ALGAE.blockID, 1, 0));
@@ -133,6 +135,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				return PlantMaterials.SAPLING.getPlantValue();
 			if (TreeGetter.isDyeLeaf(is))
 				return PlantMaterials.LEAVES.getPlantValue();
+			if (TreeGetter.isRainbowLeaf(is))
+				return 32;
+			if (TreeGetter.isRainbowSapling(is))
+				return 16;
 		}
 		if (ModList.FORESTRY.isLoaded() && is.itemID == ForestryHandler.getInstance().saplingID)
 			return 2;

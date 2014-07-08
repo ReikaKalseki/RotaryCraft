@@ -77,6 +77,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		}
 
 		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
+		if (hasLube)
+			this.distributeLubricant(world, x, y, z);
 		return hasLube;
 	}
 
@@ -253,7 +255,6 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 		this.dealPanelDamage(world, x, y, z, meta);
-		this.distributeLubricant(world, x, y, z);
 		this.spawnParticles(world, x, y, z);
 	}
 

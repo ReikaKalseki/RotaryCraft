@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.ModInterface;
+package Reika.RotaryCraft.TileEntities.Processing;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -48,8 +48,10 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 			return null;
 		for (int i = 0; i < Conversion.list.length; i++) {
 			Conversion c = Conversion.list[i];
-			if (c.inputFluid.equals(input.getActualFluid()))
-				return c;
+			if (c.validate()) {
+				if (c.inputFluid.equals(input.getActualFluid()))
+					return c;
+			}
 		}
 		return null;
 	}
@@ -68,8 +70,10 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	public boolean isValidFluid(Fluid f) {
 		for (int i = 0; i < Conversion.list.length; i++) {
 			Conversion c = Conversion.list[i];
-			if (c.inputFluid.equals(f))
-				return true;
+			if (c.validate()) {
+				if (c.inputFluid.equals(f))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -91,7 +95,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 
 	@Override
 	public boolean canOutputToPipe(MachineRegistry p) {
-		return p == MachineRegistry.HOSE;
+		return p == MachineRegistry.HOSE || p == MachineRegistry.PIPE;
 	}
 
 	@Override
@@ -119,8 +123,10 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 		return 0;
 	}
 
-	public static enum Conversion {
-		OIL(FluidRegistry.getFluid("oil"), FluidRegistry.getFluid("lubricant"), 6);
+	private static enum Conversion {
+		OIL("oil", "lubricant", 6),
+		ETHANOL1("bioethanol", "rc ethanol", 1),
+		ETHANOL2("biofuel", "rc ethanol", -2);
 
 		public final Fluid inputFluid;
 		public final Fluid outputFluid;
@@ -128,9 +134,9 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 
 		public static final Conversion[] list = values();
 
-		private Conversion(Fluid in, Fluid out, int factor) {
-			inputFluid = in;
-			outputFluid = out;
+		private Conversion(String in, String out, int factor) {
+			inputFluid = FluidRegistry.getFluid(in);
+			outputFluid = FluidRegistry.getFluid(out);
 			conversionFactor = factor;
 		}
 
@@ -141,6 +147,30 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 		public int getRequiredAmount() {
 			return conversionFactor > 0 ? 1 : -conversionFactor;
 		}
+
+		public boolean validate() {
+			return inputFluid != null && outputFluid != null;
+		}
+
+		@Override
+		public String toString() {
+			String name1 = inputFluid.getLocalizedName();
+			String name2 = outputFluid.getLocalizedName();
+			return name1+" ("+this.getRequiredAmount()+" mB) -> "+name2+" ("+this.getProductionAmount()+" mB)";
+		}
+	}
+
+	public static String getValidConversions() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < Conversion.list.length; i++) {
+			Conversion c = Conversion.list[i];
+			if (c.validate()) {
+				sb.append(c.toString());
+				if (i < Conversion.list.length-1)
+					sb.append("\n");
+			}
+		}
+		return sb.toString();
 	}
 
 }

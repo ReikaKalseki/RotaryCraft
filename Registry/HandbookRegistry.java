@@ -264,7 +264,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	SPAWNERS("Monster Spawners"),
 	YEAST("Yeast"),
 	ETHANOL("Ethanol"),
-	BEDINGOT("Bedrock Ingot"),
+	BEDINGOT("Bedrock Alloy Ingot"),
 	SILVERINGOT("Silver Ingot"),
 	SALT("Salt"),
 	AMMONIUM("Ammonium Nitrate"),
@@ -735,6 +735,10 @@ public enum HandbookRegistry implements HandbookEntry {
 			return false;
 		if (this == BEDARMOR)
 			return false;
+		if (this == STRONGSPRING)
+			return false;
+		if (this == BEDINGOT)
+			return false;
 		return true;
 	}
 
@@ -1031,6 +1035,10 @@ public enum HandbookRegistry implements HandbookEntry {
 			return ItemRegistry.CANOLA.getStackOf();
 		if (this == SILVERINGOT)
 			return ItemStacks.silveringot;
+		if (this == STRONGSPRING)
+			return ItemRegistry.STRONGCOIL.getStackOf();
+		if (this == BEDINGOT)
+			return ItemStacks.bedingot;
 		return null;
 	}
 

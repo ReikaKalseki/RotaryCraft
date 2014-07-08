@@ -40,16 +40,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 		private BlastFurnRecipe(BlastRecipe r) {
 			recipe = r;
-			inputs = this.getValidInputNumbers(r);
-		}
-
-		private ArrayList<Integer> getValidInputNumbers(BlastRecipe r) {
-			ArrayList<Integer> li = new ArrayList();
-			for (int i = r.mainRequired; i <= 9; i += r.mainRequired) {
-				if (i == r.mainRequired || !r.matchInputExactly())
-					li.add(i);
-			}
-			return li;
+			inputs = r.getValidInputNumbers();
 		}
 
 		private int getInput() {
@@ -108,20 +99,15 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		public ArrayList<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			int w = recipe.recipeWidth;
-			int h = recipe.recipeHeight;
-			int dx = w == 1 ? 57+18 : 57;
-			int dy = h == 1 ? 6+18 : 6;
+			ItemStack[] items = recipe.getArrayForDisplay();
+			int dx = 57;
+			int dy = 6;
 			try {
 				for (int i = 0; i < 3; i++) {
-					if (i < h) {
-						for (int j = 0; j < 3; j++) {
-							if (j < w) {
-								ItemStack is = recipe.recipeItems[i*w+j];
-								if (is != null) {
-									stacks.add(new PositionedStack(is, dx+18*j, dy+18*i));
-								}
-							}
+					for (int j = 0; j < 3; j++) {
+						ItemStack is = items[i*3+j];
+						if (is != null) {
+							stacks.add(new PositionedStack(is, dx+18*j, dy+18*i));
 						}
 					}
 				}

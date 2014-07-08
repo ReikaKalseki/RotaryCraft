@@ -45,6 +45,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDistillery;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
@@ -378,7 +379,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());
 		addNotes(MachineRegistry.GRINDER, PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque());
 		addNotes(MachineRegistry.FLOODLIGHT, PowerReceivers.FLOODLIGHT.getMinPower());
-		addNotes(MachineRegistry.HEATRAY, PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF);
+		addNotes(MachineRegistry.HEATRAY, PowerReceivers.HEATRAY.getMinPower(), PowerReceivers.HEATRAY.getMinPower(), TileEntityHeatRay.FALLOFF);
 		addNotes(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER, PowerReceivers.PILEDRIVER.getMinTorque());
 		addNotes(MachineRegistry.AEROSOLIZER, PowerReceivers.AEROSOLIZER.getMinPower());
 		addNotes(MachineRegistry.LIGHTBRIDGE, PowerReceivers.LIGHTBRIDGE.getMinPower(), PowerReceivers.LIGHTBRIDGE.getMinPower()/ConfigRegistry.BRIDGERANGE.getValue());
@@ -401,7 +402,8 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.WOODCUTTER, PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque());
 		addNotes(MachineRegistry.MOBRADAR, PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), TileEntityMobRadar.FALLOFF);
 		addNotes(MachineRegistry.TNTCANNON, PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque());
-		addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE, TileEntitySonicWeapon.BRAINDAMAGE, TileEntitySonicWeapon.LUNGDAMAGE, TileEntitySonicWeapon.LETHALVOLUME);
+		int fudge = TileEntitySonicWeapon.fudge;
+		addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE/fudge, TileEntitySonicWeapon.BRAINDAMAGE/fudge, TileEntitySonicWeapon.LUNGDAMAGE/fudge, TileEntitySonicWeapon.LETHALVOLUME/fudge);
 		addNotes(MachineRegistry.FORCEFIELD, PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF);
 		addNotes(MachineRegistry.MUSICBOX, TileEntityMusicBox.LOOPPOWER);
 		addNotes(MachineRegistry.MOBHARVESTER, PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower());
@@ -443,7 +445,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
 		addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
 		addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
-		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque());
+		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque(), TileEntityDistillery.getValidConversions());
 		addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
 		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 		addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
