@@ -251,7 +251,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 						if (tile.getWater() <= tile.CAPACITY-RotaryConfig.MILLIBUCKET) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addLubricant(RotaryConfig.MILLIBUCKET);
+							tile.addWater(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();

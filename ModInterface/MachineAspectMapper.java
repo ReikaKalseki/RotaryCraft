@@ -137,6 +137,36 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.MOBHARVESTER, Aspect.HARVEST, 4);
 
 		this.addAspect(MachineRegistry.PROJECTOR, Aspect.LIGHT, 2);
+
+		this.addAspect(MachineRegistry.RAILGUN, Aspect.TRAVEL, 5);
+		this.addAspect(MachineRegistry.RAILGUN, Aspect.WEAPON, 8);
+
+		this.addAspect(MachineRegistry.WEATHERCONTROLLER, Aspect.WEATHER, 8);
+		this.addAspect(MachineRegistry.WEATHERCONTROLLER, Aspect.WATER, 2);
+
+		this.addAspect(MachineRegistry.REFRESHER, Aspect.TIME, 4);
+
+		this.addAspect(MachineRegistry.FREEZEGUN, Aspect.WEAPON, 8);
+		this.addAspect(MachineRegistry.FREEZEGUN, Aspect.ICE, 6);
+
+		this.addAspect(MachineRegistry.CAVESCANNER, Aspect.SENSES, 8);
+
+		this.addAspect(MachineRegistry.SCALECHEST, Aspect.VOID, 8);
+
+		this.addAspect(MachineRegistry.IGNITER, Aspect.FIRE, 8);
+		this.addAspect(MachineRegistry.IGNITER, Aspect.WEAPON, 2);
+
+		this.addAspect(MachineRegistry.MAGNETIZER, Aspect.ENERGY, 2);
+
+		this.addAspect(MachineRegistry.CONTAINMENT, Aspect.TRAP, 8);
+
+		this.addAspect(MachineRegistry.PURIFIER, Aspect.EXCHANGE, 6);
+
+		this.addAspect(MachineRegistry.LASERGUN, Aspect.FIRE, 8);
+		this.addAspect(MachineRegistry.LASERGUN, Aspect.WEAPON, 8);
+		this.addAspect(MachineRegistry.LASERGUN, Aspect.LIGHT, 4);
+
+		this.addAspect(MachineRegistry.ITEMCANNON, Aspect.TRAVEL, 6);
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {

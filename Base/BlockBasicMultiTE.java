@@ -108,6 +108,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
@@ -508,6 +509,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (ep.isSneaking())
 				mov *= -1;
 			tc.moveSrc(mov, dir);
+			return true;
+		}
+		if (m == MachineRegistry.GPR) {
+			TileEntityGPR tc = (TileEntityGPR)te;
+			ForgeDirection dir = ReikaPlayerAPI.getDirectionFromPlayerLook(ep, false);
+			int mov = 4;
+			if (ep.isSneaking())
+				tc.resetOffset();
+			tc.shift(dir, 1);
 			return true;
 		}
 

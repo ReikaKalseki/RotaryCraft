@@ -11,7 +11,9 @@ package Reika.RotaryCraft.TileEntities.Surveying;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -31,6 +33,10 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	public int[][] colors = new int[256][81]; //these three arrays take 52KB RAM collectively (assuming Mat'l is 32bits)
 	public boolean xdir;
 
+	private int offsetX;
+	private int offsetY;
+	private int offsetZ;
+
 
 	private int oldmeta = 0;
 
@@ -40,6 +46,16 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (yCoord > 96)
 			return false;
 		return true;
+	}
+
+	public void shift(ForgeDirection dir, int amt) {
+		offsetX += dir.offsetX*amt;
+		offsetY += dir.offsetY*amt;
+		offsetZ += dir.offsetZ*amt;
+	}
+
+	public void resetOffset() {
+		offsetX = offsetY = offsetZ = 0;
 	}
 
 	public double getSpongy(World world, int x, int y, int z) {
@@ -82,7 +98,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		RotaryAchievements.GPR.triggerAchievement(this.getPlacer());
 		if (tickcount == 0) {
 			int[] bounds = this.getBounds();
-			this.eval2(world, x, y, z, meta, bounds);
+			this.eval2(world, x+offsetX, y+offsetY, z+offsetZ, meta, bounds);
 			if (world.isRemote)
 				this.blockToColor(bounds, y);
 			tickcount = 20;
@@ -198,5 +214,23 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		offsetX = NBT.getInteger("xoff");
+		offsetY = NBT.getInteger("yoff");
+		offsetZ = NBT.getInteger("zoff");
+	}
+
+	@Override
+	public void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("xoff", offsetX);
+		NBT.setInteger("yoff", offsetY);
+		NBT.setInteger("zoff", offsetZ);
 	}
 }

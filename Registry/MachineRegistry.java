@@ -661,6 +661,7 @@ public enum MachineRegistry {
 		switch(this) {
 		case CAVESCANNER:
 		case SCREEN:
+		case GPR:
 			return true;
 		default:
 			return false;
