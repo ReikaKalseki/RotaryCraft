@@ -35,14 +35,14 @@ public class RecipesBlastFurnace
 		return BlastFurnaceBase;
 	}
 
-	public void addRecipe(ItemStack out, int temperature, IRecipe in, int speed) {
-		BlastCrafting c = new BlastCrafting(out, temperature, speed, in);
+	public void addRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp);
 		craftingList.add(c);
 	}
 
-	public void add3x3Crafting(ItemStack out, int temperature, int speed, Object... in) {
+	public void add3x3Crafting(ItemStack out, int temperature, int speed, float xp, Object... in) {
 		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
-		BlastCrafting c = new BlastCrafting(out, temperature, speed, r);
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp);
 		craftingList.add(c);
 	}
 
@@ -52,6 +52,7 @@ public class RecipesBlastFurnace
 		private final IRecipe recipe;
 		private final ItemStack output;
 		public final int speed;
+		public final float xp;
 
 		/*
 		public BlastCrafting(int width, int height, ItemStack[] input, ItemStack out, int temp) {
@@ -60,11 +61,12 @@ public class RecipesBlastFurnace
 			output = out.copy();
 		}*/
 
-		public BlastCrafting(ItemStack out, int temp, int speed, IRecipe ir) {
+		public BlastCrafting(ItemStack out, int temp, int speed, IRecipe ir, float xp) {
 			recipe = ir;
 			output = out;
 			temperature = temp;
 			this.speed = speed;
+			this.xp = xp;
 		}
 
 		public final ItemStack outputItem() {
@@ -73,7 +75,7 @@ public class RecipesBlastFurnace
 
 		public BlastCrafting copy() {
 			//return new BlastCrafting(recipeWidth, recipeHeight, recipeItems, output, temperature);
-			return new BlastCrafting(output, temperature, speed, recipe);
+			return new BlastCrafting(output, temperature, speed, recipe, xp);
 		}
 
 		public boolean matches(RecipePattern ic, int temperature) {
@@ -104,6 +106,11 @@ public class RecipesBlastFurnace
 			ReikaRecipeHelper.copyRecipeToItemStackArray(items, recipe);
 			return ReikaItemHelper.matchStacks(is, items[slot-1]);
 		}
+
+		@Override
+		public float getXPPerProduct() {
+			return xp;
+		}
 	}
 
 	public static interface BlastFurnacePattern {
@@ -111,6 +118,8 @@ public class RecipesBlastFurnace
 		public ItemStack outputItem();
 
 		public boolean isValidInputForSlot(int slot, ItemStack is);
+
+		public float getXPPerProduct();
 	}
 
 	public static final class BlastInput {
@@ -236,6 +245,11 @@ public class RecipesBlastFurnace
 			if (slot >= 1 && slot < 10)
 				return ReikaItemHelper.matchStacks(is, main);
 			return false;
+		}
+
+		@Override
+		public float getXPPerProduct() {
+			return xp;
 		}
 	}
 

@@ -620,21 +620,21 @@ public enum ItemRegistry implements RegistryEnum {
 	public void addBlastRecipe(int temperature, int speed, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getStackOf();
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, 0, params);
 		}
 	}
 
 	public void addMetaBlastRecipe(int temperature, int speed, int meta, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getStackOfMetadata(meta);
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, 0, params);
 		}
 	}
 
 	public void addEnchantedBlastRecipe(int temperature, int speed, Object... params) {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getEnchantedStack();
-			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, params);
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(is, temperature, speed, 0, params);
 		}
 	}
 

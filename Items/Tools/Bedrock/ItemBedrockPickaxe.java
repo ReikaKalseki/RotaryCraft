@@ -232,7 +232,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b.blockID == OpenBlockHandler.getInstance().tankID)
 			return 20F;
 		if (b.blockID == ThermalHandler.getInstance().ductID)
-			return 30F;
+			return 48F;
 		if (MystObjects.crystal != null && b.blockID == MystObjects.crystal.blockID)
 			return 20F;
 		if (TwilightForestHandler.getInstance().isMazeStone(b))

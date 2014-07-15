@@ -112,6 +112,9 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 				else if (arm.getItem() instanceof IElectricItem) {
 					IElectricItem ie = (IElectricItem)arm.getItem();
 					///???
+					int id = ie.getEmptyItemId(arm);
+					ItemStack newarm = new ItemStack(id, 1, 0);
+					target.setCurrentItemOrArmor(i, newarm);
 				}
 				else if (arm.getItem() instanceof ItemBedrockArmor) {
 					//do nothing

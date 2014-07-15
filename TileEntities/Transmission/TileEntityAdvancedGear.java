@@ -129,7 +129,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		public static final GearType[] list = values();
 
 		public boolean isLubricated() {
-			return this == CVT || this == HIGH;
+			return this == CVT || this.consumesLubricant();
 		}
 
 		public boolean consumesLubricant() {
@@ -929,5 +929,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return this.getGearType().isLubricated() ? Flow.INPUT : Flow.NONE;
+	}
+
+	public void setLubricantFromNBT(NBTTagCompound NBT) {
+		lubricant.setContents(NBT.getInteger("lube"), FluidRegistry.getFluid("lubricant"));
 	}
 }

@@ -78,6 +78,12 @@ public class BlockAdvGear extends BlockModelledMachine {
 				is.stackTagCompound.setLong("energy", e);
 				is.stackTagCompound.setBoolean("bedrock", te.isBedrockCoil());
 			}
+			if (te.getGearType().isLubricated()) {
+				int lube = te.getLubricant();
+				if (is.stackTagCompound == null)
+					is.stackTagCompound = new NBTTagCompound();
+				is.stackTagCompound.setLong("lube", lube);
+			}
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}
 	}

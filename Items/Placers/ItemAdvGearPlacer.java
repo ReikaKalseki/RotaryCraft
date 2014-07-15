@@ -76,10 +76,15 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			adv.isFlipped = true;
 		}
-		if (adv.getGearType().storesEnergy() && is.stackTagCompound != null) {
-			adv.setEnergyFromNBT(is.stackTagCompound);
-			adv.setBedrock(is.stackTagCompound.getBoolean("bedrock"));
-			adv.setCreative(is.stackTagCompound.getBoolean("creative"));
+		if (is.stackTagCompound != null) {
+			if (adv.getGearType().storesEnergy()) {
+				adv.setEnergyFromNBT(is.stackTagCompound);
+				adv.setBedrock(is.stackTagCompound.getBoolean("bedrock"));
+				adv.setCreative(is.stackTagCompound.getBoolean("creative"));
+			}
+			if (adv.getGearType().isLubricated()) {
+				adv.setLubricantFromNBT(is.stackTagCompound);
+			}
 		}
 		return true;
 	}
@@ -109,23 +114,30 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 	}
 
 	@Override
-	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
 		if (TileEntityAdvancedGear.GearType.list[is.getItemDamage()].storesEnergy()) {
 			boolean bedrock = is.stackTagCompound != null && is.stackTagCompound.getBoolean("bedrock");
 			long max = TileEntityAdvancedGear.getMaxStorageCapacity(bedrock);
-			par3List.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
-			if (GearType.list[is.getItemDamage()].storesEnergy()) {
+			li.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
+			GearType type = GearType.list[is.getItemDamage()];
+			if (type.storesEnergy()) {
 				if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
-					par3List.add("Stored Energy: 0 J");
+					li.add("Stored Energy: 0 J");
 				else {
 					if (is.stackTagCompound.getBoolean("creative")) {
-						par3List.add("Infinite power for creative mode:");
-						par3List.add("This coil does not deplete.");
+						li.add("Infinite power for creative mode:");
+						li.add("This coil does not deplete.");
 					}
 					else {
 						long e = is.stackTagCompound.getLong("energy")/20;
-						par3List.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
+						li.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
 					}
+				}
+			}
+			if (type.isLubricated()) {
+				if (is.stackTagCompound != null) {
+					int lube = is.stackTagCompound.getInteger("lube");
+					li.add("Lubricant: "+lube+" mB");
 				}
 			}
 		}

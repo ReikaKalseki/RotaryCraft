@@ -145,6 +145,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 					if (!this.checkSpreadFit(out, out.stackSize))
 						return;
 
+		xp += out.stackSize*bc.xp;
+
 		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null)
 				ReikaInventoryHelper.decrStack(i, inv);
