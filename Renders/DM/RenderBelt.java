@@ -58,7 +58,8 @@ public class RenderBelt extends RotaryTERenderer
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		if (tile.isInWorld()) {
-			switch(tile.getBlockMetadata()) {
+			int meta = tile.getBlockMetadata()%6;
+			switch(meta) {
 			case 0:
 				var11 = 0;
 				break;
@@ -79,12 +80,12 @@ public class RenderBelt extends RotaryTERenderer
 				break;
 			}
 
-			if (tile.getBlockMetadata() <= 3)
+			if (meta <= 3)
 				GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
 			else {
 				GL11.glRotatef(var11, 1F, 0F, 0.0F);
 				GL11.glTranslatef(0F, -1F, 1F);
-				if (tile.getBlockMetadata() == 5)
+				if (meta == 5)
 					GL11.glTranslatef(0F, 0F, -2F);
 			}
 		}
@@ -113,10 +114,10 @@ public class RenderBelt extends RotaryTERenderer
 
 	private void drawBelt2(TileEntityBeltHub tile, double par2, double par4, double par6, float par8) {
 		int meta = tile.getBlockMetadata();
-		boolean vertical = meta == 4 || meta == 5;
+		boolean vertical = meta == 4 || meta == 5 || meta == 10 || meta == 11;
 		ForgeDirection dir = tile.getBeltDirection();
 		int dist = tile.getDistanceToTarget();
-		boolean emit = tile.isEmitting();
+		boolean emit = tile.isEmitting;
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -203,7 +204,7 @@ public class RenderBelt extends RotaryTERenderer
 		v5.addVertex(0.375, 0.125, 0.375);
 		v5.addVertex(0.125, 0.375, 0.375);
 
-		if (tile.isEmitting()) {
+		if (emit) {
 			v5.addVertex(0.375, 0.875, 0.375);
 			v5.addVertex(0.625+dist, 0.875, 0.375);
 			v5.addVertex(0.625+dist, 0.875, 0.625);

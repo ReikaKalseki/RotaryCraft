@@ -103,7 +103,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
 			return this.canConnectToPipe(m);
-		return this.interactsWithMachines() && this.isInteractableTile(this.getTileEntity(dx, dy, dz), side);
+		return this.interactsWithMachines() && this.isInteractableTile(this.getAdjacentTileEntity(side), side);
 	}
 
 	private boolean isInteractableTile(TileEntity te, ForgeDirection side) {

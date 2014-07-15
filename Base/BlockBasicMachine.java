@@ -246,6 +246,20 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 						return true;
 					}
 				}
+				if (tile.getEngineType().needsWater()) {
+					if (is != null && is.itemID == Item.bucketWater.itemID) {
+						if (tile.getWater() <= tile.CAPACITY-RotaryConfig.MILLIBUCKET) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+							tile.addLubricant(RotaryConfig.MILLIBUCKET);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add water!");
+						}
+						return true;
+					}
+				}
 			}
 		}
 		if (te != null && RotaryAux.hasGui(world, x, y, z, ep) && ((RotaryCraftTileEntity)te).isPlayerAccessible(ep)) {

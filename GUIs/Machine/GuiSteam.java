@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.GUIs.Machine.Inventory;
+package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -17,7 +17,7 @@ import Reika.RotaryCraft.Containers.ContainerSteam;
 public class GuiSteam extends GuiNonPoweredMachine
 {
 	private TileEntityEngine Steam;
-	
+
 	int x;
 	int y;
 
@@ -26,7 +26,7 @@ public class GuiSteam extends GuiNonPoweredMachine
 		super(new ContainerSteam(p5ep, te), te);
 		Steam = te;
 		xSize = 176;
-		ySize = 166;
+		ySize = 79;
 		ep = p5ep;
 	}
 

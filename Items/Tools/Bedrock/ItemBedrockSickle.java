@@ -9,7 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Base.ItemSickleBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockSickle extends ItemSickleBase {
 
@@ -35,6 +42,15 @@ public class ItemBedrockSickle extends ItemSickleBase {
 	@Override
 	public boolean canActAsShears() {
 		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	{
+		ItemStack item = new ItemStack(par1, 1, 0);
+		item.addEnchantment(Enchantment.fortune, 5);
+		par3List.add(item);
 	}
 
 }

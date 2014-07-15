@@ -20,6 +20,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.RegistryEnum;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -53,6 +54,7 @@ import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
 import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
 import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedReveal;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockGrafter;
@@ -148,7 +150,8 @@ public enum ItemRegistry implements RegistryEnum {
 	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class),
 	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class, ModList.FORESTRY),
 	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY),
-	BEDSAW(39, false,			"item.bedsaw",				ItemBedrockSaw.class, ModList.MULTIPART);
+	BEDSAW(39, false,			"item.bedsaw",				ItemBedrockSaw.class, ModList.MULTIPART),
+	BEDREVEAL(40, false,		"item.bedreveal",			ItemBedReveal.class, ModList.THAUMCRAFT);
 
 	private int index;
 	private boolean hasSubtypes;
@@ -208,9 +211,10 @@ public enum ItemRegistry implements RegistryEnum {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
 				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
-			if (this.isJetpack() || this.isJumpBoots())
-				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Material, Armor render, Sprite index
-			return new Class[]{int.class, int.class, int.class}; // ID, Armor render, Sprite index
+			else if (this.isJetpack() || this.isJumpBoots())
+				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Material, Sprite index, Armor render
+			else
+				return new Class[]{int.class, int.class, int.class}; // ID, Sprite index, Armor render
 		}
 
 		return new Class[]{int.class, int.class}; // ID, Sprite index
@@ -278,6 +282,7 @@ public enum ItemRegistry implements RegistryEnum {
 			return 1;
 		case BEDHELM:
 		case STEELHELMET:
+		case BEDREVEAL:
 			return 0;
 		case BEDLEGS:
 		case STEELLEGS:
@@ -363,6 +368,8 @@ public enum ItemRegistry implements RegistryEnum {
 		if (this.isJetpack())
 			return RotaryCraft.proxy.armor;
 		if (this.isJumpBoots())
+			return RotaryCraft.proxy.armor;
+		if (this == BEDREVEAL)
 			return RotaryCraft.proxy.armor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
 	}
@@ -487,6 +494,7 @@ public enum ItemRegistry implements RegistryEnum {
 		case STEELBOOTS:
 		case JUMP:
 		case BEDJUMP:
+		case BEDREVEAL:
 			return true;
 		default:
 			return false;
@@ -655,16 +663,19 @@ public enum ItemRegistry implements RegistryEnum {
 		case BEDCHEST:
 		case BEDHELM:
 		case BEDLEGS:
-			is.addEnchantment(((ItemBedrockArmor)is.getItem()).getDefaultEnchantment(), 4);
+			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)is.getItem()).getDefaultEnchantments());
 			break;
 		case BEDPACK:
-			is.addEnchantment(((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantment(), 4);
+			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantments());
 			break;
 		case BEDPICK:
 			is.addEnchantment(Enchantment.silkTouch, 1);
 			break;
 		case BEDJUMP:
-			is.addEnchantment(((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantment(), 4);
+			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantments());
+			break;
+		case BEDREVEAL:
+			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDHELM.getItemInstance()).getDefaultEnchantments());
 			break;
 		case BEDSWORD:
 			is.addEnchantment(Enchantment.sharpness, 5);

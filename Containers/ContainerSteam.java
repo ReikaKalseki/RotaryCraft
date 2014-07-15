@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -28,9 +27,6 @@ public class ContainerSteam extends CoreContainer
 		int posX = Steam.xCoord;
 		int posY = Steam.yCoord;
 		int posZ = Steam.zCoord;
-		this.addSlotToContainer(new Slot(par2TileEntitySteam, 0, 80, 36));
-
-		this.addPlayerInventory(player);
 	}
 
 	/**

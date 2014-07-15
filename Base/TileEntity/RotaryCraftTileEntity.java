@@ -150,9 +150,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-		if (phi >= 360)
-			phi = phi%360;
-		NBT.setFloat("phi", phi);
 
 		if (isFlipped)
 			NBT.setBoolean("flip", isFlipped);
@@ -161,9 +158,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
-		phi = NBT.getFloat("phi");
-		if (phi >= 360)
-			phi = phi%360;
 
 		isFlipped = NBT.getBoolean("flip");
 	}

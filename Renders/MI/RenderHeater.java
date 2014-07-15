@@ -26,74 +26,45 @@ public class RenderHeater extends RotaryTERenderer
 {
 
 	private ModelHeater HeaterModel = new ModelHeater();
-	//private ModelHeaterV HeaterModelV = new ModelHeaterV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityHeaterAt(TileEntityHeater tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
 		if (!tile.isInWorld())
-		{
 			var9 = 0;
-		}
 		else
-		{
-
 			var9 = tile.getBlockMetadata();
 
+		ModelHeater var14;
+		var14 = HeaterModel;
 
-			{
-				//((BlockHeaterBlock1)var10).unifyAdjacentChests(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
-				var9 = tile.getBlockMetadata();
-			}
-		}
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex.png");
+		if (tile.temperature >= 200)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex200C.png");
+		if (tile.temperature >= 400)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex400C.png");
+		if (tile.temperature >= 600)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex600C.png");
+		if (tile.temperature >= 800)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex800C.png");
+		if (tile.temperature >= 900)
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex900C.png");
 
-		if (true)
-		{
-			ModelHeater var14;
-			var14 = HeaterModel;
-			//ModelHeaterV var15;
-			//var14 = this.HeaterModelV;
+		GL11.glPushMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
+		GL11.glScalef(1.0F, -1.0F, -1.0F);
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		int var11 = 0;	 //used to rotate the model about metadata
 
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex.png");
-			if (tile.temperature >= 200)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex200C.png");
-			if (tile.temperature >= 400)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex400C.png");
-			if (tile.temperature >= 600)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex600C.png");
-			if (tile.temperature >= 800)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex800C.png");
-			if (tile.temperature >= 900)
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex900C.png");
+		var14.renderAll(tile, null, 0, 0);
 
-			GL11.glPushMatrix();
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
-			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			int var11 = 0;	 //used to rotate the model about metadata
-
-			//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-			float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-			// if (tile.getBlockMetadata() < 4)
-
-
-			var14.renderAll(tile, null, 0, 0);
-			// else
-			//var15.renderAll(tile, );
-			if (tile.isInWorld())
-				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		if (tile.isInWorld())
+			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

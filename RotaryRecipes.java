@@ -18,21 +18,31 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.research.ResearchCategories;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.CustomThaumResearch;
+import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ThermalRecipeHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
+import Reika.DragonAPI.ModInteract.XMLResearch;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -42,7 +52,9 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class RotaryRecipes {
 
@@ -134,6 +146,51 @@ public class RotaryRecipes {
 				ReikaRecipeHelper.replaceIngredientInAllRecipes(hardGlass, new ItemStack(RotaryCraft.obsidianglass), true);
 			}
 		}
+
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			try {
+				ResourceLocation rl1 = new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png");
+				ResourceLocation rl2 = new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png");
+				ResearchCategories.registerCategory("rotarycraft", rl1, rl2);
+
+				ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
+				ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
+				ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
+				ItemStack resource = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemResource", 1);
+				int saltDmg = 14;
+				ItemStack salis = new ItemStack(resource.itemID, 1, saltDmg);
+				AspectList al = new AspectList();
+				al.add(Aspect.MIND, 10);
+				al.add(Aspect.SENSES, 25);
+				al.add(Aspect.AURA, 10);
+				al.add(Aspect.ARMOR, 25);
+				al.add(Aspect.MAGIC, 25);
+				ItemStack[] recipe = {
+						meter,
+						new ItemStack(Item.ingotGold),
+						salis,
+						ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+						meter,
+						new ItemStack(Item.ingotGold),
+						salis,
+						ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+
+				};
+				InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 2, al, in, recipe);
+				String name = "Bedrock Helmet of Revealing";
+				CustomThaumResearch res = new CustomThaumResearch("BEDREVEAL", "rotarycraft", al, 0, 0, 0, out).setName(name);
+				res.setDescription("Combining the protection of bedrock with the power of a Thaumometer");
+				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+					String path = RotaryDescriptions.PARENT+"thaum.xml";
+					XMLResearch xml = new XMLResearch("bedreveal", RotaryCraft.class, path, ir, 2);
+					res.setPages(xml.getPages());
+				}
+				res.registerResearchItem();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static void addMachines() {
@@ -165,7 +222,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.DYNAMOMETER.addSizedCrafting(2, " S ", " E ", " Ms", 's', ItemStacks.screen, 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'E', Item.enderPearl);
 
-		MachineRegistry.BEDROCKBREAKER.addCrafting("BDO", "BSO", "BDO", 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel);
+		MachineRegistry.BEDROCKBREAKER.addCrafting("BDt", "BSO", "BDt", 't', ItemStacks.tungsteningot, 'S', ItemStacks.steelingot, 'D', Item.diamond, 'O', Block.obsidian, 'B', ItemStacks.basepanel);
 
 		MachineRegistry.FERMENTER.addCrafting("BPB", "PIP", "BPB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel);
 		MachineRegistry.FERMENTER.addOreRecipe("BPB", "PIP", "BPB", 'B', "ingotTin", 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel);
@@ -378,6 +435,8 @@ public class RotaryRecipes {
 		MachineRegistry.PIPEPUMP.addCrafting("BBB", "PIP", "BBB", 'B', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'P', ItemStacks.pipe);
 
 		MachineRegistry.CHAIN.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', ItemStacks.basepanel, 'G', ItemStacks.steelgear, 's', ItemStacks.steelingot);
+
+		MachineRegistry.CENTRIFUGE.addCrafting("SGS", "S S", "PgP", 'P', ItemStacks.basepanel, 'g', ItemStacks.gearunit4, 'S', ItemStacks.steelingot, 'G', Block.thinGlass);
 	}
 
 	private static void addCraftItems() {
@@ -474,7 +533,7 @@ public class RotaryRecipes {
 		ReikaRecipeHelper.addOreRecipe(ItemStacks.power, "RER", "GGG", "SSS", 'R', Item.redstone, 'G', "ingotElectrum", 'E', "ingotCopper", 'S', ItemStacks.steelingot);
 
 		GameRegistry.addRecipe(ItemStacks.barrel, new Object[]{
-				"OOO", "ggG", "OOO", 'O', Block.obsidian, 'G', RotaryCraft.obsidianglass, 'g', Block.glowStone});
+				"OOO", "gtG", "OOO", 't', ItemStacks.tungsteningot, 'O', Block.obsidian, 'G', RotaryCraft.obsidianglass, 'g', Block.glowStone});
 		GameRegistry.addRecipe(ItemStacks.bulb, new Object[]{
 				"GGG", "BDB", "BRB", 'D', Item.netherStar, 'G', Block.glowStone, 'R', Item.redstone, 'B', Item.blazeRod});
 

@@ -40,7 +40,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
-import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.IgnoredByBorer;
@@ -222,10 +221,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		int id = world.getBlockId(x, y, z);
 		if (id != Block.bedrock.blockID && id != FactorizationHandler.getInstance().bedrockID)
 			return false;
+		/*
 		if (y > 4 && y < 40 && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID())
 			return true;
 		if (y > 122 && world.provider.isHellWorld)
 			return true;
+		 */
 		return false;
 	}
 
@@ -402,6 +403,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (id == Block.fire.blockID)
 			return false;
 		if (id == Block.cauldron.blockID)
+			return false;
+		if (id == Block.reed.blockID)
 			return false;
 		if (id == Block.redstoneComparatorActive.blockID || id == Block.redstoneComparatorIdle.blockID)
 			return false;

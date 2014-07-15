@@ -130,6 +130,11 @@ public class GuiCoil extends GuiNonPoweredMachine
 		}
 	}
 
+	@Override
+	public boolean labelInventory() {
+		return false;
+	}
+
 	/**
 	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 	 */

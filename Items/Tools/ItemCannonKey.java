@@ -16,11 +16,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -59,7 +59,7 @@ public class ItemCannonKey extends ItemRotaryTool {
 			return false;
 		TileEntityAimedCannon can = (TileEntityAimedCannon)world.getBlockTileEntity(x, y, z);
 		String name = ep.getEntityName();
-		if (ConfigRegistry.DEBUGMODE.getState()) {
+		if (DragonOptions.DEBUGMODE.getState()) {
 			ReikaChatHelper.write("Key is held by "+name+"; machine was placed by "+can.placer);
 			ReikaChatHelper.write("name.equals(placer): "+name.equals(can.placer));
 			ReikaChatHelper.write("name.compareTo(placer): "+name.compareTo(can.placer));
@@ -74,7 +74,7 @@ public class ItemCannonKey extends ItemRotaryTool {
 			if (!is.stackTagCompound.hasKey("owner"))
 				return false;
 			String owner = is.stackTagCompound.getString("owner");
-			if (ConfigRegistry.DEBUGMODE.getState()) {
+			if (DragonOptions.DEBUGMODE.getState()) {
 				ReikaChatHelper.write("Key is made by "+owner+"; machine was placed by "+can.placer);
 				ReikaChatHelper.write("owner.equals(placer): "+owner.equals(can.placer));
 				ReikaChatHelper.write("owner.compareTo(placer): "+owner.compareTo(can.placer));

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.RotaryCraft.API.RadarJammer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -36,6 +37,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	public boolean hostile = true;
 	public boolean animal = true;
 	public boolean player = true;
+	private boolean isJammed;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -51,6 +53,10 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 		return range;
 	}
 
+	public boolean isJammed() {
+		return isJammed;
+	}
+
 	public int[] getBounds() {
 		int range = this.getRange();
 		int[] bounds = {24-range, 24+range};
@@ -60,11 +66,14 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	public void getMobs(World world, int x, int y, int z) {
 		colors = ReikaArrayHelper.fillMatrix(colors, 0);
 		mobs = ReikaArrayHelper.fillMatrix(mobs, 0);
+		isJammed = false;
 		int range = this.getRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, 255, z+1+range);
 		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (int i = 0; i < inzone.size(); i++) {
 			EntityLivingBase ent = (EntityLivingBase)inzone.get(i);
+			if (ent instanceof RadarJammer && ((RadarJammer)ent).jamRadar(worldObj, xCoord, yCoord, zCoord))
+				isJammed = true;
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;
@@ -107,6 +116,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 		super.writeSyncTag(NBT);
 		if (owner != null && !owner.isEmpty())
 			NBT.setString("own", owner);
+		NBT.setBoolean("jam", isJammed);
 	}
 
 	@Override
@@ -114,6 +124,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	{
 		super.readSyncTag(NBT);
 		owner = NBT.getString("own");
+		isJammed = NBT.getBoolean("jam");
 	}
 
 	@Override

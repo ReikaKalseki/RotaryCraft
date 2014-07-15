@@ -15,6 +15,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -45,8 +47,8 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getRangedBox());
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
-			e.attackEntityFrom(DamageSource.cactus, 0); //to prevent some despawns
 			if (ReikaEntityHelper.isHostile(e) && !(e instanceof EntityDragon || e instanceof EntityWither)) {
+				this.markNoDespawn(e);
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;
 				double dz = e.posZ-z-0.5;
@@ -92,6 +94,15 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 				}
 			}
 		}
+	}
+
+	private void markNoDespawn(EntityLivingBase e) {
+		boolean pot = !e.isPotionActive(Potion.fireResistance);
+		if (pot)
+			e.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 1, 0));
+		e.attackEntityFrom(DamageSource.onFire, 0);
+		if (pot)
+			e.removePotionEffect(Potion.fireResistance.id);
 	}
 
 	@Override

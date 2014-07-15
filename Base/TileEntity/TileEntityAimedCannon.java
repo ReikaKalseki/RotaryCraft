@@ -67,6 +67,11 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		}
 	}
 
+	protected final double getFiringPositionY(double dy) {
+		double a = dir == 1 ? 0.75 : 0.25;
+		return yCoord+voffset*0+a+dy;
+	}
+
 	@Override
 	public void updateTileEntity() {
 		//this.printSafeList();
@@ -224,7 +229,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	@Override
 	public int getUpdatePacketRadius() {
-		return 128;
+		return 192;
 	}
 
 	@Override

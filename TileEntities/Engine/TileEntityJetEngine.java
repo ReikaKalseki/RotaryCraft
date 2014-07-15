@@ -323,6 +323,11 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			return false;
 		if (caught instanceof EntityXPOrb)
 			return false;
+		String name = caught.getEntityName().toLowerCase();
+		if (name.contains("bird"))
+			return false;
+		if (name.contains("firefly"))
+			return false;
 		return caught instanceof EntityLivingBase;
 	}
 

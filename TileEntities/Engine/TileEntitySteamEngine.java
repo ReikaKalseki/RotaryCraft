@@ -11,12 +11,8 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -39,12 +35,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 	@Override
 	protected void internalizeFuel() {
-		if (inv[0] != null) {
-			if (inv[0].itemID == Item.bucketWater.itemID && water.getLevel() <= CAPACITY) {
-				water.addLiquid(FluidContainerRegistry.BUCKET_VOLUME*inv[0].stackSize, FluidRegistry.WATER);
-				inv[0] = new ItemStack(Item.bucketEmpty.itemID, inv[0].stackSize, 0);
-			}
-		}
+
 	}
 
 	@Override

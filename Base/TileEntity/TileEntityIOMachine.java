@@ -55,72 +55,23 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 			iotick -= 8;
 		superCalled = true;
 	}
-	/*
-	@Override
-	public void writeToNBT(NBTTagCompound NBT) {
-		super.writeToNBT(NBT);
-		NBT.setInteger("rx", readx);
-		NBT.setInteger("ry", ready);
-		NBT.setInteger("rz", readz);
-		NBT.setInteger("rx2", readx2);
-		NBT.setInteger("ry2", ready2);
-		NBT.setInteger("rz2", readz2);
-		NBT.setInteger("rx3", readx3);
-		NBT.setInteger("ry3", ready3);
-		NBT.setInteger("rz3", readz3);
-		NBT.setInteger("rx4", readx4);
-		NBT.setInteger("ry4", ready4);
-		NBT.setInteger("rz4", readz4);
 
-		NBT.setInteger("wx", writex);
-		NBT.setInteger("wy", writey);
-		NBT.setInteger("wz", writez);
-		NBT.setInteger("wx2", writex2);
-		NBT.setInteger("wy2", writey2);
-		NBT.setInteger("wz2", writez2);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound NBT) {
-		super.readFromNBT(NBT);
-		readx = NBT.getInteger("rx");
-		ready = NBT.getInteger("ry");
-		readz = NBT.getInteger("rz");
-		readx2 = NBT.getInteger("rx2");
-		ready2 = NBT.getInteger("ry2");
-		readz2 = NBT.getInteger("rz2");
-		readx3 = NBT.getInteger("rx3");
-		ready3 = NBT.getInteger("ry3");
-		readz3 = NBT.getInteger("rz3");
-		readx4 = NBT.getInteger("rx4");
-		ready4 = NBT.getInteger("ry4");
-		readz4 = NBT.getInteger("rz4");
-
-		writex = NBT.getInteger("wx");
-		writey = NBT.getInteger("wy");
-		writez = NBT.getInteger("wz");
-		writex2 = NBT.getInteger("wx2");
-		writey2 = NBT.getInteger("wy2");
-		writez2 = NBT.getInteger("wz2");
-
-	}
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("torque", torque);
 		NBT.setInteger("omega", omega);
-		NBT.setLong("pwr", power);
+		NBT.setLong("power", power);
 		NBT.setInteger("io", iotick);
 
-		NBT.setInteger("r1", read != null ? read.ordinal() : -1);
-		NBT.setInteger("r2", read2 != null ? read2.ordinal() : -1);
-		NBT.setInteger("r3", read3 != null ? read3.ordinal() : -1);
-		NBT.setInteger("r4", read4 != null ? read4.ordinal() : -1);
+		NBT.setInteger("read1", read != null ? read.ordinal() : -1);
+		NBT.setInteger("read2", read2 != null ? read2.ordinal() : -1);
+		NBT.setInteger("read3", read3 != null ? read3.ordinal() : -1);
+		NBT.setInteger("read4", read4 != null ? read4.ordinal() : -1);
 
-		NBT.setInteger("w1", write != null ? write.ordinal() : -1);
-		NBT.setInteger("w2", write2 != null ? write2.ordinal() : -1);
+		NBT.setInteger("write1", write != null ? write.ordinal() : -1);
+		NBT.setInteger("write2", write2 != null ? write2.ordinal() : -1);
 	}
 
 	@Override
@@ -129,7 +80,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		super.readSyncTag(NBT);
 		torque = NBT.getInteger("torque");
 		omega = NBT.getInteger("omega");
-		power = NBT.getLong("pwr");
+		power = NBT.getLong("power");
 		iotick = NBT.getInteger("io");
 
 		if (torque < 0)
@@ -137,17 +88,17 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		if (omega < 0)
 			omega = 0;
 
-		int r1 = NBT.getInteger("r1");
-		int r2 = NBT.getInteger("r2");
-		int r3 = NBT.getInteger("r3");
-		int r4 = NBT.getInteger("r4");
+		int r1 = NBT.getInteger("read1");
+		int r2 = NBT.getInteger("read2");
+		int r3 = NBT.getInteger("read3");
+		int r4 = NBT.getInteger("read4");
 		read = r1 != -1 ? dirs[r1] : null;
 		read2 = r2 != -1 ? dirs[r2] : null;
 		read3 = r3 != -1 ? dirs[r3] : null;
 		read4 = r4 != -1 ? dirs[r4] : null;
 
-		int w1 = NBT.getInteger("w1");
-		int w2 = NBT.getInteger("w2");
+		int w1 = NBT.getInteger("write1");
+		int w2 = NBT.getInteger("write2");
 		write = w1 != -1 ? dirs[w1] : null;
 		write2 = w2 != -1 ? dirs[w2] : null;
 	}
@@ -346,7 +297,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	protected final void copyStandardPower(TileEntityIOMachine te) {
 		if (te instanceof TileEntityShaft)
 			return;
-		if (!te.isWritingTo(this)) {
+		if (!te.isWritingTo(this) && !te.isWritingTo2(this)) {
 			omegain = 0;
 			torquein = 0;
 			return;

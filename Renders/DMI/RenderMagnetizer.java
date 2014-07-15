@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DMI;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -70,7 +71,9 @@ public class RenderMagnetizer extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(ReikaInventoryHelper.checkForItemStack(ItemStacks.shaftcore, tile, false)), -tile.phi, 0);
+		ItemStack is = ItemStacks.shaftcore;
+		boolean hasItem = ReikaInventoryHelper.checkForItemStack(is.itemID, is.getItemDamage(), tile);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(hasItem), -tile.phi, 0);
 
 		this.closeGL(tile);
 	}

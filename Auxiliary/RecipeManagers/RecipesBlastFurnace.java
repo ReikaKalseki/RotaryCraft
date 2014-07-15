@@ -35,7 +35,7 @@ public class RecipesBlastFurnace
 		return BlastFurnaceBase;
 	}
 
-	public void add3x3Recipe(ItemStack out, int temperature, IRecipe in, int speed) {
+	public void addRecipe(ItemStack out, int temperature, IRecipe in, int speed) {
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, in);
 		craftingList.add(c);
 	}
@@ -46,7 +46,7 @@ public class RecipesBlastFurnace
 		craftingList.add(c);
 	}
 
-	public static final class BlastCrafting {
+	public static final class BlastCrafting implements BlastFurnacePattern {
 
 		public final int temperature;
 		private final IRecipe recipe;
@@ -67,7 +67,7 @@ public class RecipesBlastFurnace
 			this.speed = speed;
 		}
 
-		public final ItemStack getRecipeOutput() {
+		public final ItemStack outputItem() {
 			return output.copy();
 		}
 
@@ -89,6 +89,28 @@ public class RecipesBlastFurnace
 			ReikaRecipeHelper.copyRecipeToItemStackArray(iss, recipe);
 			return iss;
 		}
+
+		@Override
+		public boolean isValidInputForSlot(int slot, ItemStack is) {/*
+			if (recipe instanceof ShapelessRecipes || recipe instanceof ShapelessOreRecipe) {
+				ArrayList<ItemStack> li = ReikaRecipeHelper.getAllItemsInRecipe(recipe);
+			}
+			else if (recipe instanceof ShapedOreRecipe || recipe instanceof ShapedRecipes) {
+
+			}*/
+			if (slot == TileEntityBlastFurnace.SLOT_1 || slot > 9)
+				return false;
+			ItemStack[] items = new ItemStack[9];
+			ReikaRecipeHelper.copyRecipeToItemStackArray(items, recipe);
+			return ReikaItemHelper.matchStacks(is, items[slot-1]);
+		}
+	}
+
+	public static interface BlastFurnacePattern {
+
+		public ItemStack outputItem();
+
+		public boolean isValidInputForSlot(int slot, ItemStack is);
 	}
 
 	public static final class BlastInput {
@@ -124,7 +146,7 @@ public class RecipesBlastFurnace
 		}
 	}
 
-	public static final class BlastRecipe {
+	public static final class BlastRecipe implements BlastFurnacePattern {
 		public final BlastInput primary;
 		public final BlastInput secondary;
 		public final BlastInput tertiary;
@@ -201,6 +223,19 @@ public class RecipesBlastFurnace
 					li.add(i);
 			}
 			return li;
+		}
+
+		@Override
+		public boolean isValidInputForSlot(int slot, ItemStack is) {
+			if (slot == TileEntityBlastFurnace.SLOT_1)
+				return ReikaItemHelper.matchStacks(is, primary.getItem());
+			if (slot == TileEntityBlastFurnace.SLOT_2)
+				return ReikaItemHelper.matchStacks(is, secondary.getItem());
+			if (slot == TileEntityBlastFurnace.SLOT_3)
+				return ReikaItemHelper.matchStacks(is, tertiary.getItem());
+			if (slot >= 1 && slot < 10)
+				return ReikaItemHelper.matchStacks(is, main);
+			return false;
 		}
 	}
 
@@ -357,7 +392,7 @@ public class RecipesBlastFurnace
 		ArrayList<BlastCrafting> li = new ArrayList();
 		for (int i = 0; i < craftingList.size(); i++) {
 			BlastCrafting r = craftingList.get(i);
-			if (ReikaItemHelper.matchStacks(is, r.getRecipeOutput()))
+			if (ReikaItemHelper.matchStacks(is, r.outputItem()))
 				li.add(r.copy());
 		}
 		return li;

@@ -114,7 +114,6 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			input4.setMaxStringLength(3);
 		}
 	}
-
 	@Override
 	public void keyTyped(char c, int i){
 		super.keyTyped(c, i);
@@ -300,6 +299,11 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			return;
 		theta = ReikaPhysicsHelper.degToRad(thetad);
 		phi = ReikaPhysicsHelper.degToRad(phid);
+	}
+
+	@Override
+	public boolean labelInventory() {
+		return false;
 	}
 
 	/**

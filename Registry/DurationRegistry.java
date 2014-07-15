@@ -33,7 +33,8 @@ public enum DurationRegistry {
 	WOODCUTTER(MachineRegistry.WOODCUTTER, 		40, 4),
 	GRINDSTONE(MachineRegistry.GRINDSTONE,		80, 6),
 	REFRIGERATOR(MachineRegistry.REFRIGERATOR,	1000, 80),
-	RAM(MachineRegistry.LINEBUILDER,			40, 2);
+	RAM(MachineRegistry.LINEBUILDER,			40, 2),
+	CENTRIFUGE(MachineRegistry.CENTRIFUGE,		1200, 60);
 
 	private final MathExpression formula;
 	private final boolean hasMultiple;

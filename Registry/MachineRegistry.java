@@ -26,6 +26,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -120,6 +121,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntitySuctionPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityValve;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDistillery;
@@ -318,7 +320,8 @@ public enum MachineRegistry {
 	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter"),
 	ANTIAIR(			"machine.antiair",			BlockMIMachine.class,		TileEntityAAGun.class,				24, "RenderAAGun"),
 	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16,	"RenderPipePump"),
-	CHAIN(				"machine.chain",			BlockDMMachine.class,		TileEntityChainDrive.class,			17, "RenderBelt");
+	CHAIN(				"machine.chain",			BlockDMMachine.class,		TileEntityChainDrive.class,			17, "RenderBelt"),
+	CENTRIFUGE(			"machine.centrifuge",		BlockMIMachine.class,		TileEntityCentrifuge.class,			25, "RenderCentrifuge");
 
 	private final String name;
 	private final Class te;
@@ -635,6 +638,8 @@ public enum MachineRegistry {
 			return 0.9375F;
 		if (this == COMPOSTER)
 			return 0.75F;
+		if (this == CENTRIFUGE)
+			return 0.375F;
 		return 1;
 	}
 
@@ -1027,7 +1032,7 @@ public enum MachineRegistry {
 	public boolean isAvailableInCreativeInventory() {
 		if (this.isDummiedOut())
 			return false;
-		if (this.isIncomplete() && !(DragonAPICore.isReikasComputer() || ConfigRegistry.DEBUGMODE.getState()))
+		if (this.isIncomplete() && !(DragonAPICore.isReikasComputer() || DragonOptions.DEBUGMODE.getState()))
 			return false;
 		if (this == PORTALSHAFT)
 			return false;

@@ -28,9 +28,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
@@ -77,9 +74,6 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -93,10 +87,21 @@ public abstract class GuiMachine extends GuiContainer {
 			fontRenderer.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
 		else
 			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
-		if (tile instanceof IInventory && this.getGuiTexture() != "targetgui" && !(this instanceof GuiCannon || this instanceof GuiCoil || this instanceof GuiSpyCam))
-			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), xSize-58, (ySize - 96) + 3, 4210752);
+
+		if (tile instanceof IInventory && this.labelInventory()) {
+			int dx = this.inventoryLabelLeft() ? 8 : xSize-58;
+			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), dx, (ySize - 96) + 3, 4210752);
+		}
 
 		this.drawHelpTab(j, k);
+	}
+
+	protected boolean inventoryLabelLeft() {
+		return false;
+	}
+
+	public boolean labelInventory() {
+		return this.getGuiTexture() != "targetgui";
 	}
 
 	@Override

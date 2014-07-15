@@ -128,10 +128,14 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 		double dz = v[2]/dd;
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			if (isExplosiveShell)
-				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this));
-			else
-				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, yCoord+voffset*0+0.75+dy, zCoord+0.5+dz, v[0], v[1], v[2], this.getPowerLevel(), this));
+			double y = this.getFiringPositionY(dy);
+			if (isExplosiveShell) {
+				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], this));
+			}
+			else {
+				int power = this.getPowerLevel();
+				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], power, this));
+			}
 		}
 	}
 

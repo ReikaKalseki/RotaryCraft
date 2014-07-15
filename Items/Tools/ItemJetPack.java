@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -212,9 +213,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
 		if (itemID == ItemRegistry.BEDPACK.getShiftedID()) {
-			Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantment();
-			if (ench != null)
-				is.addEnchantment(ench, 4);
+			HashMap<Enchantment, Integer> ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantments();
+			ReikaEnchantmentHelper.applyEnchantments(is, ench);
 		}
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();

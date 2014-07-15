@@ -45,6 +45,11 @@ public class GuiSpyCam extends GuiNonPoweredMachine
 			direction += 4;
 	}
 
+	@Override
+	public boolean labelInventory() {
+		return false;
+	}
+
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */

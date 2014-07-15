@@ -11,31 +11,42 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.BedrockDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implements InertIInv, DiscreteFunction {
-	private int harvestx;
-	private int harvesty;
-	private int harvestz;
+
+	private ForgeDirection facing;
+	private int step = 1;
 
 	private double dropx;
 	private double dropy;
@@ -46,21 +57,50 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		super.updateTileEntity();
 		tickcount++;
 		this.readPower(false);
-		if (tickcount >= this.getOperationTime()) {
-			this.process(world, x, y, z, meta);
-			tickcount = 0;
+		this.getIOSides(world, x, y, z, meta);
+		if (power >= MINPOWER && torque >= MINTORQUE) {
+			if (tickcount >= this.getOperationTime()) {
+				this.process(world, x, y, z, meta);
+				tickcount = 0;
+			}
+			int hx = x+step*facing.offsetX;
+			int hy = y+step*facing.offsetY;
+			int hz = z+step*facing.offsetZ;
+			int id = world.getBlockId(hx, hy, hz);
+			if (id != 0) {
+				ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, hx, hy, hz, 4);
+				ReikaSoundHelper.playStepSound(world, hx, hy, hz, Block.blocksList[id], 0.5F+rand.nextFloat(), 0.5F*rand.nextFloat());
+				//ReikaSoundHelper.playSoundAtBlock(world, hx, hy, hz, "dig.stone", );
+			}
 		}
-		//ReikaJavaLibrary.pConsole(Arrays.toString(inv), Side.SERVER);
 	}
 
 	public void process(World world, int x, int y, int z, int metadata) {
-		if (power >= MINPOWER && torque >= MINTORQUE && this.hasInventorySpace()) {
-			if (this.getBlockInFront(world, x, y, z, metadata)) {
-				if (!world.isRemote && ReikaPlayerAPI.playerCanBreakAt(world, harvestx, harvesty, harvestz, placer)) {
-					this.grind(world, harvestx, harvesty, harvestz, metadata);
-				}
+		if (this.hasInventorySpace()) {
+			int hx = x+step*facing.offsetX;
+			int hy = y+step*facing.offsetY;
+			int hz = z+step*facing.offsetZ;
+			if (this.canBreakAt(world, hx, hy, hz)) {
+				this.grind(world, x, y, z, hx, hy, hz, metadata);
 			}
 		}
+	}
+
+	private boolean canBreakAt(World world, int x, int y, int z) {
+		if (y < 0)
+			return false;
+		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
+			return false;
+		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt(world, x, y, z, placer);
+	}
+
+	private boolean processBlock(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y, z);
+		if (this.isBedrock(id))
+			return true;
+		if (id == RotaryCraft.bedrockslice.blockID)
+			return true;
+		return false;
 	}
 
 	private boolean hasInventorySpace() {
@@ -76,10 +116,6 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			return;
 		super.getPower(doublesided);
 		power = (long)omega * (long)torque;
-	}
-
-	public void getIOSides(World world, int x, int y, int z, int metadata) {
-
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
@@ -118,78 +154,45 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		return true;
 	}
 
-	public boolean getBlockInFront(World world, int x, int y, int z, int metadata) {
-		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
-			return false;
-		int id;
-		for (int a = 1; a < 6; a++) {
-			switch (metadata) {
-			case 0:
-				id = world.getBlockId(x+a, y, z);
-				harvestx = x+a;
-				harvesty = y;
-				harvestz = z;
-				dropx = x+0.5;
-				dropy = y+1.25;
-				dropz = z+0.5;
-				break;
-			case 1:
-				id = world.getBlockId(x-a, y, z);
-				harvestx = x-a;
-				harvesty = y;
-				harvestz = z;
-				dropx = x+0.5;
-				dropy = y+1.25;
-				dropz = z+0.5;
-				break;
-			case 2:
-				id = world.getBlockId(x, y, z+a);
-				harvestx = x;
-				harvesty = y;
-				harvestz = z+a;
-				dropx = x+0.5;
-				dropy = y+1.25;
-				dropz = z+0.5;
-				break;
-			case 3:
-				id = world.getBlockId(x, y, z-a);
-				harvestx = x;
-				harvesty = y;
-				harvestz = z-a;
-				dropx = x+0.5;
-				dropy = y+1.25;
-				dropz = z+0.5;
-				break;
-			case 4:
-				id = world.getBlockId(x, y+a, z);
-				harvestx = x;
-				harvesty = y+a;
-				harvestz = z;
-				dropx = x+0.5;
-				dropy = y+1.25;
-				dropz = z+0.5;
-				break;
-			case 5:
-				id = world.getBlockId(x, y-a, z);
-				harvestx = x;
-				harvesty = y-a;
-				harvestz = z;
-				dropx = x+0.5;
-				dropy = y-0.25;
-				dropz = z+0.5;
-				break;
-			default:
-				id = 0;
-				break;
-			}
-			if (this.isBedrock(id))
-				return true;
-			if (id == RotaryCraft.bedrockslice.blockID)
-				return true;
-			if (id == 10 || id == 11) //If lava
-				return false;
+	public void getIOSides(World world, int x, int y, int z, int metadata) {
+		switch (metadata) {
+		case 0:
+			dropx = x+0.5;
+			dropy = y+1.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.EAST;
+			break;
+		case 1:
+			dropx = x+0.5;
+			dropy = y+1.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.WEST;
+			break;
+		case 2:
+			dropx = x+0.5;
+			dropy = y+1.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.SOUTH;
+			break;
+		case 3:
+			dropx = x+0.5;
+			dropy = y+1.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.NORTH;
+			break;
+		case 4:
+			dropx = x+0.5;
+			dropy = y+1.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.UP;
+			break;
+		case 5:
+			dropx = x+0.5;
+			dropy = y-0.25;
+			dropz = z+0.5;
+			facing = ForgeDirection.DOWN;
+			break;
 		}
-		return false;
 	}
 
 	private boolean isBedrock(int id) {
@@ -200,33 +203,83 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		return false;
 	}
 
-	public void grind(World world, int x, int y, int z, int meta) {
-		if (y < 0)
-			return;
-		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
-			return;
-		if (this.isBedrock(world.getBlockId(harvestx, harvesty, harvestz))) {
-			world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-			world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, 0, 3);
-		}
-		else {
-			int rockmetadata = world.getBlockMetadata(harvestx, harvesty, harvestz);
-			if (rockmetadata < 15) {
+	public void grind(World world, int mx, int my, int mz, int x, int y, int z, int meta) {
+		if (this.processBlock(world, x, y, z)) {
+			if (this.isBedrock(world.getBlockId(x, y, z))) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-				world.setBlock(harvestx, harvesty, harvestz, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
+				world.setBlock(x, y, z, RotaryCraft.bedrockslice.blockID, 0, 3);
 			}
 			else {
-				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-				world.setBlock(harvestx, harvesty, harvestz, 0);
-				ItemStack is = this.getDrops();
-				if (this.isInventoryFull())
-					ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
-				else
-					ReikaInventoryHelper.addOrSetStack(is, inv, 0);
-				RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
-				MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, harvestx, harvesty, harvestz));
+				int rockmetadata = world.getBlockMetadata(x, y, z);
+				if (rockmetadata < 15) {
+					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
+					world.setBlock(x, y, z, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
+				}
+				else {
+					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
+					world.setBlock(x, y, z, 0);
+					ItemStack is = this.getDrops();
+					if (!this.chestCheck(world, x, y, z, is)) {
+						if (this.isInventoryFull())
+							ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
+						else
+							ReikaInventoryHelper.addOrSetStack(is, inv, 0);
+					}
+					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
+					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, x, y, z));
+					this.incrementStep(world, mx, my, mz);
+				}
 			}
 		}
+		else {
+			int id = world.getBlockId(x, y, z);
+			if (id != 0) {
+				Block b = Block.blocksList[id];
+				ReikaSoundHelper.playBreakSound(world, x, y, z, b);
+				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+					ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, world.getBlockMetadata(x, y, z));
+				world.setBlock(x, y, z, 0);
+			}
+			this.incrementStep(world, mx, my, mz);
+		}
+	}
+
+	private boolean chestCheck(World world, int x, int y, int z, ItemStack is) {
+		if (is == null)
+			return false;
+		if (world.isRemote)
+			return false;
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof IInventory) {
+				boolean flag = true;
+				if (te instanceof PartialInventory) {
+					if (!((PartialInventory)te).hasInventory())
+						flag = false;
+				}
+				if (flag) {
+					if (ReikaInventoryHelper.addToIInv(is, (IInventory)te))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void incrementStep(World world, int x, int y, int z) {
+		int max = step+1;
+		for (int i = 1; i < max; i++) {
+			int dx = x+i*facing.offsetX;
+			int dy = y+i*facing.offsetY;
+			int dz = z+i*facing.offsetZ;
+			//ReikaJavaLibrary.pConsole(step+"; "+i+" @ "+dx+","+dy+","+dz+" : "+world.getBlockId(dx, dy, dz), Side.SERVER);
+			if (!ReikaWorldHelper.softBlocks(world, dx, dy, dz)) {
+				step = i;
+				return;
+			}
+		}
+		step = max;
 	}
 
 	public void dropInventory() {
@@ -286,8 +339,6 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.getBlockInFront(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
-			return 15;
 		return 0;
 	}
 
@@ -320,13 +371,13 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public int getOperationTime() {
 		return DurationRegistry.BEDROCK.getOperationTime(omega);
 	}
-	/*
+
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 
-		NBT.setInteger("dust", this.getContents());
+		NBT.setInteger("step", step);
 	}
 
 	@Override
@@ -334,6 +385,15 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	{
 		super.readSyncTag(NBT);
 
-		this.setContents(NBT.getInteger("dust"));
-	}*/
+		step = NBT.getInteger("step");
+	}
+
+	public int getStep() {
+		return step;
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
+	}
 }

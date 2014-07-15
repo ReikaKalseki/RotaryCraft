@@ -100,7 +100,8 @@ public enum PowerReceivers {
 	CRAFTER(1024),
 	ANTIAIR(1024, 1, 65536),
 	PIPEPUMP(1, 4096, 4096),
-	CHAIN();
+	CHAIN(),
+	CENTRIFUGE(1, 4096, 16384);
 
 	private final int minT;
 	private final int minS;

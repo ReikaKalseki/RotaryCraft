@@ -284,7 +284,7 @@ public class RotaryCraft extends DragonAPIMod {
 			ReikaJavaLibrary.pConsole("");
 		}
 
-		logger = new ModLogger(instance, ConfigRegistry.LOGLOADING.getState(), ConfigRegistry.DEBUGMODE.getState(), ConfigRegistry.ALARM.getState());
+		logger = new ModLogger(instance, ConfigRegistry.ALARM.getState());
 
 		this.setupClassFiles();
 
@@ -373,6 +373,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Josh Ricker", 20.00F);
 		DonatorController.instance.addDonation(instance, "Karapol", 25.00F);
 		DonatorController.instance.addDonation(instance, "RiComikka", 15.00F);
+		DonatorController.instance.addDonation(instance, "Spork", 10.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
@@ -410,8 +411,6 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.instance.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
-		if (!this.isLocked())
-			RotaryRecipes.addPostLoadRecipes();
 
 		ReikaJavaLibrary.initClass(DifficultyEffects.class);
 		ReikaJavaLibrary.initClass(ExtractorBonus.class);
@@ -432,14 +431,20 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!this.isLocked())
 			RecipesGrinder.getRecipes().addOreRecipes();
 
-		if (ModList.FORESTRY.isLoaded()) {
-			CanolaBee bee = new CanolaBee();
-			bee.register();
-			bee.addBreeding("Meadows", "Cultivated", 20);
-			RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
-			FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 20); //was 150
-			RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
-		}
+		if (!this.isLocked())
+			if (ModList.FORESTRY.isLoaded()) {
+				try {
+					CanolaBee bee = new CanolaBee();
+					bee.register();
+					bee.addBreeding("Meadows", "Cultivated", 20);
+					RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
+					FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 20); //was 150
+					RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
 		if (ModList.GEOSTRATA.isLoaded()) {
 			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
@@ -453,39 +458,43 @@ public class RotaryCraft extends DragonAPIMod {
 			}
 		}
 
-		if (ModList.THAUMCRAFT.isLoaded()) {
-			RotaryCraft.logger.log("Adding ThaumCraft aspects.");
-			ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
-			ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
-			ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
+		if (!this.isLocked())
+			if (ModList.THAUMCRAFT.isLoaded()) {
+				RotaryCraft.logger.log("Adding ThaumCraft aspects.");
+				ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
+				ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
+				ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
 
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), Aspect.TOOL, 80);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDSHEARS.getStackOf(), Aspect.TOOL, 80);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), Aspect.TOOL, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHEARS.getStackOf(), Aspect.TOOL, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
 
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), Aspect.ARMOR, 140);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), Aspect.ARMOR, 100);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDBOOTS.getStackOf(), Aspect.ARMOR, 80);
-			ReikaThaumHelper.addAspects(ItemRegistry.BEDCHEST.getStackOf(), Aspect.ARMOR, 160);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), Aspect.ARMOR, 140);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), Aspect.ARMOR, 100);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDBOOTS.getStackOf(), Aspect.ARMOR, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDCHEST.getStackOf(), Aspect.ARMOR, 160);
 
-			ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
-			ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);
-			ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.ENERGY, 7, Aspect.PLANT, 3);
+				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
+				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);
+				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.ENERGY, 7, Aspect.PLANT, 3);
 
-			ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), Aspect.FIRE, 8, Aspect.WEAPON, 8);
+				ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), Aspect.FIRE, 8, Aspect.WEAPON, 8);
 
-			ReikaThaumHelper.addAspects(ItemStacks.steelingot, Aspect.METAL, 10, Aspect.MECHANISM, 6);
-			ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, Aspect.FIRE, 4);
-			ReikaThaumHelper.addAspects(ItemStacks.sludge, Aspect.ENERGY, 1);
-			ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
-			ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 4, Aspect.ENERGY, 4);
-			ReikaThaumHelper.addAspects(ItemStacks.coke, Aspect.FIRE, 2, Aspect.MECHANISM, 2);
+				ReikaThaumHelper.addAspects(ItemStacks.steelingot, Aspect.METAL, 10, Aspect.MECHANISM, 6);
+				ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, Aspect.FIRE, 4);
+				ReikaThaumHelper.addAspects(ItemStacks.sludge, Aspect.ENERGY, 1);
+				ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
+				ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 4, Aspect.ENERGY, 4);
+				ReikaThaumHelper.addAspects(ItemStacks.coke, Aspect.FIRE, 2, Aspect.MECHANISM, 2);
 
-			MachineAspectMapper.instance.register();
-		}
+				MachineAspectMapper.instance.register();
+			}
+
+		if (!this.isLocked())
+			RotaryRecipes.addPostLoadRecipes();
 	}
 
 	@EventHandler

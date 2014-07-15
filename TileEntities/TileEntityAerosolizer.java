@@ -289,9 +289,6 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 		NBT.setIntArray("IDs", potionIDs);
 	}
 
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
 	public int getSizeInventory()
 	{
 		return 9;

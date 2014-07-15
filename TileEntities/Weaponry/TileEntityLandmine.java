@@ -25,6 +25,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -121,14 +122,15 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		}
 		if (shrapnel) {
 			AxisAlignedBB region2 = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
-			List in2 = world.getEntitiesWithinAABB(EntityLivingBase.class, region);
-			for (int i = 0; i < in.size(); i++) {
-				EntityLivingBase e = (EntityLivingBase)in.get(i);
+			List in2 = world.getEntitiesWithinAABB(EntityLivingBase.class, region2);
+			for (int i = 0; i < in2.size(); i++) {
+				EntityLivingBase e = (EntityLivingBase)in2.get(i);
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;
 				double dz = e.posZ-z-0.5;
 				double dd = ReikaMathLibrary.py3d(dx, dy, dz);
-				e.attackEntityFrom(DamageSource.generic, (int)(10D/Math.sqrt(dd)));
+				int dmg = dd < 4 ? 8 : dd < 8 ? 6 : 4;
+				e.attackEntityFrom(DamageSource.generic, dmg);
 				ReikaEntityHelper.spawnParticlesAround("crit", e, 8);
 			}
 		}/*
@@ -146,17 +148,18 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	private void getExplosionModifiers() {
-		for (int i = 5; i <= 8; i++)
+		for (int i = 5; i <= 8; i++) {
 			if (inv[i] != null) {
 				if (inv[i].itemID == Item.blazePowder.itemID)
 					flaming = true;
 				if (inv[i].itemID == Item.spiderEye.itemID)
-					flaming = true;
+					poison = true;
 				if (inv[i].itemID == Block.tnt.blockID)
 					chain = true;
 				if (inv[i].itemID == Block.glass.blockID)
 					shrapnel = true;
 			}
+		}
 	}
 
 	private float getExplosionPower() {
@@ -244,7 +247,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		}
 
 		this.getExplosionModifiers();
-		if (this.ageFail())
+		if (!DragonAPICore.debugtest && this.ageFail())
 			this.detonate(world, x, y, z);
 		if (this.checkForArrow(world, x, y, z))
 			this.detonate(world, x, y, z);

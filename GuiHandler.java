@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.ContainerBlower;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Containers.ContainerCannon;
+import Reika.RotaryCraft.Containers.ContainerCentrifuge;
 import Reika.RotaryCraft.Containers.ContainerCompactor;
 import Reika.RotaryCraft.Containers.ContainerComposter;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
@@ -79,6 +80,7 @@ import Reika.RotaryCraft.GUIs.Machine.GuiBlower;
 import Reika.RotaryCraft.GUIs.Machine.GuiBorer;
 import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
 import Reika.RotaryCraft.GUIs.Machine.GuiGPR;
+import Reika.RotaryCraft.GUIs.Machine.GuiGearbox;
 import Reika.RotaryCraft.GUIs.Machine.GuiJet;
 import Reika.RotaryCraft.GUIs.Machine.GuiMobRadar;
 import Reika.RotaryCraft.GUIs.Machine.GuiMultiClutch;
@@ -90,12 +92,14 @@ import Reika.RotaryCraft.GUIs.Machine.GuiSonic;
 import Reika.RotaryCraft.GUIs.Machine.GuiSorter;
 import Reika.RotaryCraft.GUIs.Machine.GuiSpawnerController;
 import Reika.RotaryCraft.GUIs.Machine.GuiSplitter;
+import Reika.RotaryCraft.GUIs.Machine.GuiSteam;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiAerosolizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBigFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCCTVScreen;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCVT;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCannon;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiComposter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
@@ -106,7 +110,6 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFillingStation;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFractionator;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFridge;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGearbox;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
@@ -120,7 +123,6 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPurifier;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSteam;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiTerraformer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
@@ -147,6 +149,7 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
@@ -327,6 +330,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityComposter) {
 			return new ContainerComposter(player, (TileEntityComposter)te);
+		}
+		if (te instanceof TileEntityCentrifuge) {
+			return new ContainerCentrifuge(player, (TileEntityCentrifuge)te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -538,6 +544,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityComposter) {
 			return new GuiComposter(player, (TileEntityComposter)te);
+		}
+		if (te instanceof TileEntityCentrifuge) {
+			return new GuiCentrifuge(player, (TileEntityCentrifuge)te);
 		}
 
 		if (te instanceof OneSlotMachine) {

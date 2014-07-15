@@ -26,7 +26,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldoresolution, ItemStacks.silverflakes, 0.125F),
-	IRON(ItemStacks.ironoresolution, ItemStacks.aluminumpowder, 0.125F),
+	IRON(ItemStacks.ironoresolution, ItemStacks.tungstenflakes, 0.025F),
 	COAL(ItemStacks.coaloresolution, new ItemStack(Item.gunpowder), 0.0625F, ModList.REACTORCRAFT, ExtractorModOres.getFlakeProduct(ModOreList.PITCHBLENDE), ModList.IC2, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM)), //Nod to gregtech
 	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.goldoreflakes, 0.125F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.25F),
@@ -49,7 +49,7 @@ public enum ExtractorBonus {
 	QUARTZ(ItemStacks.netherquartzsolution, ExtractorModOres.getFlakeProduct(ModOreList.CERTUSQUARTZ), 0.0625F),
 	CERTUS(ExtractorModOres.getSolutionProduct(ModOreList.CERTUSQUARTZ), ItemStacks.netherquartzflakes, 0.5F),
 	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F),
-	REDSTONE(ItemStacks.redoresolution, ItemStacks.tungstenflakes, 0.1F);
+	REDSTONE(ItemStacks.redoresolution, ItemStacks.aluminumpowder, 0.25F);
 
 	private static final ExtractorBonus[] bonusList = values();
 

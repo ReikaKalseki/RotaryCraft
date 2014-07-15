@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -28,6 +30,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -43,11 +46,13 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int BEDROCKTEMP = 1000;
 	public static final int MAXTEMP = 2000;
 	public static final float SMELT_XP = 0.6F;
-	private static final int SLOT_1 = 0;
-	private static final int SLOT_2 = 11;
-	private static final int SLOT_3 = 14;
+	public static final int SLOT_1 = 0;
+	public static final int SLOT_2 = 11;
+	public static final int SLOT_3 = 14;
 
 	private float xp;
+
+	private BlastFurnacePattern pattern;
 
 	@Override
 	protected int getActiveTexture() {
@@ -64,7 +69,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private BlastRecipe getRecipe() {
 		ItemStack[] center = new ItemStack[9];
 		System.arraycopy(inv, 1, center, 0, 9);
-		BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[0], inv[11], inv[14], center, temperature);
+		BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[SLOT_1], inv[SLOT_2], inv[SLOT_3], center, temperature);
 
 		if (rec == null)
 			return null;
@@ -106,6 +111,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		BlastRecipe rec = this.getRecipe();
 		BlastCrafting bc = this.getCrafting();
 		if (bc != null) {
+			pattern = bc;
 			if (bc.speed <= 1 || worldObj.getTotalWorldTime()%bc.speed == 0)
 				smeltTime++;
 			if (smeltTime >= this.getOperationTime()) {
@@ -113,12 +119,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			}
 		}
 		else if (rec != null) {
+			pattern = rec;
 			smeltTime++;
 			if (smeltTime >= this.getOperationTime()) {
 				this.make(rec);
 			}
 		}
 		else {
+			pattern = null;
 			smeltTime = 0;
 			return;
 		}
@@ -129,7 +137,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (worldObj.isRemote)
 			return;
 
-		ItemStack out = bc.getRecipeOutput();
+		ItemStack out = bc.outputItem();
 
 		if (!ReikaInventoryHelper.addOrSetStack(out, inv, 10))
 			if (!ReikaInventoryHelper.addOrSetStack(out, inv, 12))
@@ -350,16 +358,21 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	private boolean getSlotForItem(int slot, ItemStack is) {
+		ArrayList<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
+		if (!slots.isEmpty()) {
+			return slots.contains(slot);
+		}
+
 		int type = RecipesBlastFurnace.getRecipes().getInputTypeForItem(is);
 		switch (type) {
 		case 0:
 			return slot >= 1 && slot <= 9;
 		case 1:
-			return slot == 0;
+			return slot == SLOT_1;
 		case 2:
-			return slot == 11;
+			return slot == SLOT_2;
 		case 3:
-			return slot == 14;
+			return slot == SLOT_3;
 		default:
 			return false;
 		}

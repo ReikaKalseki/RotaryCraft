@@ -218,21 +218,21 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 						clicked.filling = true;
 					return true;
 				}
-			}/*
-			if (m == MachineRegistry.ROUTER) {
-				TileEntityHydraulicRouter tile = (TileEntityHydraulicRouter)te;
-				if (tile != null) {
-					tile.updateSide(ForgeDirection.VALID_DIRECTIONS[s]);
-				}
-			}*/
+			}
 			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
+				TileEntityBeltHub clicked = (TileEntityBeltHub)te;
 				if (ep.isSneaking()) {
-					TileEntityBeltHub clicked = (TileEntityBeltHub)te;
 					if (clicked != null) {
-						clicked.setEmitting(!clicked.isEmitting());
-						return true;
+						clicked.isEmitting = !clicked.isEmitting;
 					}
 				}
+				else {
+					int newdmg = damage < 11 ? damage+1 : 0;
+					clicked.setBlockMetadata(newdmg);
+					clicked.reset();
+					clicked.resetOther();
+				}
+				return true;
 			}
 			if (m == MachineRegistry.GPR) {
 				TileEntityGPR clicked = (TileEntityGPR)te;

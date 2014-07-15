@@ -140,7 +140,8 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
-			EntityFlakShot flak = new EntityFlakShot(world, xCoord+0.5+dx, yCoord+0.75+dy, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2]);
+			double y = this.getFiringPositionY(dy);
+			EntityFlakShot flak = new EntityFlakShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2]);
 			world.spawnEntityInWorld(flak);
 		}
 	}

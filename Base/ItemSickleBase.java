@@ -16,6 +16,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -91,7 +92,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
 						if (id2 == TreeGetter.getRainbowLeafID()) {
 							//b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							items.addAll(b.getBlockDropped(world, x, y, z, meta2, fortune));
+							ReikaItemHelper.addToList(items, b.getBlockDropped(world, x, y, z, meta2, fortune));
+							//items.addAll(b.getBlockDropped(world, x, y, z, meta2, fortune));
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
 							world.setBlock(x+i, y+j, z+k, 0);
 						}
@@ -99,6 +101,25 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 				}
 			}
 			ReikaItemHelper.dropItems(world, x, y, z, items);
+			return true;
+		}
+		else if (ModList.DYETREES.isLoaded() && id == TreeGetter.getDyeFlowerID()) {
+			Block b = Block.blocksList[id];
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int id2 = world.getBlockId(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (id2 == TreeGetter.getDyeFlowerID()) {
+							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
+							world.setBlock(x+i, y+j, z+k, 0);
+						}
+					}
+				}
+			}
 			return true;
 		}
 		else if (crop != null) {
@@ -165,6 +186,25 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 							else
 								b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b, 0.25F, 1);
+							world.setBlock(x+i, y+j, z+k, 0);
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else if (Block.blocksList[id] instanceof IPlantable) {
+			Block b = Block.blocksList[id];
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int id2 = world.getBlockId(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (id2 == id && meta2 == meta) {
+							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
 							world.setBlock(x+i, y+j, z+k, 0);
 						}
 					}

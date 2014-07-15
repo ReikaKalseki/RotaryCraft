@@ -130,6 +130,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	STATIC(MachineRegistry.DYNAMO),
 	CRYSTAL(MachineRegistry.CRYSTALLIZER),
 	COMPOST(MachineRegistry.COMPOSTER),
+	CENTRIFUGE(MachineRegistry.CENTRIFUGE),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),
@@ -557,7 +558,6 @@ public enum HandbookRegistry implements HandbookEntry {
 	private static int getEngineScreen(TileEntity te) {
 		EngineType e = ((TileEntityEngine)te).getEngineType();
 		int ei = (1+e.ordinal())/8;
-		ReikaJavaLibrary.pConsole(ENGINEDESC.getBaseScreen()+ei);
 		return ENGINEDESC.getBaseScreen()+ei;
 	}
 

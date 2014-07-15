@@ -47,6 +47,13 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
+
+		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
+		if (hasLube)
+			this.distributeLubricant(world, x, y, z);
+		else
+			return false;
+
 		if (this.doesBlockObstructBlades(world, x, y+1, z)) {
 			omega = 0;
 			return false;
@@ -75,11 +82,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 				return false;
 			}
 		}
-
-		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
-		if (hasLube)
-			this.distributeLubricant(world, x, y, z);
-		return hasLube;
+		return true;
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z) {

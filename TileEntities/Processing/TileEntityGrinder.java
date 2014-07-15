@@ -123,9 +123,6 @@ ConditionalOperation, DamagingContact {
 		return true;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -136,9 +133,6 @@ ConditionalOperation, DamagingContact {
 		tank.readFromNBT(NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -148,10 +142,6 @@ ConditionalOperation, DamagingContact {
 		tank.writeToNBT(NBT);
 	}
 
-	/**
-	 * Returns an integer between 0 and the passed value representing how close the current item is to being completely
-	 * cooked
-	 */
 	public int getCookProgressScaled(int par1)
 	{
 		//ReikaChatHelper.writeInt(this.tickcount);

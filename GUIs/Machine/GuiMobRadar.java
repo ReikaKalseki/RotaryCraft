@@ -51,9 +51,16 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 			direction += 4;
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (radar.isJammed()) {
+			api.renderStatic(7, 16, 206, 215);
+		}
+	}
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

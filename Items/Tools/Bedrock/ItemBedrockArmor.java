@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -44,26 +45,30 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
-		Enchantment ench = this.getDefaultEnchantment();
-		if (ench != null)
-			is.addEnchantment(ench, 4);
+		ReikaEnchantmentHelper.applyEnchantments(is, this.getDefaultEnchantments());
 		li.add(is);
 	}
 
-	public Enchantment getDefaultEnchantment() {
+	public HashMap<Enchantment, Integer> getDefaultEnchantments() {
+		HashMap<Enchantment, Integer> map = new HashMap();
 		if (ItemRegistry.getEntryByID(itemID).isBedrockArmor()) {
 			switch(armorType) {
 			case 0:
-				return Enchantment.projectileProtection;
+				map.put(Enchantment.projectileProtection, 4);
+				map.put(Enchantment.respiration, 3);
+				break;
 			case 1:
-				return Enchantment.blastProtection;
+				map.put(Enchantment.blastProtection, 4);
+				break;
 			case 2:
-				return Enchantment.fireProtection;
+				map.put(Enchantment.fireProtection, 4);
+				break;
 			case 3:
-				return Enchantment.featherFalling;
+				map.put(Enchantment.featherFalling, 4);
+				break;
 			}
 		}
-		return null;
+		return map;
 	}
 
 	@Override
@@ -74,21 +79,28 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem ei) {
 		ItemStack is = ei.getEntityItem();
-		if (!ReikaEnchantmentHelper.hasEnchantment(this.getDefaultEnchantment(), is)) {
-			ei.playSound("random.break", 1, 1);
-			ei.setDead();
+		HashMap<Enchantment, Integer> map = this.getDefaultEnchantments();
+		for (Enchantment e : map.keySet()) {
+			if (!ReikaEnchantmentHelper.hasEnchantment(e, is)) {
+				ei.playSound("random.break", 1, 1);
+				ei.setDead();
+			}
 		}
 		return false;
 	}
 
 	private void forceEnchantments(ItemStack is, World world, Entity entity, int slot) {
-		if (!ReikaEnchantmentHelper.hasEnchantment(this.getDefaultEnchantment(), is)) {
-			entity.playSound("random.break", 1, 1);
-			if (entity instanceof EntityPlayer) {
-				EntityPlayer ep = (EntityPlayer)entity;
-				ep.inventory.setInventorySlotContents(slot, null);
-				ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
-				is = null;
+		HashMap<Enchantment, Integer> map = this.getDefaultEnchantments();
+		for (Enchantment e : map.keySet()) {
+			if (!ReikaEnchantmentHelper.hasEnchantment(e, is)) {
+				entity.playSound("random.break", 1, 1);
+				if (entity instanceof EntityPlayer) {
+					EntityPlayer ep = (EntityPlayer)entity;
+					ep.inventory.setInventorySlotContents(slot, null);
+					ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
+					is = null;
+					break;
+				}
 			}
 		}
 	}

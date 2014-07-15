@@ -117,7 +117,7 @@
 	</pulsejet>
 	<pump>
 		<desc>
-			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access.
+			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access or as fuel to some engines.
 		</desc>
 		<note>
 			Required Power: %d W
@@ -227,7 +227,7 @@
 			Required Power: %dW
 			Required Speed: %d rad/s
 			Maximum Temperature: %dC
-			Liquid Capacity: %d m^3
+			Liquid Capacity: %d mB
 			Power Input: Bottom
 		</note>
 	</obsidian>
@@ -545,7 +545,7 @@
 	</itemcannon>
 	<friction>
 		<desc>
-			The friction heater is a tool to warm up a standard furnace without fuel. Higher torques and speeds mean higher temperatures, but beware: spend too long at high temperatures and you can melt the furnace entirely. Also of note is that high temperatures can speed up the furnace operation. A hot furnace is also the only way to smelt tungsten flakes into tungsten ingots.
+			The friction heater is a tool to warm up a standard furnace without fuel. Higher torques and speeds mean higher temperatures, but beware: spend too long at high temperatures and you can melt the furnace entirely. Also of note is that high temperatures can speed up the furnace operation. A hot furnace is also the only way to smelt tungsten flakes into tungsten ingots. Note that while temperature is ultimately a function of input power, matching the torque and speed will improve efficiency.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -981,7 +981,7 @@
 	</blower>
 	<refrigerator>
 		<desc>
-			The refrigeration unit is used to dramatically cool air to the point that some components freeze or condense out of it. This is how liquid nitrogen and dry ice are produced.
+			The refrigeration unit is used to dramatically cool air to the point that some components freeze or condense out of it. This is how liquid nitrogen and dry ice are produced. Note that ice is required to aid in cooling the air.
 		</desc>
 		<note>
 			Power Input: Back
@@ -1036,4 +1036,14 @@
 			Power Input: Any side
 		</note>
 	</pipepump>
+	<centrifuge>
+		<desc>
+			The centrifuge will use large centripetal forces to separate items into constituents of different density, or to squeeze fluids of of some items. If you are into beekeeping, it can also extract propolis and other products from combs.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Speed: %d rad/s
+			Power Input: Bottom
+		</note>
+	</centrifuge>
 </machines>

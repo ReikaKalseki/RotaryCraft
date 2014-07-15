@@ -68,7 +68,7 @@ public class ItemMulti extends ItemBasic {
 				is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
 				is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
 			}
-			if (te.isEmitting()) {
+			if (te.isEmitting) {
 				is.stackTagCompound.setInteger("ex", x);
 				is.stackTagCompound.setInteger("ey", y);
 				is.stackTagCompound.setInteger("ez", z);

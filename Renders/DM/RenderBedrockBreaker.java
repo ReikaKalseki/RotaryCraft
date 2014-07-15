@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
+import java.util.ArrayList;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -16,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -28,9 +31,6 @@ public class RenderBedrockBreaker extends RotaryTERenderer
 	private ModelBedrockBreaker bbm = new ModelBedrockBreaker();
 	private ModelBedrockBreakerV bbmV = new ModelBedrockBreakerV();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityBedrockBreakerAt(TileEntityBedrockBreaker tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -94,18 +94,15 @@ public class RenderBedrockBreaker extends RotaryTERenderer
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 
-		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
+		float var13;
 
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
+		ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getStep());
 		if (tile.isInWorld() && tile.getBlockMetadata() > 3) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/bedrockvtex.png");
-			var15.renderAll(tile, null, tile.phi, 0);
+			var15.renderAll(tile, li, tile.phi, 0);
 		}
 		else
-			var14.renderAll(tile, null, tile.phi, 0);
+			var14.renderAll(tile, li, tile.phi, 0);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

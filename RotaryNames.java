@@ -11,7 +11,7 @@ package Reika.RotaryCraft;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.DragonAPI.DragonOptions;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -230,7 +230,7 @@ public class RotaryNames {
 
 	public static String getName(String tag, boolean tech) {
 		String sg = StatCollector.translateToLocal(tag);
-		if (tech && ConfigRegistry.DEBUGMODE.getState())
+		if (tech && DragonOptions.DEBUGMODE.getState())
 			sg += " (Technical Block)";
 		return sg;
 	}

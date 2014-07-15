@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -81,9 +83,8 @@ public class ItemSpringBoots extends ItemChargedArmor {
 	{
 		ItemStack is = new ItemStack(id, 1, 24000);
 		if (itemID == ItemRegistry.BEDJUMP.getShiftedID()) {
-			Enchantment ench = ((ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance()).getDefaultEnchantment();
-			if (ench != null)
-				is.addEnchantment(ench, 4);
+			HashMap<Enchantment, Integer> ench = ((ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance()).getDefaultEnchantments();
+			ReikaEnchantmentHelper.applyEnchantments(is, ench);
 		}
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		if (ir.isAvailableInCreativeInventory())

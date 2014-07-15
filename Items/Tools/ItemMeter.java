@@ -63,6 +63,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -319,7 +320,7 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				ReikaChatHelper.writeString(String.format("Water: %dkL. Lava: %dkL.", clicked.getWater(), clicked.getLava()));
+				ReikaChatHelper.writeString(String.format("Water: %dmB. Lava: %dmB.", clicked.getWater(), clicked.getLava()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
@@ -471,6 +472,23 @@ public class ItemMeter extends ItemRotaryTool
 				ReikaChatHelper.writeString(String.format("%s head at %d, %d", clicked.getName(), clicked.getHeadX(), clicked.getHeadZ()));
 				if (clicked.isJammed())
 					ReikaChatHelper.writeString(String.format("%s is jammed, supply more torque or power!", clicked.getName()));
+			}
+			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
+				TileEntityBeltHub clicked = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+				if (clicked == null)
+					return false;
+				if (clicked.isSplitting()) {
+					torque = ((TileEntityPowerReceiver)tile).torque*2;
+					omega = ((TileEntityPowerReceiver)tile).omega;
+					power = torque*omega;
+					if (power >= 1000000)
+						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					if (power >= 1000 && power < 1000000)
+						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					if (power < 1000)
+						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
+					return false;
+				}
 			}
 			if (m == MachineRegistry.FUELENGINE) {
 				TileEntityFuelEngine clicked = (TileEntityFuelEngine)world.getBlockTileEntity(x, y, z);

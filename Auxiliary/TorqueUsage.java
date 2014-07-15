@@ -196,7 +196,7 @@ public class TorqueUsage {
 			}
 			else if (tile instanceof TileEntityBeltHub) {
 				TileEntityBeltHub hub = (TileEntityBeltHub)tile;
-				if (!hub.isEmitting()) {
+				if (!hub.isEmitting) {
 					TileEntity di = world.getBlockTileEntity(hub.getTargetX(), hub.getTargetY(), hub.getTargetZ());
 					if (di != null && di instanceof TileEntityBeltHub) {
 						TileEntityBeltHub h2 = (TileEntityBeltHub)di;
@@ -331,7 +331,7 @@ public class TorqueUsage {
 		}
 		else if (tile instanceof TileEntityBeltHub) {
 			TileEntityBeltHub hub = (TileEntityBeltHub)tile;
-			if (!((TileEntityBeltHub) tile).isEmitting()) {
+			if (!((TileEntityBeltHub) tile).isEmitting) {
 				TileEntity di = world.getBlockTileEntity(hub.getTargetX(), hub.getTargetY(),hub.getTargetZ());
 				if (di != null) {
 					TileEntityBeltHub h2 = (TileEntityBeltHub)di;

@@ -19,15 +19,14 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelIodide;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
+import Reika.RotaryCraft.Models.Animated.ModelCentrifuge;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 
-public class RenderIodide extends RotaryTERenderer
+public class RenderCentrifuge extends RotaryTERenderer
 {
+	private ModelCentrifuge CentrifugeModel = new ModelCentrifuge();
 
-	private ModelIodide IodideModel = new ModelIodide();
-
-	public void renderTileEntityWeatherControllerAt(TileEntityWeatherController tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityCentrifugeAt(TileEntityCentrifuge tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -36,9 +35,9 @@ public class RenderIodide extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelIodide var14;
-		var14 = IodideModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/iotex.png");
+		ModelCentrifuge var14;
+		var14 = CentrifugeModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/centrifugetex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -51,7 +50,7 @@ public class RenderIodide extends RotaryTERenderer
 		float var13;
 
 
-		var14.renderAll(tile, null, 0, 0);
+		var14.renderAll(tile, null, tile.phi, 0);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
@@ -62,7 +61,7 @@ public class RenderIodide extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
-			this.renderTileEntityWeatherControllerAt((TileEntityWeatherController)tile, par2, par4, par6, par8);
+			this.renderTileEntityCentrifugeAt((TileEntityCentrifuge)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
@@ -70,6 +69,6 @@ public class RenderIodide extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "iotex.png";
+		return "centrifugetex.png";
 	}
 }

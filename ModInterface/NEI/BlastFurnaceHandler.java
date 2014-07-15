@@ -120,7 +120,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(recipe.getRecipeOutput(), 143, 24);
+			return new PositionedStack(recipe.outputItem(), 143, 24);
 		}
 
 		@Override

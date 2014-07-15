@@ -49,6 +49,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -509,6 +510,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			tc.moveSrc(mov, dir);
 			return true;
 		}
+
+		((TileEntityBase)te).syncAllData();
 		return false;
 	}
 
