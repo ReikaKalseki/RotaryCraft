@@ -68,6 +68,15 @@ public class ModelBedrockBreakerV extends RotaryModelBase
 	LODModelPart Shape4b;
 	LODModelPart Shape4c;
 
+	LODModelPart Shape7;
+	LODModelPart Shape7a;
+	LODModelPart Shape7b;
+	LODModelPart Shape7c;
+	LODModelPart Shape7d;
+	LODModelPart Shape7e;
+	LODModelPart Shape7f;
+	LODModelPart Shape7g;
+
 	public ModelBedrockBreakerV()
 	{
 		textureWidth = 128;
@@ -307,11 +316,61 @@ public class ModelBedrockBreakerV extends RotaryModelBase
 		Shape4c.setTextureSize(128, 128);
 		Shape4c.mirror = true;
 		this.setRotation(Shape4c, 0F, 0F, 0F);
+
+		Shape7 = new LODModelPart(this, 40, 70);
+		Shape7.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7.setRotationPoint(8F, 16F, 0F);
+		Shape7.setTextureSize(128, 128);
+		Shape7.mirror = true;
+		this.setRotation(Shape7, -2.356194F, 0F, 0F);
+		Shape7a = new LODModelPart(this, 40, 70);
+		Shape7a.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7a.setRotationPoint(8F, 16F, 0F);
+		Shape7a.setTextureSize(128, 128);
+		Shape7a.mirror = true;
+		this.setRotation(Shape7a, 0F, 0F, 0F);
+		Shape7b = new LODModelPart(this, 40, 70);
+		Shape7b.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7b.setRotationPoint(8F, 16F, 0F);
+		Shape7b.setTextureSize(128, 128);
+		Shape7b.mirror = true;
+		this.setRotation(Shape7b, 0.7853982F, 0F, 0F);
+		Shape7c = new LODModelPart(this, 40, 70);
+		Shape7c.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7c.setRotationPoint(8F, 16F, 0F);
+		Shape7c.setTextureSize(128, 128);
+		Shape7c.mirror = true;
+		this.setRotation(Shape7c, 1.570796F, 0F, 0F);
+		Shape7d = new LODModelPart(this, 40, 70);
+		Shape7d.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7d.setRotationPoint(8F, 16F, 0F);
+		Shape7d.setTextureSize(128, 128);
+		Shape7d.mirror = true;
+		this.setRotation(Shape7d, 2.356194F, 0F, 0F);
+		Shape7e = new LODModelPart(this, 40, 70);
+		Shape7e.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7e.setRotationPoint(8F, 16F, 0F);
+		Shape7e.setTextureSize(128, 128);
+		Shape7e.mirror = true;
+		this.setRotation(Shape7e, 3.141593F, 0F, 0F);
+		Shape7f = new LODModelPart(this, 40, 70);
+		Shape7f.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7f.setRotationPoint(8F, 16F, 0F);
+		Shape7f.setTextureSize(128, 128);
+		Shape7f.mirror = true;
+		this.setRotation(Shape7f, -0.7853982F, 0F, 0F);
+		Shape7g = new LODModelPart(this, 40, 70);
+		Shape7g.addBox(0F, -7F, -1F, 16, 1, 3);
+		Shape7g.setRotationPoint(8F, 16F, 0F);
+		Shape7g.setTextureSize(128, 128);
+		Shape7g.mirror = true;
+		this.setRotation(Shape7g, -1.570796F, 0F, 0F);
 	}
 
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
+		int step = (Integer)li.get(0);
 		Shape1.render(te, f5);
 		Shape2.render(te, f5);
 		Shape2a.render(te, f5);
@@ -350,6 +409,21 @@ public class ModelBedrockBreakerV extends RotaryModelBase
 		Shape3bb.render(te, f5);
 		Shape3cca.render(te, f5);
 		Shape3dd.render(te, f5);
+
+		for (int i = 1; i < step; i++) {
+			int a = i-1;
+			GL11.glTranslated(a, 0, 0);
+			Shape7.render(te, f5);
+			Shape7a.render(te, f5);
+			Shape7b.render(te, f5);
+			Shape7c.render(te, f5);
+			Shape7d.render(te, f5);
+			Shape7e.render(te, f5);
+			Shape7f.render(te, f5);
+			Shape7g.render(te, f5);
+			GL11.glTranslated(-a, 0, 0);
+		}
+
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(-phi, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);

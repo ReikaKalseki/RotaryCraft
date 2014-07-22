@@ -15,10 +15,12 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -111,19 +113,38 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	}
 
 	@Override
+	public boolean isVulnerableTo(DamageSource src) {
+		return true;
+	}
+
+	@Override
 	public boolean canBeDamaged() {
 		return false;
 	}
 
 	@Override
-	public double getDamageMultiplier() {
-		return 0.35;
+	public double getDamageMultiplier(DamageSource src) {
+		return src.isUnblockable() ? 0.75 : 0.35;
 	}
 
 	@Override
 	public int getItemEnchantability()
 	{
 		return ConfigRegistry.PREENCHANT.getState() ? 0 : Item.pickaxeIron.getItemEnchantability();
+	}
+
+	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
+		for (int i = 1; i < 5; i++) {
+			ItemStack is = e.getCurrentItemOrArmor(i);
+			if (is == null)
+				return false;
+			ItemRegistry ir = ItemRegistry.getEntry(is);
+			if (ir == null)
+				return false;
+			if (!ir.isBedrockTypeArmor())
+				return false;
+		}
+		return true;
 	}
 
 }

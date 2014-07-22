@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -34,7 +33,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
@@ -122,7 +120,9 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		int[] data = new int[0];
 		long longdata = 0;
 		float floatdata = 0;
-		int x,y,z;
+		int x = 0;
+		int y = 0;
+		int z = 0;
 		boolean readinglong = false;
 		String stringdata = null;
 		//System.out.print(packet.length);
@@ -176,10 +176,25 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				int level = inputStream.readInt();
 				ReikaPacketHelper.updateTileEntityTankData(world, x, y, z, tank, level);
 				return;
+			case RAW:
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
+				len = pack.getNumberDataInts();
+				data = new int[len];
+				readinglong = pack.isLongPacket();
+				if (!readinglong) {
+					for (int i = 0; i < len; i++)
+						data[i] = inputStream.readInt();
+				}
+				else
+					longdata = inputStream.readLong();
+				break;
 			}
-			x = inputStream.readInt();
-			y = inputStream.readInt();
-			z = inputStream.readInt();
+			if (packetType != PacketTypes.RAW) {
+				x = inputStream.readInt();
+				y = inputStream.readInt();
+				z = inputStream.readInt();
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -466,7 +481,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				if (control == PacketRegistry.PNEUMATIC.getMinValue()+2)
 					eng.incrementRedstoneState();
 				break;
-			case JETPACK:
+			case JETPACK:/*
 				if (control == PacketRegistry.JETPACK.getMinValue()) {
 					boolean move = floatdata > 100;
 					if (move) {
@@ -499,7 +514,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					ItemStack jet = ep.getCurrentArmor(2);
 					ItemJetPack i = (ItemJetPack)jet.getItem();
 					i.use(jet, 4);
-				}
+				}*/
 				break;
 			case FERTILIZER:
 				if (world.isRemote) {

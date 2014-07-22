@@ -268,8 +268,8 @@ this.addBlockColor(Block.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //me
 		this.addBlockColor(RotaryCraft.beamblock, ReikaColorAPI.RGBtoHex(33, 33, 33));
 		this.addBlockColor(RotaryCraft.lightbridge, 0x00aaff);
 
+		this.addBlockMimic(RotaryCraft.blastpane, Block.obsidian);
 		this.addBlockMimic(RotaryCraft.blastglass, Block.obsidian);
-		this.addBlockMimic(RotaryCraft.obsidianglass, Block.obsidian);
 
 		BlockColor deco = new BlockColor();
 		deco.addMetaColor(0, 210, 200, 220);

@@ -81,7 +81,6 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -348,6 +347,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						return true;
 					}
 				}
+				else if (is.itemID == ItemRegistry.FUEL.getShiftedID()) {
+					return false;
+				}
 			}
 		}
 		if (m == MachineRegistry.SCALECHEST) {
@@ -374,7 +376,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			TileEntityPulseFurnace ex = (TileEntityPulseFurnace)te;
 			int f = ex.getFuel();
 			if (f+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-				ex.addFuel(RotaryConfig.MILLIBUCKET*ItemFuelLubeBucket.JET_VALUE);
+				ex.addFuel(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
@@ -973,7 +975,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (te instanceof EnergyToPowerBase) {
 			EnergyToPowerBase e = (EnergyToPowerBase)te;
 			currenttip.add(String.format("Consuming %d %s/t", e.getConsumedUnitsPerTick(), e.getUnitDisplay()));
-			currenttip.add(String.format("Lubricant: %d mB", e.getLubricant()));
+			//currenttip.add(String.format("Lubricant: %d mB", e.getLubricant()));
+		}
+		if (te instanceof TileEntityPulseFurnace) {
+			TileEntityPulseFurnace tpf = (TileEntityPulseFurnace)te;
+			int lvl = tpf.getAccelerant();
+			if (lvl > 0)
+				currenttip.add(String.format("Accelerant: %dmB of %s", lvl, tpf.getAccelerantType().getLocalizedName()));
+			else
+				currenttip.add("Accelerant: Empty");
 		}
 		return currenttip;
 	}

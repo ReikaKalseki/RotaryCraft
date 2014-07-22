@@ -792,7 +792,6 @@ public enum MachineRegistry {
 		case GEARBOX:
 		case SPLITTER:
 		case FERMENTER:
-		case CLUTCH:
 		case DYNAMOMETER:
 		case GRINDER:
 		case HEATRAY:
@@ -844,6 +843,7 @@ public enum MachineRegistry {
 		case BLOWER:
 		case PIPEPUMP:
 		case CHAIN:
+		case CLUTCH:
 			return true;
 		default:
 			return false;

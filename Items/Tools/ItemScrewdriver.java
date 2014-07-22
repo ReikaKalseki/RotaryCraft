@@ -11,12 +11,15 @@ package Reika.RotaryCraft.Items.Tools;
 
 import mrtjp.projectred.api.IScrewdriver;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneLogic;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Screwdriverable;
 import Reika.RotaryCraft.API.ShaftMachine;
@@ -61,6 +64,7 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 		maxdamage[Block.pistonStickyBase.blockID] = 5;
 		maxdamage[Block.dispenser.blockID] = 5;
 		maxdamage[Block.furnaceIdle.blockID] = 3;
+		maxdamage[Block.furnaceBurning.blockID] = 3;
 		maxdamage[Block.stairsWoodOak.blockID] = 7;
 		maxdamage[Block.stairsCobblestone.blockID] = 7;
 		maxdamage[Block.stairsBrick.blockID] = 7;
@@ -71,7 +75,8 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 		maxdamage[Block.stairsWoodJungle.blockID] = 7;
 		maxdamage[Block.stairsNetherBrick.blockID] = 7;
 		maxdamage[Block.stairsNetherQuartz.blockID] = 7;
-		maxdamage[Block.dropper.blockID] = 3;
+		maxdamage[Block.dropper.blockID] = 5;
+		maxdamage[Block.pumpkinLantern.blockID] = 3;
 	}
 
 	@Override
@@ -306,6 +311,22 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 			if (!world.isRemote) {
 				int id = world.getBlockId(x, y, z);
 				damage = world.getBlockMetadata(x, y, z);
+				if (id == Block.endPortalFrame.blockID) {
+					if (damage >= 4) {
+						world.setBlockMetadataWithNotify(x, y, z, damage-4, 3);
+						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, new ItemStack(Item.eyeOfEnder));
+					}
+					else {
+						int newmeta = damage == 3 ? 0 : damage+1;
+						world.setBlockMetadataWithNotify(x, y, z, newmeta, 3);
+					}
+					return true;
+				}
+				if (Block.blocksList[id] instanceof BlockRedstoneLogic) {
+					int newmeta = damage%4 == 3 ? damage-3 : damage+1;
+					world.setBlockMetadataWithNotify(x, y, z, newmeta, 3);
+					return true;
+				}
 				if ((id == Block.pistonStickyBase.blockID || id == Block.pistonBase.blockID) && world.isBlockIndirectlyGettingPowered(x, y, z))
 					return false;
 				if (damage < maxdamage[id] && maxdamage[id] != -1) {

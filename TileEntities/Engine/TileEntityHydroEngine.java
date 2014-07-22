@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 public class TileEntityHydroEngine extends TileEntityEngine {
 
@@ -88,19 +89,29 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	private void distributeLubricant(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == MachineRegistry.ENGINE) {
-				TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(dx, dy, dz);
-				if (eng instanceof TileEntityHydroEngine) {
-					TileEntityHydroEngine hy = (TileEntityHydroEngine)eng;
-					int it = hy.lubricant.getLevel();
-					int dL = lubricant.getLevel()-it;
-					if (dL > 3) {
-						hy.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("lubricant"));
-						lubricant.removeLiquid(dL/4);
+			if (dir == this.getWriteDirection() || dir.getOpposite() == this.getWriteDirection()) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.ENGINE) {
+					TileEntityEngine eng = (TileEntityEngine)this.getAdjacentTileEntity(dir);
+					if (eng instanceof TileEntityHydroEngine) {
+						TileEntityHydroEngine hy = (TileEntityHydroEngine)eng;
+						int it = hy.lubricant.getLevel();
+						int dL = lubricant.getLevel()-it;
+						if (dL > 3) {
+							hy.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("lubricant"));
+							lubricant.removeLiquid(dL/4);
+						}
+					}
+				}
+				else if (m == MachineRegistry.RESERVOIR) {
+					TileEntityReservoir te = (TileEntityReservoir)this.getAdjacentTileEntity(dir);
+					if (!lubricant.isEmpty() && te.canAcceptFluid(FluidRegistry.getFluid("lubricant"))) {
+						int amt = Math.min(this.getLube(), te.CAPACITY-te.getLevel());
+						te.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+						lubricant.removeLiquid(amt);
 					}
 				}
 			}

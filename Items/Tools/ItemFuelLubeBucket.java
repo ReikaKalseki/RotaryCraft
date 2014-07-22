@@ -21,11 +21,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFuelLubeBucket extends ItemRotaryTool {
 
-	public static final int LUBE_VALUE = 1;
-	public static final int JET_VALUE = 8;
-	public static final int ETHANOL_VALUE = 4;
-	public static final int NITROGEN_VALUE = 1;
-
 	public ItemFuelLubeBucket(int ID, int tex) {
 		super(ID, tex);
 		hasSubtypes = true;

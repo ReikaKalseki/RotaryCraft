@@ -102,15 +102,18 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	private void overpressure(World world, int x, int y, int z) {
-		if (liquid.canBePlacedInWorld()) {
-			if (!world.isRemote) {
+		if (!world.isRemote) {
+			if (liquid.canBePlacedInWorld()) {
 				world.setBlock(x, y, z, liquid.getBlockID());
-				world.markBlockForUpdate(x, y, z);
-				world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlockID());
 			}
-			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
-			ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
+			else {
+				world.setBlock(x, y, z, 0);
+			}
 		}
+		world.markBlockForUpdate(x, y, z);
+		world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlockID());
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
+		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 	}
 
 	@Override

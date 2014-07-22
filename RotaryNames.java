@@ -139,8 +139,8 @@ public class RotaryNames {
 
 		LanguageRegistry.addName(RotaryCraft.bedrockslice, getName("block.bedrockslice", true));
 
-		LanguageRegistry.addName(RotaryCraft.blastglass, getName("block.blastpane", false));
-		LanguageRegistry.addName(RotaryCraft.obsidianglass, getName("block.blastglass", false));
+		LanguageRegistry.addName(RotaryCraft.blastpane, getName("block.blastpane", false));
+		LanguageRegistry.addName(RotaryCraft.blastglass, getName("block.blastglass", false));
 
 		LanguageRegistry.addName(RotaryCraft.canola, getName("block.canola", true));
 

@@ -50,7 +50,6 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -182,9 +181,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			if (is != null && is.stackSize == 1) {
 				if (is.itemID == Item.bucketEmpty.itemID) {
 					if (tile.getEngineType().isEthanolFueled()) {
-						if (tile.getFuelLevel() >= ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() >= RotaryConfig.MILLIBUCKET) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
-							tile.subtractFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
+							tile.subtractFuel(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -193,9 +192,20 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 						return true;
 					}
 					if (tile.getEngineType().isJetFueled()) {
-						if (tile.getFuelLevel() >= ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() >= RotaryConfig.MILLIBUCKET) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
-							tile.subtractFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
+							tile.subtractFuel(RotaryConfig.MILLIBUCKET);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+						}
+						return true;
+					}
+					if (tile.getEngineType().requiresLubricant()) {
+						if (tile.getLube() >= RotaryConfig.MILLIBUCKET) {
+							ep.setCurrentItemOrArmor(0, ItemStacks.lubebucket.copy());
+							tile.removeLubricant(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -206,10 +216,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().isJetFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.JET_VALUE) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-RotaryConfig.MILLIBUCKET) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(ItemFuelLubeBucket.JET_VALUE*RotaryConfig.MILLIBUCKET);
+							tile.addFuel(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -220,10 +230,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().isEthanolFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-ItemFuelLubeBucket.ETHANOL_VALUE) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-RotaryConfig.MILLIBUCKET) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(ItemFuelLubeBucket.ETHANOL_VALUE*RotaryConfig.MILLIBUCKET);
+							tile.addFuel(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -234,10 +244,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().requiresLubricant()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-						if (tile.getLube() <= tile.LUBECAP-ItemFuelLubeBucket.LUBE_VALUE) {
+						if (tile.getLube() <= tile.LUBECAP-RotaryConfig.MILLIBUCKET) {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addLubricant(ItemFuelLubeBucket.LUBE_VALUE*RotaryConfig.MILLIBUCKET);
+							tile.addLubricant(RotaryConfig.MILLIBUCKET);
 						}
 						else {
 							ReikaChatHelper.clearChat();

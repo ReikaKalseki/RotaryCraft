@@ -15,29 +15,23 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.input.Keyboard;
-
+import Reika.DragonAPI.Auxiliary.KeyWatcher;
+import Reika.DragonAPI.Auxiliary.KeyWatcher.Key;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaKeyHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -70,7 +64,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	public Fluid getFuelType() {
 		return ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("jet fuel") : FluidRegistry.getFluid("rc ethanol");
 	}
-
+	/*
 	public boolean useJetpack(EntityPlayer player)
 	{
 		int px = (int) Math.floor(player.posX);
@@ -110,7 +104,6 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			hover = true;
 		}
 
-		boolean electric = true;
 		player.playSound(SoundRegistry.JETPACK.getPlayableReference(), 0.5F, 1);
 
 		int id = PacketRegistry.JETPACK.getMinValue();
@@ -124,11 +117,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		//player.motionY = Math.min(player.motionY + power * 0.2F, 0.6000000238418579D);
 
 		return true;
-	}
+	}*/
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack is)
 	{
+		/*
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		NBTTagCompound nbtData = is.stackTagCompound;
@@ -150,7 +144,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			toggleTimer = (byte)(toggleTimer - 1);
 
 			nbtData.setByte("toggleTimer", toggleTimer);
-		}
+		}*/
+
+		boolean flying = this.useJetpack(player, is);
 
 		if (ConfigRegistry.EXPLODEPACK.getState()) {
 			if (this.getCurrentFillLevel(is) > 0) {
@@ -163,7 +159,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			}
 		}
 	}
-
+	/*
 	private boolean canFly(EntityPlayer player) {
 		long millis = System.currentTimeMillis();
 		if (player.onGround) {
@@ -181,6 +177,70 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			//ReikaJavaLibrary.pConsole(diff, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
 			return diff > 120;
 		}
+	}*/
+
+	private boolean useJetpack(EntityPlayer ep, ItemStack is) {
+		boolean isFlying = KeyWatcher.instance.isKeyDown(ep, Key.JUMP);
+		boolean hoverMode = isFlying && KeyWatcher.instance.isKeyDown(ep, Key.SNEAK);
+		float maxSpeed = 1.25F;
+		double hspeed = ReikaMathLibrary.py3d(ep.motionX, 0, ep.motionZ);
+		float thrust = hoverMode ? 0.1F : 0.2F;
+
+		boolean canFly = !hoverMode || (!ep.onGround && ep.motionY < 0);
+		if (isFlying && canFly) {
+			if (!ep.worldObj.isRemote && !ep.capabilities.isCreativeMode) {
+				if (ep.worldObj.getTotalWorldTime()%2 == 0)
+					this.use(is, (hoverMode ? 2 : 1)*this.getFuelUsageMultiplier());
+			}
+
+			if (this.getFuel(is) > 0) {
+				if (hoverMode) {
+					if (ep.motionY > 0)
+						ep.motionY = Math.max(ep.motionY*0.75, 0);
+					else
+						ep.motionY = Math.min(ep.motionY+0.15, 0);
+				}
+				else {
+					double deltav = ep.motionY > 0 ? Math.min(0.2, Math.max(0.05, (maxSpeed-ep.motionY)*0.25)) : 0.2;
+					ep.motionY = Math.min(ep.motionY+deltav, maxSpeed);
+				}
+
+				if (KeyWatcher.instance.isKeyDown(ep, Key.FOWARD)) {
+					ep.moveFlying(0, thrust, thrust);
+					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+						this.use(is, this.getFuelUsageMultiplier());
+				}
+				if (KeyWatcher.instance.isKeyDown(ep, Key.BACK)) {
+					ep.moveFlying(0, -thrust, thrust);
+					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+						this.use(is, this.getFuelUsageMultiplier());
+				}
+				if (KeyWatcher.instance.isKeyDown(ep, Key.LEFT)) {
+					ep.moveFlying(thrust, 0, thrust);
+					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+						this.use(is, this.getFuelUsageMultiplier());
+				}
+				if (KeyWatcher.instance.isKeyDown(ep, Key.RIGHT)) {
+					ep.moveFlying(-thrust, 0, thrust);
+					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+						this.use(is, this.getFuelUsageMultiplier());
+				}
+
+				if (!ep.worldObj.isRemote) {
+					ep.fallDistance = -2;
+					if (ConfigRegistry.KICKFLYING.getState()) {
+						if (ep instanceof EntityPlayerMP) {
+							((EntityPlayerMP)ep).playerNetServerHandler.ticksForFloatKick = 0;
+						}
+					}
+				}
+			}
+		}
+		return isFlying;
+	}
+
+	private int getFuelUsageMultiplier() {
+		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? 2 : 1;
 	}
 
 	private void explode(World world, EntityPlayer player) {
@@ -291,8 +351,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}
 
 	@Override
-	public double getDamageMultiplier() {
-		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? 0.35 : 1;
+	public double getDamageMultiplier(DamageSource src) {
+		ItemBedrockArmor arm = (ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance();
+		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? arm.getDamageMultiplier(src) : 1;
 	}
 
 	@Override

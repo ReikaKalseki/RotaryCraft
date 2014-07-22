@@ -115,30 +115,28 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
-		if (TileEntityAdvancedGear.GearType.list[is.getItemDamage()].storesEnergy()) {
+		GearType type = GearType.list[is.getItemDamage()];
+		if (type.storesEnergy()) {
 			boolean bedrock = is.stackTagCompound != null && is.stackTagCompound.getBoolean("bedrock");
 			long max = TileEntityAdvancedGear.getMaxStorageCapacity(bedrock);
 			li.add(String.format("Maximum Energy: %.0f %sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max)));
-			GearType type = GearType.list[is.getItemDamage()];
-			if (type.storesEnergy()) {
-				if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
-					li.add("Stored Energy: 0 J");
+			if (is.stackTagCompound == null || is.stackTagCompound.getLong("energy") <= 0)
+				li.add("Stored Energy: 0 J");
+			else {
+				if (is.stackTagCompound.getBoolean("creative")) {
+					li.add("Infinite power for creative mode:");
+					li.add("This coil does not deplete.");
+				}
 				else {
-					if (is.stackTagCompound.getBoolean("creative")) {
-						li.add("Infinite power for creative mode:");
-						li.add("This coil does not deplete.");
-					}
-					else {
-						long e = is.stackTagCompound.getLong("energy")/20;
-						li.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
-					}
+					long e = is.stackTagCompound.getLong("energy")/20;
+					li.add("Stored Energy: "+String.format("%.3f ", ReikaMathLibrary.getThousandBase(e))+ReikaEngLibrary.getSIPrefix(e)+"J");
 				}
 			}
-			if (type.isLubricated()) {
-				if (is.stackTagCompound != null) {
-					int lube = is.stackTagCompound.getInteger("lube");
-					li.add("Lubricant: "+lube+" mB");
-				}
+		}
+		if (type.isLubricated()) {
+			if (is.stackTagCompound != null) {
+				int lube = is.stackTagCompound.getInteger("lube");
+				li.add("Lubricant: "+lube+" mB");
 			}
 		}
 	}

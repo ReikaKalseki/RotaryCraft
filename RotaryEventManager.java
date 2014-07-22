@@ -25,6 +25,7 @@ import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -35,6 +36,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -77,6 +79,17 @@ public class RotaryEventManager {
 					if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
 						event.distance = Math.min(event.distance, 25);
 				}
+			}
+		}
+	}
+
+	@ForgeSubscribe
+	public void bedrockSave(LivingHurtEvent evt) {
+		EntityLivingBase e = evt.entityLiving;
+		if (evt.ammount < 1000) {
+			if (e instanceof EntityPlayer) {
+				if (ItemBedrockArmor.isWearingFullSuitOf(e))
+					evt.ammount = Math.min(evt.ammount, 5);
 			}
 		}
 	}

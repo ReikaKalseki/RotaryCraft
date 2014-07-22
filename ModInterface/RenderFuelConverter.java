@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -88,7 +89,7 @@ public class RenderFuelConverter extends RotaryTERenderer
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.DEFAULT.apply();
 
 		ReikaLiquidRenderer.bindFluidTexture(fuel);
 		ReikaLiquidRenderer.setFluidColor(liquid);

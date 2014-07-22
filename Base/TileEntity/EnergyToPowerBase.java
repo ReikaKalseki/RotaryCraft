@@ -70,9 +70,6 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
 		}
-		if (power > 0 && !tank.isEmpty() && worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
-			tank.removeLiquid(1);
-		}
 	}
 
 	public final int getTier() {
@@ -181,15 +178,48 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	public abstract int getMaxStorage();
 
 	public final long getPowerLevel() {
-		return this.isEmitting() ? this.getSpeed()*(long)this.getTorque() : 0;
+		return this.isEmitting() ? this.getMaxSpeed()*(long)this.getTorque() : 0;
 	}
 
 	public final int getSpeed() {
+		return omega;
+	}
+
+	public int getMaxSpeed() {
 		if (!this.isEmitting())
 			return 0;
 		if (baseomega < 0)
 			return 0;
 		return ReikaMathLibrary.intpow2(2, baseomega);
+	}
+
+	protected final void updateSpeed() {
+		int maxspeed = this.getMaxSpeed();
+		boolean accel = omega <= maxspeed && this.hasEnoughEnergy() && !tank.isEmpty();
+		if (accel) {
+			omega += 4*ReikaMathLibrary.logbase(maxspeed+1, 2);
+			if (omega > maxspeed)
+				omega = maxspeed;
+		}
+		else {
+			if (omega > 0) {
+				omega -= omega/256+1;
+			}
+		}
+		torque = this.getTorque();
+		power = (long)torque*(long)omega;
+		if (power > 0 && !worldObj.isRemote) {
+			this.usePower();
+			if (worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
+				tank.removeLiquid(1);
+			}
+		}
+	}
+
+	protected void usePower() {
+		storedEnergy -= this.getConsumedUnitsPerTick();
+		if (storedEnergy < 0)
+			storedEnergy = 0;
 	}
 
 	public final int getTorque() {
@@ -198,7 +228,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final boolean hasEnoughEnergy() {
 		float energy = this.getStoredPower();
-		return energy > this.getConsumedUnitsPerTick() && !tank.isEmpty();
+		return energy > this.getConsumedUnitsPerTick();
 	}
 
 	public abstract int getConsumedUnitsPerTick();

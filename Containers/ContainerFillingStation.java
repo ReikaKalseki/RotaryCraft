@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.ArmorSlot;
+import Reika.DragonAPI.Instantiable.GUI.SlotNoClick;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
@@ -24,8 +25,10 @@ public class ContainerFillingStation extends CoreContainer {
 		super(player, te);
 		tile = te;
 
-		this.addSlot(0, 106, 71);
+		this.addSlotToContainer(new SlotNoClick(tile, 0, 106, 71));
 		this.addSlot(1, 54, 21);
+		this.addSlotToContainer(new SlotNoClick(tile, 2, 134, 71));
+		this.addSlot(3, 106, 21);
 
 		this.addPlayerInventoryWithOffset(player, 0, 21);
 

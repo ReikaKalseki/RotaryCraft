@@ -41,7 +41,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -81,7 +80,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
 	public final EngineType getEngineType() {
-		return type;
+		return type != null ? type : EngineType.DC;
 	}
 
 	public final void setType(ItemStack is) {
@@ -349,12 +348,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		this.basicPowerReceiver();
 
-		if (type.isJetFueled() && inv[0] != null && fuel.getLevel()+ItemFuelLubeBucket.JET_VALUE <= FUELCAP) {
-			if (inv[0].itemID == ItemStacks.fuelbucket.itemID && inv[0].getItemDamage() == ItemStacks.fuelbucket.getItemDamage()) {
-				inv[0] = new ItemStack(Item.bucketEmpty.itemID, 1, 0);
-				fuel.addLiquid(ItemFuelLubeBucket.JET_VALUE, RotaryCraft.jetFuelFluid);
-			}
-		}
 		timer.updateTicker("fuel");
 		this.internalizeFuel();
 		if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel())
@@ -735,6 +728,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public final void addLubricant(int amt) {
 		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+	}
+
+	public final void removeLubricant(int amt) {
+		lubricant.removeLiquid(amt);
 	}
 
 	public final void setLube(int amt) {

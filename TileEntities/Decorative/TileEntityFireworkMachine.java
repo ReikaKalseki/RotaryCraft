@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.FireworkLaunchEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -171,27 +172,27 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		return product;
 	}
 
-	private int pickRandomColor(boolean decr) { //Returns a random color dye from inv
+	private ReikaDyeHelper pickRandomColor(boolean decr) { //Returns a random color dye from inv
 		int color = -1;
 		boolean[] hasColors = new boolean[16]; // To save CPU time, see below
 		boolean hasDye = false;
 		for (int i = 0; i < inv.length; i++) {
-			if (inv[i] != null) {
-				if (inv[i].itemID == Item.dyePowder.itemID) {
-					hasDye = true;
-					hasColors[inv[i].getItemDamage()] = true;
-				}
+			ReikaDyeHelper dye = ReikaDyeHelper.getColorFromItem(inv[i]);
+			if (dye != null) {
+				hasDye = true;
+				hasColors[dye.ordinal()] = true;
 			}
 		}
 		if (!hasDye)
-			return -1;
+			return null;
 		while (color == -1) {
-			int randcolor = rand.nextInt(16);
-			while (!hasColors[randcolor])
-				randcolor = rand.nextInt(16);
+			ReikaDyeHelper randcolor = ReikaDyeHelper.getRandomColor();
+			while (!hasColors[randcolor.ordinal()])
+				randcolor = ReikaDyeHelper.getRandomColor();
 			for (int j = 0; j < inv.length; j++) {
 				if (inv[j] != null) {
-					if (inv[j].itemID == Item.dyePowder.itemID && inv[j].getItemDamage() == randcolor) {
+					ReikaDyeHelper dye2 = ReikaDyeHelper.getColorFromItem(inv[j]);
+					if (dye2 == randcolor) {
 						if (decr) {
 							ReikaInventoryHelper.decrStack(j, inv);
 						}
@@ -200,7 +201,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 				}
 			}
 		}
-		return -1;
+		return null;
 	}
 
 	private boolean getIngredient(int id, boolean decr) {
@@ -271,7 +272,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	private ItemStack randomRecipe() {
-		int dyeColor = this.pickRandomColor(this.consumeChance() && ReikaInventoryHelper.checkForItem(Item.gunpowder.itemID, inv)); //Dye metadata to craft with - 0-15
+		ReikaDyeHelper dyeColor = this.pickRandomColor(this.consumeChance() && ReikaInventoryHelper.checkForItem(Item.gunpowder.itemID, inv)); //Dye metadata to craft with - 0-15
 		boolean hasDiamond = false;
 		boolean hasGlowstone = false;
 		int shape = this.getShape(); //Shape modifiers - Fire charge, gold nugget, feather, head, or nothing
@@ -280,8 +281,8 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		ItemStack glowstone = new ItemStack(Item.glowstone.itemID, 1, 0);
 
 		ItemStack[] inputitems = new ItemStack[5];
-		if (dyeColor != -1)
-			inputitems[1] = new ItemStack(Item.dyePowder.itemID, 1, dyeColor);
+		if (dyeColor != null)
+			inputitems[1] = new ItemStack(Item.dyePowder.itemID, 1, dyeColor.ordinal());
 		else
 			inputitems[1] = null;
 		if (inputitems[1] == null) // If missing dye
@@ -326,10 +327,10 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 		ItemStack output = this.setNBT(inputitems);
 		if (rand.nextInt(2) == 0) {
-			int dyeColor2 = this.pickRandomColor(this.consumeChance());
-			if (dyeColor2 == -1)
+			ReikaDyeHelper dyeColor2 = this.pickRandomColor(this.consumeChance());
+			if (dyeColor2 == null)
 				return output; //Bypass
-			ItemStack newcolor = new ItemStack(Item.dyePowder.itemID, 1, dyeColor2);
+			ItemStack newcolor = new ItemStack(Item.dyePowder.itemID, 1, dyeColor2.ordinal());
 			output = this.colorBlend(output, newcolor);
 		}
 		return output;

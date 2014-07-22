@@ -49,14 +49,14 @@ public class RotaryChests {
 		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.scrap, 4, 16, 20);
 		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.ironscrap, 1, 8, 20);
 		data.addItem(3, Location.STRONGHOLD_HALLWAY, ItemStacks.lonsda, 1, 2, 10);
-		data.addItem(2, Location.STRONGHOLD_HALLWAY, new ItemStack(RotaryCraft.obsidianglass), 1, 6, 15);
+		data.addItem(2, Location.STRONGHOLD_HALLWAY, new ItemStack(RotaryCraft.blastglass), 1, 6, 15);
 
 		data.addItem(4, Location.STRONGHOLD_CROSSING, ItemStacks.lens, 1, 1, 5);
 		data.addItem(1, Location.STRONGHOLD_CROSSING, ItemStacks.steelingot, 1, 3, 25);
 		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.scrap, 8, 24, 20);
 		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.ironscrap, 1, 8, 20);
 		data.addItem(3, Location.STRONGHOLD_CROSSING, ItemStacks.lonsda, 1, 2, 10);
-		data.addItem(2, Location.STRONGHOLD_CROSSING, new ItemStack(RotaryCraft.obsidianglass), 1, 6, 15);
+		data.addItem(2, Location.STRONGHOLD_CROSSING, new ItemStack(RotaryCraft.blastglass), 1, 6, 15);
 
 		//data.addItem(2, Location.STRONGHOLD_LIBRARY, ItemRegistry.HANDBOOK.getStackOf(), 1, 1, 25);
 		data.addItem(3, Location.STRONGHOLD_LIBRARY, ItemRegistry.METER.getStackOf(), 1, 1, 2);

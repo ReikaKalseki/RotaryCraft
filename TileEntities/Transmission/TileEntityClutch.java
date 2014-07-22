@@ -25,11 +25,11 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
 		super.updateTileEntity();
-		power = omega*torque;
 		int id = world.getBlockId(x, y, z);
 
-		this.getIOSides(world, x, y, z, meta, false);
+		this.getIOSides(world, x, y, z, meta, true);
 		this.transferPower(world, x, y, z, meta);
+		power = (long)omega*(long)torque;
 
 		this.basicPowerReceiver();
 	}

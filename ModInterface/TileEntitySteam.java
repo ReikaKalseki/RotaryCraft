@@ -68,53 +68,11 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 
 		if (this.getTicksExisted() < 2)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-		/*
-		if (steam.isEmpty()) {
-			power = 0;
-			torque = omega = 0;
-		}
-		else
-			this.genPower();*/
 
-		if (!this.hasEnoughEnergy()) {
-			torque = 0;
-			omega = 0;
-			power = 0;
-			//storedEnergy = 0;
-		}
-		else {
-			omega = this.getSpeed();
-			torque = this.getTorque();
-
-			power = (long)torque*(long)omega;
-
-			if (!world.isRemote) {
-				storedEnergy -= this.getConsumedUnitsPerTick();
-			}
-		}
+		this.updateSpeed();
 		this.basicPowerReceiver();
 	}
-	/*
-	private void genPower() {
-		omega = Math.min(GEN_OMEGA, this.getGenOmega());
-		torque = Math.min(this.getGenTorque(), MAX_TORQUE);
-		power = (long)omega*(long)torque;
-		steam.removeLiquid(steam.getLevel()/200+1);
-	}
 
-	public long getGenPower() {
-		return this.getGenOmega() * this.getGenTorque();
-	}
-
-	@Override
-	public int getGenTorque() {
-		return !steam.isEmpty() ? 8*steam.getLevel()/FluidContainerRegistry.BUCKET_VOLUME : 0;
-	}
-
-	public int getGenOmega() {
-		return this.getGenTorque() > 0 ? (int)(this.getGenTorque()/(double)MAX_TORQUE*GEN_OMEGA) : 0;
-	}
-	 */
 	private void getSteam(World world, int dx, int dy, int dz) {
 		int drain = 25;
 		if (storedEnergy <= this.getMaxStorage()-drain) {

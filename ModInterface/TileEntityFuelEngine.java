@@ -320,6 +320,10 @@ TemperatureTE {
 		tank.addLiquid(amt, FluidRegistry.getFluid("fuel"));
 	}
 
+	public void removeFuel(int amt) {
+		tank.removeLiquid(amt);
+	}
+
 	public void addWater(int amt) {
 		watertank.addLiquid(amt, FluidRegistry.WATER);
 	}

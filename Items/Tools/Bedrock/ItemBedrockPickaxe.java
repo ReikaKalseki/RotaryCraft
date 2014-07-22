@@ -190,9 +190,9 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 0;
 		if (b.blockID == Block.obsidian.blockID)
 			return 48F;
-		if (b.blockID == RotaryCraft.blastglass.blockID)
+		if (b.blockID == RotaryCraft.blastpane.blockID)
 			return 32F;
-		if (b.blockID == RotaryCraft.obsidianglass.blockID)
+		if (b.blockID == RotaryCraft.blastglass.blockID)
 			return 48F;
 		if (b.blockID == MachineRegistry.SHAFT.getBlockID())
 			return 32F;
@@ -231,7 +231,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 15F;
 		if (b.blockID == OpenBlockHandler.getInstance().tankID)
 			return 20F;
-		if (b.blockID == ThermalHandler.getInstance().ductID)
+		if (b.blockID == ThermalHandler.getInstance().ductID) //fails as of newer TE, because is TileMultipart
 			return 48F;
 		if (MystObjects.crystal != null && b.blockID == MystObjects.crystal.blockID)
 			return 20F;

@@ -36,10 +36,13 @@ public class TileEntityFluidCompressor extends TileEntityPowerReceiver implement
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
 	public int getCapacity(Fluid f) {
+		if (power < MINPOWER || torque < MINTORQUE)
+			return 0;
 		int log2 = (int)(ReikaMathLibrary.logbase(torque, 2)/2);
 		long power = ReikaMathLibrary.longpow(10, log2);
 		int factor = f.isGaseous() ? 8 : 1;
-		return factor*Math.min((int)(power/40), tank.getCapacity());
+		long frac = factor*(power/40);
+		return (int)Math.min(frac, tank.getCapacity());
 	}
 
 	public Fluid getFluid() {

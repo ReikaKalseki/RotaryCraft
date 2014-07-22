@@ -257,7 +257,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		Block b = Block.blocksList[id];
 		if (b instanceof BlowableCrop) {
 			float sp = ((BlowableCrop)b).getHarvestingSpeed();
-			if (ReikaRandomHelper.doWithChance(0.0015*sp))
+			if (ReikaRandomHelper.doWithChance(0.015*sp))
 				this.harvest(world, x, y, z, (BlowableCrop)b);
 			return;
 		}

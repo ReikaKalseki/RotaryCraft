@@ -38,7 +38,8 @@ public class JetpackFuelOverlay {
 			if (ir != null) {
 				if (ir.isJetpack()) {
 					ItemJetPack i = (ItemJetPack)is.getItem();
-					float frac = i.getCurrentFillLevel(is)/(float)i.getCapacity(is);
+					int fuel = i.getCurrentFillLevel(is);
+					float frac = fuel/(float)i.getCapacity(is);
 					ReikaTextureHelper.bindTexture(RotaryCraft.class, "Textures/GUI/overlays.png");
 					Tessellator v5 = Tessellator.instance;
 					int height = event.resolution.getScaledHeight();
@@ -60,6 +61,7 @@ public class JetpackFuelOverlay {
 					v5.addVertexWithUV(4, 	height/2-32+f*64, 	0, 	w, f*h);
 					v5.draw();
 					Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s", (int)(frac*100), "%"), 1, height/2-40, 0xffffff);
+					Minecraft.getMinecraft().fontRenderer.drawString(String.format("%dmB", fuel), 1, height/2+33, 0xffffff);
 					ReikaTextureHelper.bindHUDTexture();
 				}
 			}

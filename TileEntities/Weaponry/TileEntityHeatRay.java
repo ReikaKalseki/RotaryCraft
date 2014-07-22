@@ -17,6 +17,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
@@ -71,10 +72,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					blocked = true; //break loop
 				world.markBlockForUpdate(dx, dy, dz);
 			}
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d ", step, world.getBlockId(x+step*xstep, y+step*ystep, z+step*zstep))+String.valueOf(blocked));
 			AxisAlignedBB zone = this.getBurnZone(metadata, step);
 			List inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inzone.size()));
 			for (int i = 0; i < inzone.size(); i++) {
 				if (inzone.get(i) instanceof Entity) {
 					Entity caught = (Entity)inzone.get(i);
@@ -83,7 +82,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					if (caught instanceof EntityTNTPrimed)
 						world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
 					if (caught instanceof Laserable) {
-						((Laserable)caught).whenInBeam(power, step);
+						((Laserable)caught).whenInBeam(world, MathHelper.floor_double(caught.posX), MathHelper.floor_double(caught.posY), MathHelper.floor_double(caught.posZ), power, step);
 					}
 				}
 			}
@@ -111,7 +110,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 		switch (meta) {
 		case 0:
-			minx = xCoord-step-1;
+			minx = xCoord-step;
 			maxx = xCoord-1;
 			miny = yCoord;
 			maxy = yCoord;
@@ -120,50 +119,50 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			break;
 		case 1:
 			minx = xCoord+1;
-			maxx = xCoord+step+1;
+			maxx = xCoord+step;
 			miny = yCoord;
-			maxy = yCoord;
+			maxy = yCoord+1;
 			minz = zCoord;
-			maxz = zCoord;
+			maxz = zCoord+1;
 			break;
 		case 2:
-			maxz = zCoord+step+1;
+			maxz = zCoord+step;
 			minz = zCoord+1;
 			miny = yCoord;
-			maxy = yCoord;
+			maxy = yCoord+1;
 			minx = xCoord;
-			maxx = xCoord;
+			maxx = xCoord+1;
 			break;
 		case 3:
 			maxz = zCoord-1;
-			minz = zCoord-step-1;
+			minz = zCoord-step;
 			miny = yCoord;
-			maxy = yCoord;
+			maxy = yCoord+1;
 			minx = xCoord;
-			maxx = xCoord;
+			maxx = xCoord+1;
 			break;
 		case 4:
 			miny = yCoord;
-			maxz = zCoord;
+			maxz = zCoord+1;
 			miny = yCoord+1;
-			maxy = yCoord+step+1;
+			maxy = yCoord+step;
 			minx = xCoord;
-			maxx = xCoord;
+			maxx = xCoord+1;
 			break;
 		case 5:
 			minz = zCoord;
-			maxz = zCoord;
+			maxz = zCoord+1;
 			miny = yCoord-1;
 			maxy = yCoord-step-1;
 			minx = xCoord;
-			maxx = xCoord;
+			maxx = xCoord+1;
 			break;
 		}
 		/*ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, miny, minz, 20);
     	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, maxy, minz, 20);
     	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, maxx, maxy, maxz, 20);
     	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, maxx, miny, maxz, 20);*/
-		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.5D, 0.5D, 0.5D);
+		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz);//.expand(0.25D, 0.25D, 0.25D);
 	}
 
 	public void ignite(World world, int x, int y, int z, int metadata, int step) {
@@ -189,7 +188,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (b.hasTileEntity(metadata)) {
 			TileEntity te = world.getBlockTileEntity(x+step*xstep, y+step*ystep, z+step*zstep);
 			if (te instanceof Laserable) {
-				((Laserable)te).whenInBeam(power, step);
+				((Laserable)te).whenInBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power, step);
+				if (((Laserable)te).blockBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power))
+					return true;
 			}
 		}
 		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
@@ -277,12 +278,13 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				world.spawnEntityInWorld(var6);
 				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
 				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
-			}/*
-    	if (id == 0) {
-    		if (world.getBlockId(x+step*xstep, -1+y+step*ystep, z+step*zstep) == Block.netherrack.blockID) {
-    			world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Block.fire.blockID);
-    		}
-    	}*/
+			}
+			if (b instanceof Laserable) {
+				((Laserable) b).whenInBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power, step);
+				if (((Laserable)b).blockBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power))
+					return true;
+			}
+
 		}
 		return value;
 	}

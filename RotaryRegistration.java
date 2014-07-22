@@ -34,7 +34,6 @@ import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -52,8 +51,8 @@ public class RotaryRegistration {
 		GameRegistry.registerBlock(RotaryCraft.bedrockslice, "BedrockSlice");
 
 		GameRegistry.registerBlock(RotaryCraft.decoblock, ItemBlockDeco.class, "MachineBlock");
-		GameRegistry.registerBlock(RotaryCraft.blastglass, "BlastGlass");
-		GameRegistry.registerBlock(RotaryCraft.obsidianglass, "BlastGlassPane");
+		GameRegistry.registerBlock(RotaryCraft.blastpane, "BlastGlass");
+		GameRegistry.registerBlock(RotaryCraft.blastglass, "BlastGlassPane");
 
 		GameRegistry.registerBlock(RotaryCraft.lightblock, "LightBlock");
 		GameRegistry.registerBlock(RotaryCraft.beamblock, "BeamBlock");
@@ -148,7 +147,7 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 
-		OreDictionary.registerOre("glassHardened", RotaryCraft.obsidianglass);
+		OreDictionary.registerOre("glassHardened", RotaryCraft.blastglass);
 
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
@@ -180,10 +179,10 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
 		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
 
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.LUBE_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.JET_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.ETHANOL_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.nitrogenFluid, FluidContainerRegistry.BUCKET_VOLUME*ItemFuelLubeBucket.NITROGEN_VALUE), ItemRegistry.BUCKET.getStackOfMetadata(3), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.nitrogenFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(3), new ItemStack(Item.bucketEmpty));
 	}
 
 	@SideOnly(Side.CLIENT)

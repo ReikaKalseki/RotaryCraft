@@ -136,7 +136,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return (smelttick * par1) / SMELTTICKS;
 	}
 
-	public void getFuel(World world, int x, int y, int z, int meta) {
+	private void getFuel(World world, int x, int y, int z, int meta) {
 		if (tickcount2 >= 100) {
 			fuel.removeLiquid(100);
 			tickcount2 = 0;
@@ -393,6 +393,14 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.5F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 12F);
 	}
 
+	public int getAccelerant() {
+		return accel.getLevel();
+	}
+
+	public Fluid getAccelerantType() {
+		return accel.getActualFluid();
+	}
+
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		Fluid fluid = resource.getFluid();
@@ -478,5 +486,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	@Override
 	public String getOperationalStatus() {
 		return fuel.isEmpty() ? "No Fuel" : this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
+	}
+
+	public void removeFuel(int amt) {
+		fuel.removeLiquid(amt);
 	}
 }

@@ -29,7 +29,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -208,7 +207,7 @@ public class BlockGearbox extends BlockModelledMachine {
 				}
 				else if (ReikaItemHelper.matchStacks(held, ItemStacks.lubebucket) && held.stackSize == 1) {
 					if (tile.getGearboxType().isDamageableGear()) {
-						int amt = ItemFuelLubeBucket.LUBE_VALUE*1000;
+						int amt = 1000;
 						if (tile.canTakeLubricant(amt)) {
 							tile.addLubricant(amt);
 							if (!ep.capabilities.isCreativeMode)

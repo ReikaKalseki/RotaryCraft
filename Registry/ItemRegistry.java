@@ -232,6 +232,16 @@ public enum ItemRegistry implements RegistryEnum {
 		return false;
 	}
 
+	public boolean isBedrockTypeArmor() {
+		if (this == BEDJUMP)
+			return true;
+		if (this == BEDPACK)
+			return true;
+		if (this == BEDREVEAL)
+			return true;
+		return this.isBedrockArmor();
+	}
+
 	@Override
 	public Object[] getConstructorParams() {
 		if (this.isArmor()) {
@@ -247,7 +257,7 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	private EnumArmorMaterial getArmorMaterial() {
-		if (this == BEDPACK || this == BEDJUMP)
+		if (this.isBedrockTypeArmor())
 			return RotaryCraft.BEDROCK;
 		if (this == JETPACK)
 			return RotaryCraft.JETPACK;

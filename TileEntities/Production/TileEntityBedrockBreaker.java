@@ -89,6 +89,8 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	private boolean canBreakAt(World world, int x, int y, int z) {
 		if (y < 0)
 			return false;
+		if (y > 255)
+			return false;
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
 		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt(world, x, y, z, placer);

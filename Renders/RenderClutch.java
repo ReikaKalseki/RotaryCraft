@@ -19,12 +19,14 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ShaftOnly.ModelClutch;
+import Reika.RotaryCraft.Models.Animated.ShaftOnly.ModelVClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 
 public class RenderClutch extends RotaryTERenderer
 {
 
 	private ModelClutch ClutchModel = new ModelClutch();
+	private ModelVClutch ClutchModelV = new ModelVClutch();
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -39,8 +41,10 @@ public class RenderClutch extends RotaryTERenderer
 			var9 = tile.getBlockMetadata();
 
 		ModelClutch var14;
+		ModelVClutch var15;
 
 		var14 = ClutchModel;
+		var15 = ClutchModelV;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
 
 		this.setupGL(tile, par2, par4, par6);
@@ -62,18 +66,21 @@ public class RenderClutch extends RotaryTERenderer
 			case 3:
 				var11 = 270;
 				break;
+			case 4:
+			case 5:
+				var11 = 0;
+				break;
 			}
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 
 		}
-		//GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		//float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
-		float var13;/*
-
-            var12 = 1.0F - var12;
-            var12 = 1.0F - var12 * var12 * var12;*/
-		var14.renderAll(tile, null, -tile.phi, 0);
+		float var13;
+		if (tile.getBlockMetadata() < 4)
+			var14.renderAll(tile, null, -tile.phi, 0);
+		else {
+			var15.renderAll(tile, null, tile.getBlockMetadata() == 5 ? tile.phi : -tile.phi, 0);
+		}
 
 		this.closeGL(tile);
 	}

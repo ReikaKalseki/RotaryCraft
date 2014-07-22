@@ -154,8 +154,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final EnumArmorMaterial HSLA = EnumHelper.addArmorMaterial("HSLA", 24, new int[]{3, 7, 5, 3}, EnumArmorMaterial.IRON.getEnchantability());
 
 	public static Block decoblock;
+	public static Block blastpane;
 	public static Block blastglass;
-	public static Block obsidianglass;
 
 	public static final EnhancedFluid jetFuelFluid = (EnhancedFluid)new EnhancedFluid("jet fuel").setColor(0xFB5C90).setDensity(810).setViscosity(800);
 	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
@@ -346,8 +346,8 @@ public class RotaryCraft extends DragonAPIMod {
 			logger.log(String.format("Extra iron ore gen enabled, with a scaling factor of %.1fx.", iron));
 		}
 
+		MinecraftForge.setBlockHarvestLevel(blastpane, "pickaxe", 3);
 		MinecraftForge.setBlockHarvestLevel(blastglass, "pickaxe", 3);
-		MinecraftForge.setBlockHarvestLevel(obsidianglass, "pickaxe", 3);
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
 
 		MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);
@@ -355,6 +355,10 @@ public class RotaryCraft extends DragonAPIMod {
 		MinecraftForge.setToolClass(ItemRegistry.STEELSHOVEL.getItemInstance(), "shovel", 2);
 
 		FMLInterModComms.sendMessage(ModList.THAUMCRAFT.modLabel, "harvestStandardCrop", new ItemStack(RotaryCraft.canola, 1, 9));
+		for (int i = 0; i < RotaryNames.blockNames.length; i++) {
+			ItemStack is = new ItemStack(decoblock, 1, i);
+			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
+		}
 
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
 		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);
@@ -374,6 +378,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Karapol", 25.00F);
 		DonatorController.instance.addDonation(instance, "RiComikka", 15.00F);
 		DonatorController.instance.addDonation(instance, "Spork", 10.00F);
+		DonatorController.instance.addDonation(instance, "Demosthenex", 50.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
@@ -437,9 +442,9 @@ public class RotaryCraft extends DragonAPIMod {
 					CanolaBee bee = new CanolaBee();
 					bee.register();
 					bee.addBreeding("Meadows", "Cultivated", 20);
-					RecipeManagers.centrifugeManager.addRecipe(50, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
+					RecipeManagers.centrifugeManager.addRecipe(30, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
 					FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 20); //was 150
-					RecipeManagers.squeezerManager.addRecipe(50, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
+					RecipeManagers.squeezerManager.addRecipe(30, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -534,8 +539,8 @@ public class RotaryCraft extends DragonAPIMod {
 		modingots = new ItemModOre(ExtraConfigIDs.MODINGOTS.getValue()).setUnlocalizedName("modingots");
 
 		decoblock = new BlockDeco(ExtraConfigIDs.DECOBLOCKS.getValue()).setUnlocalizedName("decoblock");
-		blastglass = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");
-		obsidianglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
+		blastpane = new BlockBlastGlass(ExtraConfigIDs.BLASTPANE.getValue()).setUnlocalizedName("BlastGlassPane");
+		blastglass = new BlockObsidianGlass(ExtraConfigIDs.BLASTGLASS.getValue()).setUnlocalizedName("BlastGlass");
 		canola = new BlockCanola(ExtraConfigIDs.CANOLA.getValue()).setUnlocalizedName("Canola");
 
 		spawner = new ItemSpawner(ExtraConfigIDs.SPAWNERS.getValue()).setUnlocalizedName("spawner").setCreativeTab(instance.isLocked() ? null : tabSpawner);

@@ -35,7 +35,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -148,29 +147,18 @@ ConditionalOperation, DamagingContact {
 		return (grinderCookTime * par1)/2 / this.getOperationTime();
 	}
 
-	/**
-	 * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-	 * ticks and creates a new spawn inside its implementation.
-	 */
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.testIdle();
 		boolean flag1 = false;
 		tickcount++;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 
-		if (this.canSmelt()) {
-			flag1 = true;/*
-				if (inv[1] != null) {
-					inv[1].stackSize--;
-					if (inv[1].stackSize <= 0)
-						inv[1] = null;
-				}*/
-		}
+		this.readPower();
+		if (power < MINPOWER || torque < MINTORQUE)
+			return;
 		if (this.canSmelt()) {
 			grinderCookTime++;
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
 			if (grinderCookTime >= this.getOperationTime()) {
 				grinderCookTime = 0;
 				tickcount = 0;
@@ -182,22 +170,16 @@ ConditionalOperation, DamagingContact {
 			grinderCookTime = 0;
 		if (flag1)
 			this.onInventoryChanged();
-		if (inv[2] != null && tank.getLevel() >= ItemFuelLubeBucket.LUBE_VALUE*1000 && !world.isRemote) {
+		if (inv[2] != null && tank.getLevel() >= 1000 && !world.isRemote) {
 			if (inv[2].itemID == Item.bucketEmpty.itemID && inv[2].stackSize == 1) {
 				inv[2] = ItemStacks.lubebucket.copy();
-				tank.removeLiquid(ItemFuelLubeBucket.LUBE_VALUE*1000);
+				tank.removeLiquid(1000);
 			}
 		}
 	}
 
-	/**
-	 * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
-	 */
 	private boolean canSmelt()
 	{
-		this.readPower();
-		if (!(power >= MINPOWER && torque >= MINTORQUE))
-			return false;
 		if (inv[0] == null)
 		{
 			return false;

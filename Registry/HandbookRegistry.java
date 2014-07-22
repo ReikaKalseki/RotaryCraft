@@ -1020,7 +1020,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == COMPACTS)
 			return ItemStacks.prismane;
 		if (this == GLASS)
-			return new ItemStack(RotaryCraft.obsidianglass);
+			return new ItemStack(RotaryCraft.blastglass);
 		if (this == SPAWNERS)
 			return new ItemStack(RotaryCraft.spawner);
 		if (this == YEAST)

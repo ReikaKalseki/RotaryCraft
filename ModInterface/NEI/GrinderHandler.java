@@ -56,7 +56,8 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		}
 
 		public ItemStack getEntry() {
-			return input.get((int)(System.nanoTime()/1000000000)%input.size());
+			ItemStack is = input.get((int)(System.nanoTime()/1000000000)%input.size());
+			return ReikaItemHelper.getSizedItemStack(is, 1);
 		}
 	}
 
@@ -123,10 +124,10 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		if (ingredient.itemID == ItemRegistry.CANOLA.getShiftedID()) {
 			arecipes.add(new CanolaRecipe());
 		}
-		if (ReikaBlockHelper.isOre(ingredient)) {
+		else if (ReikaBlockHelper.isOre(ingredient)) {
 			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
 		}
-		if (RecipesGrinder.getRecipes().isGrindable(ingredient)) {
+		else if (RecipesGrinder.getRecipes().isGrindable(ingredient)) {
 			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));
 		}
 	}

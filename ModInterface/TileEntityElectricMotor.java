@@ -62,55 +62,13 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 		read = this.getFacing();
 		write = read.getOpposite();
 
-		/*
-		if (numberCoils == 5) {
-			type = Tier.HIGH;
-		}
-		else if (numberCoils >= 2) {
-			type = Tier.MEDIUM;
-		}
-		else
-			type = Tier.LOW;
-		if (this.isGettingSufficientPower()) {
-			omega = type.outputSpeed;
-			torque = type.outputTorque;
-			float pit = 1+((type.ordinal()-1)/3F);
-			float m = 1.025F;
-			if (type == Tier.LOW)
-				m = 2.31F;
-			if (type == Tier.HIGH)
-				m = 0.572F;
-			if (tickcount >= EngineType.DC.getSoundLength()*pit*m) {
-				SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.36F, pit);
-				tickcount = 0;
-			}
-		}
-		else {
-			omega = torque = 0;
-			tickcount = 2000;
-		}
-		power = (long)omega*(long)torque;*/
-		if (!this.hasEnoughEnergy()) {
-			torque = 0;
-			omega = 0;
-			power = 0;
-			//storedEnergy = 0;
-		}
-		else {
-			omega = this.getSpeed();
-			torque = this.getTorque();
-
-			power = (long)torque*(long)omega;
-
-			if (!world.isRemote) {
-				storedEnergy -= this.getConsumedUnitsPerTick();
-
-				tickcount++;
-				if (power > 0) {
-					if (tickcount >= 294) {
-						tickcount = 0;
-						SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.2F, 0.51F);
-					}
+		this.updateSpeed();
+		if (!world.isRemote) {
+			tickcount++;
+			if (power > 0) {
+				if (tickcount >= 294) {
+					tickcount = 0;
+					SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.2F, 0.51F);
 				}
 			}
 		}
@@ -122,19 +80,6 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	public long getMaxPower() {
 		return power;
 	}
-	/*
-	@Override
-	public long getCurrentPower() {
-		return this.getPowerOut();
-	}
-
-	public long getPowerOut() {
-		return type.outputSpeed*type.outputTorque;
-	}
-
-	public Tier getVoltageTier() {
-		return type;
-	}*/
 
 	@Override
 	public boolean canConnect(ForgeDirection dir, Object src) {

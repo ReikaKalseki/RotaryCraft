@@ -348,7 +348,7 @@ public final class HandbookAuxData {
 		}
 		else if (h == HandbookRegistry.GLASS) {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.obsidian), dx+87, dy+28);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.obsidianglass), dx+145, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.blastglass), dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.JETPACK) {
 			int k = (int)((System.nanoTime()/2000000000)%2);

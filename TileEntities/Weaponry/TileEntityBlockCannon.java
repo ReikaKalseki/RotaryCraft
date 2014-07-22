@@ -76,7 +76,8 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	private int getReqTorque(ItemStack is) {
 		double m = this.getBlockMass(is);
-		return ReikaMathLibrary.ceil2exp((int)(velocity*m));
+		int base = ReikaMathLibrary.ceil2exp((int)(velocity*m))/4;
+		return base;
 	}
 
 	private ItemStack getNextToFire() {

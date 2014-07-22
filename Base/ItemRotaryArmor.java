@@ -103,12 +103,12 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	}
 
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource src, double damage, int slot) {
-		double protection = this.providesProtection() && this.isVulnerableTo(src) ? damageReduceAmount/100D/this.getDamageMultiplier() : 0;
+		double protection = this.providesProtection() && this.isVulnerableTo(src) ? damageReduceAmount/100D/this.getDamageMultiplier(src) : 0;
 		ArmorProperties prop = new ArmorProperties(Integer.MAX_VALUE, protection, Integer.MAX_VALUE);
 		return prop;
 	}
 
-	public abstract double getDamageMultiplier();
+	public abstract double getDamageMultiplier(DamageSource src);
 
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
 		if (this.canBeDamaged() && this.isVulnerableTo(source)) {

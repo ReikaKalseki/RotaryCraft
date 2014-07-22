@@ -109,34 +109,23 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 		if (storedEnergy < 0)
 			storedEnergy = (int)pp.getMaxEnergyStored();
 
-		if (!this.hasEnoughEnergy()) {
-			torque = 0;
-			omega = 0;
-			power = 0;
-			//storedEnergy = 0;
-			return;
-		}
-		else {
-			if (!world.isRemote) {
-				float mj = pp.getEnergyStored();
+		this.updateSpeed();
+		if (!world.isRemote) {
+			sound.update();
 
-				torque = this.getTorque();
-				omega = this.getSpeed();
-
-				power = (long)torque*(long)omega;
-
-				pp.useEnergy(this.getMJPerTick(), this.getMJPerTick(), true);
-
-				sound.update();
-
-				if (power > 0) {
-					if (sound.checkCap())
-						SoundRegistry.PNEUMATIC.playSoundAtBlock(world, x, y, z, 1.2F, 1);
-				}
+			if (power > 0) {
+				if (sound.checkCap())
+					SoundRegistry.PNEUMATIC.playSoundAtBlock(world, x, y, z, 1.2F, 1);
 			}
 		}
 
 		this.basicPowerReceiver();
+	}
+
+	@Override
+	protected void usePower() {
+		float amt = this.getMJPerTick();
+		pp.useEnergy(amt, amt, true);
 	}
 
 	public int powerRequest(ForgeDirection from) {

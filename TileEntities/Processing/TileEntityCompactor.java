@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -34,7 +35,8 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, DiscreteFunction, ConditionalOperation
+public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, ThermalMachine,
+DiscreteFunction,ConditionalOperation
 {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -522,5 +524,25 @@ public class TileEntityCompactor extends InventoriedPowerReceiver implements Tem
 		if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]))
 			return "Insufficient Pressure";
 		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
+	}
+
+	@Override
+	public void setTemperature(int T) {
+		temperature = T;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
+	@Override
+	public void onOverheat(World world, int x, int y, int z) {
+		this.overheat(world, x, y, z);
+	}
+
+	@Override
+	public boolean canBeFrictionHeated() {
+		return true;
 	}
 }

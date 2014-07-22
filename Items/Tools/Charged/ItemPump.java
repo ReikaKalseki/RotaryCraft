@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
@@ -65,13 +66,27 @@ public class ItemPump extends ItemChargedTool {
 						else {
 							Fluid f2 = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
 							int amt = is.stackTagCompound.getInteger("lvl");
-							if (f2.equals(f) && amt < TileEntityReservoir.CAPACITY) {
-								is.stackTagCompound.setInteger("lvl", amt+1000);
-								world.setBlock(x, y, z, 0);
-								is.setItemDamage(is.getItemDamage()-1);
+							if (f2.equals(f)) {
+								if (amt < TileEntityReservoir.CAPACITY) {
+									is.stackTagCompound.setInteger("lvl", amt+1000);
+									world.setBlock(x, y, z, 0);
+									is.setItemDamage(is.getItemDamage()-1);
+								}
+								else {
+									RotaryCraft.logger.debug("Too little space");
+								}
+							}
+							else {
+								RotaryCraft.logger.debug("Fluid mismatch "+f+" != "+f2);
 							}
 						}
 					}
+					else {
+						RotaryCraft.logger.debug("Null fluid for block "+id+":"+b+", yet was marked as such!");
+					}
+				}
+				else {
+					RotaryCraft.logger.debug("Not a fluid block ("+id+":"+b+")");
 				}
 			}
 		}

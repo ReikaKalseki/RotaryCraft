@@ -82,7 +82,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 				int lube = te.getLubricant();
 				if (is.stackTagCompound == null)
 					is.stackTagCompound = new NBTTagCompound();
-				is.stackTagCompound.setLong("lube", lube);
+				is.stackTagCompound.setInteger("lube", lube);
 			}
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}

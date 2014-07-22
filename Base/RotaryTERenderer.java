@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
@@ -48,7 +49,7 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		int alpha = te.iotick;
 		Color[] colors = RotaryAux.sideColors;
 		ReikaRenderHelper.prepareGeoDraw(true);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.DEFAULT.apply();
 		Tessellator v5 = Tessellator.instance;
 		v5.startDrawing(GL11.GL_LINE_LOOP);
 		v5.setColorRGBA(colors[0].getRed(), colors[0].getGreen(), colors[0].getBlue(), alpha);

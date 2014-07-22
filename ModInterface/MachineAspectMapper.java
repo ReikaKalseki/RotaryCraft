@@ -124,6 +124,7 @@ public class MachineAspectMapper {
 
 		this.addAspect(MachineRegistry.SONICWEAPON, Aspect.WEAPON, 8);
 		this.addAspect(MachineRegistry.SONICWEAPON, Aspect.SENSES, 8);
+		this.addAspect(MachineRegistry.SONICWEAPON, Aspect.AURA, 2);
 
 		this.addAspect(MachineRegistry.BLASTFURNACE, Aspect.ORDER, 5);
 		this.addAspect(MachineRegistry.BLASTFURNACE, Aspect.EXCHANGE, 5);
@@ -144,7 +145,7 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.WEATHERCONTROLLER, Aspect.WEATHER, 8);
 		this.addAspect(MachineRegistry.WEATHERCONTROLLER, Aspect.WATER, 2);
 
-		this.addAspect(MachineRegistry.REFRESHER, Aspect.TIME, 4);
+		//this.addAspect(MachineRegistry.REFRESHER, Aspect.TIME, 4); not native to ThaumCraft
 
 		this.addAspect(MachineRegistry.FREEZEGUN, Aspect.WEAPON, 8);
 		this.addAspect(MachineRegistry.FREEZEGUN, Aspect.ICE, 6);
@@ -167,6 +168,132 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.LASERGUN, Aspect.LIGHT, 4);
 
 		this.addAspect(MachineRegistry.ITEMCANNON, Aspect.TRAVEL, 6);
+
+		this.addAspect(MachineRegistry.LANDMINE, Aspect.TRAP, 8);
+		this.addAspect(MachineRegistry.LANDMINE, Aspect.WEAPON, 8);
+
+		this.addAspect(MachineRegistry.FRICTION, Aspect.FIRE, 2);
+		this.addAspect(MachineRegistry.FRICTION, Aspect.EXCHANGE, 2);
+
+		this.addAspect(MachineRegistry.BLOCKCANNON, Aspect.WEAPON, 4);
+		this.addAspect(MachineRegistry.BLOCKCANNON, Aspect.TRAVEL, 3);
+
+		this.addAspect(MachineRegistry.BUCKETFILLER, Aspect.EXCHANGE, 2);
+
+		this.addAspect(MachineRegistry.MIRROR, Aspect.LIGHT, 6);
+		this.addAspect(MachineRegistry.MIRROR, Aspect.CRYSTAL, 3);
+
+		this.addAspect(MachineRegistry.SOLARTOWER, Aspect.ENERGY, 8);
+
+		this.addAspect(MachineRegistry.SPYCAM, Aspect.SENSES, 8);
+
+		this.addAspect(MachineRegistry.SELFDESTRUCT, Aspect.TRAP, 8);
+		this.addAspect(MachineRegistry.SELFDESTRUCT, Aspect.WEAPON, 6);
+
+		this.addAspect(MachineRegistry.COMPRESSOR, Aspect.AIR, 4);
+
+		this.addAspect(MachineRegistry.PNEUENGINE, Aspect.AIR, 4);
+
+		this.addAspect(MachineRegistry.LAMP, Aspect.LIGHT, 8);
+
+		this.addAspect(MachineRegistry.EMP, Aspect.WEAPON, 12);
+		this.addAspect(MachineRegistry.EMP, Aspect.ENERGY, 40);
+		this.addAspect(MachineRegistry.EMP, Aspect.ENTROPY, 12);
+		this.addAspect(MachineRegistry.EMP, Aspect.AURA, 20);
+
+		this.addAspect(MachineRegistry.LINEBUILDER, Aspect.TRAVEL, 2);
+
+		this.addAspect(MachineRegistry.BEAMMIRROR, Aspect.LIGHT, 4);
+
+		this.addAspect(MachineRegistry.TERRAFORMER, Aspect.EARTH, 4);
+		this.addAspect(MachineRegistry.TERRAFORMER, Aspect.WATER, 4);
+		this.addAspect(MachineRegistry.TERRAFORMER, Aspect.ICE, 4);
+		this.addAspect(MachineRegistry.TERRAFORMER, Aspect.FIRE, 4);
+		this.addAspect(MachineRegistry.TERRAFORMER, Aspect.AIR, 4);
+
+		this.addAspect(MachineRegistry.SORTING, Aspect.MIND, 2);
+
+		this.addAspect(MachineRegistry.FUELENHANCER, Aspect.ENERGY, 3);
+		this.addAspect(MachineRegistry.FUELENHANCER, Aspect.CRAFT, 3);
+
+		this.addAspect(MachineRegistry.ARROWGUN, Aspect.WEAPON, 4);
+		this.addAspect(MachineRegistry.ARROWGUN, Aspect.FLIGHT, 1);
+
+		this.addAspect(MachineRegistry.BOILER, Aspect.WATER, 4);
+
+		this.addAspect(MachineRegistry.STEAMTURBINE, Aspect.WATER, 4);
+
+		this.addAspect(MachineRegistry.FERTILIZER, Aspect.PLANT, 6);
+		this.addAspect(MachineRegistry.FERTILIZER, Aspect.WATER, 4);
+
+		this.addAspect(MachineRegistry.LAVAMAKER, Aspect.FIRE, 6);
+		this.addAspect(MachineRegistry.LAVAMAKER, Aspect.STONE, 4);
+
+		this.addAspect(MachineRegistry.AGGREGATOR, Aspect.WATER, 8);
+		this.addAspect(MachineRegistry.AGGREGATOR, Aspect.AIR, 4);
+
+		this.addAspect(MachineRegistry.AIRGUN, Aspect.WEAPON, 4);
+		this.addAspect(MachineRegistry.AIRGUN, Aspect.AIR, 4);
+		this.addAspect(MachineRegistry.AIRGUN, Aspect.TRAVEL, 4);
+
+		this.addAspect(MachineRegistry.SONICBORER, Aspect.WEAPON, 1);
+		this.addAspect(MachineRegistry.SONICBORER, Aspect.AIR, 6);
+		this.addAspect(MachineRegistry.SONICBORER, Aspect.MINE, 8);
+		this.addAspect(MachineRegistry.SONICBORER, Aspect.ENTROPY, 2);
+
+		this.addAspect(MachineRegistry.FUELENGINE, Aspect.ENERGY, 8);
+		this.addAspect(MachineRegistry.FUELENGINE, Aspect.FIRE, 3);
+		this.addAspect(MachineRegistry.FUELENGINE, Aspect.WATER, 1);
+
+		this.addAspect(MachineRegistry.FILLINGSTATION, Aspect.WATER, 1);
+		this.addAspect(MachineRegistry.FILLINGSTATION, Aspect.EXCHANGE, 1);
+
+		this.addAspect(MachineRegistry.BELT, Aspect.CLOTH, 4);
+
+		this.addAspect(MachineRegistry.VANDEGRAFF, Aspect.WEAPON, 6);
+		this.addAspect(MachineRegistry.VANDEGRAFF, Aspect.EXCHANGE, 2);
+		this.addAspect(MachineRegistry.VANDEGRAFF, Aspect.ENERGY, 4);
+
+		this.addAspect(MachineRegistry.DEFOLIATOR, Aspect.PLANT, 4);
+		this.addAspect(MachineRegistry.DEFOLIATOR, Aspect.POISON, 8);
+		this.addAspect(MachineRegistry.DEFOLIATOR, Aspect.AURA, 2);
+
+		this.addAspect(MachineRegistry.BIGFURNACE, Aspect.FIRE, 8);
+		this.addAspect(MachineRegistry.BIGFURNACE, Aspect.STONE, 2);
+		this.addAspect(MachineRegistry.BIGFURNACE, Aspect.CRAFT, 4);
+
+		this.addAspect(MachineRegistry.DISTILLER, Aspect.CRAFT, 3);
+
+		this.addAspect(MachineRegistry.CRYSTALLIZER, Aspect.CRYSTAL, 4);
+		this.addAspect(MachineRegistry.CRYSTALLIZER, Aspect.ICE, 8);
+
+		this.addAspect(MachineRegistry.PARTICLE, Aspect.LIGHT, 2);
+		this.addAspect(MachineRegistry.PARTICLE, Aspect.SENSES, 4);
+
+		this.addAspect(MachineRegistry.LAWNSPRINKLER, Aspect.WATER, 6);
+		this.addAspect(MachineRegistry.LAWNSPRINKLER, Aspect.PLANT, 6);
+
+		this.addAspect(MachineRegistry.GRINDSTONE, Aspect.TOOL, 6);
+		this.addAspect(MachineRegistry.GRINDSTONE, Aspect.ORDER, 4);
+
+		this.addAspect(MachineRegistry.BLOWER, Aspect.TRAVEL, 8);
+
+		this.addAspect(MachineRegistry.REFRIGERATOR, Aspect.ICE, 8);
+		this.addAspect(MachineRegistry.REFRIGERATOR, Aspect.AIR, 4);
+
+		this.addAspect(MachineRegistry.GASTANK, Aspect.VOID, 12);
+		this.addAspect(MachineRegistry.GASTANK, Aspect.AIR, 6);
+
+		this.addAspect(MachineRegistry.CRAFTER, Aspect.CRAFT, 8);
+
+		this.addAspect(MachineRegistry.COMPOSTER, Aspect.PLANT, 4);
+		this.addAspect(MachineRegistry.COMPOSTER, Aspect.EXCHANGE, 4);
+		this.addAspect(MachineRegistry.COMPOSTER, Aspect.LIFE, 2);
+
+		this.addAspect(MachineRegistry.RAILGUN, Aspect.FLIGHT, 5);
+		this.addAspect(MachineRegistry.RAILGUN, Aspect.WEAPON, 8);
+
+		this.addAspect(MachineRegistry.CENTRIFUGE, Aspect.CRAFT, 4);
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {
@@ -255,6 +382,13 @@ public class MachineAspectMapper {
 		}
 		if (m.hasNBTVariants()) {
 			al.merge(Aspect.EXCHANGE, 1);
+		}
+		if (m.isModConversionEngine() || m.isEnergyToPower()) {
+			al.merge(Aspect.EXCHANGE, 4);
+			al.merge(Aspect.ENERGY, 6);
+		}
+		if (m.isEnchantable()) {
+			//al.merge(Aspect.MAGIC, 2);
 		}
 		AspectList prekey = data.get(new MachineKey(m, offset));
 		if (prekey != null) {

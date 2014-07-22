@@ -16,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -23,8 +24,14 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,6 +88,10 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			return true;
 		if (f.equals(FluidRegistry.getFluid("jet fuel")))
 			return true;
+		if (f.equals(FluidRegistry.getFluid("bioethanol")))
+			return true;
+		if (f.equals(FluidRegistry.getFluid("biofuel")))
+			return true;
 		return false;
 	}
 
@@ -125,6 +136,8 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 		addCreativeFluid("fuel");
 		addCreativeFluid("jet fuel");
 		addCreativeFluid("rc ethanol");
+		addCreativeFluid("bioethanol");
+		addCreativeFluid("biofuel");
 	}
 
 	@Override
@@ -148,6 +161,117 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			}
 		}
 		return is;
+	}
+
+	private void removeFuel(ItemStack is, int amt) {
+		int newfuel = this.getCurrentFillLevel(is)-amt;
+		is.stackTagCompound.setInteger("fuel", newfuel);
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		if (m == MachineRegistry.ENGINE) {
+			TileEntityEngine te = (TileEntityEngine)tile;
+			EngineType eng = te.getEngineType();
+			Fluid f = this.getCurrentFluid(is);
+			if (f != null) {
+				int amt = Math.min(this.getCurrentFillLevel(is), te.getFuelCapacity()-te.getFuelLevel());
+				if (amt > 0) {
+					boolean flag = false;
+					if (eng.isJetFueled() && f.equals(FluidRegistry.getFluid("jet fuel"))) {
+						te.addFuel(amt);
+						flag = true;
+					}
+					else if (eng.isEthanolFueled() && f.equals(FluidRegistry.getFluid("rc ethanol"))) {
+						te.addFuel(amt);
+						flag = true;
+					}
+					if (flag) {
+						this.removeFuel(is, amt);
+						return true;
+					}
+				}
+			}
+			else {
+				int amt = Math.min(this.getCapacity(is), te.getFuelLevel());
+				if (amt > 0) {
+					if (eng.isJetFueled()) {
+						this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
+					}
+					else if (eng.isEthanolFueled()) {
+						this.addFluid(is, FluidRegistry.getFluid("rc ethanol"), amt);
+					}
+					te.subtractFuel(amt);
+					return true;
+				}
+			}
+		}
+		if (m == MachineRegistry.FUELENGINE) {
+			TileEntityFuelEngine te = (TileEntityFuelEngine)tile;
+			Fluid f = this.getCurrentFluid(is);
+			if (f == null) {
+				int amt = Math.min(this.getCapacity(is), te.getFuelLevel());
+				if (amt > 0) {
+					this.addFluid(is, FluidRegistry.getFluid("fuel"), amt);
+					te.removeFuel(amt);
+					return true;
+				}
+			}
+			else if (f.equals(FluidRegistry.getFluid("fuel"))) {
+				int amt = Math.min(this.getCurrentFillLevel(is), te.CAPACITY-te.getFuelLevel());
+				if (amt > 0) {
+					te.addFuel(amt);
+					this.removeFuel(is, amt);
+					return true;
+				}
+			}
+		}
+		if (m == MachineRegistry.PULSEJET) {
+			TileEntityPulseFurnace te = (TileEntityPulseFurnace)tile;
+			Fluid f = this.getCurrentFluid(is);
+			if (f == null) {
+				int amt = Math.min(this.getCapacity(is), te.getFuel());
+				if (amt > 0) {
+					this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
+					te.removeFuel(amt);
+					return true;
+				}
+			}
+			else if (f.equals(FluidRegistry.getFluid("jet fuel"))) {
+				int amt = Math.min(this.getCurrentFillLevel(is), te.MAXFUEL-te.getFuel());
+				if (amt > 0) {
+					te.addFuel(amt);
+					this.removeFuel(is, amt);
+					return true;
+				}
+			}
+		}
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir te = (TileEntityReservoir)tile;
+			Fluid f = this.getCurrentFluid(is);
+			Fluid f2 = te.getFluid();
+			if (f != null) {
+				int amt = Math.min(this.getCurrentFillLevel(is), te.CAPACITY-te.getLevel());
+				if (amt > 0 && te.canAcceptFluid(f)) {
+					te.addLiquid(amt, f);
+					this.removeFuel(is, amt);
+					return true;
+				}
+			}
+			else {
+				if (this.isValidFluid(f2)) {
+					int amt = Math.min(this.getCapacity(is), te.getLevel());
+					if (amt > 0) {
+						te.removeLiquid(amt);
+						this.addFluid(is, f2, amt);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

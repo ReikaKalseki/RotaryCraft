@@ -19,6 +19,7 @@ import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
@@ -51,8 +52,9 @@ public class ItemSpringBoots extends ItemChargedArmor {
 	}
 
 	@Override
-	public double getDamageMultiplier() {
-		return itemID == ItemRegistry.BEDJUMP.getShiftedID() ? 0.35 : 1;
+	public double getDamageMultiplier(DamageSource src) {
+		ItemBedrockArmor arm = (ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance();
+		return itemID == ItemRegistry.BEDJUMP.getShiftedID() ? arm.getDamageMultiplier(src) : 1;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -307,7 +308,7 @@ public class RenderSEngine extends RotaryTERenderer
 
 		ReikaRenderHelper.prepareGeoDraw(a < 255);
 		double d = -0.5*s*2;
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.PREALPHA.apply();
 		for (float i = 0; i < 360; i += 22.5F) {
 			GL11.glTranslated(0.5, 0.5, 0);
 			GL11.glRotated(i, 0, 0, 1);
@@ -334,7 +335,7 @@ public class RenderSEngine extends RotaryTERenderer
 			GL11.glTranslated(-0.5, -0.5, 0);
 			GL11.glTranslated(0, 0, 0.01);
 		}
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.DEFAULT.apply();
 		ReikaRenderHelper.exitGeoDraw();
 		GL11.glTranslated(-par2, -par4, -par6);
 	}

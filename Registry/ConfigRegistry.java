@@ -76,7 +76,8 @@ public enum ConfigRegistry implements ConfigList {
 	ALLOWTNTCANNON("Allow TNT Cannon", true),
 	EXTRAIRON("Iron Ore Density", 1F),
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
-	CLEARCHAT("Tools Clear Chat", true);
+	CLEARCHAT("Tools Clear Chat", true),
+	KICKFLYING("Jetpack bypasses allow-flight property", true);
 
 	private String label;
 	private boolean defaultState;

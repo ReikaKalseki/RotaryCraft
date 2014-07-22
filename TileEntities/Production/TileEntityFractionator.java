@@ -21,7 +21,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
-import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -87,10 +86,10 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		super.updateTileEntity();
 		this.getPowerBelow();
 		power = (long)omega * (long)torque;
-		if (inv[ingredients.length+1] != null && tank.getLevel() >= ItemFuelLubeBucket.JET_VALUE*1000) {
+		if (inv[ingredients.length+1] != null && tank.getLevel() >= 1000) {
 			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket.copy();
-				tank.removeLiquid(ItemFuelLubeBucket.JET_VALUE*1000);
+				tank.removeLiquid(1000);
 			}
 		}
 		if (power < MINPOWER || omega < MINSPEED) {

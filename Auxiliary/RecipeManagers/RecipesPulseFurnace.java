@@ -44,7 +44,7 @@ public class RecipesPulseFurnace
 
 	private RecipesPulseFurnace()
 	{
-		this.addSmelting(Block.obsidian.blockID, new ItemStack(RotaryCraft.obsidianglass, 1, 0), 0.7F);
+		this.addSmelting(Block.obsidian.blockID, new ItemStack(RotaryCraft.blastglass, 1, 0), 0.7F);
 		this.addSmelting(Item.ingotIron.itemID, new ItemStack(RotaryCraft.shaftcraft, 1, 1), 0.4F);	//Iron ingot
 
 		//RECYCLING

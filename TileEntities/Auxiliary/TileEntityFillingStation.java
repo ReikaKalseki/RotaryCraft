@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidInOut;
@@ -31,6 +32,11 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 	public static final int CAPACITY = 32000;
 
 	public static final int FUEL_PER_CRYSTAL = 250;
+
+	public static final int INPUT_SLOT = 3;
+	public static final int FUEL_SLOT = 1;
+	public static final int OUTPUT_SLOT = 2;
+	public static final int FILLING_SLOT = 0;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -51,31 +57,38 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 				this.fill();
 			}
 		}
+		else {
+			ItemStack is = inv[INPUT_SLOT];
+			if (is != null && is.getItem() instanceof Fillable) {
+				ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(is, 1), inv, FILLING_SLOT);
+				ReikaInventoryHelper.decrStack(INPUT_SLOT, inv);
+			}
+		}
 	}
 
 	private boolean hasContainer() {
-		return inv[0] != null && FluidContainerRegistry.isContainer(inv[0]);
+		return inv[FILLING_SLOT] != null && FluidContainerRegistry.isContainer(inv[FILLING_SLOT]);
 	}
 
 	private void fillContainer() {
 		int maxadd = this.getFluidToAdd()*128;
-		ItemStack filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(tank.getActualFluid(), maxadd), inv[0]);
+		ItemStack filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(tank.getActualFluid(), maxadd), inv[FILLING_SLOT]);
 		if (filled != null) {
 			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(filled);
 			if (fs != null && fs.amount > 0) {
 				int added = fs.amount;
 				tank.removeLiquid(added);
-				inv[0] = filled;
+				inv[FILLING_SLOT] = filled;
 			}
 		}
 	}
 
 	public boolean canMakeFuel() {
-		if (inv[1] == null)
+		if (inv[FUEL_SLOT] == null)
 			return false;
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
 		if (fs == null) {
-			boolean item = inv[1].itemID == ItemRegistry.ETHANOL.getShiftedID();
+			boolean item = inv[FUEL_SLOT].itemID == ItemRegistry.ETHANOL.getShiftedID();
 			boolean space = tank.canTakeIn(FUEL_PER_CRYSTAL) && (tank.isEmpty() || tank.getActualFluid().equals(FluidRegistry.getFluid("rc ethanol")));
 			return item && space;
 		}
@@ -87,22 +100,41 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 	}
 
 	public void makeFuel() {
-		if (inv[1].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
+		if (inv[FUEL_SLOT].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
 			tank.addLiquid(FUEL_PER_CRYSTAL, FluidRegistry.getFluid("rc ethanol"));
 			ReikaInventoryHelper.decrStack(1, inv);
 			return;
 		}
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[1]);
+		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
 		tank.addLiquid(fs.amount, fs.getFluid());
-		inv[1] = new ItemStack(Item.bucketEmpty);
+		inv[FUEL_SLOT] = new ItemStack(Item.bucketEmpty);
 	}
 
 	private void fill() {
-		ItemStack is = inv[0];
+		ItemStack is = inv[FILLING_SLOT];
 		Fillable i = (Fillable)is.getItem();
 		int added = i.addFluid(is, tank.getActualFluid(), this.getFluidToAdd());
 		if (added > 0)
 			tank.removeLiquid(added);
+		if (this.canShuttleItem()) {
+			if (ReikaInventoryHelper.addOrSetStack(is, inv, 2))
+				inv[FILLING_SLOT] = null;
+		}
+	}
+
+	private boolean canShuttleItem() {
+		ItemStack is = inv[FILLING_SLOT];
+		Fillable f = (Fillable)is.getItem();
+		ItemStack is2 = inv[OUTPUT_SLOT];
+		if (is2 == null)
+			return f.isFull(is);
+		if (!ReikaItemHelper.matchStacks(is, is2))
+			return false;
+		if (!f.isFull(is) || !f.isFull(is2))
+			return false;
+		if (is.stackSize+is2.stackSize > is.getMaxStackSize())
+			return false;
+		return true;
 	}
 
 	private int getFluidToAdd() {
@@ -130,17 +162,12 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		if (i == 0) {
-			if (itemstack != null && itemstack.getItem() instanceof Fillable) {
-				return ((Fillable)itemstack.getItem()).isFull(itemstack);
-			}
-		}
-		return false;
+		return i == OUTPUT_SLOT;
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return 2;
+		return 4;
 	}
 
 	@Override
@@ -150,9 +177,9 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (i == 0)
+		if (i == INPUT_SLOT)
 			return itemstack.getItem() instanceof Fillable;
-		if (i == 1) {
+		if (i == FUEL_SLOT) {
 			boolean container = FluidContainerRegistry.isFilledContainer(itemstack);
 			return container || itemstack.itemID == ItemRegistry.ETHANOL.getShiftedID();
 		}

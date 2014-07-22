@@ -17,11 +17,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
@@ -228,5 +230,19 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	@Override
 	public String getTexture(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
+	@Override
+	public boolean hitEntity(ItemStack is, EntityLivingBase target, EntityLivingBase ep)
+	{
+		if (target.getClass().getSimpleName().equals("EntityEnt")) {
+			DamageSource src = ep instanceof EntityPlayer ? DamageSource.causePlayerDamage((EntityPlayer)ep) : DamageSource.generic;
+			target.setHealth(1);
+			target.attackEntityFrom(src, Integer.MAX_VALUE);
+			return true;
+		}
+		else {
+			return super.hitEntity(is, target, ep);
+		}
 	}
 }

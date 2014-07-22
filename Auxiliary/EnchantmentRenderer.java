@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
@@ -44,7 +45,7 @@ public abstract class EnchantmentRenderer {
 		float f9 = (System.nanoTime()/100000000)%64/64F;
 		bindGlint();
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+		BlendMode.OVERLAYDARK.apply();
 		float f10 = 0.5F;
 		GL11.glColor4f(f10, f10, f10, 1.0F);
 
@@ -109,7 +110,7 @@ public abstract class EnchantmentRenderer {
 		GL11.glPopMatrix();
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		BlendMode.ADDITIVE2.apply();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
