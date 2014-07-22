@@ -10,8 +10,14 @@
 package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
 public class GuiGPR extends GuiPowerOnlyMachine
@@ -23,6 +29,9 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	int y;
 	public static final int UNIT = 2;
 
+	private boolean pressL;
+	private boolean pressR;
+
 	public GuiGPR(EntityPlayer p5ep, TileEntityGPR GPR) {
 		super(new CoreContainer(p5ep, GPR), GPR);
 		gpr = GPR;
@@ -30,9 +39,32 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		ep = p5ep;
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+
+		boolean keyL = Keyboard.isKeyDown(Keyboard.KEY_LBRACKET);
+		boolean keyR = Keyboard.isKeyDown(Keyboard.KEY_RBRACKET);
+
+		if (keyL && !pressL) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 1);
+			gpr.shift(gpr.getGuiDirection(), 1);
+			pressL = true;
+		}
+		else if (keyL && pressL) {
+			pressL = false;
+		}
+
+		if (keyR && !pressR) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, -1);
+			gpr.shift(gpr.getGuiDirection(), -1);
+			pressR = true;
+		}
+		else if (keyR && pressR) {
+			pressR = false;
+		}
+	}
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);

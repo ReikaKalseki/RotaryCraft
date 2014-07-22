@@ -22,6 +22,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -165,7 +167,10 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
 	private void removeFuel(ItemStack is, int amt) {
 		int newfuel = this.getCurrentFillLevel(is)-amt;
-		is.stackTagCompound.setInteger("fuel", newfuel);
+		if (newfuel > 0)
+			is.stackTagCompound.setInteger("fuel", newfuel);
+		else
+			is.stackTagCompound = null;
 	}
 
 	@Override
@@ -189,6 +194,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 						flag = true;
 					}
 					if (flag) {
+						ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "fuel");
 						this.removeFuel(is, amt);
 						return true;
 					}
@@ -197,14 +203,20 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			else {
 				int amt = Math.min(this.getCapacity(is), te.getFuelLevel());
 				if (amt > 0) {
+					boolean flag = false;
 					if (eng.isJetFueled()) {
 						this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
+						flag = true;
 					}
 					else if (eng.isEthanolFueled()) {
 						this.addFluid(is, FluidRegistry.getFluid("rc ethanol"), amt);
+						flag = true;
 					}
-					te.subtractFuel(amt);
-					return true;
+					if (flag) {
+						te.subtractFuel(amt);
+						ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "fuel");
+						return true;
+					}
 				}
 			}
 		}
@@ -223,6 +235,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.CAPACITY-te.getFuelLevel());
 				if (amt > 0) {
 					te.addFuel(amt);
+					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
 					this.removeFuel(is, amt);
 					return true;
 				}
@@ -236,6 +249,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				if (amt > 0) {
 					this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
 					te.removeFuel(amt);
+					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "fuel");
 					return true;
 				}
 			}
@@ -243,6 +257,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.MAXFUEL-te.getFuel());
 				if (amt > 0) {
 					te.addFuel(amt);
+					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "fuel");
 					this.removeFuel(is, amt);
 					return true;
 				}
@@ -256,6 +271,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.CAPACITY-te.getLevel());
 				if (amt > 0 && te.canAcceptFluid(f)) {
 					te.addLiquid(amt, f);
+					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
 					this.removeFuel(is, amt);
 					return true;
 				}
@@ -265,6 +281,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 					int amt = Math.min(this.getCapacity(is), te.getLevel());
 					if (amt > 0) {
 						te.removeLiquid(amt);
+						ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
 						this.addFluid(is, f2, amt);
 						return true;
 					}

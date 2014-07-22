@@ -817,7 +817,7 @@
 	</separation>
 	<aggregator>
 		<desc>
-			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed.
+			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function.
 		</desc>
 		<note>
 			Required Power: %dW

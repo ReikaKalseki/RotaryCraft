@@ -28,7 +28,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -258,7 +257,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public final int getPacketDelay() {
-		return DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
+		return 1;//DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 
 

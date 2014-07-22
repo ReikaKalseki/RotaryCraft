@@ -54,6 +54,7 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
+import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
@@ -100,6 +101,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityParticleEmitter emitter;
 	private TileEntityBlower blower;
 	private TileEntityDefoliator defo;
+	private TileEntityGPR gpr;
 
 	protected PacketRegistry pack;
 	protected PacketTypes packetType;
@@ -558,6 +560,11 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			case DEFOLIATOR:
 				defo = (TileEntityDefoliator)te;
 				defo.onBlockBreak(world, data[0], data[1], data[2]);
+				break;
+			case GPR:
+				gpr = (TileEntityGPR)te;
+				int direction = data[0];
+				gpr.shift(gpr.getGuiDirection(), direction);
 				break;
 			}
 		}

@@ -46,7 +46,8 @@ public enum PacketRegistry {
 	POWERBUS(59, 62),
 	PARTICLES(63),
 	BLOWER(64, 67),
-	DEFOLIATOR(68);
+	DEFOLIATOR(68),
+	GPR(69);
 
 	private int min;
 	private int max;

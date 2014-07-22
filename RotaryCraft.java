@@ -359,6 +359,7 @@ public class RotaryCraft extends DragonAPIMod {
 			ItemStack is = new ItemStack(decoblock, 1, i);
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
 		}
+		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", new ItemStack(blastglass));
 
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
 		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);

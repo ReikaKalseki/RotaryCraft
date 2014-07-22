@@ -10,7 +10,7 @@
 		Gear units can be made of the alternative gear types. Stronger gears wear down more slowly, and bedrock gears do not wear down at all. Simply craft them using the same base materials as a shaft, but subtituting a gear unit for the rod/shaft.
 	</othergearunit>
 	<othergear>
-		Gears can be crafted from materials other than steel. Wood, Stone, Diamond, and Bedrock can also be used. Different materials consume lubricant and acquire damage at different rates. Bedrock gears do not require lubricant. Bedrock varieties are crafting in the blast furnace like bedrock tools.
+		Gears can be crafted from materials other than steel. Wood, Stone, Diamond, and Bedrock can also be used. Different materials consume lubricant and acquire damage at different rates. Bedrock gears do not require lubricant. Bedrock varieties are crafted in the blast furnace like bedrock tools.
 	</othergear>
 	<netherdust>
 		Netherrack dust is made from grinding netherrack blocks in the grinder, while tar is made by grinding soul sand. Both of these are required constituents of jet fuel due to their hydrocarbon content.

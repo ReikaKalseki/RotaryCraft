@@ -58,6 +58,10 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		offsetX = offsetY = offsetZ = 0;
 	}
 
+	public ForgeDirection getGuiDirection() {
+		return xdir ? ForgeDirection.SOUTH : ForgeDirection.EAST;
+	}
+
 	public double getSpongy(World world, int x, int y, int z) {
 		int range = (this.getBounds()[1]-this.getBounds()[0])/2;
 		int numcave = 0;

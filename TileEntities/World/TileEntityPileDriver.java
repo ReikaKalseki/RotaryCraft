@@ -36,7 +36,6 @@ import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.GeoStrata.Registry.GeoBlocks;
@@ -44,10 +43,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -233,16 +230,16 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	private ArrayList<ItemStack> getDrops(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
-		Block b = Block.blocksList[id];
+		Block b = Block.blocksList[id];/*
 		if (TileEntityBorer.isMineableBedrock(world, x, y, z))
 			return ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt()));
-		else
-			return b != null ? b.getBlockDropped(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
+		else*/
+		return b != null ? b.getBlockDropped(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
 	}
 
 	public int[] getBlockProduct(World world, int x, int y, int z, int id, int meta) {
 		int[] to = {0,0};
-		if (id == Block.bedrock.blockID && !TileEntityBorer.isMineableBedrock(world, x, y, z)) //does not break bedrock unless TF
+		if (id == Block.bedrock.blockID/* && !TileEntityBorer.isMineableBedrock(world, x, y, z)*/) //does not break bedrock unless TF
 			to[0] = id;
 		if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
 			to[0] = id;

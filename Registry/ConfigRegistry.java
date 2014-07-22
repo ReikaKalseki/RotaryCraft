@@ -68,7 +68,7 @@ public enum ConfigRegistry implements ConfigList {
 	CONSERVEPACK("Conservative Jetpack Firing", true),
 	ALLOWBAN("Allow Build Blocking of Some Machines", false),
 	LOGBLOCKS("Log Block Placement and Removal", false),
-	PACKETDELAY("Sync Packet Interval in Ticks", 1),
+	//PACKETDELAY("Sync Packet Interval in Ticks", 1),
 	FLOWSPEED("Fluid Flow Speed", 5),
 	ATTACKBLOCKS("Block Damage from Destructive Machines", true),
 	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false),
