@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -55,7 +56,8 @@ public class RecipesLavaMaker {
 		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000);
 		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 100, 180, 6000);
 
-		this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000);
+		if (ModList.MAGICCROPS.isLoaded())
+			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000);
 	}
 
 	private void addRecipe(String in, String out, int amt, int temperature, long energy) {

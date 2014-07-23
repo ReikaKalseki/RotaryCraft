@@ -110,8 +110,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 					TileEntityReservoir te = (TileEntityReservoir)this.getAdjacentTileEntity(dir);
 					if (!lubricant.isEmpty() && te.canAcceptFluid(FluidRegistry.getFluid("lubricant"))) {
 						int amt = Math.min(this.getLube(), te.CAPACITY-te.getLevel());
-						te.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
-						lubricant.removeLiquid(amt);
+						if (amt > 0) {
+							te.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+							lubricant.removeLiquid(amt);
+						}
 					}
 				}
 			}

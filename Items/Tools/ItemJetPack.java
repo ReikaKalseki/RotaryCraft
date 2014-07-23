@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -207,22 +208,22 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 				if (KeyWatcher.instance.isKeyDown(ep, Key.FOWARD)) {
 					ep.moveFlying(0, thrust, thrust);
-					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());
 				}
 				if (KeyWatcher.instance.isKeyDown(ep, Key.BACK)) {
 					ep.moveFlying(0, -thrust, thrust);
-					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());
 				}
 				if (KeyWatcher.instance.isKeyDown(ep, Key.LEFT)) {
 					ep.moveFlying(thrust, 0, thrust);
-					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());
 				}
 				if (KeyWatcher.instance.isKeyDown(ep, Key.RIGHT)) {
 					ep.moveFlying(-thrust, 0, thrust);
-					if (ep.worldObj.getTotalWorldTime()%2 == 0)
+					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());
 				}
 
@@ -234,6 +235,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 						}
 					}
 				}
+
+				SoundRegistry.JETPACK.playSound(ep.worldObj, ep.posX, ep.posY, ep.posZ, 0.5F, itemRand.nextFloat()+0.5F);
 			}
 		}
 		return isFlying;
