@@ -21,7 +21,7 @@ public class RotaryChests {
 	private static final LootController data = new LootController();
 
 	public static void addToChests() {
-		data.addItem(1, Location.BONUS, ItemStacks.steelingot, 1, 5, 25);
+		data.addItem(1, Location.BONUS, ItemStacks.steelingot, 1, 5, 12);
 
 		data.addItem(2, Location.DUNGEON, ItemStacks.scrap, 6, 18, 20);
 		data.addItem(2, Location.DUNGEON, ItemStacks.ironscrap, 1, 12, 40);

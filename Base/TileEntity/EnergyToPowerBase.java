@@ -79,7 +79,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	@Override
 	public final void upgrade() {
 		tier++;
-		this.syncAllData();
+		this.syncAllData(true);
 	}
 
 	public final boolean canUpgradeWith(ItemStack item) {
@@ -413,6 +413,14 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final int getLubricant() {
 		return tank.getLevel();
+	}
+
+	public final int getMaxLubricant() {
+		return tank.getCapacity();
+	}
+
+	public final int getLubricantScaled(int a) {
+		return tank.getLevel() * a / tank.getCapacity();
 	}
 
 }

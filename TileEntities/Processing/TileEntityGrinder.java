@@ -155,8 +155,10 @@ ConditionalOperation, DamagingContact {
 		tickcount++;
 
 		this.readPower();
-		if (power < MINPOWER || torque < MINTORQUE)
+		if (power < MINPOWER || torque < MINTORQUE) {
+			grinderCookTime = 0;
 			return;
+		}
 		if (this.canSmelt()) {
 			grinderCookTime++;
 			if (grinderCookTime >= this.getOperationTime()) {

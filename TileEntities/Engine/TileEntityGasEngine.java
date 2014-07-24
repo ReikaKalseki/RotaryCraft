@@ -33,8 +33,8 @@ public class TileEntityGasEngine extends TileEntityEngine implements Upgradeable
 		worldObj.setBlock(xCoord, yCoord, zCoord, this.getTileEntityBlockID(), type.ordinal(), 3);
 		TileEntityEngine te = (TileEntityEngine)worldObj.getBlockTileEntity(xCoord, yCoord, zCoord);
 		te.readFromNBT(NBT);
-		this.syncAllData();
-		te.syncAllData();
+		this.syncAllData(true);
+		te.syncAllData(true);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 

@@ -53,6 +53,7 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -197,8 +198,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		ItemStack is = ep.getCurrentEquippedItem();
 
-		((TileEntityBase)te).syncAllData();
-
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);
 			ep.playSound("random.break", 1, 1);
@@ -215,6 +214,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (((EnchantableMachine)te).applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, null);
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 			return false;
@@ -228,6 +228,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				else {
 					tile.saveMusicToDisk(is);
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -240,6 +241,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						tb.fill(ForgeDirection.DOWN, f, true);
 						if (!ep.capabilities.isCreativeMode)
 							ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+						((TileEntityBase)te).syncAllData(true);
 						return true;
 					}
 				}
@@ -255,18 +257,21 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 							tf.fill(ForgeDirection.DOWN, f, true);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							((TileEntityBase)te).syncAllData(true);
 							return true;
 						}
 						else if (f.getFluid().equals(FluidRegistry.WATER)) {
 							tf.addWater(f.amount);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							((TileEntityBase)te).syncAllData(true);
 							return true;
 						}
 						else if (f.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
 							tf.addLube(f.amount);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItemStack(is));
+							((TileEntityBase)te).syncAllData(true);
 							return true;
 						}
 					}
@@ -281,6 +286,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					if (i != 4)
 						items[i] = new ItemStack(Block.planks);
 				tc.writePattern(is, items);
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -294,6 +300,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						tr.isCovered = true;
 						if (!ep.capabilities.isCreativeMode)
 							ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(is, is.stackSize-1));
+						((TileEntityBase)te).syncAllData(true);
 						return true;
 					}
 				}
@@ -312,6 +319,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 									else
 										ep.setCurrentItemOrArmor(0, null);
 								}
+								((TileEntityBase)te).syncAllData(true);
+								if (!world.isRemote)
+									ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
 								return true;
 							}
 							else if (f.getFluid().equals(tr.getFluid())) {
@@ -322,6 +332,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 									else
 										ep.setCurrentItemOrArmor(0, null);
 								}
+								((TileEntityBase)te).syncAllData(true);
+								if (!world.isRemote)
+									ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
 								return true;
 							}
 						}
@@ -337,6 +350,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 							tr.removeLiquid(amt);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, ReikaItemHelper.getSizedItemStack(ret, size));
+							((TileEntityBase)te).syncAllData(true);
+							if (!world.isRemote)
+								ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
 							return true;
 						}
 					}
@@ -345,6 +361,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					int size = is.stackSize;
 					if (tr.getLevel() > 0 && tr.getFluid().equals(FluidRegistry.WATER)) {
 						ep.setCurrentItemOrArmor(0, new ItemStack(Item.potion.itemID, size, 0));
+						((TileEntityBase)te).syncAllData(true);
 						return true;
 					}
 				}
@@ -361,6 +378,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (m == MachineRegistry.BEDROCKBREAKER && !ep.isSneaking()) {
 			TileEntityBedrockBreaker tb = (TileEntityBedrockBreaker)te;
 			tb.dropInventory();
+			((TileEntityBase)te).syncAllData(true);
 			return true;
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
@@ -370,6 +388,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -381,6 +400,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 			int water = ex.getWater();
@@ -389,6 +409,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -399,6 +420,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -409,6 +431,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -419,12 +442,14 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
 		if (m == MachineRegistry.EMP) {
 			TileEntityEMP tp = (TileEntityEMP)te;
 			tp.updateListing();
+			((TileEntityBase)te).syncAllData(true);
 			return true;
 		}
 		if (m == MachineRegistry.FUELENHANCER) {
@@ -440,6 +465,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						else
 							ep.setCurrentItemOrArmor(0, null);
 					}
+					((TileEntityBase)te).syncAllData(true);
 					return true;
 				}
 			}
@@ -448,11 +474,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (ReikaDyeHelper.isDyeItem(is)) {
 				TileEntityDisplay td = (TileEntityDisplay)te;
 				td.setDyeColor(ReikaDyeHelper.getColorFromItem(is));
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 			if (is.itemID == Item.glowstone.itemID) {
 				TileEntityDisplay td = (TileEntityDisplay)te;
 				td.setColorToArgon();
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 			if (is.itemID == Item.writtenBook.itemID) {
@@ -479,6 +507,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					ReikaChatHelper.writeString("Error reading book.");
 					e.printStackTrace();
 				}
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -490,6 +519,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					if (!ep.capabilities.isCreativeMode) {
 						ep.setCurrentItemOrArmor(0, new ItemStack(is.itemID, is.stackSize-1, is.getItemDamage()));
 					}
+					((TileEntityBase)te).syncAllData(true);
 					return true;
 				}
 			}
@@ -502,6 +532,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			TileEntityScreen tc = (TileEntityScreen)te;
 			if (ep.isSneaking()) {
 				tc.activate(ep);
+				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}
 		}
@@ -512,10 +543,11 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (ep.isSneaking())
 				mov *= -1;
 			tc.moveSrc(mov, dir);
+			((TileEntityBase)te).syncAllData(true);
 			return true;
 		}
 
-		((TileEntityBase)te).syncAllData();
+		((TileEntityBase)te).syncAllData(true);
 		return false;
 	}
 
@@ -873,6 +905,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
+		te.syncAllData(false);
 		if (te instanceof TemperatureTE)
 			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
@@ -886,6 +919,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			else {
 				currenttip.add("Merging Power");
 			}
+		}
+		if (te instanceof EnergyToPowerBase) {
+			EnergyToPowerBase e = (EnergyToPowerBase)te;
+			currenttip.add(String.format("Consuming %d %s/t", e.getConsumedUnitsPerTick(), e.getUnitDisplay()));
+			currenttip.add(String.format("Contains %d %s", e.getStoredPower(), e.getUnitDisplay()));
+			//currenttip.add(String.format("Lubricant: %d mB", e.getLubricant()));
 		}
 		if (te instanceof PoweredLiquidIO) {
 			PoweredLiquidIO liq = (PoweredLiquidIO)te;
@@ -963,11 +1002,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof ConditionalOperation) {
 			currenttip.add(((ConditionalOperation) te).getOperationalStatus());
-		}
-		if (te instanceof EnergyToPowerBase) {
-			EnergyToPowerBase e = (EnergyToPowerBase)te;
-			currenttip.add(String.format("Consuming %d %s/t", e.getConsumedUnitsPerTick(), e.getUnitDisplay()));
-			//currenttip.add(String.format("Lubricant: %d mB", e.getLubricant()));
 		}
 		if (te instanceof TileEntityPulseFurnace) {
 			TileEntityPulseFurnace tpf = (TileEntityPulseFurnace)te;

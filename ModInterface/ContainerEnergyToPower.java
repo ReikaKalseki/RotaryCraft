@@ -33,6 +33,7 @@ public class ContainerEnergyToPower extends CoreContainer {
 		super.detectAndSendChanges();
 
 		ReikaPacketHelper.sendSyncPacket(RotaryCraft.packetChannel, engine, "storedEnergy");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "tank");
 	}
 
 }

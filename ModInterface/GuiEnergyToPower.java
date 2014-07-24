@@ -35,7 +35,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		super(new ContainerEnergyToPower(pl, te), te);
 		engine = te;
 		ySize = 99;
-		xSize = 199;
+		xSize = 207;
 		ep = pl;
 	}
 
@@ -44,15 +44,16 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		super.initGui();
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int inset = 21;
+		int dx = 4;
+		int inset = 21+dx;
 		if (flexible) {
-			buttonList.add(new GuiButton(0, SHIFT+j+inset-1, k+ySize-30-48+0, 20, 20, "-"));;
-			buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset, k+ySize-30-48+0, 20, 20, "+"));
+			buttonList.add(new GuiButton(0, SHIFT+j+inset-1+dx, k+ySize-30-48+0, 20, 20, "-"));;
+			buttonList.add(new GuiButton(1, SHIFT+j+xSize-20-inset-dx, k+ySize-30-48+0, 20, 20, "+"));
 		}
-		buttonList.add(new GuiButton(2, SHIFT+j+inset-1, k+ySize-30-48+25, 20, 20, "-"));;
-		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset, k+ySize-30-48+25, 20, 20, "+"));
+		buttonList.add(new GuiButton(2, SHIFT+j+inset-10+dx, k+ySize-30-48+25, 20, 20, "-"));;
+		buttonList.add(new GuiButton(3, SHIFT+j+xSize-20-inset-dx, k+ySize-30-48+25, 20, 20, "+"));
 
-		buttonList.add(new GuiButton(4, SHIFT+j+xSize-20-inset, k+ySize-30-48+50, 20, 20, ""));
+		buttonList.add(new GuiButton(4, SHIFT+j+xSize-20-inset-dx, k+ySize-30-48+50, 20, 20, ""));
 
 	}
 
@@ -82,21 +83,28 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int w = 55;
 		int h = 20;
 		int dy = h+5;
-
+		int dx = 4;
 
 		for (int i = 0; i < 3; i++) {
-			this.drawRect(SHIFT+xSize/2-w, ySize-30-48+i*dy, SHIFT+xSize/2+w, ySize-30-48+h+i*dy, 0xff777777);
-			this.drawRect(SHIFT+xSize/2-w+inset, ySize-30-48+inset+i*dy, SHIFT+xSize/2+w-inset, ySize-30-48+h-inset+i*dy, 0xff000000);
+			this.drawRect(SHIFT+xSize/2-w-dx, ySize-30-48+i*dy, SHIFT+xSize/2+w-dx, ySize-30-48+h+i*dy, 0xff777777);
+			this.drawRect(SHIFT+xSize/2-w+inset-dx, ySize-30-48+inset+i*dy, SHIFT+xSize/2+w-inset-dx, ySize-30-48+h-inset+i*dy, 0xff000000);
 		}
 
-		this.drawCenteredString(fontRenderer, String.format("Torque: %d Nm", torque), SHIFT+xSize/2, ySize-30-48+6, 0xffffff);
+		this.drawCenteredString(fontRenderer, String.format("Torque: %d Nm", torque), SHIFT+xSize/2-dx, ySize-30-48+6, 0xffffff);
 
-		this.drawCenteredString(fontRenderer, String.format("Speed: %d rad/s", omega), SHIFT+xSize/2, ySize-30-48+6+dy, 0xffffff);
-		this.drawCenteredString(fontRenderer, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+xSize/2, ySize-30-48+6+dy*2, 0xffffff);
+		this.drawCenteredString(fontRenderer, String.format("Speed: %d rad/s", omega), SHIFT+xSize/2-dx, ySize-30-48+6+dy, 0xffffff);
+		this.drawCenteredString(fontRenderer, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+xSize/2-dx, ySize-30-48+6+dy*2, 0xffffff);
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+171, j+188, k+21, k+90)) {
 			int e = engine.getStoredPower();
 			String sg = String.format("%d/%d %s", e, engine.getMaxStorage(), engine.getUnitDisplay());
+			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
+		}
+
+		if (ReikaGuiAPI.instance.isMouseInBox(j+192, j+200, k+21, k+90)) {
+			int e = engine.getLubricant();
+			String sg = String.format("%d/%d mB", e, engine.getMaxLubricant());
 			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
 			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
 		}
@@ -120,7 +128,11 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int px = engine.getEnergyScaled(68);
 		Color c = engine.getPowerColor();
 		GL11.glColor3f(c.getRed()/255F, c.getGreen()/255F, c.getBlue()/255F);
-		this.drawTexturedModalRect(j+172, k+90-px, 200, 69-px, 16, px);
+		this.drawTexturedModalRect(j+172, k+90-px, 208, 69-px, 16, px);
+
+		int px2 = engine.getLubricantScaled(68);
+		GL11.glColor3f(1, 1, 1);
+		this.drawTexturedModalRect(j+193, k+90-px2, 244, 69-px2, 7, px2);
 	}
 
 	@Override

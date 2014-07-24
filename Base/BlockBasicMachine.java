@@ -33,7 +33,6 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTEBase;
-import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -136,8 +135,6 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 
 		ItemStack is = ep.getCurrentEquippedItem();
-		
-		((TileEntityBase)te).syncAllData();
 
 		if (ModList.DARTCRAFT.isLoaded() && DartItemHandler.getInstance().isWrench(is)) {
 			ep.setCurrentItemOrArmor(0, null);

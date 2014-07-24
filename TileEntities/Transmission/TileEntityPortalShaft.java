@@ -15,7 +15,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.DragonAPI.APIPacketHandler.PacketIDs;
+import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
@@ -108,46 +111,71 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		}
 	}
 
+	private int[] getScaledCoordinates(int x, int y, int z, World source, World target) {
+		int tg = target.provider.dimensionId;
+		int src = source.provider.dimensionId;
+		if (src != -1 && tg == -1) { //to nether
+			x = x/8;
+			z = z/8;
+		}
+		if (src == -1 && tg != -1) { //from nether
+			x *= 8;
+			z *= 8;
+		}
+		//ReikaJavaLibrary.pConsole(src+">"+tg+" @ "+x+","+y+","+z, Side.SERVER);
+		return new int[]{x, y, z};
+	}
+
 	private void emitPower(World world, int x, int y, int z) {
 		//use dimensionmanager to set power
 		int dim = this.getTargetDimID();
 		//ReikaJavaLibrary.pConsole(writex+":"+writey+":"+writez, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(dim, Side.SERVER);
 		World age = DimensionManager.getWorld(dim);
-		int ax = x+write.offsetX;
-		int ay = y+write.offsetY;
-		int az = z+write.offsetZ;
+		int[] coords = this.getScaledCoordinates(x+write.offsetX, y+write.offsetY, z+write.offsetZ, world, age);
+		int ax = coords[0];
+		int ay = coords[1];
+		int az = coords[2];
 		if (age != null && age.checkChunksExist(ax, ay, az, ax, ay, az)) {
 			int tg = this.getTargetDimensionBy(age, ax, ay, az);
-			//ReikaJavaLibrary.pConsole(tg, Side.SERVER);
+			//ReikaJavaLibrary.pConsole(write+": "+tg+": "+ax+","+ay+","+az, Side.SERVER);
 			//ReikaJavaLibrary.pConsole(tg, dim == 7);
 			if (tg == world.provider.dimensionId) {
 				//ReikaJavaLibrary.pConsole(writex+", "+writey+", "+writez+" >> "+Block.blocksList[id], Side.SERVER);
-				int dx = x+(write.offsetX)*2;
-				int dy = y+(write.offsetY)*2;
-				int dz = z+(write.offsetZ)*2;
+				int[] c2 = this.getScaledCoordinates(x+write.offsetX*2, y+write.offsetY*2, z+write.offsetZ*2, world, age);
+				int dx = c2[0];
+				int dy = c2[1];
+				int dz = c2[2];
 				MachineRegistry m = MachineRegistry.getMachine(age, dx, dy, dz);
+				//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+age.getBlockId(dx, dy, dz), Side.SERVER);
 				//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
 				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
 				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, dim == 7);
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft te = (TileEntityShaft)age.getBlockTileEntity(dx, dy, dz);
-					int terx = te.getReadDirection().offsetX;
-					int tery = te.getReadDirection().offsetY;
-					int terz = te.getReadDirection().offsetZ;
+					int terx = te.xCoord+te.getReadDirection().offsetX;
+					int tery = te.yCoord+te.getReadDirection().offsetY;
+					int terz = te.zCoord+te.getReadDirection().offsetZ;
+					//ReikaJavaLibrary.pConsole(terx+","+tery+","+terz, Side.SERVER);
 					if (terx == ax && tery == ay && terz == az) {
-						age.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
-						TileEntityPortalShaft ps = (TileEntityPortalShaft)age.getBlockTileEntity(dx, dy, dz);
+						int tid = MachineRegistry.PORTALSHAFT.getBlockID();
+						int tmeta = MachineRegistry.PORTALSHAFT.getMachineMetadata();
+						//ReikaJavaLibrary.pConsole(tid+":"+tmeta);
+						age.setBlock(dx, dy, dz, 0, 0, 3);
+						age.setBlock(dx, dy, dz, tid, tmeta, 3);
+						TileEntityPortalShaft ps = (TileEntityPortalShaft)age.getBlockTileEntity(dx, dy, dz);//new TileEntityPortalShaft();
+						ps.read = te.getReadDirection();
 						ps.setBlockMetadata(te.getBlockMetadata());
 						ps.setPortalType(age, ax, ay, az);
 						ps.material = material;
+						ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps);
 					}
 				}
 				else if (m == MachineRegistry.PORTALSHAFT) {
 					TileEntityPortalShaft te = (TileEntityPortalShaft)age.getBlockTileEntity(dx, dy, dz);
-					int terx = te.getReadDirection().offsetX;
-					int tery = te.getReadDirection().offsetY;
-					int terz = te.getReadDirection().offsetZ;
+					int terx = te.xCoord+te.getReadDirection().offsetX;
+					int tery = te.yCoord+te.getReadDirection().offsetY;
+					int terz = te.zCoord+te.getReadDirection().offsetZ;
 					if (terx == ax && tery == ay && terz == az) {
 						te.power = power;
 						te.omega = omega;
@@ -301,10 +329,14 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	public boolean isEnteringPortal() {
+		if (write == null)
+			return false;
 		return ReikaBlockHelper.isPortalBlock(worldObj, xCoord+write.offsetX, yCoord+write.offsetY, zCoord+write.offsetZ);
 	}
 
 	public boolean isExitingPortal() {
+		if (read == null)
+			return false;
 		return ReikaBlockHelper.isPortalBlock(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ);
 	}
 

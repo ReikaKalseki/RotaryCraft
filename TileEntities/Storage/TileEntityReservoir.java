@@ -61,10 +61,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		if (flowTimer.checkCap())
 			this.transferBetween(world, x, y, z);
 		if (!isCovered) {
-			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-			if (world.isRaining() && !biome.getEnableSnow() && biome.canSpawnLightningBolt() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
-				if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
-					this.addLiquid(25, FluidRegistry.WATER);
+			if (!world.isRemote) {
+				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+				if (world.isRaining() && biome.canSpawnLightningBolt() && worldObj.canBlockSeeTheSky(x, y+1, z)) {
+					if (this.isEmpty() || (this.getFluid().equals(FluidRegistry.WATER) && this.getLevel() < CAPACITY)) {
+						this.addLiquid(25, FluidRegistry.WATER);
+					}
 				}
 			}
 
