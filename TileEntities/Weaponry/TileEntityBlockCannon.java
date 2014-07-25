@@ -11,11 +11,14 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -102,6 +105,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 					ItemStack is = new ItemStack(Block.waterMoving);
 					if (torque >= this.getReqTorque(is)) {
 						ReikaInventoryHelper.decrStack(i, inv);
+						this.dropItem(new ItemStack(Item.bucketEmpty));
 						return is;
 					}
 				}
@@ -109,6 +113,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 					ItemStack is = new ItemStack(Block.lavaMoving);
 					if (torque >= this.getReqTorque(is)) {
 						ReikaInventoryHelper.decrStack(i, inv);
+						this.dropItem(new ItemStack(Item.bucketEmpty));
 						return is;
 					}
 				}
@@ -119,7 +124,11 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 						if (f.canBePlacedInWorld()) {
 							ItemStack is = new ItemStack(Block.blocksList[f.getBlockID()]);
 							if (torque >= this.getReqTorque(is)) {
+								Item cont = inv[i].getItem().getContainerItem();
 								ReikaInventoryHelper.decrStack(i, inv);
+								if (cont != null) {
+									this.dropItem(new ItemStack(cont));
+								}
 								return is;
 							}
 						}
@@ -128,6 +137,19 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 			}
 		}
 		return null;
+	}
+
+	private void dropItem(ItemStack is) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof IInventory) {
+				if (ReikaInventoryHelper.addToIInv(is, (IInventory)te)) {
+					return;
+				}
+			}
+		}
+		ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 	}
 
 	private void fireBlock(ItemStack is, World world, int x, int y, int z) {

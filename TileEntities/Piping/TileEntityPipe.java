@@ -87,7 +87,6 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		if (liquid != null) {
 			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
 			temperature = temp > 750 ? temp-425 : temp-273;
-
 			if (temperature > 2500) {
 				this.overheat(worldObj, xCoord, yCoord, zCoord);
 			}
