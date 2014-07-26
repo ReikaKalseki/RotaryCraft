@@ -43,4 +43,9 @@ public class LuaSetParticle extends LuaMethod {
 		return "int settingOrdinal OR String particleName";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

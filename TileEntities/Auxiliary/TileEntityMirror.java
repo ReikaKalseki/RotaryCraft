@@ -26,14 +26,13 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.MultiBlockMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBlockMachine {
+public class TileEntityMirror extends RotaryCraftTileEntity {
 
 	//2.3 kW/m^2 (392MW/170000) -> 2kW/block; sunlight is 15 kW per m^2, so thus efficiency of 13%
 
@@ -41,21 +40,6 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements MultiBloc
 	public boolean broken;
 
 	public int[] targetloc = {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
-
-	@Override
-	public boolean isMultiBlock(World world, int x, int y, int z) {
-		return false;
-	}
-
-	@Override
-	public int[] getMultiBlockPosition(World world, int x, int y, int z) {
-		return null;
-	}
-
-	@Override
-	public int[] getMultiBlockSize(World world, int x, int y, int z) {
-		return null;
-	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {

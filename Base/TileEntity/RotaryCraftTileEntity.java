@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import li.cil.oc.api.Network;
-import li.cil.oc.api.network.Arguments;
-import li.cil.oc.api.network.Component;
-import li.cil.oc.api.network.Context;
-import li.cil.oc.api.network.Environment;
-import li.cil.oc.api.network.ManagedPeripheral;
-import li.cil.oc.api.network.Message;
-import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +16,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -36,7 +23,6 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -46,11 +32,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.ILuaContext;
-import dan200.computer.api.IPeripheral;
 
-public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, IPeripheral, Environment, ManagedPeripheral {
+public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher {
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
@@ -65,9 +48,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	protected StepTimer second = new StepTimer(20);
 
 	public boolean isFlipped = false;
-
-	private final HashMap<Integer, LuaMethod> luaMethods = new HashMap();
-	private final HashMap<String, LuaMethod> methodNames = new HashMap();
 
 	@Override
 	public final boolean canUpdate() {
@@ -168,9 +148,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 		if (disabled)
 			NBT.setBoolean("emp", disabled);
-
-		if (node != null)
-			node.save(NBT);
 	}
 
 	@Override
@@ -178,9 +155,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		super.readFromNBT(NBT);
 		tickcount = NBT.getInteger("tick");
 		disabled = NBT.getBoolean("emp");
-
-		if (node != null)
-			node.load(NBT);
 	}
 
 	public boolean isSelfBlock() {
@@ -260,89 +234,12 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return 1;//DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
 	}
 
-
-	/** ComputerCraft */
 	@Override
-	public final String[] getMethodNames() {
-		ArrayList<LuaMethod> li = new ArrayList();
-		List<LuaMethod> all = LuaMethod.getMethods();
-		for (int i = 0; i < all.size(); i++) {
-			LuaMethod l = all.get(i);
-			if (l.isValidFor(this))
-				li.add(l);
-		}
-		String[] s = new String[li.size()];
-		for (int i = 0; i < s.length; i++) {
-			LuaMethod l = li.get(i);
-			s[i] = l.displayName;
-			luaMethods.put(i, l);
-			methodNames.put(l.displayName, l);
-		}
-		return s;
+	public final boolean hasModel() {
+		return this.getMachine().hasModel();
 	}
 
 	@Override
-	public final Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return luaMethods.containsKey(method) ? luaMethods.get(method).invoke(this, arguments) : null;
-	}
-
-	@Override
-	public final boolean canAttachToSide(int side) {
-		return true;
-	}
-
-	@Override
-	public final void attach(IComputerAccess computer) {}
-	@Override
-	public final void detach(IComputerAccess computer) {}
-
-	@Override
-	public final String getType() {
-		return this.getName().replaceAll(" ", "");
-	}
-
-	/** OpenComputers */
-	public final String getComponentName() {
-		return this.getType();
-	}
-
-	@Override
-	public final String[] methods() {
-		return this.getMethodNames();
-	}
-
-	@Override
-	public final Object[] invoke(String method, Context context, Arguments args) throws Exception {
-		Object[] objs = new Object[args.count()];
-		for (int i = 0; i < objs.length; i++) {
-			objs[i] = args.checkAny(i);
-		}
-		return methodNames.containsKey(method) ? methodNames.get(method).invoke(this, objs) : null;
-	}
-
-	@Override
-	public final void onChunkUnload() {
-		super.onChunkUnload();
-		if (node != null)
-			node.remove();
-	}
-
-	@Override
-	public final void invalidate() {
-		super.invalidate();
-		if (node != null)
-			node.remove();
-	}
-
-	private final Component node = this.createNode();
-
-	private Component createNode() {
-		if (ModList.OPENCOMPUTERS.isLoaded())
-			return Network.newNode(this, Visibility.Network).withComponent(this.getType(), this.getOCNetworkVisibility()).create();
-		else
-			return null;
-	}
-
 	protected final Visibility getOCNetworkVisibility() {
 		if (this.getMachine().isTransmissionMachine())
 			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.Neighbors;
@@ -350,23 +247,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return Visibility.Neighbors;
 		else
 			return this instanceof TileEntityBeltHub ? Visibility.Neighbors : Visibility.Network;
-	}
-
-	@Override
-	public final Node node() {
-		return node;
-	}
-
-	@Override
-	public final void onConnect(Node node) {}
-	@Override
-	public final void onDisconnect(Node node) {}
-	@Override
-	public final void onMessage(Message message) {}
-
-	@Override
-	public final boolean hasModel() {
-		return this.getMachine().hasModel();
 	}
 
 }

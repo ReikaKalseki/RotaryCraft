@@ -9,21 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE {
+public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE, DiscreteFunction {
 
-	public static final int CAPACITY = 6000;
+	public static final int CAPACITY = 64000;
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -38,17 +41,51 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 
+		if (!tank.isEmpty())
+			this.dumpLiquid(world, x, y, z);
+
+		if (power < MINPOWER || omega < MINSPEED)
+			return;
+
+		if (tank.isFull())
+			return;
+
+		tickcount++;
+		if (tickcount < this.getOperationTime())
+			return;
+		tickcount = 0;
+
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature < Tamb) {
-			if (power >= MINPOWER && omega >= MINSPEED) {
-				if (!tank.isFull()) {
-					BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-					float h = biome.rainfall; //Not used by any biome
-					double amt = 20+Math.sqrt(omega);
-					tank.addLiquid((int)(amt*ReikaBiomeHelper.getBiomeHumidity(biome)), FluidRegistry.WATER);
+			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+			float h = biome.rainfall; //Not used by any biome
+			int amt = this.getWaterProduced(biome);
+			tank.addLiquid(amt, FluidRegistry.WATER);
+		}
+	}
+
+	private void dumpLiquid(World world, int x, int y, int z) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			TileEntity te = this.getAdjacentTileEntity(dir);
+			if (te instanceof IFluidHandler) {
+				IFluidHandler ifl = (IFluidHandler)te;
+				int added = ifl.fill(dir.getOpposite(), tank.getFluid(), true);
+				if (added > 0) {
+					tank.removeLiquid(added);
+					if (tank.isEmpty())
+						return;
 				}
 			}
 		}
+	}
+
+	public int getOperationTime() {
+		return Math.max(0, (int)(80-5*ReikaMathLibrary.logbase(omega+1-MINSPEED, 2)));
+	}
+
+	private int getWaterProduced(BiomeGenBase biome) {
+		return Math.max(2, (int)(torque*torque*ReikaBiomeHelper.getBiomeHumidity(biome)));
 	}
 
 	@Override

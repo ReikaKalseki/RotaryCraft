@@ -37,4 +37,9 @@ public class LuaSetECU extends LuaMethod {
 		return "int settingOrdinal";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

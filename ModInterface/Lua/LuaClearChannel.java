@@ -37,4 +37,9 @@ public class LuaClearChannel extends LuaMethod {
 		return "int channel";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

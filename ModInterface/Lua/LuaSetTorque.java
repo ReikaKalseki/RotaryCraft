@@ -40,4 +40,9 @@ public class LuaSetTorque extends LuaMethod {
 		return "int torque";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

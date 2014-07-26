@@ -105,6 +105,10 @@ public class ItemMulti extends ItemBasic {
 							is.stackTagCompound = null;
 							return false;
 						}
+						rec.resetOther();
+						em.resetOther();
+						em.reset();
+						rec.reset();
 						boolean src = em.setSource(rx, ry, rz);
 						boolean tg = rec.setTarget(ex, ey, ez);
 						//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);

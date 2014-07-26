@@ -35,4 +35,9 @@ public class LuaGetAPIPower extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.ARRAY;
+	}
+
 }

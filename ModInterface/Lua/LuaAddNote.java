@@ -46,4 +46,9 @@ public class LuaAddNote extends LuaMethod {
 		return "int pitch, int channel, int length, int voice";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

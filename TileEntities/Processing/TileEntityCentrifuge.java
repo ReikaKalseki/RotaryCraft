@@ -126,7 +126,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return i != 0;
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return RecipesCentrifuge.recipes().isCentrifugable(itemstack);
+		return i == 0 && RecipesCentrifuge.recipes().isCentrifugable(itemstack);
 	}
 
 	@Override

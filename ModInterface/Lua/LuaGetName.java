@@ -34,4 +34,9 @@ public class LuaGetName extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.STRING;
+	}
+
 }

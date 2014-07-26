@@ -50,12 +50,15 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		this.updateCoil();
+		boolean red = world.isBlockIndirectlyGettingPowered(x, y, z);
+
+		if (!red)
+			this.updateCoil();
 
 		if (world.isRemote)
 			return;
 
-		if (world.isBlockIndirectlyGettingPowered(x, y, z))
+		if (red)
 			canlight = false;
 
 		if (!canlight) {

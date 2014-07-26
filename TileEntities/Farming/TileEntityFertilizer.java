@@ -12,11 +12,13 @@ package Reika.RotaryCraft.TileEntities.Farming;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -66,6 +68,12 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
+
+		if (DragonAPICore.debugtest) {
+			tank.addLiquid(100, FluidRegistry.WATER);
+			inv[0] = new ItemStack(Item.dyePowder.itemID, 64, 15);
+		}
+
 		if (!world.isRemote && this.hasFertilizer()) {
 			int n = this.getUpdatesPerTick();
 			for (int i = 0; i < n; i++)

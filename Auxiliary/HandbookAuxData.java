@@ -676,7 +676,8 @@ public final class HandbookAuxData {
 								LuaMethod cur = li.get(j);
 								if (cur.isClassInstanceOf(m.getTEClass())) {
 									ReikaRenderHelper.disableLighting();
-									font.drawString(cur.displayName+"("+cur.getArgsAsString()+")", posX+11, posY+88+k*10, 0xffffff);
+									String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
+									font.drawString(s, posX+11, posY+88+k*10, 0xffffff);
 									k++;
 								}
 							}

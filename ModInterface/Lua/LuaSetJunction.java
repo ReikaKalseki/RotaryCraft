@@ -40,4 +40,9 @@ public class LuaSetJunction extends LuaMethod {
 		return "int ratio";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

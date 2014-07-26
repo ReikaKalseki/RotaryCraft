@@ -40,4 +40,9 @@ public class LuaSetSpeed extends LuaMethod {
 		return "int speed";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

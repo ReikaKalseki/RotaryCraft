@@ -43,4 +43,9 @@ public class LuaSetCannon extends LuaMethod {
 		return "int angle, int compass, int velocity";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.VOID;
+	}
+
 }

@@ -72,7 +72,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 		//ReikaJavaLibrary.pConsole(input+":"+output);
 
-		int factor = 10;
+		int factor = 5;
 
 		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.CLIENT);
 

@@ -34,4 +34,9 @@ public class LuaGetPressure extends LuaMethod {
 		return "";
 	}
 
+	@Override
+	public ReturnType getReturnType() {
+		return ReturnType.INTEGER;
+	}
+
 }
