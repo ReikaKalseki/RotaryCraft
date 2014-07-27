@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 
 public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
@@ -122,6 +123,10 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			return 0;
 		if (id == Block.sapling.blockID)
 			return meta&3;
+		ModWoodList wood = ModWoodList.getModWoodFromLeaf(id, meta);
+		if (wood != null) {
+			return wood.getLeafMetadatas().get(0);
+		}
 		return meta;
 	}
 

@@ -40,6 +40,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.IgnoredByBorer;
 import Reika.RotaryCraft.API.Event.BorerDigEvent;
@@ -392,6 +393,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return 0;
 		if (ReikaBlockHelper.isStairBlock(id))
 			return 0;
+		ModWoodList wood = ModWoodList.getModWood(id, meta);
+		if (wood != null) {
+			return wood.getLogMetadatas().get(0);
+		}
+		wood = ModWoodList.getModWoodFromLeaf(id, meta);
+		if (wood != null) {
+			return wood.getLeafMetadatas().get(0);
+		}
 		return meta;
 	}
 
@@ -409,7 +418,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (id == Block.redstoneRepeaterActive.blockID || id == Block.redstoneRepeaterIdle.blockID)
 			return false;
+		if (id == Block.redstoneWire.blockID)
+			return false;
 		if (id == Block.pistonExtension.blockID || id == Block.pistonMoving.blockID)
+			return false;
+		if (id == Block.doorWood.blockID || id == Block.doorIron.blockID)
 			return false;
 		if (id == RotaryCraft.miningpipe.blockID)
 			return false;

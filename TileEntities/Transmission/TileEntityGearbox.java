@@ -64,7 +64,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public MaterialRegistry getGearboxType() {
-		return type;
+		return type != null ? type : MaterialRegistry.WOOD;
 	}
 
 	public int getMaxLubricant() {

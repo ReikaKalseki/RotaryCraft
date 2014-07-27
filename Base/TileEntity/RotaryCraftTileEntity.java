@@ -81,6 +81,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return this.getMachine().ordinal();
 	}
 
+	@Override
 	public final String getName() {
 		return this.getMachine().getName();
 	}
