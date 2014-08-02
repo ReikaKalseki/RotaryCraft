@@ -113,8 +113,8 @@ public class ItemMeter extends ItemRotaryTool
 				for (int i = 0; i < li.size(); i++)
 					ReikaChatHelper.writeString(li.get(i));
 			}
-			flag = tile instanceof ShaftPowerEmitter;
-			flag1 = tile instanceof ShaftPowerReceiver;
+			//flag = tile instanceof ShaftPowerEmitter;
+			//flag1 = tile instanceof ShaftPowerReceiver;
 		}
 		else if (b instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)b).getMessages(world, x, y, z, s);

@@ -267,7 +267,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}

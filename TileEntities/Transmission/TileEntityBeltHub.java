@@ -316,7 +316,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 			return tile.getPowerSources(io, caller);
 		}
 		else {
-			return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+			return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 		}
 	}
 

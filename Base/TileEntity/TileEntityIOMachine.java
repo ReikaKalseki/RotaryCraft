@@ -11,8 +11,8 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -192,19 +192,52 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		pointoffsety = y;
 		pointoffsetz = z;
 	}
+	/*
+	protected final void processTileSimply(TileEntity te, MachineRegistry m, int tgx, int tgy, int tgz) {
+		if (m == MachineRegistry.SHAFT) {
+			TileEntityShaft devicein = (TileEntityShaft)te;
+			if (devicein.isCross()) {
+				this.readFromCross(devicein);
+				return;
+			}
+			if (devicein.isWritingTo(this)) {
+				torquein = devicein.torque;
+				omegain = devicein.omega;
+			}
+		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+			omegain = pwr.getSpeedToSide(dir);
+			torquein = pwr.getTorqueToSide(dir);
+		}
+		if (te instanceof SimpleProvider) {
+			this.copyStandardPower(te);
+		}
+		if (te instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+			if (sp.isEmitting() && sp.canWriteToBlock(tgx, tgy, tgz)) {
+				torquein = sp.getTorque();
+				omegain = sp.getOmega();
+			}
+		}
+		if (m == MachineRegistry.SPLITTER) {
+			TileEntitySplitter devicein = (TileEntitySplitter)te;
+			if (devicein.isSplitting()) {
+				this.readFromSplitter(devicein);
+				return;
+			}
+			else if (devicein.isWritingTo(this)) {
+				torquein = devicein.torque;
+				omegain = devicein.omega;
+			}
+		}
+		omega = omegain;
+		torque = torquein;
+	}*/
 
-	protected void writePowerToReciever(ShaftPowerReceiver sp) {
-		if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
-			sp.setOmega(omega);
-			sp.setTorque(torque);
-			sp.setPower((long)omega*(long)torque);
-		}
-		else {
-			sp.setOmega(0);
-			sp.setTorque(0);
-			sp.setPower(0);
-		}
-	}
+	//protected void readFromSplitter(TileEntitySplitter te) {}
+	//protected void readFromCross(TileEntityShaft te) {}
 
 	public final boolean isWritingToCoordinate(int x, int y, int z) {
 		if (write == null)
@@ -224,70 +257,44 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return wx && wy && wz;
 	}
 
-	public final boolean isWritingTo(TileEntityIOMachine te) {
-		if (write == null)
+	private boolean matchTile(TileEntityIOMachine te, ForgeDirection dir) {
+		if (dir == null)
 			return false;
-		boolean x = xCoord+write.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+write.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+write.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
+		int dim = te.worldObj.provider.dimensionId;
+		int tx = te.xCoord+te.pointoffsetx;
+		int ty = te.yCoord+te.pointoffsety;
+		int tz = te.zCoord+te.pointoffsetz;
+		TileEntity out = this.getAdjacentTileEntity(dir);
+		while (out instanceof SpaceRift) {
+			out = ((SpaceRift)out).getTileEntityFrom(dir);
+		}
+		if (out == null)
+			return false;
+		return !out.isInvalid() && out.worldObj.provider.dimensionId == dim && out.xCoord == tx && out.yCoord == ty && out.zCoord == tz;
+	}
+
+	public final boolean isWritingTo(TileEntityIOMachine te) {
+		return this.matchTile(te, write);
 	}
 
 	public final boolean isWritingTo2(TileEntityIOMachine te) {
-		if (write2 == null)
-			return false;
-		boolean x = xCoord+write2.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+write2.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+write2.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
+		return this.matchTile(te, write2);
 	}
 
 	public final boolean isReadingFrom(TileEntityIOMachine te) {
-		if (read == null)
-			return false;
-		boolean x = xCoord+read.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+read.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+read.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
+		return this.matchTile(te, read);
 	}
 
 	public final boolean isReadingFrom2(TileEntityIOMachine te) {
-		if (read2 == null)
-			return false;
-		boolean x = xCoord+read2.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+read2.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+read2.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
+		return this.matchTile(te, read2);
 	}
 
 	public final boolean isReadingFrom3(TileEntityIOMachine te) {
-		if (read3 == null)
-			return false;
-		boolean x = xCoord+read3.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+read3.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+read3.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
+		return this.matchTile(te, read3);
 	}
 
 	public final boolean isReadingFrom4(TileEntityIOMachine te) {
-		if (read4 == null)
-			return false;
-		boolean x = xCoord+read4.offsetX == te.xCoord+te.pointoffsetx;
-		boolean y = yCoord+read4.offsetY == te.yCoord+te.pointoffsety;
-		boolean z = zCoord+read4.offsetZ == te.zCoord+te.pointoffsetz;
-		return x && y && z;
-	}
-
-	protected final void basicPowerReceiver() {
-		TileEntity te = this.getAdjacentTileEntity(write);
-		if (te instanceof ShaftPowerReceiver) {
-			if (this.isBlacklistedReceiver(te)) {
-				if (omega > 0 && torque > 0)
-					this.affectBlacklistedReceiver(te);
-			}
-			else
-				this.writePowerToReciever((ShaftPowerReceiver)te);
-		}
+		return this.matchTile(te, read4);
 	}
 
 	protected final void copyStandardPower(TileEntity te) {
@@ -306,17 +313,53 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		omegain = te.omega;
 	}
 
-	private boolean isBlacklistedReceiver(TileEntity te) {
-		return RotaryAux.isBlacklistedIOMachine(te);
+	private void setPower(TileEntity te, ForgeDirection from, int om, int tq) {
+		if (te instanceof ShaftPowerReceiver) {
+			if (this.isBlacklistedReceiver(te)) {
+				if (omega > 0 && torque > 0)
+					this.affectBlacklistedReceiver(te);
+			}
+			else {
+				ShaftPowerReceiver sp = (ShaftPowerReceiver)te;
+				if (sp.isReceiving() && sp.canReadFrom(from.getOpposite())) {
+					sp.setOmega(om);
+					sp.setTorque(tq);
+					sp.setPower((long)om*(long)tq);
+				}
+				else {
+					sp.setOmega(0);
+					sp.setTorque(0);
+					sp.setPower(0);
+				}
+			}
+		}
+		else if (te instanceof SpaceRift) {
+			this.setPower(((SpaceRift)te).getTileEntityFrom(from), from, om, tq);
+		}/*
+		else if (te instanceof TileEntityIOMachine) {
+			TileEntityIOMachine io = (TileEntityIOMachine)te;
+			io.torque = tq;
+			io.omega = om;
+			io.power = (long)om*(long)tq;
+		}*/
 	}
 
-	private void affectBlacklistedReceiver(TileEntity te) {
-		te.worldObj.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
-		te.worldObj.createExplosion(null, te.xCoord, te.yCoord, te.zCoord, 3, true);
+	protected final void basicPowerReceiver() {
+		this.writeToReceiver(write);
 	}
 
-	protected void writeToPowerReceiverAt(World world, int x, int y, int z, int om, int tq) {
-		TileEntity te = this.getTileEntity(x, y, z);
+	private void writeToReceiver(ForgeDirection dir) {
+		this.writeToReceiver(dir, omega, torque);
+	}
+
+	private void writeToReceiver(ForgeDirection dir, int om, int tq) {
+		TileEntity te = this.getAdjacentTileEntity(dir);
+		this.setPower(te, dir, om, tq);
+	}
+
+	protected void writeToPowerReceiver(ForgeDirection dir, int om, int tq) {
+		this.writeToReceiver(dir, om, tq);
+		/*
 		if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
 				if (om > 0 && tq > 0)
@@ -327,7 +370,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 				if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
 					sp.setOmega(om);
 					sp.setTorque(tq);
-					sp.setPower(om*tq);
+					sp.setPower((long)om*(long)tq);
 				}
 				else {
 					sp.setOmega(0);
@@ -335,7 +378,20 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 					sp.setPower(0);
 				}
 			}
-		}
+		}*/
+	}
+
+	private void writePowerToReciever(ShaftPowerReceiver sp) {
+
+	}
+
+	private boolean isBlacklistedReceiver(TileEntity te) {
+		return RotaryAux.isBlacklistedIOMachine(te);
+	}
+
+	private void affectBlacklistedReceiver(TileEntity te) {
+		te.worldObj.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
+		te.worldObj.createExplosion(null, te.xCoord, te.yCoord, te.zCoord, 3, true);
 	}
 
 	public abstract PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller);

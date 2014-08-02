@@ -15,9 +15,7 @@ import net.minecraft.client.renderer.entity.RenderTNTPrimed;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.lwjgl.input.Keyboard;
-
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
@@ -106,7 +104,7 @@ public class ClientProxy extends CommonProxy
 		connected = new ConnectedGlassRenderer(connectedRender);
 		RenderingRegistry.registerBlockHandler(connectedRender, connected);
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
+		if (DragonOptions.NORENDERS.getState()) {
 			RotaryCraft.logger.log("Disabling all machine renders for FPS and lag profiling.");
 		}
 		else {

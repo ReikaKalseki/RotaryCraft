@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+import net.minecraftforge.common.ForgeDirection;
+
 public interface ShaftPowerReceiver extends ShaftMachine {
 
 	/** RC machines set your machine's rotational speed with this. */
@@ -23,7 +25,7 @@ public interface ShaftPowerReceiver extends ShaftMachine {
 	public void setPower(long power);
 
 	/** x,y,z to read from */
-	public boolean canReadFromBlock(int x, int y, int z);
+	public boolean canReadFrom(ForgeDirection dir);
 
 	/** Whether your machine is able to receive power right now */
 	public boolean isReceiving();

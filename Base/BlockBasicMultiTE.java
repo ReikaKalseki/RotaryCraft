@@ -395,7 +395,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (m == MachineRegistry.PULSEJET) {
 			TileEntityPulseFurnace ex = (TileEntityPulseFurnace)te;
 			int f = ex.getFuel();
-			if (f+RotaryConfig.MILLIBUCKET <= ex.CAPACITY && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
+			if (f+RotaryConfig.MILLIBUCKET <= ex.MAXFUEL && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
 				ex.addFuel(RotaryConfig.MILLIBUCKET);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));

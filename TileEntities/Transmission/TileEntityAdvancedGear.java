@@ -24,8 +24,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -40,7 +43,6 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
-import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -215,6 +217,79 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				return;
 			}
 		}
+		else if (this.getGearType() == GearType.HIGH) {
+			if (this.hasLubricant()) {
+				if (this.getEffectiveRatio() < 0) {
+					if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+						omega = -(int)(spl.omega/this.getEffectiveRatio()); //omega always constant
+						if (sratio == 1) { //Even split, favorbent irrelevant
+							torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+						}
+						else if (favorbent) {
+							torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+						}
+						else {
+							torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+						}
+					}
+					else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+						omega = -(int)(spl.omega/this.getEffectiveRatio()); //omega always constant
+						if (sratio == 1) { //Even split, favorbent irrelevant
+							torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+						}
+						else if (favorbent) {
+							torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+						}
+						else {
+							torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+						}
+					}
+					else { //We are not one of its write-to blocks
+						torque = 0;
+						omega = 0;
+						power = 0;
+						return;
+					}
+				}
+				else {
+					if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+						omega = (int)(spl.omega*this.getEffectiveRatio()); //omega always constant
+						if (sratio == 1) { //Even split, favorbent irrelevant
+							torque = (int)(spl.torque/2/this.getEffectiveRatio());
+						}
+						else if (favorbent) {
+							torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
+						}
+						else {
+							torque = (int)((spl.torque*((sratio-1D))/sratio)/(this.getEffectiveRatio()));
+						}
+					}
+					else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+						omega = (int)(spl.omega*this.getEffectiveRatio()); //omega always constant
+						if (sratio == 1) { //Even split, favorbent irrelevant
+							torque = (int)(spl.torque/2/this.getEffectiveRatio());
+						}
+						else if (favorbent) {
+							torque = (int)(spl.torque*((sratio-1D)/(sratio))/this.getEffectiveRatio());
+						}
+						else {
+							torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
+						}
+					}
+					else { //We are not one of its write-to blocks
+						torque = 0;
+						omega = 0;
+						power = 0;
+						return;
+					}
+				}
+				if (omega > 0 && (worldObj.getTotalWorldTime()&4) == 4)
+					lubricant.removeLiquid((int)ReikaMathLibrary.logbase(Math.max(omega, torque), 2));
+			}
+			else {
+				omega = torque = 0;
+			}
+		}
 		else {
 			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
 				omega = (int)(spl.omega*this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
@@ -257,6 +332,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return 1;
 		if (type == GearType.WORM)
 			return WORMRATIO;
+		if (type == GearType.HIGH)
+			return torquemode ? -256 : 256;
 		return this.getCVTRatio();
 	}
 
@@ -475,55 +552,67 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	protected void transferPower(World world, int x, int y, int z, int meta) {
 		this.calculateRatio();
 		omegain = torquein = 0;
-		TileEntity te = this.getAdjacentTileEntity(read);
-		if (!this.isProvider(te)) {
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		if (this.isProvider(te)) {
+			if (m == MachineRegistry.SHAFT) {
+				TileEntityShaft devicein = (TileEntityShaft)te;
+				if (devicein.isCross()) {
+					this.readFromCross(devicein);
+					return;
+				}
+				if (devicein.isWritingToCoordinate(x, y, z)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
+			}
+			if (te instanceof SimpleProvider) {
+				this.copyStandardPower(te);
+			}
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+					torquein = sp.getTorque();
+					omegain = sp.getOmega();
+				}
+			}
+
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
+			if (m == MachineRegistry.SPLITTER) {
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
+				if (devicein.isSplitting()) {
+					this.readFromSplitter(devicein);
+					omegain = omega;
+					torquein = torque;
+					//ReikaJavaLibrary.pConsole(torque+" @ "+omega, Side.SERVER);
+					return;
+				}
+				else if (devicein.isWritingToCoordinate(x, y, z)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
+			}
+		}
+		else if (te instanceof SpaceRift) {
+			SpaceRift sr = (SpaceRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
+		}
+		else {
 			omega = 0;
 			torque = 0;
 			power = 0;
 			return;
-		}
-		MachineRegistry m = this.getMachine(read);
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.isCross()) {
-				this.readFromCross(devicein);
-				return;
-			}
-			if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(te);
-		}
-		if (te instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-				torquein = sp.getTorque();
-				omegain = sp.getOmega();
-			}
-		}
-
-		if (m == MachineRegistry.POWERBUS) {
-			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-			omegain = pwr.getSpeedToSide(dir);
-			torquein = pwr.getTorqueToSide(dir);
-		}
-		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.isSplitting()) {
-				this.readFromSplitter(devicein);
-				omegain = omega;
-				torquein = torque;
-				//ReikaJavaLibrary.pConsole(torque+" @ "+omega, Side.SERVER);
-				return;
-			}
-			else if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
 		}
 
 		switch(this.getGearType()) {

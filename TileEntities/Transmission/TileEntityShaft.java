@@ -18,6 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.ChromatiCraft.API.SpaceRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -330,100 +332,137 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 	}
 
-	private void crossTransfer(World world) {
-		readomega[0] = 0;
-		readomega[1] = 0;
-		readtorque[0] = 0;
-		readtorque[1] = 0;
-		TileEntity te1 = this.getAdjacentTileEntity(read);
-		TileEntity te2 = this.getAdjacentTileEntity(read2);
+	private void crossTransfer(World world, int x, int y, int z, boolean check1, boolean check2) {
+		if (check1 && check2) {
+			readomega[0] = 0;
+			readomega[1] = 0;
+			readtorque[0] = 0;
+			readtorque[1] = 0;
+		}
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		int dx2 = x+read2.offsetX;
+		int dy2 = y+read2.offsetY;
+		int dz2 = z+read2.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te1 = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		MachineRegistry m2 = isCentered ? this.getMachine(read2) : MachineRegistry.getMachine(world, dx2, dy2, dz2);
+		TileEntity te2 = isCentered ? this.getAdjacentTileEntity(read2) : world.getBlockTileEntity(dx2, dy2, dz2);
 
 
 		//ReikaJavaLibrary.pConsole(read.name()+":"+read2.name(), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsole(te1, Side.SERVER);
 
-		if (this.isProvider(te1)) {
-			MachineRegistry m = this.getMachine(read);
-			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)te1;
-				if (devicein.isCross()) {
-					this.crossReadFromCross(devicein, 0);
-					return;
+		if (check1) {
+			if (this.isProvider(te1)) {
+				if (m == MachineRegistry.SHAFT) {
+					TileEntityShaft devicein = (TileEntityShaft)te1;
+					if (devicein.isCross()) {
+						this.crossReadFromCross(devicein, 0);
+						return;
+					}
+					else if (devicein.isWritingTo(this)) {
+						readomega[0] = devicein.omega;
+						readtorque[0] = devicein.torque;
+					}
 				}
-				else if (devicein.isWritingTo(this)) {
-					readomega[0] = devicein.omega;
-					readtorque[0] = devicein.torque;
+				if (te1 instanceof SimpleProvider) {
+					if (((TileEntityIOMachine)te1).isWritingTo(this)) {
+						readtorque[0] = ((TileEntityIOMachine)te1).torque;
+						readomega[0] = ((TileEntityIOMachine)te1).omega;
+					}
 				}
-			}
-			if (te1 instanceof SimpleProvider) {
-				if (((TileEntityIOMachine)te1).isWritingTo(this)) {
-					readtorque[0] = ((TileEntityIOMachine)te1).torque;
-					readomega[0] = ((TileEntityIOMachine)te1).omega;
+				if (te1 instanceof ShaftPowerEmitter) {
+					ShaftPowerEmitter sp = (ShaftPowerEmitter)te1;
+					if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+						readtorque[0] = sp.getTorque();
+						readomega[0] = sp.getOmega();
+					}
 				}
-			}
-			if (te1 instanceof ShaftPowerEmitter) {
-				ShaftPowerEmitter sp = (ShaftPowerEmitter)te1;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-					readtorque[0] = sp.getTorque();
-					readomega[0] = sp.getOmega();
-				}
-			}
-			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)te1;
-				if (devicein.isSplitting()) {
-					this.crossReadFromSplitter(devicein, 0);
-					return;
-				}
-				else if (devicein.isWritingTo(this)) {
-					readtorque[0] = devicein.torque;
-					readomega[0] = devicein.omega;
-				}
-			}
-		}
-
-		if (this.isProvider(te2)) {
-			MachineRegistry m2 = this.getMachine(read2);
-			if (m2 == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein2 = (TileEntityShaft)te2;
-				if (devicein2.isCross()) {
-					this.crossReadFromCross(devicein2, 1);
-					return;
-				}
-				else if (devicein2.isWritingTo(this)) {
-					if (((TileEntityIOMachine)te2).isWritingTo(this)) {
-						readomega[1] = devicein2.omega;
-						readtorque[1] = devicein2.torque;
+				if (m == MachineRegistry.SPLITTER) {
+					TileEntitySplitter devicein = (TileEntitySplitter)te1;
+					if (devicein.isSplitting()) {
+						this.crossReadFromSplitter(devicein, 0);
+						return;
+					}
+					else if (devicein.isWritingTo(this)) {
+						readtorque[0] = devicein.torque;
+						readomega[0] = devicein.omega;
 					}
 				}
 			}
-			if (te2 instanceof SimpleProvider) {
-				readtorque[1] = ((TileEntityIOMachine)te2).torque;
-				readomega[1] = ((TileEntityIOMachine)te2).omega;
+			else if (te1 instanceof SpaceRift) {
+				SpaceRift sr = (SpaceRift)te1;
+				WorldLocation loc = sr.getLinkTarget();
+				if (loc != null)
+					this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, true, false);
 			}
-			if (te2 instanceof ShaftPowerEmitter) {
-				ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-					readtorque[1] = sp.getTorque();
-					readomega[1] = sp.getOmega();
-				}
-			}
-			if (m2 == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
-				if (devicein2.isSplitting()) {
-					this.crossReadFromSplitter(devicein2, 1);
-					return;
-				}
-				else if (devicein2.isWritingTo(this)) {
-					readtorque[1] = devicein2.torque;
-					readomega[1] = devicein2.omega;
-				}
+			else {
+				readtorque[0] = 0;
+				readomega[0] = 0;
 			}
 		}
+
+		if (check2) {
+			if (this.isProvider(te2)) {
+				if (m2 == MachineRegistry.SHAFT) {
+					TileEntityShaft devicein2 = (TileEntityShaft)te2;
+					if (devicein2.isCross()) {
+						this.crossReadFromCross(devicein2, 1);
+						return;
+					}
+					else if (devicein2.isWritingTo(this)) {
+						if (((TileEntityIOMachine)te2).isWritingTo(this)) {
+							readomega[1] = devicein2.omega;
+							readtorque[1] = devicein2.torque;
+						}
+					}
+				}
+				if (te2 instanceof SimpleProvider) {
+					readtorque[1] = ((TileEntityIOMachine)te2).torque;
+					readomega[1] = ((TileEntityIOMachine)te2).omega;
+				}
+				if (te2 instanceof ShaftPowerEmitter) {
+					ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
+					if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
+						readtorque[1] = sp.getTorque();
+						readomega[1] = sp.getOmega();
+					}
+				}
+				if (m2 == MachineRegistry.SPLITTER) {
+					TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
+					if (devicein2.isSplitting()) {
+						this.crossReadFromSplitter(devicein2, 1);
+						return;
+					}
+					else if (devicein2.isWritingTo(this)) {
+						readtorque[1] = devicein2.torque;
+						readomega[1] = devicein2.omega;
+					}
+				}
+			}
+			else if (te2 instanceof SpaceRift) {
+				SpaceRift sr = (SpaceRift)te2;
+				WorldLocation loc = sr.getLinkTarget();
+				if (loc != null)
+					this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false, true);
+			}
+			else {
+				readtorque[1] = 0;
+				readomega[1] = 0;
+			}
+		}
+
+		if (!check1 || !check2)
+			return;
+
 		//ReikaJavaLibrary.pConsole(Arrays.toString(readtorque)+":"+Arrays.toString(readomega), Side.SERVER);
 
-		this.writeToPowerReceiverAt(world, xCoord+write.offsetX, yCoord+write.offsetY, zCoord+write.offsetZ, readomega[0], readtorque[0]);
-		this.writeToPowerReceiverAt(world, xCoord+write2.offsetX, yCoord+write2.offsetY, zCoord+write2.offsetZ, readomega[1], readtorque[1]);
+		this.writeToPowerReceiver(write, readomega[0], readtorque[0]);
+		this.writeToPowerReceiver(write2, readomega[1], readtorque[1]);
 
 	}
 
@@ -431,55 +470,67 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	protected void transferPower(World world, int x, int y, int z, int meta) {
 		reading2Dir = false;
 		if (this.isCross()) {
-			this.crossTransfer(world);
+			this.crossTransfer(world, x, y, z, true, true);
 			return;
 		}
 		omegain = torquein = 0;
-		TileEntity te = this.getAdjacentTileEntity(read);
-		if (!this.isProvider(te)) {
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		if (this.isProvider(te)) {
+			if (m == MachineRegistry.SHAFT) {
+				TileEntityShaft devicein = (TileEntityShaft)te;
+				if (devicein.isCross()) {
+					this.readFromCross(devicein);
+					return;
+				}
+				else if (devicein.isWritingTo(this)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
+			}
+			if (te instanceof SimpleProvider) {
+				this.copyStandardPower(te);
+			}
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+					torquein = sp.getTorque();
+					omegain = sp.getOmega();
+				}
+			}
+			if (m == MachineRegistry.SPLITTER) {
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
+				if (devicein.isSplitting()) {
+					this.readFromSplitter(devicein);
+					return;
+				}
+				else if (devicein.isWritingTo(this)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
+			}
+		}
+		else if (te instanceof SpaceRift) {
+			SpaceRift sr = (SpaceRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
+		}
+		else {
 			omega = 0;
 			torque = 0;
 			power = 0;
 			return;
-		}
-		MachineRegistry m = this.getMachine(read);
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.isCross()) {
-				this.readFromCross(devicein);
-				return;
-			}
-			else if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
-		}
-		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(te);
-		}
-		if (m == MachineRegistry.POWERBUS) {
-			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-			omegain = pwr.getSpeedToSide(dir);
-			torquein = pwr.getTorqueToSide(dir);
-		}
-		if (te instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-				torquein = sp.getTorque();
-				omegain = sp.getOmega();
-			}
-		}
-		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.isSplitting()) {
-				this.readFromSplitter(devicein);
-				return;
-			}
-			else if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
-			}
 		}
 
 		omega = omegain / ratio;
@@ -559,10 +610,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		if (this.isCross()) {
 			boolean read1 = this.isWritingTo(io);
 			if (read1) {
-				return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+				return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 			}
 			else {
-				return PowerSourceList.getAllFrom(worldObj, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
+				return PowerSourceList.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
 			}
 		}
 		else

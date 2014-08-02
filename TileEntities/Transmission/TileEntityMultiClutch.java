@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.ChromatiCraft.API.SpaceRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,10 +32,13 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
 		omegain = torquein = 0;
-		TileEntity te = this.getAdjacentTileEntity(read);
-		//ReikaChatHelper.writeBlockAtCoords(worldObj, readx, ready, readz);
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
-			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
@@ -56,7 +61,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -75,8 +80,17 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 			omega = omegain;
 			torque = torquein;
 		}
+		else if (te instanceof SpaceRift) {
+			SpaceRift sr = (SpaceRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
+		}
 		else {
-			omega = torque = 0;
+			omega = 0;
+			torque = 0;
+			power = 0;
+			return;
 		}
 	}
 

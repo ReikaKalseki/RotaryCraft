@@ -26,6 +26,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
+import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -42,7 +43,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
-import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
@@ -522,18 +522,29 @@ ConditionalOperation, DamagingContact {
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				if (lvl > 0)
+					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
 
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {

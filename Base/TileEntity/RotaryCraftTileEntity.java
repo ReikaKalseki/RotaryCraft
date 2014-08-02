@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -22,7 +23,6 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -103,7 +103,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		int x = xCoord+dir.offsetX;
 		int y = yCoord+dir.offsetY;
 		int z = zCoord+dir.offsetZ;
-		return MachineRegistry.getMachine(worldObj, x, y, z);
+		TileEntity te = this.getAdjacentTileEntity(dir);
+		return te instanceof RotaryCraftTileEntity ? ((RotaryCraftTileEntity)te).getMachine() : null;
+		//return MachineRegistry.getMachine(worldObj, x, y, z);
 	}
 
 	public void giveNoSuperWarning() {
@@ -165,13 +167,13 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return meta == worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	public boolean isPlayerAccessible(EntityPlayer var1) {
 		if (ConfigRegistry.LOCKMACHINES.getState() && !var1.getEntityName().equals(placer)) {
 			ReikaChatHelper.write("This "+this.getName()+" is locked and can only be used by "+placer+"!");
 			return false;
 		}
-		double dist = ReikaMathLibrary.py3d(xCoord+0.5-var1.posX, yCoord+0.5-var1.posY, zCoord+0.5-var1.posZ);
-		return (dist <= 8) && worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this;
+		return super.isPlayerAccessible(var1);
 	}
 
 	@Override
@@ -228,16 +230,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		int id2 = this.getTileEntityBlockID();
 		int meta2 = this.getMachine().getMachineMetadata();
 		return id2 == id && meta2 == meta;
-	}
-
-	@Override
-	public final int getPacketDelay() {
-		return 1;//DragonAPICore.isSinglePlayer() ? 1 : Math.min(20, ConfigRegistry.PACKETDELAY.getValue());
-	}
-
-	@Override
-	public final boolean hasModel() {
-		return this.getMachine().hasModel();
 	}
 
 	@Override

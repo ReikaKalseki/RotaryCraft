@@ -10,20 +10,27 @@
 package Reika.RotaryCraft.API;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.ChromatiCraft.API.SpaceRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 
 public class PowerTransferHelper {
 
-	public static boolean checkPowerFrom(TileEntity tile, World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		return checkPowerFrom(tile, world.getBlockTileEntity(x, y, z));
-	}
-
-	public static boolean checkPowerFrom(TileEntity tile, TileEntity toCheck) {
+	public static boolean checkPowerFrom(TileEntity tile, ForgeDirection dir) {
 		int x = tile.xCoord;
 		int y = tile.yCoord;
 		int z = tile.zCoord;
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		TileEntity toCheck = tile.worldObj.getBlockTileEntity(dx, dy, dz);
+		if (toCheck instanceof SpaceRift) {
+			SpaceRift sr = (SpaceRift)toCheck;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null) {
+				return checkPowerFrom(loc.getTileEntity(), dir);
+			}
+		}
 		if (toCheck instanceof PowerGenerator || toCheck instanceof IOMachine) {
 			if (toCheck instanceof IOMachine) {
 				int wx = ((IOMachine) toCheck).getWriteX();
@@ -62,10 +69,7 @@ public class PowerTransferHelper {
 		int z = tile.zCoord;
 		for (int i = vertical ? 0 : 2; i < 6; i++) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (checkPowerFrom(tile, tile.worldObj, dx, dy, dz)) {
+			if (checkPowerFrom(tile, dir)) {
 				return true;
 			}
 		}

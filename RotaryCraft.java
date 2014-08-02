@@ -383,6 +383,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
+		ReikaMystcraftHelper.disableFluidPage("lubricant");
+		ReikaMystcraftHelper.disableFluidPage("liquid nitrogen");
 
 		if (!this.isLocked())
 			IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);

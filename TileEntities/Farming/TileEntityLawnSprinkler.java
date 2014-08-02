@@ -68,7 +68,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				this.accelerateGrowth(world, x, y, z);
 				this.extinguishFire(world, x, y, z);
 			}
-			if (this.getPressure() > 10000)
+			if (this.getPressure() > 300000)
 				this.damageMobs(world, x, y, z);
 		}
 		this.spreadWater(world, x, y, z);

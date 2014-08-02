@@ -556,7 +556,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+				if (lvl > 0)
+					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
 			}
 		}
 

@@ -19,7 +19,7 @@ import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
+import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.GuiBasicRange;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;

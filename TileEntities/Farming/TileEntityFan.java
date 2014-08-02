@@ -83,33 +83,33 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			int editz;
 			for (int i = 1; i <= range; i++) {
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 
 				editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 
 				editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 				editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0)
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Block.fire.blockID);
 			}
 		}
@@ -255,7 +255,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		Block b = Block.blocksList[id];
-		if (b instanceof BlowableCrop) {
+		if (b instanceof BlowableCrop && omega >= HARVESTSPEED) {
 			float sp = ((BlowableCrop)b).getHarvestingSpeed();
 			if (ReikaRandomHelper.doWithChance(0.015*sp))
 				this.harvest(world, x, y, z, (BlowableCrop)b);

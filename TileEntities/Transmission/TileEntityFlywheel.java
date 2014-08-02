@@ -14,6 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.ChromatiCraft.API.SpaceRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -238,49 +240,63 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void process(World world, int x, int y, int z) {
 		omegain = 0;
 		tickcount++;
-		MachineRegistry m = this.getMachine(read);
-		TileEntity te = this.getAdjacentTileEntity(read);
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.isCross()) {
-				omegain = this.readFromCross(devicein, false);
-				torquein = this.readFromCross(devicein, true);
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		if (this.isProvider(te)) {
+			if (m == MachineRegistry.SHAFT) {
+				TileEntityShaft devicein = (TileEntityShaft)te;
+				if (devicein.isCross()) {
+					omegain = this.readFromCross(devicein, false);
+					torquein = this.readFromCross(devicein, true);
+				}
+				else if (devicein.isWritingTo(this)) {
+					omegain = devicein.omega;
+					torquein = devicein.torque;
+				}
 			}
-			else if (devicein.isWritingTo(this)) {
-				omegain = devicein.omega;
-				torquein = devicein.torque;
+			if (te instanceof SimpleProvider) {
+				this.copyStandardPower(te);
+			}
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
+			}
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+					torquein = sp.getTorque();
+					omegain = sp.getOmega();
+				}
+			}
+			if (m == MachineRegistry.SPLITTER) {
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
+				if (devicein.isSplitting()) {
+					this.readFromSplitter(devicein);
+					return;
+				}
+				else if (devicein.isWritingTo(this)) {
+					omegain = devicein.omega;
+					torquein = devicein.torque;
+				}
 			}
 		}
-		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(te);
+		else if (te instanceof SpaceRift) {
+			SpaceRift sr = (SpaceRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.process(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
 		}
-		if (m == MachineRegistry.POWERBUS) {
-			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-			omegain = pwr.getSpeedToSide(dir);
-			torquein = pwr.getTorqueToSide(dir);
-		}
-		if (te instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-			if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-				torquein = sp.getTorque();
-				omegain = sp.getOmega();
-			}
-		}
-		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.isSplitting()) {
-				this.readFromSplitter(devicein);
-				return;
-			}
-			else if (devicein.isWritingTo(this)) {
-				omegain = devicein.omega;
-				torquein = devicein.torque;
-			}
-		}
-		if (te == null) {
-			torquein = 0;
-			omegain = 0;
+		else {
+			omega = 0;
+			torque = 0;
+			power = 0;
+			return;
 		}
 		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
 		double h = 0.4;

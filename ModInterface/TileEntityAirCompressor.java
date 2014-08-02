@@ -25,6 +25,7 @@ import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerEmitter, PressureTE {
 
@@ -74,7 +75,9 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private void playSound(World world, int x, int y, int z) {
 		int p = (int)(ReikaMathLibrary.logbase(omega, 2)/8);
-		SoundRegistry.AIRCOMP.playSoundAtBlock(world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
+		float v = 0.5F*this.getSoundVolume(world, x, y, z);
+		FMLClientHandler.instance().getClient().sndManager.playSound(SoundRegistry.AIRCOMP.getPlayableReference(), x, y, z, v, p);
+		//SoundRegistry.AIRCOMP.playSoundAtBlock(world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
 	}
 
 	private float getSoundVolume(World world, int x, int y, int z) {
@@ -188,15 +191,13 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
-
-		isOut = NBT.getBoolean("out");
+		pressure = NBT.getInteger("pressure");
 	}
 
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-
-		NBT.setBoolean("out", isOut);
+		NBT.setInteger("pressure", pressure);
 	}
 
 	@Override

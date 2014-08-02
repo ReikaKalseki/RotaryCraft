@@ -208,10 +208,10 @@ public abstract class IORenderer {
 					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
-					int dx = dir.offsetX+teb.xCoord;
-					int dy = dir.offsetY+teb.yCoord;
-					int dz = dir.offsetZ+teb.zCoord;
-					if (sr.canReadFromBlock(dx, dy, dz)) {
+					//int dx = dir.offsetX+teb.xCoord;
+					//int dy = dir.offsetY+teb.yCoord;
+					//int dz = dir.offsetZ+teb.zCoord;
+					if (sr.canReadFrom(dir)) {
 						renderIn(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
 					}
 				}
@@ -225,10 +225,10 @@ public abstract class IORenderer {
 					return;
 				for (int i = 0; i < 6; i++) {
 					ForgeDirection dir = dirs[i];
-					int dx = dir.offsetX+teb.xCoord;
-					int dy = dir.offsetY+teb.yCoord;
-					int dz = dir.offsetZ+teb.zCoord;
-					if (se.canWriteToBlock(dx, dy, dz)) {
+					//int dx = dir.offsetX+teb.xCoord;
+					//int dy = dir.offsetY+teb.yCoord;
+					//int dz = dir.offsetZ+teb.zCoord;
+					if (se.canWriteTo(dir)) {
 						renderOut(par2+dir.offsetX, par4+dir.offsetY, par6+dir.offsetZ, io);
 					}
 				}

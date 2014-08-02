@@ -45,7 +45,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		if (torque >= MINTORQUE && power >= MINPOWER && this.hasHeatableMachine(world)) {
+		if (torque >= MINTORQUE && power >= MINPOWER && omega > 0 && this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
@@ -62,6 +62,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature >= MAXTEMP)
 			if (!world.isRemote && rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
 				this.meltFurnace(world);
+		if (temperature < Tamb)
+			temperature = Tamb;
 	}
 
 	public boolean hasHeatableMachine(World world) {

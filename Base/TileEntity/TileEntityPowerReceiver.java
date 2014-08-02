@@ -216,7 +216,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -286,7 +286,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
+				if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -375,7 +375,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (te1 instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te1;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord+stepx, yCoord+stepy, zCoord+stepz)) {
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -425,7 +425,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (te2 instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord+stepx, yCoord+stepy, zCoord+stepz)) {
+				if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -474,7 +474,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (te3 instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te3;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord+stepx, yCoord+stepy, zCoord+stepz)) {
+				if (sp.isEmitting() && sp.canWriteTo(read3.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -524,7 +524,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 			if (te4 instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te4;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord+stepx, yCoord+stepy, zCoord+stepz)) {
+				if (sp.isEmitting() && sp.canWriteTo(read4.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
@@ -647,16 +647,16 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 		if (read != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller));
 		}
 		if (read2 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller));
 		}
 		if (read3 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, xCoord+read3.offsetX, yCoord+read3.offsetY, zCoord+read3.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read3, xCoord+read3.offsetX, yCoord+read3.offsetY, zCoord+read3.offsetZ, this, caller));
 		}
 		if (read4 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, xCoord+read4.offsetX, yCoord+read4.offsetY, zCoord+read4.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read4, xCoord+read4.offsetX, yCoord+read4.offsetY, zCoord+read4.offsetZ, this, caller));
 		}
 		return pwr;
 	}

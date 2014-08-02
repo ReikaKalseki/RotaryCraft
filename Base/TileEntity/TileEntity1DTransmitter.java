@@ -78,6 +78,6 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		if (read == null)
 			return new PowerSourceList();
-		return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+		return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 	}
 }

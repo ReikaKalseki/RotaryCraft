@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import Reika.ChromatiCraft.API.SpaceRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -75,7 +77,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		super.updateTileEntity();
 
 		this.getIOSides(world, x, y, z, meta);
-		this.transferPower(world, x, y, z, meta);
+		this.transferPower(world, x, y, z, meta, true, true);
 		power = (long)omega*(long)torque;
 	}
 
@@ -85,115 +87,115 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			read = ForgeDirection.EAST;
 			read2 = ForgeDirection.NORTH;
 			write = ForgeDirection.WEST;
+			write2 = null;
 			break;
 		case 1: //+z and +x -> -z
 			read = ForgeDirection.EAST;
 			read2 = ForgeDirection.SOUTH;
 			write = ForgeDirection.NORTH;
+			write2 = null;
 			break;
 		case 2: //+z and -x -> +x
 			read = ForgeDirection.SOUTH;
 			read2 = ForgeDirection.WEST;
 			write = ForgeDirection.EAST;
+			write2 = null;
 			break;
 		case 3: //-z and -x -> +z
 			read = ForgeDirection.NORTH;
 			read2 = ForgeDirection.WEST;
 			write = ForgeDirection.SOUTH;
+			write2 = null;
 			break;
 		case 4://+z and +x -> -x
 			read = ForgeDirection.EAST;
 			read2 = ForgeDirection.SOUTH;
 			write = ForgeDirection.WEST;
+			write2 = null;
 			break;
 		case 5: //+z and -x -> -z
 			read = ForgeDirection.WEST;
 			read2 = ForgeDirection.SOUTH;
 			write = ForgeDirection.NORTH;
+			write2 = null;
 			break;
 		case 6: //-z and -x -> +x
 			read = ForgeDirection.NORTH;
 			read2 = ForgeDirection.WEST;
 			write = ForgeDirection.EAST;
+			write2 = null;
 			break;
 		case 7: //-z and +x -> +z
 			read = ForgeDirection.NORTH;
 			read2 = ForgeDirection.EAST;
 			write = ForgeDirection.SOUTH;
+			write2 = null;
 			break;
 			//---------------------------SPLITTER-----------------------------------
 		case 8://-z and +x <- -x
-			write = null;
 			read2 = null;
 			read = ForgeDirection.WEST;
-			writeinline[0] = xCoord+1;
-			writeinline[1] = zCoord;
-			writebend[0] = xCoord;
-			writebend[1] = zCoord-1;
+			write = ForgeDirection.EAST;
+			write2 = ForgeDirection.NORTH;
 			break;
 		case 9: //+z and +x <- -z
 			read = ForgeDirection.NORTH;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord;
-			writeinline[1] = zCoord+1;
-			writebend[0] = xCoord+1;
-			writebend[1] = zCoord;
+			write = ForgeDirection.SOUTH;
+			write2 = ForgeDirection.EAST;
 			break;
 		case 10: //+z and -x <- +x
 			read = ForgeDirection.EAST;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord-1;
-			writeinline[1] = zCoord;
-			writebend[0] = xCoord;
-			writebend[1] = zCoord+1;
+			write = ForgeDirection.WEST;
+			write2 = ForgeDirection.SOUTH;
 			break;
 		case 11: //-z and -x <- +z
 			read = ForgeDirection.SOUTH;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord;
-			writeinline[1] = zCoord-1;
-			writebend[0] = xCoord-1;
-			writebend[1] = zCoord;
+			write = ForgeDirection.NORTH;
+			write2 = ForgeDirection.WEST;
 			break;
 		case 12://+z and +x <- -x
 			read = ForgeDirection.WEST;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord+1;
-			writeinline[1] = zCoord;
-			writebend[0] = xCoord;
-			writebend[1] = zCoord+1;
+			write = ForgeDirection.EAST;
+			write2 = ForgeDirection.SOUTH;
 			break;
 		case 13: //+z and -x <- -z
 			read = ForgeDirection.NORTH;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord;
-			writeinline[1] = zCoord+1;
-			writebend[0] = xCoord-1;
-			writebend[1] = zCoord;
+			write = ForgeDirection.SOUTH;
+			write2 = ForgeDirection.WEST;
 			break;
 		case 14: //-z and -x <- +x
 			read = ForgeDirection.EAST;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord-1;
-			writeinline[1] = zCoord;
-			writebend[0] = xCoord;
-			writebend[1] = zCoord-1;
+			write = ForgeDirection.WEST;
+			write2 = ForgeDirection.NORTH;
 			break;
 		case 15: //-z and +x <- +z
 			read = ForgeDirection.SOUTH;
-			write = null;
 			read2 = null;
-			writeinline[0] = xCoord;
-			writeinline[1] = zCoord-1;
-			writebend[0] = xCoord+1;
-			writebend[1] = zCoord;
+			write = ForgeDirection.NORTH;
+			write2 = ForgeDirection.EAST;
 			break;
+		}
+		if (write != null) {
+			writeinline[0] = xCoord+write.offsetX;
+			writeinline[1] = zCoord+write.offsetZ;
+		}
+		else {
+			writeinline[0] = Integer.MIN_VALUE;
+			writeinline[1] = Integer.MIN_VALUE;
+		}
+		if (write2 != null) {
+			writebend[0] = xCoord+write2.offsetX;
+			writebend[1] = zCoord+write2.offsetZ;
+		}
+		else {
+			writebend[0] = Integer.MIN_VALUE;
+			writebend[1] = Integer.MIN_VALUE;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.writex, this.yCoord, this.writez, 44);
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.writex2, this.yCoord, this.writez2, 79);
@@ -238,121 +240,149 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			return; //not its output
 	}
 
-	protected void transferPower(World world, int x, int y, int z, int meta) {
-		omegain = torquein = 0;
+	protected void transferPower(World world, int x, int y, int z, int meta, boolean check1, boolean check2) {
+		if (check1 && check2)
+			omegain = torquein = 0;
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		if (!this.isSplitting()) {
-			TileEntity te = this.getAdjacentTileEntity(read);
-			TileEntity te2 = this.getAdjacentTileEntity(read2);
-			MachineRegistry m = this.getMachine(read);
-			MachineRegistry m2 = this.getMachine(read2);
-			if (this.isProvider(te)) {
-				if (m == MachineRegistry.SHAFT) {
-					TileEntityShaft devicein = (TileEntityShaft)te;
-					if (devicein.isCross()) {
-						this.mergeReadFromCross(devicein, 0);
-						//  return;
+			int dx = x+read.offsetX;
+			int dy = y+read.offsetY;
+			int dz = z+read.offsetZ;
+			int dx2 = x+read2.offsetX;
+			int dy2 = y+read2.offsetY;
+			int dz2 = z+read2.offsetZ;
+			MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+			MachineRegistry m2 = isCentered ? this.getMachine(read2) : MachineRegistry.getMachine(world, dx2, dy2, dz2);
+			TileEntity te2 = isCentered ? this.getAdjacentTileEntity(read2) : world.getBlockTileEntity(dx2, dy2, dz2);
+			if (check1) {
+				if (this.isProvider(te)) {
+					if (m == MachineRegistry.SHAFT) {
+						TileEntityShaft devicein = (TileEntityShaft)te;
+						if (devicein.isCross()) {
+							this.mergeReadFromCross(devicein, 0);
+							//  return;
+						}
+						else if (devicein.isWritingTo(this)) {
+							torquein = devicein.torque;
+							omegain = devicein.omega;
+						}
 					}
-					else if (devicein.isWritingTo(this)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
+					if (te instanceof SimpleProvider) {
+						TileEntityIOMachine devicein = (TileEntityIOMachine)te;
+						if (devicein.isWritingTo(this)) {
+							torquein = devicein.torque;
+							omegain = devicein.omega;
+						}
+						else
+							torquein = omegain = 0;
 					}
-				}
-				if (te instanceof SimpleProvider) {
-					TileEntityIOMachine devicein = (TileEntityIOMachine)te;
-					if (devicein.isWritingTo(this)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
+					if (m == MachineRegistry.POWERBUS) {
+						TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+						omegain = pwr.getSpeedToSide(dir);
+						torquein = pwr.getTorqueToSide(dir);
 					}
-					else
-						torquein = omegain = 0;
-				}
-				if (m == MachineRegistry.POWERBUS) {
-					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-					omegain = pwr.getSpeedToSide(dir);
-					torquein = pwr.getTorqueToSide(dir);
-				}
-				if (te instanceof ShaftPowerEmitter) {
-					ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-					if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-						torquein = sp.getTorque();
-						omegain = sp.getOmega();
+					if (te instanceof ShaftPowerEmitter) {
+						ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+						if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+							torquein = sp.getTorque();
+							omegain = sp.getOmega();
+						}
+						else
+							torquein = omegain = 0;
 					}
-					else
-						torquein2 = omegain2 = 0;
-				}
-				if (m == MachineRegistry.SPLITTER) {
-					TileEntitySplitter devicein = (TileEntitySplitter)te;
-					if (devicein.isSplitting()) {
-						this.readFromSplitter(devicein);
-					}
-					else if (devicein.isWritingTo(this)) {
-						torquein = devicein.torque;
-						omegain = devicein.omega;
-					}
-				}
-			}
-			else {
-				torquein = omegain = 0;
-			}
-			if (this.isProvider(te2)) {
-				if (m2 == MachineRegistry.SHAFT) {
-					TileEntityShaft devicein2 = (TileEntityShaft)te2;
-					if (devicein2.isCross()) {
-						this.mergeReadFromCross(devicein2, 1);
-						// ReikaChatHelper.writeInt(this.omegain2);
-						// return;
-					}
-					else if (devicein2.isWritingTo(this)) {
-						torquein2 = devicein2.torque;
-						omegain2 = devicein2.omega;
+					if (m == MachineRegistry.SPLITTER) {
+						TileEntitySplitter devicein = (TileEntitySplitter)te;
+						if (devicein.isSplitting()) {
+							this.readFromSplitter(devicein);
+						}
+						else if (devicein.isWritingTo(this)) {
+							torquein = devicein.torque;
+							omegain = devicein.omega;
+						}
 					}
 				}
-				if (te2 instanceof SimpleProvider) {
-					TileEntityIOMachine devicein = (TileEntityIOMachine)te2;
-					if (devicein.isWritingTo(this)) {
-						torquein2 = devicein.torque;
-						omegain2 = devicein.omega;
-					}
-					else
-						torquein2 = omegain2 = 0;
+				else if (te instanceof SpaceRift) {
+					SpaceRift sr = (SpaceRift)te;
+					WorldLocation loc = sr.getLinkTarget();
+					if (loc != null)
+						this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta, true, false);
 				}
-				if (m2 == MachineRegistry.POWERBUS) {
-					TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
-					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-					omegain2 = pwr.getSpeedToSide(dir);
-					torquein2 = pwr.getTorqueToSide(dir);
-				}
-				if (te2 instanceof ShaftPowerEmitter) {
-					ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
-					if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-						torquein2 = sp.getTorque();
-						omegain2 = sp.getOmega();
-					}
-					else
-						torquein2 = omegain2 = 0;
-				}
-				if (m2 == MachineRegistry.SPLITTER) {
-					TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
-					if (devicein2.isSplitting()) {
-						this.readFromSplitter(devicein2);
-					}
-					else if (devicein2.isWritingTo(this)) {
-						torquein2 = devicein2.torque;
-						omegain2 = devicein2.omega;
-					}
+				else {
+					omegain = 0;
+					torquein = 0;
 				}
 			}
-			else {
-				torquein2 = omegain2 = 0;
+			if (check2) {
+				if (this.isProvider(te2)) {
+					if (m2 == MachineRegistry.SHAFT) {
+						TileEntityShaft devicein2 = (TileEntityShaft)te2;
+						if (devicein2.isCross()) {
+							this.mergeReadFromCross(devicein2, 1);
+							// ReikaChatHelper.writeInt(this.omegain2);
+							// return;
+						}
+						else if (devicein2.isWritingTo(this)) {
+							torquein2 = devicein2.torque;
+							omegain2 = devicein2.omega;
+						}
+					}
+					if (te2 instanceof SimpleProvider) {
+						TileEntityIOMachine devicein = (TileEntityIOMachine)te2;
+						if (devicein.isWritingTo(this)) {
+							torquein2 = devicein.torque;
+							omegain2 = devicein.omega;
+						}
+						else
+							torquein2 = omegain2 = 0;
+					}
+					if (m2 == MachineRegistry.POWERBUS) {
+						TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
+						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+						omegain2 = pwr.getSpeedToSide(dir);
+						torquein2 = pwr.getTorqueToSide(dir);
+					}
+					if (te2 instanceof ShaftPowerEmitter) {
+						ShaftPowerEmitter sp = (ShaftPowerEmitter)te2;
+						if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
+							torquein2 = sp.getTorque();
+							omegain2 = sp.getOmega();
+						}
+						else
+							torquein2 = omegain2 = 0;
+					}
+					if (m2 == MachineRegistry.SPLITTER) {
+						TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
+						if (devicein2.isSplitting()) {
+							this.readFromSplitter(devicein2);
+						}
+						else if (devicein2.isWritingTo(this)) {
+							torquein2 = devicein2.torque;
+							omegain2 = devicein2.omega;
+						}
+					}
+				}
+				else if (te2 instanceof SpaceRift) {
+					SpaceRift sr = (SpaceRift)te2;
+					WorldLocation loc = sr.getLinkTarget();
+					if (loc != null)
+						this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta, false, true);
+				}
+				else {
+					omegain2 = 0;
+					torquein2 = 0;
+				}
 			}
+			if (!check1 || !check2)
+				return;
 
 			if (read != null && read2 != null) {
-				PowerSourceList in1 = PowerSourceList.getAllFrom(world, x+read.offsetX, y+read.offsetY, z+read.offsetZ, this, this);
-				PowerSourceList in2 = PowerSourceList.getAllFrom(world, x+read2.offsetX, y+read2.offsetY, z+read2.offsetZ, this, this);
+				PowerSourceList in1 = PowerSourceList.getAllFrom(world, read, x+read.offsetX, y+read.offsetY, z+read.offsetZ, this, this);
+				PowerSourceList in2 = PowerSourceList.getAllFrom(world, read2, x+read2.offsetX, y+read2.offsetY, z+read2.offsetZ, this, this);
 				if (this.isLoopingPower(in1, in2)) {
-					omega = omegain;
-					torque = torquein;
+					omega = Math.min(omegain, omegain2);
+					torque = Math.min(torquein, torquein2);
 					power = omega*torque;
 					return;
 				}
@@ -379,65 +409,75 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			//--------------------------------------------------------------------------------------------
 			//------################-------Splitter mode (dmg >= 8)-------##########################------
 			//--------------------------------------------------------------------------------------------
-			MachineRegistry m = this.getMachine(read);
-			//ReikaJavaLibrary.pConsole(readx+"  "+readz+"  "+m);
-			TileEntity te = this.getAdjacentTileEntity(read);
-			if (te == null || !(te instanceof TileEntityIOMachine)) {
-				torque = omega = 0;
-				return;
-			}
-			if (m == MachineRegistry.SHAFT) {
-				TileEntityShaft devicein = (TileEntityShaft)te;
-				if (devicein.isCross()) {
-					this.readFromCross(devicein);
-					//ReikaChatHelper.writeInt(this.torque);
-					return;
+			int dx = x+read.offsetX;
+			int dy = y+read.offsetY;
+			int dz = z+read.offsetZ;
+			MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+			if (this.isProvider(te)) {
+				if (m == MachineRegistry.SHAFT) {
+					TileEntityShaft devicein = (TileEntityShaft)te;
+					if (devicein.isCross()) {
+						this.readFromCross(devicein);
+						//ReikaChatHelper.writeInt(this.torque);
+						return;
+					}
+					if (devicein.isWritingTo(this)) {
+						torque = devicein.torque;
+						omega = devicein.omega;
+					}
+					else
+						torque = omega = 0;
 				}
-				if (devicein.isWritingTo(this)) {
-					torque = devicein.torque;
-					omega = devicein.omega;
+				if (te instanceof SimpleProvider) {
+					TileEntityIOMachine devicein = (TileEntityIOMachine)te;
+					if (devicein.isWritingTo(this)) {
+						torque = devicein.torque;
+						omega = devicein.omega;
+					}
+					else
+						torque = omega = 0;
 				}
-				else
-					torque = omega = 0;
-			}
-			if (te instanceof SimpleProvider) {
-				TileEntityIOMachine devicein = (TileEntityIOMachine)te;
-				if (devicein.isWritingTo(this)) {
-					torque = devicein.torque;
-					omega = devicein.omega;
+				if (te instanceof ShaftPowerEmitter) {
+					ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+					if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+						torque = sp.getTorque();
+						omega = sp.getOmega();
+					}
+					else
+						torque = omega = 0;
 				}
-				else
-					torque = omega = 0;
-			}
-			if (te instanceof ShaftPowerEmitter) {
-				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-				if (sp.isEmitting() && sp.canWriteToBlock(xCoord, yCoord, zCoord)) {
-					torque = sp.getTorque();
-					omega = sp.getOmega();
-				}
-				else
-					torque = omega = 0;
-			}
 
-			if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-				omegain = pwr.getSpeedToSide(dir);
-				torquein = pwr.getTorqueToSide(dir);
+				if (m == MachineRegistry.POWERBUS) {
+					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+					omegain = pwr.getSpeedToSide(dir);
+					torquein = pwr.getTorqueToSide(dir);
+				}
+				if (m == MachineRegistry.SPLITTER) {
+					TileEntitySplitter devicein = (TileEntitySplitter)te;
+					if (devicein.isSplitting()) {
+						this.readFromSplitter(devicein);
+						torque = torquein;
+						omega = omegain;
+					}
+					else if (devicein.isWritingTo(this)) {
+						torque = devicein.torque;
+						omega = devicein.omega;
+					}
+					else
+						torque = omega = 0;
+				}
 			}
-			if (m == MachineRegistry.SPLITTER) {
-				TileEntitySplitter devicein = (TileEntitySplitter)te;
-				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
-					torque = torquein;
-					omega = omegain;
-				}
-				else if (devicein.isWritingTo(this)) {
-					torque = devicein.torque;
-					omega = devicein.omega;
-				}
-				else
-					torque = omega = 0;
+			else if (te instanceof SpaceRift) {
+				SpaceRift sr = (SpaceRift)te;
+				WorldLocation loc = sr.getLinkTarget();
+				if (loc != null)
+					this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta, false, false);
+			}
+			else {
+				omega = 0;
+				torque = 0;
 			}
 			power = (long)torque*(long)omega;
 			this.writeToReceiver();
@@ -450,26 +490,22 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	private boolean isLoopingPower(PowerSourceList in1, PowerSourceList in2) {
-		if (torquein*omegain != 0 && in1.getMaxGennablePower() == 0) {
+		if (torquein*omegain != 0 && in1.getRealMaxPower() == 0) {
 			omegain = omegain2;
 			torquein = torquein2;
 			return true;
 		}
-		if (torquein2*omegain2 != 0 && in2.getMaxGennablePower() == 0) {
+		if (torquein2*omegain2 != 0 && in2.getRealMaxPower() == 0) {
 			omegain2 = omegain;
 			torquein2 = torquein;
 			return true;
 		}
-		return false;
+		return in1.passesThrough(this) || in2.passesThrough(this);
 	}
 
 	private void writeToReceiver() {
 		int t1;
 		int t2;
-		int x1 = writeinline[0];
-		int z1 = writeinline[1];
-		int x2 = writebend[0];
-		int z2 = writebend[1];
 		int y = yCoord;
 		World world = worldObj;
 
@@ -501,8 +537,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			t2 = torque/ratio;
 		}
 
-		this.writeToPowerReceiverAt(world, x1, y, z1, omega, t1);
-		this.writeToPowerReceiverAt(world, x2, y, z2, omega, t2);
+		this.writeToPowerReceiver(write, omega, t1);
+		this.writeToPowerReceiver(write2, omega, t2);
 	}
 
 	@Override
@@ -601,15 +637,15 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			caller = this;
 		if (!this.isSplitting()) { //merge
 			if (read != null && read2 != null) {
-				PowerSourceList in1 = pwr.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
-				PowerSourceList in2 = pwr.getAllFrom(worldObj, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
+				PowerSourceList in1 = pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+				PowerSourceList in2 = pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
 				pwr.addAll(in1);
 				pwr.addAll(in2);
 			}
 			return pwr;
 		}
 		else {
-			return PowerSourceList.getAllFrom(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+			return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 		}
 	}
 
@@ -640,7 +676,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getWriteX() {
-		return this.isSplitting() ? writeinline[0] : write != null ? xCoord+write.offsetX : Integer.MIN_VALUE;
+		return write != null ? xCoord+write.offsetX : Integer.MIN_VALUE;
 	}
 
 	@Override
@@ -650,12 +686,12 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getWriteZ() {
-		return this.isSplitting() ? writeinline[1] : write != null ? zCoord+write.offsetZ : Integer.MIN_VALUE;
+		return write != null ? zCoord+write.offsetZ : Integer.MIN_VALUE;
 	}
 
 	@Override
 	public int getWriteX2() {
-		return this.isSplitting() ? writebend[0] : write2 != null ? xCoord+write2.offsetX : Integer.MIN_VALUE;
+		return write2 != null ? xCoord+write2.offsetX : Integer.MIN_VALUE;
 	}
 
 	@Override
@@ -665,6 +701,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getWriteZ2() {
-		return this.isSplitting() ? writebend[1] : write2 != null ? zCoord+write2.offsetZ : Integer.MIN_VALUE;
+		return write2 != null ? zCoord+write2.offsetZ : Integer.MIN_VALUE;
 	}
 }

@@ -563,35 +563,40 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		return 27;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				if (lvl > 0)
+					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
 
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null) {
 				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
 				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
-	}
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
-		super.writeSyncTag(NBT);
-
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
 			}
 		}
 	}

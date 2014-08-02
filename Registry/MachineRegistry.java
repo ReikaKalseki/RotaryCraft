@@ -29,6 +29,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -464,6 +465,10 @@ public enum MachineRegistry {
 		if (m == null)
 			return -1;
 		return m.ordinal();
+	}
+
+	public static MachineRegistry getMachine(WorldLocation loc) {
+		return getMachine(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
 	}
 
 	public static MachineRegistry getMachine(IBlockAccess world, int x, int y, int z) {
@@ -1297,6 +1302,15 @@ public enum MachineRegistry {
 			return true;
 		default:
 			return false;
+		}
+	}
+
+	public boolean canFlip() {
+		switch(this) {
+		case SPLITTER:
+			return false;
+		default:
+			return true;
 		}
 	}
 

@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -159,7 +158,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
-		te.isFlipped = RotaryAux.shouldSetFlipped(world, x, y, z);
+		if (m.canFlip())
+			te.isFlipped = RotaryAux.shouldSetFlipped(world, x, y, z);
 		if (m == MachineRegistry.PNEUENGINE || m == MachineRegistry.STEAMTURBINE || m == MachineRegistry.GENERATOR || m == MachineRegistry.ELECTRICMOTOR || m == MachineRegistry.MAGNETIC) {
 			te.setBlockMetadata(BlockModEngine.getDirectionMetadataFromPlayerLook(ep));
 			return true;

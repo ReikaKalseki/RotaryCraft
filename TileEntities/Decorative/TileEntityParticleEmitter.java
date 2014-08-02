@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.InertIInv;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

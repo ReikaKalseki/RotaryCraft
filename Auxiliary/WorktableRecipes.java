@@ -152,7 +152,7 @@ public class WorktableRecipes
 			{
 				if (!(object1 instanceof Block))
 				{
-					throw new RuntimeException("Invalid shapeless recipy!");
+					throw new RuntimeException("Invalid shapeless recipe!");
 				}
 
 				arraylist.add(new ItemStack((Block)object1));

@@ -279,13 +279,6 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("setRange", setRange);
-
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
 	}
 
 	@Override
@@ -293,6 +286,24 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	{
 		super.readSyncTag(NBT);
 		setRange = NBT.getInteger("setRange");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+			if (Enchantment.enchantmentsList[i] != null) {
+				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
+				if (lvl > 0)
+					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
+			}
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
 
 		enchantments = new HashMap<Enchantment,Integer>();
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {

@@ -9,10 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+import net.minecraftforge.common.ForgeDirection;
+
 public interface ShaftPowerEmitter extends ShaftMachine, PowerGenerator {
 
 	/** x,y,z to write to */
-	public boolean canWriteToBlock(int x, int y, int z);
+	public boolean canWriteTo(ForgeDirection dir);
 
 	/** Whether your machine is emitting power right now */
 	public boolean isEmitting();

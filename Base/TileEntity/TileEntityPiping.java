@@ -86,6 +86,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	@Override
+	public int getPacketDelay() {
+		return 4*super.getPacketDelay();
+	}
+
+	@Override
 	public final int getRedstoneOverride() {
 		return 0;
 	}

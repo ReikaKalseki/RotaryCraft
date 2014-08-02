@@ -152,7 +152,7 @@ public final class OreForcer {
 		if (id == -1)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Silicon");
 		ItemStack silicon = new ItemStack(id, 1, GalacticCraftHandler.siliconMeta);
-		GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.SILICON), silicon);
+		GameRegistry.addShapelessRecipe(silicon, ItemStacks.getModOreIngot(ModOreList.SILICON));
 	}
 
 	private void intercraftPRGems() {
