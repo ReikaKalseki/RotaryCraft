@@ -31,6 +31,7 @@ public class JetpackFuelOverlay {
 
 	@ForgeSubscribe
 	public void eventHandler(RenderGameOverlayEvent event) {
+		//if (event.type == ElementType.HEALTH) {
 		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
 		ItemStack is = ep.getCurrentArmor(2);
 		if (is != null) {
@@ -66,6 +67,7 @@ public class JetpackFuelOverlay {
 				}
 			}
 		}
+		//}
 	}
 
 }

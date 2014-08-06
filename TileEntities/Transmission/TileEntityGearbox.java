@@ -273,42 +273,44 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
 		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
-		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft devicein = (TileEntityShaft)te;
-			if (devicein.isCross()) {
-				this.readFromCross(devicein);
-				return;
+		if (this.isProvider(te)) {
+			if (m == MachineRegistry.SHAFT) {
+				TileEntityShaft devicein = (TileEntityShaft)te;
+				if (devicein.isCross()) {
+					this.readFromCross(devicein);
+					return;
+				}
+				if (devicein.isWritingTo(this)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
 			}
-			if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
+			if (te instanceof SimpleProvider) {
+				this.copyStandardPower(te);
 			}
-		}
-		if (te instanceof SimpleProvider) {
-			this.copyStandardPower(te);
-		}
-		if (m == MachineRegistry.POWERBUS) {
-			TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-			ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-			omegain = pwr.getSpeedToSide(dir);
-			torquein = pwr.getTorqueToSide(dir);
-		}
-		if (te instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
-			if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
-				torquein = sp.getTorque();
-				omegain = sp.getOmega();
+			if (m == MachineRegistry.POWERBUS) {
+				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				omegain = pwr.getSpeedToSide(dir);
+				torquein = pwr.getTorqueToSide(dir);
 			}
-		}
-		if (m == MachineRegistry.SPLITTER) {
-			TileEntitySplitter devicein = (TileEntitySplitter)te;
-			if (devicein.isSplitting()) {
-				this.readFromSplitter(devicein);
-				return;
+			if (te instanceof ShaftPowerEmitter) {
+				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
+				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
+					torquein = sp.getTorque();
+					omegain = sp.getOmega();
+				}
 			}
-			else if (devicein.isWritingTo(this)) {
-				torquein = devicein.torque;
-				omegain = devicein.omega;
+			if (m == MachineRegistry.SPLITTER) {
+				TileEntitySplitter devicein = (TileEntitySplitter)te;
+				if (devicein.isSplitting()) {
+					this.readFromSplitter(devicein);
+					return;
+				}
+				else if (devicein.isWritingTo(this)) {
+					torquein = devicein.torque;
+					omegain = devicein.omega;
+				}
 			}
 		}
 		else if (te instanceof SpaceRift) {

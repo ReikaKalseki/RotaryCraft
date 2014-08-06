@@ -115,7 +115,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 			if (power > 0) {
 				if (sound.checkCap())
-					SoundRegistry.PNEUMATIC.playSoundAtBlock(world, x, y, z, 1.2F, 1);
+					SoundRegistry.PNEUMATIC.playSoundAtBlock(world, x, y, z, this.isMuffled() ? 0.3F : 1.2F, 1);
 			}
 		}
 

@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
@@ -68,7 +69,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		sound.update();
 		if (omega > 0) {
 			if (sound.checkCap())
-				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
+				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.05F : 0.5F, 1F);
 		}
 	}
 

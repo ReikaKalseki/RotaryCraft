@@ -52,6 +52,14 @@ public abstract class GuiMachine extends GuiContainer {
 
 	public abstract String getGuiTexture();
 
+	public final int getXSize() {
+		return xSize;
+	}
+
+	public final int getYSize() {
+		return ySize;
+	}
+
 	@Override
 	public void initGui() {
 		super.initGui();

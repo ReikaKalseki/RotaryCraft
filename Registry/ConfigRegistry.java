@@ -77,7 +77,8 @@ public enum ConfigRegistry implements ConfigList {
 	EXTRAIRON("Iron Ore Density", 1F),
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
 	CLEARCHAT("Tools Clear Chat", true),
-	KICKFLYING("Jetpack bypasses allow-flight property", true);
+	KICKFLYING("Jetpack bypasses allow-flight property", true),
+	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true);
 
 	private String label;
 	private boolean defaultState;

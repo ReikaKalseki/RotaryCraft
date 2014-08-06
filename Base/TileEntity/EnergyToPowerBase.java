@@ -92,6 +92,30 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		return item.itemID == ItemRegistry.UPGRADE.getShiftedID() && item.getItemDamage() == tier+1;
 	}
 
+	protected final boolean isMuffled() {
+		World world = worldObj;
+		int x = xCoord;
+		int y = yCoord;
+		int z = zCoord;
+		if (world.getBlockId(x, y+1, z) == Block.cloth.blockID && world.getBlockId(x, y-1, z) == Block.cloth.blockID) {
+			return true;
+		}
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (dir != ForgeDirection.DOWN) {
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				if ((dir != write.getOpposite() && dir != write) || dir == ForgeDirection.UP) {
+					int id = world.getBlockId(dx, dy, dz);
+					if (id != Block.cloth.blockID)
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public final int getTierFromPowerOutput(long power) {
 		for (int i = 0; i < TIERS; i++) {
 			long tier = this.getTierPower(i);

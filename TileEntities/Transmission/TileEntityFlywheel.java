@@ -25,6 +25,7 @@ import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Event.FlywheelFailureEvent;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TorqueUsage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -191,7 +192,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		if (soundtick < -3F/(pitch*pitch)+69/(pitch))
 			return;
 		soundtick = 0;
-		SoundRegistry.FLYWHEEL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 1, pitch);
+		SoundRegistry.FLYWHEEL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, RotaryAux.isMuffled(this) ? 0.3F : 1, pitch);
 	}
 
 	public void getType(int meta) {

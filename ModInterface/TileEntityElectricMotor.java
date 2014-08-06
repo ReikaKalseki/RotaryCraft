@@ -68,7 +68,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 			if (power > 0) {
 				if (tickcount >= 294) {
 					tickcount = 0;
-					SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, 0.2F, 0.51F);
+					SoundRegistry.ELECTRIC.playSoundAtBlock(world, x, y, z, this.isMuffled() ? 0.08F : 0.2F, 0.51F);
 				}
 			}
 		}

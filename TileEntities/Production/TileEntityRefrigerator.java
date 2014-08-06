@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
@@ -44,7 +45,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 					this.cycle();
 			}
 			if (soundTimer.checkCap()) {
-				SoundRegistry.FRIDGE.playSoundAtBlock(world, x, y, z, 1, 0.88F);
+				SoundRegistry.FRIDGE.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.25F : 1, 0.88F);
 			}
 		}
 		else {

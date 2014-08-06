@@ -16,28 +16,28 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelDynamo2 extends RotaryModelBase
 {
 	//fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
+	LODModelPart Shape1;
+	LODModelPart Shape2;
 
 	public ModelDynamo2()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
+		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 10, 16);
 		Shape1.setRotationPoint(-8F, 14F, -8F);
 		Shape1.setTextureSize(128, 128);
 		Shape1.mirror = true;
 		this.setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 70, 0);
+		Shape2 = new LODModelPart(this, 70, 0);
 		Shape2.addBox(0F, 0F, 0F, 8, 6, 8);
 		Shape2.setRotationPoint(-4F, 8F, -4F);
 		Shape2.setTextureSize(128, 128);
@@ -48,8 +48,8 @@ public class ModelDynamo2 extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2.render(f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
 	}
 
 	@Override

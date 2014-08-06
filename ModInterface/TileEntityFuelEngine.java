@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -131,7 +132,7 @@ TemperatureTE {
 		if (power > 0) {
 			this.makeSmoke(world, x, y, z, meta);
 			if (soundTick.checkCap()) {
-				SoundRegistry.DIESEL.playSoundAtBlock(world, x, y, z, 1F, 0.4F);
+				SoundRegistry.DIESEL.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.3F : 1F, 0.4F);
 			}
 			if (world.getTotalWorldTime()%8 == 0)
 				lubetank.removeLiquid(1);

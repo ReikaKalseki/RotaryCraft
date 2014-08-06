@@ -37,8 +37,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		if (power >= MINPOWER)
 			RotaryAchievements.FLOODLIGHT.triggerAchievement(this.getPlacer());
 		power = (long)omega*(long)torque;
-		if ((world.getTotalWorldTime()&8) == 8) //almost unnoticeable light lag, but big FPS increase
-			this.makeBeam(world, x, y, z, meta);
+		if (!world.isRemote) {
+			if ((world.getTotalWorldTime()&8) == 8) //almost unnoticeable light lag, but big FPS increase
+				this.makeBeam(world, x, y, z, meta);
+		}
 	}
 
 	@Override
@@ -46,6 +48,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		//ReikaJavaLibrary.pConsole(lastRange+":"+this.getRange(), Side.SERVER);
 		int r = this.getRange();
 		if (lastRange != r) {
+			RotaryCraft.logger.debug("Updating "+this+" range from "+lastRange+" to "+r);
 			//ReikaJavaLibrary.pConsole(beam);
 			for (int i = 0; i < beam.getSize(); i++) {
 				int[] xyz = beam.getNthBlock(i);

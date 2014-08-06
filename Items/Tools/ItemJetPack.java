@@ -123,30 +123,6 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack is)
 	{
-		/*
-		if (is.stackTagCompound == null)
-			is.stackTagCompound = new NBTTagCompound();
-		NBTTagCompound nbtData = is.stackTagCompound;
-		byte toggleTimer = nbtData.getByte("toggleTimer");
-		boolean jetpackUsed = false;
-		boolean flying = false;
-
-		//ReikaJavaLibrary.pConsole(player.onGround+":"+Keyboard.isKeyDown(Keyboard.KEY_SPACE));
-
-		if (!ConfigRegistry.CONSERVEPACK.getState() || this.canFly(player)) {
-			flying = ReikaReflectionHelper.getPrivateBoolean(player, ReikaObfuscationHelper.getLabelName("isJumping"), RotaryCraft.logger);
-			//ReikaJavaLibrary.pConsole(bool+" on "+FMLCommonHandler.instance().getEffectiveSide());
-			if (flying) {
-				jetpackUsed = this.useJetpack(player);
-			}
-		}
-
-		if (!world.isRemote && (toggleTimer > 0)) {
-			toggleTimer = (byte)(toggleTimer - 1);
-
-			nbtData.setByte("toggleTimer", toggleTimer);
-		}*/
-
 		boolean flying = this.useJetpack(player, is);
 
 		if (ConfigRegistry.EXPLODEPACK.getState()) {
@@ -160,25 +136,6 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			}
 		}
 	}
-	/*
-	private boolean canFly(EntityPlayer player) {
-		long millis = System.currentTimeMillis();
-		if (player.onGround) {
-			onGround.put(player.getEntityName(), millis);
-			return false;
-		}
-		Long prev = onGround.get(player.getEntityName());
-		if (prev == null) {
-			prev = new Long(0);
-			onGround.put(player.getEntityName(), prev);
-			return true;
-		}
-		else {
-			long diff = millis - prev.longValue();
-			//ReikaJavaLibrary.pConsole(diff, FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
-			return diff > 120;
-		}
-	}*/
 
 	private boolean useJetpack(EntityPlayer ep, ItemStack is) {
 		boolean isFlying = KeyWatcher.instance.isKeyDown(ep, Key.JUMP);
@@ -236,7 +193,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 					}
 				}
 
-				SoundRegistry.JETPACK.playSound(ep.worldObj, ep.posX, ep.posY, ep.posZ, 0.5F, itemRand.nextFloat()+0.5F);
+				float pitch = 1+0.5F*(float)Math.sin((ep.worldObj.getWorldTime()*2)%360);
+				SoundRegistry.JETPACK.playSound(ep.worldObj, ep.posX, ep.posY, ep.posZ, 0.75F, pitch);
 			}
 		}
 		return isFlying;

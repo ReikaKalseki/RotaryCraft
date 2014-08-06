@@ -16,87 +16,87 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelCompressor extends RotaryModelBase
 {
 	//fields
-	ModelRenderer ring1;
-	ModelRenderer base;
-	ModelRenderer ring2;
-	ModelRenderer ring3;
-	ModelRenderer ring;
-	ModelRenderer core;
-	ModelRenderer jacket;
-	ModelRenderer jacket2;
-	ModelRenderer jacket1;
-	ModelRenderer jacket3;
+	LODModelPart ring1;
+	LODModelPart base;
+	LODModelPart ring2;
+	LODModelPart ring3;
+	LODModelPart ring;
+	LODModelPart core;
+	LODModelPart jacket;
+	LODModelPart jacket2;
+	LODModelPart jacket1;
+	LODModelPart jacket3;
 
 	public ModelCompressor()
 	{
 		textureWidth = 128;
 		textureHeight = 128;
 
-		ring1 = new ModelRenderer(this, 75, 21);
+		ring1 = new LODModelPart(this, 75, 21);
 		ring1.addBox(0F, 0F, 0F, 4, 4, 16);
 		ring1.setRotationPoint(4F, 16F, -8F);
 		ring1.setTextureSize(128, 128);
 		ring1.mirror = true;
 		this.setRotation(ring1, 0F, 0F, 0F);
-		base = new ModelRenderer(this, 0, 21);
+		base = new LODModelPart(this, 0, 21);
 		base.addBox(0F, 0F, 0F, 16, 4, 16);
 		base.setRotationPoint(-8F, 20F, -8F);
 		base.setTextureSize(128, 128);
 		base.mirror = true;
 		this.setRotation(base, 0F, 0F, 0F);
-		ring2 = new ModelRenderer(this, 0, 53);
+		ring2 = new LODModelPart(this, 0, 53);
 		ring2.addBox(0F, 0F, 0F, 8, 4, 4);
 		ring2.setRotationPoint(-4F, 16F, 4F);
 		ring2.setTextureSize(128, 128);
 		ring2.mirror = true;
 		this.setRotation(ring2, 0F, 0F, 0F);
-		ring3 = new ModelRenderer(this, 75, 0);
+		ring3 = new LODModelPart(this, 75, 0);
 		ring3.addBox(0F, 0F, 0F, 4, 4, 16);
 		ring3.setRotationPoint(-8F, 16F, -8F);
 		ring3.setTextureSize(128, 128);
 		ring3.mirror = true;
 		this.setRotation(ring3, 0F, 0F, 0F);
-		ring = new ModelRenderer(this, 0, 43);
+		ring = new LODModelPart(this, 0, 43);
 		ring.addBox(0F, 0F, 0F, 8, 4, 4);
 		ring.setRotationPoint(-4F, 16F, -8F);
 		ring.setTextureSize(128, 128);
 		ring.mirror = true;
 		this.setRotation(ring, 0F, 0F, 0F);
-		core = new ModelRenderer(this, 41, 0);
+		core = new LODModelPart(this, 41, 0);
 		core.addBox(0F, 0F, 0F, 8, 12, 8);
 		core.setRotationPoint(-4F, 8F, -4F);
 		core.setTextureSize(128, 128);
 		core.mirror = true;
 		this.setRotation(core, 0F, 0F, 0F);
-		jacket = new ModelRenderer(this, 0, 72);
+		jacket = new LODModelPart(this, 0, 72);
 		jacket.addBox(0F, 0F, 0F, 10, 8, 1);
 		jacket.setRotationPoint(-5F, 12F, 4F);
 		jacket.setTextureSize(128, 128);
 		jacket.mirror = true;
 		this.setRotation(jacket, 0F, 0F, 0F);
-		jacket2 = new ModelRenderer(this, 24, 70);
+		jacket2 = new LODModelPart(this, 24, 70);
 		jacket2.addBox(0F, 0F, 0F, 1, 8, 8);
 		jacket2.setRotationPoint(4F, 12F, -4F);
 		jacket2.setTextureSize(128, 128);
 		jacket2.mirror = true;
 		this.setRotation(jacket2, 0F, 0F, 0F);
-		jacket1 = new ModelRenderer(this, 0, 62);
+		jacket1 = new LODModelPart(this, 0, 62);
 		jacket1.addBox(0F, 0F, 0F, 10, 8, 1);
 		jacket1.setRotationPoint(-5F, 12F, -5F);
 		jacket1.setTextureSize(128, 128);
 		jacket1.mirror = true;
 		this.setRotation(jacket1, 0F, 0F, 0F);
-		jacket3 = new ModelRenderer(this, 27, 47);
+		jacket3 = new LODModelPart(this, 27, 47);
 		jacket3.addBox(0F, 0F, 0F, 1, 8, 8);
 		jacket3.setRotationPoint(-5F, 12F, -4F);
 		jacket3.setTextureSize(128, 128);
@@ -110,26 +110,26 @@ public class ModelCompressor extends RotaryModelBase
 		if (phi == 0)
 			phi = 0.0001F;
 
-		base.render(f5);
-		core.render(f5);
+		base.render(te, f5);
+		core.render(te, f5);
 
 		double d = phi;
 		double dy = -phi*2+phi*0.5+1.25;
 
 		GL11.glTranslated(0, dy, 0);
 		GL11.glScaled(-1, d*2, 1);
-		jacket.render(f5);
-		jacket2.render(f5);
-		jacket1.render(f5);
-		jacket3.render(f5);
+		jacket.render(te, f5);
+		jacket2.render(te, f5);
+		jacket1.render(te, f5);
+		jacket3.render(te, f5);
 		GL11.glScaled(-1, 0.5D/d, 1);
 		GL11.glTranslated(0, -dy, 0);
 
 		GL11.glTranslated(0, d, 0);
-		ring1.render(f5);
-		ring2.render(f5);
-		ring3.render(f5);
-		ring.render(f5);
+		ring1.render(te, f5);
+		ring2.render(te, f5);
+		ring3.render(te, f5);
+		ring.render(te, f5);
 		GL11.glTranslated(0, -d, 0);
 	}
 

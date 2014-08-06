@@ -187,7 +187,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			catch (ConcurrentModificationException e) {
 				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population due to a ConcurrentModificationException! Contact Reika with information on any mods that might be multithreading worldgen!");
 			}
-			catch (RuntimeException e) {
+			catch (Exception e) {
 				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population!");
 				e.printStackTrace();
 			}

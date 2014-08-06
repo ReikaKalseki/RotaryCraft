@@ -229,4 +229,15 @@ public class RotaryAux {
 	public static void writeMessage(String tag) {
 		ReikaChatHelper.writeString(getMessage(tag));
 	}
+
+	public static boolean isMuffled(TileEntity te) {
+		World world = te.worldObj;
+		int x = te.xCoord;
+		int y = te.yCoord;
+		int z = te.zCoord;
+		if (world.getBlockId(x, y+1, z) == Block.cloth.blockID && world.getBlockId(x, y-1, z) == Block.cloth.blockID) {
+			return true;
+		}
+		return false;
+	}
 }

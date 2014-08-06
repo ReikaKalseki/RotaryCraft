@@ -4,7 +4,7 @@
 		The most basic power-transmission device is the shaft. Nothing fancy, just carries the power from one place to another, with no changes to either the torque or the speed. Pay attention, though, to the direction to avoid headaches. Different materials of shaft have different strengths and thus different limits on maximum torque and speed.
 	</shaft>
 	<gearbox>
-		Gearboxes are used to change the ratio of torque to speed, while keeping the power constant. They come in 4 ratios - 2:1, 4:1, 8:1, and 16:1, and will affect the torque and speed accordingly. Reduction gears increase the torque and decrease the speed; acceleration gears do the opposite. Be warned: these need to be lubricated to work at their full potential; most unlubricated gearboxes will gradually wear down, and reduce the transmitted torque accordingly. Like shafts, gearboxes are subject to material failure under excessive loads.
+		Gearboxes are used to change the ratio of torque to speed, while keeping the power constant. They come in 4 ratios - 2:1, 4:1, 8:1, and 16:1, and will affect the torque and speed accordingly. Reduction gears increase the torque and decrease the speed; acceleration gears do the opposite. Be warned: these need to be lubricated to work at their full potential; most unlubricated gearboxes will gradually wear down, and reduce the transmitted torque accordingly. Like shafts, gearboxes are subject to material failure under excessive loads. Gearboxes can be repaired with gear items.
 	</gearbox>
 	<bevel>
 		Bevel gears are used to change the direction of power transmission without changing the torque or speed. Unlike their inline cousins, they do not need lubricant, and will operate continuously and losslessly.

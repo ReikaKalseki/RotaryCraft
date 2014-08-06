@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -46,7 +47,7 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		if (inv[0] != null) {
 			soundtick++;
 			if (soundtick > 49) {
-				SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
+				SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
 				soundtick = 0;
 			}
 		}

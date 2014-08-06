@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -82,7 +83,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		sound.update();
 		if (omega > 0) {
 			if (sound.checkCap())
-				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, 0.4F, 0.6F);
+				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.4F, 0.6F);
 		}
 	}
 

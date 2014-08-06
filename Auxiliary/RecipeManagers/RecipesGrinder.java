@@ -59,10 +59,10 @@ public class RecipesGrinder {
 		this.addRecipe(Block.stoneBrick, new ItemStack(Block.cobblestone.blockID, 1, 0), 0.2F);
 		this.addRecipe(Block.furnaceIdle, new ItemStack(Block.cobblestone.blockID, 8, 0), 0.2F);
 		this.addRecipe(Block.brick, new ItemStack(Item.clay.itemID, 4, 0), 0.2F);
-		this.addRecipe(Block.stairsBrick, new ItemStack(Item.clay.itemID, 24, 0), 0.2F);
+		this.addRecipe(Block.stairsBrick, new ItemStack(Item.clay.itemID, 6, 0), 0.2F);
 		this.addRecipe(Item.brick, new ItemStack(Item.clay.itemID, 1, 0), 0.2F);
-		this.addRecipe(Block.stairsCobblestone, new ItemStack(Block.gravel.blockID, 6, 0), 0.2F);
-		this.addRecipe(Block.stairsStoneBrick, new ItemStack(Block.cobblestone.blockID, 1, 0), 0.2F);
+		this.addRecipe(Block.stairsCobblestone, new ItemStack(Block.gravel.blockID, 2, 0), 0.2F);
+		this.addRecipe(Block.stairsStoneBrick, new ItemStack(Block.cobblestone.blockID, 2, 0), 0.2F);
 		this.addRecipe(Block.netherrack, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.netherrackdust.getItemDamage()), 0.2F); //create a netherrack powder
 		this.addRecipe(Block.slowSand, new ItemStack(RotaryCraft.powders.itemID, 1, ItemStacks.tar.getItemDamage()), 0.3F); //create a tar
 		this.addRecipe(Item.wheat, new ItemStack(ItemStacks.flour.itemID, 4, ItemStacks.flour.getItemDamage()), 0.1F);
@@ -74,10 +74,10 @@ public class RecipesGrinder {
 		this.addRecipe(Block.music, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.jukebox, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.fence, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Block.stairsWoodOak, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Block.stairsWoodBirch, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Block.stairsWoodSpruce, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Block.stairsWoodJungle, new ItemStack(ItemStacks.sawdust.itemID, 24, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addRecipe(Block.stairsWoodOak, new ItemStack(ItemStacks.sawdust.itemID, 6, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addRecipe(Block.stairsWoodBirch, new ItemStack(ItemStacks.sawdust.itemID, 6, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addRecipe(Block.stairsWoodSpruce, new ItemStack(ItemStacks.sawdust.itemID, 6, ItemStacks.sawdust.getItemDamage()), 0.3F);
+		this.addRecipe(Block.stairsWoodJungle, new ItemStack(ItemStacks.sawdust.itemID, 6, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.chest, new ItemStack(ItemStacks.sawdust.itemID, 32, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.workbench, new ItemStack(ItemStacks.sawdust.itemID, 16, ItemStacks.sawdust.getItemDamage()), 0.3F);
 		this.addRecipe(Block.ladder, new ItemStack(ItemStacks.sawdust.itemID, 4, ItemStacks.sawdust.getItemDamage()), 0.3F);

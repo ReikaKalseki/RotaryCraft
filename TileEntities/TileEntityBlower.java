@@ -21,10 +21,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -75,11 +77,13 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 		if (source instanceof IInventory) {
 			TileEntity target = this.getAdjacentTileEntity(dir);
+			WorldLocation tg = new WorldLocation(target);
 
 			ArrayList<TileEntity> li = new ArrayList();
 			while (target instanceof TileEntityBlower) {
 				TileEntityBlower te = (TileEntityBlower)target;
 				target = te.getAdjacentTileEntity(te.getFacingDir());
+				tg = tg.move(te.getFacingDir(), 1);
 
 				if (li.contains(target))
 					return;
@@ -101,6 +105,37 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				//ReikaJavaLibrary.pConsole(map, Side.SERVER);
 				if (map != null && !map.isEmpty())
 					this.transferItems(map, (IInventory)source, (IInventory)target, dir);
+			}
+			else if (target == null && ConfigRegistry.BLOWERSPILL.getState()) {
+				if (tg.isEmpty()) {
+					HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+					if (map != null && !map.isEmpty()) {
+						this.dumpItems(map, (IInventory)source, tg);
+					}
+				}
+			}
+		}
+	}
+
+	private void dumpItems(HashMap<Integer, ItemStack> map, IInventory source, WorldLocation loc) {
+		int items = 0;
+		int max = this.getNumberTransferrableItems();
+		if (max <= 0)
+			return;
+
+		for (int slot : map.keySet()) {
+			ItemStack is = map.get(slot);
+			if (this.isItemTransferrable(is)) {
+				int maxadd = Math.min(max-items, is.getMaxStackSize());
+				for (int i = 0; i < maxadd; i++) {
+					if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
+						loc.dropItem(ReikaItemHelper.getSizedItemStack(is, 1), 2+rand.nextDouble()*4);
+						ReikaInventoryHelper.decrStack(slot, source, 1);
+						items += 1;
+					}
+					if (items >= max)
+						return;
+				}
 			}
 		}
 	}

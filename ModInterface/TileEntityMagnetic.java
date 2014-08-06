@@ -47,7 +47,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 			if (power > 0) {
 				if (tickcount >= 85) {
 					tickcount = 0;
-					SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, 0.5F, 1F);
+					SoundRegistry.DYNAMO.playSoundAtBlock(world, x, y, z, this.isMuffled() ? 0.1F : 0.5F, 1F);
 				}
 			}
 		}

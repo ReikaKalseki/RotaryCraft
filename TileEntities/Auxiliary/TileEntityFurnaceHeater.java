@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -150,7 +151,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 		soundtick++;
 		if (soundtick > 49) {
-			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
+			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
 			soundtick = 0;
 		}
 	}
@@ -210,7 +211,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		//ReikaJavaLibrary.pConsole(smeltTime+" , "+tile.furnaceCookTime);
 		soundtick++;
 		if (soundtick > 49) {
-			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, 0.5F, 1);
+			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
 			soundtick = 0;
 		}
 		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);

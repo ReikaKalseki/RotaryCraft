@@ -279,6 +279,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
+		if (world.getBlockId(x, y+1, z) == Block.cloth.blockID) {
+			if (world.getBlockId(x, y-1, z) == Block.cloth.blockID || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
+				return true;
+		}
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			if (dir != ForgeDirection.DOWN) {

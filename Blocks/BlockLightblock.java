@@ -29,6 +29,7 @@ public class BlockLightblock extends BlockBasic {
 	public BlockLightblock(int ID) {
 		super(ID, Material.circuits);
 		this.setResistance(3600000F);
+		this.setBlockUnbreakable();
 	}
 
 	@Override

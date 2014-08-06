@@ -42,9 +42,14 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final LavaMakerHandler melter = new LavaMakerHandler();
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
 
+	private static final NEITabOccluder occlusion = new NEITabOccluder();
+
 	@Override
 	public void loadConfig() {
 		RotaryCraft.logger.log("Loading NEI Compatibility!");
+
+		API.registerNEIGuiHandler(occlusion);
+
 		API.registerRecipeHandler(worktable);
 		API.registerUsageHandler(worktable);
 		API.registerGuiOverlayHandler(GuiWorktable.class, new DefaultOverlayHandler(), "crafting");

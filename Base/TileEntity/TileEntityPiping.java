@@ -119,7 +119,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		}
 		if (te instanceof IFluidHandler) {
 			String name = te.getClass().getSimpleName().toLowerCase();
-			return !name.contains("conduit") && !name.contains("pipe");
+			return !name.contains("conduit") && !name.contains("pipe") && !name.contains("multipart");
 		}
 		return false;
 	}
